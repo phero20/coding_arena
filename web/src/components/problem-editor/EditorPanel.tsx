@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { LanguageSelector } from "./LanguageSelector";
 import { ConsolePanel } from "./ConsolePanel";
+import { VerdictBadge } from "@/components/verdict/VerdictBadge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +15,7 @@ import { useProblemEditor } from "@/hooks/use-problem-editor";
 import { useProblemTests } from "@/hooks/use-problem-tests";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useRunSubmission } from "@/hooks/use-run-submission";
+import type { ExecutionVerdict } from "@/services/submission.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +35,12 @@ interface EditorPanelProps {
   runError?: Error | null;
   activeTab?: "code" | "testcase" | "result";
   onTabChange?: (tab: "code" | "testcase" | "result") => void;
+  /** Current submission verdict (from polling) */
+  verdict?: ExecutionVerdict | "PENDING" | null;
+  /** Whether currently evaluating a submission */
+  isEvaluating?: boolean;
+  /** Test results from submission polling */
+  pollingTests?: import("@/services/submission.service").ExecutionTestResult[] | null;
 }
 
 /** Tab trigger style shared across Code / Test Cases / Result */
@@ -49,6 +57,9 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   runError,
   activeTab: externalTab,
   onTabChange,
+  verdict,
+  isEvaluating,
+  pollingTests,
 }) => {
   const { theme } = useTheme();
   const {
@@ -215,6 +226,9 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
           defaultTab="testcase"
           runResult={runResult ?? null}
           isExecutionRunning={isExecutionRunning}
+          verdict={verdict}
+          isEvaluating={isEvaluating}
+          pollingTests={pollingTests}
         />
       </TabsContent>
 
@@ -229,6 +243,9 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
           defaultTab="result"
           runResult={runResult ?? null}
           isExecutionRunning={isExecutionRunning}
+          verdict={verdict}
+          isEvaluating={isEvaluating}
+          pollingTests={pollingTests}
         />
       </TabsContent>
     </Tabs>
@@ -248,7 +265,21 @@ const ConsolePanelAdapter: React.FC<{
   runResult: import("@/services/submission.service").RunSubmissionResponse | null;
   isExecutionRunning?: boolean;
   runError?: Error | null;
-}> = ({ tests, isLoading, error, defaultTab, runResult, isExecutionRunning, runError }) => (
+  verdict?: ExecutionVerdict | "PENDING" | null;
+  isEvaluating?: boolean;
+  pollingTests?: import("@/services/submission.service").ExecutionTestResult[] | null;
+}> = ({ 
+  tests, 
+  isLoading, 
+  error, 
+  defaultTab, 
+  runResult, 
+  isExecutionRunning, 
+  runError,
+  verdict,
+  isEvaluating,
+  pollingTests,
+}) => (
   <ConsolePanel
     tests={tests}
     isLoading={isLoading}
@@ -257,5 +288,8 @@ const ConsolePanelAdapter: React.FC<{
     runResult={runResult}
     runResultLoading={isExecutionRunning}
     runError={runError}
+    verdict={verdict}
+    isEvaluating={isEvaluating}
+    pollingTests={pollingTests}
   />
 );
