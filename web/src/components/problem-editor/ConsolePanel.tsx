@@ -47,7 +47,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   const activeCase = cases[activeIndex] ?? null;
   const activeResult = useMemo(
     () => runResult?.tests[activeResultIndex] ?? null,
-    [runResult, activeResultIndex]
+    [runResult, activeResultIndex],
   );
 
   return (
@@ -167,7 +167,6 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
               <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
                 <div className="size-14 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10 relative">
                   <Terminal className="size-6 text-primary/40" />
-                  
                 </div>
                 <div className="space-y-1.5">
                   <p className="text-sm font-bold text-foreground">
@@ -255,7 +254,11 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
 
                       <TestCaseField label="Input" value={activeResult.input} />
                       <TestCaseField
-                        label="Expected Output"
+                        label={
+                          activeTab === "testcase"
+                            ? "Expected Output"
+                            : "Output"
+                        }
                         value={activeResult.expected_output}
                         isOutput
                       />
