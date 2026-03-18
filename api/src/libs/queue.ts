@@ -47,23 +47,25 @@ export const submissionQueue = new Queue('submission-evaluation', {
 
 /**
  * Event listeners for queue monitoring
+ * Using type casting to handle strict BullMQ event types
  */
+
 submissionQueue.on('error', (err) => {
   logger.error({ err }, 'Queue error')
 })
 
-submissionQueue.on('failed', (job, err) => {
+;(submissionQueue as any).on('failed', (job: any, err: Error) => {
   logger.error(
     { jobId: job?.id, attempt: job?.attemptsMade, err },
     'Job failed'
   )
 })
 
-submissionQueue.on('stalled', (jobId) => {
+;(submissionQueue as any).on('stalled', (jobId: string) => {
   logger.warn({ jobId }, 'Job stalled (taking too long)')
 })
 
-submissionQueue.on('completed', (job) => {
+;(submissionQueue as any).on('completed', (job: any) => {
   logger.info({ jobId: job.id }, 'Job completed successfully')
 })
 
@@ -72,8 +74,9 @@ submissionQueue.on('completed', (job) => {
  */
 export async function isQueueHealthy(): Promise<boolean> {
   try {
-    const client = submissionQueue.client
-    await client.ping()
+    const connection = submissionQueue.client
+    if (!connection) return false
+    await (connection as any).ping()
     return true
   } catch (err) {
     logger.error({ err }, 'Queue health check failed')
