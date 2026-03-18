@@ -1,5 +1,6 @@
 import { ArenaWSMessage } from "./arena.service";
 import { useArenaStore } from "@/store/useArenaStore";
+import { useEditorStore } from "@/store/match-store/use-editor-store";
 
 /**
  * Manager for High-Performance Go WebSocket Connections.
@@ -19,7 +20,7 @@ export class ArenaSocketManager {
     userId: string,
     token: string,
     username: string,
-    avatarUrl?: string
+    avatarUrl?: string,
   ) {
     this.roomId = roomId;
     this.userId = userId;
@@ -33,9 +34,10 @@ export class ArenaSocketManager {
    */
   connect() {
     // 1. Build Secure URL (Go worker on 8080)
-    const baseUri = process.env.NEXT_PUBLIC_ARENA_WS_URL || "ws://localhost:8080";
+    const baseUri =
+      process.env.NEXT_PUBLIC_ARENA_WS_URL || "ws://localhost:8080";
     const url = new URL(`${baseUri}/arena/ws/${this.roomId}`);
-    
+
     // Auth and User Identity via Query Params
     url.searchParams.set("token", this.token);
     url.searchParams.set("userId", this.userId);
@@ -91,9 +93,17 @@ export class ArenaSocketManager {
           setRoom(message.payload.room);
         }
         break;
-      
+
+      case "OPPONENT_CODE_UPDATE":
+        if (message.payload?.userId && message.payload?.code !== undefined) {
+          useEditorStore.getState().updateOpponentCode(message.payload.userId, message.payload.code);
+        }
+        break;
+
       case "ERROR":
-        const terminal = typeof message.payload === "string" && message.payload.includes("terminated");
+        const terminal =
+          typeof message.payload === "string" &&
+          message.payload.includes("terminated");
         if (terminal) {
           useArenaStore.getState().setRoom(null);
         }
