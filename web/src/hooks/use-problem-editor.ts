@@ -2,13 +2,13 @@ import { useEffect, useMemo } from "react";
 import type { Problem } from "@/types/api";
 import { useEditorStore } from "@/store/use-editor-store";
 
-export const useProblemEditor = (problem: Problem) => {
+export const useProblemEditor = (problem: Problem, enforcedLanguage?: string) => {
   const snippetLanguages = useMemo(
     () => Object.keys(problem.code_snippets || {}),
     [problem.code_snippets],
   );
 
-  const defaultLanguage = snippetLanguages[0] || "javascript";
+  const defaultLanguage = enforcedLanguage || snippetLanguages[0] || "java";
 
   const session = useEditorStore((state) => state.sessions[problem.problem_id]);
   const initSession = useEditorStore((state) => state.initSession);
@@ -90,6 +90,7 @@ export const useProblemEditor = (problem: Problem) => {
   }, [language]);
 
   const setLanguage = (next: string) => {
+    if (enforcedLanguage) return; // Cannot change if enforced
     updateLanguage(problem.problem_id, next);
   };
 
