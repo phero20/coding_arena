@@ -38,6 +38,7 @@ type ArenaRoom struct {
 	ProblemID   string                 `json:"problemId,omitempty"`
 	ProblemSlug string                 `json:"problemSlug,omitempty"`
 	Difficulty  string                 `json:"difficulty,omitempty"`
+	Language    string                 `json:"language,omitempty"`
 	Players     map[string]ArenaPlayer `json:"players"`
 	CreatedAt   time.Time              `json:"createdAt"`
 	StartTime   *time.Time             `json:"startTime,omitempty"`
