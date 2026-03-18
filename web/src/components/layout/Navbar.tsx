@@ -48,7 +48,7 @@ export const Navbar = () => {
   }, []);
 
   // List of paths where the Navbar should be hidden
-  const HIDDEN_NAVBAR_PATHS = ["/practice/problem"]; // Add more prefixes here (e.g., "/battle/", "/editor/")
+  const HIDDEN_NAVBAR_PATHS = ["/practice/problem", "/arena/match"]; // Add more prefixes here (e.g., "/battle/", "/editor/")
 
   const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some(
     (path) => pathname.startsWith(path) && pathname !== path
