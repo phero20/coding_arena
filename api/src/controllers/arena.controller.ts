@@ -22,12 +22,14 @@ export class ArenaController {
     let problemId: string | undefined;
     let problemSlug: string | undefined;
     let difficulty: string | undefined;
+    let language: string | undefined;
     
     try {
       const body = await c.req.json();
       problemId = body.problemId;
       problemSlug = body.problemSlug;
       difficulty = body.difficulty;
+      language = body.language;
     } catch (e) {
       // Body might be empty or invalid, which is fine for custom battles
     }
@@ -58,6 +60,7 @@ export class ArenaController {
       problemId,
       problemSlug,
       difficulty,
+      language,
       players: { [auth.clerkUserId]: creator },
       createdAt: new Date(),
     };
@@ -86,12 +89,14 @@ export class ArenaController {
     let problemId: string | undefined;
     let problemSlug: string | undefined;
     let difficulty: string | undefined;
+    let language: string | undefined;
 
     try {
       const body = await c.req.json();
       problemId = body.problemId;
       problemSlug = body.problemSlug;
       difficulty = body.difficulty;
+      language = body.language;
     } catch (e) {
       throw AppError.badRequest("Invalid problem details provided");
     }
@@ -107,6 +112,7 @@ export class ArenaController {
     room.problemId = problemId;
     room.problemSlug = problemSlug;
     room.difficulty = difficulty;
+    room.language = language;
     room.topic = formattedTopic;
 
     Object.keys(room.players).forEach(userId => {
