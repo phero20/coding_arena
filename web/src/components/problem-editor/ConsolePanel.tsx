@@ -6,9 +6,10 @@ import { Terminal, AlertCircle, RefreshCw } from "lucide-react";
 import type { ProblemTest } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { TestCaseField } from "./TestCaseField";
+import { VerdictBadge } from "@/components/verdict/VerdictBadge";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
-import type { RunSubmissionResponse } from "@/services/submission.service";
+import type { RunSubmissionResponse, ExecutionVerdict, ExecutionTestResult } from "@/services/submission.service";
 import { Badge } from "../ui/badge";
 
 interface ConsolePanelProps {
@@ -23,6 +24,12 @@ interface ConsolePanelProps {
   runResultLoading?: boolean;
   /** Optional error from the run submission API. */
   runError?: Error | null;
+  /** Current submission verdict from polling (for submit flow) */
+  verdict?: ExecutionVerdict | "PENDING" | null;
+  /** Whether currently evaluating a submission */
+  isEvaluating?: boolean;
+  /** Test results from polling (for submit flow) */
+  pollingTests?: ExecutionTestResult[] | null;
 }
 
 export const ConsolePanel: React.FC<ConsolePanelProps> = ({
@@ -33,6 +40,9 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   runResult,
   runResultLoading,
   runError,
+  verdict,
+  isEvaluating,
+  pollingTests,
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -41,19 +51,26 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   // Reset result index when new results arrive
   React.useEffect(() => {
     setActiveResultIndex(0);
-  }, [runResult]);
+  }, [runResult, pollingTests]);
 
   const cases = useMemo(() => tests?.cases ?? [], [tests]);
   const activeCase = cases[activeIndex] ?? null;
+  
+  // Combine test results from either run flow (runResult) or submit flow with polling
+  // Priority: runResult tests (from run flow) > pollingTests (from submit flow)
+  const effectiveTestResults = runResult?.tests ?? pollingTests ?? [];
+  const hasTestResults = effectiveTestResults.length > 0;
+  const showResultsSection = !runError && (runResult || (verdict && hasTestResults));
+  
   const activeResult = useMemo(
-    () => runResult?.tests[activeResultIndex] ?? null,
-    [runResult, activeResultIndex],
+    () => effectiveTestResults[activeResultIndex] ?? null,
+    [effectiveTestResults, activeResultIndex],
   );
 
   return (
-    <div className="flex flex-col h-full  border-t border-border/20 overflow-hidden">
+    <div className="flex flex-col h-full border-t border-border/20 overflow-hidden">
       <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-        <Tabs defaultValue="testcase" value={activeTab} className="h-full">
+        <Tabs defaultValue="testcase" value={activeTab} className="h-full overflow-hidden">
           <TabsContent value="testcase" className="mt-0 h-full space-y-4">
             {isLoading && (
               <div className="h-full flex items-center justify-center py-12">
@@ -123,9 +140,16 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
             )}
           </TabsContent>
 
-          <TabsContent value="result" className="mt-0 h-full space-y-4">
+          <TabsContent value="result" className="mt-0 h-full space-y-4 overflow-hidden flex flex-col">
+            {/* Show verdict badge for submissions (polling results) */}
+            {verdict && (
+              <div className="px-0 pt-2 shrink-0">
+                <VerdictBadge status={verdict} isLoading={isEvaluating} />
+              </div>
+            )}
+
             {runError && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 ">
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 overflow-y-auto">
                 <div className="size-16 rounded-2xl bg-destructive/10 flex items-center justify-center border border-destructive/20 relative shadow-2xl shadow-destructive/5 drop-shadow-xl">
                   <AlertCircle className="size-8 text-destructive animate-pulse" />
                   <div className="absolute inset-0 rounded-2xl bg-destructive/5 blur-xl -z-10" />
@@ -147,8 +171,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
               </div>
             )}
 
-            {!runError && runResultLoading && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
+            {!runError && runResultLoading && !verdict && (
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 overflow-y-auto">
                 <div className="size-14 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10 relative">
                   <RefreshCw className="size-6 text-primary/40 animate-spin" />
                 </div>
@@ -163,8 +187,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
               </div>
             )}
 
-            {!runError && !runResultLoading && !runResult && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
+            {!runError && !runResultLoading && !runResult && !verdict && (
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 overflow-y-auto">
                 <div className="size-14 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10 relative">
                   <Terminal className="size-6 text-primary/40" />
                 </div>
@@ -181,10 +205,10 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
               </div>
             )}
 
-            {!runError && !runResultLoading && runResult && (
-              <div className="h-full flex flex-col gap-6 py-4">
+            {showResultsSection && (
+              <div className="flex-1 overflow-y-auto flex flex-col gap-6 py-4 min-h-0">
                 {/* Overall status header */}
-                <div className=" flex items-center justify-between shrink-0">
+                <div className="flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
                     <Terminal className="size-4 text-muted-foreground" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
@@ -193,20 +217,20 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                     <Badge
                       className={cn(
                         "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded border",
-                        runResult.overallStatus === "ACCEPTED"
+                        (verdict || runResult?.overallStatus) === "ACCEPTED"
                           ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/40"
                           : "bg-destructive/10 text-destructive border-destructive/40",
                       )}
                     >
-                      {runResult.overallStatus}
+                      {verdict || runResult?.overallStatus || "PENDING"}
                     </Badge>
                   </div>
                 </div>
 
                 {/* Tabbed Case Selector - Exactly like Tests tab */}
-                <div className="space-y-6 flex-1 flex flex-col min-h-0">
+                <div className="space-y-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
                   <ButtonGroup className="flex flex-wrap shrink-0">
-                    {runResult.tests.map((t, idx) => (
+                    {effectiveTestResults.map((t, idx) => (
                       <Button
                         key={t.index}
                         type="button"
