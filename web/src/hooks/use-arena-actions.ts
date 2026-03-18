@@ -10,7 +10,7 @@ export function useCreateArena() {
 
   const mutation = useMutation({
     mutationKey: ["create-arena"],
-    mutationFn: (params?: { problemId: string; problemSlug: string; difficulty: string }) => 
+    mutationFn: (params?: { problemId: string; problemSlug: string; difficulty: string; language?: string }) => 
       arenaService.createRoom(params),
     onSuccess: (room) => {
       toast.success("Arena Room Created!");
@@ -23,7 +23,7 @@ export function useCreateArena() {
   });
 
   return {
-    hostArena: (params?: { problemId: string; problemSlug: string; difficulty: string }) => 
+    hostArena: (params?: { problemId: string; problemSlug: string; difficulty: string; language?: string }) => 
       mutation.mutate(params as any),
     isHosting: mutation.isPending,
     error: mutation.error as Error | null,
