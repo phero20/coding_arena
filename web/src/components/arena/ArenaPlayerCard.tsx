@@ -33,9 +33,6 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({ player }: ArenaPl
                 </Badge>
               )}
             </div>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest opacity-60">
-              {player.status === "CODING" ? "Preparing" : "Ready"}
-            </p>
           </div>
         </div>
 
