@@ -58,12 +58,15 @@ export function ArenaLobby({
     toast.success("Invite code copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   }, [roomId]);
+  console.log(room)
 
   return (
-    <div className={cn(
-      "flex flex-col items-center gap-6 md:gap-12 pt-12 pb-4 duration-500",
-      hasMounted ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0"
-    )}>
+    <div
+      className={cn(
+        "flex flex-col items-center gap-6 md:gap-12 pt-12 pb-4 duration-500",
+        hasMounted ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0",
+      )}
+    >
       {/* Arena Header */}
       <div className="w-full space-y-6">
         <div className="flex items-center justify-center gap-4">
@@ -77,35 +80,49 @@ export function ArenaLobby({
 
         <div className="flex flex-wrap items-center justify-center gap-6">
           {/* Problem Details */}
-          <Card className="inline-flex items-center gap-4 py-3 px-6 h-16">
-            <h2 className="text-lg font-bold text-foreground/90">
+          <Card className="inline-flex items-center gap-4 py-3 px-6 min-h-16 h-auto max-w-[95vw] md:max-w-2xl flex-wrap md:flex-nowrap">
+            <h2 className="text-lg font-bold text-foreground/90 leading-tight max-w-[200px] md:max-w-[400px] wrap-break-words">
               {room?.topic || "Custom Battle"}
             </h2>
             {room?.difficulty && (
               <Badge
                 variant="outline"
                 className={cn(
-                  "font-black tracking-widest text-[10px] uppercase py-0.5 px-3 border-none",
+                  "font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none",
                   room.difficulty === "Easy"
-                    ? "bg-emerald-500/10 text-emerald-500"
+                    ? "bg-emerald-400/10 border-emerald-500/30 text-emerald-400"
                     : room.difficulty === "Medium"
-                      ? "bg-amber-500/10 text-amber-500"
-                      : "bg-rose-500/10 text-rose-500",
+                      ? "bg-amber-400/10 border-amber-500/30 text-amber-400"
+                      : "bg-rose-400/10 border-rose-500/30 text-rose-400",
                 )}
               >
                 {room.difficulty}
               </Badge>
             )}
-            
+
+            {
+              room.language && (
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none",
+                  )}
+                >
+                  {room.language}
+                </Badge>
+              )
+            }
+
             {isHost && (
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 hover:bg-primary/10 hover:text-primary transition-all ml-1"
+              <Button
+                variant="default"
+                size="icon"
+                className="h-8 w-20 px-12 hover:bg-primary/10 hover:text-primary transition-all ml-1"
                 asChild
               >
                 <Link href={`/arena/select?roomId=${roomId}`}>
                   <Edit2 className="w-3.5 h-3.5" />
+                  Change
                 </Link>
               </Button>
             )}
@@ -137,13 +154,12 @@ export function ArenaLobby({
         </div>
       </div>
       <div className="flex flex-col items-center gap-6 max-w-2xl">
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {players.map((player) => (
             <ArenaPlayerCard key={player.userId} player={player} />
           ))}
           {players.length < 2 && (
-            <div className="flex items-center justify-center p-6 border border-dashed border-border/60 rounded-xl bg-muted/5 min-h-[80px]">
+            <div className="flex items-center justify-center p-6 border border-dashed border-border/60 rounded-xl bg-muted/5 min-h-[60px]">
               <div className="text-center space-y-1">
                 <p className="font-semibold text-xs text-foreground/60 uppercase tracking-tight">
                   Waiting for Opponent
