@@ -46,12 +46,18 @@ export interface Submission {
   user_id: string;
   language_id: string;
   source_code: string;
-  status: ExecutionVerdict;
+  status: ExecutionVerdict | "PENDING";
   time?: number;
   memory?: number;
   details?: any;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SubmitCodeResponse {
+  submissionId: string;
+  status: "PENDING" | "ACCEPTED" | "WRONG_ANSWER" | "COMPILATION_ERROR" | "RUNTIME_ERROR" | "TLE" | "SYSTEM_ERROR";
+  message?: string;
 }
 
 class SubmissionService {
@@ -72,10 +78,16 @@ class SubmissionService {
     return response.data.data;
   }
 
+  /**
+   * Submit code for full evaluation (async)
+   * 
+   * Returns immediately with PENDING status.
+   * Use getSubmissionStatus() to poll for final results.
+   */
   async submitCode(
     payload: RunSubmissionPayload,
-  ): Promise<RunSubmissionResponse> {
-    const response = await apiClient.post<ApiResponse<RunSubmissionResponse>>(
+  ): Promise<SubmitCodeResponse> {
+    const response = await apiClient.post<ApiResponse<SubmitCodeResponse>>(
       "/submissions/submit",
       payload,
     );
@@ -83,6 +95,26 @@ class SubmissionService {
     if (!response.data.success || !response.data.data) {
       throw new Error(
         response.data.message || "Failed to submit code for evaluation",
+      );
+    }
+
+    return response.data.data;
+  }
+
+  /**
+   * Get submission status and results
+   * 
+   * Fetches the current status of a submission by ID.
+   * Returns PENDING if still evaluating, or final verdict with test results.
+   */
+  async getSubmissionStatus(submissionId: string): Promise<Submission> {
+    const response = await apiClient.get<ApiResponse<Submission>>(
+      `/submissions/${submissionId}`,
+    );
+
+    if (!response.data.success || !response.data.data) {
+      throw new Error(
+        response.data.message || "Failed to fetch submission status",
       );
     }
 
