@@ -8,6 +8,7 @@ import (
 	"arena/internal/models"
 	"arena/internal/repository"
 	"arena/internal/service"
+
 	"github.com/gofiber/contrib/websocket"
 )
 
@@ -68,6 +69,19 @@ func (c *Client) ReadPump() {
 				// Special case: change broadcast type to MATCH_STARTED
 				msg.Type = "MATCH_STARTED"
 			}
+		case "CODE_UPDATE":
+			// Relay code update as OPPONENT_CODE_UPDATE with sender identity
+			c.Hub.Broadcast <- Message{
+				RoomID: c.RoomID,
+				Payload: models.ArenaWSMessage{
+					Type: "OPPONENT_CODE_UPDATE",
+					Payload: map[string]interface{}{
+						"userId": c.UserID,
+						"code":   msg.Payload,
+					},
+				},
+			}
+			continue
 		case "LEAVE_ROOM":
 			var wasDeleted bool
 			updatedRoom, wasDeleted, handleErr = c.Service.HandleExplicitLeave(ctx, c.RoomID, c.UserID)
