@@ -13,6 +13,8 @@ import { WorkspaceHeader } from "./WorkspaceHeader";
 import { useRunSubmission } from "@/hooks/use-run-submission";
 import { useSubmitCode } from "@/hooks/use-submit-code";
 import { useEditorStore } from "@/store/use-editor-store";
+import { VerdictBadge } from "@/components/verdict/VerdictBadge";
+import type { ExecutionVerdict } from "@/services/submission.service";
 
 interface ProblemWorkspaceProps {
   problem: Problem;
@@ -44,6 +46,8 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
   const {
     data: submitResult,
     isSubmitting,
+    status: submitStatus,
+    tests: submitTests,
     submitAsync,
     error: submitError,
     reset: resetSubmit,
@@ -52,11 +56,28 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
     languageId: activeLanguage || "javascript",
   });
 
+  // Auto-switch to result tab when submission is complete with a verdict
+  React.useEffect(() => {
+    // Only auto-switch for submissions (submitStatus exists)
+    // Only when verdict is final (not PENDING) and we have test results
+    if (
+      submitStatus &&
+      submitStatus !== "PENDING" &&
+      submitTests &&
+      submitTests.length > 0 &&
+      activeTab !== "result"
+    ) {
+      setActiveTab("result");
+    }
+  }, [submitStatus, submitTests, activeTab]);
+
   const handleRun = async () => {
     if (!currentCode || isRunning) return;
     try {
       resetSubmit(); // Clear previous submission result
       await runAsync(currentCode);
+      // Add microtask delay to ensure state updates process before switching tab
+      await new Promise(resolve => setTimeout(resolve, 0));
       setActiveTab("result");
     } catch (err) {
       console.error("Run failed:", err);
@@ -69,17 +90,32 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
     try {
       resetRun(); // Clear previous run result
       await submitAsync(currentCode);
-      setActiveTab("result");
+      // Don't switch tab immediately - let the effect handle it
+      // This ensures data is ready before tab switches
     } catch (err) {
       console.error("Submission failed:", err);
       setActiveTab("result");
     }
   };
 
+  // Normalize submit result to match runResult structure for EditorPanel
+  const normalizedSubmitResult = submitResult
+    ? {
+        submissionId: submitResult.submissionId,
+        overallStatus: submitResult.status,
+        tests: submitResult.tests || [],
+      }
+    : undefined;
+
+  // Extract polling tests for ConsolePanel (for real-time display while polling)
+  const pollingTests = submitTests || null;
+
   // The latest result will now be the only one present due to mutual resets
-  const latestResult = submitResult || runResult;
+  const latestResult = normalizedSubmitResult || runResult;
   const latestLoading = isRunning || isSubmitting;
   const latestError = submitError || runError;
+  const latestStatus: ExecutionVerdict | "PENDING" | null =
+    submitStatus || (latestResult?.overallStatus as any) || null;
 
   return (
     <div className="h-screen w-full bg-background flex flex-col">
@@ -118,6 +154,9 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
               runError={latestError}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              verdict={latestStatus}
+              isEvaluating={isSubmitting}
+              pollingTests={pollingTests}
             />
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -136,6 +175,9 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
             runError={latestError}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            verdict={latestStatus}
+            isEvaluating={isSubmitting}
+            pollingTests={pollingTests}
           />
         </section>
       </div>
