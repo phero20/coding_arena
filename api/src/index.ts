@@ -6,6 +6,7 @@ import { AppError } from "./utils/app-error";
 import { ApiResponse } from "./utils/api-response";
 import { config } from "./configs/env";
 import { connectMongo } from "./mongo/connection";
+import "./workers/submission.worker";
 
 void connectMongo();
 
