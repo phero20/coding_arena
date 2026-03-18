@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { ArenaSocketManager } from "@/services/arena-socket";
 import { ArenaWSMessage } from "@/services/arena.service";
+import { useEditorStore } from "@/store/match-store/use-editor-store";
 
 /**
  * Hook to manage the Go WebSocket lifecycle for a specific room.
@@ -56,7 +57,7 @@ export function useArenaSocket(roomId: string | undefined) {
         socketManagerRef.current = null;
       }
     };
-  }, [roomId, userId, isLoaded, user, getToken]);
+  }, [roomId, userId, isLoaded, user?.username, user?.imageUrl, getToken]);
 
   const sendMessage = useCallback((type: ArenaWSMessage["type"], payload: any = {}) => {
     if (socketManagerRef.current) {
@@ -82,6 +83,8 @@ export function useArenaSocket(roomId: string | undefined) {
       socketManagerRef.current.disconnect();
       socketManagerRef.current = null;
     }
+    // Explicitly reset editor state on intentional leave
+    useEditorStore.getState().reset();
     // Redirect to arena dashboard
     router.push("/arena");
   }, [sendMessage, router]);
