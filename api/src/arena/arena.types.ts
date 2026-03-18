@@ -22,6 +22,7 @@ export interface ArenaRoom {
   problemId?: string;
   problemSlug?: string;
   difficulty?: string;
+  language?: string;
   problem?: Problem;
   players: Record<string, ArenaPlayer>; // userId -> ArenaPlayer
   createdAt: Date;
