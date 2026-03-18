@@ -8,6 +8,7 @@ import (
 	"arena/internal/models"
 	"arena/internal/repository"
 	"arena/internal/service"
+
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 )
