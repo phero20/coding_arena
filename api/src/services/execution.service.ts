@@ -43,18 +43,9 @@ export class ExecutionService {
       throw new Error('No public tests configured for this problem')
     }
 
-    const submission = await this.submissionService.createSubmission({
-      problem_id: input.problemId,
-      user_id: input.userId,
-      language_id: input.languageId,
-      source_code: input.sourceCode,
-      status: 'RUNNING',
-    })
-
     const aiResult = await this.aiCodeJudgeService.runSamples({
       problemId: input.problemId,
       languageId: input.languageId,
-      // For now we pass the id as name; frontend can later send a friendly language name if needed.
       languageName: input.languageId,
       sourceCode: input.sourceCode,
       tests: testsDoc.cases.map((testCase, index) => ({
@@ -65,22 +56,10 @@ export class ExecutionService {
     })
 
     const tests: ExecutionTestResult[] = aiResult.tests
-
     const overallStatus: SubmissionStatus = aiResult.overallStatus
 
-    await this.submissionService.updateSubmissionStatus({
-      id: (submission as any).id,
-      status: overallStatus,
-      // For now, we aggregate max time/memory across tests where available.
-      time: undefined,
-      memory: undefined,
-      details: {
-        tests,
-      },
-    })
-
     return {
-      submissionId: (submission as any).id,
+      submissionId: '', // Runs do not create submisson records
       overallStatus,
       tests,
     }
