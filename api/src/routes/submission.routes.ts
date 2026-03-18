@@ -30,6 +30,11 @@ export const registerSubmissionRoutes = (
     (c) => submissionController.submit(c),
   )
 
+  // Check submission status - no rate limit (frequent polling expected)
+  app.get('/submissions/:submissionId', (c) =>
+    submissionController.getSubmissionStatus(c),
+  )
+
   app.get('/submissions/problem/:problemId', (c) =>
     submissionController.getUserSubmissions(c),
   )
