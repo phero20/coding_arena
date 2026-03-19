@@ -7,12 +7,11 @@ export interface ArenaPlayer {
   userId: string;
   username: string;
   avatarUrl?: string;
-  isReady: boolean;
   isCreator: boolean;
   score: number;
   testsPassed: number;
   totalTests: number;
-  submittedAt?: string;
+  joinedAt: string;
   status: "CODING" | "SUBMITTED";
 }
 
@@ -40,12 +39,14 @@ export interface ArenaWSMessage {
     | "PROGRESS_UPDATE"
     | "MATCH_SUBMITTED"
     | "MATCH_OVER"
+    | "MATCH_ENDED"
     | "PROBLEM_CHANGED"
     | "ERROR"
     | "CHAT"
-    | "CODE_UPDATE"
-    | "OPPONENT_CODE_UPDATE"
-    | "LEAVE_ROOM";
+    | "LEAVE_ROOM"
+    | "PLAYER_REMOVED"
+    | "LEADERBOARD_UPDATE"
+    | "HOST_TRANSFERRED";
   payload: any;
 }
 
