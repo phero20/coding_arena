@@ -22,13 +22,13 @@ type ArenaPlayer struct {
 	UserID      string            `json:"userId"`
 	Username    string            `json:"username"`
 	AvatarURL   string            `json:"avatarUrl,omitempty"`
-	IsReady     bool              `json:"isReady"`
 	IsCreator   bool              `json:"isCreator"`
 	Score       int               `json:"score"`
 	TestsPassed int               `json:"testsPassed"`
 	TotalTests  int               `json:"totalTests"`
 	SubmittedAt *time.Time        `json:"submittedAt,omitempty"`
 	Status      ArenaPlayerStatus `json:"status"`
+	JoinedAt    time.Time         `json:"joinedAt"`
 }
 
 type ArenaRoom struct {
