@@ -59,8 +59,8 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           )}
           Run
         </Button>
-        <Button 
-          size="sm" 
+        <Button
+          size="sm"
           type="button"
           onClick={onSubmit}
           disabled={isInteractionDisabled}
