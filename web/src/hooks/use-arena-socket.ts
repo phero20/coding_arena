@@ -65,9 +65,6 @@ export function useArenaSocket(roomId: string | undefined) {
     }
   }, []);
 
-  const sendReady = useCallback((ready: boolean) => {
-    sendMessage("PLAYER_READY", ready);
-  }, [sendMessage]);
 
   const sendStartMatch = useCallback(() => {
     sendMessage("START_MATCH");
@@ -91,7 +88,6 @@ export function useArenaSocket(roomId: string | undefined) {
 
   return {
     sendMessage,
-    sendReady,
     sendStartMatch,
     sendProgress,
     leaveRoom,
