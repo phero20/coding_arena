@@ -79,7 +79,7 @@ export class ArenaSocketManager {
    * Handle incoming messages and dispatch to Zustand Store.
    */
   private handleMessage(message: ArenaWSMessage) {
-    const { setRoom, updatePlayer, updateRoom } = useArenaStore.getState();
+    const { setRoom, updatePlayer, updateRoom, setLeaderboard, setMatchEnded, removePlayer, setUserRemoved, setHostTransferred } = useArenaStore.getState();
 
     switch (message.type) {
       case "PLAYER_JOINED":
@@ -88,15 +88,40 @@ export class ArenaSocketManager {
       case "PROBLEM_CHANGED":
       case "MATCH_STARTED":
       case "PROGRESS_UPDATE":
+      case "MATCH_SUBMITTED":
         // Go server sends the updated room in the payload
         if (message.payload?.room) {
           setRoom(message.payload.room);
         }
         break;
 
-      case "OPPONENT_CODE_UPDATE":
-        if (message.payload?.userId && message.payload?.code !== undefined) {
-          useEditorStore.getState().updateOpponentCode(message.payload.userId, message.payload.code);
+      case "PLAYER_REMOVED":
+        if (message.payload?.userId) {
+          const removedUserId = message.payload.userId;
+          if (removedUserId === this.userId) {
+            setUserRemoved(true, message.payload.reason || "You were removed from the room");
+          } else {
+            removePlayer(removedUserId);
+          }
+        }
+        break;
+
+      case "LEADERBOARD_UPDATE":
+        if (message.payload?.leaderboard) {
+          setLeaderboard(message.payload.leaderboard);
+        }
+        break;
+
+      case "MATCH_ENDED":
+      case "MATCH_OVER":
+        if (message.payload?.finalRankings) {
+          setMatchEnded(true, message.payload.finalRankings);
+        }
+        break;
+
+      case "HOST_TRANSFERRED":
+        if (message.payload?.newHostId) {
+          setHostTransferred(true, message.payload.newHostId);
         }
         break;
 
