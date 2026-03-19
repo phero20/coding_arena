@@ -34,7 +34,7 @@ export function useArenaRoom(roomId: string) {
   }, [initialRoom, setRoom]);
 
   // 3. Socket Lifecycle
-  const { sendReady, sendStartMatch, ...socketHandlers } = useArenaSocket(roomId);
+  const { sendStartMatch, ...socketHandlers } = useArenaSocket(roomId);
 
   const error = globalError || (fetchError as any)?.message;
 
@@ -44,7 +44,6 @@ export function useArenaRoom(roomId: string) {
     error,
     isLoading,
     refetch,
-    setReady: sendReady,
     startMatch: sendStartMatch,
     ...socketHandlers
   };
