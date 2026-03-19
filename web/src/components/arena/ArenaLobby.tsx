@@ -22,7 +22,6 @@ import { ArenaRoom } from "@/services/arena.service";
 interface ArenaLobbyProps {
   roomId: string;
   room: ArenaRoom;
-  setReady: (ready: boolean) => void;
   startMatch: () => void;
   leaveRoom: () => void;
   isConnected: boolean;
@@ -31,7 +30,6 @@ interface ArenaLobbyProps {
 export function ArenaLobby({
   roomId,
   room,
-  setReady,
   startMatch,
   leaveRoom,
   isConnected,
@@ -44,13 +42,24 @@ export function ArenaLobby({
     setHasMounted(true);
   }, []);
 
-  const players = useMemo(() => Object.values(room?.players || {}), [room?.players]);
-  const currentPlayer = useMemo(() => (userId ? room?.players[userId] : null), [userId, room?.players]);
+  const players = useMemo(
+    () =>
+      Object.values(room?.players || {}).sort((a, b) => {
+        const dateA = new Date(a.joinedAt).getTime();
+        const dateB = new Date(b.joinedAt).getTime();
+        return dateA - dateB;
+      }),
+    [room?.players],
+  );
+
+  const currentPlayer = useMemo(
+    () => (userId ? room?.players[userId] : null),
+    [userId, room?.players],
+  );
 
   // Logic checks
   const isHost = currentPlayer?.isCreator;
-  const allReady = useMemo(() => players.length >= 2 && players.every((p) => p.isReady), [players]);
-  const isReady = !!currentPlayer?.isReady;
+  const canStartMatch = useMemo(() => players.length >= 2, [players]);
 
   const copyInviteCode = useCallback(() => {
     navigator.clipboard.writeText(roomId);
@@ -58,26 +67,51 @@ export function ArenaLobby({
     toast.success("Invite code copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   }, [roomId]);
-  console.log(room)
 
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-6 md:gap-12 pt-12 pb-4 duration-500",
+        "relative flex flex-col items-center gap-6 md:gap-12 pt-28 md:pt-42 pb-20 duration-500 w-full min-h-screen",
         hasMounted ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0",
       )}
     >
-      {/* Arena Header */}
-      <div className="w-full space-y-6">
-        <div className="flex items-center justify-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center border border-border/50">
-            <Sword className="w-6 h-6" />
-          </div>
-          <h1 className="text-3xl font-black tracking-tight uppercase italic opacity-90">
-            Arena Lobby
-          </h1>
-        </div>
+      {/* Action Buttons - Responsive Positioning (Non-overlapping on Mobile) */}
+      <div className="w-full md:w-auto flex items-center justify-end gap-2 z-20 mb-6 md:mb-0 md:absolute md:top-24 md:right-0">
+        {isHost && (
+          <Button
+            size="sm"
+            variant="default"
+            className="h-8 md:h-9 px-3 md:px-4"
+            onClick={startMatch}
+            disabled={!canStartMatch || !isConnected}
+          >
+            <Rocket className="mr-2 h-3.5 w-3.5" />
+            Start Match
+          </Button>
+        )}
 
+        <Button
+          variant="destructive"
+          size="sm"
+          className="h-8 md:h-9 px-3 md:px-4"
+          onClick={leaveRoom}
+        >
+          <LogOut className="mr-2 h-3.5 w-3.5 " />
+          Leave
+        </Button>
+      </div>
+
+      {/* Arena Header - Centered */}
+      <div className="flex items-center justify-center gap-4">
+        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center border border-border/50">
+          <Sword className="w-6 h-6 text-primary-foreground" />
+        </div>
+        <h1 className="text-3xl font-black tracking-tight uppercase italic opacity-90">
+          Arena Lobby
+        </h1>
+      </div>
+
+      <div className="w-full space-y-6">
         <div className="flex flex-wrap items-center justify-center gap-6">
           {/* Problem Details */}
           <Card className="inline-flex items-center gap-4 py-3 px-6 min-h-16 h-auto max-w-[95vw] md:max-w-2xl flex-wrap md:flex-nowrap">
@@ -100,29 +134,27 @@ export function ArenaLobby({
               </Badge>
             )}
 
-            {
-              room.language && (
-                <Badge
-                  variant="outline"
-                  className={cn(
-                    "font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none",
-                  )}
-                >
-                  {room.language}
-                </Badge>
-              )
-            }
+            {room.language && (
+              <Badge
+                variant="outline"
+                className={cn(
+                  "font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none",
+                )}
+              >
+                {room.language}
+              </Badge>
+            )}
 
             {isHost && (
               <Button
                 variant="default"
-                size="icon"
-                className="h-8 w-20 px-12 hover:bg-primary/10 hover:text-primary transition-all ml-1"
+                size="sm"
+                className="hover:bg-primary/10 hover:text-primary transition-all ml-1"
                 asChild
               >
                 <Link href={`/arena/select?roomId=${roomId}`}>
                   <Edit2 className="w-3.5 h-3.5" />
-                  Change
+                  <span className="hidden md:block">Change</span>
                 </Link>
               </Button>
             )}
@@ -130,7 +162,7 @@ export function ArenaLobby({
 
           {/* Invite Code */}
           <Card className="flex items-center justify-between gap-6 px-6 py-3 h-16 min-w-[280px]">
-            <div className="flex flex-col items-start min-w-0">
+            <div className="flex flex-col items-start gap-1 min-w-0">
               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 leading-tight">
                 Invite Code
               </span>
@@ -140,92 +172,59 @@ export function ArenaLobby({
             </div>
             <Button
               size="icon"
-              variant="ghost"
+              variant="outline"
               className="h-8 w-8 hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={copyInviteCode}
             >
               {copied ? (
-                <Check className="w-4 h-4 text-primary animate-in zoom-in duration-300" />
+                <Check className="w-3 h-3 text-primary animate-in zoom-in duration-300" />
               ) : (
-                <Copy className="w-4 h-4" />
+                <Copy className="w-3 h-3" />
               )}
             </Button>
           </Card>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-6 max-w-2xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {players.map((player) => (
-            <ArenaPlayerCard key={player.userId} player={player} />
-          ))}
-          {players.length < 2 && (
-            <div className="flex items-center justify-center p-6 border border-dashed border-border/60 rounded-xl bg-muted/5 min-h-[60px]">
-              <div className="text-center space-y-1">
-                <p className="font-semibold text-xs text-foreground/60 uppercase tracking-tight">
-                  Waiting for Opponent
-                </p>
-                <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest opacity-60">
-                  Share the code to start a battle
-                </p>
-              </div>
-            </div>
-          )}
+      <div className="flex flex-col gap-4 w-full max-w-7xl">
+        <div className="flex items-center justify-between px-1 w-full">
+          <div className="flex items-center gap-2">
+            <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] text-foreground/40">
+              Participants
+            </h3>
+            <Badge
+              variant="outline"
+              className="h-5 px-1.5 text-[10px] font-bold border-border/10 bg-muted/10"
+            >
+              {players.length} / 50
+            </Badge>
+          </div>
         </div>
 
-        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em] opacity-80 text-center px-4 max-w-sm mx-auto">
-          {!isReady
-            ? "Waiting for you to get ready"
-            : isHost
-              ? allReady
-                ? "Everyone is ready. You can start the match."
-                : "Waiting for other players to get ready..."
+        {/* Simple Status Message */}
+        <div className="w-full flex justify-center py-1">
+          <p className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-[0.15em] text-center px-6 max-w-md line-clamp-1">
+            {isHost
+              ? canStartMatch
+                ? "You can start the match"
+                : "Waiting for players..."
               : "Waiting for host to start..."}
-        </p>
-      </div>
+          </p>
+        </div>
 
-      <div className="flex flex-row items-center justify-center gap-3 w-full pt-4 border-t border-border/40">
-        {!isReady ? (
-          <Button
-            size="lg"
-            className="h-11 px-6"
-            onClick={() => setReady(true)}
-            disabled={!isConnected}
-          >
-            <Rocket className="mr-2 h-4 w-4" />
-            Ready
-          </Button>
-        ) : isHost ? (
-          <Button
-            size="lg"
-            variant="default"
-            className="h-11 px-6"
-            onClick={startMatch}
-            disabled={!allReady || !isConnected}
-          >
-            <Sword className="mr-2 h-4 w-4" />
-            Start Match
-          </Button>
-        ) : (
-          <Button
-            size="lg"
-            variant="outline"
-            className="h-11 px-6 border-dashed hover:bg-destructive/5 hover:text-destructive hover:border-destructive/20 transition-all group"
-            onClick={() => setReady(false)}
-          >
-            <XCircle className="mr-2 h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
-            Not Ready
-          </Button>
-        )}
-
-        <Button
-          variant="destructive"
-          size="lg"
-          className="h-11 px-4"
-          onClick={leaveRoom}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          Exit Arena
-        </Button>
+        <div className="w-full">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {players.map((player) => (
+              <ArenaPlayerCard key={player.userId} player={player} />
+            ))}
+            {players.length < 50 && (
+              <div className="flex items-center justify-center p-3 border border-dashed border-border/20 rounded-xl bg-muted/5 min-h-[50px] group hover:border-primary/20 transition-colors">
+                <span className="text-[9px] font-bold text-foreground/20 uppercase tracking-widest group-hover:text-primary/30">
+                  {50 - players.length} more players can join
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
