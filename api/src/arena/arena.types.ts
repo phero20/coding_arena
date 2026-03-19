@@ -6,13 +6,13 @@ export interface ArenaPlayer {
   userId: string;
   username: string;
   avatarUrl?: string;
-  isReady: boolean;
   isCreator: boolean;
   score: number;
   testsPassed: number;
   totalTests: number;
   submittedAt?: Date;
   status: "CODING" | "SUBMITTED";
+  joinedAt: Date;
 }
 
 export interface ArenaRoom {
