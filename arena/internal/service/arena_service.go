@@ -36,7 +36,7 @@ func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username,
 	}
 
 	// Limit to 2 players (PVP)
-	if len(room.Players) >= 2 {
+	if len(room.Players) >= 50 {
 		return nil, false, errors.New("room is full")
 	}
 
@@ -45,10 +45,10 @@ func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username,
 		UserID:    userId,
 		Username:  username,
 		AvatarURL: avatarUrl,
-		IsReady:   false,
 		IsCreator: false,
 		Score:     0,
 		Status:    models.PlayerCoding,
+		JoinedAt:  time.Now(),
 	}
 
 	if room.Players == nil {
@@ -81,7 +81,6 @@ func (s *ArenaService) HandleReady(ctx context.Context, roomId, userId string, r
 		return nil, errors.New("player not in room")
 	}
 
-	player.IsReady = ready
 	room.Players[userId] = player
 
 	if err := s.repo.SaveRoom(ctx, room); err != nil {
@@ -114,12 +113,6 @@ func (s *ArenaService) HandleStartMatch(ctx context.Context, roomId, userId stri
 	// Check if all players are ready
 	if len(room.Players) < 2 {
 		return nil, errors.New("not enough players to start")
-	}
-
-	for _, p := range room.Players {
-		if !p.IsReady {
-			return nil, errors.New("all players must be ready to start")
-		}
 	}
 
 	now := time.Now()
