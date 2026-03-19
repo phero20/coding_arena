@@ -22,6 +22,7 @@ import { AiProblemController } from '../controllers/ai-problem.controller'
 import { ProblemCache } from '../cache/problem.cache'
 import { ProblemTestCache } from '../cache/problem-test.cache'
 import { ArenaRepository } from '../repositories/arena.repository'
+import { ArenaService } from '../services/arena.service'
 import { ArenaController } from '../controllers/arena.controller'
 
 // --- Repositories ---
@@ -36,6 +37,7 @@ const authService = new AuthService(userRepository)
 const problemService = new ProblemService(problemRepository)
 const problemTestService = new ProblemTestService(problemTestRepository)
 const submissionService = new SubmissionService(submissionRepository)
+const arenaService = new ArenaService(arenaRepository, userRepository)
 
 // --- Cache Layers (Wrappers) ---
 const problemCache = new ProblemCache(problemService)
@@ -70,7 +72,7 @@ const aiProblemController = new AiProblemController(
   problemCache as any,
   problemTestCache as any,
 )
-const arenaController = new ArenaController(arenaRepository, userRepository)
+const arenaController = new ArenaController(arenaService)
 
 /**
  * Centalized Dependency Injection Container.
