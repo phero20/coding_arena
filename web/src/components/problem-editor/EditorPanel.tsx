@@ -4,17 +4,21 @@ import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { LanguageSelector } from "./LanguageSelector";
 import { ConsolePanel } from "./ConsolePanel";
-import { VerdictBadge } from "@/components/verdict/VerdictBadge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Problem } from "@/types/api";
-import { RefreshCw, Code2, Terminal, CheckCircle2, WrapText } from "lucide-react";
+import {
+  RefreshCw,
+  Code2,
+  Terminal,
+  CheckCircle2,
+  WrapText,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { useProblemEditor } from "@/hooks/use-problem-editor";
 import { useProblemTests } from "@/hooks/use-problem-tests";
 import { useEditorStore } from "@/store/use-editor-store";
-import { useRunSubmission } from "@/hooks/use-run-submission";
 import type { ExecutionVerdict } from "@/services/submission.service";
 import {
   AlertDialog,
@@ -30,7 +34,9 @@ import {
 
 interface EditorPanelProps {
   problem: Problem;
-  runResult?: import("@/services/submission.service").RunSubmissionResponse | null;
+  runResult?:
+    | import("@/services/submission.service").RunSubmissionResponse
+    | null;
   isRunning?: boolean;
   runError?: Error | null;
   activeTab?: "code" | "testcase" | "result";
@@ -40,7 +46,9 @@ interface EditorPanelProps {
   /** Whether currently evaluating a submission */
   isEvaluating?: boolean;
   /** Test results from submission polling */
-  pollingTests?: import("@/services/submission.service").ExecutionTestResult[] | null;
+  pollingTests?:
+    | import("@/services/submission.service").ExecutionTestResult[]
+    | null;
 }
 
 /** Tab trigger style shared across Code / Test Cases / Result */
@@ -80,15 +88,10 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   const preferences = useEditorStore((state) => state.preferences);
   const toggleWordWrap = useEditorStore((state) => state.toggleWordWrap);
 
-  const [localTab, setLocalTab] = useState<"code" | "testcase" | "result">(
-    "code",
-  );
-  
-  const activeTab = externalTab ?? localTab;
+  const activeTab = externalTab ?? "code";
+
   const handleTabChange = (tab: string) => {
-    const t = tab as typeof localTab;
-    setLocalTab(t);
-    onTabChange?.(t);
+    onTabChange?.(tab as any);
   };
 
   const editorTheme = theme === "dark" ? "vs-dark" : "light";
@@ -262,19 +265,23 @@ const ConsolePanelAdapter: React.FC<{
   isLoading: boolean;
   error: Error | null;
   defaultTab: "testcase" | "result";
-  runResult: import("@/services/submission.service").RunSubmissionResponse | null;
+  runResult:
+    | import("@/services/submission.service").RunSubmissionResponse
+    | null;
   isExecutionRunning?: boolean;
   runError?: Error | null;
   verdict?: ExecutionVerdict | "PENDING" | null;
   isEvaluating?: boolean;
-  pollingTests?: import("@/services/submission.service").ExecutionTestResult[] | null;
-}> = ({ 
-  tests, 
-  isLoading, 
-  error, 
-  defaultTab, 
-  runResult, 
-  isExecutionRunning, 
+  pollingTests?:
+    | import("@/services/submission.service").ExecutionTestResult[]
+    | null;
+}> = ({
+  tests,
+  isLoading,
+  error,
+  defaultTab,
+  runResult,
+  isExecutionRunning,
   runError,
   verdict,
   isEvaluating,
