@@ -12,7 +12,6 @@ interface EditorPreferences {
 interface EditorState {
   sessions: Record<string, EditorSession>;
   preferences: EditorPreferences;
-  opponentCodes: Record<string, string>; // userId -> code
   isRunning: boolean;
   initSession: (
     problemId: string,
@@ -26,7 +25,6 @@ interface EditorState {
     language: string,
     defaultCode: string,
   ) => void;
-  updateOpponentCode: (userId: string, code: string) => void;
   toggleWordWrap: () => void;
   reset: () => void;
   setIsRunning: (isRunning: boolean) => void;
@@ -37,7 +35,6 @@ export const useEditorStore = create<EditorState>()((set) => ({
   preferences: {
     wordWrap: true,
   },
-  opponentCodes: {},
   isRunning: false,
 
   initSession: (problemId, initialLanguage, initialCodes) =>
@@ -105,14 +102,6 @@ export const useEditorStore = create<EditorState>()((set) => ({
       };
     }),
 
-  updateOpponentCode: (userId, code) =>
-    set((state) => ({
-      opponentCodes: {
-        ...state.opponentCodes,
-        [userId]: code,
-      },
-    })),
-
   toggleWordWrap: () =>
     set((state) => ({
       preferences: {
@@ -129,7 +118,6 @@ export const useEditorStore = create<EditorState>()((set) => ({
   reset: () =>
     set(() => ({
       sessions: {},
-      opponentCodes: {},
       isRunning: false,
     })),
 }));
