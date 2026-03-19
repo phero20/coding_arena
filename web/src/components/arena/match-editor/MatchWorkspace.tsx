@@ -10,17 +10,16 @@ import { DescriptionPanel } from "./DescriptionPanel";
 import { EditorPanel } from "./EditorPanel";
 import { Problem } from "@/types/api";
 import { WorkspaceHeader } from "./WorkspaceHeader";
-import { useRunSubmission } from "@/hooks/match-hooks/use-run-submission";
-import { ArenaWSMessage } from "@/services/arena.service";
-import { useEditorStore } from "@/store/match-store/use-editor-store";
-import { useArenaStore } from "@/store/useArenaStore";
-import { useShallow } from "zustand/react/shallow";
-import { useUser } from "@clerk/nextjs";
+
+// New custom hooks
+import { useMatchEvaluation } from "@/hooks/match-hooks/use-match-evaluation";
+import { useMatchSync } from "@/hooks/match-hooks/use-match-sync";
+import { useProblemEditor } from "@/hooks/match-hooks/use-problem-editor";
 
 interface MatchWorkspaceProps {
   problem: Problem;
   roomId: string;
-  sendMessage: (type: ArenaWSMessage["type"], payload?: any) => void;
+  sendMessage: (type: any, payload?: any) => void;
   onExit?: () => void;
   enforcedLanguage?: string;
 }
@@ -32,87 +31,59 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
   onExit,
   enforcedLanguage,
 }) => {
-  const [activeTab, setActiveTab] = React.useState<
-    "code" | "testcase" | "result"
-  >("code");
-
-  // Get current editor state from store with focused selectors
-  const storeKey = roomId || problem.problem_id;
-  const session = useEditorStore(
-    useShallow((state) => state.sessions[storeKey])
+  // 1. Editor State (Lifting this ensure run/submit has the latest code)
+  const editor = useProblemEditor(
+    problem,
+    enforcedLanguage,
+    roomId,
+    sendMessage,
   );
-  const activeLanguage = session?.activeLanguage;
-  const currentCode = session?.codes?.[activeLanguage || ""];
 
-  const {
-    data: runResult,
-    isRunning,
-    runAsync,
-    error: runError,
-    reset: resetRun,
-  } = useRunSubmission({
+  // 2. Evaluation Logic (Run / Submit / Poll / Arena Sync)
+  const evaluation = useMatchEvaluation({
     problemId: problem.problem_id,
-    languageId: enforcedLanguage || activeLanguage || "javascript",
+    languageId: enforcedLanguage || editor.language,
+    roomId,
+    sendMessage,
   });
 
-  // In Arena mode, we don't hit the normal API for submission.
-  // Instead, we just RUN the code, and if tests pass, we broadcast to WebSocket.
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const room = useArenaStore(useShallow((state) => state.room));
-  const { user } = useUser();
+  // 3. Normalize results to ensure all UI components/hooks see the same structure (overallStatus, tests)
+  const normalizedResult = evaluation.latestResult ? {
+    submissionId: (evaluation.latestResult as any).submissionId,
+    overallStatus: (evaluation.latestResult as any).status || (evaluation.latestResult as any).overallStatus,
+    tests: (evaluation.latestResult.tests as any[]) || [],
+    isFullSubmission: evaluation.isFullSubmission
+  } : null;
 
+  // 4. Sync & UI (Leaderboard / Tab Switching / Match End)
+  const sync = useMatchSync({
+    submitStatus: normalizedResult?.overallStatus,
+    submitTests: normalizedResult?.tests,
+    isArena: !!roomId,
+  });
+
+  // Action handlers
   const handleRun = React.useCallback(async () => {
-    if (!currentCode || isRunning) return;
     try {
-      await runAsync(currentCode);
-      setActiveTab("result");
+      await evaluation.runCode(editor.code);
+      sync.setActiveTab("result");
     } catch (err) {
-      console.error("Run failed:", err);
-      setActiveTab("result");
+      sync.setActiveTab("result");
     }
-  }, [currentCode, isRunning, runAsync]);
+  }, [evaluation, editor.code, sync]);
 
   const handleSubmit = React.useCallback(async () => {
-    if (!currentCode || isSubmitting) return;
     try {
-      setIsSubmitting(true);
-      resetRun();
-
-      // 1. Run the code locally against the judge
-      const result = await runAsync(currentCode);
-      setActiveTab("result");
-
-      // 2. Count passed tests
-      const passedTests = result.tests.filter(
-        (t) => t.status === "ACCEPTED"
-      ).length;
-      const totalTests = result.tests.length;
-
-      // 3. Broadcast progress so opponent sees it
-      sendMessage("PROGRESS_UPDATE", {
-        testsPassed: passedTests,
-        totalTests: totalTests,
-      });
-
-      // 4. If everything passed, broadcast submission intent
-      if (passedTests === totalTests && result.overallStatus === "ACCEPTED") {
-        sendMessage("MATCH_SUBMITTED", {
-          code: currentCode,
-          language: activeLanguage,
-        });
-      }
+      sync.setActiveTab("result");
+      await evaluation.submitCode(editor.code);
     } catch (err) {
-      console.error("Submission failed:", err);
-      setActiveTab("result");
-    } finally {
-      setIsSubmitting(false);
+      sync.setActiveTab("result");
     }
-  }, [currentCode, isSubmitting, resetRun, runAsync, sendMessage, activeLanguage]);
+  }, [evaluation, editor.code, sync]);
 
-  // The runResult acts as both run & submit result in match mode
-  const latestResult = runResult;
-  const latestLoading = isRunning || isSubmitting;
-  const latestError = runError;
+  // The latest states used for UI props
+  const latestLoading = evaluation.isRunning || evaluation.isSubmitting;
+  const latestError = evaluation.error;
 
   return (
     <div className="h-screen w-full bg-background flex flex-col">
@@ -121,8 +92,8 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
         onRun={handleRun}
         onSubmit={handleSubmit}
         onExit={onExit}
-        isLoading={isRunning}
-        isSubmitting={isSubmitting}
+        isLoading={evaluation.isRunning}
+        isSubmitting={evaluation.isSubmitting}
       />
 
       {/* Desktop: resizable two-panel split */}
@@ -138,8 +109,8 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
           >
             <DescriptionPanel
               problem={problem}
-              room={room}
-              currentUserId={user?.id}
+              room={sync.room}
+              currentUserId={sync.currentUser?.id}
             />
           </ResizablePanel>
 
@@ -151,11 +122,11 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
           <ResizablePanel defaultSize={60} minSize={25}>
             <EditorPanel
               problem={problem}
-              runResult={latestResult}
+              runResult={normalizedResult as any}
               isRunning={latestLoading}
               runError={latestError}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
+              activeTab={sync.activeTab}
+              onTabChange={sync.setActiveTab}
               enforcedLanguage={enforcedLanguage}
               roomId={roomId}
               sendMessage={sendMessage}
@@ -169,18 +140,18 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
         <section className="border-b border-border/40 bg-card/30 w-full ">
           <DescriptionPanel
             problem={problem}
-            room={room}
-            currentUserId={user?.id}
+            room={sync.room}
+            currentUserId={sync.currentUser?.id}
           />
         </section>
         <section className="border-b border-border/40 bg-card/10">
           <EditorPanel
             problem={problem}
-            runResult={latestResult}
+            runResult={normalizedResult as any}
             isRunning={latestLoading}
             runError={latestError}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
+            activeTab={sync.activeTab}
+            onTabChange={sync.setActiveTab}
             enforcedLanguage={enforcedLanguage}
             roomId={roomId}
             sendMessage={sendMessage}
