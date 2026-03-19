@@ -46,13 +46,6 @@ func (c *Client) ReadPump() {
 		var handleErr error
 
 		switch msg.Type {
-		case "PLAYER_READY":
-			// Safely parse bool from payload
-			payloadBytes, _ := json.Marshal(msg.Payload)
-			var ready bool
-			if err := json.Unmarshal(payloadBytes, &ready); err == nil {
-				updatedRoom, handleErr = c.Service.HandleReady(ctx, c.RoomID, c.UserID, ready)
-			}
 		case "PROGRESS_UPDATE":
 			// Safely parse progress from payload
 			payloadBytes, _ := json.Marshal(msg.Payload)
@@ -69,19 +62,6 @@ func (c *Client) ReadPump() {
 				// Special case: change broadcast type to MATCH_STARTED
 				msg.Type = "MATCH_STARTED"
 			}
-		case "CODE_UPDATE":
-			// Relay code update as OPPONENT_CODE_UPDATE with sender identity
-			c.Hub.Broadcast <- Message{
-				RoomID: c.RoomID,
-				Payload: models.ArenaWSMessage{
-					Type: "OPPONENT_CODE_UPDATE",
-					Payload: map[string]interface{}{
-						"userId": c.UserID,
-						"code":   msg.Payload,
-					},
-				},
-			}
-			continue
 		case "LEAVE_ROOM":
 			var wasDeleted bool
 			updatedRoom, wasDeleted, handleErr = c.Service.HandleExplicitLeave(ctx, c.RoomID, c.UserID)
