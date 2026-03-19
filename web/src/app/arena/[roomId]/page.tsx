@@ -24,7 +24,6 @@ export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
     isConnected,
     error,
     isLoading,
-    setReady,
     startMatch,
     leaveRoom,
   } = useArenaRoom(roomId);
@@ -68,8 +67,8 @@ export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
   // 4. Lobby View
   if (room) {
     return (
-      <div className="min-h-screen bg-background relative overflow-hidden flex items-center">
-        <div className="relative z-10 max-w-6xl mx-auto px-4 space-y-4">
+      <div className="min-h-screen bg-background relative flex flex-col">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 w-full">
           {/* Connection Status Indicator */}
           {!isConnected && (
             <div className="flex justify-center -mb-4 animate-in fade-in slide-in-from-top-4">
@@ -86,7 +85,6 @@ export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
           <ArenaLobby
             roomId={roomId}
             room={room}
-            setReady={setReady}
             startMatch={startMatch}
             leaveRoom={leaveRoom}
             isConnected={isConnected}
