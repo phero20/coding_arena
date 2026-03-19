@@ -13,7 +13,6 @@ import { WorkspaceHeader } from "./WorkspaceHeader";
 import { useRunSubmission } from "@/hooks/use-run-submission";
 import { useSubmitCode } from "@/hooks/use-submit-code";
 import { useEditorStore } from "@/store/use-editor-store";
-import { VerdictBadge } from "@/components/verdict/VerdictBadge";
 import type { ExecutionVerdict } from "@/services/submission.service";
 
 interface ProblemWorkspaceProps {
@@ -56,45 +55,27 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
     languageId: activeLanguage || "javascript",
   });
 
-  // Auto-switch to result tab when submission is complete with a verdict
-  React.useEffect(() => {
-    // Only auto-switch for submissions (submitStatus exists)
-    // Only when verdict is final (not PENDING) and we have test results
-    if (
-      submitStatus &&
-      submitStatus !== "PENDING" &&
-      submitTests &&
-      submitTests.length > 0 &&
-      activeTab !== "result"
-    ) {
-      setActiveTab("result");
-    }
-  }, [submitStatus, submitTests, activeTab]);
 
   const handleRun = async () => {
     if (!currentCode || isRunning) return;
     try {
-      resetSubmit(); // Clear previous submission result
-      await runAsync(currentCode);
-      // Add microtask delay to ensure state updates process before switching tab
-      await new Promise(resolve => setTimeout(resolve, 0));
+       resetSubmit();
       setActiveTab("result");
+      // Clear previous submission result
+      runAsync(currentCode);
     } catch (err) {
       console.error("Run failed:", err);
-      setActiveTab("result");
     }
   };
 
   const handleSubmit = async () => {
     if (!currentCode || isSubmitting) return;
     try {
-      resetRun(); // Clear previous run result
-      await submitAsync(currentCode);
-      // Don't switch tab immediately - let the effect handle it
-      // This ensures data is ready before tab switches
+      resetRun();
+      setActiveTab("result");
+      submitAsync(currentCode);
     } catch (err) {
       console.error("Submission failed:", err);
-      setActiveTab("result");
     }
   };
 
