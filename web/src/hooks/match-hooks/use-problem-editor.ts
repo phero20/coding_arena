@@ -57,15 +57,6 @@ export const useProblemEditor = (
     problem.code_snippets?.[language] ??
     "// No snippet available";
 
-  // Broadcast code changes (Debounced to 500ms)
-  const [debouncedCode] = useDebounce(code, 300);
-
-  useEffect(() => {
-    if (!sendMessage || !debouncedCode) return;
-    
-    sendMessage("CODE_UPDATE", debouncedCode);
-  }, [debouncedCode, sendMessage, roomId]);
-
   const languageOptions = useMemo(() => {
     if (enforcedLanguage) {
       return [{ id: enforcedLanguage, label: enforcedLanguage.toUpperCase() }];
