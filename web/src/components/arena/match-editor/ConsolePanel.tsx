@@ -49,7 +49,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
   const cases = useMemo(() => tests?.cases ?? [], [tests]);
   const activeCase = cases[activeIndex] ?? null;
   const activeResult = useMemo(
-    () => runResult?.tests[activeResultIndex] ?? null,
+    () => runResult?.tests?.[activeResultIndex] ?? null,
     [runResult, activeResultIndex]
   );
 
