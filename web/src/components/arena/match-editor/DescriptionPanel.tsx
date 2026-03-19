@@ -39,7 +39,7 @@ const difficultyColor: Record<Problem["difficulty"], string> = {
 const TABS = [
   { id: "description", label: "Description", icon: BookOpen },
   { id: "hints", label: "Hints", icon: HelpCircle },
-  { id: "opponents", label: "Opponents", icon: Users },
+  { id: "opponents", label: "Participants", icon: Users },
 ] as const;
 
 export const DescriptionPanel = React.memo(({
