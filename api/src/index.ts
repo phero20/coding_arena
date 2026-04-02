@@ -60,4 +60,6 @@ app.onError((err, c) => {
 
 registerRoutes(app);
 
-export default app;
+export default {
+  fetch: app.fetch,
+};
