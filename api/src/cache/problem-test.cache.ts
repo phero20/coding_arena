@@ -25,8 +25,8 @@ export class ProblemTestCache {
     const key = `problem-tests:${problem_id}:${type}`;
 
     try {
-      const cached = await redis.get<ProblemTest>(key);
-      if (cached) return cached;
+      const cached = await redis.get(key);
+      if (cached) return JSON.parse(cached);
     } catch (err) {
       console.error('[ProblemTestCache] Redis get error:', err);
     }
@@ -35,7 +35,7 @@ export class ProblemTestCache {
 
     if (test) {
       try {
-        await redis.set(key, test, { ex: this.CACHE_TTL });
+        await redis.set(key, JSON.stringify(test), 'EX', this.CACHE_TTL);
       } catch (err) {
         console.error('[ProblemTestCache] Redis set error:', err);
       }
