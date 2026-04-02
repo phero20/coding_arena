@@ -16,8 +16,8 @@ export class ProblemCache {
     const key = `problem:slug:${slug}`;
     
     try {
-      const cached = await redis.get<Problem>(key);
-      if (cached) return cached;
+      const cached = await redis.get(key);
+      if (cached) return JSON.parse(cached);
     } catch (err) {
       console.error('[ProblemCache] Redis get error:', err);
     }
@@ -26,9 +26,9 @@ export class ProblemCache {
 
     if (problem) {
       try {
-        await redis.set(key, problem, { ex: this.CACHE_TTL });
+        await redis.set(key, JSON.stringify(problem), 'EX', this.CACHE_TTL);
         // Also cache by ID for cross-reference
-        await redis.set(`problem:${problem.problem_id}`, problem, { ex: this.CACHE_TTL });
+        await redis.set(`problem:${problem.problem_id}`, JSON.stringify(problem), 'EX', this.CACHE_TTL);
       } catch (err) {
         console.error('[ProblemCache] Redis set error:', err);
       }
@@ -41,8 +41,8 @@ export class ProblemCache {
     const key = `problem:${id}`;
     
     try {
-      const cached = await redis.get<Problem>(key);
-      if (cached) return cached;
+      const cached = await redis.get(key);
+      if (cached) return JSON.parse(cached);
     } catch (err) {
       console.error('[ProblemCache] Redis get error:', err);
     }
@@ -51,9 +51,9 @@ export class ProblemCache {
 
     if (problem) {
       try {
-        await redis.set(key, problem, { ex: this.CACHE_TTL });
+        await redis.set(key, JSON.stringify(problem), 'EX', this.CACHE_TTL);
         // Also cache by slug
-        await redis.set(`problem:slug:${problem.problem_slug}`, problem, { ex: this.CACHE_TTL });
+        await redis.set(`problem:slug:${problem.problem_slug}`, JSON.stringify(problem), 'EX', this.CACHE_TTL);
       } catch (err) {
         console.error('[ProblemCache] Redis set error:', err);
       }
@@ -71,9 +71,9 @@ export class ProblemCache {
     const key = `problems:page:${page}:${limit}`;
     
     try {
-      const cached = await redis.get<{ problems: Problem[]; total: number }>(key);
+      const cached = await redis.get(key);
       if (cached) {
-        return cached;
+        return JSON.parse(cached);
       }
     } catch (err) {
       console.error('[ProblemCache] Redis get error:', err);
@@ -82,7 +82,7 @@ export class ProblemCache {
     const result = await this.problemService.getAllProblems(page, limit);
 
     try {
-      await redis.set(key, result, { ex: 1800 }); // 30 mins for list
+      await redis.set(key, JSON.stringify(result), 'EX', 1800); // 30 mins for list
     } catch (err) {
       console.error('[ProblemCache] Redis set error:', err);
     }
