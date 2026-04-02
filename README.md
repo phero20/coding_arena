@@ -1,0 +1,1 @@
+git ls-files --modified --others --exclude-standard | ForEach-Object { git add "$"; git commit -m "updated $" }
