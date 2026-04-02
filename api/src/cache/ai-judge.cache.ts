@@ -44,10 +44,10 @@ export class AiJudgeCache {
     const cacheKey = `ai-cache:${input.problemId}:${input.languageId}:${sourceHash}:${testsHash}`;
 
     try {
-      const cached = await redis.get<AiRunSamplesResult>(cacheKey);
+      const cached = await redis.get(cacheKey);
       if (cached) {
         return {
-          ...cached,
+          ...JSON.parse(cached),
           cached: true,
         };
       }
@@ -60,7 +60,7 @@ export class AiJudgeCache {
 
     // Persist result to cache if valid
     try {
-      await redis.set(cacheKey, result, { ex: 86400 });
+      await redis.set(cacheKey, JSON.stringify(result), 'EX', 86400);
     } catch (err) {
       console.error('[AiJudgeCache] Redis error (failed to set cache):', err);
     }
