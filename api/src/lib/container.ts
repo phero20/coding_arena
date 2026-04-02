@@ -21,12 +21,15 @@ import { SubmissionController } from '../controllers/submission.controller'
 import { AiProblemController } from '../controllers/ai-problem.controller'
 import { ProblemCache } from '../cache/problem.cache'
 import { ProblemTestCache } from '../cache/problem-test.cache'
+import { ArenaRepository } from '../repositories/arena.repository'
+import { ArenaController } from '../controllers/arena.controller'
 
 // --- Repositories ---
 const userRepository = new UserRepository()
 const problemRepository = new ProblemRepository()
 const problemTestRepository = new ProblemTestRepository()
 const submissionRepository = new SubmissionRepository()
+const arenaRepository = new ArenaRepository()
 
 // --- Services ---
 const authService = new AuthService(userRepository)
@@ -67,6 +70,7 @@ const aiProblemController = new AiProblemController(
   problemCache as any,
   problemTestCache as any,
 )
+const arenaController = new ArenaController(arenaRepository, userRepository)
 
 /**
  * Centalized Dependency Injection Container.
@@ -84,5 +88,10 @@ export const container = {
     problemTestController,
     submissionController,
     aiProblemController,
+    arenaController,
+  },
+  repositories: {
+    arenaRepository,
+    userRepository,
   },
 }
