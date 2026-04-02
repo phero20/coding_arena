@@ -106,7 +106,7 @@ export const config: EnvConfig = {
   judge0ApiKey: Bun.env.JUDGE0_API_KEY,
   judge0ApiHost: Bun.env.JUDGE0_API_HOST,
   groqApiKey: Bun.env.GROQ_API_KEY,
-  redisUrl: Bun.env.REDIS_URL,
+  redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
   upstashRedisRestUrl: Bun.env.UPSTASH_REDIS_REST_URL,
   upstashRedisRestToken: Bun.env.UPSTASH_REDIS_REST_TOKEN,
 };
