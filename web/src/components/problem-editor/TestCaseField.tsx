@@ -60,7 +60,7 @@ export const TestCaseField: React.FC<TestCaseFieldProps> = ({
       </div>
       <div
         className={cn(
-          "w-full p-3 rounded-lg font-mono text-xs overflow-x-auto whitespace-pre-wrap transition-all duration-300",
+          "w-full p-3 rounded-lg text-xs overflow-x-auto whitespace-pre-wrap transition-all duration-300",
           "bg-muted border border-border",
           isOutput ? "text-foreground" : "text-primary/90",
         )}
