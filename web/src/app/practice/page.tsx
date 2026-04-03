@@ -6,7 +6,6 @@ import { PracticeProblemList } from "@/components/practice/PracticeProblemList";
 const PracticePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
       <main className="pt-28 pb-16">
         <Container className="space-y-8">
           <PracticeProblemList />
