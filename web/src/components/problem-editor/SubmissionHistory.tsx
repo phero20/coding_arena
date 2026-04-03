@@ -183,7 +183,7 @@ export const SubmissionHistory: React.FC<SubmissionHistoryProps> = ({
 
                   <div className="flex items-center gap-3">
                     {sub.time !== undefined && (
-                      <div className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground/40">
+                      <div className="flex items-center gap-1 text-[10px]  text-muted-foreground/40">
                         <Zap className="size-3" />
                         <span>{sub.time}s</span>
                       </div>
