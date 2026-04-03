@@ -4,6 +4,7 @@ import type { User, NewUser } from '../db/schema'
 
 export interface IUserRepository {
   findByClerkId(clerkId: string): Promise<User | null>
+  findById(id: string): Promise<User | null>
   findByUsername(username: string): Promise<User | null>
   findByEmail(email: string): Promise<User | null>
   create(user: NewUser): Promise<User>
@@ -16,6 +17,16 @@ export class UserRepository implements IUserRepository {
       .select()
       .from(schema.users)
       .where(eq(schema.users.clerkId, clerkId))
+      .limit(1)
+
+    return user ?? null
+  }
+
+  async findById(id: string): Promise<User | null> {
+    const [user] = await db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.id, id))
       .limit(1)
 
     return user ?? null

@@ -5,8 +5,9 @@ import { registerProblemRoutes } from './problem.routes'
 import { registerProblemTestRoutes } from './problem-test.routes'
 import { registerSubmissionRoutes } from './submission.routes'
 import { registerAiProblemRoutes } from './ai-problem.routes'
+import { registerArenaRoutes } from './arena.routes'
 
-const { controllers, middlewares } = container
+const { controllers, middlewares, repositories } = container
 
 export const registerRoutes = (app: Hono) => {
   app.get('/', (c) => c.text('OK'))
@@ -38,6 +39,13 @@ export const registerRoutes = (app: Hono) => {
 
   registerAiProblemRoutes(v1, {
     aiProblemController: controllers.aiProblemController,
+  })
+
+  registerArenaRoutes(v1, {
+    arenaController: controllers.arenaController,
+    arenaRepository: repositories.arenaRepository,
+    userRepository: repositories.userRepository,
+    authMiddleware: middlewares.authMiddleware,
   })
 
   app.route('/api/v1', v1)
