@@ -228,7 +228,7 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({ content }) => {
             </Card>
           ) : (
             <code
-              className="px-1.5 py-0.5 rounded-md  bg-muted text-primary text-[12px] md:text-[13px] font-mono border border-border/40 break-all"
+              className="px-1.5 py-0.5 rounded-md  bg-muted text-primary text-[12px] md:text-[13px] border border-border/40 break-all"
               {...props}
             >
               {children}
