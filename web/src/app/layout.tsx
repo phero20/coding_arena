@@ -4,6 +4,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
+import { Navbar } from "@/components/layout/Navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 
 
@@ -41,12 +43,14 @@ export default function RootLayout({
         <body
           className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
         >
+          <Navbar />
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
+            <Toaster position="top-center" />
             <Providers>{children}</Providers>
           </ThemeProvider>
         </body>
