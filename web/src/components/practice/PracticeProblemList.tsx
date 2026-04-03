@@ -5,6 +5,8 @@ import Link from "next/link";
 import type { Problem } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import { useProblems } from "@/hooks/use-problems";
+import { useProblemSelection } from "@/hooks/use-problem-selection";
+import { Loader2, Swords } from "lucide-react";
 import { Input } from "../ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -18,26 +20,36 @@ import {
 import { cn } from "@/lib/utils";
 import { ButtonGroup } from "../ui/button-group";
 
-const difficultyColor: Record<Problem["difficulty"], string> = {
+const difficultyColor: Record<string, string> = {
   Easy: "text-emerald-400",
   Medium: "text-amber-400",
   Hard: "text-rose-400",
 };
 
-const difficultyBg: Record<Problem["difficulty"], string> = {
+const difficultyBg: Record<string, string> = {
   Easy: "bg-emerald-400/10 border-emerald-500/30",
   Medium: "bg-amber-400/10 border-amber-500/30",
   Hard: "bg-rose-400/10 border-rose-500/30",
 };
 
-type DifficultyFilter = "All" | Problem["difficulty"];
+type DifficultyFilter = "All" | "Easy" | "Medium" | "Hard";
 
-export const PracticeProblemList: React.FC = () => {
+interface PracticeProblemListProps {
+  isSelectPage?: boolean;
+  roomId?: string;
+}
+
+export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
+  isSelectPage = false,
+  roomId,
+}) => {
   const [page, setPage] = useState(1);
   const [topicFilter, setTopicFilter] = useState<string>("");
   const [search, setSearch] = useState("");
   const [difficultyFilter, setDifficultyFilter] =
     useState<DifficultyFilter>("All");
+
+  const { handleSelect, selectingId, isLoading: isSelectionLoading } = useProblemSelection({ roomId });
 
   const { problems, meta, isLoading, error } = useProblems(page, 20);
 
@@ -127,7 +139,13 @@ export const PracticeProblemList: React.FC = () => {
     return (
       <TableBody>
         {filteredProblems.map((problem) => (
-          <ProblemRow key={problem.problem_id} problem={problem} />
+          <ProblemRow
+            key={problem.problem_id}
+            problem={problem}
+            isSelectPage={isSelectPage}
+            onSelect={() => handleSelect(problem)}
+            isHosting={isSelectionLoading && selectingId === problem.problem_id}
+          />
         ))}
       </TableBody>
     );
@@ -137,13 +155,40 @@ export const PracticeProblemList: React.FC = () => {
     <section className="space-y-6">
       <header className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
+          <div className="flex-1">
+            {isSelectPage && (
+              <div className="mb-6 flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/5 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Swords className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold tracking-tight">
+                      Arena Selection Mode
+                    </h3>
+                    <p className="text-[11px] text-muted-foreground font-medium">
+                      Choose a problem to host your coding battle.
+                    </p>
+                  </div>
+                </div>
+                <Link href="/arena">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-[11px] font-bold border-border/40 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/20 transition-all"
+                  >
+                    Cancel
+                  </Button>
+                </Link>
+              </div>
+            )}
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-              Practice
+              {isSelectPage ? "Select Problem" : "Practice"}
             </h1>
             <p className="text-sm text-muted-foreground mt-1 text-balance">
-              Solve curated problems to sharpen your skills before entering the
-              arena.
+              {isSelectPage
+                ? "Browse and select a challenge for your arena match."
+                : "Solve curated problems to sharpen your skills before entering the arena."}
             </p>
           </div>
 
@@ -206,13 +251,13 @@ export const PracticeProblemList: React.FC = () => {
           <Table className="table-fixed">
             <TableHeader className="bg-muted/40">
               <TableRow className="border-b border-border/40 hover:bg-transparent">
-                <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-16">
+                <TableHead className="pl-4 pr-0 md:pr-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-12">
                   ID
                 </TableHead>
-                <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
+                <TableHead className="px-4 md:px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
                   Title
                 </TableHead>
-                <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-28 sm:w-32">
+                <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-20 sm:w-32">
                   Difficulty
                 </TableHead>
                 <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-40 hidden md:table-cell">
@@ -266,13 +311,25 @@ export const PracticeProblemList: React.FC = () => {
   );
 };
 
-const ProblemRow: React.FC<{ problem: Problem }> = ({ problem }) => {
+interface ProblemRowProps {
+  problem: Problem;
+  isSelectPage: boolean;
+  onSelect: () => void;
+  isHosting: boolean;
+}
+
+const ProblemRow: React.FC<ProblemRowProps> = ({
+  problem,
+  isSelectPage,
+  onSelect,
+  isHosting,
+}) => {
   return (
     <TableRow className="group border-t border-border/40 hover:bg-primary/3 transition-colors">
-      <TableCell className="px-4 py-3 align-middle text-xs text-muted-foreground font-mono">
+      <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
         {problem.problem_id}
       </TableCell>
-      <TableCell className="px-4 py-3 align-middle min-w-0">
+      <TableCell className="px-0 md:px-4 py-3 align-middle min-w-0">
         <div className="flex flex-col min-w-0">
           <div className="text-sm truncate font-bold text-foreground group-hover:text-primary transition-colors">
             <Link href={`/practice/problem/${problem.problem_slug}`}>
@@ -312,14 +369,31 @@ const ProblemRow: React.FC<{ problem: Problem }> = ({ problem }) => {
         </div>
       </TableCell>
       <TableCell className="px-4 py-3 align-middle text-right whitespace-nowrap">
-        <Link href={`/practice/problem/${problem.problem_slug}`}>
+        {isSelectPage ? (
           <Button
+            key={problem.problem_id}
             size="sm"
-            className=" text-xs h-8 px-4 font-black transition-all  hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+            onClick={onSelect}
+            disabled={isHosting}
+            className="text-xs font-medium h-8 px-3  transition-all hover:-translate-y-0.5 active:translate-y-0 active:scale-95 bg-primary/90 hover:bg-primary"
           >
-            SOLVE
+            {isHosting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>SELECT</>
+            )}
           </Button>
-        </Link>
+        ) : (
+          <Link href={`/practice/problem/${problem.problem_slug}`}>
+            <Button
+              key={problem.problem_id}
+              size="sm"
+              className=" text-xs h-8 px-4 font-black transition-all  hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
+            >
+              SOLVE
+            </Button>
+          </Link>
+        )}
       </TableCell>
     </TableRow>
   );
