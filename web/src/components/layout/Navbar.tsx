@@ -47,10 +47,19 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // List of paths where the Navbar should be hidden
+  const HIDDEN_NAVBAR_PATHS = ["/practice/problem"]; // Add more prefixes here (e.g., "/battle/", "/editor/")
+
+  const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some(
+    (path) => pathname.startsWith(path) && pathname !== path
+  );
+
+  if (shouldHideNavbar) return null;
+
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-[100] transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-100 transition-all duration-300",
         scrolled
           ? "py-3 bg-background/80 border-b border-border/40 backdrop-blur-xl"
           : "py-5 bg-transparent border-b border-transparent",
