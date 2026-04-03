@@ -135,7 +135,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                     Execution Error
                   </h3>
                   <div className="max-w-[320px] p-3 rounded-lg bg-destructive/5 border border-destructive/20 backdrop-blur-md">
-                    <p className="text-[11px] font-mono text-destructive leading-relaxed wrap-break-word">
+                    <p className="text-[11px] text-destructive leading-relaxed wrap-break-word">
                       {runError.message ||
                         "An unexpected server error occurred while running your code."}
                     </p>
