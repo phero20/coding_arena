@@ -1,14 +1,9 @@
 import { Queue } from 'bullmq'
 import { config } from '../configs/env'
-import pino from 'pino'
+import { createLogger } from './logger';
 
-/**
- * Logger for queue operations
- */
-const logger = pino({
-  name: 'submission-queue',
-  level: process.env.LOG_LEVEL || 'info',
-})
+const logger = createLogger('queue');
+
 
 /**
  * Redis connection configuration for BullMQ
@@ -66,7 +61,10 @@ submissionQueue.on('error', (err) => {
 })
 
 ;(submissionQueue as any).on('completed', (job: any) => {
-  logger.info({ jobId: job.id }, 'Job completed successfully')
+  logger.info(
+    { submissionId: job.data.submissionId, problemId: job.data.problemId, userId: job.data.userId },
+    "Submission evaluation completed successfully"
+  );
 })
 
 /**
