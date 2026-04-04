@@ -1,4 +1,5 @@
 import { mongoose } from '../connection'
+import type { ProblemTest, TestCase } from '../../types/problem.types'
 
 const TestCaseSchema = new mongoose.Schema(
   {
@@ -36,26 +37,11 @@ ProblemTestSchema.index(
   { unique: true, name: 'problem_test_unique_by_type' },
 )
 
-export interface TestCase {
-  input: string
-  expected_output: string
-  timeout_ms?: number
-  memory_limit_mb?: number
-  weight?: number
-  is_sample?: boolean
-}
-
-export interface ProblemTest {
-  problem_id: string
-  type: 'public' | 'hidden' | 'stress' | 'ai_eval'
-  cases: TestCase[]
-  createdAt: Date
-  updatedAt: Date
-}
+// Re-export domain types for backwards compatibility
+export type { ProblemTest, TestCase } from '../../types/problem.types'
 
 export type ProblemTestDocument = ProblemTest & mongoose.Document
 
 export const ProblemTestModel =
   mongoose.models.ProblemTest ||
   mongoose.model<ProblemTestDocument>('ProblemTest', ProblemTestSchema)
-
