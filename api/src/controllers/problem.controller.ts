@@ -1,56 +1,20 @@
-import type { Context } from "hono";
-import { ProblemService } from "../services/problem.service";
-import { ApiResponse } from "../utils/api-response";
+import { BaseController } from "./base.controller";
+import type { IProblemService } from "../services/problem.service";
 import { AppError } from "../utils/app-error";
+import { ApiResponse } from "../utils/api-response";
+import type { Context } from "hono";
+import type { AppEnv, ValidatedContext } from "../types/hono.types";
+import type { CreateProblemInput } from "../validators/problem.validator";
 
-export class ProblemController {
-  constructor(private readonly problemService: ProblemService) {}
+export class ProblemController extends BaseController {
+  constructor(private readonly problemService: IProblemService) {
+    super();
+  }
 
-  async createProblem(c: Context) {
-    const body = await c.req.json().catch(() => null);
-
-    if (!body) {
-      throw AppError.badRequest("Invalid JSON body");
-    }
-
-    const {
-      title,
-      problem_id,
-      frontend_id,
-      difficulty,
-      problem_slug,
-      topics,
-      description,
-      examples,
-      constraints,
-      follow_ups,
-      hints,
-      code_snippets,
-      solutions,
-    } = body;
-
-    if (!title || !problem_id || !difficulty || !problem_slug || !description) {
-      throw AppError.badRequest("Missing required fields for problem");
-    }
-
-    const problem = await this.problemService.upsertProblem({
-      title,
-      problem_id,
-      frontend_id,
-      difficulty,
-      problem_slug,
-      topics,
-      description,
-      examples,
-      constraints,
-      follow_ups,
-      hints,
-      code_snippets,
-      solutions,
-    });
-
-    const response = ApiResponse.success(problem);
-    return c.json(response.toJSON(), 201);
+  async createProblem(c: Context<AppEnv, any, ValidatedContext<CreateProblemInput>>) {
+    const body = this.getBody(c);
+    const problem = await this.problemService.upsertProblem(body);
+    return this.created(c, problem);
   }
 
   async getProblemBySlug(c: Context) {
@@ -61,8 +25,7 @@ export class ProblemController {
       throw AppError.notFound("Problem not found");
     }
 
-    const response = ApiResponse.success(problem);
-    return c.json(response.toJSON());
+    return this.ok(c, problem);
   }
 
   async getProblemById(c: Context) {
@@ -73,8 +36,7 @@ export class ProblemController {
       throw AppError.notFound("Problem not found");
     }
 
-    const response = ApiResponse.success(problem);
-    return c.json(response.toJSON());
+    return this.ok(c, problem);
   }
 
   async getProblemsByTopic(c: Context) {
@@ -82,9 +44,12 @@ export class ProblemController {
     const limitParam = c.req.query("limit");
     const limit = limitParam ? Number(limitParam) : undefined;
 
+    if (limit !== undefined && !Number.isFinite(limit)) {
+      throw AppError.badRequest("limit must be a valid number");
+    }
+
     const problems = await this.problemService.searchByTopic(topic, limit);
-    const response = ApiResponse.success(problems);
-    return c.json(response.toJSON());
+    return this.ok(c, problems);
   }
 
   async getProblems(c: Context) {
@@ -92,13 +57,12 @@ export class ProblemController {
     const limit = Number(c.req.query("limit") || "20");
 
     const result = await this.problemService.getAllProblems(page, limit);
-    const response = ApiResponse.paginated(result.problems, {
+    return c.json(ApiResponse.paginated(result.problems, {
       totalItems: result.total,
       itemCount: result.problems.length,
       perPage: limit,
       totalPages: Math.ceil(result.total / limit),
       currentPage: page,
-    });
-    return c.json(response.toJSON());
+    }).toJSON());
   }
 }
