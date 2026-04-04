@@ -1,22 +1,9 @@
-import type { Problem, ProblemDocument } from "../mongo/models/problem.model";
+import { ProblemModel } from '../mongo/models/problem.model'
+import type { Problem, CreateOrUpdateProblemInput } from '../types/problem.types'
+import type { ProblemDocument } from '../mongo/models/problem.model'
 
-import { ProblemModel } from "../mongo/models/problem.model";
-
-export interface CreateOrUpdateProblemInput {
-  title: string;
-  problem_id: string;
-  frontend_id?: string;
-  difficulty: Problem["difficulty"];
-  problem_slug: string;
-  topics?: string[];
-  description: string;
-  examples?: Problem["examples"];
-  constraints?: string[];
-  follow_ups?: string[];
-  hints?: string[];
-  code_snippets?: Problem["code_snippets"];
-  solutions?: string;
-}
+// Re-export for external consumers to avoid importing from model
+export type { CreateOrUpdateProblemInput } from '../types/problem.types'
 
 export interface IProblemRepository {
   findByProblemId(problem_id: string): Promise<Problem | null>;
@@ -58,9 +45,6 @@ export class ProblemRepository implements IProblemRepository {
   ): Promise<{ problems: Problem[]; total: number }> {
     const skip = (page - 1) * limit;
 
-    // We use a regular expression check to see if we can sort numerically
-    // but since problem_id is a string, we'll just sort by it normally first.
-    // If you want true numeric sort, you might need a separate numeric field.
     const [docs, total] = await Promise.all([
       ProblemModel.find()
         .sort({ problem_id: 1 })
