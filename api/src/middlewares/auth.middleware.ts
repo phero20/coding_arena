@@ -1,5 +1,6 @@
 import type { Context, Next } from 'hono'
-import { clerkClient, verifyToken } from '../lib/clerk'
+import { clerkClient, verifyToken } from "../libs/clerk";
+
 import type { AuthService } from '../services/auth.service'
 import { AppError } from '../utils/app-error'
 import type { AuthContext } from '../types/auth'
