@@ -1,4 +1,5 @@
 import { mongoose } from '../connection'
+import type { Problem } from '../../types/problem.types'
 
 const ExampleSchema = new mongoose.Schema(
   {
@@ -52,45 +53,11 @@ ProblemSchema.index(
   { name: 'problem_text_index' },
 )
 
-export interface Example {
-  example_num: number
-  example_text: string
-  images: string[]
-}
-
-export interface CodeSnippets {
-  python?: string
-  cpp?: string
-  java?: string
-  javascript?: string
-  typescript?: string
-  go?: string
-  rust?: string
-  // allow extra language keys
-  [language: string]: string | undefined
-}
-
-export interface Problem {
-  title: string
-  problem_id: string
-  frontend_id?: string
-  difficulty: 'Easy' | 'Medium' | 'Hard'
-  problem_slug: string
-  topics: string[]
-  description: string
-  examples: Example[]
-  constraints: string[]
-  follow_ups: string[]
-  hints: string[]
-  code_snippets: CodeSnippets
-  solutions?: string
-  createdAt: Date
-  updatedAt: Date
-}
+// Re-export from domain types for backwards compatibility
+export type { Problem, Example, CodeSnippets } from '../../types/problem.types'
 
 export type ProblemDocument = Problem & mongoose.Document
 
 export const ProblemModel =
   mongoose.models.Problem ||
   mongoose.model<ProblemDocument>('Problem', ProblemSchema)
-
