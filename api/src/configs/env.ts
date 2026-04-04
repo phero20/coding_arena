@@ -1,112 +1,119 @@
+// ─── Node Env ────────────────────────────────────────────────────────────────
+
 type NodeEnv = "development" | "test" | "production";
 
-interface EnvConfig {
-  nodeEnv: NodeEnv;
-  isDev: boolean;
-  isTest: boolean;
-  isProd: boolean;
-  port: number;
-  appName: string;
-  apiUrl: string;
-  clientUrl: string;
-  jwtSecret?: string;
-  clerkSecretKey: string;
-  clerkWebhookSecret?: string;
-  clerkJwtAudience?: string | string[];
-  clerkAuthorizedParties?: string[];
-  databaseUrl: string;
-  mongoUri: string;
-  mongoDbName?: string;
-  judge0BaseUrl?: string;
-  judge0ApiKey?: string;
-  judge0ApiHost?: string;
-  groqApiKey?: string;
-  redisUrl?: string;
-  upstashRedisRestUrl?: string;
-  upstashRedisRestToken?: string;
-}
+const getNodeEnv = (): NodeEnv => {
+  const env = (Bun.env.NODE_ENV || "development").toLowerCase();
+  if (env === "development" || env === "test" || env === "production") {
+    return env as NodeEnv;
+  }
+  return "development";
+};
+
+// ─── Generic Helpers ─────────────────────────────────────────────────────────
+
+const requireEnv = (key: string): string => {
+  const value = Bun.env[key];
+  if (!value) throw new Error(`Environment variable "${key}" is required but not set.`);
+  return value;
+};
 
 const parseNumber = (value: string | undefined, fallback: number): number => {
   const parsed = value ? Number(value) : NaN;
   return Number.isFinite(parsed) ? parsed : fallback;
 };
 
-const getNodeEnv = (): NodeEnv => {
-  const env = (Bun.env.NODE_ENV || "development").toLowerCase();
-
-  if (env === "development" || env === "test" || env === "production") {
-    return env;
-  }
-
-  return "development";
-};
-
-const env = getNodeEnv();
-
-const ensureDatabaseUrl = (): string => {
-  const value = Bun.env.DATABASE_URL;
-  if (!value) {
-    throw new Error("DATABASE_URL environment variable is not set");
-  }
-  return value;
-};
-
-const ensureClerkSecretKey = (): string => {
-  const value = Bun.env.CLERK_SECRET_KEY;
-  if (!value) {
-    throw new Error("CLERK_SECRET_KEY environment variable is not set");
-  }
-  return value;
-};
-
-const ensureMongoUri = (): string => {
-  const value = Bun.env.MONGODB_URI;
-  if (!value) {
-    throw new Error("MONGODB_URI environment variable is not set");
-  }
-  return value;
-};
-
 const parseStringList = (value: string | undefined): string[] | undefined => {
   if (!value) return undefined;
-  return value
-    .split(",")
-    .map((v) => v.trim())
-    .filter((v) => v.length > 0);
+  return value.split(",").map((v) => v.trim()).filter((v) => v.length > 0);
 };
 
-const parseAudience = (
-  value: string | undefined,
-): string | string[] | undefined => {
+const parseAudience = (value: string | undefined): string | string[] | undefined => {
   if (!value) return undefined;
-  if (value.includes(",")) {
-    return parseStringList(value) as string[];
-  }
+  if (value.includes(",")) return parseStringList(value) as string[];
   return value;
 };
 
+// ─── Config Shape ────────────────────────────────────────────────────────────
+
+interface EnvConfig {
+  // App
+  nodeEnv: NodeEnv;
+  isDev: boolean;
+  isTest: boolean;
+  isProd: boolean;
+  port: number;
+  appName: string;
+
+  // URLs
+  apiUrl: string;
+  clientUrl: string;
+
+  // Clerk Auth
+  clerkSecretKey: string;
+  clerkWebhookSecret?: string;
+  clerkJwtAudience?: string | string[];
+  clerkAuthorizedParties?: string[];
+
+  // Database
+  databaseUrl: string;
+  mongoUri: string;
+  mongoDbName?: string;
+
+  // Judge0
+  judge0BaseUrl?: string;
+  judge0ApiKey?: string;
+  judge0ApiHost?: string;
+
+  // AI
+  groqApiKey?: string;
+
+  // Redis
+  redisUrl: string;
+
+  // Logging
+  logLevel: string;
+}
+
+// ─── Config Export ───────────────────────────────────────────────────────────
+
+const nodeEnv = getNodeEnv();
+
 export const config: EnvConfig = {
-  nodeEnv: env,
-  isDev: env === "development",
-  isTest: env === "test",
-  isProd: env === "production",
+  // App
+  nodeEnv,
+  isDev: nodeEnv === "development",
+  isTest: nodeEnv === "test",
+  isProd: nodeEnv === "production",
   port: parseNumber(Bun.env.PORT, 3000),
   appName: Bun.env.APP_NAME || "coding-arena-api",
+
+  // URLs
   apiUrl: Bun.env.API_URL || "http://localhost:3000",
   clientUrl: Bun.env.CLIENT_URL || "http://localhost:3001",
-  jwtSecret: Bun.env.JWT_SECRET,
-  clerkSecretKey: ensureClerkSecretKey(),
+
+  // Clerk Auth
+  clerkSecretKey: requireEnv("CLERK_SECRET_KEY"),
   clerkWebhookSecret: Bun.env.CLERK_WEBHOOK_SECRET,
   clerkJwtAudience: parseAudience(Bun.env.CLERK_JWT_AUDIENCE),
   clerkAuthorizedParties: parseStringList(Bun.env.CLERK_AUTHORIZED_PARTIES),
-  databaseUrl: ensureDatabaseUrl(),
-  mongoUri: ensureMongoUri(),
+
+  // Database
+  databaseUrl: requireEnv("DATABASE_URL"),
+  mongoUri: requireEnv("MONGODB_URI"),
   mongoDbName: Bun.env.MONGODB_DB_NAME,
+
+  // Judge0
   judge0BaseUrl: Bun.env.JUDGE0_BASE_URL,
   judge0ApiKey: Bun.env.JUDGE0_API_KEY,
   judge0ApiHost: Bun.env.JUDGE0_API_HOST,
+
+  // AI
   groqApiKey: Bun.env.GROQ_API_KEY,
-  redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
-  upstashRedisRestUrl: Bun.env.UPSTASH_REDIS_REST_URL,
-  upstashRedisRestToken: Bun.env.UPSTASH_REDIS_REST_TOKEN,
+
+  // Redis
+  redisUrl: Bun.env.REDIS_URL || "redis://localhost:6379",
+
+  // Logging
+  logLevel: Bun.env.LOG_LEVEL || "info",
 };
