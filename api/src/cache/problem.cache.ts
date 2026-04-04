@@ -1,13 +1,11 @@
+import { createLogger } from '../libs/logger';
 import { redis } from '../libs/redis';
-import type { Problem } from '../mongo/models/problem.model';
-import type { ProblemService } from '../services/problem.service';
-import type { CreateOrUpdateProblemInput } from '../repositories/problem.repository';
+import type { Problem, CreateOrUpdateProblemInput } from '../types/problem.types';
+import type { IProblemService, ProblemService } from '../services/problem.service';
 
-/**
- * ProblemCache wraps the ProblemService to provide Redis-based caching.
- * It improves performance for frequently accessed problems.
- */
-export class ProblemCache {
+const logger = createLogger('problem-cache');
+
+export class ProblemCache implements IProblemService {
   private readonly CACHE_TTL = 3600; // 1 hour
 
   constructor(private readonly problemService: ProblemService) {}
@@ -19,7 +17,7 @@ export class ProblemCache {
       const cached = await redis.get(key);
       if (cached) return JSON.parse(cached);
     } catch (err) {
-      console.error('[ProblemCache] Redis get error:', err);
+      logger.error({ slug, err }, 'Redis get error');
     }
 
     const problem = await this.problemService.getProblemBySlug(slug);
@@ -27,10 +25,9 @@ export class ProblemCache {
     if (problem) {
       try {
         await redis.set(key, JSON.stringify(problem), 'EX', this.CACHE_TTL);
-        // Also cache by ID for cross-reference
         await redis.set(`problem:${problem.problem_id}`, JSON.stringify(problem), 'EX', this.CACHE_TTL);
       } catch (err) {
-        console.error('[ProblemCache] Redis set error:', err);
+        logger.error({ id: problem.problem_id, err }, 'Redis set error');
       }
     }
 
@@ -44,7 +41,7 @@ export class ProblemCache {
       const cached = await redis.get(key);
       if (cached) return JSON.parse(cached);
     } catch (err) {
-      console.error('[ProblemCache] Redis get error:', err);
+      logger.error({ id, err }, 'Redis get error');
     }
 
     const problem = await this.problemService.getProblemById(id);
@@ -52,10 +49,9 @@ export class ProblemCache {
     if (problem) {
       try {
         await redis.set(key, JSON.stringify(problem), 'EX', this.CACHE_TTL);
-        // Also cache by slug
         await redis.set(`problem:slug:${problem.problem_slug}`, JSON.stringify(problem), 'EX', this.CACHE_TTL);
       } catch (err) {
-        console.error('[ProblemCache] Redis set error:', err);
+        logger.error({ id: problem.problem_id, err }, 'Redis set error');
       }
     }
 
@@ -63,7 +59,6 @@ export class ProblemCache {
   }
 
   async searchByTopic(topic: string, limit?: number): Promise<Problem[]> {
-    // Search is dynamic, usually not cached at this grain unless it's "Popular Topics"
     return this.problemService.searchByTopic(topic, limit);
   }
 
@@ -76,7 +71,7 @@ export class ProblemCache {
         return JSON.parse(cached);
       }
     } catch (err) {
-      console.error('[ProblemCache] Redis get error:', err);
+      logger.error({ page, limit, err }, 'Redis get error');
     }
 
     const result = await this.problemService.getAllProblems(page, limit);
@@ -84,7 +79,7 @@ export class ProblemCache {
     try {
       await redis.set(key, JSON.stringify(result), 'EX', 1800); // 30 mins for list
     } catch (err) {
-      console.error('[ProblemCache] Redis set error:', err);
+      logger.error({ page, limit, err }, 'Redis set error');
     }
 
     return result;
@@ -93,22 +88,18 @@ export class ProblemCache {
   async upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem> {
     const problem = await this.problemService.upsertProblem(input);
     
-    // Invalidate individual caches
     try {
       await redis.del(`problem:${problem.problem_id}`);
       await redis.del(`problem:slug:${problem.problem_slug}`);
       
-      // Invalidate all paginated list segments
-      // Note: In production with many keys, we'd use a versioning prefix or a set of keys
-      // For now, clearing based on prefix is industry standard for small-mid size lists.
       const keys = await redis.keys('problems:page:*');
       if (keys.length > 0) {
         await redis.del(...keys);
       }
       
-      console.log(`[ProblemCache] Invalidated all problem caches for update: ${problem.problem_id}`);
+      logger.info({ id: problem.problem_id }, 'Invalidated problem caches');
     } catch (err) {
-      console.error('[ProblemCache] Redis invalidation error:', err);
+      logger.error({ id: problem.problem_id, err }, 'Redis invalidation error');
     }
 
     return problem;
