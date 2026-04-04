@@ -1,26 +1,18 @@
 import type { Context } from 'hono'
-import type { ProblemTestService } from '../services/problem-test.service'
+import type { AppEnv, ValidatedContext } from '../types/hono.types'
+import type { UpsertTestsInput } from '../validators/problem-test.validator'
+import type { IProblemTestService } from '../services/problem-test.service'
 import { ApiResponse } from '../utils/api-response'
 import { AppError } from '../utils/app-error'
 
 export class ProblemTestController {
-  constructor(private readonly problemTestService: ProblemTestService) {}
+  constructor(private readonly problemTestService: IProblemTestService) {}
 
-  async upsertTests(c: Context) {
+  async upsertTests(c: Context<AppEnv, any, ValidatedContext<UpsertTestsInput>>) {
     const problem_id = c.req.param('problem_id')!
-    const body = await c.req.json().catch(() => null)
-
-    if (!body) {
-      throw AppError.badRequest('Invalid JSON body')
-    }
+    const body = c.req.valid('json')
 
     const { type, cases } = body
-
-    if (!type || !cases || !Array.isArray(cases)) {
-      throw AppError.badRequest(
-        'Missing required fields: type and cases (array)',
-      )
-    }
 
     const problemTest = await this.problemTestService.upsertTests({
       problem_id,
