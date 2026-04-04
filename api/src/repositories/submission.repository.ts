@@ -1,20 +1,9 @@
-import type {
-  Submission,
-  SubmissionDocument,
-  SubmissionStatus,
-} from '../mongo/models/submission.model'
 import { SubmissionModel } from '../mongo/models/submission.model'
+import type { Submission, SubmissionStatus, CreateSubmissionInput, UpdateSubmissionInput } from '../types/submission.types'
+import type { SubmissionDocument } from '../mongo/models/submission.model'
 
-export interface CreateSubmissionInput {
-  problem_id: string
-  user_id: string
-  language_id: string
-  source_code: string
-  status?: SubmissionStatus
-  time?: number
-  memory?: number
-  details?: unknown
-}
+// Re-export for external consumers
+export type { CreateSubmissionInput, UpdateSubmissionInput } from '../types/submission.types'
 
 export interface UpdateSubmissionStatusInput {
   id: string
@@ -39,22 +28,20 @@ export interface ISubmissionRepository {
 export class SubmissionRepository implements ISubmissionRepository {
   private toSubmission(doc: SubmissionDocument | null): Submission | null {
     if (!doc) return null
-    const json = doc.toJSON() as any
-    json.id = json._id.toString()
-    delete json.__v
-    return json as Submission
+    const obj = doc.toObject()
+    return {
+      ...obj,
+      id: doc._id.toString(),
+    } as Submission
   }
 
   async createSubmission(input: CreateSubmissionInput): Promise<Submission> {
     const doc = await SubmissionModel.create({
-      problem_id: input.problem_id,
-      user_id: input.user_id,
-      language_id: input.language_id,
-      source_code: input.source_code,
+      problemId: input.problemId,
+      userId: input.userId,
+      languageId: input.languageId,
+      sourceCode: input.sourceCode,
       status: input.status ?? 'PENDING',
-      time: input.time,
-      memory: input.memory,
-      details: input.details,
     })
 
     const submission = this.toSubmission(doc)
@@ -64,16 +51,13 @@ export class SubmissionRepository implements ISubmissionRepository {
     return submission
   }
 
-  /**
-   * Updates the existing submission by id. Never creates a new document.
-   */
   async updateSubmissionStatus(
     input: UpdateSubmissionStatusInput,
   ): Promise<Submission | null> {
     const doc = await SubmissionModel.findByIdAndUpdate(
       input.id,
       { $set: { status: input.status, time: input.time, memory: input.memory, details: input.details } },
-      { returnDocument: 'after' },
+      { new: true },
     ).exec()
     return this.toSubmission(doc)
   }
@@ -88,8 +72,8 @@ export class SubmissionRepository implements ISubmissionRepository {
     problemId: string,
   ): Promise<Submission[]> {
     const docs = await SubmissionModel.find({
-      user_id: userId,
-      problem_id: problemId,
+      userId: userId,
+      problemId: problemId,
     })
       .sort({ createdAt: -1 })
       .exec()
@@ -99,4 +83,3 @@ export class SubmissionRepository implements ISubmissionRepository {
       .filter((s): s is Submission => s !== null)
   }
 }
-
