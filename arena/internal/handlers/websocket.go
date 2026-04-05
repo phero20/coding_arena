@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"context"
-	"log"
+	"log/slog" // Changed from "log"
+	// "log" // Removed
 
 	"arena/internal/hub"
 	"arena/internal/models"
@@ -15,17 +16,18 @@ import (
 
 func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaRepository) fiber.Handler {
 	if h == nil || s == nil || r == nil {
-		log.Fatal("[WS] ArenaHandler initialized with nil dependencies!")
+		slog.Error("[WS] ArenaHandler initialized with nil dependencies!") // Changed from log.Fatal
 	}
 
 	return websocket.New(func(c *websocket.Conn) {
-		log.Printf("[WS] Connection Handshake Successful: %s", c.RemoteAddr().String())
+		slog.Info("WS connection handshake successful", "remoteAddr", c.RemoteAddr().String()) // Changed from log.Printf
 		
 		// Panic Recovery for this specific connection
 		defer func() {
 			if r := recover(); r != nil {
-				log.Printf("[WS] PANIC RECOVERED inside connection: %v", r)
+				slog.Error("WS Panic Recovered", "panic", r) // Changed from log.Printf
 			}
+			c.Close() // Added c.Close() here as per instruction
 		}()
 
 		roomId := c.Params("roomId")
@@ -47,27 +49,27 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 		}
 		avatarUrl := c.Query("avatarUrl")
 
-		log.Printf("[WS] Connection Attempt: Room=%s, User=%s (Method=%s)", roomId, userId, authMethod)
+		slog.Info("WS Connection Attempt", "roomId", roomId, "userId", userId, "authMethod", authMethod) // Changed from log.Printf
 
 		if roomId == "" || userId == "" {
-			log.Println("[WS] Rejected: Missing roomId or userId")
+			slog.Warn("WS Rejected: Missing roomId or userId") // Changed from log.Println
 			c.WriteJSON(models.ArenaWSMessage{
 				Type:    "ERROR",
 				Payload: "Authentication failed: missing ID",
 			})
-			c.Close()
+			// c.Close() // Removed as it's now in defer
 			return
 		}
 
 		// Handle Join Logic (Persists in Redis)
 		room, isNewPlayer, err := s.HandleJoin(context.Background(), roomId, userId, username, avatarUrl)
 		if err != nil {
-			log.Printf("[WS] Join Error for User %s: %v", userId, err)
+			slog.Error("WS Join Error", "userId", userId, "error", err) // Changed from log.Printf
 			c.WriteJSON(models.ArenaWSMessage{
 				Type:    "ERROR",
 				Payload: err.Error(),
 			})
-			c.Close()
+			// c.Close() // Removed as it's now in defer
 			return
 		}
 
