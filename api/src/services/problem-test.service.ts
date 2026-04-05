@@ -4,7 +4,16 @@ import type {
   UpsertProblemTestInput,
 } from '../repositories/problem-test.repository'
 
-export class ProblemTestService {
+export interface IProblemTestService {
+  getTestsForProblem(problem_id: string): Promise<ProblemTest[]>
+  getTestsForProblemAndType(
+    problem_id: string,
+    type: ProblemTest['type'],
+  ): Promise<ProblemTest | null>
+  upsertTests(input: UpsertProblemTestInput): Promise<ProblemTest>
+}
+
+export class ProblemTestService implements IProblemTestService {
   constructor(private readonly problemTestRepository: IProblemTestRepository) {}
 
   getTestsForProblem(
