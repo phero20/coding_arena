@@ -1,15 +1,21 @@
-import type { Hono } from 'hono'
+import { Hono } from 'hono'
+import { zValidator } from '@hono/zod-validator'
+import { importedProblemSchema } from '../validators/ai-problem.validator'
 import type { AiProblemController } from '../controllers/ai-problem.controller'
+import type { AppEnv } from '../types/hono.types'
 
 export interface AiProblemRoutesDeps {
   aiProblemController: AiProblemController
 }
 
-export const registerAiProblemRoutes = (app: Hono, deps: AiProblemRoutesDeps) => {
+export const registerAiProblemRoutes = (app: Hono<AppEnv>, deps: AiProblemRoutesDeps) => {
   const { aiProblemController } = deps
 
   // NOTE: This route is intentionally left unauthenticated for now.
   // Add auth and role-based checks before using in production.
-  app.post('/problems/ai-import', (c) => aiProblemController.import(c))
+  app.post(
+    '/ai/import',
+    zValidator('json', importedProblemSchema),
+    (c) => aiProblemController.import(c)
+  )
 }
-
