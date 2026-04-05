@@ -28,6 +28,7 @@ type ArenaPlayer struct {
 	TotalTests  int               `json:"totalTests"`
 	SubmittedAt *time.Time        `json:"submittedAt,omitempty"`
 	Status      ArenaPlayerStatus `json:"status"`
+	IsOffline   bool              `json:"isOffline"`
 	JoinedAt    time.Time         `json:"joinedAt"`
 }
 
