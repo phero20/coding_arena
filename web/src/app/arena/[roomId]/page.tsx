@@ -1,16 +1,19 @@
 "use client";
 
-import { use, useEffect } from "react";
-import { useArenaRoom } from "@/hooks/use-arena-room";
+import { use, useEffect, useState, useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
+import { useArenaRoom } from "@/hooks/arena/use-arena-room";
 import { ArenaLobby } from "@/components/arena/ArenaLobby";
-import { Skeleton } from "@/components/ui/skeleton";
+import { LobbySkeleton } from "@/components/shared/Skeletons";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+import { RefreshCw } from "lucide-react";
+import { ConnectionBadge } from "@/components/shared/StatusState";
 import { useRouter } from "next/navigation";
+
+import { useArenaStore } from "@/store/useArenaStore";
+
+import { useAuth } from "@clerk/nextjs";
 
 interface ArenaRoomPageProps {
   params: Promise<{ roomId: string }>;
@@ -19,75 +22,73 @@ interface ArenaRoomPageProps {
 export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
   const { roomId } = use(params);
   const router = useRouter();
+  const { userId } = useAuth();
+
+  // Retry state for room synchronization
+  const [retries, setRetries] = useState(0);
+  const maxRetries = 3;
+
   const {
     room,
     isConnected,
     error,
-    isLoading,
+    isLoading: isRoomLoading,
     startMatch,
     leaveRoom,
+    isStartingMatch,
   } = useArenaRoom(roomId);
 
-  // 2. Handle Errors
+  const {
+    matchEnded,
+    finalRankings,
+  } = useArenaStore(
+    useShallow((state: any) => ({
+      matchEnded: state.matchEnded,
+      finalRankings: state.finalRankings,
+    }))
+  );
+
+  // 1. Handle Errors & Navigation
   useEffect(() => {
     if (error) {
-      const errorStr =
-        typeof error === "string"
-          ? error
-          : (error as any)?.message || "Arena Error";
-
-      toast.error("Arena Error", {
-        description: errorStr,
-      });
-
+      toast.error("Arena Error", { description: error });
       router.push("/arena");
     }
   }, [error, router]);
 
-  // This hook is GONE, which is why the "Start" button does nothing (it changes status on server, but client doesn't move)
+  // 2. Redirect to match if already playing
   useEffect(() => {
-    if (room?.status === "PLAYING") {
+    if (room?.status === "PLAYING" && room?.roomId === roomId && !matchEnded) {
       router.push(`/arena/match/${roomId}`);
     }
-  }, [room?.status, roomId, router]);
+  }, [room?.status, room?.roomId, roomId, router, matchEnded]);
 
-  // 3. Loading State
-  if (isLoading || !room) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-8 max-w-4xl mx-auto">
-        <Skeleton className="h-16 w-56 bg-secondary/20" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-          <Skeleton className="h-36 rounded-3xl bg-secondary/10" />
-          <Skeleton className="h-36 rounded-3xl bg-secondary/10" />
-        </div>
-      </div>
-    );
+  // 3. Redirect to results if match ended
+  useEffect(() => {
+    if (matchEnded && finalRankings.length > 0) {
+      router.push(`/arena/match/${roomId}/results`);
+    }
+  }, [matchEnded, finalRankings.length, roomId, router]);
+
+  const isLoading = isRoomLoading || (matchEnded && !finalRankings.length);
+
+  if (isLoading || (!room && !matchEnded)) {
+    return <LobbySkeleton />;
   }
 
-  // 4. Lobby View
+  // 6. Lobby View
   if (room) {
     return (
       <div className="min-h-screen bg-background relative flex flex-col">
-        <div className="relative z-10 max-w-6xl mx-auto px-4 w-full">
-          {/* Connection Status Indicator */}
-          {!isConnected && (
-            <div className="flex justify-center -mb-4 animate-in fade-in slide-in-from-top-4">
-              <Badge
-                variant="outline"
-                className="px-4 py-1 gap-2 rounded-full backdrop-blur-md"
-              >
-                <span className="w-2 h-2 rounded-full bg-primary" />
-                Reconnecting to Arena...
-              </Badge>
-            </div>
-          )}
-
+        <ConnectionBadge isConnected={isConnected} />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 w-full h-full flex flex-col justify-center">
           <ArenaLobby
             roomId={roomId}
             room={room}
             startMatch={startMatch}
             leaveRoom={leaveRoom}
             isConnected={isConnected}
+            isStartingMatch={isStartingMatch}
           />
         </div>
       </div>
