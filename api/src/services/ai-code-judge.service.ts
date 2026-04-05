@@ -1,8 +1,9 @@
-import type { ProblemService } from './problem.service'
+import type { IProblemService } from './problem.service'
 import type { GroqJsonResponse } from './groq-llm.service'
 import { GroqLlmService } from './groq-llm.service'
 import type { SubmissionStatus } from '../mongo/models/submission.model'
 import type { ExecutionTestResult, ExecutionVerdict } from '../libs/verdict.util'
+import { getLanguageName } from '../libs/languages'
 
 export interface AiRunSamplesInput {
   problemId: string
@@ -29,6 +30,10 @@ interface AiRunSamplesOutput {
   tests: AiTestVerdict[]
 }
 
+export interface IAiJudgeService {
+  runSamples(input: AiRunSamplesInput): Promise<AiRunSamplesResult>
+}
+
 export interface AiRunSamplesResult {
   overallStatus: SubmissionStatus
   tests: ExecutionTestResult[]
@@ -53,10 +58,10 @@ const verdictToStatusId: Record<
  * returning results in the same shape that the real Judge0-based
  * execution service uses.
  */
-export class AiCodeJudgeService {
+export class AiCodeJudgeService implements IAiJudgeService {
   constructor(
     private readonly llm: GroqLlmService,
-    private readonly problemService: ProblemService,
+    private readonly problemService: IProblemService,
   ) {}
 
   async runSamples(input: AiRunSamplesInput): Promise<AiRunSamplesResult> {
