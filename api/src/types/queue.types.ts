@@ -49,7 +49,19 @@ export interface SubmissionEvaluationJob {
    * For monitoring and debugging
    */
   createdAt?: number
+
+  /**
+   * Optional Arena Match ID
+   * If present, the worker will update the arena match state
+   */
+  arenaMatchId?: string
+
+  /**
+   * Optional Clerk User ID for Arena matching
+   */
+  clerkId?: string
 }
+
 
 /**
  * Result of a successful job completion
