@@ -20,27 +20,8 @@ func NewArenaService(repo *repository.ArenaRepository) *ArenaService {
 
 func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username, avatarUrl string) (*models.ArenaRoom, bool, error) {
 	roomId = strings.ToUpper(roomId)
-	room, err := s.repo.GetRoom(ctx, roomId)
-	if err != nil {
-		return nil, false, err
-	}
-	if room == nil {
-		return nil, false, errors.New("room not found")
-	}
 
-	// If player already in room, just return room
-	if room.Players != nil {
-		if _, ok := room.Players[userId]; ok {
-			return room, false, nil
-		}
-	}
-
-	// Limit to 2 players (PVP)
-	if len(room.Players) >= 50 {
-		return nil, false, errors.New("room is full")
-	}
-
-	// Create new player
+	// Create new player object
 	newPlayer := models.ArenaPlayer{
 		UserID:    userId,
 		Username:  username,
@@ -48,14 +29,13 @@ func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username,
 		IsCreator: false,
 		Score:     0,
 		Status:    models.PlayerCoding,
+		IsOffline: false,
 		JoinedAt:  time.Now(),
 	}
 
-	if room.Players == nil {
-		room.Players = make(map[string]models.ArenaPlayer)
-	}
-	room.Players[userId] = newPlayer
-	if err := s.repo.SaveRoom(ctx, room); err != nil {
+	// Atomically join the room (Lua handles capacity and existence checks)
+	room, err := s.repo.AtomicJoinRoom(ctx, roomId, newPlayer)
+	if err != nil {
 		return nil, false, err
 	}
 
@@ -92,34 +72,10 @@ func (s *ArenaService) HandleReady(ctx context.Context, roomId, userId string, r
 
 func (s *ArenaService) HandleStartMatch(ctx context.Context, roomId, userId string) (*models.ArenaRoom, error) {
 	roomId = strings.ToUpper(roomId)
-	room, err := s.repo.GetRoom(ctx, roomId)
+
+	// Atomically start the match (Lua handles permissions, status, and player count)
+	room, err := s.repo.AtomicStartMatch(ctx, roomId, userId)
 	if err != nil {
-		return nil, err
-	}
-	if room == nil {
-		return nil, errors.New("room not found")
-	}
-
-	if room.Players == nil {
-		return nil, errors.New("room is empty")
-	}
-
-	// Only creator can start the match
-	player, ok := room.Players[userId]
-	if !ok || !player.IsCreator {
-		return nil, errors.New("only room creator can start the match")
-	}
-
-	// Check if all players are ready
-	if len(room.Players) < 2 {
-		return nil, errors.New("not enough players to start")
-	}
-
-	now := time.Now()
-	room.Status = models.StatusPlaying
-	room.StartTime = &now
-
-	if err := s.repo.SaveRoom(ctx, room); err != nil {
 		return nil, err
 	}
 
@@ -128,32 +84,10 @@ func (s *ArenaService) HandleStartMatch(ctx context.Context, roomId, userId stri
 
 func (s *ArenaService) HandleProgressUpdate(ctx context.Context, roomId, userId string, testsPassed, totalTests int) (*models.ArenaRoom, error) {
 	roomId = strings.ToUpper(roomId)
-	room, err := s.repo.GetRoom(ctx, roomId)
+
+	// Atomically update progress and calculate score in Redis
+	room, err := s.repo.AtomicUpdateProgress(ctx, roomId, userId, testsPassed, totalTests)
 	if err != nil {
-		return nil, err
-	}
-	if room == nil {
-		return nil, errors.New("room not found")
-	}
-
-	if room.Players == nil {
-		room.Players = make(map[string]models.ArenaPlayer)
-	}
-
-	player, ok := room.Players[userId]
-	if !ok {
-		return nil, errors.New("player not in room")
-	}
-
-	player.TestsPassed = testsPassed
-	player.TotalTests = totalTests
-	// Basic score calculation: percentage of tests passed
-	if totalTests > 0 {
-		player.Score = (testsPassed * 100) / totalTests
-	}
-	room.Players[userId] = player
-
-	if err := s.repo.SaveRoom(ctx, room); err != nil {
 		return nil, err
 	}
 
@@ -179,21 +113,68 @@ func (s *ArenaService) HandleExplicitLeave(ctx context.Context, roomId, userId s
 		return room, false, nil
 	}
 
-	wasCreator := player.IsCreator
-
-	if wasCreator {
-		// If creator explicitly leaves via button, delete room
-		if err := s.repo.DeleteRoom(ctx, roomId); err != nil {
-			return nil, true, err
+	if room.Status == models.StatusPlaying {
+		// Mid-battle explicit leave: Mark as offline instead of removing
+		player.IsOffline = true
+		room.Players[userId] = player
+	} else {
+		// Lobby Phase: Hard Leave
+		if player.IsCreator {
+			// If creator explicitly leaves via button in lobby, delete room
+			if err := s.repo.DeleteRoom(ctx, roomId); err != nil {
+				return nil, true, err
+			}
+			return nil, true, nil
 		}
-		return nil, true, nil
+		// Otherwise remove regular player
+		delete(room.Players, userId)
 	}
 
-	// Otherwise remove player
-	delete(room.Players, userId)
 	if err := s.repo.SaveRoom(ctx, room); err != nil {
 		return nil, false, err
 	}
 
 	return room, false, nil
+}
+
+func (s *ArenaService) HandleConnectionLoss(ctx context.Context, roomId, userId string) (*models.ArenaRoom, error) {
+	roomId = strings.ToUpper(roomId)
+	room, err := s.repo.GetRoom(ctx, roomId)
+	if err != nil {
+		return nil, err
+	}
+	if room == nil || room.Players == nil {
+		return nil, nil
+	}
+
+	player, ok := room.Players[userId]
+	if !ok {
+		return nil, nil
+	}
+
+	if room.Status == models.StatusPlaying {
+		// Mid-battle disconnection: Mark as offline
+		player.IsOffline = true
+		room.Players[userId] = player
+		if err := s.repo.SaveRoom(ctx, room); err != nil {
+			return nil, err
+		}
+		return room, nil
+	}
+
+	// Lobby Phase disconnection: Remove player entirely
+	if player.IsCreator {
+		// If creator disconnects in lobby, delete room
+		if err := s.repo.DeleteRoom(ctx, roomId); err != nil {
+			return nil, err
+		}
+		return nil, nil
+	}
+
+	delete(room.Players, userId)
+	if err := s.repo.SaveRoom(ctx, room); err != nil {
+		return nil, err
+	}
+
+	return room, nil
 }
