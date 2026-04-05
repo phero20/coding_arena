@@ -6,7 +6,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -52,7 +52,7 @@ func (m *AuthMiddleware) Handle(c *fiber.Ctx) error {
 	if tokenString == "" {
 		// Log but allow in local dev if public key is empty
 		if m.publicKey == nil {
-			log.Println("[Auth] No token provided, but public key is missing (Local Dev?)")
+			slog.Info("No token provided, but public key is missing (Local Dev?)")
 			return c.Next()
 		}
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized: Missing token"})
@@ -60,7 +60,7 @@ func (m *AuthMiddleware) Handle(c *fiber.Ctx) error {
 
 	// 2. Verify JWT
 	if m.publicKey == nil {
-		log.Println("[Auth] Warning: JWT provided but CLERK_PEM_PUBLIC_KEY is not set. Skipping verification (Local Dev).")
+		slog.Warn("JWT provided but CLERK_PEM_PUBLIC_KEY is not set. Skipping verification (Local Dev).")
 		// In a real production environment, we should return an error here.
 		// But for now, we'll allow it to proceed to the fallback logic.
 		return c.Next()
@@ -74,7 +74,7 @@ func (m *AuthMiddleware) Handle(c *fiber.Ctx) error {
 	})
 
 	if err != nil || !token.Valid {
-		log.Printf("[Auth] JWT Verification Failed: %v", err)
+		slog.Error("JWT Verification Failed", "error", err)
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized: Invalid token"})
 	}
 
