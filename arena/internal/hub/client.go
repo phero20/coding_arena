@@ -3,13 +3,28 @@ package hub
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"log/slog"
+	"time"
 
 	"arena/internal/models"
 	"arena/internal/repository"
 	"arena/internal/service"
 
 	"github.com/gofiber/contrib/websocket"
+)
+
+const (
+	// Time allowed to write a message to the peer.
+	writeWait = 10 * time.Second
+
+	// Time allowed to read the next pong message from the peer.
+	pongWait = 60 * time.Second
+
+	// Send pings to peer with this period. Must be less than pongWait.
+	pingPeriod = (pongWait * 9) / 10
+
+	// Maximum message size allowed from peer.
+	maxMessageSize = 512 * 1024 // 512KB for code progress updates
 )
 
 type Client struct {
@@ -24,18 +39,39 @@ type Client struct {
 
 func (c *Client) ReadPump() {
 	defer func() {
-		// Just unregister and close. Don't delete room or remove player.
-		// This allows for re-connections without nuking the arena.
+		// Handle automatic disconnection/status update
+		ctx := context.Background()
+		updatedRoom, _ := c.Service.HandleConnectionLoss(ctx, c.RoomID, c.UserID)
+		
+		if updatedRoom != nil {
+			c.Hub.Broadcast <- Message{
+				RoomID: c.RoomID,
+				Payload: models.ArenaWSMessage{
+					Type: "PLAYER_LEFT",
+					Payload: map[string]interface{}{
+						"room": updatedRoom,
+					},
+				},
+			}
+		}
+
 		c.Hub.Unregister <- c
 		c.Conn.Close()
 	}()
+
+	c.Conn.SetReadLimit(maxMessageSize)
+	c.Conn.SetReadDeadline(time.Now().Add(pongWait))
+	c.Conn.SetPongHandler(func(string) error {
+		c.Conn.SetReadDeadline(time.Now().Add(pongWait))
+		return nil
+	})
 
 	for {
 		var msg models.ArenaWSMessage
 		err := c.Conn.ReadJSON(&msg)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("[Client] Read Error: %v", err)
+				slog.Error("Client Read Error", "error", err, "userId", c.UserID, "roomId", c.RoomID)
 			}
 			break
 		}
@@ -86,7 +122,7 @@ func (c *Client) ReadPump() {
 		}
 
 		if handleErr != nil {
-			log.Printf("[Client] Event Handle Error: %v", handleErr)
+			slog.Error("Client Event Handle Error", "error", handleErr, "userId", c.UserID, "roomId", c.RoomID, "msgType", msg.Type)
 			continue
 		}
 
@@ -106,17 +142,31 @@ func (c *Client) ReadPump() {
 }
 
 func (c *Client) WritePump() {
-	for msg := range c.Send {
-		if c.Conn == nil {
-			break
-		}
-		err := c.Conn.WriteJSON(msg)
-		if err != nil {
-			// log.Printf("[Client] Write Error: %v", err)
-			break
-		}
-	}
-	if c.Conn != nil {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
 		c.Conn.Close()
+	}()
+
+	for {
+		select {
+		case msg, ok := <-c.Send:
+			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				// The hub closed the channel.
+				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+
+			if err := c.Conn.WriteJSON(msg); err != nil {
+				return
+			}
+
+		case <-ticker.C:
+			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				return
+			}
+		}
 	}
 }
