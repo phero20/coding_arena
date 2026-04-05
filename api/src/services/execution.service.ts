@@ -1,8 +1,10 @@
-import type { ProblemTestService } from './problem-test.service'
+import type { IProblemTestService } from './problem-test.service'
 import type { SubmissionService } from './submission.service'
 import type { SubmissionStatus } from '../mongo/models/submission.model'
 import type { ExecutionTestResult } from '../libs/verdict.util'
-import type { AiCodeJudgeService } from './ai-code-judge.service'
+import type { IAiJudgeService } from './ai-code-judge.service'
+import { getLanguageName } from '../libs/languages'
+
 
 export interface RunSamplesInput {
   problemId: string
@@ -12,15 +14,15 @@ export interface RunSamplesInput {
 }
 
 export interface RunSamplesResult {
-  submissionId: string
+  submissionId?: string
   overallStatus: SubmissionStatus
   tests: ExecutionTestResult[]
 }
 
 export class ExecutionService {
   constructor(
-    private readonly problemTestService: ProblemTestService,
-    private readonly aiCodeJudgeService: AiCodeJudgeService,
+    private readonly problemTestService: IProblemTestService,
+    private readonly aiCodeJudgeService: IAiJudgeService,
     private readonly submissionService: SubmissionService,
   ) {}
 
@@ -46,7 +48,7 @@ export class ExecutionService {
     const aiResult = await this.aiCodeJudgeService.runSamples({
       problemId: input.problemId,
       languageId: input.languageId,
-      languageName: input.languageId,
+      languageName: getLanguageName(input.languageId),
       sourceCode: input.sourceCode,
       tests: testsDoc.cases.map((testCase, index) => ({
         index,
@@ -54,12 +56,10 @@ export class ExecutionService {
         expected_output: testCase.expected_output,
       })),
     })
-
     const tests: ExecutionTestResult[] = aiResult.tests
     const overallStatus: SubmissionStatus = aiResult.overallStatus
 
     return {
-      submissionId: '', // Runs do not create submisson records
       overallStatus,
       tests,
     }
@@ -117,7 +117,7 @@ export class ExecutionService {
     const aiResult = await this.aiCodeJudgeService.runSamples({
       problemId: input.problemId,
       languageId: input.languageId,
-      languageName: input.languageId,
+      languageName: getLanguageName(input.languageId),
       sourceCode: input.sourceCode,
       tests: allCases.map((c) => ({
         index: c.index,
@@ -130,7 +130,6 @@ export class ExecutionService {
     const overallStatus: SubmissionStatus = aiResult.overallStatus
 
     return {
-      submissionId: '', // Will be handled by controller
       overallStatus,
       tests,
     }
