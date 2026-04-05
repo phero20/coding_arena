@@ -4,7 +4,18 @@ import type {
   IProblemRepository,
 } from "../repositories/problem.repository";
 
-export class ProblemService {
+export interface IProblemService {
+  getProblemBySlug(slug: string): Promise<Problem | null>;
+  getProblemById(problem_id: string): Promise<Problem | null>;
+  searchByTopic(topic: string, limit?: number): Promise<Problem[]>;
+  getAllProblems(
+    page: number,
+    limit: number,
+  ): Promise<{ problems: Problem[]; total: number }>;
+  upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem>;
+}
+
+export class ProblemService implements IProblemService {
   constructor(private readonly problemRepository: IProblemRepository) {}
 
   getProblemBySlug(slug: string): Promise<Problem | null> {
