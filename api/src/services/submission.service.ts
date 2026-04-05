@@ -1,12 +1,22 @@
-import type { Submission } from '../mongo/models/submission.model'
+import type { 
+  Submission, 
+  CreateSubmissionInput 
+} from '../types/submission.types'
 import type {
-  CreateSubmissionInput,
   ISubmissionRepository,
   UpdateSubmissionStatusInput,
 } from '../repositories/submission.repository'
 
+import type { ArenaMatchRepository } from '../repositories/arena-match.repository'
+import type { ArenaRepository } from '../repositories/arena.repository'
+import type { ArenaMatch } from '../mongo/models/arena-match.model'
+
 export class SubmissionService {
-  constructor(private readonly submissionRepository: ISubmissionRepository) {}
+  constructor(
+    private readonly submissionRepository: ISubmissionRepository,
+    private readonly arenaMatchRepository: ArenaMatchRepository,
+    private readonly arenaRepository: ArenaRepository,
+  ) {}
 
   /**
    * Creates a new submission record.
@@ -39,6 +49,20 @@ export class SubmissionService {
    */
   getUserSubmissions(userId: string, problemId: string): Promise<Submission[]> {
     return this.submissionRepository.findByUserAndProblem(userId, problemId)
+  }
+
+  /**
+   * Fetches an Arena Match by its identifier.
+   */
+  getArenaMatchById(id: string): Promise<ArenaMatch | null> {
+    return this.arenaMatchRepository.findById(id)
+  }
+
+  /**
+   * Fetches an Arena Room from Redis for high-performance status checks.
+   */
+  getArenaRoom(roomId: string) {
+    return this.arenaRepository.getRoom(roomId)
   }
 }
 
