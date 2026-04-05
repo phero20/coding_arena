@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
-	"log"
+	"log/slog"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"arena/internal/handlers"
 	"arena/internal/hub"
@@ -11,6 +15,7 @@ import (
 	"arena/internal/service"
 	"arena/pkg/config"
 	"arena/pkg/redis"
+
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -19,18 +24,26 @@ import (
 )
 
 func main() {
+	// Initialize Structured Logging
+	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	})
+	slog.SetDefault(slog.New(handler))
+
 	cfg := config.LoadConfig()
 
 	// Initialize Redis
 	redisClient, err := redis.NewRedisClient(cfg.RedisURL)
 	if err != nil {
-		log.Fatalf("Failed to connect to Redis: %v", err)
+		slog.Error("Failed to connect to Redis", "error", err)
+		os.Exit(1)
 	}
 
 	// Initialize Middleware
 	authMid, err := middleware.NewAuthMiddleware(cfg.ClerkPublicKey)
 	if err != nil {
-		log.Fatalf("Failed to initialize Auth Middleware: %v", err)
+		slog.Error("Failed to initialize Auth Middleware", "error", err)
+		os.Exit(1)
 	}
 
 	// Initialize Architecture
@@ -57,9 +70,29 @@ func main() {
 	app.Use(logger.New())
 	app.Use(recover.New())
 
-	// Health check
+	// Enhanced Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
-		return c.SendString("Arena Server is running 🚀")
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+
+		redisStatus := "UP"
+		if err := redisClient.Ping(ctx).Err(); err != nil {
+			redisStatus = "DOWN"
+		}
+
+		isHealthy := redisStatus == "UP"
+		status := "HEALTHY"
+		if !isHealthy {
+			status = "UNHEALTHY"
+		}
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status":    status,
+			"timestamp": time.Now().Format(time.RFC3339),
+			"checks": fiber.Map{
+				"redis": redisStatus,
+			},
+		})
 	})
 
 	// WebSocket Upgrade Middleware
@@ -73,6 +106,29 @@ func main() {
 	// WebSocket Route
 	app.Get("/arena/ws/:roomId", authMid.Handle, handlers.ArenaHandler(arenaHub, arenaService, arenaRepo))
 
-	log.Printf("Starting Arena Server on port %s...", cfg.Port)
-	log.Fatal(app.Listen(":" + cfg.Port))
+	// Listen for OS signals for graceful shutdown
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		slog.Info("Starting Arena Server", "port", cfg.Port)
+		if err := app.Listen(":" + cfg.Port); err != nil {
+			slog.Error("Listen Error", "error", err)
+		}
+	}()
+
+	<-sigChan
+	slog.Info("Shutting down Arena Server...")
+
+	// 1. Graceful Shutdown Fiber (timeout 10s)
+	if err := app.ShutdownWithTimeout(10 * time.Second); err != nil {
+		slog.Error("App Shutdown Error", "error", err)
+	}
+
+	// 2. Close Redis Connection
+	if err := redisClient.Close(); err != nil {
+		slog.Error("Redis Close Error", "error", err)
+	}
+
+	slog.Info("Arena Server stopped cleanly.")
 }
