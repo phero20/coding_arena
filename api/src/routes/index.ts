@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
-import { container } from '../lib/container'
+import { container } from '../libs/container'
+import type { AppEnv } from '../types/hono.types'
+
 import { registerAuthRoutes } from './auth.routes'
 import { registerProblemRoutes } from './problem.routes'
 import { registerProblemTestRoutes } from './problem-test.routes'
@@ -7,14 +9,18 @@ import { registerSubmissionRoutes } from './submission.routes'
 import { registerAiProblemRoutes } from './ai-problem.routes'
 import { registerArenaRoutes } from './arena.routes'
 
-const { controllers, middlewares, repositories } = container
+import { healthRoutes } from './health.routes'
 
-export const registerRoutes = (app: Hono) => {
+const { controllers, middlewares } = container
+
+export const registerRoutes = (app: Hono<AppEnv>) => {
   app.get('/', (c) => c.text('OK'))
   
-  const v1 = new Hono()
+  // Health monitoring
+  app.route('/health', healthRoutes)
+  const v1 = new Hono<AppEnv>()
 
-  const authApp = new Hono()
+  const authApp = new Hono<AppEnv>()
   registerAuthRoutes(authApp, {
     authMiddleware: middlewares.authMiddleware,
     authorizationMiddleware: middlewares.authorizationMiddleware,
@@ -25,10 +31,14 @@ export const registerRoutes = (app: Hono) => {
 
   registerProblemRoutes(v1, {
     problemController: controllers.problemController,
+    authMiddleware: middlewares.authMiddleware,
+    authorizationMiddleware: middlewares.authorizationMiddleware,
   })
 
   registerProblemTestRoutes(v1, {
     problemTestController: controllers.problemTestController,
+    authMiddleware: middlewares.authMiddleware,
+    authorizationMiddleware: middlewares.authorizationMiddleware,
   })
 
   registerSubmissionRoutes(v1, {
@@ -43,10 +53,9 @@ export const registerRoutes = (app: Hono) => {
 
   registerArenaRoutes(v1, {
     arenaController: controllers.arenaController,
-    arenaRepository: repositories.arenaRepository,
-    userRepository: repositories.userRepository,
     authMiddleware: middlewares.authMiddleware,
   })
+
 
   app.route('/api/v1', v1)
 }
