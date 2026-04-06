@@ -3,7 +3,7 @@
 import React from "react";
 import { useUser, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { useCurrentUser } from "@/hooks/use-current-user";
+import { useCurrentUser } from "@/hooks/auth/use-current-user";
 
 const DashboardPage = () => {
   const { isLoaded, user } = useUser();
