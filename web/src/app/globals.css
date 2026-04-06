@@ -59,6 +59,12 @@
   --shadow-2xl: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 2.50);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
+  
+  /* Z-Index Layers */
+  --z-base: 0;
+  --z-nav: 40;
+  --z-overlay: 50;
+  --z-modal: 100;
 }
 
 .dark {
@@ -167,12 +173,17 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
+html {
+  overflow-y: scroll;
+}
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 @layer base {
