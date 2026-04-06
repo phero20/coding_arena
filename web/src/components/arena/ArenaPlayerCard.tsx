@@ -33,3 +33,4 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({ player }: ArenaPl
     </Card>
   );
 });
+      
