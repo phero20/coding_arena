@@ -12,7 +12,9 @@ import {
   XCircle,
   Check,
   Edit2,
+  Loader2,
 } from "lucide-react";
+
 import Link from "next/link";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -25,6 +27,7 @@ interface ArenaLobbyProps {
   startMatch: () => void;
   leaveRoom: () => void;
   isConnected: boolean;
+  isStartingMatch: boolean;
 }
 
 export function ArenaLobby({
@@ -33,6 +36,7 @@ export function ArenaLobby({
   startMatch,
   leaveRoom,
   isConnected,
+  isStartingMatch,
 }: ArenaLobbyProps) {
   const { userId } = useAuth();
   const [copied, setCopied] = useState(false);
@@ -83,10 +87,19 @@ export function ArenaLobby({
             variant="default"
             className="h-8 md:h-9 px-3 md:px-4"
             onClick={startMatch}
-            disabled={!canStartMatch || !isConnected}
+            disabled={!canStartMatch || !isConnected || isStartingMatch}
           >
-            <Rocket className="mr-2 h-3.5 w-3.5" />
-            Start Match
+            {isStartingMatch ? (
+              <>
+                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                Starting...
+              </>
+            ) : (
+              <>
+                <Rocket className="mr-2 h-3.5 w-3.5" />
+                Start Match
+              </>
+            )}
           </Button>
         )}
 
