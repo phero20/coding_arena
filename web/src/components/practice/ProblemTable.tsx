@@ -12,6 +12,8 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { ProblemRow } from "./ProblemRow";
 import type { Problem } from "@/types/api";
+import { ProblemRowSkeleton } from "@/components/shared/Skeletons";
+import { EmptyDisplay } from "@/components/shared/StatusState";
 
 interface ProblemTableProps {
   problems: Problem[];
@@ -38,27 +40,7 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
 }) => {
   const renderBody = () => {
     if (isLoading) {
-      return (
-        <TableBody>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <TableRow key={i} className="animate-pulse">
-              <TableCell className="px-4 py-3">
-                <div className="h-3 w-12 rounded-full bg-muted" />
-              </TableCell>
-              <TableCell className="px-4 py-3">
-                <div className="h-3 w-40 rounded-full bg-muted" />
-              </TableCell>
-              <TableCell className="px-4 py-3">
-                <div className="h-6 w-16 rounded-full bg-muted" />
-              </TableCell>
-              <TableCell className="px-4 py-3 hidden md:table-cell">
-                <div className="h-3 w-32 rounded-full bg-muted" />
-              </TableCell>
-              <TableCell />
-            </TableRow>
-          ))}
-        </TableBody>
-      );
+      return <ProblemRowSkeleton />;
     }
 
     if (error) {
@@ -80,13 +62,11 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
       return (
         <TableBody>
           <TableRow>
-            <TableCell
-              colSpan={5}
-              className="py-10 text-center text-sm text-muted-foreground"
-            >
-              No problems found{" "}
-              {topicFilter ? `for topic "${topicFilter}"` : ""} with current
-              filters.
+            <TableCell colSpan={5}>
+              <EmptyDisplay
+                title="No Problems Found"
+                message={topicFilter ? `No challenges match the topic "${topicFilter}".` : "Try adjusting your filters or search terms."}
+              />
             </TableCell>
           </TableRow>
         </TableBody>
