@@ -3,8 +3,8 @@
 import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useProblems } from "@/hooks/use-problems";
-import { useCreateArena } from "@/hooks/use-arena-actions";
+import { useProblems } from "@/hooks/api/use-problems";
+import { useCreateArena } from "@/hooks/arena/use-arena-actions";
 import { arenaService } from "@/services/arena.service";
 import type { Problem } from "@/types/api";
 
@@ -26,21 +26,23 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
 }) => {
   const router = useRouter();
   const { hostArena, isHosting } = useCreateArena();
-  
+
   // Filtering & Pagination State
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [topicFilter, setTopicFilter] = useState<string>("");
-  const [difficultyFilter, setDifficultyFilter] = useState<DifficultyFilter>("All");
+  const [difficultyFilter, setDifficultyFilter] =
+    useState<DifficultyFilter>("All");
 
   // Selection & Loading State
   const [isUpdating, setIsUpdating] = useState(false);
   const [selectingId, setSelectingId] = useState<string | null>(null);
-  
+
   // Language Selection Dialog State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
-  const [selectedProblemForArena, setSelectedProblemForArena] = useState<Problem | null>(null);
+  const [selectedProblemForArena, setSelectedProblemForArena] =
+    useState<Problem | null>(null);
 
   const { problems, meta, isLoading, error } = useProblems(page, 20);
 
@@ -79,7 +81,9 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
 
   const openLanguageSelect = (problem: Problem) => {
     setSelectedProblemForArena(problem);
-    const availableLangs = problem.code_snippets ? Object.keys(problem.code_snippets) : [];
+    const availableLangs = problem.code_snippets
+      ? Object.keys(problem.code_snippets)
+      : [];
     setSelectedLanguage(availableLangs[0] || "javascript");
     setIsDialogOpen(true);
   };
@@ -87,7 +91,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
   const handleConfirmSelection = async () => {
     if (!selectedProblemForArena) return;
     const problem = selectedProblemForArena;
-    
+
     setSelectingId(problem.problem_id);
     setIsDialogOpen(false);
 
@@ -121,8 +125,8 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
   return (
     <section className="space-y-6">
       {isSelectPage && <ArenaSelectionBanner roomId={roomId} />}
-      
-      <ProblemFilters 
+
+      <ProblemFilters
         search={search}
         setSearch={setSearch}
         difficultyFilter={difficultyFilter}
@@ -133,7 +137,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
         isSelectPage={isSelectPage}
       />
 
-      <ProblemTable 
+      <ProblemTable
         problems={filteredProblems}
         isLoading={isLoading}
         error={error}
@@ -146,14 +150,14 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
       />
 
       {meta && (
-        <ProblemPagination 
+        <ProblemPagination
           page={page}
           totalPages={meta.totalPages}
           setPage={setPage}
         />
       )}
 
-      <LanguageSelectDialog 
+      <LanguageSelectDialog
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
         problem={selectedProblemForArena}
