@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { LanguageSelector } from "@/components/arena/match-editor/LanguageSelector";
+import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector";
 import type { Problem } from "@/types/api";
 
 interface LanguageSelectDialogProps {
