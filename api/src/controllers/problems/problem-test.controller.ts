@@ -46,7 +46,7 @@ export class ProblemTestController extends BaseController {
 
   async getTestsForProblemAndType(c: Context) {
     const problem_id = c.req.param("problem_id")!;
-    const type = c.req.param("type")!;
+    const type = c.req.param("type")!.toLowerCase();
 
     const tests = await this.problemTestService.getTestsForProblemAndType(
       problem_id,
