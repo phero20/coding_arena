@@ -13,6 +13,7 @@ const {
   arenaMatchService,
   submissionEvaluator,
   clockService,
+  statsSubmissionService,
 } = container.cradle;
 
 // 2. Initialize internal worker modules
@@ -21,6 +22,7 @@ const processor = createSubmissionProcessor(
   arenaMatchService,
   submissionEvaluator,
   clockService,
+  statsSubmissionService,
 );
 
 // 3. Create and Start Worker
