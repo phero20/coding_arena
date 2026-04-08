@@ -9,6 +9,7 @@ import { SubmissionEvaluator } from "./evaluator";
 import { createLogger } from "../../libs/utils/logger";
 import { metrics } from "../../libs/core/metrics";
 import type { EvaluationResultData } from "../../types/submissions/submission.types";
+import { type StatsSubmissionService } from "../../services/stats/stats-submission.service";
 
 const logger = createLogger("submission-processor");
 let jobsProcessed = 0;
@@ -20,6 +21,7 @@ export function createSubmissionProcessor(
   arenaMatchService: ArenaMatchService,
   evaluator: SubmissionEvaluator,
   clock: IClockService,
+  statsSubmissionService: StatsSubmissionService,
 ) {
   return async function processSubmissionJob(
     job: Job<SubmissionEvaluationJob>,
@@ -56,7 +58,7 @@ export function createSubmissionProcessor(
       const executionTime = clock.now() - requestStartTime;
 
       // 2. Update standard submission
-      await submissionRepository.updateSubmissionStatus(
+      const updatedSubmission = await submissionRepository.updateSubmissionStatus(
         {
           id: jobData.submissionId,
           status: evaluation.status,
@@ -68,6 +70,14 @@ export function createSubmissionProcessor(
         },
         options,
       );
+
+      // 2.5 Trigger Postgres Stats Update
+      if (updatedSubmission) {
+        // We run stats update in background (don't await) to keep worker fast
+        // unless you want to ensure it succeeds before completing the job.
+        // Given our standard, we should probably await it here since it's a worker task.
+        await statsSubmissionService.handleSubmissionUpdate(updatedSubmission);
+      }
 
       // 3. Match Logic (Delegated to Service)
       if (jobData.arenaMatchId) {
