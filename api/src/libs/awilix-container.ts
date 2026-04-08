@@ -17,6 +17,7 @@ import { type SubmissionRepository } from "../repositories/submissions/submissio
 import { type ArenaRepository } from "../repositories/arena/arena.repository";
 import { type ArenaMatchRepository } from "../repositories/arena/arena-match.repository";
 import { type ArenaSubmissionRepository } from "../repositories/arena/arena-submission.repository";
+import { type StatsRepository } from "../repositories/stats/stats.repository";
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
@@ -53,6 +54,8 @@ import { type ArenaController } from "../controllers/arena/arena.controller";
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
 
+import { type StatsSubmissionService } from "../services/stats/stats-submission.service";
+
 /**
  * Type Definition for the DI Container Cradle.
  * This is the ultimate source of truth for dependencies across the platform.
@@ -72,12 +75,14 @@ export interface ICradle {
   arenaRepository: ArenaRepository;
   arenaMatchRepository: ArenaMatchRepository;
   arenaSubmissionRepository: ArenaSubmissionRepository;
+  statsRepository: StatsRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
   problemService: ProblemService;
   problemTestService: ProblemTestService;
   submissionService: SubmissionService;
+  statsSubmissionService: StatsSubmissionService;
   groqLlmService: GroqLlmService;
   llm: GroqLlmService;
   aiProblemService: AiProblemService;
