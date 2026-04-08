@@ -15,20 +15,21 @@ import type { ArenaMatch } from "../../mongo/models/arena-match.model";
 
 const logger = createLogger("submission-service");
 
+import type { IClockService } from "../common/clock.service";
 import { type ICradle } from "../../libs/awilix-container";
 import {
   validateServiceInput,
   CreateSubmissionSchema,
   UpdateSubmissionStatusSchema,
 } from "../validation/submission.validator";
-
-import { type IClockService } from "../common/clock.service";
+import { type StatsSubmissionService } from "../stats/stats-submission.service";
 
 export class SubmissionService {
   private readonly submissionRepository: ISubmissionRepository;
   private readonly arenaMatchRepository: ArenaMatchRepository;
   private readonly arenaRepository: ArenaRepository;
   private readonly arenaSubmissionRepository: ArenaSubmissionRepository;
+  private readonly statsSubmissionService: StatsSubmissionService;
   private readonly clock: IClockService;
 
   constructor({
@@ -36,20 +37,19 @@ export class SubmissionService {
     arenaMatchRepository,
     arenaRepository,
     arenaSubmissionRepository,
+    statsSubmissionService,
     clockService,
   }: ICradle) {
     this.submissionRepository = submissionRepository;
     this.arenaMatchRepository = arenaMatchRepository;
     this.arenaRepository = arenaRepository;
     this.arenaSubmissionRepository = arenaSubmissionRepository;
+    this.statsSubmissionService = statsSubmissionService;
     this.clock = clockService;
   }
 
   /**
    * Creates a new submission record.
-   *
-   * This is a thin wrapper over the repository and will later
-   * be extended to coordinate with the execution/judge service.
    */
   createSubmission(
     input: CreateSubmissionInput,
@@ -61,13 +61,28 @@ export class SubmissionService {
 
   /**
    * Updates the status and optional execution metadata for a submission.
+   * Delegates analytics and stats updates to the StatsSubmissionService.
    */
-  updateSubmissionStatus(
+  async updateSubmissionStatus(
     input: UpdateSubmissionStatusInput,
     traceId?: string,
   ): Promise<Submission | null> {
     validateServiceInput(UpdateSubmissionStatusSchema, input);
-    return this.submissionRepository.updateSubmissionStatus(input, { traceId });
+
+    // 1. Update basic submission status in MongoDB
+    const submission = await this.submissionRepository.updateSubmissionStatus(
+      input,
+      { traceId },
+    );
+    if (!submission) return null;
+
+    // 2. Delegate analytics orchestration (out-of-band/async style)
+    // We don't block the main flow for stats, but we ensure it's triggered
+    this.statsSubmissionService.handleSubmissionUpdate(submission).catch((err) => {
+      logger.error({ err, submissionId: submission.id }, "Background stats update failed");
+    });
+
+    return submission;
   }
 
   /**
