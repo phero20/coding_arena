@@ -17,6 +17,7 @@ import { ExecutionService } from "../../services/submissions/execution.service";
 import { ProblemValidatorService } from "../../services/problems/problem-validator.service";
 import { MatchDomainEngine } from "../../services/arena/match-domain-engine.service";
 import { MatchBroadcasterService } from "../../services/arena/match-broadcaster.service";
+import { StatsSubmissionService } from "../../services/stats/stats-submission.service";
 
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
@@ -65,4 +66,5 @@ export const servicesRegistry = {
   aiCodeJudgeService: asFunction(
     ({ aiJudgeCache }: ICradle) => aiJudgeCache,
   ).singleton(),
+  statsSubmissionService: asClass(StatsSubmissionService).singleton(),
 };
