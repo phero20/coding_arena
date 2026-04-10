@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface EditorSession {
   activeLanguage: string;
   codes: Record<string, string>; // language_id -> code
+  matchId?: string; // Optional match context for arena
 }
 
 interface EditorPreferences {
@@ -14,15 +15,26 @@ interface EditorState {
   sessions: Record<string, EditorSession>;
   preferences: EditorPreferences;
   isRunning: boolean;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
+  
+  /**
+   * Initialize or sync a session.
+   * For Arena: If matchId changes, the session is reset.
+   * For Practice: Persists indefinitely.
+   */
   initSession: (
-    problemId: string,
+    sessionId: string,
     initialLanguage: string,
     initialCodes: Record<string, string>,
+    matchId?: string,
   ) => void;
-  updateLanguage: (problemId: string, language: string) => void;
-  updateCode: (problemId: string, language: string, code: string) => void;
+  
+  updateLanguage: (sessionId: string, language: string) => void;
+  updateCode: (sessionId: string, language: string, code: string) => void;
+  clearSession: (sessionId: string) => void;
   resetToDefault: (
-    problemId: string,
+    sessionId: string,
     language: string,
     defaultCode: string,
   ) => void;
@@ -38,29 +50,41 @@ export const useEditorStore = create<EditorState>()(
         wordWrap: true,
       },
       isRunning: false,
+      _hasHydrated: false,
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
 
-      initSession: (problemId, initialLanguage, initialCodes) =>
+      initSession: (sessionId, initialLanguage, initialCodes, matchId) =>
         set((state) => {
-          if (state.sessions[problemId]) return state;
-          return {
-            sessions: {
-              ...state.sessions,
-              [problemId]: {
-                activeLanguage: initialLanguage,
-                codes: initialCodes,
+          const existing = state.sessions[sessionId];
+          
+          // For Arena sessions, if the matchId is different, we MUST reset to prevent code leakage between matches
+          const isArena = sessionId.startsWith("arena:");
+          const matchChanged = isArena && existing && existing.matchId !== matchId;
+
+          if (!existing || matchChanged) {
+            return {
+              sessions: {
+                ...state.sessions,
+                [sessionId]: {
+                  activeLanguage: initialLanguage,
+                  codes: initialCodes,
+                  matchId: matchId,
+                },
               },
-            },
-          };
+            };
+          }
+          
+          return state;
         }),
 
-      updateLanguage: (problemId, language) =>
+      updateLanguage: (sessionId, language) =>
         set((state) => {
-          const current = state.sessions[problemId];
+          const current = state.sessions[sessionId];
           if (!current) return state;
           return {
             sessions: {
               ...state.sessions,
-              [problemId]: {
+              [sessionId]: {
                 ...current,
                 activeLanguage: language,
               },
@@ -68,14 +92,14 @@ export const useEditorStore = create<EditorState>()(
           };
         }),
 
-      updateCode: (problemId, language, code) =>
+      updateCode: (sessionId, language, code) =>
         set((state) => {
-          const current = state.sessions[problemId];
+          const current = state.sessions[sessionId];
           if (!current) return state;
           return {
             sessions: {
               ...state.sessions,
-              [problemId]: {
+              [sessionId]: {
                 ...current,
                 codes: {
                   ...current.codes,
@@ -86,14 +110,20 @@ export const useEditorStore = create<EditorState>()(
           };
         }),
 
-      resetToDefault: (problemId, language, defaultCode) =>
+      clearSession: (sessionId) =>
         set((state) => {
-          const current = state.sessions[problemId];
+          const { [sessionId]: _, ...remainingSessions } = state.sessions;
+          return { sessions: remainingSessions };
+        }),
+
+      resetToDefault: (sessionId, language, defaultCode) =>
+        set((state) => {
+          const current = state.sessions[sessionId];
           if (!current) return state;
           return {
             sessions: {
               ...state.sessions,
-              [problemId]: {
+              [sessionId]: {
                 ...current,
                 codes: {
                   ...current.codes,
@@ -111,14 +141,23 @@ export const useEditorStore = create<EditorState>()(
             wordWrap: !state.preferences.wordWrap,
           },
         })),
+
       setIsRunning: (isRunning: boolean) =>
         set(() => ({
           isRunning,
         })),
     }),
     {
-      name: "editor-sessions",
+      name: "coding-arena-editor-v2",
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        sessions: state.sessions,
+        preferences: state.preferences,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     },
   ),
 );
+
