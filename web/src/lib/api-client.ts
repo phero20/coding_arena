@@ -3,7 +3,8 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 /**
  * Modular API client with automated Clerk authentication.
  */
-const baseURL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000") + "/api/v1";
+const baseURL =
+  (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000") + "/api/v1";
 
 export const apiClient = axios.create({
   baseURL,
@@ -22,19 +23,21 @@ export const setTokenGetter = (fn: typeof getToken) => {
 };
 
 // --- Request Interceptor ---
-apiClient.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  if (getToken) {
-    try {
-      const token = await getToken();
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
+    if (getToken) {
+      try {
+        const token = await getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (err) {
+        console.error("[API Client] Error fetching auth token:", err);
       }
-    } catch (err) {
-      console.error("[API Client] Error fetching auth token:", err);
     }
-  }
-  return config;
-});
+    return config;
+  },
+);
 
 // --- Response Interceptor ---
 apiClient.interceptors.response.use(
@@ -64,5 +67,5 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
