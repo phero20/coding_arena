@@ -35,17 +35,19 @@ export interface RunSubmissionResponse {
 }
 
 export interface RunSubmissionPayload {
-  problem_id: string;
-  language_id: string;
-  source_code: string;
+  problemId: string;
+  languageId: string;
+  sourceCode: string;
+  arenaMatchId?: string | null;
 }
+
 
 export interface Submission {
   id: string;
-  problem_id: string;
-  user_id: string;
-  language_id: string;
-  source_code: string;
+  problemId: string;
+  userId: string;
+  languageId: string;
+  sourceCode: string;
   status: ExecutionVerdict | "PENDING";
   time?: number;
   memory?: number;
@@ -137,4 +139,3 @@ class SubmissionService {
 }
 
 export const submissionService = new SubmissionService();
-
