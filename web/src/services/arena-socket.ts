@@ -1,6 +1,6 @@
 import { ArenaWSMessage } from "./arena.service";
 import { useArenaStore } from "@/store/useArenaStore";
-import { useEditorStore } from "@/store/match-store/use-editor-store";
+import { useEditorStore } from "@/store/use-editor-store";
 
 /**
  * Manager for High-Performance Go WebSocket Connections.
@@ -47,94 +47,41 @@ export class ArenaSocketManager {
     this.socket = new WebSocket(url.toString());
 
     this.socket.onopen = () => {
-      console.log("[Arena Socket] Connected to Go Worker");
+      console.log(`[Arena Socket] Joined Room: ${this.roomId}`);
       const store = useArenaStore.getState();
       store.setIsConnected(true);
       store.setSocket(this.socket);
-      store.setError(null);
     };
 
     this.socket.onmessage = (event) => {
       try {
         const message: ArenaWSMessage = JSON.parse(event.data);
-        this.handleMessage(message);
+        useArenaStore.getState().syncWebSocketState(message);
       } catch (err) {
-        console.error("[Arena Socket] Message Parse Error:", err);
+        console.error("[Arena Socket] Malformed Message:", err);
       }
     };
 
-    this.socket.onclose = () => {
-      console.log("[Arena Socket] Connection Closed");
+    this.socket.onclose = (event) => {
+      const isClean = event.wasClean;
+      console.log(
+        `[Arena Socket] Closed (Clean: ${isClean}, Code: ${event.code})`,
+      );
       useArenaStore.getState().setIsConnected(false);
-      this.attemptReconnect();
+
+      // Don't reconnect if the room was intentionally left, terminated, or match ended
+      if (
+        event.code !== 1000 &&
+        event.code !== 1001 &&
+        !useArenaStore.getState().matchEnded
+      ) {
+        this.attemptReconnect();
+      }
     };
 
-    this.socket.onerror = (err) => {
-      console.error("[Arena Socket] Error:", err);
-      useArenaStore.getState().setError("Real-time connection failed");
+    this.socket.onerror = (err: any) => {
+      console.error("[Arena Socket] Transport Error:", err);
     };
-  }
-
-  /**
-   * Handle incoming messages and dispatch to Zustand Store.
-   */
-  private handleMessage(message: ArenaWSMessage) {
-    const { setRoom, updatePlayer, updateRoom, setLeaderboard, setMatchEnded, removePlayer, setUserRemoved, setHostTransferred } = useArenaStore.getState();
-
-    switch (message.type) {
-      case "PLAYER_JOINED":
-      case "PLAYER_LEFT":
-      case "PLAYER_READY":
-      case "PROBLEM_CHANGED":
-      case "MATCH_STARTED":
-      case "PROGRESS_UPDATE":
-      case "MATCH_SUBMITTED":
-        // Go server sends the updated room in the payload
-        if (message.payload?.room) {
-          setRoom(message.payload.room);
-        }
-        break;
-
-      case "PLAYER_REMOVED":
-        if (message.payload?.userId) {
-          const removedUserId = message.payload.userId;
-          if (removedUserId === this.userId) {
-            setUserRemoved(true, message.payload.reason || "You were removed from the room");
-          } else {
-            removePlayer(removedUserId);
-          }
-        }
-        break;
-
-      case "LEADERBOARD_UPDATE":
-        if (message.payload?.leaderboard) {
-          setLeaderboard(message.payload.leaderboard);
-        }
-        break;
-
-      case "MATCH_ENDED":
-      case "MATCH_OVER":
-        if (message.payload?.finalRankings) {
-          setMatchEnded(true, message.payload.finalRankings);
-        }
-        break;
-
-      case "HOST_TRANSFERRED":
-        if (message.payload?.newHostId) {
-          setHostTransferred(true, message.payload.newHostId);
-        }
-        break;
-
-      case "ERROR":
-        const terminal =
-          typeof message.payload === "string" &&
-          message.payload.includes("terminated");
-        if (terminal) {
-          useArenaStore.getState().setRoom(null);
-        }
-        useArenaStore.getState().setError(message.payload);
-        break;
-    }
   }
 
   /**
@@ -160,8 +107,11 @@ export class ArenaSocketManager {
       this.socket.onclose = null; // Prevent reconnect loop
       this.socket.close();
     }
+
+    // CRITICAL: We NO LONGER call store.reset() here.
+    // This prevents the infinite "fetchRoom -> render -> disconnect -> reset -> repeat" loop.
     const store = useArenaStore.getState();
-    store.reset();
+    store.setIsConnected(false);
     store.setSocket(null);
   }
 }
