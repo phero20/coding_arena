@@ -13,6 +13,7 @@ export interface ArenaPlayer {
   totalTests: number;
   joinedAt: string;
   status: "CODING" | "SUBMITTED";
+  isOffline: boolean;
 }
 
 export interface ArenaRoom {
@@ -27,6 +28,7 @@ export interface ArenaRoom {
   createdAt: string;
   startTime?: string;
   winnerId?: string;
+  matchId?: string;
 }
 
 export interface ArenaWSMessage {
@@ -35,6 +37,7 @@ export interface ArenaWSMessage {
     | "PLAYER_LEFT"
     | "PLAYER_READY"
     | "START_MATCH"
+    | "MATCH_START"
     | "MATCH_STARTED"
     | "PROGRESS_UPDATE"
     | "MATCH_SUBMITTED"
@@ -78,6 +81,43 @@ class ArenaService {
     const response = await apiClient.put(`/arena/${roomId}/problem`, details);
     return response.data.data as ArenaRoom;
   }
+
+  async startMatch(
+    roomId: string,
+  ): Promise<{ matchId: string; roomId: string }> {
+    const response = await apiClient.post(`/arena/${roomId}/start`);
+    return response.data.data;
+  }
+
+  async getMatchStatus(matchId: string) {
+    const response = await apiClient.get(`/arena/match/${matchId}/status`);
+    return response.data.data as ArenaMatch;
+  }
+}
+
+export interface ArenaPlayerResult {
+  userId: string;
+  username: string;
+  avatarUrl?: string;
+  finalRank?: number;
+  submissionOrder: number;
+  verdict: string;
+  score: number;
+  testsPassed: number;
+  totalTests: number;
+  submittedAt?: string;
+}
+
+export interface ArenaMatch {
+  id: string;
+  roomId: string;
+  hostId: string;
+  problemId: string;
+  language: string;
+  status: string;
+  players: ArenaPlayerResult[];
+  startedAt?: string;
+  endedAt?: string;
 }
 
 export const arenaService = new ArenaService();
