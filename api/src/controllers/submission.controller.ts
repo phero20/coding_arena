@@ -121,7 +121,7 @@ export class SubmissionController extends BaseController {
     const problemId = c.req.param('problemId')
     if (!problemId) throw AppError.badRequest('Missing problemId parameter')
 
-    const submissions = await this.submissionService.getUserSubmissions(auth.user.id, problemId)
+    const submissions = await this.submissionService.getUserSubmissions(auth.user.id, problemId, auth.clerkUserId)
     return this.ok(c, submissions);
   }
 }
