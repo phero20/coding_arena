@@ -1,3 +1,4 @@
+import { MongoBaseRepository } from './base.repository'
 import type {
   ProblemTest,
   ProblemTestDocument,
@@ -20,29 +21,29 @@ export interface IProblemTestRepository {
   upsertTests(input: UpsertProblemTestInput): Promise<ProblemTest>
 }
 
-export class ProblemTestRepository implements IProblemTestRepository {
-  private toProblemTest(doc: ProblemTestDocument | null): ProblemTest | null {
-    if (!doc) return null
-    const json = doc.toJSON() as any
-    delete json.__v
-    return json as ProblemTest
+export class ProblemTestRepository 
+  extends MongoBaseRepository<ProblemTest, ProblemTestDocument> 
+  implements IProblemTestRepository 
+{
+  constructor() {
+    super(ProblemTestModel);
   }
 
   async findByProblemAndType(
     problem_id: string,
     type: ProblemTest['type'],
   ): Promise<ProblemTest | null> {
-    const doc = await ProblemTestModel.findOne({ problem_id, type }).exec()
-    return this.toProblemTest(doc)
+    const doc = await this.model.findOne({ problem_id, type }).exec()
+    return this.toDomain(doc)
   }
 
   async findAllByProblem(problem_id: string): Promise<ProblemTest[]> {
-    const docs = await ProblemTestModel.find({ problem_id }).exec()
-    return docs.map((d) => this.toProblemTest(d)!) as ProblemTest[]
+    const docs = await this.model.find({ problem_id }).exec()
+    return this.toDomainArray(docs);
   }
 
   async upsertTests(input: UpsertProblemTestInput): Promise<ProblemTest> {
-    const doc = await ProblemTestModel.findOneAndUpdate(
+    const doc = await this.model.findOneAndUpdate(
       { problem_id: input.problem_id, type: input.type },
       {
         $set: {
@@ -55,7 +56,7 @@ export class ProblemTestRepository implements IProblemTestRepository {
       },
     ).exec()
 
-    const problemTest = this.toProblemTest(doc)
+    const problemTest = this.toDomain(doc)
     if (!problemTest) {
       throw new Error('Failed to create or update problem tests')
     }
