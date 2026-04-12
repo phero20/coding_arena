@@ -31,6 +31,26 @@ export class ArenaRepository {
     return JSON.parse(data);
   }
 
+  async getAllPlayingRooms(): Promise<ArenaRoom[]> {
+    const keys = await redis.keys(`${this.PREFIX}*`);
+    if (keys.length === 0) return [];
+    
+    const rawData = await redis.mget(...keys);
+    const rooms: ArenaRoom[] = [];
+    
+    for (const data of rawData) {
+      if (data) {
+        try {
+          const room = JSON.parse(data) as ArenaRoom;
+          if (room.status === "PLAYING") rooms.push(room);
+        } catch (e) {
+          // Ignore parsing errors for dirty keys
+        }
+      }
+    }
+    return rooms;
+  }
+
   async saveRoom(room: ArenaRoom): Promise<void> {
     const key = `${this.PREFIX}${room.roomId}`;
     await redis.set(key, JSON.stringify(room), "EX", this.TTL);
@@ -171,6 +191,7 @@ export class ArenaRepository {
     room.status = "FINISHED";
     delete room.matchId;
     delete room.startTime;
+    delete room.endTime;
 
     await this.saveRoom(room);
   }
@@ -187,6 +208,7 @@ export class ArenaRepository {
     room.status = "WAITING";
     delete room.matchId;
     delete room.startTime;
+    delete room.endTime;
 
     await this.saveRoom(room);
   }
