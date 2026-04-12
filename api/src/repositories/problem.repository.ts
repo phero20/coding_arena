@@ -1,3 +1,4 @@
+import { MongoBaseRepository } from './base.repository'
 import { ProblemModel } from '../mongo/models/problem.model'
 import type { Problem, CreateOrUpdateProblemInput } from '../types/problem.types'
 import type { ProblemDocument } from '../mongo/models/problem.model'
@@ -7,6 +8,7 @@ export type { CreateOrUpdateProblemInput } from '../types/problem.types'
 
 export interface IProblemRepository {
   findByProblemId(problem_id: string): Promise<Problem | null>;
+  findById(id: string): Promise<Problem | null>;
   findBySlug(slug: string): Promise<Problem | null>;
   searchByTopic(topic: string, limit?: number): Promise<Problem[]>;
   findPaginated(
@@ -16,27 +18,27 @@ export interface IProblemRepository {
   createOrUpdate(data: CreateOrUpdateProblemInput): Promise<Problem>;
 }
 
-export class ProblemRepository implements IProblemRepository {
-  private toProblem(doc: ProblemDocument | null): Problem | null {
-    if (!doc) return null;
-    const json = doc.toJSON() as any;
-    delete json.__v;
-    return json as Problem;
+export class ProblemRepository 
+  extends MongoBaseRepository<Problem, ProblemDocument> 
+  implements IProblemRepository 
+{
+  constructor() {
+    super(ProblemModel);
   }
 
   async findByProblemId(problem_id: string): Promise<Problem | null> {
-    const doc = await ProblemModel.findOne({ problem_id }).exec();
-    return this.toProblem(doc);
+    const doc = await this.model.findOne({ problem_id }).exec();
+    return this.toDomain(doc);
   }
 
   async findBySlug(slug: string): Promise<Problem | null> {
-    const doc = await ProblemModel.findOne({ problem_slug: slug }).exec();
-    return this.toProblem(doc);
+    const doc = await this.model.findOne({ problem_slug: slug }).exec();
+    return this.toDomain(doc);
   }
 
   async searchByTopic(topic: string, limit = 20): Promise<Problem[]> {
-    const docs = await ProblemModel.find({ topics: topic }).limit(limit).exec();
-    return docs.map((d) => this.toProblem(d)!) as Problem[];
+    const docs = await this.model.find({ topics: topic }).limit(limit).exec();
+    return this.toDomainArray(docs);
   }
 
   async findPaginated(
@@ -46,22 +48,22 @@ export class ProblemRepository implements IProblemRepository {
     const skip = (page - 1) * limit;
 
     const [docs, total] = await Promise.all([
-      ProblemModel.find()
+      this.model.find()
         .sort({ problem_id: 1 })
         .skip(skip)
         .limit(limit)
         .exec(),
-      ProblemModel.countDocuments(),
+      this.model.countDocuments(),
     ]);
 
     return {
-      problems: docs.map((d) => this.toProblem(d)!) as Problem[],
+      problems: this.toDomainArray(docs),
       total,
     };
   }
 
   async createOrUpdate(data: CreateOrUpdateProblemInput): Promise<Problem> {
-    const doc = await ProblemModel.findOneAndUpdate(
+    const doc = await this.model.findOneAndUpdate(
       { problem_id: data.problem_id },
       {
         $set: {
@@ -80,7 +82,7 @@ export class ProblemRepository implements IProblemRepository {
       },
     ).exec();
 
-    const problem = this.toProblem(doc);
+    const problem = this.toDomain(doc);
     if (!problem) {
       throw new Error("Failed to create or update problem");
     }
