@@ -50,6 +50,7 @@ export class ArenaService {
       testsPassed: 0,
       totalTests: 0,
       status: "CODING",
+      isOffline: false,
       joinedAt: new Date(),
     };
 
@@ -168,8 +169,13 @@ export class ArenaService {
         room.players[userId].totalTests = 0;
       }
 
-      // 3. Update Redis status immediately to prevent status pulse sync errors
+      // 3. Calculate Timers & Update Redis status
+      const now = Date.now();
       room.status = "PLAYING";
+      room.startTime = now;
+      const durationMins = room.matchDuration || 20;
+      room.endTime = now + (durationMins * 60 * 1000);
+      
       await this.arenaRepository.saveRoom(room);
 
       // 4. Update MongoDB status
@@ -189,7 +195,7 @@ export class ArenaService {
   }
 
   async getMatchStatus(matchId: string): Promise<ArenaMatch> {
-    const match = await this.arenaMatchRepository.findById(matchId);
+    const match = await this.arenaMatchRepository.findByIdWithSubmissions(matchId);
     if (!match) throw AppError.notFound("Match not found");
     return match;
   }
@@ -199,7 +205,9 @@ export class ArenaService {
     if (!room) throw AppError.notFound("Arena room not found");
 
     // If match is in progress, find and attach the matchId for late joiners
-    if (room.status === "PLAYING") {
+    // Attach matchId for active or recently finished matches
+    // This perfectly solves the "Results Not Available" error during page reloads.
+    if (room.status === "PLAYING" || room.status === "FINISHED") {
       const activeMatch = await this.arenaMatchRepository.findByRoomId(roomId);
       if (activeMatch) {
         room.matchId = activeMatch.id;
@@ -209,5 +217,67 @@ export class ArenaService {
     return room;
   }
 
+  /**
+   * Hard-kills an active match, finalizes scores, and broadcasts MATCH_OVER.
+   * Called automatically by the Enforcer Worker when the match timer expires.
+   */
+  async forceFinishMatch(roomId: string): Promise<void> {
+    const lockId = await acquireLock(`finishMatch:${roomId}`, 5000);
+    if (!lockId) return; // Prevent concurrent finishing
+
+    try {
+      const room = await this.arenaRepository.getRoom(roomId);
+      if (!room || room.status !== "PLAYING") return;
+
+      const updatedMatch = await this.arenaMatchRepository.findByRoomId(roomId);
+      if (!updatedMatch || updatedMatch.status !== "PLAYING") return;
+
+      console.log(`[ArenaService] Hard-killing expired match for room ${roomId}`);
+
+      // 1. Calculate Final Rankings
+      const finalRankings = [...updatedMatch.players]
+        .sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          if (a.submissionOrder === 0) return 1;
+          if (b.submissionOrder === 0) return -1;
+          return a.submissionOrder - b.submissionOrder;
+        })
+        .map((p, index) => ({ ...p, finalRank: index + 1 }));
+
+      // 2. Finalize Match in MongoDB
+      await this.arenaMatchRepository.updateStatus({
+        id: updatedMatch.id,
+        status: "COMPLETED",
+        endedAt: new Date(),
+      });
+
+      // 3. Transition Redis Room to FINISHED
+      await this.arenaRepository.finishRoom(roomId);
+
+      // 4. Broadcast MATCH_OVER via Go Hub
+      await arenaRedis.publishArenaUpdate(roomId, {
+        type: "MATCH_OVER",
+        roomId: roomId,
+        payload: {
+          finalRankings,
+          matchId: updatedMatch.id,
+        },
+      });
+
+      // 5. Delayed Cleanup
+      setTimeout(async () => {
+        try {
+          await this.arenaRepository.deleteRoom(roomId);
+        } catch (err) {
+          console.error("Delayed cleanup failed", err);
+        }
+      }, 60 * 1000);
+      
+    } catch (e) {
+      console.error(`[ArenaService] Error force finishing match ${roomId}:`, e);
+    } finally {
+      await releaseLock(`finishMatch:${roomId}`, lockId);
+    }
+  }
 }
 
