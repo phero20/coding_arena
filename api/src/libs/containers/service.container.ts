@@ -13,7 +13,8 @@ export const problemTestService = new ProblemTestService(problemTestRepository);
 export const submissionService = new SubmissionService(
   submissionRepository,
   arenaMatchRepository,
-  arenaRepository
+  arenaRepository,
+  arenaSubmissionRepository
 );
 export const groqLlmService = new GroqLlmService();
 export const aiProblemService = new AiProblemService();
