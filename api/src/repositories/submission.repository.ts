@@ -1,3 +1,4 @@
+import { MongoBaseRepository } from './base.repository'
 import { SubmissionModel } from '../mongo/models/submission.model'
 import type { Submission, SubmissionStatus, CreateSubmissionInput, UpdateSubmissionInput } from '../types/submission.types'
 import type { SubmissionDocument } from '../mongo/models/submission.model'
@@ -22,21 +23,20 @@ export interface ISubmissionRepository {
   findByUserAndProblem(
     userId: string,
     problemId: string,
+    excludeIds?: string[],
   ): Promise<Submission[]>
 }
 
-export class SubmissionRepository implements ISubmissionRepository {
-  private toSubmission(doc: SubmissionDocument | null): Submission | null {
-    if (!doc) return null
-    const obj = doc.toObject()
-    return {
-      ...obj,
-      id: doc._id.toString(),
-    } as Submission
+export class SubmissionRepository 
+  extends MongoBaseRepository<Submission, SubmissionDocument>
+  implements ISubmissionRepository 
+{
+  constructor() {
+    super(SubmissionModel);
   }
 
   async createSubmission(input: CreateSubmissionInput): Promise<Submission> {
-    const doc = await SubmissionModel.create({
+    const doc = await this.model.create({
       problemId: input.problemId,
       userId: input.userId,
       languageId: input.languageId,
@@ -44,7 +44,7 @@ export class SubmissionRepository implements ISubmissionRepository {
       status: input.status ?? 'PENDING',
     })
 
-    const submission = this.toSubmission(doc)
+    const submission = this.toDomain(doc)
     if (!submission) {
       throw new Error('Failed to create submission')
     }
@@ -54,32 +54,32 @@ export class SubmissionRepository implements ISubmissionRepository {
   async updateSubmissionStatus(
     input: UpdateSubmissionStatusInput,
   ): Promise<Submission | null> {
-    const doc = await SubmissionModel.findByIdAndUpdate(
+    const doc = await this.model.findByIdAndUpdate(
       input.id,
       { $set: { status: input.status, time: input.time, memory: input.memory, details: input.details } },
       { new: true },
     ).exec()
-    return this.toSubmission(doc)
-  }
-
-  async findById(id: string): Promise<Submission | null> {
-    const doc = await SubmissionModel.findById(id).exec()
-    return this.toSubmission(doc)
+    return this.toDomain(doc)
   }
 
   async findByUserAndProblem(
     userId: string,
     problemId: string,
+    excludeIds: string[] = [],
   ): Promise<Submission[]> {
-    const docs = await SubmissionModel.find({
+    const query: any = {
       userId: userId,
       problemId: problemId,
-    })
+    }
+
+    if (excludeIds.length > 0) {
+      query._id = { $nin: excludeIds }
+    }
+
+    const docs = await this.model.find(query)
       .sort({ createdAt: -1 })
       .exec()
 
-    return docs
-      .map((doc) => this.toSubmission(doc))
-      .filter((s): s is Submission => s !== null)
+    return this.toDomainArray(docs);
   }
 }
