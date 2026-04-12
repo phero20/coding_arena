@@ -1,3 +1,4 @@
+import { MongoBaseRepository } from "./base.repository";
 import { 
   ArenaMatch, 
   ArenaMatchDocument, 
@@ -7,8 +8,6 @@ import {
 } from "../mongo/models/arena-match.model";
 
 export type { ArenaPlayerResult };
-
-
 
 export interface CreateArenaMatchInput {
   roomId: string;
@@ -39,19 +38,13 @@ export interface UpdatePlayerProgressInput {
   };
 }
 
-export class ArenaMatchRepository {
-  private toMatch(doc: ArenaMatchDocument | null): ArenaMatch | null {
-    if (!doc) return null;
-    const obj = doc.toObject();
-    return {
-      ...obj,
-      id: doc._id.toString(),
-    } as ArenaMatch;
+export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaMatchDocument> {
+  constructor() {
+    super(ArenaMatchModel);
   }
 
-
   async create(input: CreateArenaMatchInput): Promise<ArenaMatch> {
-    const doc = await ArenaMatchModel.create({
+    const doc = await this.model.create({
       roomId: input.roomId,
       hostId: input.hostId,
       problemId: input.problemId,
@@ -61,17 +54,12 @@ export class ArenaMatchRepository {
     });
 
 
-    return this.toMatch(doc)!;
+    return this.toDomain(doc)!;
   }
 
   async findByRoomId(roomId: string): Promise<ArenaMatch | null> {
-    const doc = await ArenaMatchModel.findOne({ roomId }).exec();
-    return this.toMatch(doc);
-  }
-
-  async findById(id: string): Promise<ArenaMatch | null> {
-    const doc = await ArenaMatchModel.findById(id).exec();
-    return this.toMatch(doc);
+    const doc = await this.model.findOne({ roomId }).sort({ createdAt: -1 }).exec();
+    return this.toDomain(doc);
   }
 
   async updateStatus(input: UpdateArenaMatchStatusInput): Promise<ArenaMatch | null> {
@@ -79,11 +67,11 @@ export class ArenaMatchRepository {
     if (input.startedAt) updateData.startedAt = input.startedAt;
     if (input.endedAt) updateData.endedAt = input.endedAt;
 
-    const doc = await ArenaMatchModel.findByIdAndUpdate(input.id, updateData, {
+    const doc = await this.model.findByIdAndUpdate(input.id, updateData, {
       new: true,
     }).exec();
 
-    return this.toMatch(doc);
+    return this.toDomain(doc);
   }
 
   async updatePlayerProgress(
@@ -112,7 +100,7 @@ export class ArenaMatchRepository {
       updateQuery.$set["players.$[player].score"] = progress.score;
     }
 
-    const doc = await ArenaMatchModel.findByIdAndUpdate(
+    const doc = await this.model.findByIdAndUpdate(
       matchId,
       updateQuery,
       {
@@ -121,24 +109,108 @@ export class ArenaMatchRepository {
       }
     ).exec();
 
-    return this.toMatch(doc);
+    return this.toDomain(doc);
   }
 
   async addPlayer(matchId: string, player: ArenaPlayerResult): Promise<ArenaMatch | null> {
-    const doc = await ArenaMatchModel.findByIdAndUpdate(
+    const doc = await this.model.findByIdAndUpdate(
       matchId,
       { $addToSet: { players: player } },
       { new: true }
     ).exec();
-    return this.toMatch(doc);
+    return this.toDomain(doc);
   }
 
   async getHistoryByUserId(userId: string, limit = 10): Promise<ArenaMatch[]> {
-    const docs = await ArenaMatchModel.find({ "players.userId": userId })
+    const docs = await this.model.find({ "players.userId": userId })
       .sort({ createdAt: -1 })
       .limit(limit)
       .exec();
 
-    return docs.map((doc) => this.toMatch(doc)).filter((m): m is ArenaMatch => m !== null);
+    return this.toDomainArray(docs);
+  }
+
+  /**
+   * Fetches the match results including the source code for each player.
+   * Uses an aggregation pipeline to join ArenaMatch -> ArenaSubmission -> Submission.
+   */
+  async findByIdWithSubmissions(id: string): Promise<any | null> {
+    const { mongoose } = await import("../mongo/connection");
+
+    const results = await this.model.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      // 1. Flatten players to join each one individually
+      { $unwind: { path: "$players", preserveNullAndEmptyArrays: true } },
+      // 2. Look up the link record in ArenaSubmission
+      {
+        $lookup: {
+          from: "arenasubmissions",
+          let: { mId: { $toString: "$_id" }, uId: "$players.userId" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$matchId", "$$mId"] },
+                    { $eq: ["$userId", "$$uId"] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "arenaSub",
+        },
+      },
+      { $unwind: { path: "$arenaSub", preserveNullAndEmptyArrays: true } },
+      // 3. Look up the actual code from Submission
+      {
+        $lookup: {
+          from: "submissions",
+          let: { sId: "$arenaSub.submissionId" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$_id", { $toObjectId: "$$sId" }],
+                },
+              },
+            },
+          ],
+          as: "subDetails",
+        },
+      },
+      { $unwind: { path: "$subDetails", preserveNullAndEmptyArrays: true } },
+      // 4. Inject code results into the player object
+      {
+        $addFields: {
+          "players.sourceCode": "$subDetails.sourceCode",
+          "players.languageId": "$subDetails.languageId",
+        },
+      },
+      // 5. Re-group players back into the original match structure
+      {
+        $group: {
+          _id: "$_id",
+          roomId: { $first: "$roomId" },
+          hostId: { $first: "$hostId" },
+          problemId: { $first: "$problemId" },
+          language: { $first: "$language" },
+          status: { $first: "$status" },
+          startedAt: { $first: "$startedAt" },
+          endedAt: { $first: "$endedAt" },
+          createdAt: { $first: "$createdAt" },
+          updatedAt: { $first: "$updatedAt" },
+          players: { $push: "$players" },
+        },
+      },
+    ]).exec();
+
+    if (!results || results.length === 0) return null;
+
+    const match = results[0];
+    return {
+      ...match,
+      id: match._id.toString(),
+    };
   }
 }
