@@ -14,6 +14,7 @@ export interface ArenaPlayer {
   status: "CODING" | "SUBMITTED";
   isOffline: boolean;
   joinedAt: Date;
+  submissionOrder?: number;
 }
 
 export interface ArenaRoom {
@@ -24,10 +25,12 @@ export interface ArenaRoom {
   problemSlug?: string;
   difficulty?: string;
   language?: string;
+  matchDuration?: number;
   problem?: Problem;
   players: Record<string, ArenaPlayer>; // userId -> ArenaPlayer
   createdAt: Date;
-  startTime?: Date;
+  startTime?: number;
+  endTime?: number;
   winnerId?: string;
   matchId?: string;
 }

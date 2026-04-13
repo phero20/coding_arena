@@ -9,6 +9,7 @@ import type {
 
 import type { ArenaMatchRepository } from '../repositories/arena-match.repository'
 import type { ArenaRepository } from '../repositories/arena.repository'
+import type { ArenaSubmissionRepository } from '../repositories/arena-submission.repository'
 import type { ArenaMatch } from '../mongo/models/arena-match.model'
 
 export class SubmissionService {
@@ -16,6 +17,7 @@ export class SubmissionService {
     private readonly submissionRepository: ISubmissionRepository,
     private readonly arenaMatchRepository: ArenaMatchRepository,
     private readonly arenaRepository: ArenaRepository,
+    private readonly arenaSubmissionRepository: ArenaSubmissionRepository,
   ) {}
 
   /**
@@ -45,10 +47,19 @@ export class SubmissionService {
   }
 
   /**
-   * Fetches all submissions for a specific user and problem.
+   * Fetches all submissions for a specific user and problem (excluding Arena attempts).
    */
-  getUserSubmissions(userId: string, problemId: string): Promise<Submission[]> {
-    return this.submissionRepository.findByUserAndProblem(userId, problemId)
+  async getUserSubmissions(userId: string, problemId: string, clerkId?: string): Promise<Submission[]> {
+    // 1. Fetch exclusion IDs (could be saved as Clerk ID or current internal ID)
+    const [idsByClerk, idsByInternal] = await Promise.all([
+      clerkId ? this.arenaSubmissionRepository.findAllSubmissionIdsByUser(clerkId) : Promise.resolve([]),
+      this.arenaSubmissionRepository.findAllSubmissionIdsByUser(userId)
+    ]);
+    
+    // 2. Merge and deduplicate
+    const arenaIds = Array.from(new Set([...idsByClerk, ...idsByInternal]));
+    
+    return this.submissionRepository.findByUserAndProblem(userId, problemId, arenaIds)
   }
 
   /**
