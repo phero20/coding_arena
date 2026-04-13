@@ -10,9 +10,7 @@ const SelectContent = () => {
   const searchParams = useSearchParams();
   const roomId = searchParams.get("roomId") || undefined;
 
-  return (
-    <PracticeProblemList isSelectPage={true} roomId={roomId} />
-  );
+  return <PracticeProblemList isSelectPage={true} roomId={roomId} />;
 };
 
 const SelectPage = () => {
