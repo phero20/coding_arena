@@ -3,8 +3,10 @@ package handlers
 import (
 	"context"
 	"log/slog" // Changed from "log"
+
 	// "log" // Removed
 
+	"strings"
 	"arena/internal/hub"
 	"arena/internal/models"
 	"arena/internal/repository"
@@ -30,7 +32,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 			c.Close() // Added c.Close() here as per instruction
 		}()
 
-		roomId := c.Params("roomId")
+		roomId := strings.ToUpper(c.Params("roomId"))
 		
 		// Get userId from middleware context (Verified JWT)
 		rawUserId := c.Locals("userId")
@@ -57,7 +59,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 				Type:    "ERROR",
 				Payload: "Authentication failed: missing ID",
 			})
-			// c.Close() // Removed as it's now in defer
+			c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(4004, "Authentication failed"))
 			return
 		}
 
@@ -69,7 +71,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 				Type:    "ERROR",
 				Payload: err.Error(),
 			})
-			// c.Close() // Removed as it's now in defer
+			c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(4004, "Room Not Found or Join Failed"))
 			return
 		}
 
