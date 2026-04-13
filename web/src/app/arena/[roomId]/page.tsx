@@ -19,36 +19,32 @@ interface ArenaRoomPageProps {
   params: Promise<{ roomId: string }>;
 }
 
+import { useArenaTransitions } from "@/hooks/arena/use-arena-actions";
+
 export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
   const { roomId } = use(params);
   const router = useRouter();
-  const { userId } = useAuth();
 
-  // Retry state for room synchronization
-  const [retries, setRetries] = useState(0);
-  const maxRetries = 3;
-
+  // 1. [SELF-SERVING] The page only needs minimal metadata for transitions/errors
   const {
     room,
     isConnected,
     error,
     isLoading: isRoomLoading,
-    startMatch,
-    leaveRoom,
-    isStartingMatch,
   } = useArenaRoom(roomId);
 
   const {
     matchEnded,
-    finalRankings,
   } = useArenaStore(
     useShallow((state: any) => ({
       matchEnded: state.matchEnded,
-      finalRankings: state.finalRankings,
     }))
   );
 
-  // 1. Handle Errors & Navigation
+  // 2. Centralized Transitions
+  useArenaTransitions(roomId, room?.status, matchEnded);
+
+  // 3. Handle Errors
   useEffect(() => {
     if (error) {
       toast.error("Arena Error", { description: error });
@@ -56,44 +52,17 @@ export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
     }
   }, [error, router]);
 
-  // 2. Redirect to match if already playing
-  useEffect(() => {
-    if (room?.status === "PLAYING" && room?.roomId === roomId && !matchEnded) {
-      router.push(`/arena/match/${roomId}`);
-    }
-  }, [room?.status, room?.roomId, roomId, router, matchEnded]);
-
-  // 3. Redirect to results if match ended
-  useEffect(() => {
-    if (matchEnded && finalRankings.length > 0) {
-      router.push(`/arena/match/${roomId}/results`);
-    }
-  }, [matchEnded, finalRankings.length, roomId, router]);
-
-  const isLoading = isRoomLoading || (matchEnded && !finalRankings.length);
-
-  if (isLoading || (!room && !matchEnded)) {
+  if (isRoomLoading || (!room && !matchEnded)) {
     return <LobbySkeleton />;
   }
 
-  // 6. Lobby View
-  if (room) {
-    return (
-      <div className="min-h-screen bg-background relative flex flex-col">
-        <ConnectionBadge isConnected={isConnected} />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 w-full h-full flex flex-col justify-center">
-          <ArenaLobby
-            roomId={roomId}
-            room={room}
-            startMatch={startMatch}
-            leaveRoom={leaveRoom}
-            isConnected={isConnected}
-            isStartingMatch={isStartingMatch}
-          />
-        </div>
+  // 4. Lobby View
+  return (
+    <div className="min-h-screen bg-background relative flex flex-col">
+      <ConnectionBadge isConnected={isConnected} />
+      <div className="relative z-10 max-w-6xl mx-auto px-4 w-full h-full flex flex-col justify-center">
+        <ArenaLobby roomId={roomId} />
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 }
