@@ -41,9 +41,17 @@ func (c *Client) ReadPump() {
 	defer func() {
 		// Handle automatic disconnection/status update
 		ctx := context.Background()
-		updatedRoom, _ := c.Service.HandleConnectionLoss(ctx, c.RoomID, c.UserID)
+		updatedRoom, wasDeleted, _ := c.Service.HandleConnectionLoss(ctx, c.RoomID, c.UserID)
 		
-		if updatedRoom != nil {
+		if wasDeleted {
+			c.Hub.Broadcast <- Message{
+				RoomID: c.RoomID,
+				Payload: models.ArenaWSMessage{
+					Type:    "ERROR",
+					Payload: "Host disconnected. Arena terminated.",
+				},
+			}
+		} else if updatedRoom != nil {
 			c.Hub.Broadcast <- Message{
 				RoomID: c.RoomID,
 				Payload: models.ArenaWSMessage{
@@ -115,6 +123,47 @@ func (c *Client) ReadPump() {
 		case "SYNC_PROBLEM":
 			updatedRoom, handleErr = c.Repo.GetRoom(ctx, c.RoomID)
 			msg.Type = "PROBLEM_CHANGED"
+		case "UPDATE_MATCH_DURATION":
+			payloadBytes, _ := json.Marshal(msg.Payload)
+			var data struct {
+				Duration int `json:"duration"`
+			}
+			if err := json.Unmarshal(payloadBytes, &data); err == nil {
+				updatedRoom, handleErr = c.Service.HandleUpdateMatchDuration(ctx, c.RoomID, c.UserID, data.Duration)
+			}
+			msg.Type = "MATCH_DURATION_CHANGED"
+		case "KICK_PLAYER":
+			payloadBytes, _ := json.Marshal(msg.Payload)
+			var data struct {
+				TargetUserId string `json:"targetUserId"`
+			}
+			if err := json.Unmarshal(payloadBytes, &data); err == nil {
+				updatedRoom, handleErr = c.Service.HandleKickPlayer(ctx, c.RoomID, c.UserID, data.TargetUserId)
+				if handleErr == nil {
+					// 1. Notify the target user first so they can redirect
+					c.Hub.mu.RLock()
+					if clients, ok := c.Hub.Rooms[c.RoomID]; ok {
+						if targetClient, found := clients[data.TargetUserId]; found {
+							select {
+							case targetClient.Send <- models.ArenaWSMessage{
+								Type:    "YOU_ARE_KICKED",
+								Payload: "You have been removed from the lobby.",
+							}:
+							default:
+							}
+						}
+					}
+					c.Hub.mu.RUnlock()
+					
+					// 2. Change broadcast type for the rest of the room
+					msg.Type = "PLAYER_KICKED"
+				}
+			}
+		case "ABORT_MATCH":
+			updatedRoom, handleErr = c.Service.HandleAbortMatch(ctx, c.RoomID, c.UserID)
+			if handleErr == nil {
+				msg.Type = "MATCH_OVER"
+			}
 		default:
 			// Just broadcast other message types as is
 			c.Hub.Broadcast <- Message{RoomID: c.RoomID, Payload: msg}
