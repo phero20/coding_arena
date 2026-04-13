@@ -137,19 +137,19 @@ func (s *ArenaService) HandleExplicitLeave(ctx context.Context, roomId, userId s
 	return room, false, nil
 }
 
-func (s *ArenaService) HandleConnectionLoss(ctx context.Context, roomId, userId string) (*models.ArenaRoom, error) {
+func (s *ArenaService) HandleConnectionLoss(ctx context.Context, roomId, userId string) (*models.ArenaRoom, bool, error) {
 	roomId = strings.ToUpper(roomId)
 	room, err := s.repo.GetRoom(ctx, roomId)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	if room == nil || room.Players == nil {
-		return nil, nil
+		return nil, false, nil
 	}
 
 	player, ok := room.Players[userId]
 	if !ok {
-		return nil, nil
+		return nil, false, nil
 	}
 
 	if room.Status == models.StatusPlaying {
@@ -157,24 +157,61 @@ func (s *ArenaService) HandleConnectionLoss(ctx context.Context, roomId, userId 
 		player.IsOffline = true
 		room.Players[userId] = player
 		if err := s.repo.SaveRoom(ctx, room); err != nil {
-			return nil, err
+			return nil, false, err
 		}
-		return room, nil
+		return room, false, nil
 	}
 
 	// Lobby Phase disconnection: Remove player entirely
 	if player.IsCreator {
 		// If creator disconnects in lobby, delete room
 		if err := s.repo.DeleteRoom(ctx, roomId); err != nil {
-			return nil, err
+			return nil, true, err
 		}
-		return nil, nil
+		return nil, true, nil
 	}
 
 	delete(room.Players, userId)
+	if err := s.repo.SaveRoom(ctx, room); err != nil {
+		return nil, false, err
+	}
+
+	return room, false, nil
+}
+
+func (s *ArenaService) HandleUpdateMatchDuration(ctx context.Context, roomId, userId string, duration int) (*models.ArenaRoom, error) {
+	roomId = strings.ToUpper(roomId)
+	room, err := s.repo.GetRoom(ctx, roomId)
+	if err != nil {
+		return nil, err
+	}
+	if room == nil {
+		return nil, errors.New("room not found")
+	}
+
+	player, ok := room.Players[userId]
+	if !ok {
+		return nil, errors.New("player not in room")
+	}
+
+	if !player.IsCreator {
+		return nil, errors.New("only the host can change match duration")
+	}
+
+	room.MatchDuration = duration
 	if err := s.repo.SaveRoom(ctx, room); err != nil {
 		return nil, err
 	}
 
 	return room, nil
+}
+
+func (s *ArenaService) HandleKickPlayer(ctx context.Context, roomId, hostId, targetUserId string) (*models.ArenaRoom, error) {
+	roomId = strings.ToUpper(roomId)
+	return s.repo.AtomicKickPlayer(ctx, roomId, hostId, targetUserId)
+}
+
+func (s *ArenaService) HandleAbortMatch(ctx context.Context, roomId, hostId string) (*models.ArenaRoom, error) {
+	roomId = strings.ToUpper(roomId)
+	return s.repo.AtomicAbortMatch(ctx, roomId, hostId)
 }
