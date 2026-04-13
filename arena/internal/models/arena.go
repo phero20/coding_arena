@@ -28,8 +28,9 @@ type ArenaPlayer struct {
 	TotalTests  int               `json:"totalTests"`
 	SubmittedAt *time.Time        `json:"submittedAt,omitempty"`
 	Status      ArenaPlayerStatus `json:"status"`
-	IsOffline   bool              `json:"isOffline"`
-	JoinedAt    time.Time         `json:"joinedAt"`
+	IsOffline       bool              `json:"isOffline"`
+	JoinedAt        time.Time         `json:"joinedAt"`
+	SubmissionOrder int               `json:"submissionOrder"`
 }
 
 type ArenaRoom struct {
@@ -38,11 +39,13 @@ type ArenaRoom struct {
 	Topic       string                 `json:"topic,omitempty"`
 	ProblemID   string                 `json:"problemId,omitempty"`
 	ProblemSlug string                 `json:"problemSlug,omitempty"`
-	Difficulty  string                 `json:"difficulty,omitempty"`
-	Language    string                 `json:"language,omitempty"`
-	Players     map[string]ArenaPlayer `json:"players"`
+	Difficulty    string                 `json:"difficulty,omitempty"`
+	Language      string                 `json:"language,omitempty"`
+	MatchDuration int                    `json:"matchDuration,omitempty"`
+	Players       map[string]ArenaPlayer `json:"players"`
 	CreatedAt   time.Time              `json:"createdAt"`
-	StartTime   *time.Time             `json:"startTime,omitempty"`
+	StartTime   *int64                 `json:"startTime,omitempty"`
+	EndTime     *int64                 `json:"endTime,omitempty"`
 	WinnerID    string                 `json:"winnerId,omitempty"`
 }
 
