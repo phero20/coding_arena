@@ -6,13 +6,8 @@ import { toast } from "sonner";
 import { MatchWorkspace } from "@/components/arena/match-editor/MatchWorkspace";
 import { useProblem } from "@/hooks/api/use-problem";
 import { useArenaRoom } from "@/hooks/arena/use-arena-room";
+import { useArenaTransitions } from "@/hooks/arena/use-arena-actions";
 import { WorkspaceSkeleton } from "@/components/shared/Skeletons";
-import { AlertCircle, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { MatchOverOverlay } from "@/components/arena/MatchOverOverlay";
 
 interface ArenaMatchPageProps {
   params: Promise<{ roomId: string }>;
@@ -25,9 +20,8 @@ const MatchDetailPage = ({ params }: ArenaMatchPageProps) => {
     room,
     isLoading: isLoadingRoom,
     error: roomError,
-    sendMessage,
-    leaveRoom,
   } = useArenaRoom(roomId);
+
   const problemIdentifier = room?.problemSlug || room?.problemId;
   const {
     problem,
@@ -37,6 +31,11 @@ const MatchDetailPage = ({ params }: ArenaMatchPageProps) => {
 
   const isLoading = isLoadingRoom || (!!room && isLoadingProblem);
   const error = roomError || (!!room && problemError);
+
+  // 1. Centralized Transitions (Auto-redirect to results when status === "FINISHED")
+  useArenaTransitions(roomId, room?.status);
+
+  // 2. Handle Errors
   useEffect(() => {
     if (error) {
       const errorStr =
@@ -55,21 +54,17 @@ const MatchDetailPage = ({ params }: ArenaMatchPageProps) => {
       router.push("/arena");
     }
   }, [error, router]);
-  const isMatchFinished = room?.status === "FINISHED";
-  const playersCount = room?.players ? Object.keys(room.players).length : 0;
 
-  if (isLoading || !problem) {
+  if (isLoading || !problem || !room) {
     return <WorkspaceSkeleton />;
   }
 
   return (
     <main className="min-h-screen bg-background relative">
-      <MatchWorkspace problem={problem} roomId={roomId} />
-
-      <MatchOverOverlay
-        isOpen={isMatchFinished}
-        roomId={roomId}
-        playersCount={playersCount}
+      <MatchWorkspace 
+        key={`${roomId}-${room?.status}-${room?.language}`}
+        problem={problem} 
+        roomId={roomId} 
       />
     </main>
   );
