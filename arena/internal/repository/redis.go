@@ -211,7 +211,12 @@ func (r *ArenaRepository) AtomicStartMatch(ctx context.Context, roomId, userId s
 		
 		-- 5. Transition status and reset offline state
 		room.status = "PLAYING"
-		room.startTime = tonumber(ARGV[2]) * 1000 -- Store as ms for JS compatibility
+		local msTime = tonumber(ARGV[2]) * 1000
+		room.startTime = msTime -- Store as ms for JS compatibility
+
+		local durationMins = room.matchDuration
+		if not durationMins then durationMins = 20 end
+		room.endTime = msTime + (durationMins * 60 * 1000)
 		
 		for _, p in pairs(room.players) do
 			p.isOffline = false
@@ -234,6 +239,133 @@ func (r *ArenaRepository) AtomicStartMatch(ctx context.Context, roomId, userId s
 			return nil, fmt.Errorf("match already started or finished")
 		case strings.Contains(err.Error(), "NOT_ENOUGH_PLAYERS"):
 			return nil, fmt.Errorf("not enough players to start")
+		default:
+			return nil, err
+		}
+	}
+
+	if res == nil {
+		return nil, fmt.Errorf("room not found")
+	}
+
+	var updatedRoom models.ArenaRoom
+	if err := json.Unmarshal([]byte(res.(string)), &updatedRoom); err != nil {
+		return nil, err
+	}
+
+	return &updatedRoom, nil
+}
+
+// AtomicKickPlayer removes a player from the room atomically by the host using Lua
+func (r *ArenaRepository) AtomicKickPlayer(ctx context.Context, roomId, hostId, targetUserId string) (*models.ArenaRoom, error) {
+	roomId = strings.ToUpper(roomId)
+
+	script := `
+		local roomData = redis.call('GET', KEYS[1])
+		if not roomData then return nil end
+		local room = cjson.decode(roomData)
+		
+		-- 1. Verify requester is creator
+		local player = room.players[ARGV[1]]
+		if not player or not player.isCreator then
+			return {err = "NOT_CREATOR"}
+		end
+		
+		-- 2. Verify target exists and is not the host
+		if not room.players[ARGV[2]] then
+			return {err = "TARGET_NOT_FOUND"}
+		end
+		if room.players[ARGV[2]].isCreator then
+			return {err = "CANNOT_KICK_HOST"}
+		end
+
+		-- 3. Transition status (Can only kick in LOBBY/WAITING phase)
+		if room.status ~= "WAITING" and room.status ~= "LOBBY" then
+			return {err = "INVALID_STATUS"}
+		end
+		
+		-- 4. Remove player 
+		room.players[ARGV[2]] = nil
+		
+		local updatedData = cjson.encode(room)
+		redis.call('SET', KEYS[1], updatedData, 'PX', ARGV[3])
+		
+		-- 5. Clean up user mapping
+		redis.call('DEL', KEYS[2])
+		
+		return updatedData
+	`
+
+	res, err := r.redis.Eval(ctx, script, []string{
+		r.prefix + roomId,
+		r.userRoomPrefix + targetUserId,
+	}, hostId, targetUserId, int(r.ttl.Milliseconds())).Result()
+
+	if err != nil {
+		switch {
+		case strings.Contains(err.Error(), "NOT_CREATOR"):
+			return nil, fmt.Errorf("only creator can kick players")
+		case strings.Contains(err.Error(), "TARGET_NOT_FOUND"):
+			return nil, fmt.Errorf("player not found in room")
+		case strings.Contains(err.Error(), "CANNOT_KICK_HOST"):
+			return nil, fmt.Errorf("cannot kick the host")
+		case strings.Contains(err.Error(), "INVALID_STATUS"):
+			return nil, fmt.Errorf("can only kick players during lobby phase")
+		default:
+			return nil, err
+		}
+	}
+
+	if res == nil {
+		return nil, fmt.Errorf("room not found")
+	}
+
+	var updatedRoom models.ArenaRoom
+	if err := json.Unmarshal([]byte(res.(string)), &updatedRoom); err != nil {
+		return nil, err
+	}
+
+	return &updatedRoom, nil
+}
+
+// AtomicAbortMatch transitions the room to StatusFinished atomically by the host using Lua
+func (r *ArenaRepository) AtomicAbortMatch(ctx context.Context, roomId, hostId string) (*models.ArenaRoom, error) {
+	roomId = strings.ToUpper(roomId)
+	now := time.Now().Unix() * 1000 // ms for JS compatibility
+
+	script := `
+		local roomData = redis.call('GET', KEYS[1])
+		if not roomData then return nil end
+		local room = cjson.decode(roomData)
+		
+		-- 1. Verify requester is creator
+		local player = room.players[ARGV[1]]
+		if not player or not player.isCreator then
+			return {err = "NOT_CREATOR"}
+		end
+		
+		-- 2. Verify status is PLAYING
+		if room.status ~= "PLAYING" then
+			return {err = "INVALID_STATUS"}
+		end
+		
+		-- 3. Transition status and set endTime
+		room.status = "FINISHED"
+		room.endTime = tonumber(ARGV[2])
+		
+		local updatedData = cjson.encode(room)
+		redis.call('SET', KEYS[1], updatedData, 'PX', ARGV[3])
+		return updatedData
+	`
+
+	res, err := r.redis.Eval(ctx, script, []string{r.prefix + roomId}, hostId, now, int(r.ttl.Milliseconds())).Result()
+
+	if err != nil {
+		switch {
+		case strings.Contains(err.Error(), "NOT_CREATOR"):
+			return nil, fmt.Errorf("only creator can abort the match")
+		case strings.Contains(err.Error(), "INVALID_STATUS"):
+			return nil, fmt.Errorf("can only abort a live match")
 		default:
 			return nil, err
 		}
