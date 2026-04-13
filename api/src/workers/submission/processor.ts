@@ -100,7 +100,7 @@ export function createSubmissionProcessor(
         // B. Permanent Record (Log every attempt)
         await arenaSubmissionRepository.create({
           matchId: jobData.arenaMatchId,
-          userId: jobData.userId,
+          userId: jobData.clerkId || jobData.userId,
           submissionId: jobData.submissionId,
           status: evaluation.status,
           testsPassed,
@@ -142,6 +142,7 @@ export function createSubmissionProcessor(
 
             // HARD LOCK: status becomes SUBMITTED regardless of verdict (Accepted, Wrong Answer, etc.)
             room.players[playerIdentifier].status = "SUBMITTED";
+            room.players[playerIdentifier].submissionOrder = finalOrder;
 
             // Simple scoring for now: 100 points for accepted
             if (evaluation.status === "ACCEPTED")
