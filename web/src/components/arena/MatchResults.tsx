@@ -1,19 +1,27 @@
 import React from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Medal, User, LogOut, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { cn } from "@/lib/utils";
 import { ArenaPlayerResult } from "@/services/arena.service";
+import {
+  LogOut,
+  Trophy,
+  Eye,
+  Code2,
+  Terminal,
+  Info,
+  ChevronRight,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 interface MatchResultsProps {
   rankings: ArenaPlayerResult[];
@@ -21,30 +29,34 @@ interface MatchResultsProps {
   onClose: () => void;
 }
 
+
 export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
-  const getRankIcon = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <Trophy className="w-5 h-5 text-amber-400" />;
-      case 2:
-        return <Medal className="w-5 h-5 text-slate-300" />;
-      case 3:
-        return <Medal className="w-5 h-5 text-amber-600" />;
-      default:
-        return <span className="text-muted-foreground/50 font-bold ml-1.5">{rank}</span>;
-    }
-  };
+  const [expandedUser, setExpandedUser] = React.useState<string | undefined>(
+    undefined,
+  );
+
+  const sortedRankings = React.useMemo(() => {
+    return [...rankings].sort((a, b) => {
+      if (a.submissionOrder && b.submissionOrder)
+        return a.submissionOrder - b.submissionOrder;
+      if (a.submissionOrder) return -1;
+      if (b.submissionOrder) return 1;
+      return b.score - a.score;
+    });
+  }, [rankings]);
+
+  const topThree = sortedRankings.slice(0, 3);
 
   const getVerdictBadge = (verdict: string) => {
     const isAccepted = verdict === "ACCEPTED";
     return (
       <Badge
-        variant="outline"
+        variant="secondary"
         className={cn(
-          "text-[10px] px-2 py-0 h-5 font-bold uppercase tracking-wider border-none",
-          isAccepted 
-            ? "bg-emerald-500/10 text-emerald-400" 
-            : "bg-rose-500/10 text-rose-400"
+          "text-[9px] md:text-[10px] font-bold uppercase tracking-wider border-none whitespace-nowrap",
+          isAccepted
+            ? "bg-emerald-500/10 text-emerald-500"
+            : "bg-destructive/10 text-destructive",
         )}
       >
         {verdict.replace("_", " ")}
@@ -53,97 +65,223 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 md:p-8 w-full max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center gap-4 text-center">
-        <div className="p-3 bg-primary/10 rounded-2xl border border-primary/20">
-          <Trophy className="w-8 h-8 text-primary" />
-        </div>
-        <div className="flex flex-col items-start">
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic opacity-90">
-            Battle Summary
+    <div className="h-screen flex flex-col items-center w-full max-w-4xl mx-auto px-0 py-10 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* Header Section */}
+      <div className="w-full flex items-center justify-between py-2 border-b border-border/10 pb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
+            <Trophy className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+          </div>
+          <h1 className="text-2xl md:text-3xl text-secondary font-black tracking-tight uppercase italic">
+            Final Standings
           </h1>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-            Match results finalized and verified
-          </p>
         </div>
+
+        <Button variant="destructive" size="sm" onClick={onClose}>
+          <LogOut className="size-4 mr-2" /> <span>Exit Arena</span>
+        </Button>
       </div>
 
-      <Card className="w-full border-border/40 bg-card/50 backdrop-blur-xl shadow-2xl overflow-hidden">
-        <CardHeader className="pb-0 border-b border-border/10">
-          <CardTitle className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground/60 py-4">
-            Final Standings
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader className="bg-muted/5">
-              <TableRow className="hover:bg-transparent border-border/10">
-                <TableHead className="w-[80px] text-center">Rank</TableHead>
-                <TableHead>Participant</TableHead>
-                <TableHead className="text-center">Score</TableHead>
-                <TableHead className="text-center">Tests</TableHead>
-                <TableHead className="text-right pr-8">Verdict</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rankings.map((player) => (
-                <TableRow 
-                  key={player.userId}
-                  className={cn(
-                  "group border-border/5 hover:bg-primary/5 transition-colors",
-                  player.finalRank === 1 && "bg-primary/10"
+      {/* Podium Section */}
+      <div className="flex flex-row items-center justify-center gap-2 w-full max-w-3xl">
+        {topThree[1] && (
+          <div className="order-1">
+            <PodiumProfile
+              player={topThree[1]}
+              rank={2}
+              size="md"
+              onExpand={setExpandedUser}
+            />
+          </div>
+        )}
+        {topThree[0] && (
+          <div className="order-2">
+            <PodiumProfile
+              player={topThree[0]}
+              rank={1}
+              size="lg"
+              onExpand={setExpandedUser}
+            />
+          </div>
+        )}
+        {topThree[2] && (
+          <div className="order-3">
+            <PodiumProfile
+              player={topThree[2]}
+              rank={3}
+              size="sm"
+              onExpand={setExpandedUser}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Results List (Accordion Style - Practice History Match) */}
+      <div className="w-full space-y-4">
+        <Accordion
+          type="single"
+          collapsible
+          value={expandedUser}
+          onValueChange={setExpandedUser}
+          className="w-full space-y-3"
+        >
+          {sortedRankings.map((player, index) => {
+            const isWinner = index === 0;
+            return (
+              <AccordionItem
+                key={player.userId}
+                value={player.userId}
+                className={cn(
+                  "border border-border/40 bg-muted/20 rounded-xl px-1 overflow-hidden transition-all data-[state=open]:border-primary/40 hover:border-primary/20",
+                  isWinner && "border-primary/20 bg-primary/5",
                 )}
-                >
-                  <TableCell className="text-center">
-                    <div className="flex justify-center">
-                      {getRankIcon(player.finalRank || 0)}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8 border border-border/20 shadow-sm">
-                        <AvatarImage src={player.avatarUrl} />
-                        <AvatarFallback>
-                          <User className="w-4 h-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-bold text-foreground/80 leading-tight">
-                          {player.username}
-                        </span>
-                        {player.submittedAt && (
-                          <span className="text-[9px] text-muted-foreground/50 font-medium">
-                            {new Date(player.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              >
+                <AccordionTrigger className="px-5 py-4 hover:no-underline [&>svg]:hidden group" disabled={!player.sourceCode}>
+                  <div className="flex w-full items-center justify-between pr-2">
+                    <div className="flex items-center gap-4">
+                      {/* Rank Indicator */}
+                      <Badge className="">
+                        {index + 1}
+                      </Badge>
+
+                      <div className="flex items-center gap-3">
+                        <Avatar className="size-8 md:size-9 border-2 border-background shadow-md shrink-0">
+                          <AvatarImage src={player.avatarUrl} />
+                          <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
+                            {player.username.slice(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col items-start gap-0 min-w-0">
+                          <span className="text-xs md:text-sm font-bold tracking-tight truncate">
+                            {player.username}
                           </span>
-                        )}
+                          <p className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-tighter">
+                            {player.testsPassed}/{player.totalTests} Tests
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell className="text-center font-mono font-bold text-primary">
-                    {player.score}
-                  </TableCell>
-                  <TableCell className="text-center font-medium text-muted-foreground/80">
-                    {player.testsPassed} / {player.totalTests}
-                  </TableCell>
-                  <TableCell className="text-right pr-6">
-                    {getVerdictBadge(player.verdict)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
 
-      <div className="flex items-center gap-4 w-full justify-center">
-        <Button 
-          variant="outline" 
-          onClick={onClose}
-          className="px-8 font-bold gap-2 border-border/40"
+                    <div className="flex items-center gap-8">
+                      {getVerdictBadge(player.verdict)}
+                      <Button
+                        disabled={!player.sourceCode}
+                        className={cn(
+                          "flex items-center justify-center size-8 rounded-full transition-all",
+                          player.sourceCode
+                            ? "text-primary/40 group-hover:text-primary  group-data-[state=open]:text-primary"
+                            : "text-muted-foreground/10",
+                        )}
+                      >
+                        <Button size="sm">Code</Button>
+                      </Button>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+
+                <AccordionContent className="border-t border-border/10 bg-muted/5 p-0">
+                  {!player.sourceCode ? (
+                    <div className="flex flex-col items-center justify-center py-10 opacity-30 text-center">
+                      <Eye className="size-8 mb-2" />
+                      <p className="text-[10px] font-black uppercase italic">
+                        Code not available yet
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col">
+                      <div className="relative">
+                        <SyntaxHighlighter
+                          language={player.languageId || "javascript"}
+                          style={vscDarkPlus}
+                          PreTag="div"
+                          customStyle={{
+                            margin: 0,
+                            padding: "1.5rem",
+                            fontSize: "0.75rem",
+                            lineHeight: "1.8",
+                            background: "transparent",
+                            overflowX: "hidden",
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-all",
+                          }}
+                          codeTagProps={{
+                            style: {
+                              whiteSpace: "pre-wrap",
+                              wordBreak: "break-all",
+                              display: "block",
+                              maxWidth: "100%",
+                            },
+                          }}
+                        >
+                          {player.sourceCode}
+                        </SyntaxHighlighter>
+                      </div>
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </div>
+    </div>
+  );
+}
+
+function PodiumProfile({
+  player,
+  rank,
+  size,
+  onExpand,
+}: {
+  player: ArenaPlayerResult;
+  rank: number;
+  size: "sm" | "md" | "lg";
+  onExpand: (userId: string) => void;
+}) {
+  const sizes = {
+    sm: "size-14 md:size-20",
+    md: "size-16 md:size-24",
+    lg: "size-24 md:size-32 border-primary",
+  };
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center gap-2 md:gap-3 shrink-0",
+        rank === 1 ? "mb-0 md:mb-6" : "mb-0",
+      )}
+    >
+      <div
+        className="relative group cursor-pointer"
+        onClick={() => onExpand(player.userId)}
+      >
+        <Avatar
+          className={cn(
+            "border-4 border-card shadow-2xl transition-all group-hover:scale-105 group-hover:border-primary/50",
+            sizes[size],
+          )}
         >
-          <LogOut className="w-4 h-4" />
-          Leave Arena
-        </Button>
+          <AvatarImage src={player.avatarUrl} />
+          <AvatarFallback className="text-lg md:text-xl font-black italic">
+            {player.username.slice(0, 1).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div
+          className={cn(
+            "absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-[9px] md:text-[10px] font-black z-10 shadow-lg",
+            rank === 1
+              ? "bg-primary text-primary-foreground"
+              : "bg-card text-foreground border",
+          )}
+        >
+          {rank}
+        </div>
+      </div>
+      <div className="text-center max-w-[120px] flex flex-col items-center gap-1">
+        <p className="font-bold text-xs md:text-sm truncate w-full tracking-tight">
+          {player.username}
+        </p>
       </div>
     </div>
   );
