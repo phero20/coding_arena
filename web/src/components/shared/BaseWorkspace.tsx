@@ -16,10 +16,13 @@ interface BaseWorkspaceProps {
   onRun: () => void;
   onSubmit: () => void;
   onExit?: () => void;
+  onAbort?: () => void;
   exitText?: string;
+  endTime?: number | string;
   isLoading?: boolean;
   isSubmitting?: boolean;
   hasSubmitted?: boolean;
+  confirmSubmit?: boolean;
 }
 
 /**
@@ -33,10 +36,13 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
   onRun,
   onSubmit,
   onExit,
+  onAbort,
+  endTime,
   isLoading,
   isSubmitting,
   hasSubmitted,
   exitText,
+  confirmSubmit,
 }) => {
   return (
     <div className="h-screen w-full bg-background flex flex-col">
@@ -45,10 +51,13 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
         onRun={onRun}
         onSubmit={onSubmit}
         onExit={onExit}
+        onAbort={onAbort}
         exitText={exitText}
+        endTime={endTime}
         isLoading={isLoading}
         isSubmitting={isSubmitting}
         hasSubmitted={hasSubmitted}
+        confirmSubmit={confirmSubmit}
       />
 
       {/* Desktop: standard resizable two-panel split */}
