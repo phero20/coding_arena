@@ -32,10 +32,12 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
     runCode,
     submitCode,
     leaveRoom,
+    abortMatch,
     isFullSubmission,
     room,
     isLoading,
     hasSubmitted,
+    isHost,
   } = useArenaMatch({ problem, roomId });
 
   const router = useRouter();
@@ -46,12 +48,20 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
       onRun={runCode}
       onSubmit={submitCode}
       onExit={leaveRoom}
+      onAbort={isHost ? abortMatch : undefined}
       exitText="Exit Match"
+      endTime={room?.endTime}
       isLoading={!!evaluation?.isLoading && !isFullSubmission}
       isSubmitting={!!evaluation?.isLoading && isFullSubmission}
       hasSubmitted={hasSubmitted}
+      confirmSubmit={true}
       descriptionSlot={
-        <DescriptionPanel mode="arena" problem={problem} room={room} />
+        <DescriptionPanel 
+          mode="arena" 
+          problem={problem} 
+          room={room} 
+          roomId={roomId}
+        />
       }
       editorSlot={
         <EditorPanel
