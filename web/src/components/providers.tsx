@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { AuthInitializer } from "./auth-initializer";
 import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import { FullPageOverlay } from "./shared/StatusState";
+import { ArenaSocketProvider } from "./providers/ArenaSocketProvider";
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -29,7 +30,9 @@ export function Providers({ children }: { children: ReactNode }) {
 
       <ClerkLoaded>
         <AuthInitializer />
-        {children}
+        <ArenaSocketProvider>
+          {children}
+        </ArenaSocketProvider>
       </ClerkLoaded>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
