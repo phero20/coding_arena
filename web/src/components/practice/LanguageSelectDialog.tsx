@@ -35,7 +35,7 @@ export const LanguageSelectDialog: React.FC<LanguageSelectDialogProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[360px]">
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold tracking-tight">
             Select Battle Language
