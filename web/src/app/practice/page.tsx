@@ -11,7 +11,7 @@ const PracticePage = () => {
           <PracticeProblemList />
         </Container>
       </main>
-    </div>
+    </div>  
   );
 };
 
