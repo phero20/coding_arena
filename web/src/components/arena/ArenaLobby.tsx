@@ -1,76 +1,62 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 import { ArenaPlayerCard } from "./ArenaPlayerCard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Copy,
-  Share2,
-  Rocket,
   Sword,
   LogOut,
-  XCircle,
   Check,
   Edit2,
+  Rocket,
   Loader2,
+  Clock,
 } from "lucide-react";
 
 import Link from "next/link";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { ArenaRoom } from "@/services/arena.service";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useArenaLobby } from "@/hooks/arena/use-arena-lobby";
 
 interface ArenaLobbyProps {
   roomId: string;
-  room: ArenaRoom;
-  startMatch: () => void;
-  leaveRoom: () => void;
-  isConnected: boolean;
-  isStartingMatch: boolean;
 }
 
-export function ArenaLobby({
-  roomId,
-  room,
-  startMatch,
-  leaveRoom,
-  isConnected,
-  isStartingMatch,
-}: ArenaLobbyProps) {
-  const { userId } = useAuth();
-  const [copied, setCopied] = useState(false);
+export function ArenaLobby({ roomId }: ArenaLobbyProps) {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  const players = useMemo(
-    () =>
-      Object.values(room?.players || {}).sort((a, b) => {
-        const dateA = new Date(a.joinedAt).getTime();
-        const dateB = new Date(b.joinedAt).getTime();
-        return dateA - dateB;
-      }),
-    [room?.players],
-  );
+  const {
+    room,
+    players,
+    isHost,
+    isConnected,
+    isStartingMatch,
+    canStartMatch,
+    copied,
+    startMatch,
+    copyInviteCode,
+    leaveRoom,
+    isLoading,
+    updateMatchDuration,
+    kickPlayer,
+  } = useArenaLobby(roomId);
 
-  const currentPlayer = useMemo(
-    () => (userId ? room?.players[userId] : null),
-    [userId, room?.players],
-  );
+  const matchDuration = String(room?.matchDuration || 20);
 
-  // Logic checks
-  const isHost = currentPlayer?.isCreator;
-  const canStartMatch = useMemo(() => players.length >= 2, [players]);
-
-  const copyInviteCode = useCallback(() => {
-    navigator.clipboard.writeText(roomId);
-    setCopied(true);
-    toast.success("Invite code copied to clipboard!");
-    setTimeout(() => setCopied(false), 2000);
-  }, [roomId]);
+  if (isLoading || !room) {
+    return null; // Or a sub-skeleton, but the page handles this
+  }
 
   return (
     <div
@@ -79,8 +65,31 @@ export function ArenaLobby({
         hasMounted ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0",
       )}
     >
-      {/* Action Buttons - Responsive Positioning (Non-overlapping on Mobile) */}
-      <div className="w-full md:w-auto flex items-center justify-end gap-2 z-20 mb-6 md:mb-0 md:absolute md:top-24 md:right-0">
+      {/* Action Buttons */}
+      <div className="w-full md:w-auto flex flex-wrap items-center justify-center md:justify-end gap-2 z-20 mb-6 md:mb-0 md:absolute md:top-24 md:right-0">
+        <Select
+          value={matchDuration}
+          onValueChange={updateMatchDuration}
+          disabled={!isHost}
+        >
+          <SelectTrigger
+            className={cn(
+              "h-8 md:h-9 w-[120px] bg-card",
+              isHost ? "cursor-pointer" : "opacity-90",
+            )}
+          >
+            <Clock className="w-3.5 h-3.5 mr-2 opacity-70" />
+            <SelectValue placeholder="Time" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1">5 mins</SelectItem>
+            <SelectItem value="10">10 mins</SelectItem>
+            <SelectItem value="20">20 mins</SelectItem>
+            <SelectItem value="30">30 mins</SelectItem>
+            <SelectItem value="60">60 mins</SelectItem>
+          </SelectContent>
+        </Select>
+
         {isHost && (
           <Button
             size="sm"
@@ -114,7 +123,7 @@ export function ArenaLobby({
         </Button>
       </div>
 
-      {/* Arena Header - Centered */}
+      {/* Arena Header */}
       <div className="flex items-center justify-center gap-4">
         <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center border border-border/50">
           <Sword className="w-6 h-6 text-primary-foreground" />
@@ -126,7 +135,6 @@ export function ArenaLobby({
 
       <div className="w-full space-y-6">
         <div className="flex flex-wrap items-center justify-center gap-6">
-          {/* Problem Details */}
           <Card className="inline-flex items-center gap-4 py-3 px-6 min-h-16 h-auto max-w-[95vw] md:max-w-2xl flex-wrap md:flex-nowrap">
             <h2 className="text-lg font-bold text-foreground/90 leading-tight max-w-[200px] md:max-w-[400px] wrap-break-words">
               {room?.topic || "Custom Battle"}
@@ -150,9 +158,7 @@ export function ArenaLobby({
             {room.language && (
               <Badge
                 variant="outline"
-                className={cn(
-                  "font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none",
-                )}
+                className="font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none"
               >
                 {room.language}
               </Badge>
@@ -173,7 +179,6 @@ export function ArenaLobby({
             )}
           </Card>
 
-          {/* Invite Code */}
           <Card className="flex items-center justify-between gap-6 px-6 py-3 h-16 min-w-[280px]">
             <div className="flex flex-col items-start gap-1 min-w-0">
               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 leading-tight">
@@ -213,7 +218,6 @@ export function ArenaLobby({
           </div>
         </div>
 
-        {/* Simple Status Message */}
         <div className="w-full flex justify-center py-1">
           <p className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-[0.15em] text-center px-6 max-w-md line-clamp-1">
             {isHost
@@ -227,11 +231,17 @@ export function ArenaLobby({
         <div className="w-full">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {players.map((player) => (
-              <ArenaPlayerCard key={player.userId} player={player} />
+              <ArenaPlayerCard 
+                key={player.userId} 
+                player={player} 
+                isHost={isHost}
+                canKick={isHost && !player.isCreator}
+                onKick={kickPlayer}
+              />
             ))}
             {players.length < 50 && (
-              <div className="flex items-center justify-center p-3 border border-dashed border-border/20 rounded-xl bg-muted/5 min-h-[50px] group hover:border-primary/20 transition-colors">
-                <span className="text-[9px] font-bold text-foreground/20 uppercase tracking-widest group-hover:text-primary/30">
+              <div className="flex items-center justify-center p-3 border border-dashed border-border/80 rounded-xl bg-muted/35 min-h-[50px] group hover:border-primary/20 transition-colors">
+                <span className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest group-hover:text-primary/30">
                   {50 - players.length} more players can join
                 </span>
               </div>
