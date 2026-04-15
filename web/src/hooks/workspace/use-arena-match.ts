@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useMemo } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useArenaStore } from "@/store/useArenaStore";
 import { useEditorStore } from "@/store/use-editor-store";
@@ -6,8 +6,8 @@ import { useProblemEditor } from "./use-problem-editor";
 import { useTaskEvaluation } from "./use-task-evaluation";
 import { Problem } from "@/types/api";
 import { useShallow } from "zustand/react/shallow";
-
 import { useRouter } from "next/navigation";
+import { useLeaveArena } from "@/hooks/arena/use-arena-actions";
 
 export type MatchTab =
   | "result"
@@ -51,12 +51,20 @@ export function useArenaMatch({ problem, roomId }: UseArenaMatchProps) {
   const me = userId ? room?.players[userId] : null;
   const hasSubmitted = me?.status === "SUBMITTED";
 
-  // 3. Editor State
+  // 3. Editor State (Atomic Context Lock)
+  // Industry Standard: Key your session by both the identity (roomId) AND the mandated configuration (language).
+  // If the language arrives late, the key CHANGES, forcing a fresh, correct initialization.
+  const sessionId = useMemo(() => {
+    if (!room?.language) return `arena:loading:${roomId}`;
+    if (matchId) return `arena:${matchId}:${room.language}`;
+    return `arena:room:${roomId}:${room.language}`;
+  }, [matchId, roomId, room?.language]);
+
   const editor = useProblemEditor(
     problem,
+    sessionId,
     room?.language,
     matchId as string | null,
-    true,
   );
 
   // 4. Unified Evaluation Hook
@@ -93,23 +101,16 @@ export function useArenaMatch({ problem, roomId }: UseArenaMatchProps) {
     submit(editor.code);
   }, [editor.code, submit]);
 
-  const leaveRoom = useCallback(
-    (shouldClearSession = false) => {
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: "LEAVE_ROOM" }));
-      }
-      setEvaluation(null);
-      if (shouldClearSession && matchId) {
-        // Clear the specific match session from the unified store
-        useEditorStore.getState().clearSession(`arena:${matchId}`);
-      }
+  const leaveArenaAction = useLeaveArena();
+  const leaveRoom = useCallback(() => {
+    leaveArenaAction(true); // Hard-kill session cache on explicit exit
+  }, [leaveArenaAction]);
 
-      // Explicit reset and redirect
-      useArenaStore.getState().reset();
-      router.push("/arena");
-    },
-    [socket, setEvaluation, matchId, router],
-  );
+  const abortMatch = useCallback(() => {
+    if (socket && socket.readyState === WebSocket.OPEN && me?.isCreator) {
+      socket.send(JSON.stringify({ type: "ABORT_MATCH" }));
+    }
+  }, [socket, me?.isCreator]);
 
   return {
     // State
@@ -121,11 +122,13 @@ export function useArenaMatch({ problem, roomId }: UseArenaMatchProps) {
     isLoading, // Export loading state for UI
     hasSubmitted,
     matchEnded,
+    isHost: !!me?.isCreator,
 
     // Actions
     setActiveTab,
     runCode,
     submitCode,
     leaveRoom,
+    abortMatch,
   };
 }
