@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Editor from "@monaco-editor/react";
 import { LanguageSelector } from "./LanguageSelector";
 import { ConsolePanel } from "./ConsolePanel";
@@ -78,6 +78,15 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   const { theme } = useTheme();
   const matchId = useArenaStore(state => state.matchId);
 
+  const sessionId = useMemo(() => {
+    if (mode === "arena") {
+      if (!enforcedLanguage) return `arena:loading:${roomId}`;
+      if (matchId) return `arena:${matchId}:${enforcedLanguage}`;
+      return `arena:room:${roomId}:${enforcedLanguage}`;
+    }
+    return `practice:${problem.problem_id}`;
+  }, [mode, matchId, roomId, enforcedLanguage, problem.problem_id]);
+
   const {
     language,
     code,
@@ -87,10 +96,10 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
     setCode,
     resetCode,
   } = useProblemEditor(
-    problem, 
-    enforcedLanguage, 
-    mode === "arena" ? (matchId as string | null) : undefined, 
-    mode === "arena"
+    problem,
+    sessionId,
+    enforcedLanguage,
+    mode === "arena" ? (matchId as string | null) : undefined,
   );
 
   const { tests, isLoading, error } = useProblemTests(problem.problem_id, {
