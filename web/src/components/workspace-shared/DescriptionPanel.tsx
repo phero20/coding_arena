@@ -33,6 +33,7 @@ interface DescriptionPanelProps {
   mode?: "practice" | "arena";
   room?: ArenaRoom | null;
   currentUserId?: string | null;
+  roomId?: string;
 }
 
 const difficultyColor: Record<Problem["difficulty"], string> = {
@@ -47,6 +48,7 @@ export const DescriptionPanel = React.memo(
     mode = "practice",
     room,
     currentUserId,
+    roomId,
   }: DescriptionPanelProps) => {
     const {
       data: submissions,
@@ -224,7 +226,7 @@ export const DescriptionPanel = React.memo(
                 value="opponents"
                 className="h-full m-0 border-none outline-none data-[state=inactive]:hidden"
               >
-                <OpponentsPanel room={room} currentUserId={currentUserId} />
+                <OpponentsPanel roomId={roomId || room?.roomId || ""} />
               </TabsContent>
             )}
 
