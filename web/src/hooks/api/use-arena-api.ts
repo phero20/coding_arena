@@ -34,13 +34,13 @@ export function useMatchResultsQuery(matchId: string | null) {
  */
 export function useStartMatchMutation() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (roomId: string) => arenaService.startMatch(roomId),
     onSuccess: (data, roomId) => {
       // Invalidate the room query to ensure state consistency
       queryClient.invalidateQueries({ queryKey: ["arena-room", roomId] });
-      
+
       // We don't manually push to matchId here if we rely on WS sync,
       // but for host we might want immediate local feedback.
       useArenaStore.getState().setMatchId(data.matchId);
