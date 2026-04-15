@@ -1,111 +1,156 @@
 import React from "react";
-import { Users } from "lucide-react";
+import { Users, Trophy, Medal } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArenaRoom } from "@/services/arena.service";
+import { ArenaPlayer } from "@/services/arena.service";
 import { cn } from "@/lib/utils";
+import { useArenaStore } from "@/store/useArenaStore";
+import { useArenaRoomQuery } from "@/hooks/api/use-arena-api";
+import { useAuth } from "@clerk/nextjs";
+import { useShallow } from "zustand/react/shallow";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface OpponentsPanelProps {
-  room?: ArenaRoom | null;
-  currentUserId?: string | null;
+  roomId: string;
 }
 
-export const OpponentsPanel = React.memo(
-  ({ room, currentUserId }: OpponentsPanelProps) => {
-    const participants = React.useMemo(() => {
-      if (!room?.players) return [];
-      return Object.values(room.players);
-    }, [room?.players]);
+export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
+  const { userId: currentUserId } = useAuth();
 
-    return (
-      <ScrollArea className="h-full">
-        <div className="p-4 space-y-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold flex items-center gap-2">
-              <Users className="size-4 text-primary" />
-              Participants ({participants.length})
-            </h3>
+  // 1. Reactive Store Data (Live Updates)
+  const storePlayers = useArenaStore(
+    useShallow(
+      (state: any) =>
+        state.room?.players as Record<string, ArenaPlayer> | undefined,
+    ),
+  );
+
+  // 2. Persistent Query Data (Metadata Fallback)
+  const { data: roomMetadata } = useArenaRoomQuery(roomId);
+
+  const participants = React.useMemo(() => {
+    const players = storePlayers || roomMetadata?.players || {};
+    return Object.values(players).sort((a, b) => {
+      // 1. Sort by submission order (rank)
+      if (a.submissionOrder && b.submissionOrder)
+        return a.submissionOrder - b.submissionOrder;
+      if (a.submissionOrder) return -1;
+      if (b.submissionOrder) return 1;
+
+      // 2. Fallback to status
+      if (a.status === "SUBMITTED" && b.status !== "SUBMITTED") return -1;
+      if (b.status === "SUBMITTED" && a.status !== "SUBMITTED") return 1;
+
+      // 3. Fallback to username
+      return a.username.localeCompare(b.username);
+    });
+  }, [storePlayers, roomMetadata?.players]);
+
+  return (
+    <ScrollArea className="h-full">
+      <div className="p-4 space-y-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-bold flex items-center gap-2">
+            <Users className="size-4 text-primary" />
+            Participants ({participants.length})
+          </h3>
+        </div>
+
+        {participants.length === 0 ? (
+          <div className="py-12 flex flex-col items-center justify-center text-center opacity-50 grayscale">
+            <Users className="size-12 mb-4" />
+            <p className="text-sm">No participants in the arena yet.</p>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3">
+            {participants.map((player: ArenaPlayer) => {
+              const isMe = player.userId === currentUserId;
+              const isOffline = player.isOffline;
+              const rank = player.submissionOrder;
 
-          {participants.length === 0 ? (
-            <div className="py-12 flex flex-col items-center justify-center text-center opacity-50 grayscale">
-              <Users className="size-12 mb-4" />
-              <p className="text-sm">No participants in the arena yet.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-3">
-              {participants.map((player) => {
-                const isMe = player.userId === currentUserId;
-                const isOffline = player.isOffline;
-
-                return (
-                  <Card
-                    key={player.userId}
-                    className={cn(
-                      "p-3 transition-all duration-300",
-                      isOffline && "opacity-50 grayscale",
-                    )}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <img
-                          src={
-                            player.avatarUrl ||
-                            `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.username}`
-                          }
-                          className="size-10 rounded-full border border-border/40 shadow-sm"
-                          alt={player.username}
-                        />
+              return (
+                <Card
+                  key={player.userId}
+                  className={cn(
+                    "p-3 transition-all duration-300 relative border-border/40 hover:bg-muted/30",
+                    isMe && "border-primary/30 bg-primary/5",
+                    isOffline && "opacity-50 grayscale",
+                  )}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* 1. Left Rank Identifier */}
+                    <div className="shrink-0 flex items-center justify-center w-8">
+                      {rank && rank > 0 ? (
                         <div
                           className={cn(
-                            "absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-background shadow-sm",
-                            isOffline ? "bg-muted-foreground" : "bg-secondary",
+                            "size-8 rounded-full flex items-center justify-center text-xs font-black shadow-sm",
+                            rank === 1
+                              ? "bg-primary text-primary-foreground ring-2 ring-primary/20"
+                              : "bg-secondary text-secondary-foreground",
                           )}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold flex items-center gap-1.5 leading-tight">
-                          {player.username}
-                          {isMe && (
-                            <span className="text-[10px] text-primary font-black uppercase tracking-widest bg-primary/10 px-1 py-0.5 rounded leading-none">
-                              You
-                            </span>
-                          )}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge
-                            variant="secondary"
-                            className={cn(
-                              "text-[9px] font-black uppercase tracking-widest px-1.5 h-5 border-none",
-                              player.status === "SUBMITTED"
-                                ? "bg-secondary/10 text-secondary"
-                                : "bg-primary/10 text-primary",
-                            )}
-                          >
-                            {player.status}
-                          </Badge>
-                          {isOffline && (
-                            <Badge
-                              variant="secondary"
-                              className="text-[9px] font-black uppercase tracking-widest px-1.5 h-5 bg-muted text-muted-foreground border-none"
-                            >
-                              OFFLINE
-                            </Badge>
-                          )}
-                          <span className="text-[10px] font-bold text-muted-foreground/60">
-                            {player.testsPassed} / {player.totalTests} Tests
-                          </span>
+                        >
+                          {rank}
                         </div>
+                      ) : (
+                        <div className="size-8 rounded-full border-2 border-dashed border-border flex items-center justify-center">
+                          <div className="size-1 rounded-full bg-muted-foreground/30" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 2. Avatar with Status Dot */}
+                    <div className="relative shrink-0">
+                      <Avatar className="size-8 border border-border/40 shadow-sm">
+                        <AvatarImage src={player.avatarUrl} />
+                        <AvatarFallback className="text-[10px] uppercase bg-muted">
+                          {player.username.slice(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div
+                        className={cn(
+                          "absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full border-2 border-background shadow-sm",
+                          isOffline ? "bg-muted-foreground" : "bg-secondary",
+                        )}
+                      />
+                    </div>
+
+                    {/* 3. Identity & Progress */}
+                    <div className="flex-grow min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-xs font-bold truncate">
+                          {player.username}
+                        </span>
+                        {isMe && (
+                          <span className="text-[8px] text-primary font-black uppercase tracking-tighter bg-primary/10 px-1 py-0.5 rounded leading-none shrink-0">
+                            Me
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Badge
+                          variant="secondary"
+                          className={cn(
+                            "text-[8px] font-black uppercase tracking-widest px-1 h-3.5 border-none shrink-0 rounded-[2px]",
+                            player.status === "SUBMITTED"
+                              ? "bg-secondary text-secondary-foreground"
+                              : "bg-muted text-muted-foreground",
+                          )}
+                        >
+                          {player.status}
+                        </Badge>
+                        <span className="text-[9px] font-bold text-muted-foreground/50 whitespace-nowrap">
+                          {player.testsPassed}/{player.totalTests} Tests
+                        </span>
                       </div>
                     </div>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </ScrollArea>
-    );
-  },
-);
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </ScrollArea>
+  );
+});
