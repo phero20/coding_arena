@@ -6,6 +6,7 @@ import {
   ArenaWSMessage,
   ArenaPlayerResult,
 } from "@/services/arena.service";
+import { ArenaEventProcessor } from "@/services/arena-event-processor";
 
 export interface ArenaEvaluation {
   submissionId: string | null;
@@ -43,7 +44,7 @@ interface ArenaState {
   updatePlayer: (userId: string, updates: Partial<ArenaPlayer>) => void;
   setIsConnected: (connected: boolean) => void;
   setSocket: (socket: WebSocket | null) => void;
-  syncWebSocketState: (message: any) => void;
+  syncWebSocketState: (message: any, sourceRoomId: string) => void;
 
   // Evaluation Actions
   setEvaluation: (evaluation: ArenaEvaluation | null) => void;
@@ -92,124 +93,100 @@ export const useArenaStore = create<ArenaState>()(
               },
         })),
 
-      syncWebSocketState: (message) => {
+      syncWebSocketState: (message, sourceRoomId) => {
+        const { room: currentRoom, matchId: currentMatchId } = get();
+
+        // 1. Production-Grade Isolation Guard
+        if (currentRoom && currentRoom.roomId.toUpperCase() !== sourceRoomId.toUpperCase()) {
+          console.warn(
+            `[Arena Store] Isolation Breach: Ignoring message from room ${sourceRoomId}. ` +
+            `Current Active Room: ${currentRoom.roomId}. Reason: Room mismatch.`
+          );
+          return;
+        }
+
         const { type, payload } = message;
         console.log(`[Arena Sync] ${type}`, payload);
 
+        // 2. Delegate Business Logic to Processor
+        let updates: Partial<ArenaState> = {};
+
         switch (type) {
           case "PLAYER_JOINED":
-            if (payload?.room) {
-              set({ room: payload.room });
-            } else if (payload?.player && get().room) {
-              const player = payload.player;
-              set((state) => ({
-                room: state.room
-                  ? {
-                      ...state.room,
-                      players: {
-                        ...state.room.players,
-                        [player.userId]: player,
-                      },
-                    }
-                  : null,
-              }));
-            }
+            updates = ArenaEventProcessor.processPlayerJoined(
+              payload,
+              currentRoom,
+            );
             break;
-
           case "PLAYER_LEFT":
-            if (payload?.room) {
-              set({ room: payload.room });
-            } else if (payload?.userId && get().room) {
-              get().removePlayer(payload.userId);
-            }
+            updates = ArenaEventProcessor.processPlayerLeft(
+              payload,
+              currentRoom,
+            );
             break;
-
           case "PLAYER_READY":
           case "PROBLEM_CHANGED":
-            if (payload?.room) {
-              set({ room: payload.room });
-            }
+          case "MATCH_DURATION_CHANGED":
+          case "MATCH_SUBMITTED":
+            if (payload?.room) updates = { room: payload.room };
             break;
-
           case "MATCH_START":
           case "MATCH_STARTED":
-            const matchId = payload?.matchId || (message as any).matchId;
-            set((state) => ({
-              room: state.room
-                ? { ...state.room, status: "PLAYING" as any }
-                : payload?.room || null,
-              matchId: matchId || state.matchId,
-            }));
+            updates = ArenaEventProcessor.processMatchStarted(
+              payload,
+              currentRoom,
+              currentMatchId,
+            );
             break;
-
           case "PROGRESS_UPDATE":
-            if (payload?.room) {
-              set({ room: payload.room });
-            } else if (payload?.userId && get().room) {
-              const { userId, testsPassed, totalTests, score } = payload;
-              get().updatePlayer(userId, { testsPassed, totalTests, score });
-            }
+            updates = ArenaEventProcessor.processProgressUpdate(
+              payload,
+              currentRoom,
+            );
             break;
-
-          case "MATCH_SUBMITTED":
-            if (payload?.room) {
-              set({ room: payload.room });
-            }
-            break;
-
           case "LEADERBOARD_UPDATE":
-            if (payload?.room) {
-              set({ room: payload.room });
-            }
-            if (payload?.leaderboard) {
-              set({ leaderboard: payload.leaderboard });
-            }
+            if (payload?.room) updates.room = payload.room;
+            if (payload?.leaderboard) updates.leaderboard = payload.leaderboard;
             break;
-
-          case "PLAYER_REMOVED":
-            if (payload?.userId) {
-              const removedUserId = payload.userId;
-              get().removePlayer(removedUserId);
-            }
+          case "PLAYER_KICKED":
+            if (payload?.room) updates = { room: payload.room };
             break;
+          case "YOU_ARE_KICKED":
+            // 1. Mark user as removed
+            get().setUserRemoved(true, typeof payload === "string" ? payload : "You have been removed from the lobby.");
+            
+            // 2. Kill the socket connection immediately to prevent background sync
+            const currentSocket = get().socket;
+            if (currentSocket) {
+              currentSocket.close(1000, "Kicked by host");
+            }
 
+            // 3. Reset the store (except for the removal state info)
+            const reason = typeof payload === "string" ? payload : "Removed by host";
+            get().reset();
+            get().setUserRemoved(true, reason);
+            return;
           case "MATCH_ENDED":
           case "MATCH_OVER":
-            const finalMatchId = payload?.matchId || get().matchId;
-            const rankings = payload?.finalRankings;
-
-            if (finalMatchId) {
-              set({ matchEnded: true });
-              if (rankings) {
-                set({ finalRankings: rankings });
-              }
-
-              if (get().room) {
-                set((state) => ({
-                  room: state.room
-                    ? { ...state.room, status: "FINISHED" as any }
-                    : null,
-                }));
-              }
-            }
+            updates = ArenaEventProcessor.processMatchEnded(
+              payload,
+              currentRoom,
+              currentMatchId,
+            );
             break;
-
           case "HOST_TRANSFERRED":
             if (payload?.newHostId) {
-              set({ hostTransferred: true, newHostId: payload.newHostId });
+              updates = { hostTransferred: true, newHostId: payload.newHostId };
             }
             break;
-
           case "ERROR":
-            const errorMsg =
-              typeof payload === "string"
-                ? payload
-                : payload?.message || "Arena Error";
-
-            if (errorMsg.toLowerCase().includes("terminated")) {
-              set({ room: null });
-            }
+            updates = ArenaEventProcessor.processError(payload);
             break;
+        }
+
+        // 3. Atomically Apply Updates
+        if (Object.keys(updates).length > 0) {
+          set(updates);
         }
       },
 
@@ -256,7 +233,6 @@ export const useArenaStore = create<ArenaState>()(
       setSocket: (socket) => set({ socket }),
       setMatchId: (matchId) => set({ matchId }),
 
-
       reset: () =>
         set({
           room: null,
@@ -277,9 +253,8 @@ export const useArenaStore = create<ArenaState>()(
       name: "arena-match-storage",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        matchId: state.matchId,
-        matchEnded: state.matchEnded,
-        finalRankings: state.finalRankings,
+        // We only persist minimal, harmless metadata
+        // matchId and matchEnded are REMOVED to prevent cross-room stale state
         matchHostId: state.matchHostId,
       }),
       onRehydrateStorage: () => (state) => {
