@@ -1,8 +1,18 @@
 import { apiClient } from "@/lib/api-client";
 
-// Re-defining the types for the frontend to maintain consistency with the backend
+// --- MODEL OWNERSHIP DOCUMENTATION ---
+// 1. Transient State (Redis-backed): Managed by Zustand (useArenaStore).
+//    Includes real-time player lists, typing status, and volatile lobby info.
+// 2. Persistent State (MongoDB-backed): Managed by TanStack Query (useArenaRoomQuery, useMatchResultsQuery).
+//    Includes room metadata, finalized match rankings, and historical data.
+// --------------------------------------
+
 export type ArenaRoomStatus = "WAITING" | "PLAYING" | "FINISHED" | "LOBBY";
 
+/**
+ * Transient Player State (Redis/WebSocket)
+ * Used for real-time updates in the store.
+ */
 export interface ArenaPlayer {
   userId: string;
   username: string;
@@ -14,8 +24,13 @@ export interface ArenaPlayer {
   joinedAt: string;
   status: "CODING" | "SUBMITTED";
   isOffline: boolean;
+  rank?: number; // Real-time ranking during match
+  submissionOrder?: number; // Order of successful submission
 }
 
+/**
+ * Room Metadata (MongoDB Client View)
+ */
 export interface ArenaRoom {
   roomId: string;
   status: ArenaRoomStatus;
@@ -24,10 +39,11 @@ export interface ArenaRoom {
   problemSlug?: string;
   difficulty?: string;
   language?: string;
+  matchDuration?: number;
   players: Record<string, ArenaPlayer>;
   createdAt: string;
-  startTime?: string;
-  winnerId?: string;
+  startTime?: number;
+  endTime?: number;
   matchId?: string;
 }
 
@@ -49,7 +65,13 @@ export interface ArenaWSMessage {
     | "LEAVE_ROOM"
     | "PLAYER_REMOVED"
     | "LEADERBOARD_UPDATE"
-    | "HOST_TRANSFERRED";
+    | "HOST_TRANSFERRED"
+    | "UPDATE_MATCH_DURATION"
+    | "MATCH_DURATION_CHANGED"
+    | "KICK_PLAYER"
+    | "YOU_ARE_KICKED"
+    | "PLAYER_KICKED"
+    | "ABORT_MATCH";
   payload: any;
 }
 
@@ -95,28 +117,39 @@ class ArenaService {
   }
 }
 
+/**
+ * Persistent Player Result (MongoDB)
+ * Used for historical match records and final rankings.
+ */
 export interface ArenaPlayerResult {
   userId: string;
   username: string;
   avatarUrl?: string;
   finalRank?: number;
-  submissionOrder: number;
-  verdict: string;
   score: number;
   testsPassed: number;
   totalTests: number;
+  verdict: "ACCEPTED" | "WRONG_ANSWER" | "TIME_LIMIT_EXCEEDED" | "MEMORY_LIMIT_EXCEEDED" | "RUNTIME_ERROR" | "COMPILATION_ERROR" | "SKIPPED";
   submittedAt?: string;
+  submissionOrder?: number;
+  sourceCode?: string;
+  languageId?: string;
 }
 
+/**
+ * Match Record (MongoDB)
+ */
 export interface ArenaMatch {
   id: string;
   roomId: string;
   hostId: string;
   problemId: string;
+  problemSlug: string;
+  difficulty: "Easy" | "Medium" | "Hard";
   language: string;
-  status: string;
+  status: "FINISHED" | "CANCELLED";
   players: ArenaPlayerResult[];
-  startedAt?: string;
+  startedAt: string;
   endedAt?: string;
 }
 
