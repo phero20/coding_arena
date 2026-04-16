@@ -29,6 +29,10 @@ export class ArenaSocketManager {
     this.avatarUrl = avatarUrl;
   }
 
+  public getRoomId() {
+    return this.roomId;
+  }
+
   /**
    * Initialize the connection to the Go Microservice.
    */
@@ -56,7 +60,7 @@ export class ArenaSocketManager {
     this.socket.onmessage = (event) => {
       try {
         const message: ArenaWSMessage = JSON.parse(event.data);
-        useArenaStore.getState().syncWebSocketState(message);
+        useArenaStore.getState().syncWebSocketState(message, this.roomId);
       } catch (err) {
         console.error("[Arena Socket] Malformed Message:", err);
       }
@@ -70,9 +74,11 @@ export class ArenaSocketManager {
       useArenaStore.getState().setIsConnected(false);
 
       // Don't reconnect if the room was intentionally left, terminated, or match ended
+      // 4004 = Backend intentionally rejected connection (e.g., room deleted/doesn't exist)
       if (
         event.code !== 1000 &&
         event.code !== 1001 &&
+        event.code !== 4004 &&
         !useArenaStore.getState().matchEnded
       ) {
         this.attemptReconnect();
@@ -102,14 +108,29 @@ export class ArenaSocketManager {
   }
 
   disconnect() {
-    if (this.reconnectTimeout) clearTimeout(this.reconnectTimeout);
-    if (this.socket) {
-      this.socket.onclose = null; // Prevent reconnect loop
-      this.socket.close();
+    // 1. Kill any pending reconnect timers immediately
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
     }
 
-    // CRITICAL: We NO LONGER call store.reset() here.
-    // This prevents the infinite "fetchRoom -> render -> disconnect -> reset -> repeat" loop.
+    // 2. Neutralize the socket BEFORE closing
+    // This prevents the 'onclose' or 'onerror' handlers from firing during teardown
+    if (this.socket) {
+      console.log(`[Arena Socket] Hard Teardown for room: ${this.roomId}`);
+      this.socket.onclose = null; 
+      this.socket.onerror = null;
+      this.socket.onmessage = null;
+      this.socket.onopen = null;
+      
+      // Only close if it's not already closed
+      if (this.socket.readyState !== WebSocket.CLOSED && this.socket.readyState !== WebSocket.CLOSING) {
+        this.socket.close();
+      }
+      this.socket = null;
+    }
+
+    // 3. Clear Store references
     const store = useArenaStore.getState();
     store.setIsConnected(false);
     store.setSocket(null);
