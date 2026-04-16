@@ -11,7 +11,8 @@ export function usePracticeWorkspace({ problem }: UsePracticeWorkspaceProps) {
   const [activeTab, setActiveTab] = useState<"code" | "testcase" | "result">("code");
 
   // Use the unified editor hook (handles practice: prefix and hydration)
-  const { code, language, isRunning: isEditorRunning } = useProblemEditor(problem);
+  const sessionId = `practice:${problem.problem_id}`;
+  const { code, language, isRunning: isEditorRunning } = useProblemEditor(problem, sessionId);
 
   const {
     run,

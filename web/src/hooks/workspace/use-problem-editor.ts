@@ -9,15 +9,13 @@ import { useShallow } from "zustand/react/shallow";
  */
 export function useProblemEditor(
   problem: Problem,
+  sessionId: string, // Industry Standard: Explicit identity provided by parent
   enforcedLanguage?: string,
-  matchId?: string | null,
-  isArena = false,
+  matchId?: string | null, // Still needed for initSession metadata
 ) {
-  // 1. Generate Contextual Session ID
-  const sessionId = useMemo(() => {
-    if (isArena && matchId) return `arena:${matchId}`;
-    return `practice:${problem.problem_id}`;
-  }, [isArena, matchId, problem.problem_id]);
+  // 1. Contextual Verification
+  // With explicit sessionId, we no longer "guess" the context inside the hook.
+  // This physically prevents practice-to-arena leakage.
 
   const {
     sessions,
@@ -51,26 +49,35 @@ export function useProblemEditor(
   useEffect(() => {
     if (!_hasHydrated) return;
 
-    const snippetLanguages = Object.keys(problem.code_snippets || {});
-    const initialLanguage = enforcedLanguage || snippetLanguages[0] || "javascript";
-    
-    // Only set boilerplate if the session is brand new
-    if (!session || (isArena && matchId && session.matchId !== matchId)) {
+    // Industry Standard: If the session is marked as 'loading', we REFUSE to initialize.
+    // This prevents creating a session with a 'default' language before the mandate arrives.
+    if (sessionId.includes(":loading:")) return;
+
+    // With the parent 'key' and ID reset, this will run fresh on every context change.
+    if (!session) {
+      const snippetLanguages = Object.keys(problem.code_snippets || {});
+      const initialLanguage = enforcedLanguage || snippetLanguages[0] || "javascript";
+      
       const initialCodes: Record<string, string> = {};
       Object.entries(problem.code_snippets || {}).forEach(([lang, snippet]) => {
         if (snippet) initialCodes[lang] = snippet;
       });
-      // Fallback if no snippets provided
+
       if (Object.keys(initialCodes).length === 0) {
         initialCodes[initialLanguage] = "// Start coding here...";
       }
       
+      // Industrial-Standard Fix: Reset global 'isRunning' state on session switch
+      // This prevents stuck states from blocking callbacks in different modes.
+      setIsRunning(false);
       initSession(sessionId, initialLanguage, initialCodes, matchId || undefined);
     }
-  }, [sessionId, _hasHydrated, enforcedLanguage, problem, initSession, session, isArena, matchId]);
+  }, [sessionId, _hasHydrated, enforcedLanguage, problem, initSession, session, matchId, setIsRunning]);
 
-  // 3. Derived Helpers
-  const currentLanguage = session?.activeLanguage || (enforcedLanguage || Object.keys(problem.code_snippets || {})[0] || "javascript");
+  // 3. Derived States (Strictly State-Driven)
+  // Industry Standard: If session is ready, use it. No more render-time "priorities"
+  // that cause typing lag or empty snippet submissions.
+  const currentLanguage = session?.activeLanguage || (enforcedLanguage || "javascript");
   const currentCode = session?.codes[currentLanguage] || "";
 
   const handleLanguageChange = useCallback((lang: string) => {
