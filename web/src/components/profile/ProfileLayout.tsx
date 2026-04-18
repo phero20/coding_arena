@@ -8,6 +8,7 @@ import { type UserStats } from "@/types/stats";
 import { SocialTab } from "./SocialTab";
 import { ProfileSidebar } from "./ProfileSidebar";
 import { ProfileSettingsTab } from "./ProfileSettingsTab";
+import { ArenaHistoryTab } from "./ArenaHistoryTab";
 
 interface ProfileLayoutProps {
   username: string;
@@ -19,7 +20,7 @@ interface ProfileLayoutProps {
   joinedAt: string;
   followerCount: number;
   followingCount: number;
-  isFollowing: boolean;
+  clerkUserId: string;
   stats?: UserStats;
   children: React.ReactNode;
 }
@@ -31,9 +32,10 @@ export function ProfileLayout({
   githubUsername,
   linkedinUsername,
   leetcodeUsername,
+  joinedAt,
   followerCount,
   followingCount,
-  isFollowing,
+  clerkUserId,
   stats,
   children,
 }: ProfileLayoutProps) {
@@ -67,7 +69,6 @@ export function ProfileLayout({
         leetcodeUsername={leetcodeUsername}
         followerCount={followerCount}
         followingCount={followingCount}
-        isFollowing={isFollowing}
         isOwner={isOwner}
         stats={stats}
         onTabChange={setActiveTab}
@@ -96,6 +97,10 @@ export function ProfileLayout({
             initialType={socialType}
             onBack={() => setActiveTab("stats")}
           />
+        </TabsContent>
+
+        <TabsContent value="arena" className="mt-0 focus-visible:ring-0">
+          <ArenaHistoryTab userId={clerkUserId} />
         </TabsContent>
 
         {isOwner && (
