@@ -7,6 +7,7 @@ export type ArenaRoomStatus = "WAITING" | "PLAYING" | "FINISHED" | "LOBBY";
 export interface ArenaPlayer {
   userId: string;
   username: string;
+  fullName?: string;
   avatarUrl?: string;
   isCreator: boolean;
   score: number;
@@ -74,6 +75,7 @@ export interface ArenaWSMessage {
 export interface ArenaPlayerResult {
   userId: string;
   username: string;
+  fullName?: string;
   avatarUrl?: string;
   finalRank?: number;
   score: number;
@@ -95,8 +97,9 @@ export interface ArenaMatch {
   roomId: string;
   hostId: string;
   problemId: string;
-  problemSlug: string;
-  difficulty: "Easy" | "Medium" | "Hard";
+  problemTitle?: string;
+  problemSlug?: string;
+  difficulty?: "Easy" | "Medium" | "Hard";
   language: string;
   status: "FINISHED" | "CANCELLED";
   players: ArenaPlayerResult[];
