@@ -13,6 +13,8 @@ import {
 import { useUpdateProfileMutation } from "@/hooks/queries/use-profile.mutations";
 import { useClerk } from "@clerk/nextjs";
 
+import { useProfileSettingsForm } from "@/hooks/profile/use-profile-settings-form";
+
 interface ProfileSettingsTabProps {
   currentUsername: string;
   githubUsername?: string | null;
@@ -27,21 +29,16 @@ export function ProfileSettingsTab({
   leetcodeUsername,
 }: ProfileSettingsTabProps) {
   const { openUserProfile } = useClerk();
-  const { updateProfile } = useUpdateProfileMutation(currentUsername);
 
-  // Profile Edit State
-  const [github, setGithub] = React.useState(githubUsername || "");
-  const [linkedin, setLinkedin] = React.useState(linkedinUsername || "");
-  const [leetcode, setLeetcode] = React.useState(leetcodeUsername || "");
-
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateProfile.mutate({
-      githubUsername: github || null,
-      linkedinUsername: linkedin || null,
-      leetcodeUsername: leetcode || null,
+  const { values, isDirty, isLoading, handleChange, handleSave } =
+    useProfileSettingsForm({
+      currentUsername,
+      initialValues: {
+        githubUsername,
+        linkedinUsername,
+        leetcodeUsername,
+      },
     });
-  };
 
   return (
     <TabsContent value="settings" className="mt-0 focus-visible:ring-0">
@@ -63,7 +60,7 @@ export function ProfileSettingsTab({
             </div>
           </div>
           <CardContent className="p-6">
-            <form onSubmit={handleSaveProfile} className="space-y-6">
+            <form onSubmit={handleSave} className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="leetcode" className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -72,8 +69,8 @@ export function ProfileSettingsTab({
                   <Input
                     id="leetcode"
                     placeholder="Your LeetCode ID"
-                    value={leetcode}
-                    onChange={(e) => setLeetcode(e.target.value)}
+                    value={values.leetcodeUsername}
+                    onChange={(e) => handleChange("leetcodeUsername", e.target.value)}
                     className="bg-muted/50 border-border/50 focus-visible:ring-primary/50"
                   />
                 </div>
@@ -84,8 +81,8 @@ export function ProfileSettingsTab({
                   <Input
                     id="github"
                     placeholder="Your GitHub ID"
-                    value={github}
-                    onChange={(e) => setGithub(e.target.value)}
+                    value={values.githubUsername}
+                    onChange={(e) => handleChange("githubUsername", e.target.value)}
                     className="bg-muted/50 border-border/50 focus-visible:ring-primary/50"
                   />
                 </div>
@@ -96,16 +93,16 @@ export function ProfileSettingsTab({
                   <Input
                     id="linkedin"
                     placeholder="Your LinkedIn Profile ID"
-                    value={linkedin}
-                    onChange={(e) => setLinkedin(e.target.value)}
+                    value={values.linkedinUsername}
+                    onChange={(e) => handleChange("linkedinUsername", e.target.value)}
                     className="bg-muted/50 border-border/50 focus-visible:ring-primary/50"
                   />
                 </div>
               </div>
               
               <div className="flex justify-start pt-2">
-                <Button type="submit" size="lg" className="px-8" disabled={updateProfile.isPending}>
-                  {updateProfile.isPending ? (
+                <Button type="submit" size="lg" className="px-8" disabled={!isDirty || isLoading}>
+                  {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Saving...
