@@ -26,7 +26,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
   const { updateProblem, isUpdating } = useUpdateArenaProblem(roomId || "");
 
   const [page, setPage] = useState(1);
-  const { data, isLoading, error } = useProblemsQuery(page, 20); 
+  const { data, isLoading, error, refetch } = useProblemsQuery(page, 20); 
   const problems = data?.problems;
   const meta = data?.meta;
   
@@ -81,6 +81,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
         isHosting={isHosting}
         isUpdating={isUpdating}
         topicFilter={topicFilter}
+        onRetry={refetch}
       />
 
       {meta && (
