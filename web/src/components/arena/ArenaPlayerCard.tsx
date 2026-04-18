@@ -31,8 +31,8 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
           </Avatar>
           <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1.5 min-w-0">
-              <span className="font-bold text-xs truncate text-foreground/80 lowercase tracking-tight">
-                {player.username}
+              <span className="font-semibold text-xs truncate text-primary tracking-tight">
+                {player.fullName || player.username}
               </span>
               {player.isCreator && (
                 <Badge variant="secondary" className="h-4 px-1 text-[8px] font-black uppercase tracking-tighter bg-primary/20 text-primary border-none">
@@ -40,6 +40,11 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
                 </Badge>
               )}
             </div>
+            {player.fullName && (
+              <span className="text-[10px] text-muted-foreground truncate leading-none mt-0.5">
+                {player.username}
+              </span>
+            )}
             {player.timeTaken && (
               <div className="flex items-center gap-1 mt-0.5">
                 <Clock className="size-2.5 text-primary" />
