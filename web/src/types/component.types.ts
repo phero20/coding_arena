@@ -113,6 +113,7 @@ export interface ProblemTableProps {
   isHosting: boolean;
   isUpdating: boolean;
   topicFilter: string;
+  onRetry?: () => void;
 }
 
 // ProblemWorkspace.tsx
@@ -207,6 +208,7 @@ export interface SubmissionHistoryProps {
   submissions: Submission[];
   isLoading: boolean;
   error: any;
+  onRetry?: () => void;
 }
 
 // TestCaseField.tsx
