@@ -1,15 +1,15 @@
 import { apiClient } from "@/lib/api-client";
-import type { ApiResponse, BackendUser } from "@/types/api";
 
 /**
- * Fetch the currently authenticated user's profile metadata.
+ * Perform a global search for users.
+ * Matches username or full name case-insensitively.
  */
-export async function getCurrentUser(): Promise<BackendUser> {
-  const response = await apiClient.get<ApiResponse<BackendUser>>("/me");
-
-  if (!response.data.success || !response.data.data) {
-    throw new Error(response.data.message || "Failed to fetch current user");
+export async function searchUsers(query: string) {
+  const response = await apiClient.get(`/users/search?q=${encodeURIComponent(query)}`);
+  
+  if (!response.data.success) {
+    throw new Error(response.data.error?.message || "Failed to search users");
   }
 
-  return response.data.data;
+  return response.data.data as { id: string; username: string; fullName: string | null; avatarUrl: string | null }[];
 }
