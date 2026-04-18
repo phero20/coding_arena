@@ -24,6 +24,7 @@ export interface UserActivityLog {
 export interface UserProfileData {
   user: {
     id: string;
+    clerkId: string;
     username: string;
     fullName?: string | null;
     avatarUrl?: string | null;
