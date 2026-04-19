@@ -29,7 +29,7 @@ export function useFollowMutation(targetUsername: string, currentUsername?: stri
       toast.success(`You are now following @${targetUsername}`);
     },
     onError: () => {
-      toast.error("Failed to follow warrior. Are you logged in?");
+      toast.error("Failed to follow user. Are you logged in?");
     },
   });
 
@@ -53,7 +53,7 @@ export function useFollowMutation(targetUsername: string, currentUsername?: stri
       toast.success(`You unfollowed @${targetUsername}`);
     },
     onError: () => {
-      toast.error("Failed to unfollow warrior.");
+      toast.error("Failed to unfollow user.");
     },
   });
 
