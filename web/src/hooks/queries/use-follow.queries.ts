@@ -10,7 +10,22 @@ export interface SocialUser {
 }
 
 /**
- * Hook to fetch the list of followers for a generic warrior.
+ * Hook to check if the current logged-in user follows a specific user.
+ * @param targetUsername The username of the user to check.
+ */
+export function useIsFollowingQuery(targetUsername: string) {
+  return useQuery({
+    queryKey: ['is-following', targetUsername],
+    queryFn: async () => {
+      const response = await apiClient.get<ApiResponse<boolean>>(`/follows/is-following/${targetUsername}`);
+      return response.data.data;
+    },
+    enabled: !!targetUsername,
+  });
+}
+
+/**
+ * Hook to fetch the list of followers for a generic user.
  */
 export function useFollowersQuery(username: string) {
   return useQuery({
@@ -24,7 +39,7 @@ export function useFollowersQuery(username: string) {
 }
 
 /**
- * Hook to fetch the list of users a warrior is following.
+ * Hook to fetch the list of users a user is following.
  */
 export function useFollowingQuery(username: string) {
   return useQuery({
