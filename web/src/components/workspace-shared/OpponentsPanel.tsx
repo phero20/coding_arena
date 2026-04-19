@@ -119,13 +119,20 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
 
                     {/* 3. Identity & Progress */}
                     <div className="grow min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-xs font-bold truncate">
-                          {player.username}
-                        </span>
-                        {isMe && (
-                          <span className="text-[8px] text-primary font-black uppercase tracking-tighter bg-primary/10 px-1 py-0.5 rounded leading-none shrink-0">
-                            Me
+                      <div className="flex flex-col min-w-0 mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-semibold truncate text-primary">
+                            {player.fullName || player.username}
+                          </span>
+                          {isMe && (
+                            <span className="text-[8px] text-primary font-black uppercase tracking-tighter bg-primary/10 px-1 py-0.5 rounded leading-none shrink-0">
+                              Me
+                            </span>
+                          )}
+                        </div>
+                        {player.fullName && (
+                          <span className="text-[10px] text-muted-foreground truncate leading-tight">
+                            {player.username}
                           </span>
                         )}
                       </div>
