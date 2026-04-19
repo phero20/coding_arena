@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useArenaStore } from "@/store/useArenaStore";
 import { 
@@ -67,7 +67,7 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
   }, [roomMetadata, storeRoom, setRoom]);
 
   // 4. Rankings Calculation
-  const rankings: ArenaPlayerResult[] = useMemo(() => {
+  const getRankings = (): ArenaPlayerResult[] => {
     if (serverResults?.players && serverResults.players.length > 0) {
       return [...serverResults.players].sort((a, b) => (a.finalRank || 0) - (b.finalRank || 0));
     }
@@ -101,24 +101,23 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
         return 0;
       })
       .map((p, index) => ({ ...p, finalRank: index + 1 }));
-  }, [storeRoom, roomMetadata, stateRankings, serverResults]);
+  };
+
+  const rankings = getRankings();
 
   // 5. Host Check
-  const isHost = useMemo(() => {
-    const currentRoom = storeRoom || roomMetadata;
-    if (!currentRoom?.players || !userId) return false;
-    return currentRoom.players[userId]?.isCreator || false;
-  }, [storeRoom, roomMetadata, userId]);
+  const currentRoom = storeRoom || roomMetadata;
+  const isHost = (currentRoom?.players && userId) ? (currentRoom.players[userId]?.isCreator || false) : false;
 
   // 6. Actions
-  const handleLeave = useCallback(() => {
+  const handleLeave = () => {
     resetStore();
     router.push("/arena");
-  }, [resetStore, router]);
+  };
 
-  const handleReset = useCallback(() => {
+  const handleReset = () => {
     router.push(`/arena/match/${roomId}`);
-  }, [roomId, router]);
+  };
 
   return {
     rankings,
