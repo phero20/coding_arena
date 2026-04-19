@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Editor from "@monaco-editor/react";
+import { DynamicEditor as Editor } from "./DynamicEditor";
 import { LanguageSelector } from "./LanguageSelector";
 import { ConsolePanel } from "./ConsolePanel";
 import { Button } from "@/components/ui/button";
