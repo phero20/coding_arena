@@ -9,10 +9,11 @@ import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   User, Users, BarChart3, Settings, 
   Code, Github, Linkedin, UserPlus, 
-  UserMinus, Loader2, Edit, Code2 
+  UserMinus, Loader2, Edit, Code2, Trophy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type UserStats } from "@/types/stats";
+import { useSocialRegistry } from "@/hooks/queries/use-social-registry";
 import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
 import { useUser } from "@clerk/nextjs";
 
@@ -25,7 +26,6 @@ interface ProfileSidebarProps {
   leetcodeUsername?: string | null;
   followerCount: number;
   followingCount: number;
-  isFollowing: boolean;
   isOwner: boolean;
   stats?: UserStats;
   onTabChange: (tab: string) => void;
@@ -41,12 +41,14 @@ export function ProfileSidebar({
   leetcodeUsername,
   followerCount,
   followingCount,
-  isFollowing,
   isOwner,
   stats,
   onTabChange,
   onSocialClick,
 }: ProfileSidebarProps) {
+  const { isFollowing: checkIsFollowing } = useSocialRegistry();
+  const isFollowing = checkIsFollowing(username);
+  
   const { user } = useUser();
   const { follow, unfollow } = useFollowMutation(
     username,
@@ -57,6 +59,7 @@ export function ProfileSidebar({
 
   const navItems = [
     { value: "stats", label: "Statistics", icon: BarChart3 },
+    { value: "arena", label: "Arena Records", icon: Trophy },
     {
       value: "social",
       label: `Social`,
