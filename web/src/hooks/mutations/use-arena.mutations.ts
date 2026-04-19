@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { startMatch, createRoom, updateRoomProblem } from "@/services/mutations/arena.mutations";
 import { useArenaStore } from "@/store/useArenaStore";
 
@@ -19,7 +20,13 @@ export function useStartMatchMutation() {
       // We update store immediately for the host experience
       useArenaStore.getState().setMatchId(data.matchId);
       useArenaStore.getState().updateRoom({ status: "PLAYING" });
+      
+      toast.success("Arena initialized. Good luck, players!");
     },
+    onError: (error: any) => {
+      const message = "Failed to start the Arena match.";
+      toast.error(message);
+    }
   });
 }
 
