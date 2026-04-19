@@ -49,6 +49,7 @@ export const DescriptionPanel = React.memo(
       data: submissions,
       isLoading: isSubmissionsLoading,
       error: submissionsError,
+      refetch: refetchSubmissions,
     } = useUserSubmissionsQuery(problem.problem_id);
 
     const tabs = useWorkspaceTabs(mode);
@@ -197,12 +198,12 @@ export const DescriptionPanel = React.memo(
                           <AccordionItem
                             key={idx}
                             value={`hint-${idx + 1}`}
-                            className="border border-border/40 bg-muted/20 rounded-lg px-4 overflow-hidden transition-all data-[state=open]:border-primary/40 hover:border-primary/20"
+                            className="border bg-card rounded-lg px-1 overflow-hidden transition-all data-[state=open]:border-primary"
                           >
-                            <AccordionTrigger className="hover:no-underline py-4 text-xs font-bold text-foreground/90 uppercase tracking-widest">
+                            <AccordionTrigger className="px-5 py-3 hover:no-underline group">
                               Hint {idx + 1}
                             </AccordionTrigger>
-                            <AccordionContent className="text-xs leading-relaxed text-muted-foreground pb-4 prose prose-invert max-w-full">
+                            <AccordionContent className="text-xs leading-relaxed text-muted-foreground p-4 prose prose-invert max-w-full border-t border-border bg-muted">
                               {hint}
                             </AccordionContent>
                           </AccordionItem>
@@ -246,6 +247,7 @@ export const DescriptionPanel = React.memo(
                         submissions={submissions || []}
                         isLoading={isSubmissionsLoading}
                         error={submissionsError}
+                        onRetry={refetchSubmissions}
                       />
                     </div>
                   </ScrollArea>
