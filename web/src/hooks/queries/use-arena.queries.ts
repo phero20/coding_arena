@@ -1,7 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getRoom, getMatchStatus } from "@/services/queries/arena.queries";
+import { 
+  getRoom, 
+  getMatchStatus, 
+  getArenaHistory, 
+  getMatchDetail 
+} from "@/services/queries/arena.queries";
 
 /**
  * Hook to fetch and cache Arena Room metadata (server-state).
@@ -24,5 +29,29 @@ export function useMatchResultsQuery(matchId: string | null) {
     queryFn: () => getMatchStatus(matchId!),
     enabled: !!matchId,
     staleTime: Infinity, // Results once generated are permanent
+  });
+}
+
+/**
+ * Hook to fetch detailed match results (including code) from MongoDB.
+ */
+export function useArenaMatchDetailsQuery(matchId: string | null) {
+  return useQuery({
+    queryKey: ["match-details-detailed", matchId],
+    queryFn: () => getMatchDetail(matchId!),
+    enabled: !!matchId,
+    staleTime: Infinity, // Historical code never changes
+  });
+}
+
+/**
+ * Hook to fetch the match history for a specific user.
+ */
+export function useArenaHistoryQuery(userId: string) {
+  return useQuery({
+    queryKey: ["arena-history", userId],
+    queryFn: () => getArenaHistory(userId),
+    enabled: !!userId,
+    staleTime: 60000, // History is relatively fresh but cached
   });
 }
