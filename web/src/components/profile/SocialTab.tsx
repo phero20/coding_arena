@@ -12,6 +12,10 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
+import { useSocialRegistry } from "@/hooks/queries/use-social-registry";
+import { QueryGuard } from "@/components/shared/QueryGuard";
+import { SocialListSkeleton } from "@/components/shared/Skeletons";
+
 
 interface SocialTabProps {
   username: string;
@@ -20,7 +24,7 @@ interface SocialTabProps {
 }
 
 /**
- * SocialUserCard: Individual warrior card with its own follow/unfollow logic.
+ * SocialUserCard: Individual user card with its own follow/unfollow logic.
  */
 const SocialUserCard = ({ 
   targetUser, 
@@ -106,83 +110,57 @@ const SocialUserCard = ({
 };
 
 /**
- * UserList: Sub-component to render the actual grid of warriors.
+ * UserList: Sub-component to render the actual grid of users.
  */
 const UserList = ({
   username,
   type,
-  myFollowingSet,
+  checkIsFollowing,
 }: {
   username: string;
   type: "followers" | "following";
-  myFollowingSet: Set<string>;
+  checkIsFollowing: (username: string) => boolean;
 }) => {
   const { user: currentUser } = useUser();
   const {
     data: users,
     isLoading,
+    isError,
     error,
+    refetch,
   } = type === "followers"
     ? useFollowersQuery(username)
     : useFollowingQuery(username);
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <Card
-            key={i}
-            className="p-4 flex items-center gap-4 bg-muted/20 border-border/50"
-          >
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-3 w-32" />
-            </div>
-          </Card>
-        ))}
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center p-12 text-center text-muted-foreground bg-muted/10 rounded-xl border border-dashed border-border/50">
-        <p>Failed to load {type}. Please try again later.</p>
-      </div>
-    );
-  }
-
-  if (!users || users.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center p-16 text-center bg-muted/5 rounded-xl border border-dashed border-border/50">
-        <div className="w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center mb-4">
-          <Users className="text-primary/20" size={32} />
-        </div>
-        <h3 className="text-lg font-medium text-foreground mb-1">
-          No {type} yet
-        </h3>
-        <p className="text-sm text-muted-foreground max-w-xs">
-          {type === "followers"
-            ? "When other warriors follow this profile, they'll appear here."
-            : "This warrior hasn't followed anyone yet."}
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-      {users.map((targetUser) => (
-        <SocialUserCard
-          key={targetUser.id}
-          targetUser={targetUser}
-          currentUser={currentUser}
-          isFollowing={myFollowingSet.has(targetUser.username)}
-          listType={type}
-        />
-      ))}
-    </div>
+    <QueryGuard
+      loading={isLoading}
+      error={isError ? error : null}
+      data={users}
+      onRetry={refetch}
+      skeleton={<SocialListSkeleton count={6} />}
+      emptyTitle={`No ${type} yet`}
+      emptyMessage={
+        type === "followers"
+          ? "When other user follow this profile, they'll appear here."
+          : "This user hasn't followed anyone yet."
+      }
+      emptyIcon={Users}
+    >
+      {(userList) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+          {userList.map((targetUser) => (
+            <SocialUserCard
+              key={targetUser.id}
+              targetUser={targetUser}
+              currentUser={currentUser}
+              isFollowing={checkIsFollowing(targetUser.username)}
+              listType={type}
+            />
+          ))}
+        </div>
+      )}
+    </QueryGuard>
   );
 }
 
@@ -194,14 +172,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
   initialType = "followers",
   onBack,
 }) => {
-  const { user: currentUser } = useUser();
-  
-  // Fetch CURRENT user's following list (to determine isFollowing on cards)
-  const { data: myFollowing } = useFollowingQuery(currentUser?.username || "");
-  
-  const myFollowingSet = React.useMemo(() => {
-    return new Set(myFollowing?.map(u => u.username) || []);
-  }, [myFollowing]);
+  const { isFollowing } = useSocialRegistry();
 
   return (
     <div className="space-y-8">
@@ -232,18 +203,10 @@ export const SocialTab: React.FC<SocialTabProps> = ({
         </div>
 
         <TabsContent value="followers" className="focus-visible:ring-0 mt-0">
-          <UserList 
-            username={username} 
-            type="followers" 
-            myFollowingSet={myFollowingSet} 
-          />
+          <UserList username={username} type="followers" checkIsFollowing={isFollowing} />
         </TabsContent>
         <TabsContent value="following" className="focus-visible:ring-0 mt-0">
-          <UserList 
-            username={username} 
-            type="following" 
-            myFollowingSet={myFollowingSet} 
-          />
+          <UserList username={username} type="following" checkIsFollowing={isFollowing} />
         </TabsContent>
       </Tabs>
     </div>
