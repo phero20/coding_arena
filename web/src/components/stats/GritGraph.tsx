@@ -1,24 +1,8 @@
-"use client";
-
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { 
-  format, 
-  subDays, 
-  eachMonthOfInterval, 
-  startOfMonth, 
-  endOfMonth, 
-  eachDayOfInterval, 
-  getYear, 
-  startOfYear, 
-  endOfYear, 
-  isSameYear,
-  isAfter,
-  isBefore,
-  parseISO
-} from "date-fns";
+import { format } from "date-fns";
 import { type UserActivityLog, type UserStats } from "@/types/stats";
-import { Info, Target, Sword, Zap } from "lucide-react";
+import { Info } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
@@ -28,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useActivityTimeline } from "@/hooks/stats/use-activity-timeline";
 
 interface GritGraphProps {
   activityLog: UserActivityLog[];
@@ -37,86 +22,18 @@ interface GritGraphProps {
 }
 
 export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraphProps) {
-  const [selectedYear, setSelectedYear] = useState<string>("Current");
   const [hoveredDay, setHoveredDay] = useState<UserActivityLog | null>(null);
 
-  const today = new Date();
-  const joinDate = parseISO(joinedAt);
-  const currentYearNum = getYear(today);
-  const joinedYearNum = getYear(joinDate);
+  const {
+    selectedYear,
+    setSelectedYear,
+    yearOptions,
+    totalSubmissions,
+    activeDays,
+    filteredMonthsData
+  } = useActivityTimeline({ activityLog, joinedAt });
 
-  // 1. Generate Year Options Dynamically
-  const yearOptions = useMemo(() => {
-    const years = ["Current"];
-    for (let year = currentYearNum; year >= joinedYearNum; year--) {
-      years.push(year.toString());
-    }
-    return years;
-  }, [currentYearNum, joinedYearNum]);
-
-  // 2. Determine Temporal Bounds
-  const { dateRangeStart, dateRangeEnd } = useMemo(() => {
-    if (selectedYear === "Current") {
-      return {
-        dateRangeStart: subDays(today, 364),
-        dateRangeEnd: today
-      };
-    }
-    
-    const year = parseInt(selectedYear);
-    const mStart = startOfYear(new Date(year, 0, 1));
-    const mEnd = isSameYear(new Date(year, 0, 1), today) ? today : endOfYear(new Date(year, 0, 1));
-    
-    return {
-      dateRangeStart: mStart,
-      dateRangeEnd: mEnd
-    };
-  }, [selectedYear, today]);
-
-  // 3. Filter and Calculate Telemetry for Selected Window
-  const { totalSubmissions, activeDays, filteredMonthsData } = useMemo(() => {
-    let totalSubs = 0;
-    let actDays = 0;
-
-    const months = eachMonthOfInterval({ start: dateRangeStart, end: dateRangeEnd });
-    
-    const processedMonths = months.map(month => {
-      // Find overlap between the month and our range
-      const mStart = startOfMonth(month) < dateRangeStart ? dateRangeStart : startOfMonth(month);
-      const mEnd = endOfMonth(month) > dateRangeEnd ? dateRangeEnd : endOfMonth(month);
-      
-      const daysInMonth = eachDayOfInterval({ start: mStart, end: mEnd });
-      
-      return {
-        label: format(month, "MMM"),
-        days: daysInMonth.map(date => {
-          const dateStr = format(date, "yyyy-MM-dd");
-          const activity = activityLog.find(a => a.date === dateStr);
-          
-          if (activity) {
-            totalSubs += (activity.submissions || 0);
-            if (activity.submissions > 0) actDays += 1;
-          }
-
-          return {
-            date,
-            submissions: activity?.submissions || 0,
-            matches: activity?.matches || 0,
-            pointsEarned: activity?.pointsEarned || 0,
-            arenaPointsEarned: activity?.arenaPointsEarned || 0,
-          };
-        }),
-      };
-    });
-
-    return { 
-      totalSubmissions: totalSubs, 
-      activeDays: actDays, 
-      filteredMonthsData: processedMonths 
-    };
-  }, [activityLog, dateRangeStart, dateRangeEnd]);
-
-  // 4. Level Logic
+  // 1. Level Logic
   const getLevel = (submissions: number) => {
     if (submissions === 0) return 0;
     if (submissions < 2) return 1;
