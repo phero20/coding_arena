@@ -1,71 +1,55 @@
-import type { Context } from "hono";
-import type { AppEnv, ValidatedContext } from "../types/hono.types";
+import type { ControllerRequest } from "../types/hono.types";
 import type { CreateRoomInput, UpdateRoomProblemInput } from "../validators/arena.validator";
 import { BaseController } from "./base.controller";
 import type { ArenaService } from "../services/arena.service";
 import { AppError } from "../utils/app-error";
+import { ERRORS } from "../constants/errors";
 
+/**
+ * ArenaController manages the lifecycle of arena rooms and matches.
+ * Refactored to use standard DTOs for improved testability and decoupling.
+ */
 export class ArenaController extends BaseController {
   constructor(private readonly arenaService: ArenaService) {
     super();
   }
 
-  async createRoom(c: Context<AppEnv, any, ValidatedContext<CreateRoomInput>>) {
-    const auth = this.getAuth(c);
-    const body = this.getBody(c);
-
-    const room = await this.arenaService.createRoom(
-      auth.clerkUserId,
-      body,
+  async createRoom(req: ControllerRequest<CreateRoomInput>) {
+    return await this.arenaService.createRoom(
+      req.clerkUserId!,
+      req.body,
     );
-
-    return this.ok(c, room);
   }
 
-  async updateRoomProblem(c: Context<AppEnv, any, ValidatedContext<UpdateRoomProblemInput>>) {
-    const auth = this.getAuth(c);
+  async updateRoomProblem(req: ControllerRequest<UpdateRoomProblemInput, { roomId: string }>) {
+    const roomId = req.params.roomId?.toUpperCase();
+    if (!roomId) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
 
-    const roomId = c.req.param("roomId")?.toUpperCase();
-    if (!roomId) throw AppError.badRequest("Room ID is required");
-
-    const body = this.getBody(c);
-
-    const room = await this.arenaService.updateRoomProblem(
-      auth.clerkUserId,
+    return await this.arenaService.updateRoomProblem(
+      req.clerkUserId!,
       roomId,
-      body,
+      req.body,
     );
-
-    return this.ok(c, room);
   }
 
-  async startMatch(c: Context<AppEnv>) {
-    const auth = this.getAuth(c);
+  async startMatch(req: ControllerRequest<never, { roomId: string }>) {
+    const roomId = req.params.roomId?.toUpperCase();
+    if (!roomId) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
 
-    const roomId = c.req.param("roomId")?.toUpperCase();
-    if (!roomId) throw AppError.badRequest("Room ID is required");
-
-    const result = await this.arenaService.startMatch(auth.clerkUserId, roomId);
-
-    return this.ok(c, result);
+    return await this.arenaService.startMatch(req.clerkUserId!, roomId);
   }
 
-  async getMatchStatus(c: Context) {
-    const matchId = c.req.param("matchId");
-    if (!matchId) throw AppError.badRequest("Match ID is required");
+  async getMatchStatus(req: ControllerRequest<never, { matchId: string }>) {
+    const matchId = req.params.matchId;
+    if (!matchId) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
 
-    const match = await this.arenaService.getMatchStatus(matchId);
-
-    return this.ok(c, match);
+    return await this.arenaService.getMatchStatus(matchId);
   }
 
-  async getRoom(c: Context) {
-    const roomId = c.req.param("roomId")?.toUpperCase();
-    if (!roomId) throw AppError.badRequest("Room ID is required");
+  async getRoom(req: ControllerRequest<never, { roomId: string }>) {
+    const roomId = req.params.roomId?.toUpperCase();
+    if (!roomId) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
 
-    const room = await this.arenaService.getRoom(roomId);
-
-    return this.ok(c, room);
+    return await this.arenaService.getRoom(roomId);
   }
 }
-
