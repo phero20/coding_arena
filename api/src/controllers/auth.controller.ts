@@ -1,5 +1,8 @@
 import type { Context } from 'hono'
 import { ApiResponse } from '../utils/api-response'
+import { createLogger } from '../libs/logger'
+
+const logger = createLogger('auth-controller')
 
 export class AuthController {
   async me(c: Context) {
