@@ -8,10 +8,13 @@ import { config } from "./configs/env";
 import { logger } from "./libs/logger";
 import type { AppEnv } from "./types/hono.types";
 
+import { requestId } from "hono/request-id";
+
 export function createApp(): Hono<AppEnv> {
   const app = new Hono<AppEnv>();
 
   // 1. Core Global Middlewares
+  app.use("*", requestId());
   app.use(
     "*",
     cors({
