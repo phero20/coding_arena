@@ -3,7 +3,14 @@
 import { useProfileStatsQuery } from "@/hooks/queries/use-stats.queries";
 import { ProfileLayout } from "./ProfileLayout";
 import { StatsProfile } from "../stats/StatsProfile";
-import { Skeleton } from "@/components/ui/skeleton";
+import { 
+  IdentitySkeleton, 
+  StatsSkeleton, 
+  ActivitySkeleton,
+  RecentActivitiesSkeleton
+} from "@/components/shared/Skeletons";
+
+import { QueryGuard } from "@/components/shared/QueryGuard";
 
 interface ProfileWrapperProps {
   username: string;
@@ -14,49 +21,47 @@ interface ProfileWrapperProps {
  * for the profile page and orchestrates the layout.
  */
 export function ProfileWrapper({ username }: ProfileWrapperProps) {
-  const { data, isLoading, error } = useProfileStatsQuery(username);
-  console.log(data)
-  if (isLoading) {
-    return (
-      <div className="flex flex-col lg:flex-row gap-10">
-        <div className="lg:w-72 shrink-0 space-y-8">
-          <Skeleton className="h-64 w-full rounded-xl" />
-        </div>
-        <div className="flex-1 space-y-8">
-          <Skeleton className="h-48 w-full rounded-2xl" />
-          <div className="grid grid-cols-2 gap-8">
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-32 w-full" />
+  const { data, isLoading, error, refetch } = useProfileStatsQuery(username);
+  
+  return (
+    <QueryGuard
+      loading={isLoading}
+      error={error}
+      data={data}
+      onRetry={refetch}
+      skeleton={
+        <div className="flex flex-col lg:flex-row gap-8">
+          <IdentitySkeleton />
+          <div className="flex-1 space-y-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              <StatsSkeleton />
+              <StatsSkeleton />
+            </div>
+            <ActivitySkeleton />
+            <RecentActivitiesSkeleton />
           </div>
         </div>
-      </div>
-    );
-  }
-
-  if (error || !data) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-        <h2 className="text-2xl font-black uppercase italic tracking-tighter">Warrior Not Found</h2>
-        <p className="text-muted-foreground">The stats for this warrior have been lost to the sands of time.</p>
-      </div>
-    );
-  }
-
-  return (
-    <ProfileLayout 
-      username={data.user.username} 
-      fullName={data.user.fullName || undefined}
-      avatarUrl={data.user.avatarUrl || undefined}
-      githubUsername={data.user.githubUsername}
-      linkedinUsername={data.user.linkedinUsername}
-      leetcodeUsername={data.user.leetcodeUsername}
-      joinedAt={data.user.joinedAt}
-      followerCount={data.social.followers}
-      followingCount={data.social.following}
-      isFollowing={data.social.isFollowing}
-      stats={data.stats}
+      }
+      errorTitle="User Registry Error"
+      errorMessage="The stats for this user have been lost to the sands of time."
     >
-      <StatsProfile data={data} />
-    </ProfileLayout>
+      {(profileData) => (
+        <ProfileLayout 
+          username={profileData.user.username} 
+          fullName={profileData.user.fullName || undefined}
+          avatarUrl={profileData.user.avatarUrl || undefined}
+          githubUsername={profileData.user.githubUsername}
+          linkedinUsername={profileData.user.linkedinUsername}
+          leetcodeUsername={profileData.user.leetcodeUsername}
+          joinedAt={profileData.user.joinedAt}
+          followerCount={profileData.social.followers}
+          followingCount={profileData.social.following}
+          clerkUserId={profileData.user.clerkId}
+          stats={profileData.stats}
+        >
+          <StatsProfile data={profileData} />
+        </ProfileLayout>
+      )}
+    </QueryGuard>
   );
 }
