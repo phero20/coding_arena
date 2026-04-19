@@ -3,8 +3,9 @@
 import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Terminal, AlertCircle, RefreshCw } from "lucide-react";
-import { ConsoleSkeleton } from "@/components/shared/Skeletons";
-import { EmptyDisplay } from "@/components/shared/StatusState";
+import { TestCaseSkeleton, ResultSkeleton } from "@/components/shared/Skeletons";
+import { EmptyDisplay, ErrorDisplay } from "@/components/shared/StatusState";
+import { QueryGuard } from "@/components/shared/QueryGuard";
 import { cn } from "@/lib/utils";
 import { TestCaseField } from "./TestCaseField";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,9 @@ import { ButtonGroup } from "@/components/ui/button-group";
 import { Badge } from "@/components/ui/badge";
 import type { ConsolePanelProps } from "@/types/component.types";
 import { useConsoleViewState } from "@/hooks/workspace/use-console-view-state";
+import { type ExecutionVerdict } from "@/types/submission";
+import { VerdictBadge } from "@/components/ui/verdict-badge";
+import { STATUS_CONFIG } from "@/domain/status";
 
 export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
   const {
@@ -34,6 +38,9 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
 
   const { isLoading, error, runError, hasSubmitted, verdict, runResult } = props;
 
+  // Derive consolidated status config
+  const overallVerdict = (verdict || runResult?.overallStatus || "PENDING") as ExecutionVerdict | "PENDING" | "RUNNING";
+
   return (
     <div className="flex flex-col h-full border-t border-border/20 overflow-hidden">
       <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
@@ -44,61 +51,49 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
           className="h-full overflow-hidden"
         >
           <TabsContent value="testcase" className="mt-0 h-full space-y-4">
-            {isLoading && <ConsoleSkeleton />}
+            <QueryGuard
+              loading={isLoading}
+              error={error}
+              data={cases}
+              skeleton={<TestCaseSkeleton />}
+              emptyTitle="No Public Tests"
+              emptyMessage="This problem does not provide public test cases."
+            >
+              {(testCases) => (
+                <div className="space-y-6">
+                  <ButtonGroup className="flex flex-wrap">
+                    {testCases.map((tc, idx) => (
+                      <Button
+                        key={idx}
+                        type="button"
+                        onClick={() => setActiveIndex(idx)}
+                        className={cn(
+                          "px-4 py-1.5 rounded-md text-[11px] font-black uppercase tracking-wider border transition-all duration-300",
+                          idx === activeIndex
+                            ? "bg-primary/10 border-primary/50 text-foreground ring-1 ring-primary/20 hover:bg-primary/20"
+                            : "bg-muted/10 border-border/40 text-muted-foreground hover:bg-muted/20 hover:border-border/60",
+                        )}
+                      >
+                        Case {idx + 1}
+                      </Button>
+                    ))}
+                  </ButtonGroup>
 
-            {!isLoading && error && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-3 py-12">
-                <div className="size-12 rounded-full bg-destructive/10 flex items-center justify-center border border-destructive/20">
-                  <AlertCircle className="size-6 text-destructive" />
+                  <div className="space-y-5">
+                    {activeCase && (
+                      <>
+                        <TestCaseField label="Input" value={activeCase.input} />
+                        <TestCaseField
+                          label="Expected Output"
+                          value={activeCase.expected_output}
+                          isOutput
+                        />
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-bold text-foreground">
-                    Failed to load tests
-                  </p>
-                  <p className="text-xs text-muted-foreground max-w-[200px] leading-relaxed">
-                    {error.message}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {!isLoading && !error && cases.length === 0 && (
-              <EmptyDisplay
-                title="No Public Tests"
-                message="This problem does not provide public test cases."
-              />
-            )}
-
-            {!isLoading && !error && cases.length > 0 && activeCase && (
-              <div className="space-y-6">
-                <ButtonGroup className="flex flex-wrap">
-                  {cases.map((tc, idx) => (
-                    <Button
-                      key={idx}
-                      type="button"
-                      onClick={() => setActiveIndex(idx)}
-                      className={cn(
-                        "px-4 py-1.5 rounded-md text-[11px] font-black uppercase tracking-wider border transition-all duration-300",
-                        idx === activeIndex
-                          ? "bg-primary/10 border-primary/50 text-foreground ring-1 ring-primary/20 hover:bg-primary/20"
-                          : "bg-muted/10 border-border/40 text-muted-foreground hover:bg-muted/20 hover:border-border/60",
-                      )}
-                    >
-                      Case {idx + 1}
-                    </Button>
-                  ))}
-                </ButtonGroup>
-
-                <div className="space-y-5">
-                  <TestCaseField label="Input" value={activeCase.input} />
-                  <TestCaseField
-                    label="Expected Output"
-                    value={activeCase.expected_output}
-                    isOutput
-                  />
-                </div>
-              </div>
-            )}
+              )}
+            </QueryGuard>
           </TabsContent>
 
           <TabsContent
@@ -106,79 +101,30 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
             className="mt-0 h-full space-y-4 overflow-hidden flex flex-col"
           >
             {runError && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 overflow-y-auto">
-                <div className={cn(
-                  "size-16 rounded-2xl flex items-center justify-center border relative shadow-2xl drop-shadow-xl",
+              <ErrorDisplay
+                title={isForbiddenError ? "Match Concluded" : "Execution Error"}
+                message={
                   isForbiddenError 
-                    ? "bg-primary/10 border-primary/20 shadow-primary/5" 
-                    : "bg-destructive/10 border-destructive/20 shadow-destructive/5"
-                )}>
-                  {isForbiddenError ? (
-                    <RefreshCw className="size-8 text-primary animate-spin-slow" />
-                  ) : (
-                    <AlertCircle className="size-8 text-destructive animate-pulse" />
-                  )}
-                  <div className={cn(
-                    "absolute inset-0 rounded-2xl blur-xl -z-10",
-                    isForbiddenError ? "bg-primary/5" : "bg-destructive/5"
-                  )} />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-sm font-black uppercase tracking-widest text-foreground">
-                    {isForbiddenError ? "Battle Concluded" : "Execution Error"}
-                  </h3>
-                  <div className={cn(
-                    "max-w-[320px] p-3 rounded-lg border backdrop-blur-md",
-                    isForbiddenError 
-                      ? "bg-primary/5 border-primary/20" 
-                      : "bg-destructive/5 border-destructive/20"
-                  )}>
-                    <p className={cn(
-                      "text-[11px] leading-relaxed wrap-break-word font-bold tracking-tight",
-                      isForbiddenError ? "text-primary/90" : "text-destructive"
-                    )}>
-                      {isForbiddenError 
-                        ? "Your final submission has already been recorded for this match. The sector is now locked."
-                        : (typeof runError === "string" 
-                            ? runError 
-                            : (runError as Error)?.message || "An unexpected server error occurred.")}
-                    </p>
-                  </div>
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-tight">
-                    {isForbiddenError 
-                      ? "Check the leaderboard for final standings."
-                      : "Please check your connection or try again later."}
-                  </p>
-                </div>
-              </div>
+                    ? "Your final submission has been recorded. The simulation sector is now locked."
+                    : (typeof runError === "string" 
+                        ? runError 
+                        : (runError as Error)?.message || "An unexpected simulation error occurred.")
+                }
+                className="h-full border-none shadow-none bg-transparent"
+              />
             )}
 
             {/* 1. Loading State */}
-            {!runError && isTabLoading && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12 overflow-y-auto">
-                <div className="size-14 rounded-full bg-primary/5 flex items-center justify-center border border-primary/10 relative">
-                  <RefreshCw className="size-6 text-primary/40 animate-spin" />
-                  <div className="absolute inset-0 rounded-full bg-primary/5 blur-xl -z-10 animate-pulse" />
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-sm font-black uppercase tracking-widest text-foreground animate-pulse">
-                    Executing Code...
-                  </p>
-                  <p className="text-[11px] text-muted-foreground max-w-[200px] leading-relaxed mx-auto font-medium">
-                    {currentStatus === "PENDING" || verdict === "PENDING" ? "Evaluating your submission against all test cases." : "Running your solution against the selected test cases."}
-                  </p>
-                </div>
-              </div>
-            )}
+            {!runError && isTabLoading && <ResultSkeleton />}
 
             {/* 2. Empty State (Fallback if not loading and no results) */}
             {!runError && !isTabLoading && !showResultsSection && (
               <EmptyDisplay
                 icon={hasSubmitted ? RefreshCw : Terminal}
-                title={hasSubmitted ? "Submission Finalized" : "No Results Yet"}
+                title={hasSubmitted ? "Submission Finalized" : "Ready for Simulation"}
                 message={hasSubmitted 
                   ? "Your performance has been logged. Results are synced across the arena." 
-                  : "Write your code and click the Run or Submit button to see simulation results."}
+                  : "Click Run or Submit to initialize the match simulation."}
                 className="h-full"
               />
             )}
@@ -193,67 +139,60 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                     <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                       Overall Status:
                     </span>
-                    <Badge
-                      className={cn(
-                        "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded border",
-                        (verdict || runResult?.overallStatus) === "ACCEPTED"
-                          ? "bg-status-accepted text-status-accepted border-status-accepted"
-                          : "bg-status-wrong-answer text-status-wrong-answer border-status-wrong-answer",
-                      )}
-                    >
-                      {verdict || runResult?.overallStatus || "PENDING"}
-                    </Badge>
+                    <VerdictBadge 
+                      verdict={overallVerdict} 
+                    />
                   </div>
                 </div>
 
                 {/* Tabbed Case Selector - Exactly like Tests tab */}
                 <div className="space-y-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
                   <ButtonGroup className="flex flex-wrap shrink-0">
-                    {effectiveTestResults.map((t, idx) => (
-                      <Button
-                        key={t.index}
-                        type="button"
-                        onClick={() => setActiveResultIndex(idx)}
-                        className={cn(
-                          "px-4 py-1.5 rounded-md text-[11px] font-black uppercase tracking-wider border transition-all duration-300 relative overflow-hidden",
-                          idx === activeResultIndex
-                            ? "bg-primary/10 border-primary/50 text-foreground ring-1 ring-primary/20 hover:bg-primary/20"
-                            : "bg-muted/10 border-border/40 text-muted-foreground hover:bg-muted/20 hover:border-border/60",
-                        )}
-                      >
-                        <span className="relative z-10 flex items-center gap-2">
-                          Case {idx + 1}
-                          <div
-                            className={cn(
-                              "size-1.5 rounded-full shrink-0",
-                              t.status === "ACCEPTED"
-                                ? "bg-status-accepted"
-                                : "bg-status-wrong-answer",
-                            )}
-                          />
-                        </span>
-                      </Button>
-                    ))}
+                    {effectiveTestResults.map((t, idx) => {
+                      const caseVerdict = (t.status || "SYSTEM_ERROR") as ExecutionVerdict | "PENDING" | "RUNNING";
+                      const caseConfig = STATUS_CONFIG[caseVerdict] ?? STATUS_CONFIG.SYSTEM_ERROR;
+                      
+                      return (
+                        <Button
+                          key={t.index}
+                          type="button"
+                          onClick={() => setActiveResultIndex(idx)}
+                          className={cn(
+                            "px-4 py-1.5 rounded-md text-[11px] font-black uppercase tracking-wider border transition-all duration-300 relative overflow-hidden",
+                            idx === activeResultIndex
+                              ? "bg-primary/10 border-primary/50 text-foreground ring-1 ring-primary/20 hover:bg-primary/20"
+                              : "bg-muted/10 border-border/40 text-muted-foreground hover:bg-muted/20 hover:border-border/60",
+                          )}
+                        >
+                          <span className="relative z-10 flex items-center gap-2">
+                            Case {idx + 1}
+                            <div
+                              className={cn(
+                                "size-1.5 rounded-full shrink-0",
+                                caseVerdict === "RUNNING" ? "animate-spin" : "",
+                                caseConfig.textColor.replace("text-", "bg-")
+                              )}
+                            />
+                          </span>
+                        </Button>
+                      );
+                    })}
                   </ButtonGroup>
 
                   {/* Active Case Details */}
-                  {activeResult && (
-                    <div className="space-y-5 flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground/60">
-                          Result Details
-                        </span>
-                        <Badge
-                          className={cn(
-                            "text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md border",
-                            activeResult.status === "ACCEPTED"
-                              ? "bg-status-accepted text-status-accepted border-status-accepted"
-                              : "bg-status-wrong-answer text-status-wrong-answer border-status-wrong-answer",
-                          )}
-                        >
-                          {activeResult.status}
-                        </Badge>
-                      </div>
+                  {activeResult && (() => {
+                    const activeResultVerdict = (activeResult.status || "SYSTEM_ERROR") as ExecutionVerdict | "PENDING" | "RUNNING";
+
+                    return (
+                      <div className="space-y-5 flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground/60">
+                            Result Details
+                          </span>
+                          <VerdictBadge 
+                            verdict={activeResultVerdict} 
+                          />
+                        </div>
 
                       <TestCaseField label="Input" value={activeResult.input} />
                       <TestCaseField
@@ -287,7 +226,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                         />
                       )}
                     </div>
-                  )}
+                  );
+                  })()}
                 </div>
               </div>
             )}
