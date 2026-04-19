@@ -1,9 +1,16 @@
-import { createLogger } from '../libs/logger';
-import { redis } from '../libs/redis';
-import type { ProblemTest, ProblemTestType, TestCase } from '../types/problem.types';
-import type { IProblemTestService, ProblemTestService } from '../services/problem-test.service';
+import { createLogger } from "../libs/logger";
+import { redis } from "../libs/redis";
+import type {
+  ProblemTest,
+  ProblemTestType,
+  TestCase,
+} from "../types/problem.types";
+import type {
+  IProblemTestService,
+  ProblemTestService,
+} from "../services/problem-test.service";
 
-const logger = createLogger('problem-test-cache');
+const logger = createLogger("problem-test-cache");
 
 export interface UpsertProblemTestInput {
   problem_id: string;
@@ -14,10 +21,10 @@ export interface UpsertProblemTestInput {
 export class ProblemTestCache implements IProblemTestService {
   private readonly CACHE_TTL = 3600; // 1 hour
 
-  constructor(private readonly testService: ProblemTestService) {}
+  constructor(private readonly rawProblemTestService: ProblemTestService) {}
 
   async getTestsForProblem(problem_id: string): Promise<ProblemTest[]> {
-    return this.testService.getTestsForProblem(problem_id);
+    return this.rawProblemTestService.getTestsForProblem(problem_id);
   }
 
   async getTestsForProblemAndType(
@@ -30,16 +37,19 @@ export class ProblemTestCache implements IProblemTestService {
       const cached = await redis.get(key);
       if (cached) return JSON.parse(cached);
     } catch (err) {
-      logger.error({ problem_id, type, err }, 'Redis get error');
+      logger.error({ problem_id, type, err }, "Redis get error");
     }
 
-    const test = await this.testService.getTestsForProblemAndType(problem_id, type);
+    const test = await this.rawProblemTestService.getTestsForProblemAndType(
+      problem_id,
+      type,
+    );
 
     if (test) {
       try {
-        await redis.set(key, JSON.stringify(test), 'EX', this.CACHE_TTL);
+        await redis.set(key, JSON.stringify(test), "EX", this.CACHE_TTL);
       } catch (err) {
-        logger.error({ problem_id, type, err }, 'Redis set error');
+        logger.error({ problem_id, type, err }, "Redis set error");
       }
     }
 
@@ -47,13 +57,19 @@ export class ProblemTestCache implements IProblemTestService {
   }
 
   async upsertTests(input: UpsertProblemTestInput): Promise<ProblemTest> {
-    const test = await this.testService.upsertTests(input);
+    const test = await this.rawProblemTestService.upsertTests(input);
 
     try {
       await redis.del(`problem-tests:${test.problem_id}:${test.type}`);
-      logger.info({ problem_id: test.problem_id, type: test.type }, 'Invalidated problem test cache');
+      logger.info(
+        { problem_id: test.problem_id, type: test.type },
+        "Invalidated problem test cache",
+      );
     } catch (err) {
-      logger.error({ problem_id: test.problem_id, type: test.type, err }, 'Redis del error');
+      logger.error(
+        { problem_id: test.problem_id, type: test.type, err },
+        "Redis del error",
+      );
     }
 
     return test;
