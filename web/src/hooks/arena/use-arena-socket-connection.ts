@@ -56,6 +56,7 @@ export function useArenaSocketConnection() {
         token,
         user.username || user.firstName || "Anonymous",
         user.imageUrl,
+        user.fullName || undefined,
       );
 
       manager.connect();
