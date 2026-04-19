@@ -3,6 +3,7 @@ import "./workers/submission.worker";
 import { initResilience } from "./libs/resilience";
 import { createApp } from "./app";
 import { startMatchEnforcer } from "./workers/match-enforcer.worker";
+import "./workers/arena-cleanup.worker";
 
 // 1. Initialize DB Connections
 void connectMongo();
