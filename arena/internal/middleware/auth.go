@@ -25,6 +25,7 @@ func NewAuthMiddleware(pemPublicKey string) (*AuthMiddleware, error) {
 	// Unescape literal \n strings back into real newlines to survive Render/Docker env parsing
 	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\n", "\n")
 	pemPublicKey = strings.TrimSpace(pemPublicKey)
+	pemPublicKey = strings.Trim(pemPublicKey, "\"")
 
 	block, _ := pem.Decode([]byte(pemPublicKey))
 	if block == nil {
