@@ -41,6 +41,23 @@ export const submissionQueue = new Queue('submission-evaluation', {
 })
 
 /**
+ * Arena Cleanup Queue
+ * - Periodically purges stale Redis match data
+ * - Handles delayed room cleanup after match completion
+ */
+export const arenaCleanupQueue = new Queue('arena-cleanup', {
+  connection: redisConnection,
+  defaultJobOptions: {
+    attempts: 5,
+    backoff: {
+      type: 'exponential',
+      delay: 5000,
+    },
+    removeOnComplete: true,
+  },
+})
+
+/**
  * Event listeners for queue monitoring
  * Using type casting to handle strict BullMQ event types
  */
