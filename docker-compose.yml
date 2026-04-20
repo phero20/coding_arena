@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./infra/api.Dockerfile
+    container_name: coding-arena-api
+    env_file:
+      - ./api/.env
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - LOG_PRETTY=true
+    depends_on:
+      - redis
+
+  arena:
+    build:
+      context: .
+      dockerfile: ./infra/arena.Dockerfile
+    container_name: coding-arena-worker
+    env_file:
+      - ./arena/.env
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - LOG_PRETTY=true
+      - CLERK_PEM_PUBLIC_KEY=${CLERK_PEM_PUBLIC_KEY}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    container_name: coding-arena-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
