@@ -22,14 +22,24 @@ func NewAuthMiddleware(pemPublicKey string) (*AuthMiddleware, error) {
 		return &AuthMiddleware{}, nil // Bypass or handle error based on local dev needs
 	}
 
-	// Unescape literal \n strings back into real newlines to survive Render/Docker env parsing
+	// Unescape and clean the key to survive PaaS environment variable mangling
 	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\n", "\n")
+	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\r", "")
 	pemPublicKey = strings.TrimSpace(pemPublicKey)
-	pemPublicKey = strings.Trim(pemPublicKey, "\"")
+	pemPublicKey = strings.Trim(pemPublicKey, "\"'") // Strip both " and '
 
 	block, _ := pem.Decode([]byte(pemPublicKey))
 	if block == nil {
-		return nil, errors.New("failed to parse PEM block containing the public key")
+		// This provides enough info to debug in Render logs without exposing the whole key
+		start := ""
+		if len(pemPublicKey) > 10 {
+			start = pemPublicKey[:10]
+		}
+		end := ""
+		if len(pemPublicKey) > 10 {
+			end = pemPublicKey[len(pemPublicKey)-10:]
+		}
+		return nil, fmt.Errorf("failed to parse PEM block: length=%d, start=%q, end=%q", len(pemPublicKey), start, end)
 	}
 
 	pub, err := x509.ParsePKIXPublicKey(block.Bytes)
