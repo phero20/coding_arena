@@ -24,9 +24,14 @@ func NewAuthMiddleware(pemPublicKey string) (*AuthMiddleware, error) {
 
 	// Unescape and clean the key to survive PaaS environment variable mangling
 	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\n", "\n")
-	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\r", "")
 	pemPublicKey = strings.TrimSpace(pemPublicKey)
 	pemPublicKey = strings.Trim(pemPublicKey, "\"'") // Strip both " and '
+
+	// AUTO-REPAIR: If headers are missing (starts with Base64 MII...), wrap it automatically
+	if !strings.HasPrefix(pemPublicKey, "-----BEGIN") {
+		slog.Warn("CLERK_PEM_PUBLIC_KEY missing headers. Attempting to auto-wrap in PEM format.")
+		pemPublicKey = "-----BEGIN PUBLIC KEY-----\n" + pemPublicKey + "\n-----END PUBLIC KEY-----"
+	}
 
 	block, _ := pem.Decode([]byte(pemPublicKey))
 	if block == nil {
