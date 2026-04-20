@@ -22,6 +22,10 @@ func NewAuthMiddleware(pemPublicKey string) (*AuthMiddleware, error) {
 		return &AuthMiddleware{}, nil // Bypass or handle error based on local dev needs
 	}
 
+	// Unescape literal \n strings back into real newlines to survive Render/Docker env parsing
+	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\n", "\n")
+	pemPublicKey = strings.TrimSpace(pemPublicKey)
+
 	block, _ := pem.Decode([]byte(pemPublicKey))
 	if block == nil {
 		return nil, errors.New("failed to parse PEM block containing the public key")
