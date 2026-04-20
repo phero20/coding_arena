@@ -128,7 +128,9 @@ export async function publishArenaUpdate(roomId: string, payload: any): Promise<
 export async function publishMatchStarted(
   roomId: string,
   players: string[],
-  matchId: string
+  matchId: string,
+  startTime?: number,
+  endTime?: number
 ): Promise<void> {
   await redis.publish(
     "arena:room:updates",
@@ -139,6 +141,8 @@ export async function publishMatchStarted(
         matchId,
         playerCount: players.length,
         players,
+        startTime,
+        endTime,
       },
       timestamp: new Date().toISOString(),
     })
