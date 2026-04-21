@@ -35,6 +35,7 @@ const ArenaPlayerResultSchema = new mongoose.Schema(
     testsPassed: { type: Number, default: 0 },
     totalTests: { type: Number, default: 0 },
     submittedAt: { type: Date },
+    timeTaken: { type: Number },
   },
   { _id: false },
 );
@@ -96,10 +97,10 @@ export interface ArenaPlayerResult {
   testsPassed: number;
   totalTests: number;
   submittedAt?: Date;
+  timeTaken?: number;
 }
 
 export interface ArenaMatch {
-  _id: any;
   id: string;
   roomId: string;
   hostId: string;
@@ -113,6 +114,10 @@ export interface ArenaMatch {
   createdAt: Date;
   updatedAt: Date;
 }
+
+import { ArenaPlayerDetailed, ArenaMatchDetailed } from "../../types/arena-match.types";
+
+export type { ArenaPlayerDetailed, ArenaMatchDetailed };
 
 export type ArenaMatchDocument = ArenaMatch & mongoose.Document;
 
