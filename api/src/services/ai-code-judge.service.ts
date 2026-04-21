@@ -4,6 +4,7 @@ import { GroqLlmService } from './groq-llm.service'
 import type { SubmissionStatus } from '../mongo/models/submission.model'
 import type { ExecutionTestResult, ExecutionVerdict } from '../libs/verdict.util'
 import { getLanguageName } from '../libs/languages'
+import { sanitizeDescriptionForAi, SANITIZE_PROFILES } from '../libs/prompt-sanitizer'
 
 export interface AiRunSamplesInput {
   problemId: string
@@ -110,7 +111,7 @@ export class AiCodeJudgeService implements IAiJudgeService {
         '',
         'Problem summary:',
         `Title: ${problem.title}`,
-        `Description: ${problem.description}`,
+        `Description: ${sanitizeDescriptionForAi(problem.description, SANITIZE_PROFILES.STRICT)}`,
       )
     }
 
