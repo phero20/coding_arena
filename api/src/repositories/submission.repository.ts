@@ -57,7 +57,7 @@ export class SubmissionRepository
     const doc = await this.model.findByIdAndUpdate(
       input.id,
       { $set: { status: input.status, time: input.time, memory: input.memory, details: input.details } },
-      { new: true },
+      { returnDocument: 'after' },
     ).exec()
     return this.toDomain(doc)
   }
@@ -67,7 +67,7 @@ export class SubmissionRepository
     problemId: string,
     excludeIds: string[] = [],
   ): Promise<Submission[]> {
-    const query: any = {
+    const query: Record<string, unknown> = {
       userId: userId,
       problemId: problemId,
     }
