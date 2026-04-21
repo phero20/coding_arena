@@ -31,14 +31,15 @@ const cleanupWorker = new Worker(
     }
   },
   {
-    connection: {
-      host:
-        new URL(config.redisUrl || "redis://localhost:6379").hostname ||
-        "localhost",
-      port: parseInt(
-        new URL(config.redisUrl || "redis://localhost:6379").port || "6379",
-      ),
-    },
+    connection: (() => {
+      const redisUrl = new URL(config.redisUrl || "redis://localhost:6379");
+      return {
+        host: redisUrl.hostname || "localhost",
+        port: parseInt(redisUrl.port || "6379"),
+        password: redisUrl.password ? decodeURIComponent(redisUrl.password) : undefined,
+        tls: redisUrl.protocol === "rediss:" ? {} : undefined,
+      };
+    })(),
     concurrency: 5,
   },
 );

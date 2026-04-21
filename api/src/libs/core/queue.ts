@@ -8,16 +8,16 @@ const logger = createLogger("queue");
  * Redis connection configuration for BullMQ
  * Uses the same Redis instance as the main app
  */
+const redisUrl = new URL(config.redisUrl || "redis://localhost:6379");
+const isSecure = redisUrl.protocol === "rediss:";
+
 const redisConnection = {
-  host:
-    new URL(config.redisUrl || "redis://localhost:6379").hostname ||
-    "localhost",
-  port: parseInt(
-    new URL(config.redisUrl || "redis://localhost:6379").port || "6379",
-  ),
+  host: redisUrl.hostname || "localhost",
+  port: parseInt(redisUrl.port || "6379"),
+  password: redisUrl.password ? decodeURIComponent(redisUrl.password) : undefined,
+  tls: isSecure ? {} : undefined,
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
-  enableOfflineQueue: false,
 };
 
 /**
