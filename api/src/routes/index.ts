@@ -1,62 +1,70 @@
-import { Hono } from 'hono'
-import { container } from '../libs/container'
-import type { AppEnv } from '../types/hono.types'
+import { Hono } from "hono";
+import { container } from "../libs/awilix-container";
+import type { AppEnv } from "../types/hono.types";
 
-import { registerAuthRoutes } from './auth.routes'
-import { registerProblemRoutes } from './problem.routes'
-import { registerProblemTestRoutes } from './problem-test.routes'
-import { registerSubmissionRoutes } from './submission.routes'
-import { registerAiProblemRoutes } from './ai-problem.routes'
-import { registerArenaRoutes } from './arena.routes'
+import { registerAuthRoutes } from "./auth.routes";
+import { registerProblemRoutes } from "./problem.routes";
+import { registerProblemTestRoutes } from "./problem-test.routes";
+import { registerSubmissionRoutes } from "./submission.routes";
+import { registerAiProblemRoutes } from "./ai-problem.routes";
+import { registerArenaRoutes } from "./arena.routes";
 
-import { healthRoutes } from './health.routes'
+import { healthRoutes } from "./health.routes";
 
-const { controllers, middlewares } = container
+const { 
+  authController, 
+  clerkWebhookController, 
+  problemController, 
+  problemTestController, 
+  submissionController, 
+  aiProblemController, 
+  arenaController,
+  authMiddleware,
+  authorizationMiddleware
+} = container.cradle;
 
 export const registerRoutes = (app: Hono<AppEnv>) => {
-  app.get('/', (c) => c.text('OK'))
-  
-  // Health monitoring
-  app.route('/health', healthRoutes)
-  const v1 = new Hono<AppEnv>()
+  app.get("/", (c) => c.text("OK"));
 
-  const authApp = new Hono<AppEnv>()
+  // Health monitoring
+  app.route("/health", healthRoutes);
+  const v1 = new Hono<AppEnv>();
+
+  const authApp = new Hono<AppEnv>();
   registerAuthRoutes(authApp, {
-    authMiddleware: middlewares.authMiddleware,
-    authorizationMiddleware: middlewares.authorizationMiddleware,
-    authController: controllers.authController,
-    clerkWebhookController: controllers.clerkWebhookController,
-  })
-  v1.route('/auth', authApp)
+    authMiddleware,
+    authorizationMiddleware,
+    authController,
+    clerkWebhookController,
+  });
+  v1.route("/auth", authApp);
 
   registerProblemRoutes(v1, {
-    problemController: controllers.problemController,
-    authMiddleware: middlewares.authMiddleware,
-    authorizationMiddleware: middlewares.authorizationMiddleware,
-  })
+    problemController,
+    authMiddleware,
+    authorizationMiddleware,
+  });
 
   registerProblemTestRoutes(v1, {
-    problemTestController: controllers.problemTestController,
-    authMiddleware: middlewares.authMiddleware,
-    authorizationMiddleware: middlewares.authorizationMiddleware,
-  })
+    problemTestController,
+    authMiddleware,
+    authorizationMiddleware,
+  });
 
   registerSubmissionRoutes(v1, {
-    authMiddleware: middlewares.authMiddleware,
-    authorizationMiddleware: middlewares.authorizationMiddleware,
-    submissionController: controllers.submissionController,
-  })
+    authMiddleware,
+    authorizationMiddleware,
+    submissionController,
+  });
 
   registerAiProblemRoutes(v1, {
-    aiProblemController: controllers.aiProblemController,
-  })
+    aiProblemController,
+  });
 
   registerArenaRoutes(v1, {
-    arenaController: controllers.arenaController,
-    authMiddleware: middlewares.authMiddleware,
-  })
+    arenaController,
+    authMiddleware,
+  });
 
-
-  app.route('/api/v1', v1)
-}
-
+  app.route("/api/v1", v1);
+};
