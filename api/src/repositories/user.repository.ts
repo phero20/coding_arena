@@ -1,6 +1,9 @@
 import { db, schema } from '../db'
 import { eq } from 'drizzle-orm'
 import type { User, NewUser } from '../db/schema'
+import { createLogger } from '../libs/logger'
+
+const logger = createLogger('user-repository')
 
 export interface IUserRepository {
   findByClerkId(clerkId: string): Promise<User | null>
