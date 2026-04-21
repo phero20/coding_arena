@@ -1,5 +1,8 @@
 import { redis } from "../libs/redis";
 import { ArenaRoom, ArenaPlayer } from "../types/arena.types";
+import { createLogger } from "../libs/logger";
+
+const logger = createLogger("arena-repository");
 
 export class ArenaRepository {
   private readonly PREFIX = "arena:room:";
@@ -77,7 +80,6 @@ export class ArenaRepository {
 
   /**
    * Atomically joins a room.
-   * Updates room JSON with new player and sets user mapping.
    */
   async joinRoom(roomId: string, player: ArenaPlayer): Promise<void> {
     const script = `
@@ -92,7 +94,6 @@ export class ArenaRepository {
 
       local room = cjson.decode(roomData)
 
-      -- 1. Handling Re-entry (Sync offline state)
       if room.players[userId] then
         local p = room.players[userId]
         p.isOffline = false
@@ -126,11 +127,12 @@ export class ArenaRepository {
     if (result === "FULL_OR_PLAYING")
       throw new Error("Room is not in WAITING status");
     if (!result) throw new Error("Room not found");
+    
+    logger.info({ roomId, userId: player.userId }, "Player joined arena room");
   }
 
   /**
    * Atomically leaves a room.
-   * Removes player from room JSON and deletes user mapping.
    */
   async leaveRoom(userId: string): Promise<string | null> {
     const script = `
@@ -145,22 +147,17 @@ export class ArenaRepository {
         local room = cjson.decode(roomData)
         
         if room.status == "PLAYING" then
-          -- Soft Leave: Mark as disconnected instead of removing
           if room.players[userId] then
             room.players[userId].status = "DISCONNECTED"
           end
           redis.call("set", roomKey, cjson.encode(room), "EX", 3600)
         else
-          -- Lobby Phase: Total removal
           room.players[userId] = nil
-          
-          -- Check if room is empty
           local hasPlayers = false
           for _ in pairs(room.players) do
             hasPlayers = true
             break
           end
-
           if not hasPlayers then
             redis.call("del", roomKey)
           else
@@ -180,36 +177,112 @@ export class ArenaRepository {
     )) as string | null;
     return result;
   }
+
   /**
-   * Transitions the room to FINISHED status.
-   * Keeps player data intact for final results display.
+   * ATOMIC: Transitions the room to FINISHED status.
    */
   async finishRoom(roomId: string): Promise<void> {
-    const room = await this.getRoom(roomId);
-    if (!room) return;
-
-    room.status = "FINISHED";
-    delete room.matchId;
-    delete room.startTime;
-    delete room.endTime;
-
-    await this.saveRoom(room);
+    await this.updateRoomStatus(roomId, {
+      status: "FINISHED",
+      matchId: undefined,
+      startTime: undefined,
+      endTime: undefined,
+    });
   }
 
   /**
-   * Resets the room metadata after a match finishes.
-   * Player statuses and scores are PRESERVED so they remain visible in the results.
-   * They will be fully reset the next time a match is started.
+   * ATOMIC: Resets the room metadata after a match finishes.
    */
   async resetRoom(roomId: string): Promise<void> {
-    const room = await this.getRoom(roomId);
-    if (!room) return;
+    await this.updateRoomStatus(roomId, {
+      status: "WAITING",
+      matchId: undefined,
+      startTime: undefined,
+      endTime: undefined,
+    });
+  }
 
-    room.status = "WAITING";
-    delete room.matchId;
-    delete room.startTime;
-    delete room.endTime;
+  /**
+   * ATOMIC: Updates a single player's progress data within the room JSON.
+   */
+  async updateRoomPlayer(
+    roomId: string,
+    userId: string,
+    updates: Partial<ArenaPlayer>,
+  ): Promise<void> {
+    const script = `
+      local roomKey = KEYS[1]
+      local userId = ARGV[1]
+      local updatesJson = ARGV[2]
+      local ttl = ARGV[3]
 
-    await this.saveRoom(room);
+      local roomData = redis.call("get", roomKey)
+      if not roomData then return nil end
+
+      local room = cjson.decode(roomData)
+      local updates = cjson.decode(updatesJson)
+
+      if room.players[userId] then
+        for k, v in pairs(updates) do
+          room.players[userId][k] = v
+        end
+        redis.call("set", roomKey, cjson.encode(room), "EX", ttl)
+        return "OK"
+      end
+      return "PLAYER_NOT_FOUND"
+    `;
+
+    const result = await redis.eval(
+      script,
+      1,
+      `${this.PREFIX}${roomId}`,
+      userId,
+      JSON.stringify(updates),
+      this.TTL,
+    );
+
+    if (result === "PLAYER_NOT_FOUND") throw new Error("Player not found in room");
+    if (!result) throw new Error("Room not found");
+  }
+
+  /**
+   * ATOMIC: Updates the room status and metadata safely.
+   */
+  async updateRoomStatus(
+    roomId: string,
+    updates: Partial<Omit<ArenaRoom, "players" | "roomId">>,
+  ): Promise<void> {
+    const script = `
+        local roomKey = KEYS[1]
+        local updatesJson = ARGV[1]
+        local ttl = ARGV[2]
+
+        local roomData = redis.call("get", roomKey)
+        if not roomData then return nil end
+
+        local room = cjson.decode(roomData)
+        local updates = cjson.decode(updatesJson)
+
+        for k, v in pairs(updates) do
+            if v == "null" or v == nil then
+                room[k] = nil
+            else
+                room[k] = v
+            end
+        end
+
+        redis.call("set", roomKey, cjson.encode(room), "EX", ttl)
+        return "OK"
+    `;
+
+    const result = await redis.eval(
+      script,
+      1,
+      `${this.PREFIX}${roomId}`,
+      JSON.stringify(updates),
+      this.TTL,
+    );
+
+    if (!result) throw new Error("Room not found");
   }
 }
