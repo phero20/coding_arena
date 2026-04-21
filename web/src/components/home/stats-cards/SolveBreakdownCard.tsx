@@ -1,37 +1,28 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { type UserStats } from "@/types/stats";
-import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import { Card } from "../ui/card";
-import { useDifficultyMetrics } from "@/hooks/stats/use-difficulty-metrics";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-interface SolveBreakdownProps {
-  stats: UserStats;
-  className?: string;
-}
-
-export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
+export function SolveBreakdownCard() {
   const size = 155;
   const strokeWidth = 6;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const arcLength = circumference * 0.75;
   const gap = 10;
+  
+  const segments = [
+    { id: "easy", label: "Easy", count: 408, total: 850, color: "text-difficulty-easy", cssVar: "var(--difficulty-easy)", trackLen: arcLength * 0.5, progress: arcLength * 0.2, rotate: 0 },
+    { id: "medium", label: "Medium", count: 692, total: 1621, color: "text-difficulty-medium", cssVar: "var(--difficulty-medium)", trackLen: arcLength * 0.3, progress: arcLength * 0.1, rotate: 135 },
+    { id: "hard", label: "Hard", count: 120, total: 720, color: "text-difficulty-hard", cssVar: "var(--difficulty-hard)", trackLen: arcLength * 0.2, progress: arcLength * 0.04, rotate: 216 },
+  ];
 
-  const {
-    radius,
-    circumference,
-    arcLength,
-    segments,
-    totalSolved,
-    globalTotal,
-  } = useDifficultyMetrics({ stats, size, strokeWidth, gap });
+  const totalSolved = 1220;
+  const globalTotal = 3191;
 
   return (
-    <Card
-      className={cn(
-        "flex flex-row items-center justify-center gap-12 p-3 pr-0",
-        className,
-      )}
-    >
+    <Card className="flex flex-row items-center justify-center gap-12 p-3 pr-0 h-full bg-card/20 border-border/60 ring-1 ring-border/30 shadow-[0_1px_0_hsl(var(--background)/0.6)_inset,0_0_0_1px_hsl(var(--border)/0.45),0_28px_60px_-26px_hsl(var(--foreground)/0.85),0_14px_30px_-16px_hsl(var(--foreground)/0.72)]">
       {/* 1. The Tactical Arc System */}
       <div className="relative flex flex-col items-center justify-center shrink-0 mt-2">
         <svg width={size} height={size} className="transform rotate-140">
@@ -64,24 +55,22 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
                 strokeLinecap="round"
               />
               {/* Segment Progress */}
-              {segment.count > 0 && (
-                <motion.circle
-                  cx={size / 2}
-                  cy={size / 2}
-                  r={radius}
-                  stroke={segment.cssVar}
-                  strokeWidth={strokeWidth}
-                  fill="transparent"
-                  strokeDasharray={`${segment.progress} ${circumference}`}
-                  initial={{ strokeDashoffset: segment.progress }}
-                  animate={{
-                    strokeDashoffset: 0,
-                    rotate: segment.rotate,
-                  }}
-                  transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-                  strokeLinecap="round"
-                />
-              )}
+              <motion.circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                stroke={segment.cssVar}
+                strokeWidth={strokeWidth}
+                fill="transparent"
+                strokeDasharray={`${segment.progress} ${circumference}`}
+                initial={{ strokeDashoffset: segment.progress }}
+                animate={{
+                  strokeDashoffset: 0,
+                  rotate: segment.rotate,
+                }}
+                transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                strokeLinecap="round"
+              />
             </React.Fragment>
           ))}
         </svg>

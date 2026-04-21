@@ -7,11 +7,6 @@ export function ArenaCard() {
       <CardHeader
         icon={Swords}
         title="The Arena"
-        right={
-          <span className="text-xs text-muted-foreground/40 group-hover:text-muted-foreground transition-colors flex items-center gap-1">
-            Enter <ArrowRight className="size-3" />
-          </span>
-        }
       />
       <div className="flex-1 p-5 flex flex-col justify-center gap-4">
         {[

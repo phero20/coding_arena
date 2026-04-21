@@ -22,7 +22,7 @@ export const Features = () => {
         {/* ── Heading ── */}
         <motion.div {...fadeUp(0)} className="mb-20">
           <h2 className="text-3xl md:text-5xl font-black tracking-[-0.03em] leading-[1.05] max-w-2xl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-foreground via-foreground/80 to-foreground/30">
+            <span className="text-foreground">
               Everything you need to compete and grow.
             </span>
           </h2>

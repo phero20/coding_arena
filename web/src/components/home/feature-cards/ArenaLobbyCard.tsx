@@ -20,21 +20,23 @@ export function ArenaLobbyCard() {
 
         <div className="p-5 flex flex-col gap-4 flex-1 justify-center bg-card/30">
             {/* Host Mockup */}
-            <Card className="bg-card/60 transition-colors group-hover:border-border/80 border-border/40 shadow-none">
-              <CardContent className="p-4 flex items-center gap-3">
-                 <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                    <Swords className="size-4 text-primary" />
+            <Card className="bg-card/60 transition-colors group-hover:border-border/80 border-border/40 shadow-sm">
+              <CardContent className="p-4 flex flex-col gap-3">
+                 <div className="flex items-center gap-3">
+                   <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Swords className="size-4 text-primary" />
+                   </div>
+                   <div className="text-left flex-1">
+                      <CardTitle className="text-[11px] font-bold">Host Match</CardTitle>
+                      <CardDescription className="text-[9px] mt-0.5">Create private matches</CardDescription>
+                   </div>
                  </div>
-                 <div className="text-left flex-1">
-                    <CardTitle className="text-[11px] font-bold">Host Match</CardTitle>
-                    <CardDescription className="text-[9px] mt-0.5">Create private matches</CardDescription>
-                 </div>
-                 <Button size="sm" className="h-7 px-3 text-[10px] shrink-0">Host</Button>
+                 <Button size="sm" className="h-8 w-full text-[10px]">Host</Button>
               </CardContent>
             </Card>
 
             {/* Join Mockup */}
-            <Card className="bg-card/60 transition-colors group-hover:border-border/80 border-border/40 shadow-none">
+            <Card className="bg-card/60 transition-colors group-hover:border-border/80 border-border/40 shadow-sm">
               <CardContent className="p-4 flex flex-col gap-3">
                  <div className="flex items-center gap-3">
                    <div className="size-8 rounded-lg bg-secondary/10 flex items-center justify-center shrink-0">

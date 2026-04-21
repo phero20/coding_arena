@@ -25,6 +25,7 @@ import {
   Swords,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ButtonGroup } from "../ui/button-group";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -49,7 +50,7 @@ const TAB_CLS =
   "data-[state=active]:bg-transparent data-[state=active]:text-primary " +
   "data-[state=active]:shadow-none data-[state=active]:border-primary transition-all";
 
-const JAVA_CODE = `class Solution {
+const JAVA_CODE = ` class Solution {
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> map = new HashMap<>();
         
@@ -86,18 +87,18 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease }}
-          className="flex flex-col md:flex-row items-center md:items-center justify-between max-w-6xl mx-auto mb-20 gap-12 lg:gap-20 pb-10 px-2 md:px-8 lg:px-0"
+          className="flex flex-col md:flex-row items-center md:items-center justify-between max-w-7xl mx-auto mb-20 gap-12 lg:gap-20 pb-10 px-2 md:px-4 lg:px-0"
         >
           {/* Left Side: Brand Name */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease }}
-            className="flex-1 text-center md:text-left w-full flex items-center   justify-start"
+            className="flex-1 text-left w-full flex items-center justify-start min-w-0"
           >
-            <h1 className="text-[clamp(4rem,10vw,7.5rem)] font-bold tracking-tight text-foreground leading-none flex items-baseline">
+            <h1 className="text-[clamp(2.75rem,14vw,7.5rem)] font-bold tracking-tight text-foreground leading-none flex items-baseline whitespace-nowrap max-w-full">
               SlaveCode
-              <span className="ml-1 text-[clamp(4rem,10vw,7.5rem)] leading-none text-primary/60">.</span>
+              <span className="ml-1 text-[clamp(2.75rem,14vw,7.5rem)] leading-none text-primary/60">.</span>
             </h1>
           </motion.div>
 
@@ -148,14 +149,14 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.6, ease }}
-          className="max-w-7xl mx-auto md:px-8 lg:px-0"
+          className="max-w-7xl mx-auto"
         >
           <div
             onClick={() => router.push("/problems")}
-            className="rounded-xl border border-border/40 bg-card overflow-hidden shadow-2xl"
+            className="rounded-xl border border-border/60 bg-card/60 overflow-hidden ring-1 ring-border/30 shadow-[0_1px_0_hsl(var(--background)/0.6)_inset,0_0_0_1px_hsl(var(--border)/0.45),0_28px_60px_-26px_hsl(var(--foreground)/0.85),0_14px_30px_-16px_hsl(var(--foreground)/0.72)]"
           >
             {/* Workspace Header — mirrors WorkspaceHeader.tsx */}
-            <header className="h-14 px-4 border-b border-border/40 bg-card/20 flex items-center justify-between shrink-0">
+            <header className="relative h-14 px-4 border-b border-border/40 bg-card/10 backdrop-blur-sm flex items-center shrink-0">
               {/* Left */}
               <div className="flex items-center gap-2">
                 <Button
@@ -169,7 +170,7 @@ export const Hero = () => {
               </div>
 
               {/* Right — Run / Submit */}
-              <div className="flex items-center gap-2 pointer-events-none opacity-70">
+              <ButtonGroup className="absolute left-1/2 -translate-x-1/2  pointer-events-none opacity-70">
                 <Button
                   variant="outline"
                   size="sm"
@@ -182,13 +183,13 @@ export const Hero = () => {
                   <Send className="size-3.5" />
                   Submit
                 </Button>
-              </div>
+              </ButtonGroup>
             </header>
 
             {/* Two-pane body */}
-            <div className="grid md:grid-cols-2 min-h-[560px]">
+            <div className="grid md:grid-cols-2 min-h-[560px] bg-card/10">
               {/* ── LEFT PANE: Description ── */}
-              <div className="flex flex-col border-b md:border-b-0 md:border-r border-border/40 min-w-0">
+              <div className="flex flex-col border-b md:border-b-0 md:border-r border-border/40 min-w-0 bg-card/10">
                 {/* Tab bar — mirrors DescriptionPanel.tsx */}
                 <div className="px-4 border-b border-border/40 bg-muted/10 overflow-x-auto">
                   <div className="flex items-center gap-4 w-max min-w-full h-10">
@@ -304,9 +305,9 @@ export const Hero = () => {
               </div>
 
               {/* ── RIGHT PANE: Editor ── */}
-              <div className="flex flex-col min-w-0">
+              <div className="flex flex-col min-w-0 bg-card/50">
                 {/* Tab bar — mirrors EditorPanel.tsx */}
-                <div className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-muted/10">
+                <div className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm">
                   {/* Language selector (left) */}
                   <div className="flex items-center gap-2 shrink-0">
                     <Badge
@@ -349,7 +350,7 @@ export const Hero = () => {
                 </div>
 
                 {/* Code content — same SyntaxHighlighter as SolutionViewer.tsx */}
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-hidden bg-card/60">
                   <SyntaxHighlighter
                     language="java"
                     style={vscDarkPlus}

@@ -5,7 +5,7 @@ import { Features } from "./Features";
 import { HowItWorks } from "./HowItWorks";
 import { Statistics } from "./Statistics";
 import { DeepDive } from "./DeepDive";
-import { CallToAction } from "./CallToAction";
+import { CompilerSection, CallToAction } from "./compilerVisual";
 import { LandingFooter } from "./LandingFooter";
 
 export const HomeContent = () => {
@@ -19,7 +19,7 @@ export const HomeContent = () => {
         <Features />
 
         {/* 3.0 — How It Works: Numbered steps with connector lines */}
-        <HowItWorks />
+        {/* <HowItWorks /> */}
 
         {/* Statistics: By-the-numbers impact strip */}
         <Statistics />
@@ -27,7 +27,10 @@ export const HomeContent = () => {
         {/* 4.0 — Deep Dive: Alternating feature rows with live visuals */}
         <DeepDive />
 
-        {/* 5.0 — CTA: Final call-to-action with glow centerpiece */}
+        {/* 5.0 — Compiler Showcase: Wide visual of the playground */}
+        <CompilerSection />
+
+        {/* 6.0 — CTA: Final call-to-action with glow centerpiece */}
         <CallToAction />
       </main>
 
