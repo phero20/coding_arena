@@ -1,13 +1,20 @@
 import { MongoBaseRepository } from "./base.repository";
+import { type UpdateQuery } from "mongoose";
 import { 
   ArenaMatch, 
   ArenaMatchDocument, 
   ArenaMatchStatus, 
   ArenaPlayerResult,
-  ArenaMatchModel 
+  ArenaMatchModel,
 } from "../mongo/models/arena-match.model";
+import { zArenaMatchDetailed, type ArenaMatchDetailed } from "../types/arena-match.types";
 
 export type { ArenaPlayerResult };
+
+/**
+ * Zod Schemas for runtime validation of complex aggregation results.
+ * Moved to @types/arena-match.types.ts
+ */
 
 export interface CreateArenaMatchInput {
   roomId: string;
@@ -35,6 +42,7 @@ export interface UpdatePlayerProgressInput {
     score: number;
     lastSubmissionTime?: Date;
     submissionOrder?: number;
+    timeTaken?: number;
   };
 }
 
@@ -63,12 +71,12 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
   }
 
   async updateStatus(input: UpdateArenaMatchStatusInput): Promise<ArenaMatch | null> {
-    const updateData: any = { status: input.status };
+    const updateData: UpdateQuery<ArenaMatchDocument> = { status: input.status };
     if (input.startedAt) updateData.startedAt = input.startedAt;
     if (input.endedAt) updateData.endedAt = input.endedAt;
 
     const doc = await this.model.findByIdAndUpdate(input.id, updateData, {
-      new: true,
+      returnDocument: "after",
     }).exec();
 
     return this.toDomain(doc);
@@ -79,7 +87,7 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
     userId: string, 
     progress: UpdatePlayerProgressInput['progress']
   ): Promise<ArenaMatch | null> {
-    const updateQuery: any = {
+    const updateQuery: UpdateQuery<ArenaMatchDocument> = {
       $set: {
         "players.$[player].verdict": progress.status,
         "players.$[player].testsPassed": progress.testsPassed,
@@ -99,13 +107,16 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
     if (progress.score !== undefined) {
       updateQuery.$set["players.$[player].score"] = progress.score;
     }
+    if (progress.timeTaken !== undefined) {
+      updateQuery.$set["players.$[player].timeTaken"] = progress.timeTaken;
+    }
 
     const doc = await this.model.findByIdAndUpdate(
       matchId,
       updateQuery,
       {
         arrayFilters: [{ "player.userId": userId }],
-        new: true,
+        returnDocument: "after",
       }
     ).exec();
 
@@ -116,7 +127,7 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
     const doc = await this.model.findByIdAndUpdate(
       matchId,
       { $addToSet: { players: player } },
-      { new: true }
+      { returnDocument: "after" }
     ).exec();
     return this.toDomain(doc);
   }
@@ -134,7 +145,7 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
    * Fetches the match results including the source code for each player.
    * Uses an aggregation pipeline to join ArenaMatch -> ArenaSubmission -> Submission.
    */
-  async findByIdWithSubmissions(id: string): Promise<any | null> {
+  async findByIdWithSubmissions(id: string): Promise<ArenaMatchDetailed | null> {
     const { mongoose } = await import("../mongo/connection");
 
     const results = await this.model.aggregate([
@@ -196,6 +207,7 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
           problemId: { $first: "$problemId" },
           language: { $first: "$language" },
           status: { $first: "$status" },
+          expiresAt: { $first: "$expiresAt" },
           startedAt: { $first: "$startedAt" },
           endedAt: { $first: "$endedAt" },
           createdAt: { $first: "$createdAt" },
@@ -207,10 +219,7 @@ export class ArenaMatchRepository extends MongoBaseRepository<ArenaMatch, ArenaM
 
     if (!results || results.length === 0) return null;
 
-    const match = results[0];
-    return {
-      ...match,
-      id: match._id.toString(),
-    };
+    // Use Zod to transform the 'any' aggregation result into a strictly typed detailed match object
+    return zArenaMatchDetailed.parse(results[0]);
   }
 }
