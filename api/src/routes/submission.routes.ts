@@ -1,6 +1,7 @@
 import type { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import { runSubmissionSchema, submitSubmissionSchema } from '../validators/submission.validator'
+import { SubmissionIdParamSchema, ProblemIdParamSchema } from '../validators/common.validator'
 import type { SubmissionController } from '../controllers/submission.controller'
 import { rateLimit } from '../middlewares/rate-limit.middleware'
 import type { AuthMiddleware } from '../middlewares/auth.middleware'
@@ -22,11 +23,13 @@ export const registerSubmissionRoutes = (
   app.use('/submissions/*', (c, next) => authMiddleware.handle(c, next))
 
   // Code Play/Run: 10 per minute
+  // Controllers now use context-free handlers via the .action() adapter
+  
   app.post(
     '/submissions/run',
     rateLimit({ windowMs: 60000, max: 10, keyPrefix: 'rl:run' }),
     zValidator('json', runSubmissionSchema),
-    (c) => submissionController.run(c),
+    submissionController.action(submissionController.run, { status: 201 }),
   )
 
   // Final Submission: 5 per minute
@@ -34,16 +37,17 @@ export const registerSubmissionRoutes = (
     '/submissions/submit',
     rateLimit({ windowMs: 60000, max: 5, keyPrefix: 'rl:submit' }),
     zValidator('json', submitSubmissionSchema),
-    (c) => submissionController.submit(c),
+    submissionController.action(submissionController.submit, { status: 201 }),
   )
 
   // Check submission status - no rate limit (frequent polling expected)
-  app.get('/submissions/:submissionId', (c) =>
-    submissionController.getSubmissionStatus(c),
+  app.get('/submissions/:submissionId',
+    zValidator('param', SubmissionIdParamSchema),
+    submissionController.action(submissionController.getSubmissionStatus),
   )
 
-  app.get('/submissions/problem/:problemId', (c) =>
-    submissionController.getUserSubmissions(c),
+  app.get('/submissions/problem/:problemId',
+    zValidator('param', ProblemIdParamSchema),
+    submissionController.action(submissionController.getUserSubmissions),
   )
 }
-
