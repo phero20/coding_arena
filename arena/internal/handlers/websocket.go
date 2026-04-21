@@ -115,6 +115,6 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 		go client.WritePump()
 		client.ReadPump()
 	}, websocket.Config{
-		Origins: []string{},
+		Origins: []string{"*"},
 	})
 }
