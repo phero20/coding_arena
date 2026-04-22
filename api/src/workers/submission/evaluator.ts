@@ -6,6 +6,12 @@ import { createLogger } from "../../libs/logger";
 
 const logger = createLogger("submission-evaluator");
 
+interface TestCase {
+  index: number;
+  input: string;
+  expected_output: string;
+}
+
 export class SubmissionEvaluator {
   constructor(
     private problemTestRepository: ProblemTestRepository,
@@ -30,15 +36,15 @@ export class SubmissionEvaluator {
     }
 
     // Combine public + private test cases for evaluation
-    const allTestCases: any[] = [];
+    const allTestCases: TestCase[] = [];
     let testIndex = 0;
 
     // Add public test cases first
     const publicTestsData = problemTests.find(
-      (pt: any) => pt.type === "public",
+      (pt) => pt.type === "public",
     );
     if (publicTestsData?.cases) {
-      publicTestsData.cases.forEach((testCase: any) => {
+      publicTestsData.cases.forEach((testCase) => {
         allTestCases.push({
           index: testIndex++,
           input: testCase.input,
@@ -49,7 +55,7 @@ export class SubmissionEvaluator {
 
     // Add private test cases
     const privateTestsData = problemTests.find(
-      (pt: any) => pt.type === "hidden",
+      (pt) => pt.type === "hidden",
     );
     if (privateTestsData?.cases) {
       privateTestsData.cases.forEach((testCase: any) => {
@@ -90,7 +96,7 @@ export class SubmissionEvaluator {
       finalStatus = "SYSTEM_ERROR";
     }
 
-    const testResults: TestResult[] = evaluationResult.tests.map((t: any) => ({
+    const testResults: TestResult[] = evaluationResult.tests.map((t) => ({
       index: t.index,
       input: t.input,
       expected_output: t.expected_output,
@@ -98,17 +104,17 @@ export class SubmissionEvaluator {
       stderr: t.stderr ?? null,
       compile_output: t.compile_output ?? null,
       message: t.message ?? null,
-      status: t.status as any,
+      status: t.status as SubmissionEvaluationResult["status"],
       rawStatus: {
         id: 0,
         description: "AI Evaluation",
       },
       time: t.time ? String(t.time) : null,
-      memory: t.memory,
+      memory: t.memory ?? undefined,
     }));
 
     return {
-      status: finalStatus as any,
+      status: finalStatus as SubmissionEvaluationResult["status"],
       tests: testResults,
       executionTime: 0, // Will be calculated by processor
       cached: evaluationResult.cached,
