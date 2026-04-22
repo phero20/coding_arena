@@ -40,6 +40,21 @@ export class AppError extends Error {
     }
   }
 
+  static from(def: { message: string, code: ErrorCode }, details?: unknown) {
+    let statusCode = 500;
+    switch (def.code) {
+      case 'BAD_REQUEST': statusCode = 400; break;
+      case 'UNAUTHORIZED': statusCode = 401; break;
+      case 'FORBIDDEN': statusCode = 403; break;
+      case 'NOT_FOUND': statusCode = 404; break;
+      case 'CONFLICT': statusCode = 409; break;
+      case 'UNPROCESSABLE_ENTITY': statusCode = 422; break;
+      case 'TOO_MANY_REQUESTS': statusCode = 429; break;
+      case 'SERVICE_UNAVAILABLE': statusCode = 503; break;
+    }
+    return new AppError(def.message, { statusCode, code: def.code, details });
+  }
+
   static badRequest(message = "Bad request", details?: unknown) {
     return new AppError(message, {
       statusCode: 400,
