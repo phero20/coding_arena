@@ -3,16 +3,16 @@ import type { UserRepository } from "../repositories/user.repository";
 import type { ArenaMatchRepository } from "../repositories/arena-match.repository";
 import type { ArenaPlayerResult } from "../repositories/arena-match.repository";
 import type { ArenaSubmissionRepository } from "../repositories/arena-submission.repository";
-import {
-  ArenaRoom,
-  ArenaPlayer,
-  ArenaRoomStatus
-} from "../types/arena.types";
+import { ArenaRoom, ArenaPlayer, ArenaRoomStatus } from "../types/arena.types";
 import type { ArenaMatch } from "../mongo/models/arena-match.model";
 import { AppError } from "../utils/app-error";
+import { ERRORS } from "../constants/errors";
 import { redis, acquireLock, releaseLock } from "../libs/redis";
 import * as arenaRedis from "../libs/arena-redis";
 import { randomBytes } from "crypto";
+import { createLogger } from "../libs/logger";
+
+const logger = createLogger('arena-service');
 
 export interface MatchStartResult {
   matchId: string;
@@ -37,9 +37,9 @@ export class ArenaService {
     },
   ): Promise<ArenaRoom> {
     const user = await this.userRepository.findByClerkId(clerkUserId);
-    if (!user) throw AppError.notFound("User not found");
+    if (!user) throw AppError.from(ERRORS.AUTH.USER_NOT_FOUND);
 
-    const roomId = randomBytes(3).toString('hex').toUpperCase();
+    const roomId = randomBytes(3).toString("hex").toUpperCase();
 
     const creator: ArenaPlayer = {
       userId: clerkUserId,
@@ -78,12 +78,15 @@ export class ArenaService {
     return room;
   }
 
-  private async ensureIsHost(roomId: string, clerkUserId: string): Promise<ArenaRoom> {
+  private async ensureIsHost(
+    roomId: string,
+    clerkUserId: string,
+  ): Promise<ArenaRoom> {
     const room = await this.arenaRepository.getRoom(roomId);
-    if (!room) throw AppError.notFound("Arena room not found");
+    if (!room) throw AppError.from(ERRORS.ARENA.ROOM_NOT_FOUND);
 
     if (room.players[clerkUserId]?.isCreator === false) {
-      throw AppError.forbidden("Only the host can perform this action");
+      throw AppError.from(ERRORS.ARENA.NOT_HOST);
     }
 
     return room;
@@ -106,52 +109,71 @@ export class ArenaService {
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" ");
 
-    room.problemId = details.problemId;
-    room.problemSlug = details.problemSlug;
-    room.difficulty = details.difficulty;
-    room.language = details.language;
-    room.topic = formattedTopic;
-
-    await this.arenaRepository.saveRoom(room);
-    await arenaRedis.publishArenaUpdate(roomId, { type: "PROBLEM_CHANGED", payload: room });
+    await this.arenaRepository.updateRoomStatus(roomId, {
+      problemId: details.problemId,
+      problemSlug: details.problemSlug,
+      difficulty: details.difficulty,
+      language: details.language,
+      topic: formattedTopic,
+    });
+    await arenaRedis.publishArenaUpdate(roomId, {
+      type: "PROBLEM_CHANGED",
+      payload: room,
+    });
 
     return room;
   }
 
-  async startMatch(clerkUserId: string, roomId: string): Promise<MatchStartResult> {
+  async startMatch(
+    clerkUserId: string,
+    roomId: string,
+  ): Promise<MatchStartResult> {
     const room = await this.ensureIsHost(roomId, clerkUserId);
 
-    if (!room.problemId) throw AppError.badRequest("No problem selected for this room");
+    if (!room.problemId)
+      throw AppError.from(ERRORS.ARENA.NO_PROBLEM);
 
     // Acquire distributed lock to prevent concurrent setup flows
     const lockId = await acquireLock(`startMatch:${roomId}`, 5000);
     if (!lockId) {
       // If lock is held, it might be because a match already started or is starting
-      const existingMatch = await this.arenaMatchRepository.findByRoomId(roomId);
-      if (existingMatch && (existingMatch.status === "WAITING" || existingMatch.status === "PLAYING")) {
+      const existingMatch =
+        await this.arenaMatchRepository.findByRoomId(roomId);
+      if (
+        existingMatch &&
+        (existingMatch.status === "WAITING" ||
+          existingMatch.status === "PLAYING")
+      ) {
         return { matchId: existingMatch.id, roomId };
       }
-      throw AppError.conflict("Match setup already in progress");
+      throw AppError.from(ERRORS.ARENA.MATCH_IN_PROGRESS);
     }
 
     try {
       // Check if match already exists to prevent duplicate key errors (concurrency/double-clicks)
-      const existingMatch = await this.arenaMatchRepository.findByRoomId(roomId);
-      if (existingMatch && (existingMatch.status === "WAITING" || existingMatch.status === "PLAYING")) {
+      const existingMatch =
+        await this.arenaMatchRepository.findByRoomId(roomId);
+      if (
+        existingMatch &&
+        (existingMatch.status === "WAITING" ||
+          existingMatch.status === "PLAYING")
+      ) {
         return { matchId: existingMatch.id, roomId };
       }
 
       // 1. Create permanent Match record in Mongo with all players
-      const players: ArenaPlayerResult[] = Object.values(room.players).map(p => ({
-        userId: p.userId,
-        username: p.username,
-        avatarUrl: p.avatarUrl,
-        submissionOrder: 0,
-        verdict: "NOT_SUBMITTED",
-        score: 0,
-        testsPassed: 0,
-        totalTests: 0,
-      }));
+      const players: ArenaPlayerResult[] = Object.values(room.players).map(
+        (p) => ({
+          userId: p.userId,
+          username: p.username,
+          avatarUrl: p.avatarUrl,
+          submissionOrder: 0,
+          verdict: "NOT_SUBMITTED",
+          score: 0,
+          testsPassed: 0,
+          totalTests: 0,
+        }),
+      );
 
       const match = await this.arenaMatchRepository.create({
         roomId: room.roomId,
@@ -169,13 +191,16 @@ export class ArenaService {
         room.players[userId].totalTests = 0;
       }
 
-      // 3. Calculate Timers & Update Redis status
+      // 3. Calculate Timers & Reset players
       const now = Date.now();
+      const durationMins = room.matchDuration || 20;
+      
       room.status = "PLAYING";
       room.startTime = now;
-      const durationMins = room.matchDuration || 20;
-      room.endTime = now + (durationMins * 60 * 1000);
-      
+      room.endTime = now + durationMins * 60 * 1000;
+
+      // We use a manual saveRoom here because we are resetting the ENTIRE player list
+      // and initializing timers simultaneously within the distributed lock.
       await this.arenaRepository.saveRoom(room);
 
       // 4. Update MongoDB status
@@ -186,7 +211,13 @@ export class ArenaService {
       });
 
       // 5. Broadcast via Go Hub
-      await arenaRedis.publishMatchStarted(roomId, Object.keys(room.players), match.id);
+      await arenaRedis.publishMatchStarted(
+        roomId,
+        Object.keys(room.players),
+        match.id,
+        room.startTime,
+        room.endTime,
+      );
 
       return { matchId: match.id, roomId };
     } finally {
@@ -195,18 +226,34 @@ export class ArenaService {
   }
 
   async getMatchStatus(matchId: string): Promise<ArenaMatch> {
-    const match = await this.arenaMatchRepository.findByIdWithSubmissions(matchId);
-    if (!match) throw AppError.notFound("Match not found");
+    const match =
+      await this.arenaMatchRepository.findByIdWithSubmissions(matchId);
+    if (!match) throw AppError.from(ERRORS.ARENA.MATCH_NOT_FOUND);
     return match;
   }
 
   async getRoom(roomId: string): Promise<ArenaRoom> {
     const room = await this.arenaRepository.getRoom(roomId);
-    if (!room) throw AppError.notFound("Arena room not found");
+    
+    // Fallback: If Redis room is missing, check if a Match exists in MongoDB
+    // This prevents 404s when a user refreshes exactly after a match ends
+    if (!room) {
+      const lastMatch = await this.arenaMatchRepository.findByRoomId(roomId);
+      if (lastMatch) {
+         // Return a "Pseudo-Room" that tells the frontend the match is finished
+         return {
+           roomId,
+           status: "FINISHED",
+           matchId: lastMatch.id,
+           players: {},
+           topic: "Match Results",
+           createdAt: (lastMatch as any).createdAt || new Date(),
+         };
+      }
+      throw AppError.notFound("Arena room not found");
+    }
 
     // If match is in progress, find and attach the matchId for late joiners
-    // Attach matchId for active or recently finished matches
-    // This perfectly solves the "Results Not Available" error during page reloads.
     if (room.status === "PLAYING" || room.status === "FINISHED") {
       const activeMatch = await this.arenaMatchRepository.findByRoomId(roomId);
       if (activeMatch) {
@@ -216,68 +263,4 @@ export class ArenaService {
 
     return room;
   }
-
-  /**
-   * Hard-kills an active match, finalizes scores, and broadcasts MATCH_OVER.
-   * Called automatically by the Enforcer Worker when the match timer expires.
-   */
-  async forceFinishMatch(roomId: string): Promise<void> {
-    const lockId = await acquireLock(`finishMatch:${roomId}`, 5000);
-    if (!lockId) return; // Prevent concurrent finishing
-
-    try {
-      const room = await this.arenaRepository.getRoom(roomId);
-      if (!room || room.status !== "PLAYING") return;
-
-      const updatedMatch = await this.arenaMatchRepository.findByRoomId(roomId);
-      if (!updatedMatch || updatedMatch.status !== "PLAYING") return;
-
-      console.log(`[ArenaService] Hard-killing expired match for room ${roomId}`);
-
-      // 1. Calculate Final Rankings
-      const finalRankings = [...updatedMatch.players]
-        .sort((a, b) => {
-          if (b.score !== a.score) return b.score - a.score;
-          if (a.submissionOrder === 0) return 1;
-          if (b.submissionOrder === 0) return -1;
-          return a.submissionOrder - b.submissionOrder;
-        })
-        .map((p, index) => ({ ...p, finalRank: index + 1 }));
-
-      // 2. Finalize Match in MongoDB
-      await this.arenaMatchRepository.updateStatus({
-        id: updatedMatch.id,
-        status: "COMPLETED",
-        endedAt: new Date(),
-      });
-
-      // 3. Transition Redis Room to FINISHED
-      await this.arenaRepository.finishRoom(roomId);
-
-      // 4. Broadcast MATCH_OVER via Go Hub
-      await arenaRedis.publishArenaUpdate(roomId, {
-        type: "MATCH_OVER",
-        roomId: roomId,
-        payload: {
-          finalRankings,
-          matchId: updatedMatch.id,
-        },
-      });
-
-      // 5. Delayed Cleanup
-      setTimeout(async () => {
-        try {
-          await this.arenaRepository.deleteRoom(roomId);
-        } catch (err) {
-          console.error("Delayed cleanup failed", err);
-        }
-      }, 60 * 1000);
-      
-    } catch (e) {
-      console.error(`[ArenaService] Error force finishing match ${roomId}:`, e);
-    } finally {
-      await releaseLock(`finishMatch:${roomId}`, lockId);
-    }
-  }
 }
-

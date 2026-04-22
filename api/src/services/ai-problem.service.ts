@@ -4,6 +4,7 @@ import type {
   AiProblemOutput,
   ImportedProblemPayload,
 } from "../types/problem-import.types";
+import { sanitizeDescriptionForAi, SANITIZE_PROFILES } from "../libs/prompt-sanitizer";
 
 export interface AiRewriteResult {
   problem: AiProblemOutput["problem"];
@@ -96,13 +97,19 @@ export class AiProblemService {
       "5. STDIN FORMATTING: Use raw plaintext format for 'input' (size-prefixed arrays, raw strings, newlines for separate parameters).",
       "",
       "Original Data:",
-      JSON.stringify({ ...input, solution: undefined, solutions: undefined }),
+      JSON.stringify({ 
+        ...input, 
+        solution: undefined, 
+        solutions: undefined,
+        description: sanitizeDescriptionForAi(input.description, SANITIZE_PROFILES.LOOSE)
+      }),
     ].join("\n");
 
     const { data, raw } = await this.llm.generateJson<AiProblemOutput>({
       systemPrompt,
       userPrompt,
       temperature: 0,
+      maxTokens: 8192, // Increased for problem generation
     });
 
     if (!data.problem) {
