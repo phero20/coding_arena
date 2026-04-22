@@ -1,23 +1,24 @@
 import { Worker } from "bullmq";
 import { submissionQueue } from "../libs/queue";
-import { container } from "../libs/container";
+import { container } from "../libs/awilix-container";
 
 import { workerOptions, WORKER_NAME } from "./submission/config";
 import { setupWorkerEvents } from "./submission/events";
 import { createSubmissionProcessor } from "./submission/processor";
 
-// 1. Initialize dependencies from the Centralized Container
-const { repositories, specialists } = container;
+// 1. Initialize dependencies from the Awilix Container
+const { 
+  submissionRepository, 
+  arenaMatchService, 
+  submissionEvaluator 
+} = container.cradle;
 
 // 2. Initialize internal worker modules
 const processor = createSubmissionProcessor(
-  repositories.submissionRepository, 
-  repositories.arenaMatchRepository,
-  repositories.arenaSubmissionRepository,
-  repositories.arenaRepository,
-  specialists.submissionEvaluator
+  submissionRepository,
+  arenaMatchService,
+  submissionEvaluator,
 );
-
 
 // 3. Create and Start Worker
 const submissionWorker = new Worker(WORKER_NAME, processor, workerOptions);
