@@ -15,6 +15,7 @@ export interface ArenaPlayer {
   isOffline: boolean;
   joinedAt: Date;
   submissionOrder?: number;
+  timeTaken?: number;
 }
 
 export interface ArenaRoom {
