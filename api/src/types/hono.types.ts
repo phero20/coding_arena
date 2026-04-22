@@ -19,3 +19,16 @@ export type ValidatedContext<T = any> = {
   in: { json: T };
   out: { json: T };
 };
+
+/**
+ * Standard data transfer object for controller methods.
+ * Decoupled from any framework-specific context (e.g. Hono's Context).
+ */
+export interface ControllerRequest<TBody = any, TParams = any, TQuery = any> {
+  body: TBody;
+  params: TParams;
+  query: TQuery;
+  user?: AuthContext["user"];
+  clerkUserId?: string;
+  requestId?: string;
+}
