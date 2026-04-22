@@ -1,5 +1,8 @@
 import type { User } from '../db/schema'
 import type { IUserRepository } from '../repositories/user.repository'
+import { createLogger } from '../libs/logger'
+
+const logger = createLogger('auth-service')
 
 export interface AuthUserPayload {
   clerkId: string
@@ -21,6 +24,8 @@ export class AuthService {
 
     // Ensure unique username and email before creating
     const username = await this.generateUniqueUsername(payload.username)
+    
+    logger.info({ clerkId, username }, 'User found or created via ensureUser')
     
     return this.userRepository.create({
       clerkId,
