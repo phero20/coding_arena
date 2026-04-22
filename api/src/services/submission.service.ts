@@ -8,9 +8,12 @@ import type {
 } from '../repositories/submission.repository'
 
 import type { ArenaMatchRepository } from '../repositories/arena-match.repository'
+import { createLogger } from "../libs/logger";
 import type { ArenaRepository } from '../repositories/arena.repository'
 import type { ArenaSubmissionRepository } from '../repositories/arena-submission.repository'
 import type { ArenaMatch } from '../mongo/models/arena-match.model'
+
+const logger = createLogger("submission-service");
 
 export class SubmissionService {
   constructor(
