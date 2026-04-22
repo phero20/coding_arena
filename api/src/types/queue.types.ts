@@ -60,6 +60,11 @@ export interface SubmissionEvaluationJob {
    * Optional Clerk User ID for Arena matching
    */
   clerkId?: string
+
+  /**
+   * Optional Request ID for end-to-end tracing
+   */
+  requestId?: string
 }
 
 
