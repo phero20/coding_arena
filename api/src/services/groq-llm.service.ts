@@ -32,17 +32,19 @@ export class GroqLlmService {
     systemPrompt: string;
     userPrompt: string;
     temperature?: number;
+    model?: string;
+    maxTokens?: number;
   }): Promise<GroqJsonResponse<T>> {
     this.ensureConfigured();
 
     const body = {
-      model: this.model,
+      model: opts.model ?? this.model,
       messages: [
         { role: "system", content: opts.systemPrompt },
         { role: "user", content: opts.userPrompt },
       ],
       temperature: opts.temperature ?? 0,
-      max_tokens: 16192,
+      max_tokens: opts.maxTokens ?? 2048, 
       response_format: { type: "json_object" },
     };
 
