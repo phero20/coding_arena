@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { cn } from "@/lib/utils";
+import { cn, formatSolveTime } from "@/lib/utils";
 import { ArenaPlayerResult } from "@/services/arena.service";
 import {
   LogOut,
@@ -20,6 +20,7 @@ import {
   Terminal,
   Info,
   ChevronRight,
+  Timer,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
@@ -37,11 +38,18 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
 
   const sortedRankings = React.useMemo(() => {
     return [...rankings].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      
+      // Speed tie-breaker
+      const aTime = a.timeTaken ?? Infinity;
+      const bTime = b.timeTaken ?? Infinity;
+      if (aTime !== bTime) return aTime - bTime;
+
       if (a.submissionOrder && b.submissionOrder)
         return a.submissionOrder - b.submissionOrder;
       if (a.submissionOrder) return -1;
       if (b.submissionOrder) return 1;
-      return b.score - a.score;
+      return 0;
     });
   }, [rankings]);
 
@@ -155,9 +163,20 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                           <span className="text-xs md:text-sm font-bold tracking-tight truncate">
                             {player.username}
                           </span>
-                          <p className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-tighter">
-                            {player.testsPassed}/{player.totalTests} Tests
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-tighter">
+                              {player.testsPassed}/{player.totalTests} Tests
+                            </p>
+                            {player.timeTaken && (
+                              <>
+                                <span className="text-[8px] text-muted-foreground/30">•</span>
+                                <div className="flex items-center gap-0.5 text-[9px] font-black text-primary/60 uppercase tracking-tighter">
+                                  <Timer className="size-2.5" />
+                                  {formatSolveTime(player.timeTaken)}
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -282,6 +301,12 @@ function PodiumProfile({
         <p className="font-bold text-xs md:text-sm truncate w-full tracking-tight">
           {player.username}
         </p>
+        {player.timeTaken && (
+          <div className="flex items-center gap-1 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
+            <Timer className="size-3" />
+            {formatSolveTime(player.timeTaken)}
+          </div>
+        )}
       </div>
     </div>
   );
