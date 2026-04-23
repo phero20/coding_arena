@@ -26,6 +26,7 @@ export interface ArenaPlayer {
   isOffline: boolean;
   rank?: number; // Real-time ranking during match
   submissionOrder?: number; // Order of successful submission
+  timeTaken?: number;
 }
 
 /**
@@ -134,6 +135,7 @@ export interface ArenaPlayerResult {
   submissionOrder?: number;
   sourceCode?: string;
   languageId?: string;
+  timeTaken?: number;
 }
 
 /**
