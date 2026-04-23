@@ -62,14 +62,15 @@ export class ArenaEventProcessor {
     if (payload?.room) return { room: payload.room };
     
     if (payload?.userId && currentRoom && currentRoom.players[payload.userId]) {
-      const { userId, testsPassed, totalTests, score } = payload;
+      const { userId, testsPassed, totalTests, score, timeTaken } = payload;
       const updatedPlayers = {
         ...currentRoom.players,
         [userId]: { 
           ...currentRoom.players[userId], 
           testsPassed, 
           totalTests, 
-          score 
+          score,
+          timeTaken
         },
       };
       return { room: { ...currentRoom, players: updatedPlayers } };
