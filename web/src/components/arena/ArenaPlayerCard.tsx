@@ -2,10 +2,10 @@ import { memo } from "react";
 import { ArenaPlayer } from "@/services/arena.service";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Crown, X } from "lucide-react";
+import { Crown, X, Timer } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, formatSolveTime } from "@/lib/utils";
 
 interface ArenaPlayerCardProps {
   player: ArenaPlayer;
@@ -44,6 +44,14 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
                 </Badge>
               )}
             </div>
+            {player.timeTaken && (
+              <div className="flex items-center gap-1 mt-0.5">
+                <Timer className="size-2.5 text-primary" />
+                <span className="text-[10px] font-extrabold text-primary/80 tracking-tight">
+                  {formatSolveTime(player.timeTaken)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
