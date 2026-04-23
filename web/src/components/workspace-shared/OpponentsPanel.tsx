@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArenaPlayer } from "@/services/arena.service";
-import { cn } from "@/lib/utils";
+import { cn, formatSolveTime } from "@/lib/utils";
 import { useArenaStore } from "@/store/useArenaStore";
 import { useArenaRoomQuery } from "@/hooks/api/use-arena-api";
 import { useAuth } from "@clerk/nextjs";
@@ -32,17 +32,20 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
   const participants = React.useMemo(() => {
     const players = storePlayers || roomMetadata?.players || {};
     return Object.values(players).sort((a, b) => {
-      // 1. Sort by submission order (rank)
-      if (a.submissionOrder && b.submissionOrder)
-        return a.submissionOrder - b.submissionOrder;
-      if (a.submissionOrder) return -1;
-      if (b.submissionOrder) return 1;
+      // 1. Sort by score / tests passed
+      if (b.score !== a.score) return b.score - a.score;
+      if (b.testsPassed !== a.testsPassed) return b.testsPassed - a.testsPassed;
 
-      // 2. Fallback to status
+      // 2. Speed tie-breaker
+      const aTime = a.timeTaken ?? Infinity;
+      const bTime = b.timeTaken ?? Infinity;
+      if (aTime !== bTime) return aTime - bTime;
+
+      // 3. Fallback to status
       if (a.status === "SUBMITTED" && b.status !== "SUBMITTED") return -1;
       if (b.status === "SUBMITTED" && a.status !== "SUBMITTED") return 1;
 
-      // 3. Fallback to username
+      // 4. Fallback to username
       return a.username.localeCompare(b.username);
     });
   }, [storePlayers, roomMetadata?.players]);
@@ -116,7 +119,7 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                     </div>
 
                     {/* 3. Identity & Progress */}
-                    <div className="flex-grow min-w-0">
+                    <div className="grow min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="text-xs font-bold truncate">
                           {player.username}
@@ -142,6 +145,11 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                         <span className="text-[9px] font-bold text-muted-foreground/50 whitespace-nowrap">
                           {player.testsPassed}/{player.totalTests} Tests
                         </span>
+                        {player.timeTaken && (
+                          <span className="text-[9px] font-black text-primary/70 uppercase tracking-tighter">
+                            {formatSolveTime(player.timeTaken)}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
