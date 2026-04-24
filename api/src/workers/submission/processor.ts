@@ -7,8 +7,10 @@ import type { SubmissionRepository } from "../../repositories/submission.reposit
 import { ArenaMatchService } from "../../services/arena-match.service";
 import { SubmissionEvaluator } from "./evaluator";
 import { createLogger } from "../../libs/logger";
+import { metrics } from "../../libs/metrics";
 
 const logger = createLogger("submission-processor");
+let jobsProcessed = 0;
 
 export function createSubmissionProcessor(
   submissionRepository: SubmissionRepository,
@@ -74,6 +76,13 @@ export function createSubmissionProcessor(
         { status: evaluation.status, duration: executionTime },
         "Submission evaluation complete",
       );
+
+      // 4. Metrics & Monitoring
+      metrics.recordVerdict(evaluation.status);
+      jobsProcessed++;
+      if (jobsProcessed % 10 === 0) {
+        metrics.logHealthReport();
+      }
 
       return {
         ...evaluation,
