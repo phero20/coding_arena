@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     environment:
       - REDIS_URL=redis://redis:6379
+      - LOG_PRETTY=true
     depends_on:
       - redis
 
@@ -28,6 +29,7 @@ services:
     restart: unless-stopped
     environment:
       - REDIS_URL=redis://redis:6379
+      - LOG_PRETTY=true
       - CLERK_PEM_PUBLIC_KEY=${CLERK_PEM_PUBLIC_KEY}
     depends_on:
       - redis
