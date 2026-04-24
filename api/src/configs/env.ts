@@ -73,6 +73,7 @@ interface EnvConfig {
 
   // Logging
   logLevel: string;
+  logPretty: boolean;
 }
 
 // ─── Config Export ───────────────────────────────────────────────────────────
@@ -116,4 +117,5 @@ export const config: EnvConfig = {
 
   // Logging
   logLevel: Bun.env.LOG_LEVEL || "info",
+  logPretty: Bun.env.LOG_PRETTY === "true",
 };
