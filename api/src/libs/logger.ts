@@ -8,6 +8,14 @@ import { config } from '../configs/env';
 export const logger = pino({
   name: 'coding-arena-api',
   level: config.logLevel || 'info',
+  transport: config.logPretty ? {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'SYS:standard',
+      ignore: 'pid,hostname',
+    },
+  } : undefined,
   formatters: {
     level: (label) => {
       return { level: label.toUpperCase() };
