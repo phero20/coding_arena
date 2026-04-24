@@ -1,4 +1,5 @@
 import { config } from "../configs/env";
+import { metrics } from "../libs/metrics";
 
 export interface GroqJsonResponse<T> {
   data: T;
@@ -48,6 +49,8 @@ export class GroqLlmService {
       response_format: { type: "json_object" },
     };
 
+    const startTime = Date.now();
+    
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
@@ -56,6 +59,9 @@ export class GroqLlmService {
       },
       body: JSON.stringify(body),
     });
+
+    const duration = Date.now() - startTime;
+    metrics.recordLlmLatency(duration);
 
     if (!response.ok) {
       const errText = await response.text().catch(() => "");
