@@ -26,10 +26,10 @@ const redisConnection = {
 export const submissionQueue = new Queue('submission-evaluation', {
   connection: redisConnection,
   defaultJobOptions: {
-    attempts: 3,
+    attempts: 5,
     backoff: {
       type: 'exponential',
-      delay: 1000,
+      delay: 2000,
     },
     removeOnComplete: {
       age: 3600, // Keep completed jobs for 1 hour
