@@ -56,9 +56,14 @@ export abstract class BaseController {
     handler: (
       req: ControllerRequest<TBody, TParams, TQuery>,
     ) => Promise<TResponse>,
-    options: { status?: number; requireAuth?: boolean } = {
+    options: {
+      status?: number;
+      requireAuth?: boolean;
+      captureRawBody?: boolean;
+    } = {
       status: 200,
       requireAuth: true,
+      captureRawBody: false,
     },
   ) {
     return async (c: Context<AppEnv, any, ValidatedContext<TBody>>) => {
@@ -71,10 +76,19 @@ export abstract class BaseController {
 
       // Standardized extraction layer
       // We prioritize validated data (Zod transforms) over raw request data.
+      let body: TBody = undefined as any;
+      try {
+        body = c.req.valid("json" as any);
+      } catch (e) {
+        // Fallback for non-JSON requests or optional bodies
+      }
+
       const controllerReq: ControllerRequest<TBody, TParams, TQuery> = {
-        body: c.req.valid("json" as any),
+        body,
         params: (c.req as any).valid?.("param") || (c.req.param() as any),
         query: (c.req as any).valid?.("query") || (c.req.query() as any),
+        headers: c.req.header(),
+        rawBody: options.captureRawBody ? await c.req.text() : undefined,
         user: auth?.user,
         clerkUserId: auth?.clerkUserId,
         requestId: c.get("requestId"),
