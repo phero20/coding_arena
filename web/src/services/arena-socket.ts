@@ -1,3 +1,4 @@
+import { PUBLIC_CONFIG } from "@/config/public.config";
 import { ArenaWSMessage } from "@/types/arena";
 import { useArenaStore } from "@/store/useArenaStore";
 import { useEditorStore } from "@/store/use-editor-store";
@@ -41,8 +42,7 @@ export class ArenaSocketManager {
    */
   connect() {
     // 1. Build Secure URL (Go worker on 8080)
-    const baseUri =
-      process.env.NEXT_PUBLIC_ARENA_WS_URL || "ws://localhost:8080";
+    const baseUri = PUBLIC_CONFIG.ARENA_WS_URL || "ws://localhost:8080";
     const url = new URL(`${baseUri}/arena/ws/${this.roomId}`);
 
     // Auth and User Identity via Query Params
