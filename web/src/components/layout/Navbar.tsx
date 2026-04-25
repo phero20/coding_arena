@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Rocket } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { cn } from "@/lib/utils";
 import { NavLinks, navItems } from "./NavLinks";
@@ -23,10 +22,10 @@ export const Navbar = () => {
   }, []);
 
   // List of paths where the Navbar should be hidden
-  const HIDDEN_NAVBAR_PATHS = ["/problem", "/arena/match"];
+  const HIDDEN_NAVBAR_PATHS = ["/problem/", "/arena/match", "/compiler"];
 
-  const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some(
-    (path) => pathname.startsWith(path) && pathname !== path,
+  const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some((path) =>
+    pathname.startsWith(path),
   );
 
   if (shouldHideNavbar) return null;
@@ -42,17 +41,14 @@ export const Navbar = () => {
     >
       <Container className="flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative h-9 w-9 flex items-center justify-center rounded-xl bg-primary text-primary-foreground transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-primary/20">
-            <Rocket className="h-5 w-5" />
-          </div>
-          <span className="text-xl font-bold tracking-tighter sm:text-2xl italic">
-            CODING<span className="text-primary">ARENA</span>
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-xl font-bold tracking-tight">
+            SlaveCode<span className="text-primary">.</span>
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           <NavLinks />
           <div className="h-4 w-[1px] bg-border/50 mx-2" />
           <NavbarActions />
