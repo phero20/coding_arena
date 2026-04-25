@@ -1,10 +1,10 @@
+import { PUBLIC_CONFIG } from "@/config/public.config";
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 /**
  * Modular API client with automated Clerk authentication.
  */
-const baseURL =
-  (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000") + "/api/v1";
+const baseURL = (PUBLIC_CONFIG.API_URL ?? "http://localhost:3000") + "/api/v1";
 
 export const apiClient = axios.create({
   baseURL,
