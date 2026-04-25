@@ -22,6 +22,7 @@ import { StatsController } from "../../controllers/stats/stats.controller";
 import { FollowController } from "../../controllers/user/follow.controller";
 import { ProfileController } from "../../controllers/user/profile.controller";
 import { UserController } from "../../controllers/user/user.controller";
+import { CompilerController } from "../../controllers/compiler/compiler.controller";
 
 
 /**
@@ -51,5 +52,5 @@ export const controllersRegistry = {
   followController: asClass(FollowController).singleton(),
   profileController: asClass(ProfileController).singleton(),
   userController: asClass(UserController).singleton(),
-
+  compilerController: asClass(CompilerController).singleton(),
 };
