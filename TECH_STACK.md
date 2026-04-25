@@ -1,98 +1,72 @@
-# 🚀 Coding Arena: Technical Stack & Data Model
+Backend Architecture & Standards
+This document outlines the architectural patterns, coding standards, and directory structures for the Coding Arena backend. All development must strictly adhere to these rules to ensure modularity, maintainability, and enterprise-grade performance.
 
-This document provides a deep-dive into the "Engine Room" of the **Coding Arena** platform, detailing the multi-database schema and the concurrency primitives.
+🏗️ Core Architecture: The Modular Layered Pattern
+We follow a Clean Architecture approach with strict separation of concerns. Each layer has a specific responsibility and depends only on the layers below it.
 
----
-
-## 🏗️ The Multi-Database Entity Map (ERD)
-
-The system uses a **Polyglot Persistence Strategy**, selecting the right database for the right job: **PostgreSQL** for relational identity, **MongoDB** for complex documents, and **Redis** for ephemeral real-time state.
-
-```mermaid
-erDiagram
-    subgraph PostgreSQL [User Identity]
-        USERS {
-            uuid id PK
-            text clerk_id UK
-            text username UK
-            text email UK
-            timestamp created_at
-        }
-    end
-
-    subgraph MongoDB [Application Data]
-        PROBLEMS {
-            objectId _id PK
-            string problem_id UK
-            string title
-            string slug
-            array topics
-            json code_snippets
-        }
-        SUBMISSIONS {
-            objectId _id PK
-            string submission_id UK
-            string user_id FK
-            string problem_id FK
-            string code
-            string status
-            json results
-        }
-        ARENA_MATCHES {
-            objectId _id PK
-            string match_id UK
-            string room_id FK
-            string status
-            array results
-        }
-    end
-
-    subgraph Redis [Ephemeral State]
-        MATCH_STATE {
-            hash metadata ":" matchId
-            set active_users ":" roomId
-            list leaderboard ":" matchId
-        }
-        BULL_QUEUE {
-            list submission_queue
-            hash job_data
-        }
-    end
-
-    USERS ||--o{ SUBMISSIONS : "submits"
-    PROBLEMS ||--o{ SUBMISSIONS : "tested by"
-    PROBLEMS ||--o{ ARENA_MATCHES : "solved in"
-    ARENA_MATCHES ||--o{ SUBMISSIONS : "contains"
-```
-
-### Visual Database ERD
-![Multi-Database ERD](./docs/diagrams/database_erd.png)
-
----
-
-## ⚡ Concurrency & Logic Layer
-
-### 🛠️ Hono / Bun (The Logic)
-- **Dependency Injection**: 100% decoupled via **Awilix**, ensuring zero-leakage between business logic and infrastructure.
-- **Validation**: **Zod** schemas are enforced at the Hono middleware layer, ensuring no invalid data reaches the service tier.
-- **Performance**: Bun's `Buffer` and `Native Fetch` implementations ensure sub-10ms response times for metadata requests.
-
-### ⚙️ Go (The Engine)
-- **Hub/Client Pattern**: A centralized `Hub` manages rooms and broadcasts, while individual `Client` goroutines handle the duplex WebSocket traffic.
-- **State Synchronization**: Does not poll the database; instead, it subscribes to **Redis Pub/Sub** channels (`arena:room:updates`) to trigger instantaneous broadcasts.
-- **Deadlock Avoidance**: Uses `sync.RWMutex` for room memberships and buffered channels for message delivery.
-
-### Go Arena - WebSocket Hub Architecture
-![Realtime WebSocket](./docs/diagrams/realtime_websocket.png)
-
----
-
-## 🛸 Background Processing & Job Lifecycle
-We use **BullMQ** (powered by Redis) for all blocking tasks:
-1. **Producer**: Hono API enqueues a `submission-eval` job.
-2. **Priority**: Submissions are prioritized by match type (Arena vs Practice).
-3. **Worker**: The evaluation worker pulls the job, calls the **Judge0/AI Judge**, and updates the persistence layer.
-4. **Broadcast**: Upon completion, the worker publishes a completion trigger to Redis, which the **Go Hub** picks up to update the frontend.
-
----
-*Status: Data Model Optimized (Multi-DB Architecture)* 🛡️🏗️✨🚀📊📈🔥🎨🍿🏆🏁🏙️🌆
+1. Route Layer (/api/src/routes)
+Responsibility: Defines API endpoints, HTTP methods, and attaches middleware.
+Rules:
+No business logic.
+Must use validator middleware for payload validation.
+Must use auth middleware for protected routes.
+Routes should be grouped logically (e.g., arena.routes.ts, problem.routes.ts).
+2. Controller Layer (/api/src/controllers)
+Responsibility: The interface between HTTP and the Service layer.
+Rules:
+Thin Controllers: Only handle parameter extraction, body parsing, and response formatting.
+Error Handling: Must rely on the BaseController and global error handlers. Never use try-catch blocks for business errors; throw AppError instead.
+Dependency Injection: Services are injected via the ICradle.
+Inheritance: All controllers must extend BaseController.
+3. Service Layer (/api/src/services)
+Responsibility: The "Brain" of the application. Contains all business logic, rules, and calculations.
+Rules:
+Protocol Agnostic: Services must not know about HTTP, request objects, or sessions.
+Atomic Operations: One service method should represent one atomic business action.
+Validation: Must use Zod schemas to validate input details via validateServiceInput.
+Coordination: Services coordinate between multiple repositories and external libs (e.g., Judge0).
+4. Repository Layer (/api/src/repositories)
+Responsibility: The gateway to the database (MongoDB).
+Rules:
+Clean Data Access: Only contains DB queries (Mongoose models). No business logic.
+Domain Mapping: Must use toDomain or toDomainArray to map DB documents to clean TypeScript types.
+Aggregation Power: Complex joins and calculations are handled here via MongoDB aggregation pipelines to prevent N+1 query problems.
+Wait for Session: Must support transactions by accepting options?: RepositoryOptions which includes a session.
+5. Cache Layer (/api/src/cache)
+Responsibility: High-performance optimization using the Decorator Pattern.
+Rules:
+Proxy Pattern: Cache classes implement the same interface as their respective services.
+Aside Strategy: Check Redis first; on miss, call the "Raw" service and cache the result.
+Safe Execution: Wrap cache logic in try-catch to ensure the application continues running even if Redis is down (fallback to DB).
+🛠️ Coding Standards & Best Practices
+💉 Dependency Injection (DI)
+We use Awilix for DI. Components are registered in api/src/libs/di.
+Always use the ICradle type for identifying dependencies.
+Components are strictly decoupled, making them highly testable.
+⚠️ Error Handling
+Global Error Middleware: All errors are caught by a central handler.
+AppError Class: Use AppError.from(ERRORS.CATEGORY.CODE) for operational errors.
+Constants: Never hardcode error messages. All codes are defined in api/src/constants/errors.ts.
+⚡ Performance & N+1 Prevention
+Never loop and query: If you find yourself doing Array.map(async item => ...) for a DB call, you are creating an N+1 problem.
+Aggregation Pipelines: Use $lookup and $group in repositories to fetch complex data structures in a single round-trip.
+🧪 Validation
+Double-Layer Validation:
+Middleware: Validates incoming HTTP requests (400 Bad Request).
+Service-Level: Validates internal method calls (ensures data integrity regardless of the source).
+📁 Directory Structure Summary
+Folder	Purpose
+src/controllers	HTTP Request/Response handlers.
+src/services	Business logic and coordination.
+src/repositories	Database access and domain mapping.
+src/cache	Performance decorators for services.
+src/mongo/models	Mongoose schema definitions.
+src/libs	Core libraries (Redis, DI, AI, Logging).
+src/workers	Background processing (BullMQ).
+src/validators	Zod schemas for request/service validation.
+src/types	Centralized TypeScript interfaces and types.
+📝 Example Flow: Running Code
+Route: POST /api/v1/compiler/run calls validator then Controller.
+Controller: Extracts code and language, calls CompilerService.execute.
+Service: Validates input, selects WandboxService (lib), calls external API.
+Response: Returns standardized result to the user.
