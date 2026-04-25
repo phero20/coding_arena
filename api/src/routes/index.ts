@@ -12,6 +12,7 @@ import { registerStatsRoutes } from "./stats/stats.routes";
 import { registerFollowRoutes } from "./user/follow.routes";
 import { registerProfileRoutes } from "./user/profile.routes";
 import { registerUserRoutes } from "./user/user.routes";
+import { registerCompilerRoutes } from "./compiler.routes";
 
 
 import { healthRoutes } from "./system/health.routes";
@@ -29,6 +30,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     followController,
     profileController,
     userController,
+    compilerController,
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -95,6 +97,11 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
   registerUserRoutes(v1, {
     userController,
     authMiddleware,
+  });
+
+  registerCompilerRoutes(v1, {
+    compilerController,
+    rateLimitMiddleware,
   });
  
   app.route("/api/v1", v1);
