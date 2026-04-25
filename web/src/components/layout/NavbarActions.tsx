@@ -28,12 +28,12 @@ export const NavbarActions = () => {
       <Show when="signed-out">
         <div className="flex items-center gap-3">
           <SignInButton mode="modal">
-            <Button variant="ghost" className="text-sm font-semibold">
+            <Button variant="ghost" className="text-sm font-medium">
               Sign in
             </Button>
           </SignInButton>
           <SignUpButton mode="modal">
-            <Button className="text-sm font-bold shadow-md shadow-primary/20">
+            <Button className="text-sm font-medium">
               Get Started
             </Button>
           </SignUpButton>
