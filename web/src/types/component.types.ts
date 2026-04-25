@@ -231,4 +231,6 @@ export interface WorkspaceHeaderProps {
   isSubmitting?: boolean;
   hasSubmitted?: boolean;
   confirmSubmit?: boolean;
+  /** Hide the Submit button entirely (e.g. Compiler Playground) */
+  hideSubmit?: boolean;
 }
