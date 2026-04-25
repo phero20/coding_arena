@@ -28,6 +28,8 @@ export interface ControllerRequest<TBody = any, TParams = any, TQuery = any> {
   body: TBody;
   params: TParams;
   query: TQuery;
+  headers: Record<string, string>;
+  rawBody?: string;
   user?: AuthContext["user"];
   clerkUserId?: string;
   requestId?: string;
