@@ -34,6 +34,9 @@ import { type ProblemValidatorService } from "../services/problems/problem-valid
 import { type MatchDomainEngine } from "../services/arena/match-domain-engine.service";
 import { type MatchBroadcasterService } from "../services/arena/match-broadcaster.service";
 import { type IStatsService } from "../services/stats/stats.service";
+import { type Judge0Service } from "../services/judge/judge0.service";
+import { type WandboxService } from "../services/judge/wandbox.service";
+import { type CompilerService } from "../services/compiler/compiler.service";
 import { type StatsController } from "../controllers/stats/stats.controller";
 
 import { type ProblemCache } from "../cache/problems/problem.cache";
@@ -54,6 +57,7 @@ import { type SubmissionController } from "../controllers/submissions/submission
 import { type AiProblemController } from "../controllers/problems/ai-problem.controller";
 import { type ArenaController } from "../controllers/arena/arena.controller";
 import { type UserController } from "../controllers/user/user.controller";
+import { type CompilerController } from "../controllers/compiler/compiler.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -109,6 +113,9 @@ export interface ICradle {
   aiCodeJudgeService: AiCodeJudgeService;
   matchDomainEngine: MatchDomainEngine;
   matchBroadcaster: MatchBroadcasterService;
+  judge0Service: Judge0Service;
+  wandboxService: WandboxService;
+  compilerService: CompilerService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -144,6 +151,7 @@ export interface ICradle {
   arenaController: ArenaController;
   statsController: StatsController;
   userController: UserController;
+  compilerController: CompilerController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;
