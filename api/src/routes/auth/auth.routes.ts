@@ -24,8 +24,14 @@ export const registerAuthRoutes = (app: Hono<AppEnv>, deps: AuthRoutesDeps) => {
     "/me",
     authMiddleware.handle.bind(authMiddleware),
     authorizationMiddleware.requireRoles("user", "admin"),
-    (c) => authController.me(c),
+    authController.action(authController.me),
   );
 
-  app.post("/webhooks/clerk", (c) => clerkWebhookController.handle(c));
+  app.post(
+    "/webhooks/clerk",
+    clerkWebhookController.action(clerkWebhookController.handle, {
+      captureRawBody: true,
+      requireAuth: false,
+    }),
+  );
 };
