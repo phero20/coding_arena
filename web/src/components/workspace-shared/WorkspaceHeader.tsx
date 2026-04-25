@@ -38,6 +38,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
   isSubmitting,
   hasSubmitted,
   confirmSubmit,
+  hideSubmit,
 }) => {
   const { isLoaded } = useAuth();
   const isInteractionDisabled =
@@ -62,7 +63,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         )}
         <span className="hidden md:inline">Run</span>
       </Button>
-      {renderSubmitButton()}
+      {!hideSubmit && renderSubmitButton()}
     </ButtonGroup>
   );
 
