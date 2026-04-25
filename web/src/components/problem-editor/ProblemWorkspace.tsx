@@ -25,7 +25,7 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
   } = usePracticeWorkspace({ problem });
 
   const handleExit = () => {
-    router.push("/practice");
+    router.push("/problem");
   };
 
   return (
