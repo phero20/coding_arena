@@ -1,4 +1,6 @@
 import type { Context } from "hono";
+import { ControllerRequest } from "../../types/infrastructure/hono.types";
+import { AppError } from "../../utils/app-error";
 import { ApiResponse } from "../../utils/api-response";
 import { createLogger } from "../../libs/utils/logger";
 
@@ -11,12 +13,14 @@ export class AuthController extends BaseController {
   constructor(cradle: ICradle) {
     super(cradle);
   }
-  async me(c: Context) {
-    const auth = c.get("auth");
+  /**
+   * Returns current authenticated user profile.
+   */
+  async me(req: ControllerRequest) {
+    const user = req.user;
+    if (!user) throw AppError.unauthorized();
 
-    const { user } = auth;
-
-    const response = ApiResponse.success({
+    return {
       id: user.id,
       clerkId: user.clerkId,
       username: user.username,
@@ -24,8 +28,6 @@ export class AuthController extends BaseController {
       avatarUrl: user.avatarUrl,
       status: user.status,
       role: user.role,
-    });
-
-    return c.json(response.toJSON());
+    };
   }
 }
