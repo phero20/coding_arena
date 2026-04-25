@@ -1,4 +1,5 @@
 import type { Context } from "hono";
+import { ControllerRequest } from "../../types/infrastructure/hono.types";
 import { Webhook } from "svix";
 import type { AuthService } from "../../services/auth/auth.service";
 import { AppError } from "../../utils/app-error";
@@ -16,19 +17,22 @@ export class ClerkWebhookController extends BaseController {
     this.authService = cradle.authService;
   }
 
-  async handle(c: Context) {
+  async handle(req: ControllerRequest) {
     const WEBHOOK_SECRET = config.clerkWebhookSecret;
 
     if (!WEBHOOK_SECRET) {
-      console.error("CLERK_WEBHOOK_SECRET is missing");
       throw AppError.internal("Webhook verification failed: Secret missing");
     }
 
-    const payload = await c.req.text();
+    const payload = req.rawBody;
+    if (!payload) {
+      throw AppError.badRequest("Webhook body is missing");
+    }
+
     const headers = {
-      "svix-id": c.req.header("svix-id") ?? "",
-      "svix-timestamp": c.req.header("svix-timestamp") ?? "",
-      "svix-signature": c.req.header("svix-signature") ?? "",
+      "svix-id": req.headers["svix-id"] ?? "",
+      "svix-timestamp": req.headers["svix-timestamp"] ?? "",
+      "svix-signature": req.headers["svix-signature"] ?? "",
     };
 
     const wh = new Webhook(WEBHOOK_SECRET);
@@ -67,11 +71,9 @@ export class ClerkWebhookController extends BaseController {
       await this.authService.deleteUser(user.id);
     }
 
-    const response = ApiResponse.success({
+    return {
       received: true,
       type: event.type,
-    });
-
-    return c.json(response.toJSON());
+    };
   }
 }
