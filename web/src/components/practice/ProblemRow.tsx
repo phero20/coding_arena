@@ -42,7 +42,7 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
                   {problem.title}
                 </Button>
             ) : (
-              <Link href={`/problem/${problem.problem_slug}`}>
+              <Link href={`/problems/${problem.problem_slug}`}>
                 {" "}
                 <Button className="p-0" variant="link">
                   {problem.title}

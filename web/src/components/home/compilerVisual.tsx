@@ -24,7 +24,6 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const ease = [0.16, 1, 0.3, 1] as const;
-
 const RUST_CODE = `fn main() {
     let a = 25;
     let b = 17;
