@@ -4,6 +4,8 @@ import { initResilience } from "./libs/core/resilience";
 import { createApp } from "./app";
 import { startMatchEnforcer } from "./workers/arena/match-enforcer.worker";
 import "./workers/arena/arena-cleanup.worker";
+import { initContestSyncSchedule } from "./workers/contest/contest.worker";
+import "./workers/contest/contest.worker";
 import { logger } from "./libs/utils/logger";
 
 /**
@@ -24,6 +26,7 @@ async function bootstrap() {
 
     // 3. Start Background Workers
     startMatchEnforcer();
+    await initContestSyncSchedule();
     logger.info("Background Workers Initialized.");
 
     logger.info("Bootstrap logic complete systems online.");

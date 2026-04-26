@@ -21,6 +21,23 @@ export interface UserActivityLog {
   matches: number;
 }
 
+export interface LeetCodeStats {
+  solved: {
+    total: number;
+    easy: number;
+    medium: number;
+    hard: number;
+  };
+  contest: {
+    rating: number;
+    globalRank: number;
+    totalParticipants: number;
+    topPercentile: number;
+    attended: number;
+    history: { rating: number; date: string }[];
+  } | null;
+}
+
 export interface UserProfileData {
   user: {
     id: string;
@@ -40,6 +57,7 @@ export interface UserProfileData {
     following: number;
     isFollowing: boolean;
   };
+  leetcode?: LeetCodeStats | null;
 }
 
 export interface LeaderboardEntry extends UserStats {

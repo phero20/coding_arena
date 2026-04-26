@@ -1,0 +1,40 @@
+"use client";
+
+import React from "react";
+import { ContestHero } from "@/components/contests/ContestHero";
+import { ContestHeroSkeleton } from "@/components/skeletons";
+import { ContestFilters } from "@/components/contests/ContestFilters";
+import { ContestList } from "@/components/contests/ContestList";
+import { useUpcomingContestsQuery } from "@/hooks/queries/use-contest.queries";
+import { Trophy } from "lucide-react";
+
+export default function ContestHubPage() {
+  const { data: contests, isLoading } = useUpcomingContestsQuery(200);
+  const featuredContest = contests && contests.length > 0 ? contests[0] : null;
+
+  return (
+    <div className="relative bg-background text-foreground">
+      <main className="mx-auto max-w-7xl px-4 2xl:px-0 py-28">
+        <div className="mb-10 flex flex-col gap-2">
+          <h1 className="text-3xl font-bold tracking-tight md:text-5xl">Global Competitions</h1>
+          <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
+            Track, filter, and join competitive programming contests from top platforms worldwide.
+          </p>
+        </div>
+
+        {isLoading ? (
+          <ContestHeroSkeleton />
+        ) : (
+          <ContestHero featuredContest={featuredContest} />
+        )}
+
+        <div className="flex flex-col space-y-6">
+          <ContestFilters />
+          <ContestList />
+        </div>
+      </main>
+    </div>
+  );
+}
+
+

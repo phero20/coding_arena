@@ -58,11 +58,11 @@ export const UserSearch = () => {
           </div>
         </PopoverTrigger>
         <PopoverContent
-          className="p-1 w-84 border-border/40 bg-background/95 backdrop-blur-xl"
+          className="p-1 w-84 border-border bg-background"
           align="start"
           sideOffset={8}
         >
-          <Command shouldFilter={false} className="bg-transparent">
+          <Command shouldFilter={false} className="bg-card/60">
             <CommandInput
               placeholder="Search by name or username..."
               value={query}

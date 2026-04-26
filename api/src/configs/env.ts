@@ -71,6 +71,13 @@ interface EnvConfig {
   // Redis
   redisUrl: string;
 
+  // Clist API
+  clistUsername?: string;
+  clistApiKey?: string;
+
+  // LeetCode API
+  leetcodeApiUrl?: string;
+
   // Logging
   logLevel: string;
   logPretty: boolean;
@@ -114,6 +121,13 @@ export const config: EnvConfig = {
 
   // Redis
   redisUrl: Bun.env.REDIS_URL || "redis://localhost:6379",
+
+  // Clist API
+  clistUsername: Bun.env.CLIST_USERNAME,
+  clistApiKey: Bun.env.CLIST_API_KEY,
+
+  // LeetCode API
+  leetcodeApiUrl: Bun.env.LEETCODE_API_URL,
 
   // Logging
   logLevel: Bun.env.LOG_LEVEL || "info",

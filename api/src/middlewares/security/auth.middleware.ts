@@ -19,8 +19,10 @@ export class AuthMiddleware {
   async handle(c: Context, next: Next) {
     const authHeader = c.req.header("authorization");
 
+    // Soft Auth: If no token is provided, just move to the next handler.
+    // The Controller's 'requireAuth' flag will handle the actual blocking if needed.
     if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
-      throw AppError.from(ERRORS.AUTH.MISSING_TOKEN);
+      return await next();
     }
 
     const token = authHeader.slice("bearer ".length).trim();

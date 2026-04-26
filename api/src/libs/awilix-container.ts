@@ -18,6 +18,7 @@ import { type ArenaRepository } from "../repositories/arena/arena.repository";
 import { type ArenaMatchRepository } from "../repositories/arena/arena-match.repository";
 import { type ArenaSubmissionRepository } from "../repositories/arena/arena-submission.repository";
 import { type StatsRepository } from "../repositories/stats/stats.repository";
+import { type ContestRepository } from "../repositories/contest/contest.repository";
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
@@ -25,7 +26,10 @@ import { type SubmissionService } from "../services/submissions/submission.servi
 import { type GroqLlmService } from "../services/ai/groq-llm.service";
 import { type AiProblemService } from "../services/problems/ai-problem.service";
 import { type ArenaService } from "../services/arena/arena.service";
-import { type ArenaMatchService, type IArenaMatchService } from "../services/arena/arena-match.service";
+import {
+  type ArenaMatchService,
+  type IArenaMatchService,
+} from "../services/arena/arena-match.service";
 
 import { type MatchValidatorService } from "../services/arena/match-validator.service";
 import { type AiCodeJudgeService } from "../services/judge/ai-code-judge.service";
@@ -37,7 +41,11 @@ import { type IStatsService } from "../services/stats/stats.service";
 import { type Judge0Service } from "../services/judge/judge0.service";
 import { type WandboxService } from "../services/judge/wandbox.service";
 import { type CompilerService } from "../services/compiler/compiler.service";
+import { type ClistService } from "../services/contest/clist.service";
+import { type ContestService } from "../services/contest/contest.service";
 import { type StatsController } from "../controllers/stats/stats.controller";
+import { type ContestController } from "../controllers/contest/contest.controller";
+import { type ILeetCodeService } from "../services/stats/leetcode.service";
 
 import { type ProblemCache } from "../cache/problems/problem.cache";
 import { type ProblemTestCache } from "../cache/problems/problem-test.cache";
@@ -75,7 +83,9 @@ import { type IFollowService } from "../services/user/follow.service";
 import { FollowController } from "../controllers/user/follow.controller";
 import { ProfileController } from "../controllers/user/profile.controller";
 import { type IUserService } from "../services/user/user.service";
-import { UserStatsCache } from "../cache/user/user-stats.cache";
+import { type ContestCache } from "../cache/contest/contest.cache";
+import { type UserStatsCache } from "../cache/user/user-stats.cache";
+import { type LeetCodeCache } from "../cache/user/leetcode.cache";
 
 export interface ICradle {
   // Infrastructure
@@ -93,6 +103,7 @@ export interface ICradle {
   arenaMatchRepository: ArenaMatchRepository;
   arenaSubmissionRepository: ArenaSubmissionRepository;
   statsRepository: StatsRepository;
+  contestRepository: ContestRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
@@ -116,12 +127,16 @@ export interface ICradle {
   judge0Service: Judge0Service;
   wandboxService: WandboxService;
   compilerService: CompilerService;
+  clistService: ClistService;
+  contestService: ContestService;
+  leetcodeService: ILeetCodeService;
 
   // Raw Services
   rawProblemService: ProblemService;
   rawProblemTestService: ProblemTestService;
   rawAiCodeJudgeService: AiCodeJudgeService;
   rawStatsService: IStatsService;
+  rawLeetCodeService: ILeetCodeService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -139,7 +154,8 @@ export interface ICradle {
   problemTestCache: ProblemTestCache;
   aiJudgeCache: AiJudgeCache;
   userStatsCache: UserStatsCache;
-
+  contestCache: ContestCache;
+  leetcodeCache: LeetCodeCache;
 
   // Controllers
   authController: AuthController;
@@ -152,6 +168,7 @@ export interface ICradle {
   statsController: StatsController;
   userController: UserController;
   compilerController: CompilerController;
+  contestController: ContestController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

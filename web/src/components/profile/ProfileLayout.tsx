@@ -9,6 +9,7 @@ import { SocialTab } from "./SocialTab";
 import { ProfileSidebar } from "./ProfileSidebar";
 import { ProfileSettingsTab } from "./ProfileSettingsTab";
 import { ArenaHistoryTab } from "./ArenaHistoryTab";
+import { useProfileStore } from "@/store/use-profile-store";
 
 interface ProfileLayoutProps {
   username: string;
@@ -40,17 +41,15 @@ export function ProfileLayout({
   children,
 }: ProfileLayoutProps) {
   const { user } = useUser();
-  const [activeTab, setActiveTab] = React.useState("stats");
-  const [socialType, setSocialType] = React.useState<"followers" | "following">(
-    "followers",
-  );
+  const { activeTab, setActiveTab, socialType, setSocialType, reset } = useProfileStore();
+
+  // Reset store on mount or username change to ensure fresh UI state
+  React.useEffect(() => {
+    reset();
+    return () => reset();
+  }, [username, reset]);
 
   const isOwner = user?.username === username;
-
-  const handleSocialClick = (type: "followers" | "following") => {
-    setSocialType(type);
-    setActiveTab("social");
-  };
 
   return (
     <Tabs
@@ -71,8 +70,6 @@ export function ProfileLayout({
         followingCount={followingCount}
         isOwner={isOwner}
         stats={stats}
-        onTabChange={setActiveTab}
-        onSocialClick={handleSocialClick}
       />
 
       {/* Content Area */}
@@ -92,10 +89,7 @@ export function ProfileLayout({
 
         <TabsContent value="social" className="mt-0 focus-visible:ring-0">
           <SocialTab
-            key={`${username}-${socialType}`}
             username={username}
-            initialType={socialType}
-            onBack={() => setActiveTab("stats")}
           />
         </TabsContent>
 

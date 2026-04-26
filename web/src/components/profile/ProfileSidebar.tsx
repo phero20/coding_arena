@@ -17,6 +17,8 @@ import { useSocialRegistry } from "@/hooks/queries/use-social-registry";
 import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
 import { useUser } from "@clerk/nextjs";
 
+import { useProfileStore } from "@/store/use-profile-store";
+
 interface ProfileSidebarProps {
   username: string;
   fullName?: string;
@@ -28,8 +30,6 @@ interface ProfileSidebarProps {
   followingCount: number;
   isOwner: boolean;
   stats?: UserStats;
-  onTabChange: (tab: string) => void;
-  onSocialClick: (type: "followers" | "following") => void;
 }
 
 export function ProfileSidebar({
@@ -43,9 +43,8 @@ export function ProfileSidebar({
   followingCount,
   isOwner,
   stats,
-  onTabChange,
-  onSocialClick,
 }: ProfileSidebarProps) {
+  const { setActiveTab, setSocialType } = useProfileStore();
   const { isFollowing: checkIsFollowing } = useSocialRegistry();
   const isFollowing = checkIsFollowing(username);
   
@@ -103,7 +102,7 @@ export function ProfileSidebar({
           <div className="flex justify-start gap-2 items-center h-auto pt-2">
             <Button
               variant="link"
-              onClick={() => onSocialClick("following")}
+              onClick={() => setSocialType("following")}
               size="sm"
               className="h-full items-end hover:bg-transparent"
             >
@@ -117,7 +116,7 @@ export function ProfileSidebar({
             <div className="w-px h-4 bg-border"></div>
             <Button
               variant="link"
-              onClick={() => onSocialClick("followers")}
+              onClick={() => setSocialType("followers")}
               size="sm"
               className="h-full items-end hover:bg-transparent"
             >
@@ -134,7 +133,7 @@ export function ProfileSidebar({
             <Button
               size="lg"
               className="w-full font-semibold"
-              onClick={() => onTabChange("settings")}
+              onClick={() => setActiveTab("settings")}
             >
               <Edit size={16} className="mr-2" />
               Edit Profile
@@ -218,7 +217,7 @@ export function ProfileSidebar({
               return (
                 <Button
                   size="lg"
-                  onClick={() => onTabChange("settings")}
+                  onClick={() => setActiveTab("settings")}
                   className="w-full font-semibold"
                 >
                   <Settings

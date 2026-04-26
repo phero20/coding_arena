@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { NavbarActions } from "@/components/layout/NavbarActions";
 
 
 
@@ -116,6 +117,8 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
     );
   };
 
+  const isArena = !!onAbort;
+
   return (
     <header className="relative h-14 px-2 md:px-4 border-b border-border/40 bg-card/20 backdrop-blur-sm flex items-center justify-between shrink-0">
       {/* Left: Exit/Back Button */}
@@ -151,15 +154,26 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           {/* Timer is permanently anchored to the exact screen center */}
           {endTime && <MatchTimer endTime={endTime} />}
           
-          {/* Desktop-only: Buttons attached to the timer's right */}
-          <div className="hidden md:flex">
-            {renderActions()}
-          </div>
+          {/* Desktop-only: Buttons attached to the timer's right (Practice Mode) */}
+          {!isArena && (
+            <div className="hidden md:flex">
+              {renderActions()}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Right: Mobile Buttons */}
-      <div className="z-10 flex-1 flex justify-end">
+      {/* Right: Mobile Buttons & Navbar Actions & Arena Actions */}
+      <div className="z-10 flex-1 flex justify-end items-center gap-4">
+        {!isArena ? (
+          <div className="hidden md:block">
+            <NavbarActions />
+          </div>
+        ) : (
+          <div className="hidden md:flex">
+            {renderActions()}
+          </div>
+        )}
         <div className="flex md:hidden">
           {renderActions()}
         </div>

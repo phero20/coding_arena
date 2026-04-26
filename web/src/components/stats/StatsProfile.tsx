@@ -1,10 +1,18 @@
 "use client";
 
 import { SolveBreakdown } from "./SolveBreakdown";
+import { LeetCodeSolveBreakdown } from "./LeetCodeSolveBreakdown";
+import { LeetCodeContestCard } from "./LeetCodeContestCard";
 import { GritGraph } from "./GritGraph";
 import { BadgeShowcase } from "./BadgeShowcase";
 import { RecentActivities } from "./RecentActivities";
 import { type UserProfileData } from "@/types/stats";
+import { Card } from "../ui/card";
+import { Button } from "../ui/button";
+import { Code2, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+import { useProfileStore } from "@/store/use-profile-store";
 
 interface StatsProfileProps {
   data: UserProfileData;
@@ -15,11 +23,52 @@ interface StatsProfileProps {
  * Mirrors the dense, multi-row LeetCode dashboard exactly.
  */
 export function StatsProfile({ data }: StatsProfileProps) {
-  const { stats, activityLog } = data;
+  const { stats, activityLog, leetcode, user } = data;
+  const { setActiveTab } = useProfileStore();
 
   return (
     <div className="space-y-3">
-      {/* Row 1: The Command Row */}
+      {/* Row 1: External Overview */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3">
+        {leetcode && user.leetcodeUsername ? (
+          <>
+            <div className="xl:col-span-6">
+              <LeetCodeSolveBreakdown stats={leetcode} username={user.leetcodeUsername} />
+            </div>
+            <div className="xl:col-span-6">
+              <LeetCodeContestCard stats={leetcode} username={user.leetcodeUsername} />
+            </div>
+          </>
+        ) : (
+          <div className="xl:col-span-12">
+            <Card className="flex flex-row items-center justify-between p-3 px-5 border-dashed bg-muted/5 group/connect hover:bg-muted/10 transition-all cursor-pointer border-muted-foreground/20">
+              <div className="flex items-center gap-4">
+                <div className=" shrink-0">
+                  <Code2 className="w-5 h-5 text-difficulty-medium" />
+                </div>
+                <div className="flex flex-col">
+                  <h3 className="text-sm font-bold tracking-tight">Connect LeetCode</h3>
+                  <p className="text-xs text-muted-foreground leading-tight">
+                    Connect your LeetCode account to fetch and display your solve stats and contest rating.
+                  </p>
+                </div>
+              </div>
+              
+              <Button 
+                variant="default" 
+                size="default"
+                className="shrink-0"
+                onClick={() => setActiveTab('settings')}
+              >
+                Link Account
+                <ArrowRight className="w-3 h-3" />
+              </Button>
+            </Card>
+          </div>
+        )}
+      </div>
+
+      {/* Row 2: Native Progress */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-3">
         <div className="xl:col-span-6">
           <SolveBreakdown stats={stats} />
@@ -29,7 +78,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
         </div>
       </div>
 
-      {/* Row 2: The Activity Grid */}
+      {/* Row 3: The Activity Grid */}
       <div className="w-full">
         <GritGraph
           activityLog={activityLog}
@@ -38,7 +87,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
         />
       </div>
 
-      {/* Row 3: The Tactical Log */}
+      {/* Row 4: The Tactical Log */}
       <div className="w-full">
         <RecentActivities username={data.user.username} />
       </div>

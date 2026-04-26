@@ -78,6 +78,23 @@ export const follows = pgTable('follows', {
   }
 })
 
+export const contests = pgTable('contests', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  clistId: integer('clist_id').notNull().unique(), // The external ID from CLIST
+  title: text('title').notNull(),
+  description: text('description'),
+  platform: text('platform').notNull(), // e.g., 'leetcode', 'codeforces'
+  startTime: timestamp('start_time', { withTimezone: true }).notNull(),
+  endTime: timestamp('end_time', { withTimezone: true }).notNull(),
+  duration: integer('duration').notNull(), // in seconds
+  href: text('href').notNull(), // the contest link
+  resourceId: integer('resource_id'), // the internal ID for the platform in CLIST
+  icon: text('icon'), // URL to the platform icon
+  status: text('status').notNull().default('upcoming'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
 // --- Types ---
 
 export type User = typeof users.$inferSelect
@@ -86,4 +103,6 @@ export type UserStats = typeof userStats.$inferSelect
 export type UserActivity = typeof userActivity.$inferSelect
 export type UserSolvedProblem = typeof userSolvedProblems.$inferSelect
 export type UserSolvedLanguage = typeof userSolvedLanguages.$inferSelect
+export type Contest = typeof contests.$inferSelect
+export type NewContest = typeof contests.$inferInsert
 

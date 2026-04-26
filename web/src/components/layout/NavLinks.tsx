@@ -8,14 +8,15 @@ import {
   Code2, 
   Swords, 
   Trophy, 
+  Terminal,
   Activity 
 } from "lucide-react";
 
 export const navItems = [
   { name: "Arena", href: "/arena", icon: Swords },
-  { name: "Problems", href: "/problem", icon: Code2 },
-  { name: "Compilers", href: "/compiler", icon: Trophy },
-  { name: "Watch", href: "/watch", icon: Activity },
+  { name: "Problems", href: "/problems", icon: Code2 },
+  { name: "Compilers", href: "/compilers", icon: Terminal },
+  { name: "Contests", href: "/contests", icon: Trophy },
 ];
 
 export const NavLinks = () => {

@@ -282,6 +282,9 @@ export class StatsSubmissionService {
             { postgresUserId, rank, points: arenaBonusPoints },
             "Arena stats updated for ranked player",
           );
+
+          // 3. Invalidate User Stats Cache so the new rank/points show up instantly
+          await this.statsService.invalidateProfile(postgresUserId);
         } catch (err) {
           logger.error(
             { userId: player.userId, err },

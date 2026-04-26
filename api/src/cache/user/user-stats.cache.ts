@@ -11,7 +11,7 @@ const logger = createLogger("user-stats-cache");
  * Implements IStatsService to provide a high-performance caching layer for user profiles.
  */
 export class UserStatsCache implements IStatsService {
-  private readonly CACHE_TTL = 86400; // 24 hours
+  private readonly CACHE_TTL = 14400; // 4 hours
   private readonly rawStatsService: IStatsService;
   private readonly userRepository: IUserRepository;
 
@@ -34,13 +34,19 @@ export class UserStatsCache implements IStatsService {
     const key = this.getCacheKey(userId);
     try {
       await redis.del(key);
-      logger.info({ userId }, "♻️ CACHE INVALIDATED: Profile stats cleared from Redis");
+      logger.info(
+        { userId },
+        "♻️ CACHE INVALIDATED: Profile stats cleared from Redis",
+      );
     } catch (err) {
       logger.error({ userId, err }, "Failed to invalidate user stats cache");
     }
   }
 
-  async getProfileStats(identifier: string, viewerClerkId?: string): Promise<any> {
+  async getProfileStats(
+    identifier: string,
+    viewerClerkId?: string,
+  ): Promise<any> {
     // 1. Resolve Identity to ensure a stable cache key (UUID-based key)
     let user = await this.userRepository.findByUsername(identifier);
     if (!user) {
@@ -48,7 +54,10 @@ export class UserStatsCache implements IStatsService {
     }
 
     if (!user) {
-      logger.warn({ identifier }, "User identity resolution failed during stats caching");
+      logger.warn(
+        { identifier },
+        "User identity resolution failed during stats caching",
+      );
       return null;
     }
 
@@ -58,26 +67,41 @@ export class UserStatsCache implements IStatsService {
     try {
       const cached = await redis.get(cacheKey);
       if (cached) {
-        logger.info({ userId: user.id, identifier }, "🚀 CACHE HIT: Served profile stats from Redis");
+        logger.info(
+          { userId: user.id, identifier },
+          "🚀 CACHE HIT: Served profile stats from Redis",
+        );
         return JSON.parse(cached);
       }
     } catch (err) {
-      logger.error({ userId: user.id, err }, "Redis GET error in user stats cache");
+      logger.error(
+        { userId: user.id, err },
+        "Redis GET error in user stats cache",
+      );
     }
 
     // 3. DB Fallback & Cache Population
-    logger.warn({ userId: user.id, identifier }, "📉 CACHE MISS: Fetching fresh stats from database...");
-    
-    // We pass the identifier to the raw service. 
-    // Since we already resolved the user, we could potentially optimize the raw service 
+    logger.warn(
+      { userId: user.id, identifier },
+      "📉 CACHE MISS: Fetching fresh stats from database...",
+    );
+
+    // We pass the identifier to the raw service.
+    // Since we already resolved the user, we could potentially optimize the raw service
     // to accept a UUID, but to stay strictly as a decorator, we call it normally.
-    const stats = await this.rawStatsService.getProfileStats(identifier, viewerClerkId);
+    const stats = await this.rawStatsService.getProfileStats(
+      identifier,
+      viewerClerkId,
+    );
 
     if (stats) {
       try {
         await redis.set(cacheKey, JSON.stringify(stats), "EX", this.CACHE_TTL);
       } catch (err) {
-        logger.error({ userId: user.id, err }, "Redis SET error in user stats cache");
+        logger.error(
+          { userId: user.id, err },
+          "Redis SET error in user stats cache",
+        );
       }
     }
 

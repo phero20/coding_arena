@@ -24,6 +24,9 @@ import { StatsSubmissionService } from "../../services/stats/stats-submission.se
 import { StatsService } from "../../services/stats/stats.service";
 import { FollowService } from "../../services/user/follow.service";
 import { UserService } from "../../services/user/user.service";
+import { ClistService } from "../../services/contest/clist.service";
+import { ContestService } from "../../services/contest/contest.service";
+import { LeetCodeService } from "../../services/stats/leetcode.service";
 
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
@@ -31,8 +34,8 @@ import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
 import { AiJudgeCache } from "../../cache/judge/ai-judge.cache";
 import { UserStatsCache } from "../../cache/user/user-stats.cache";
 import { ArenaMatchCache } from "../../cache/arena/arena-match.cache";
-
-
+import { ContestCache } from "../../cache/contest/contest.cache";
+import { LeetCodeCache } from "../../cache/user/leetcode.cache";
 
 /**
  * Service layer registrations.
@@ -53,10 +56,7 @@ export const servicesRegistry = {
   rawAiCodeJudgeService: asClass(AiCodeJudgeService).singleton(),
   rawStatsService: asClass(StatsService).singleton(),
   rawArenaMatchService: asClass(ArenaMatchService).singleton(),
-
-
-
-  // arenaMatchService: asClass(ArenaMatchService).singleton(), -> Moved to function below
+  rawLeetCodeService: asClass(LeetCodeService).singleton(),
 
   arenaService: asClass(ArenaService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
@@ -75,8 +75,8 @@ export const servicesRegistry = {
   aiJudgeCache: asClass(AiJudgeCache).singleton(),
   userStatsCache: asClass(UserStatsCache).singleton(),
   arenaMatchCache: asClass(ArenaMatchCache).singleton(),
-
-
+  contestCache: asClass(ContestCache).singleton(),
+  leetcodeCache: asClass(LeetCodeCache).singleton(),
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -92,11 +92,15 @@ export const servicesRegistry = {
   statsService: asFunction(
     ({ userStatsCache }: ICradle) => userStatsCache,
   ).singleton(),
+  leetcodeService: asFunction(
+    ({ leetcodeCache }: ICradle) => leetcodeCache,
+  ).singleton(),
   followService: asClass(FollowService).singleton(),
   arenaMatchService: asFunction(
     ({ arenaMatchCache }: ICradle) => arenaMatchCache,
   ).singleton(),
 
-
   userService: asClass(UserService).singleton(),
+  clistService: asClass(ClistService).singleton(),
+  contestService: asClass(ContestService).singleton(),
 };

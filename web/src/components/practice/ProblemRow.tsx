@@ -94,7 +94,7 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
             )}
           </Button>
         ) : (
-          <Link href={`/problem/${problem.problem_slug}`}>
+          <Link href={`/problems/${problem.problem_slug}`}>
             <Button key={problem.problem_id} size="sm">
               SOLVE
             </Button>

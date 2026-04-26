@@ -17,10 +17,10 @@ import { QueryGuard } from "@/components/shared/QueryGuard";
 import { SocialListSkeleton } from "@/components/shared/Skeletons";
 
 
+import { useProfileStore } from "@/store/use-profile-store";
+
 interface SocialTabProps {
   username: string;
-  initialType?: "followers" | "following";
-  onBack?: () => void;
 }
 
 /**
@@ -169,21 +169,27 @@ const UserList = ({
  */
 export const SocialTab: React.FC<SocialTabProps> = ({
   username,
-  initialType = "followers",
-  onBack,
 }) => {
   const { isFollowing } = useSocialRegistry();
+  const { socialType, setSocialType, setActiveTab } = useProfileStore();
 
   return (
     <div className="space-y-8">
-      <Tabs defaultValue={initialType} className="w-full">
+      <Tabs 
+        value={socialType} 
+        onValueChange={(val) => setSocialType(val as "followers" | "following")}
+        className="w-full"
+      >
         <div className="flex flex-col md:items-start justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            {onBack && (
-              <Button size="icon" onClick={onBack}>
-                <ArrowLeft size={18} />
-              </Button>
-            )}
+            <Button 
+              size="icon" 
+              variant="outline"
+              className="rounded-full h-10 w-10 border-border/50"
+              onClick={() => setActiveTab('stats')}
+            >
+              <ArrowLeft size={18} />
+            </Button>
           </div>
 
           <TabsList className="p-1 h-10 w-full md:w-auto">

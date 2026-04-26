@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { NavLinks, navItems } from "./NavLinks";
 import { NavbarActions } from "./NavbarActions";
 import { MobileMenu } from "./MobileMenu";
+import { UserSearch } from "./UserSearch";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -22,7 +23,7 @@ export const Navbar = () => {
   }, []);
 
   // List of paths where the Navbar should be hidden
-  const HIDDEN_NAVBAR_PATHS = ["/problem/", "/arena/match", "/compiler"];
+  const HIDDEN_NAVBAR_PATHS = ["/problems/", "/arena/match", "/compilers"];
 
   const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some((path) =>
     pathname.startsWith(path),
@@ -35,8 +36,8 @@ export const Navbar = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
-          ? "py-3 bg-background/80 border-b border-border/40 backdrop-blur-xl"
-          : "py-5 bg-transparent border-b border-transparent",
+          ? "py-3 bg-background border-b border-border"
+          : "py-5 bg-background border-b border-transparent",
       )}
     >
       <Container className="flex items-center justify-between">
@@ -47,15 +48,29 @@ export const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <NavLinks />
-          <div className="h-4 w-[1px] bg-border/50 mx-2" />
-          <NavbarActions />
-        </div>
+        {/* Actions Container */}
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Desktop Only Links */}
+          <div className="hidden md:flex items-center gap-6 mr-2">
+            <NavLinks />
+            <div className="h-4 w-px bg-border/50 mx-2" />
+          </div>
+          
+          {/* Search: Desktop Only */}
+          <div className="hidden md:block">
+            <UserSearch />
+          </div>
+          
+          {/* Desktop Only Actions */}
+          <div className="hidden md:block">
+            <NavbarActions />
+          </div>
 
-        {/* Mobile Menu & Toggle */}
-        <MobileMenu navItems={navItems} pathname={pathname} />
+          {/* Mobile Menu Trigger */}
+          <div className="md:hidden">
+            <MobileMenu navItems={navItems} pathname={pathname} />
+          </div>
+        </div>
       </Container>
     </nav>
   );

@@ -4,6 +4,8 @@ import { type IFollowRepository } from "../../repositories/user/follow.repositor
 import { type ICradle } from "../../libs/awilix-container";
 import { createLogger } from "../../libs/utils/logger";
 
+import { type ILeetCodeService } from "./leetcode.service";
+
 const logger = createLogger("stats-service");
 
 export interface IStatsService {
@@ -16,21 +18,27 @@ export class StatsService implements IStatsService {
   private readonly statsRepository: IStatsRepository;
   private readonly userRepository: IUserRepository;
   private readonly followRepository: IFollowRepository;
+  private readonly leetcodeService: ILeetCodeService;
 
-  constructor({ statsRepository, userRepository, followRepository }: ICradle) {
+  constructor({
+    statsRepository,
+    userRepository,
+    followRepository,
+    leetcodeService,
+  }: ICradle) {
     this.statsRepository = statsRepository;
     this.userRepository = userRepository;
     this.followRepository = followRepository;
+    this.leetcodeService = leetcodeService;
   }
 
   /**
-   * No-op implementation. 
+   * No-op implementation.
    * The actual invalidation is handled by the caching decorator.
    */
   async invalidateProfile(userId: string): Promise<void> {
     return;
   }
-
 
   /**
    * Retrieves full profile analytics for a user by their identifier (username or clerkId).
@@ -55,10 +63,13 @@ export class StatsService implements IStatsService {
     }
 
     // 2. Fetch parallel data for efficiency
-    const [stats, activityLog, followStats] = await Promise.all([
+    const [stats, activityLog, followStats, leetcodeStats] = await Promise.all([
       this.statsRepository.getUserStats(user.id),
       this.statsRepository.getUserActivityLog(user.id),
       this.getFollowContext(user.id, viewerClerkId),
+      user.leetcodeUsername
+        ? this.leetcodeService.getUserStats(user.leetcodeUsername)
+        : Promise.resolve(null),
     ]);
 
     return {
@@ -86,6 +97,7 @@ export class StatsService implements IStatsService {
       },
       activityLog: activityLog || [],
       social: followStats,
+      leetcode: leetcodeStats,
     };
   }
 
