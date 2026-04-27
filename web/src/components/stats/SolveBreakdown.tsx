@@ -106,7 +106,7 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
           <div className="flex items-center gap-0.5 whitespace-nowrap  transition-colors  ">
             <Code2 size={12} className="text-difficulty-medium" />
-            <p className="text-[9px] text-muted-foreground group-hover/card:text-difficulty-medium uppercase font-bold tracking-widest leading-none">
+            <p className="text-[9px] text-muted-foreground group-hover/card:text-difficulty-medium uppercase font-bold tracking-widest leading-none translate-y-[1.5px]">
               SlaveCode
             </p>
           </div>

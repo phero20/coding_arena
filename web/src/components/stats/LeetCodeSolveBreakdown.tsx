@@ -40,9 +40,9 @@ export function LeetCodeSolveBreakdown({ stats, username, className }: LeetCodeS
         )}
       >
         {/* Top Left Branding */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest text-muted-foreground group-hover/card:text-difficulty-medium transition-colors">
-          <Code2 size={12} className="text-difficulty-medium" />
-          {username}
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-widest text-muted-foreground group-hover/card:text-difficulty-medium transition-colors leading-none">
+          <Code2 size={12} className="text-difficulty-medium shrink-0" />
+          <span className="translate-y-[0.5px]">{username}</span>
         </div>
 
       {/* 1. The Tactical Arc System */}
@@ -117,9 +117,9 @@ export function LeetCodeSolveBreakdown({ stats, username, className }: LeetCodeS
 
         {/* Base Status Label */}
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
-          <div className="flex items-center gap-0.5 whitespace-nowrap  transition-colors  ">
-            <Code2 size={12} className="text-difficulty-medium" />
-            <p className="text-[9px] text-muted-foreground group-hover/card:text-difficulty-medium uppercase font-bold tracking-widest leading-none">
+          <div className="flex items-center gap-0.5 whitespace-nowrap transition-colors">
+            <Code2 size={12} className="text-difficulty-medium shrink-0" />
+            <p className="text-[9px] text-muted-foreground group-hover/card:text-difficulty-medium uppercase font-bold tracking-widest leading-none translate-y-[1.5px]">
               Leetcode
             </p>
           </div>

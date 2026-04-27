@@ -6,18 +6,29 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  User, Users, BarChart3, Settings, 
-  Code, Github, Linkedin, UserPlus, 
-  UserMinus, Loader2, Edit, Code2, Trophy
+import {
+  User,
+  Users,
+  BarChart3,
+  Settings,
+  Code,
+  Github,
+  Linkedin,
+  UserPlus,
+  UserMinus,
+  Loader2,
+  Edit,
+  Code2,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type UserStats } from "@/types/stats";
 import { useSocialRegistry } from "@/hooks/queries/use-social-registry";
 import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
-import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 import { useProfileStore } from "@/store/use-profile-store";
+import { useUser } from "@clerk/nextjs";
 
 interface ProfileSidebarProps {
   username: string;
@@ -44,10 +55,11 @@ export function ProfileSidebar({
   isOwner,
   stats,
 }: ProfileSidebarProps) {
+  const router = useRouter();
   const { setActiveTab, setSocialType } = useProfileStore();
   const { isFollowing: checkIsFollowing } = useSocialRegistry();
   const isFollowing = checkIsFollowing(username);
-  
+
   const { user } = useUser();
   const { follow, unfollow } = useFollowMutation(
     username,
@@ -133,7 +145,7 @@ export function ProfileSidebar({
             <Button
               size="lg"
               className="w-full font-semibold"
-              onClick={() => setActiveTab("settings")}
+              onClick={() => router.push("/settings?tab=profile")}
             >
               <Edit size={16} className="mr-2" />
               Edit Profile
@@ -217,12 +229,10 @@ export function ProfileSidebar({
               return (
                 <Button
                   size="lg"
-                  onClick={() => setActiveTab("settings")}
+                  onClick={() => router.push("/settings?tab=profile")}
                   className="w-full font-semibold"
                 >
-                  <Settings
-                    size={14}
-                  />
+                  <Settings size={14} />
                   Add social links
                 </Button>
               );

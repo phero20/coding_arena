@@ -16,13 +16,19 @@ import {
   Terminal,
   CheckCircle2,
   WrapText,
+  Settings,
 } from "lucide-react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useProblemEditor } from "@/hooks/workspace/use-problem-editor";
 import { useProblemTestsQuery } from "@/hooks/queries/use-problem.queries";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useArenaStore } from "@/store/useArenaStore";
-import type { ExecutionVerdict, ExecutionTestResult, RunSubmissionResponse } from "@/types/submission";
+import type {
+  ExecutionVerdict,
+  ExecutionTestResult,
+  RunSubmissionResponse,
+} from "@/types/submission";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import {
   AlertDialog,
@@ -35,7 +41,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 
 const TAB_CLS =
   "h-10 rounded-none px-3 text-[11px] font-black uppercase tracking-wide " +
@@ -59,7 +64,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   hasSubmitted,
 }) => {
   const { theme } = useTheme();
-  const matchId = useArenaStore(state => state.matchId);
+  const matchId = useArenaStore((state) => state.matchId);
 
   const sessionId = useMemo(() => {
     if (mode === "arena") {
@@ -85,7 +90,11 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
     mode === "arena" ? (matchId as string | null) : undefined,
   );
 
-  const { data: tests, isLoading, error } = useProblemTestsQuery(problem.problem_id, "PUBLIC");
+  const {
+    data: tests,
+    isLoading,
+    error,
+  } = useProblemTestsQuery(problem.problem_id, "PUBLIC");
   const publicTests = Array.isArray(tests) ? (tests[0] ?? null) : tests;
 
   const preferences = useEditorStore((state) => state.preferences);
@@ -102,8 +111,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
     onTabChange?.(t);
   };
 
-  const editorTheme = theme === "dark" ? "vs-dark" : "light";
-  const monacoOptions = useMonacoConfig(preferences.wordWrap);
+  const monacoOptions = useMonacoConfig(preferences);
 
   return (
     <Tabs
@@ -183,6 +191,21 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+
+            {
+              mode === "arena" && (
+                <Link href="/settings?tab=editor">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 text-muted-foreground hover:text-primary transition-colors shrink-0"
+                title="Editor Settings"
+              >
+                <Settings className="size-3.5" />
+              </Button>
+            </Link>
+            )}
+            
           </div>
         )}
 
@@ -211,14 +234,16 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
         <div className="h-[990px] md:h-full w-full ">
           <Editor
             height="100%"
-            defaultLanguage={mode === "arena" ? enforcedLanguage : monacoLanguage}
+            defaultLanguage={
+              mode === "arena" ? enforcedLanguage : monacoLanguage
+            }
             language={mode === "arena" ? enforcedLanguage : monacoLanguage}
-            theme={editorTheme}
+            theme="vs-dark"
             value={code}
             onChange={(value) => setCode(value ?? "")}
             options={{
               ...monacoOptions,
-              readOnly: hasSubmitted
+              readOnly: hasSubmitted,
             }}
           />
         </div>

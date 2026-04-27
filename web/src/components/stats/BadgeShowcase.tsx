@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { type UserStats } from "@/types/stats";
 import { cn } from "@/lib/utils";
-import { Trophy } from "lucide-react";
+import { Code2, Trophy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface BadgeShowcaseProps {
@@ -169,10 +169,12 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
 
         {/* Base Status Label */}
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
-          <p className="text-[9px] text-muted-foreground uppercase whitespace-nowrap">
-            <span className="text-foreground font-semibold mr-1">4</span>{" "}
-            Attempting
-          </p>
+          <div className="flex items-center gap-0.5 whitespace-nowrap  transition-colors  ">
+            <Code2 size={12} className="text-difficulty-medium" />
+            <p className="text-[9px] text-muted-foreground group-hover/card:text-difficulty-medium uppercase font-bold tracking-widest leading-none translate-y-[1.5px]">
+              SlaveCode
+            </p>
+          </div>
         </div>
       </div>
 

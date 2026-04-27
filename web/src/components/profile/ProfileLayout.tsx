@@ -2,12 +2,11 @@
 
 import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { User, Users } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { type UserStats } from "@/types/stats";
 import { SocialTab } from "./SocialTab";
 import { ProfileSidebar } from "./ProfileSidebar";
-import { ProfileSettingsTab } from "./ProfileSettingsTab";
 import { ArenaHistoryTab } from "./ArenaHistoryTab";
 import { useProfileStore } from "@/store/use-profile-store";
 
@@ -40,21 +39,29 @@ export function ProfileLayout({
   stats,
   children,
 }: ProfileLayoutProps) {
-  const { user } = useUser();
-  const { activeTab, setActiveTab, socialType, setSocialType, reset } = useProfileStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
 
-  // Reset store on mount or username change to ensure fresh UI state
+  const { user } = useUser();
+  const { activeTab, initTab, syncTab } = useProfileStore();
+
+  // Smart state management: Initial load and username changes
   React.useEffect(() => {
-    reset();
-    return () => reset();
-  }, [username, reset]);
+    initTab({ tabParam, router, pathname, searchParams, username });
+  }, [username, tabParam, initTab, router, pathname, searchParams]);
 
   const isOwner = user?.username === username;
+
+  const handleTabChange = (value: string) => {
+    syncTab({ value, router, pathname, searchParams });
+  };
 
   return (
     <Tabs
       value={activeTab}
-      onValueChange={setActiveTab}
+      onValueChange={handleTabChange}
       orientation="vertical"
       className="flex flex-col lg:flex-row gap-10"
     >
@@ -78,33 +85,13 @@ export function ProfileLayout({
           {children}
         </TabsContent>
 
-        <TabsContent value="profile" className="mt-0">
-          <div className="p-12 border border-dashed border-border/50 rounded-2xl flex flex-col items-center justify-center text-center">
-            <User size={40} className="mb-4 text-muted-foreground/30" />
-            <h3 className="text-sm font-semibold uppercase">
-              Public profile settings under construct
-            </h3>
-          </div>
-        </TabsContent>
-
         <TabsContent value="social" className="mt-0 focus-visible:ring-0">
-          <SocialTab
-            username={username}
-          />
+          <SocialTab username={username} />
         </TabsContent>
 
         <TabsContent value="arena" className="mt-0 focus-visible:ring-0">
           <ArenaHistoryTab userId={clerkUserId} />
         </TabsContent>
-
-        {isOwner && (
-          <ProfileSettingsTab
-            currentUsername={username}
-            githubUsername={githubUsername}
-            linkedinUsername={linkedinUsername}
-            leetcodeUsername={leetcodeUsername}
-          />
-        )}
       </main>
     </Tabs>
   );

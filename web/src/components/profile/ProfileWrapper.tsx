@@ -22,11 +22,11 @@ interface ProfileWrapperProps {
  * for the profile page and orchestrates the layout.
  */
 export function ProfileWrapper({ username }: ProfileWrapperProps) {
-  const { data, isLoading, error, refetch } = useProfileStatsQuery(username);
+  const { data, isLoading, isFetching, error, refetch } = useProfileStatsQuery(username);
 
   return (
     <QueryGuard
-      loading={isLoading}
+      loading={isLoading || isFetching}
       error={error}
       data={data}
       onRetry={refetch}

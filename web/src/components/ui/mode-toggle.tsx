@@ -24,14 +24,31 @@ export function ModeToggle() {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const themeOptions = [
-    { name: "Lime Dark", value: "dark", icon: Zap },
-    { name: "Neutral Zinc", value: "theme-neutral", icon: Terminal },
+  const DEFAULT_THEMES = [
+    { name: "Lime Dark", value: "dark", icon: Palette },
+    { name: "Neutral Zinc", value: "theme-neutral", icon: Palette },
     { name: "Bubble Gum", value: "theme-bubble-gum", icon: Palette },
   ];
 
-  const currentTheme =
-    themeOptions.find((opt) => opt.value === theme) || themeOptions[0];
+  const EXTRA_THEMES = [
+    { name: "Twitter Dark", value: "theme-twitter", icon: Palette },
+    { name: "Claude Warm", value: "theme-claude", icon: Palette },
+    { name: "Astro Vista", value: "theme-astro-vista", icon: Palette },
+    { name: "Chalk", value: "theme-chalk", icon: Palette },
+    { name: "Sandstone", value: "theme-sandstone", icon: Palette },
+    { name: "Cyber Yellow", value: "theme-cyber-yellow", icon: Palette },
+  ];
+
+  const allKnownThemes = [...DEFAULT_THEMES, ...EXTRA_THEMES];
+  
+  const currentThemeData = allKnownThemes.find((opt) => opt.value === theme) || 
+    { name: "Custom", value: theme || "dark", icon: Palette };
+
+  // Only show the active theme if it's NOT in the default list
+  const isDefaultTheme = DEFAULT_THEMES.some(t => t.value === theme);
+  const themeOptions = isDefaultTheme 
+    ? DEFAULT_THEMES 
+    : [...DEFAULT_THEMES, currentThemeData];
 
   const handleSetTheme = (newTheme: string) => {
     // Fallback for browsers that don't support View Transitions
@@ -66,9 +83,9 @@ export function ModeToggle() {
               : "border-border hover:border-primary/40",
           )}
         >
-          <currentTheme.icon className="h-[1.2rem] w-[1.2rem] text-primary transition-all" />
+          <currentThemeData.icon className="size-[1.2rem] text-primary relative z-10" />
           <span className="sr-only">
-            Toggle theme (Current: {currentTheme.name})
+            Toggle theme (Current: {currentThemeData.name})
           </span>
         </Button>
       </PopoverTrigger>
@@ -117,7 +134,7 @@ export function ModeToggle() {
             </CommandGroup>
             <CommandSeparator className="my-1 opacity-50" />
             <CommandGroup>
-              <Link href="/settings" onClick={() => setOpen(false)}>
+              <Link href="/settings?tab=appearance" onClick={() => setOpen(false)}>
                 <CommandItem className="flex items-center gap-3 p-2 cursor-pointer rounded-md group">
                   <div className="p-1 rounded-md bg-muted/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                     <Settings2 size={14} />

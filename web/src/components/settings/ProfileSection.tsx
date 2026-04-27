@@ -5,26 +5,21 @@ import { useUser } from "@clerk/nextjs";
 import { useProfileStatsQuery } from "@/hooks/queries/use-stats.queries";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { ProfileSettingsTab } from "@/components/profile/ProfileSettingsTab";
-import { IdentitySkeleton, ActivitySkeleton } from "@/components/shared/Skeletons";
+import { ProfileSettingsSkeleton } from "@/components/skeletons/ProfileSkeletons";
 
 export const ProfileSection = () => {
   const { user } = useUser();
   const username = user?.username || "";
 
-  const { data, isLoading, error, refetch } = useProfileStatsQuery(username);
+  const { data, isLoading, isFetching, error, refetch } = useProfileStatsQuery(username);
 
   return (
     <QueryGuard
-      loading={isLoading || !username}
+      loading={isLoading || isFetching || !username}
       error={error}
       data={data}
       onRetry={refetch}
-      skeleton={
-        <div className="space-y-6">
-          <IdentitySkeleton />
-          <ActivitySkeleton />
-        </div>
-      }
+      skeleton={<ProfileSettingsSkeleton />}
     >
       {(profileData) => (
         <ProfileSettingsTab

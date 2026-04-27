@@ -9,6 +9,18 @@ interface EditorSession {
 
 interface EditorPreferences {
   wordWrap: boolean;
+  fontSize: number;
+  tabSize: number;
+  minimap: boolean;
+  lineNumbers: "on" | "off";
+  fontLigatures: boolean;
+  cursorStyle: "line" | "block" | "underline" | "line-thin" | "block-outline" | "underline-thin";
+  cursorBlinking: "blink" | "smooth" | "phase" | "expand" | "solid";
+  bracketPairColorization: boolean;
+  renderWhitespace: "none" | "boundary" | "selection" | "trailing" | "all";
+  smoothScrolling: boolean;
+  lineHeight: number;
+  autoClosingBrackets: "always" | "languageDefined" | "beforeWhitespace" | "never";
 }
 
 interface EditorState {
@@ -18,11 +30,6 @@ interface EditorState {
   _hasHydrated: boolean;
   setHasHydrated: (state: boolean) => void;
   
-  /**
-   * Initialize or sync a session.
-   * For Arena: If matchId changes, the session is reset.
-   * For Practice: Persists indefinitely.
-   */
   initSession: (
     sessionId: string,
     initialLanguage: string,
@@ -39,6 +46,7 @@ interface EditorState {
     defaultCode: string,
   ) => void;
   toggleWordWrap: () => void;
+  setPreference: <K extends keyof EditorPreferences>(key: K, value: EditorPreferences[K]) => void;
   setIsRunning: (isRunning: boolean) => void;
 }
 
@@ -48,16 +56,27 @@ export const useEditorStore = create<EditorState>()(
       sessions: {},
       preferences: {
         wordWrap: true,
+        fontSize: 14,
+        tabSize: 2,
+        minimap: false,
+        lineNumbers: "on",
+        fontLigatures: true,
+        cursorStyle: "line",
+        cursorBlinking: "smooth",
+        bracketPairColorization: true,
+        renderWhitespace: "none",
+        smoothScrolling: true,
+        lineHeight: 22,
+        autoClosingBrackets: "always",
       },
       isRunning: false,
       _hasHydrated: false,
       setHasHydrated: (state) => set({ _hasHydrated: state }),
 
+      // ... (initSession, updateLanguage, updateCode, clearSession, resetToDefault remain same)
       initSession: (sessionId, initialLanguage, initialCodes, matchId) =>
         set((state) => {
           const existing = state.sessions[sessionId];
-          
-          // For Arena sessions, if the matchId is different, we MUST reset to prevent code leakage between matches
           const isArena = sessionId.startsWith("arena:");
           const matchChanged = isArena && existing && existing.matchId !== matchId;
 
@@ -73,7 +92,6 @@ export const useEditorStore = create<EditorState>()(
               },
             };
           }
-          
           return state;
         }),
 
@@ -139,6 +157,14 @@ export const useEditorStore = create<EditorState>()(
           preferences: {
             ...state.preferences,
             wordWrap: !state.preferences.wordWrap,
+          },
+        })),
+
+      setPreference: (key, value) =>
+        set((state) => ({
+          preferences: {
+            ...state.preferences,
+            [key]: value,
           },
         })),
 

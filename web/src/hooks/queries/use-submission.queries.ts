@@ -1,29 +1,49 @@
 "use client";
 
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   getSubmissionStatus, 
   getUserSubmissions,
   getRecentSubmissions
 } from "@/services/queries/submission.queries";
+import { useUser } from "@clerk/nextjs";
 
 /**
  * Polling query to retrieve the finalized evaluation of a background execution.
  */
 export function useSubmissionStatusQuery(submissionId: string | null) {
-  return useQuery({
+  const queryClient = useQueryClient();
+  const { user } = useUser();
+
+  const query = useQuery({
     queryKey: ["submission-status", submissionId],
     queryFn: () => getSubmissionStatus(submissionId!),
     enabled: !!submissionId,
     // Polling logic when evaluating
     refetchInterval: (query: any) => {
       const data = query.state.data;
-      if (data && (data.overallStatus === "PENDING" || data.status === "PENDING")) {
+      if (data && data.status === "PENDING") {
         return 1000;
       }
       return false;
     }
   });
+
+  const isFinished = query.data && query.data.status !== "PENDING";
+
+  useEffect(() => {
+    if (isFinished && user?.username) {
+      queryClient.invalidateQueries({
+        queryKey: ["stats", "profile", user.username],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["recent-submissions-infinite"],
+      });
+    }
+  }, [isFinished, user?.username, queryClient]);
+
+  return query;
 }
 
 /**

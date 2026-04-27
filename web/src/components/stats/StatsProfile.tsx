@@ -13,6 +13,7 @@ import { Code2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { useProfileStore } from "@/store/use-profile-store";
+import { useUser } from "@clerk/nextjs";
 
 interface StatsProfileProps {
   data: UserProfileData;
@@ -25,6 +26,9 @@ interface StatsProfileProps {
 export function StatsProfile({ data }: StatsProfileProps) {
   const { stats, activityLog, leetcode, user } = data;
   const { setActiveTab } = useProfileStore();
+  const { user: currentUser } = useUser();
+  
+  const isOwner = currentUser?.username === user.username;
 
   return (
     <div className="space-y-3">
@@ -39,7 +43,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
               <LeetCodeContestCard stats={leetcode} username={user.leetcodeUsername} />
             </div>
           </>
-        ) : (
+        ) : isOwner ? (
           <div className="xl:col-span-12">
             <Card className="flex flex-row items-center justify-between p-3 px-5 border-dashed bg-muted/5 group/connect hover:bg-muted/10 transition-all cursor-pointer border-muted-foreground/20">
               <div className="flex items-center gap-4">
@@ -65,7 +69,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
               </Button>
             </Card>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* Row 2: Native Progress */}

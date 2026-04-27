@@ -220,3 +220,54 @@ export const BadgeShowcaseSkeleton = () => (
     </div>
   </SkeletonProvider>
 );
+/**
+ * Profile Settings Form Skeleton
+ */
+export const ProfileSettingsSkeleton = () => (
+  <SkeletonProvider noWrapper>
+    <div className="space-y-6">
+      {/* Public Profile Card Ghost */}
+      <div className="border border-border/50 rounded-xl overflow-hidden bg-card/20">
+        <div className="p-6 border-b border-border/50 bg-muted/10">
+          <div className="flex items-center gap-3">
+            <Skeleton circle width={20} height={20} className="opacity-20" />
+            <div className="space-y-1.5">
+              <Skeleton width={120} height={16} className="rounded-sm" />
+              <Skeleton width={180} height={10} className="opacity-30" />
+            </div>
+          </div>
+        </div>
+        <div className="p-6 space-y-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className={`space-y-2 ${i === 3 ? "md:col-span-2" : ""}`}>
+                <Skeleton width={100} height={10} className="opacity-30 uppercase" />
+                <Skeleton height={40} className="rounded-lg w-full" />
+              </div>
+            ))}
+          </div>
+          <Skeleton width={140} height={44} className="rounded-lg" />
+        </div>
+      </div>
+
+      {/* Security Card Ghost */}
+      <div className="border border-border/50 rounded-xl overflow-hidden bg-card/20">
+        <div className="p-6 border-b border-border/50 bg-muted/10">
+          <div className="flex items-center gap-3">
+            <Skeleton circle width={20} height={20} className="opacity-20" />
+            <div className="space-y-1.5">
+              <Skeleton width={150} height={16} className="rounded-sm" />
+              <Skeleton width={220} height={10} className="opacity-30" />
+            </div>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 border border-border/50 rounded-xl bg-muted/5">
+            <Skeleton width="60%" height={14} className="opacity-40" />
+            <Skeleton width={140} height={36} className="rounded-md shrink-0" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </SkeletonProvider>
+);

@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@clerk/nextjs";
 import { useArenaStore } from "@/store/useArenaStore";
 import { 
   ArenaPlayerResult, 
@@ -58,6 +60,21 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
   // 3. TanStack Query
   const { data: roomMetadata, isLoading: isRoomLoading } = useArenaRoomQuery(roomId);
   const { data: serverResults, isLoading: isResultsLoading } = useMatchResultsQuery(matchId);
+  const queryClient = useQueryClient();
+  const { user: currentUser } = useUser();
+
+  // Invalidate stats and history when results are finalized
+  useEffect(() => {
+    if (serverResults && currentUser?.username) {
+      console.log("[Results] Finalized. Invalidating profile stats and history...");
+      queryClient.invalidateQueries({
+        queryKey: ["stats", "profile", currentUser.username],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["arena-history", currentUser.id],
+      });
+    }
+  }, [serverResults, currentUser?.username, currentUser?.id, queryClient]);
 
   // Sync metadata if missing
   useEffect(() => {

@@ -185,7 +185,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
             <Button 
               size="icon" 
               variant="outline"
-              className="rounded-full h-10 w-10 border-border/50"
+              className="h-10 w-10 border border-border transition-all"
               onClick={() => setActiveTab('stats')}
             >
               <ArrowLeft size={18} />

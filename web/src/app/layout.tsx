@@ -43,7 +43,7 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="dark"
             enableSystem={false}
-            themes={["dark", "theme-neutral", "theme-bubble-gum"]}
+            themes={["dark", "theme-neutral", "theme-bubble-gum", "theme-twitter", "theme-claude", "theme-astro-vista", "theme-chalk", "theme-sandstone", "theme-cyber-yellow"]}
           >
             <Toaster position="top-center" />
             <Providers>
