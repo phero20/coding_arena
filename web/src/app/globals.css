@@ -194,6 +194,18 @@ html {
   }
 }
 
+/* Force-hide Clerk branding and internal development labels */
+.cl-rootBox div:has(> a[aria-label="Clerk logo"]),
+.cl-rootBox a[href*="clerk.com"],
+.cl-internal-b3fm6y,
+.cl-internal-66iszh,
+.cl-internal-1dauv8j,
+.cl-internal-1p7sh9j,
+.cl-internal-1scxde7,
+.cl-card__footer {
+  display: none !important;
+}
+
 html.transitioning-theme {
   contain: paint;
 }

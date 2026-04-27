@@ -5,6 +5,7 @@ import { DynamicEditor as Editor } from "@/components/workspace-shared/DynamicEd
 import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import { useTheme } from "next-themes";
+import { useEditorStore } from "@/store/use-editor-store";
 import { WrapText, Code2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -33,8 +34,9 @@ export const CompilerEditor: React.FC<Props> = ({
   code, onChange, language, languages, onLanguageChange, onReset,
 }) => {
   const { theme } = useTheme();
+  const { preferences } = useEditorStore();
   const [wordWrap, setWordWrap] = useState(true);
-  const monacoOptions = useMonacoConfig(wordWrap);
+  const monacoOptions = useMonacoConfig({ ...preferences, wordWrap });
   const monacoLanguage = getLangConfig(language).monacoLang;
 
   return (

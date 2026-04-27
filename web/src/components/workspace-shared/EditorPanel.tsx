@@ -192,8 +192,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
               </AlertDialogContent>
             </AlertDialog>
 
-            {
-              mode === "arena" && (
+         
                 <Link href="/settings?tab=editor">
               <Button
                 variant="ghost"
@@ -204,7 +203,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 <Settings className="size-3.5" />
               </Button>
             </Link>
-            )}
+        
             
           </div>
         )}
