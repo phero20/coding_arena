@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Lora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/layout/Navbar";
@@ -34,7 +35,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "var(--primary)",
+          colorBackground: "var(--background)",
+          colorText: "var(--foreground)",
+          colorInputBackground: "var(--card)",
+          colorInputText: "var(--foreground)",
+          borderRadius: "var(--radius)",
+        },
+        elements: {
+          card: "bg-card/40 border border-border/40 backdrop-blur-xl shadow-2xl",
+          navbar: "bg-transparent",
+          headerTitle: "text-xl font-bold tracking-tight text-foreground",
+          headerSubtitle: "text-muted-foreground",
+          socialButtonsBlockButton: "bg-muted/50 border-border/40 hover:bg-muted/80 transition-all",
+          formButtonPrimary: "bg-primary text-primary-foreground hover:opacity-90 transition-opacity",
+          footerActionLink: "text-primary hover:text-primary/80",
+          userButtonPopoverCard: "bg-card/90 border border-border/40 backdrop-blur-xl",
+          footer: "hidden",
+          footerInternal: "hidden",
+        },
+      }}
+    >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
