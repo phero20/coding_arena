@@ -1,117 +1,12 @@
 @import "tailwindcss";
 @import "../styles/difficulty.css";
 
-@import "tailwindcss";
+/* Modular Tactical Themes */
+@import "../styles/themes/lime.css";
+@import "../styles/themes/neutral.css";
+@import "../styles/themes/bubble-gum.css";
 
 @custom-variant dark (&:is(.dark *));
-
-:root {
-  --background: rgb(255, 255, 255);
-  --foreground: rgb(10, 10, 10);
-  --card: rgb(255, 255, 255);
-  --card-foreground: rgb(10, 10, 10);
-  --popover: rgb(255, 255, 255);
-  --popover-foreground: rgb(10, 10, 10);
-  --primary: rgb(23, 23, 23);
-  --primary-foreground: rgb(250, 250, 250);
-  --secondary: rgb(245, 245, 245);
-  --secondary-foreground: rgb(23, 23, 23);
-  --muted: rgb(245, 245, 245);
-  --muted-foreground: rgb(115, 115, 115);
-  --accent: rgb(245, 245, 245);
-  --accent-foreground: rgb(23, 23, 23);
-  --destructive: rgb(231, 0, 11);
-  --destructive-foreground: rgb(255, 255, 255);
-  --border: rgb(229, 229, 229);
-  --input: rgb(229, 229, 229);
-  --ring: rgb(161, 161, 161);
-  --chart-1: rgb(145, 197, 255);
-  --chart-2: rgb(58, 129, 246);
-  --chart-3: rgb(37, 99, 239);
-  --chart-4: rgb(26, 78, 218);
-  --chart-5: rgb(31, 63, 173);
-  --sidebar: rgb(250, 250, 250);
-  --sidebar-foreground: rgb(10, 10, 10);
-  --sidebar-primary: rgb(23, 23, 23);
-  --sidebar-primary-foreground: rgb(250, 250, 250);
-  --sidebar-accent: rgb(245, 245, 245);
-  --sidebar-accent-foreground: rgb(23, 23, 23);
-  --sidebar-border: rgb(229, 229, 229);
-  --sidebar-ring: rgb(161, 161, 161);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --radius: 0.625rem;
-  --shadow-x: 0;
-  --shadow-y: 1px;
-  --shadow-blur: 3px;
-  --shadow-spread: 0px;
-  --shadow-opacity: 0.1;
-  --shadow-color: oklch(0 0 0);
-  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
-}
-
-.dark {
-  --background: rgb(10, 10, 10);
-  --foreground: rgb(250, 250, 250);
-  --card: rgb(23, 23, 23);
-  --card-foreground: rgb(250, 250, 250);
-  --popover: rgb(38, 38, 38);
-  --popover-foreground: rgb(250, 250, 250);
-  --primary: rgb(229, 229, 229);
-  --primary-foreground: rgb(23, 23, 23);
-  --secondary: rgb(38, 38, 38);
-  --secondary-foreground: rgb(250, 250, 250);
-  --muted: rgb(38, 38, 38);
-  --muted-foreground: rgb(161, 161, 161);
-  --accent: rgb(64, 64, 64);
-  --accent-foreground: rgb(250, 250, 250);
-  --destructive: rgb(255, 100, 103);
-  --destructive-foreground: rgb(250, 250, 250);
-  --border: rgb(40, 40, 40);
-  --input: rgb(52, 52, 52);
-  --ring: rgb(115, 115, 115);
-  --chart-1: rgb(145, 197, 255);
-  --chart-2: rgb(58, 129, 246);
-  --chart-3: rgb(37, 99, 239);
-  --chart-4: rgb(26, 78, 218);
-  --chart-5: rgb(31, 63, 173);
-  --sidebar: rgb(23, 23, 23);
-  --sidebar-foreground: rgb(250, 250, 250);
-  --sidebar-primary: rgb(20, 71, 230);
-  --sidebar-primary-foreground: rgb(250, 250, 250);
-  --sidebar-accent: rgb(38, 38, 38);
-  --sidebar-accent-foreground: rgb(250, 250, 250);
-  --sidebar-border: rgb(40, 40, 40);
-  --sidebar-ring: rgb(82, 82, 82);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --radius: 0.625rem;
-  --shadow-x: 0;
-  --shadow-y: 1px;
-  --shadow-blur: 3px;
-  --shadow-spread: 0px;
-  --shadow-opacity: 0.1;
-  --shadow-color: oklch(0 0 0);
-  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
-  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-}
 
 @theme inline {
   --color-background: var(--background);
@@ -164,7 +59,15 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
-    /* Difficulty & Metric Colors */
+
+  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+
+  /* Difficulty & Metric Colors */
   --color-difficulty-easy: var(--difficulty-easy);
   --color-difficulty-medium: var(--difficulty-medium);
   --color-difficulty-hard: var(--difficulty-hard);
@@ -172,7 +75,7 @@
   --color-metric-solutions: var(--metric-solutions);
   --color-metric-discuss: var(--metric-discuss);
   --color-metric-reputation: var(--metric-reputation);
-  
+
   --color-rank-1: var(--rank-1);
   --color-rank-2: var(--rank-2);
   --color-rank-3: var(--rank-3);
@@ -190,26 +93,7 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+    letter-spacing: var(--tracking-normal);
   }
 }
 
@@ -277,4 +161,33 @@ html {
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--primary);
   }
+}
+
+/* Center-Out Circle Theme Transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2147483646;
+  animation: 3000ms cubic-bezier(0.4, 0, 0.2, 1) both circle-reveal;
+}
+
+@keyframes circle-reveal {
+  from {
+    clip-path: circle(0% at 50% 50%);
+  }
+  to {
+    clip-path: circle(150% at 50% 50%);
+  }
+}
+
+html.transitioning-theme {
+  contain: paint;
 }

@@ -1,17 +1,31 @@
-import React from 'react';
+import React from "react";
+import { Container } from "@/components/shared/Container";
+import { SettingsTabs } from "@/components/settings/SettingsTabs";
+import { Settings } from "lucide-react";
 
 const SettingsPage = () => {
   return (
-    <div className='flex min-h-screen items-center justify-center bg-black text-white p-4 font-sans'>
-      <div className='text-center space-y-4'>
-        <h1 className='text-5xl font-extrabold tracking-tighter sm:text-7xl bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent'>
-          SettingsPage
-        </h1>
-        <p className='text-lg text-gray-400'>
-          Dynamic Route: /settings
-        </p>
-        <div className='mt-8 h-1 w-24 bg-blue-500 mx-auto rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]'></div>
-      </div>
+    <div className="min-h-screen bg-background pt-24 pb-12">
+      <Container className="max-w-4xl">
+        <div className="mb-10 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary">
+              <Settings size={28} />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-foreground">
+                Settings
+              </h1>
+              <p className="text-muted-foreground">
+                Configure your tactical environment and account preferences.
+              </p>
+            </div>
+          </div>
+          <div className="h-px w-full bg-gradient-to-r from-border via-border/50 to-transparent" />
+        </div>
+
+        <SettingsTabs />
+      </Container>
     </div>
   );
 };

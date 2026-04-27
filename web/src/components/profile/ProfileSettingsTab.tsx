@@ -20,6 +20,7 @@ interface ProfileSettingsTabProps {
   githubUsername?: string | null;
   linkedinUsername?: string | null;
   leetcodeUsername?: string | null;
+  value?: string;
 }
 
 export function ProfileSettingsTab({
@@ -27,6 +28,7 @@ export function ProfileSettingsTab({
   githubUsername,
   linkedinUsername,
   leetcodeUsername,
+  value = "settings",
 }: ProfileSettingsTabProps) {
   const { openUserProfile } = useClerk();
 
@@ -41,7 +43,10 @@ export function ProfileSettingsTab({
     });
 
   return (
-    <TabsContent value="settings" className="mt-0 focus-visible:ring-0">
+    <TabsContent 
+      value={value} 
+      className="mt-0 focus-visible:ring-0 animate-in fade-in slide-in-from-bottom-4 duration-500"
+    >
       <div className="space-y-6">
         <Card className="bg-card border-border/50 overflow-hidden">
           <div className="p-6 border-b border-border/50 bg-muted/20">
