@@ -13,10 +13,10 @@ const RegisterPage = () => {
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl">
-            Join the <span className="text-primary">Arena</span>
+            Join <span className="text-primary">SlaveCode</span>
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Create your account to start competing
+            Create your account to enter the arena
           </p>
         </div>
 

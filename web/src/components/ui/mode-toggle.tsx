@@ -37,6 +37,9 @@ export function ModeToggle() {
     { name: "Chalk", value: "theme-chalk", icon: Palette },
     { name: "Sandstone", value: "theme-sandstone", icon: Palette },
     { name: "Cyber Yellow", value: "theme-cyber-yellow", icon: Palette },
+    { name: "Meridian", value: "theme-meridian", icon: Palette },
+    { name: "Discord", value: "theme-discord", icon: Palette },
+    { name: "Royal Gold", value: "theme-royal-gold", icon: Palette },
   ];
 
   const allKnownThemes = [...DEFAULT_THEMES, ...EXTRA_THEMES];

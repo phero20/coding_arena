@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, integer, bigint, date, primaryKey, jsonb } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid, integer, bigint, date, primaryKey, jsonb, foreignKey, index } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -105,4 +105,48 @@ export type UserSolvedProblem = typeof userSolvedProblems.$inferSelect
 export type UserSolvedLanguage = typeof userSolvedLanguages.$inferSelect
 export type Contest = typeof contests.$inferSelect
 export type NewContest = typeof contests.$inferInsert
+
+
+// --- Taxonomy Layer (Topics \u0026 Patterns) ---
+
+/**
+ * Categories table supports a recursive tree structure.
+ * This allows for Top-level Topics (Array) -\u003e Patterns (Sliding Window) -\u003e Sub-patterns.
+ */
+export const categories = pgTable('categories', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  parentId: uuid('parent_id'),
+  name: text('name').notNull(), // e.g., "Two Pointer"
+  slug: text('slug').notNull().unique(), // e.g., "two-pointer"
+  description: text('description'),
+  order: integer('order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    parentReference: foreignKey({
+      columns: [table.parentId],
+      foreignColumns: [table.id],
+    }).onDelete('cascade'),
+    // Explicit index — Postgres does NOT auto-index FK columns unlike MySQL
+    parentIdx: index('categories_parent_id_idx').on(table.parentId),
+  }
+})
+
+/**
+ * Junction table mapping Problems (from MongoDB) to Categories.
+ * Allows a single problem to exist in multiple categories/patterns.
+ */
+export const categoryProblems = pgTable('category_problems', {
+  categoryId: uuid('category_id').references(() => (categories as any).id, { onDelete: 'cascade' }).notNull(),
+  problemId: text('problem_id').notNull(), // Matching MongoDB problem_id
+  order: integer('order').notNull().default(0), // Solve order within the category
+}, (table) => {
+  return {
+    pk: primaryKey({ columns: [table.categoryId, table.problemId] }),
+  }
+})
+
+export type Category = typeof categories.$inferSelect
+export type NewCategory = typeof categories.$inferInsert
+export type CategoryProblem = typeof categoryProblems.$inferSelect
 

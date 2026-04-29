@@ -11,6 +11,7 @@ import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Code2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { useProfileStore } from "@/store/use-profile-store";
 import { useUser } from "@clerk/nextjs";
@@ -27,6 +28,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
   const { stats, activityLog, leetcode, user } = data;
   const { setActiveTab } = useProfileStore();
   const { user: currentUser } = useUser();
+  const router = useRouter();
   
   const isOwner = currentUser?.username === user.username;
 
@@ -62,7 +64,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
                 variant="default" 
                 size="default"
                 className="shrink-0"
-                onClick={() => setActiveTab('settings')}
+                onClick={() => router.push("/settings?tab=profile")}
               >
                 Link Account
                 <ArrowRight className="w-3 h-3" />

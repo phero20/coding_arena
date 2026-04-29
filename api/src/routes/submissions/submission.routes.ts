@@ -61,18 +61,24 @@ export const registerSubmissionRoutes = (
   app.get(
     "/submissions/recent",
     zValidator("query", RecentSubmissionsQuerySchema),
-    submissionController.action(submissionController.getRecentSubmissions),
+    submissionController.action(submissionController.getRecentSubmissions, {
+      requireAuth: false,
+    }),
   );
 
   app.get(
     "/submissions/:submissionId",
     zValidator("param", SubmissionIdParamSchema),
-    submissionController.action(submissionController.getSubmissionStatus),
+    submissionController.action(submissionController.getSubmissionStatus, {
+      requireAuth: false,
+    }),
   );
 
   app.get(
     "/submissions/problem/:problemId",
     zValidator("param", ProblemIdParamSchema),
-    submissionController.action(submissionController.getUserSubmissions),
+    submissionController.action(submissionController.getUserSubmissions, {
+      requireAuth: false,
+    }),
   );
 };

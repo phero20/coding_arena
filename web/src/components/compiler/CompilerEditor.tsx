@@ -43,33 +43,54 @@ export const CompilerEditor: React.FC<Props> = ({
     <div className="flex flex-col h-full bg-background">
       <header className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-2 shrink-0">
-          <LanguageSelector value={language} onChange={onLanguageChange} languages={languages} />
+          <LanguageSelector
+            value={language}
+            onChange={onLanguageChange}
+            languages={languages}
+          />
 
-          <Button variant="ghost" size="icon" title="Toggle Word Wrap"
-            className={cn("size-7 shrink-0 transition-colors",
-              wordWrap ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary")}
-            onClick={() => setWordWrap(w => !w)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            title="Toggle Word Wrap"
+            className={cn(
+              "size-7 shrink-0 transition-colors",
+              wordWrap
+                ? "text-primary bg-primary/10"
+                : "text-muted-foreground hover:text-primary",
+            )}
+            onClick={() => setWordWrap((w) => !w)}
+          >
             <WrapText className="size-3.5" />
           </Button>
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon"
-                className="size-7 shrink-0 text-muted-foreground hover:text-primary transition-colors">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 shrink-0 text-muted-foreground hover:text-primary transition-colors"
+              >
                 <RefreshCw className="size-3.5" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-card/95 backdrop-blur-xl border-border/40">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-sm font-bold">Reset Code?</AlertDialogTitle>
+                <AlertDialogTitle className="text-sm font-bold">
+                  Reset Code?
+                </AlertDialogTitle>
                 <AlertDialogDescription className="text-xs text-muted-foreground">
                   Restores the default boilerplate for the selected language.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel className="h-8 text-xs font-bold border-border/40">Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={onReset}
-                  className="h-8 text-xs font-bold bg-primary text-primary-foreground hover:opacity-90">
+                <AlertDialogCancel className="h-8 text-xs font-bold border-border/40">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={onReset}
+                  className="h-8 text-xs font-bold bg-primary text-primary-foreground hover:opacity-90"
+                >
                   Reset
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -89,7 +110,7 @@ export const CompilerEditor: React.FC<Props> = ({
         <Editor
           height="100%"
           language={monacoLanguage}
-          theme={theme === "dark" ? "vs-dark" : "light"}
+          theme="vs-dark"
           value={code}
           onChange={(val) => onChange(val ?? "")}
           options={monacoOptions}

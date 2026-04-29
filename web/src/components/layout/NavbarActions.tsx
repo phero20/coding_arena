@@ -23,7 +23,13 @@ import { User, LogOut, LayoutDashboard, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const Show = ({ when, children }: { when: "signed-in" | "signed-out"; children: React.ReactNode }) => {
+const Show = ({
+  when,
+  children,
+}: {
+  when: "signed-in" | "signed-out";
+  children: React.ReactNode;
+}) => {
   const { isLoaded, isSignedIn } = useUser();
   if (!isLoaded) return null;
   const isMatch = when === "signed-in" ? isSignedIn : !isSignedIn;
@@ -37,7 +43,7 @@ export const NavbarActions = () => {
   const [open, setOpen] = useState(false);
 
   const username = user?.username || user?.id;
-  console.log(user)
+  console.log(user);
   const handleAction = (pathOrAction: string | (() => void)) => {
     setOpen(false);
     if (typeof pathOrAction === "string") {
@@ -57,9 +63,7 @@ export const NavbarActions = () => {
       <Show when="signed-out">
         <div className="flex items-center gap-3">
           <SignInButton mode="modal">
-            <Button className="text-sm font-medium">
-              Sign in
-            </Button>
+            <Button className="text-sm font-medium">Sign in</Button>
           </SignInButton>
         </div>
       </Show>
@@ -94,7 +98,10 @@ export const NavbarActions = () => {
               className="p-1 w-50 border-border bg-background overflow-hidden"
             >
               <Command className="bg-card/60">
-                <Link href={`/u/${username}`} className="flex flex-col px-3 py-2 border-b border-border/40 bg-muted/20">
+                <Link
+                  href={`/u/${username}`}
+                  className="flex flex-col px-3 py-2 border-b border-border/40 bg-muted/20"
+                >
                   <span className="text-sm font-bold truncate text-foreground">
                     {user?.fullName}
                   </span>

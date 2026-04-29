@@ -14,6 +14,7 @@ import { registerProfileRoutes } from "./user/profile.routes";
 import { registerUserRoutes } from "./user/user.routes";
 import { registerCompilerRoutes } from "./compiler.routes";
 import { registerContestRoutes } from "./contest/contest.routes";
+import { registerTaxonomyRoutes } from "./taxonomy/taxonomy.routes";
 
 
 import { healthRoutes } from "./system/health.routes";
@@ -33,6 +34,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     userController,
     compilerController,
     contestController,
+    taxonomyController,
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -108,6 +110,12 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
 
   registerContestRoutes(v1, {
     contestController,
+  });
+
+  registerTaxonomyRoutes(v1, {
+    taxonomyController,
+    authMiddleware,
+    authorizationMiddleware,
   });
  
   app.route("/api/v1", v1);

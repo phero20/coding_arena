@@ -21,6 +21,6 @@ export const registerUserRoutes = (
   app.get(
     "/users/search",
     (c, next) => authMiddleware.handle(c, next),
-    userController.action(userController.searchUsers),
+    userController.action(userController.searchUsers, { requireAuth: false }),
   );
 };

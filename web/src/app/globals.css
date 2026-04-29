@@ -11,6 +11,9 @@
 @import "../styles/themes/chalk.css";
 @import "../styles/themes/sandstone.css";
 @import "../styles/themes/cyber-yellow.css";
+@import "../styles/themes/meridian.css";
+@import "../styles/themes/discord.css";
+@import "../styles/themes/royal-gold.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -204,6 +207,18 @@ html {
 .cl-internal-1scxde7,
 .cl-card__footer {
   display: none !important;
+}
+/* Hide Clerk Development Badge */
+div[style*="z-index: 9999"], 
+div[style*="z-index: 99999"],
+div[style*="z-index: 2147483647"],
+aside[style*="position: fixed"][style*="bottom"],
+body > div > div[style*="position: fixed"][style*="right"][style*="bottom"],
+.cl-internal-b3al4t {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 html.transitioning-theme {

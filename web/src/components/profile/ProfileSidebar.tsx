@@ -28,7 +28,7 @@ import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
 import { useRouter } from "next/navigation";
 
 import { useProfileStore } from "@/store/use-profile-store";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 
 interface ProfileSidebarProps {
   username: string;
@@ -61,6 +61,7 @@ export function ProfileSidebar({
   const isFollowing = checkIsFollowing(username);
 
   const { user } = useUser();
+  const { openSignIn } = useClerk();
   const { follow, unfollow } = useFollowMutation(
     username,
     user?.username ?? undefined,
@@ -156,9 +157,13 @@ export function ProfileSidebar({
               variant={isFollowing ? "destructive" : "default"}
               className={cn("w-full")}
               disabled={isPending}
-              onClick={() =>
-                isFollowing ? unfollow.mutate() : follow.mutate()
-              }
+              onClick={() => {
+                if (!user) {
+                  openSignIn();
+                  return;
+                }
+                isFollowing ? unfollow.mutate() : follow.mutate();
+              }}
             >
               {isPending ? (
                 <Loader2 className="animate-spin" size={16} />

@@ -5,9 +5,11 @@ const isPublicRoute = createRouteMatcher([
   "/problems",
   "/compilers",
   "/contests",
+  "/roadmap",
   "/auth/login(.*)",
   "/auth/register(.*)",
   "/auth/forgot-password(.*)",
+  "/u/(.*)",
   "/api/v1/auth/webhooks/clerk", // Always public
 ]);
 

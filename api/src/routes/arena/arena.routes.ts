@@ -59,19 +59,25 @@ export const registerArenaRoutes = (
     "/arena/match/:matchId/status",
     (c, next) => authMiddleware.handle(c, next),
     zValidator("param", MatchIdParamSchema),
-    arenaController.action(arenaController.getMatchStatus),
+    arenaController.action(arenaController.getMatchStatus, {
+      requireAuth: false,
+    }),
   );
 
   app.get(
     "/arena/match/:matchId/details",
     (c, next) => authMiddleware.handle(c, next),
     zValidator("param", MatchIdParamSchema),
-    arenaController.action(arenaController.getMatchDetail),
+    arenaController.action(arenaController.getMatchDetail, {
+      requireAuth: false,
+    }),
   );
 
   app.get(
     "/arena/u/:userId/history",
     (c, next) => authMiddleware.handle(c, next),
-    arenaController.action(arenaController.getUserHistory),
+    arenaController.action(arenaController.getUserHistory, {
+      requireAuth: false,
+    }),
   );
 };

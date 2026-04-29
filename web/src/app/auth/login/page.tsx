@@ -13,10 +13,10 @@ const LoginPage = () => {
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl">
-            Welcome to <span className="text-primary">Coding Arena</span>
+            Welcome to <span className="text-primary">SlaveCode</span>
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Join the battle and prove your skills
+            Sign in to your account to continue
           </p>
         </div>
 

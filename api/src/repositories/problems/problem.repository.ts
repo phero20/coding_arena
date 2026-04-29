@@ -11,6 +11,7 @@ export type { CreateOrUpdateProblemInput } from "../../types/problems/problem.ty
 
 export interface IProblemRepository {
   findByProblemId(problem_id: string): Promise<Problem | null>;
+  findManyByProblemIds(problem_ids: string[]): Promise<Problem[]>;
   findById(id: string): Promise<Problem | null>;
   findBySlug(slug: string): Promise<Problem | null>;
   searchByTopic(topic: string, limit?: number): Promise<Problem[]>;
@@ -34,6 +35,25 @@ export class ProblemRepository
   async findByProblemId(problem_id: string): Promise<Problem | null> {
     const doc = await this.model.findOne({ problem_id }).lean().exec();
     return this.toDomain(doc as any);
+  }
+
+  /**
+   * Batch fetch problems by IDs — single $in query instead of N queries.
+   * Preserves the original order of the input IDs.
+   */
+  async findManyByProblemIds(problem_ids: string[]): Promise<Problem[]> {
+    if (problem_ids.length === 0) return [];
+    const docs = await this.model
+      .find({ problem_id: { $in: problem_ids } })
+      // Projection: only fetch fields needed for list/category views
+      .select('problem_id frontend_id title difficulty problem_slug topics')
+      .lean()
+      .exec();
+    // Restore the original ordered sequence from the junction table
+    const docMap = new Map(docs.map((d: any) => [d.problem_id, d]));
+    return problem_ids
+      .map((id) => this.toDomain(docMap.get(id) as any))
+      .filter((p): p is Problem => p !== null);
   }
 
   async findBySlug(slug: string): Promise<Problem | null> {
@@ -64,7 +84,8 @@ export class ProblemRepository
         .limit(limit)
         .lean()
         .exec(),
-      this.model.countDocuments(),
+      // estimatedDocumentCount uses collection metadata — near-instant vs full scan
+      this.model.estimatedDocumentCount(),
     ]);
 
     return {

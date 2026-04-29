@@ -25,7 +25,7 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Coding Arena",
+  title: "SlaveCode",
   description: "Standardize your coding journey.",
 };
 
@@ -36,6 +36,20 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
+      localization={{
+        signIn: {
+          start: {
+            title: "Welcome to SlaveCode",
+            subtitle: "Sign in or Create account to continue",
+          },
+        },
+        signUp: {
+          start: {
+            title: "Welcome to SlaveCode",
+            subtitle: "Sign in or Create account to continue",
+          },
+        },
+      }}
       appearance={{
         baseTheme: dark,
         variables: {
@@ -47,16 +61,20 @@ export default function RootLayout({
           borderRadius: "var(--radius)",
         },
         elements: {
-          card: "bg-card/40 border border-border/40 backdrop-blur-xl shadow-2xl",
+          card: "bg-card border border-border shadow-2xl",
           navbar: "bg-transparent",
-          headerTitle: "text-xl font-bold tracking-tight text-foreground",
-          headerSubtitle: "text-muted-foreground",
-          socialButtonsBlockButton: "bg-muted/50 border-border/40 hover:bg-muted/80 transition-all",
-          formButtonPrimary: "bg-primary text-primary-foreground hover:opacity-90 transition-opacity",
+          headerTitle: "text-2xl font-bold tracking-tight text-foreground",
+          headerSubtitle: "text-base text-muted-foreground",
+          socialButtonsBlockButton:
+            "bg-muted/50 border-border hover:bg-muted transition-all",
+          formButtonPrimary:
+            "bg-primary text-primary-foreground hover:opacity-90 transition-opacity",
           footerActionLink: "text-primary hover:text-primary/80",
-          userButtonPopoverCard: "bg-card/90 border border-border/40 backdrop-blur-xl",
-          footer: "hidden",
-          footerInternal: "hidden",
+          userButtonPopoverCard: "bg-card border border-border",
+          modalBackdrop: "!bg-background/70 backdrop-blur-[1px]",
+          footer: "block",
+          footerInternal: "block",
+          watermark: "hidden",
         },
       }}
     >
@@ -68,7 +86,20 @@ export default function RootLayout({
             attribute="class"
             defaultTheme="dark"
             enableSystem={false}
-            themes={["dark", "theme-neutral", "theme-bubble-gum", "theme-twitter", "theme-claude", "theme-astro-vista", "theme-chalk", "theme-sandstone", "theme-cyber-yellow"]}
+            themes={[
+              "dark",
+              "theme-neutral",
+              "theme-bubble-gum",
+              "theme-twitter",
+              "theme-claude",
+              "theme-astro-vista",
+              "theme-chalk",
+              "theme-sandstone",
+              "theme-cyber-yellow",
+              "theme-meridian",
+              "theme-discord",
+              "theme-royal-gold",
+            ]}
           >
             <Toaster position="top-center" />
             <Providers>

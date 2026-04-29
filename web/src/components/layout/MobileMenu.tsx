@@ -19,7 +19,13 @@ interface MobileMenuProps {
   pathname: string;
 }
 
-const Show = ({ when, children }: { when: "signed-in" | "signed-out"; children: React.ReactNode }) => {
+const Show = ({
+  when,
+  children,
+}: {
+  when: "signed-in" | "signed-out";
+  children: React.ReactNode;
+}) => {
   const { isLoaded, isSignedIn } = useUser();
   if (!isLoaded) return null;
   const isMatch = when === "signed-in" ? isSignedIn : !isSignedIn;
@@ -61,10 +67,11 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
             className="absolute top-full left-0 right-0 bg-background border-b border-border md:hidden overflow-hidden z-50"
           >
             <div className="p-4 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
-              
               {/* Search at the Top */}
               <div className="space-y-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 ml-1">Search Users</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 ml-1">
+                  Search Users
+                </span>
                 <div className="w-full">
                   <UserSearch />
                 </div>
@@ -73,7 +80,11 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
               {/* User Profile Header (Signed In) */}
               <Show when="signed-in">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/40">
-                  <Link href={`/u/${user?.username}`} onClick={() => setIsOpen(false)} className="flex items-center gap-3">
+                  <Link
+                    href={`/u/${user?.username}`}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3"
+                  >
                     <Avatar className="h-10 w-10 border border-border/40">
                       <AvatarImage src={user?.imageUrl} />
                       <AvatarFallback className="bg-primary/10 text-primary font-bold">
@@ -84,7 +95,9 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
                       <span className="text-sm font-bold truncate text-foreground">
                         {user?.fullName}
                       </span>
-                      <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">{user?.username}</span>
+                      <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
+                        {user?.username}
+                      </span>
                     </div>
                   </Link>
                   <ModeToggle />
@@ -93,7 +106,9 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
 
               {/* Main Links */}
               <div className="space-y-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 ml-1">Navigation</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 ml-1">
+                  Navigation
+                </span>
                 <div className="grid grid-cols-1 gap-1">
                   {navItems.map((item) => (
                     <Link
@@ -107,12 +122,21 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
                           : "text-muted-foreground hover:bg-muted hover:text-foreground",
                       )}
                     >
-                      <item.icon className={cn(
-                        "h-5 w-5",
-                        pathname === item.href ? "text-primary" : "text-muted-foreground/60"
-                      )} />
+                      <item.icon
+                        className={cn(
+                          "h-5 w-5",
+                          pathname === item.href
+                            ? "text-primary"
+                            : "text-muted-foreground/60",
+                        )}
+                      />
                       <span className="font-bold text-sm">{item.name}</span>
-                      {pathname === item.href && <ChevronRight size={14} className="ml-auto opacity-50" />}
+                      {pathname === item.href && (
+                        <ChevronRight
+                          size={14}
+                          className="ml-auto opacity-50"
+                        />
+                      )}
                     </Link>
                   ))}
                 </div>
@@ -122,14 +146,17 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
               <div className="pt-4 border-t border-border/40 flex flex-col gap-3">
                 <Show when="signed-out">
                   <SignInButton mode="modal">
-                    <Button variant="default" className="w-full h-11 font-bold border-border/60">
+                    <Button
+                      variant="default"
+                      className="w-full h-11 font-bold border-border/60"
+                    >
                       Sign In
                     </Button>
                   </SignInButton>
                 </Show>
 
                 <Show when="signed-in">
-                  <Button 
+                  <Button
                     variant="destructive"
                     onClick={handleSignOut}
                     className="w-full h-11 justify-start gap-4 px-3 font-bold"

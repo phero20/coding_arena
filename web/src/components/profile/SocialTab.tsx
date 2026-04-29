@@ -5,7 +5,7 @@ import {
   useFollowingQuery,
 } from "@/hooks/queries/use-follow.queries";
 import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, User, Users, UserPlus, UserMinus, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -37,6 +37,7 @@ const SocialUserCard = ({
   isFollowing: boolean;
   listType: 'followers' | 'following';
 }) => {
+  const { openSignIn } = useClerk();
   const isMe = currentUser?.username === targetUser.username;
   const { follow, unfollow } = useFollowMutation(targetUser.username, currentUser?.username ?? undefined);
   const isPending = follow.isPending || unfollow.isPending;
@@ -72,6 +73,10 @@ const SocialUserCard = ({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  if (!currentUser) {
+                    openSignIn();
+                    return;
+                  }
                   if (isFollowing) unfollow.mutate();
                   else follow.mutate();
                 }}

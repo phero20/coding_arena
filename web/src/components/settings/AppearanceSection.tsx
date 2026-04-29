@@ -85,6 +85,30 @@ const THEMES = [
     bg: "rgb(9, 9, 9)",
     secondary: "rgb(18, 18, 18)",
   },
+  {
+    id: "theme-meridian",
+    name: "Meridian",
+    description: "A tactical dark theme with refreshing cyan accents.",
+    accent: "rgb(107, 141, 184)",
+    bg: "rgb(20, 23, 28)",
+    secondary: "rgb(28, 32, 39)",
+  },
+  {
+    id: "theme-discord",
+    name: "Discord",
+    description: "The classic Discord dark mode theme.",
+    accent: "rgb(88, 101, 242)",
+    bg: "rgb(26, 26, 30)",
+    secondary: "rgb(36, 36, 41)",
+  },
+  {
+    id: "theme-royal-gold",
+    name: "Royal Gold",
+    description: "A majestic deep blue and vibrant gold theme.",
+    accent: "rgb(255, 224, 102)",
+    bg: "rgb(24, 26, 36)",
+    secondary: "rgb(35, 36, 58)",
+  },
 ];
 
 const ThemePreview = ({

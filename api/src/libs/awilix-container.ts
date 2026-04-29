@@ -19,6 +19,7 @@ import { type ArenaMatchRepository } from "../repositories/arena/arena-match.rep
 import { type ArenaSubmissionRepository } from "../repositories/arena/arena-submission.repository";
 import { type StatsRepository } from "../repositories/stats/stats.repository";
 import { type ContestRepository } from "../repositories/contest/contest.repository";
+import { type TaxonomyRepository } from "../repositories/taxonomy/taxonomy.repository";
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
@@ -43,6 +44,7 @@ import { type WandboxService } from "../services/judge/wandbox.service";
 import { type CompilerService } from "../services/compiler/compiler.service";
 import { type ClistService } from "../services/contest/clist.service";
 import { type ContestService } from "../services/contest/contest.service";
+import { type TaxonomyService } from "../services/taxonomy/taxonomy.service";
 import { type StatsController } from "../controllers/stats/stats.controller";
 import { type ContestController } from "../controllers/contest/contest.controller";
 import { type ILeetCodeService } from "../services/stats/leetcode.service";
@@ -66,6 +68,7 @@ import { type AiProblemController } from "../controllers/problems/ai-problem.con
 import { type ArenaController } from "../controllers/arena/arena.controller";
 import { type UserController } from "../controllers/user/user.controller";
 import { type CompilerController } from "../controllers/compiler/compiler.controller";
+import { type TaxonomyController } from "../controllers/taxonomy/taxonomy.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -86,6 +89,7 @@ import { type IUserService } from "../services/user/user.service";
 import { type ContestCache } from "../cache/contest/contest.cache";
 import { type UserStatsCache } from "../cache/user/user-stats.cache";
 import { type LeetCodeCache } from "../cache/user/leetcode.cache";
+import { type TaxonomyCache } from "../cache/taxonomy/taxonomy.cache";
 
 export interface ICradle {
   // Infrastructure
@@ -104,6 +108,7 @@ export interface ICradle {
   arenaSubmissionRepository: ArenaSubmissionRepository;
   statsRepository: StatsRepository;
   contestRepository: ContestRepository;
+  taxonomyRepository: TaxonomyRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
@@ -129,6 +134,7 @@ export interface ICradle {
   compilerService: CompilerService;
   clistService: ClistService;
   contestService: ContestService;
+  taxonomyService: TaxonomyService;
   leetcodeService: ILeetCodeService;
 
   // Raw Services
@@ -137,6 +143,7 @@ export interface ICradle {
   rawAiCodeJudgeService: AiCodeJudgeService;
   rawStatsService: IStatsService;
   rawLeetCodeService: ILeetCodeService;
+  rawTaxonomyService: TaxonomyService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -156,6 +163,7 @@ export interface ICradle {
   userStatsCache: UserStatsCache;
   contestCache: ContestCache;
   leetcodeCache: LeetCodeCache;
+  taxonomyCache: TaxonomyCache;
 
   // Controllers
   authController: AuthController;
@@ -169,6 +177,7 @@ export interface ICradle {
   userController: UserController;
   compilerController: CompilerController;
   contestController: ContestController;
+  taxonomyController: TaxonomyController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

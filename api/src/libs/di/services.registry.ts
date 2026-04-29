@@ -27,6 +27,7 @@ import { UserService } from "../../services/user/user.service";
 import { ClistService } from "../../services/contest/clist.service";
 import { ContestService } from "../../services/contest/contest.service";
 import { LeetCodeService } from "../../services/stats/leetcode.service";
+import { TaxonomyService } from "../../services/taxonomy/taxonomy.service";
 
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
@@ -36,6 +37,7 @@ import { UserStatsCache } from "../../cache/user/user-stats.cache";
 import { ArenaMatchCache } from "../../cache/arena/arena-match.cache";
 import { ContestCache } from "../../cache/contest/contest.cache";
 import { LeetCodeCache } from "../../cache/user/leetcode.cache";
+import { TaxonomyCache } from "../../cache/taxonomy/taxonomy.cache";
 
 /**
  * Service layer registrations.
@@ -57,6 +59,7 @@ export const servicesRegistry = {
   rawStatsService: asClass(StatsService).singleton(),
   rawArenaMatchService: asClass(ArenaMatchService).singleton(),
   rawLeetCodeService: asClass(LeetCodeService).singleton(),
+  rawTaxonomyService: asClass(TaxonomyService).singleton(),
 
   arenaService: asClass(ArenaService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
@@ -77,6 +80,7 @@ export const servicesRegistry = {
   arenaMatchCache: asClass(ArenaMatchCache).singleton(),
   contestCache: asClass(ContestCache).singleton(),
   leetcodeCache: asClass(LeetCodeCache).singleton(),
+  taxonomyCache: asClass(TaxonomyCache).singleton(),
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -103,4 +107,8 @@ export const servicesRegistry = {
   userService: asClass(UserService).singleton(),
   clistService: asClass(ClistService).singleton(),
   contestService: asClass(ContestService).singleton(),
+  
+  taxonomyService: asFunction(
+    ({ taxonomyCache }: ICradle) => taxonomyCache,
+  ).singleton(),
 };
