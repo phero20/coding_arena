@@ -1,65 +1,28 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { registerRoutes } from "./routes";
-import { requestLogger } from "./middlewares/request-logger.middleware";
+import { container } from "./libs/awilix-container";
 import { AppError } from "./utils/app-error";
 import { ApiResponse } from "./utils/api-response";
 import { config } from "./configs/env";
-import { logger } from "./libs/logger";
-import type { AppEnv } from "./types/hono.types";
+import { logger } from "./libs/utils/logger";
+import type { AppEnv } from "./types/infrastructure/hono.types";
 
 import { requestId } from "hono/request-id";
+import { corsConfig } from "./configs/cors";
 
 export function createApp(): Hono<AppEnv> {
   const app = new Hono<AppEnv>();
 
   // 1. Core Global Middlewares
   app.use("*", requestId());
-  app.use(
-    "*",
-    cors({
-      origin: (origin) => {
-        if (config.isDev) return origin;
-        return [config.clientUrl, "http://127.0.0.1:3001"].includes(origin)
-          ? origin
-          : config.clientUrl;
-      },
-      allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-      allowHeaders: [
-        "Content-Type",
-        "Authorization",
-        "Clerk-Auth-Token",
-        "x-clerk-auth-token",
-      ],
-      maxAge: 86400,
-      credentials: true,
-    }),
-  );
-
-  app.use("*", requestLogger);
+  app.use("*", corsConfig());
 
   // 2. Global Error Handling
-  app.onError((err, c) => {
-    let appError: AppError;
+  const { requestLoggerMiddleware, errorMiddleware } = container.cradle;
+  app.use("*", (c, next) => requestLoggerMiddleware.handle(c, next));
 
-    if (err instanceof AppError) {
-      appError = err;
-    } else if (err instanceof Error) {
-      appError = AppError.internal(err.message, undefined, err);
-    } else {
-      appError = AppError.internal("Unexpected error", err, undefined);
-    }
-
-    logger.error({ code: appError.code, cause: appError.cause }, appError.message);
-
-    const response = ApiResponse.failure(
-      appError.code,
-      appError.message,
-      appError.details
-    );
-
-    return c.json(response.toJSON(), appError.statusCode as any);
-  });
+  app.onError((err, c) => errorMiddleware.handle(err, c));
 
   // 3. Route Registration
   registerRoutes(app);
