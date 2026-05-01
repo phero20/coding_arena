@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Container } from "@/components/shared/Container";
 import { cn } from "@/lib/utils";
@@ -36,13 +37,20 @@ export const Navbar = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
-          ? "py-3 bg-background border-b border-border"
-          : "py-5 bg-background border-b border-transparent",
+          ? "py-2 bg-background border-b border-border"
+          : "py-3 bg-background border-b border-transparent",
       )}
     >
       <Container className="flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt="SlaveCode Logo"
+            width={52}
+            height={40}
+            className="object-contain -mr-2"
+          />
           <span className="text-xl font-bold tracking-tight">
             SlaveCode<span className="text-primary">.</span>
           </span>
@@ -55,12 +63,12 @@ export const Navbar = () => {
             <NavLinks />
             <div className="h-4 w-px bg-border/50 mx-2" />
           </div>
-          
+
           {/* Search: Desktop Only */}
           <div className="hidden md:block">
             <UserSearch />
           </div>
-          
+
           {/* Desktop Only Actions */}
           <div className="hidden md:block">
             <NavbarActions />

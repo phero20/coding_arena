@@ -295,7 +295,9 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
           currentVisualParentId: string,
           depth: number,
         ) => {
-          parentNodeData.children?.forEach((child) => {
+          [...(parentNodeData.children || [])]
+            .sort((a, b) => b.order - a.order)
+            .forEach((child) => {
             const isExpanded = expandedNodeIds.has(child.id);
             const isActive = activeNodeId === child.id;
 

@@ -39,13 +39,13 @@ export default function RootLayout({
       localization={{
         signIn: {
           start: {
-            title: "Welcome to SlaveCode",
+            title: "Welcome to",
             subtitle: "Sign in or Create account to continue",
           },
         },
         signUp: {
           start: {
-            title: "Welcome to SlaveCode",
+            title: "Welcome to",
             subtitle: "Sign in or Create account to continue",
           },
         },
@@ -61,9 +61,9 @@ export default function RootLayout({
           borderRadius: "var(--radius)",
         },
         elements: {
-          card: "bg-card border border-border shadow-2xl",
+          card: "bg-card border border-border shadow-2xl mx-auto !my-auto",
           navbar: "bg-transparent",
-          headerTitle: "text-2xl font-bold tracking-tight text-foreground",
+          headerTitle: "text-2xl font-bold tracking-tight text-foreground after:content-['SlaveCode'] after:text-primary after:ml-2",
           headerSubtitle: "text-base text-muted-foreground",
           socialButtonsBlockButton:
             "bg-muted/50 border-border hover:bg-muted transition-all",
@@ -71,9 +71,10 @@ export default function RootLayout({
             "bg-primary text-primary-foreground hover:opacity-90 transition-opacity",
           footerActionLink: "text-primary hover:text-primary/80",
           userButtonPopoverCard: "bg-card border border-border",
-          modalBackdrop: "!bg-background/70 backdrop-blur-[1px]",
-          footer: "block",
-          footerInternal: "block",
+          modalContent: "flex items-center justify-center",
+          modalBackdrop: "!bg-background/60 backdrop-blur-[2px] fixed inset-0 flex items-center justify-center z-[9999]",
+          footer: "!hidden",
+          footerInternal: "!hidden",
           watermark: "hidden",
         },
       }}

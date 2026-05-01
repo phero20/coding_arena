@@ -224,3 +224,42 @@ body > div > div[style*="position: fixed"][style*="right"][style*="bottom"],
 html.transitioning-theme {
   contain: paint;
 }
+
+
+.cl-modalBackdrop {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.cl-modalContent {
+  margin: auto !important;
+  position: static !important;
+}
+
+/* Even more aggressive Clerk badge removal */
+.cl-internal-ph72j6, .cl-internal-1dauv8j, .cl-internal-66iszh, .cl-internal-b3al4t, .cl-internal-1p7sh9j, .cl-internal-1scxde7, .cl-internal-b3fm6y {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Target the specific sidebar footer in UserProfile */
+.cl-navbar + div, .cl-sidebar + div, .cl-userProfile-navbar + div {
+  display: none !important;
+}
+
+/* Hide the specific development badge area in UserProfile sidebar */
+.cl-navbar > div:last-child, .cl-sidebar > div:last-child {
+  display: none !important;
+}
+
+/* Nuke the orange development stripes from Clerk sidebars */
+.cl-navbar, .cl-sidebar, .cl-userProfile-navbar, .cl-organizationProfile-navbar {
+  background-image: none !important;
+}
+
+/* Fix the transparent sidebar by adding a solid background color */
+.cl-navbar, .cl-sidebar {
+  background-color: var(--card) !important;
+  border-right: 1px solid var(--border) !important;
+}
