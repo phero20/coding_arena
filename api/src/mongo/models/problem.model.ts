@@ -1,5 +1,5 @@
-import { mongoose } from '../connection'
-import type { Problem } from '../../types/problem.types'
+import { mongoose } from "../connection";
+import type { Problem } from "../../types/problems/problem.types";
 
 const ExampleSchema = new mongoose.Schema(
   {
@@ -8,7 +8,7 @@ const ExampleSchema = new mongoose.Schema(
     images: { type: [String], default: [] },
   },
   { _id: false },
-)
+);
 
 const CodeSnippetsSchema = new mongoose.Schema(
   {
@@ -21,7 +21,7 @@ const CodeSnippetsSchema = new mongoose.Schema(
     rust: { type: String },
   },
   { _id: false, strict: false },
-)
+);
 
 const ProblemSchema = new mongoose.Schema(
   {
@@ -30,7 +30,7 @@ const ProblemSchema = new mongoose.Schema(
     frontend_id: { type: String },
     difficulty: {
       type: String,
-      enum: ['Easy', 'Medium', 'Hard'],
+      enum: ["Easy", "Medium", "Hard"],
       required: true,
     },
     problem_slug: { type: String, required: true, unique: true },
@@ -46,18 +46,22 @@ const ProblemSchema = new mongoose.Schema(
   {
     timestamps: true,
   },
-)
+);
 
 ProblemSchema.index(
-  { title: 'text', problem_slug: 'text', topics: 'text' },
-  { name: 'problem_text_index' },
-)
+  { title: "text", problem_slug: "text", topics: "text" },
+  { name: "problem_text_index" },
+);
 
 // Re-export from domain types for backwards compatibility
-export type { Problem, Example, CodeSnippets } from '../../types/problem.types'
+export type {
+  Problem,
+  Example,
+  CodeSnippets,
+} from "../../types/problems/problem.types";
 
-export type ProblemDocument = Problem & mongoose.Document
+export type ProblemDocument = Problem & mongoose.Document;
 
 export const ProblemModel =
   mongoose.models.Problem ||
-  mongoose.model<ProblemDocument>('Problem', ProblemSchema)
+  mongoose.model<ProblemDocument>("Problem", ProblemSchema);
