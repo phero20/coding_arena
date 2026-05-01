@@ -115,7 +115,10 @@ export interface ArenaMatch {
   updatedAt: Date;
 }
 
-import { ArenaPlayerDetailed, ArenaMatchDetailed } from "../../types/arena-match.types";
+import {
+  ArenaPlayerDetailed,
+  ArenaMatchDetailed,
+} from "../../types/arena/arena-match.types";
 
 export type { ArenaPlayerDetailed, ArenaMatchDetailed };
 
