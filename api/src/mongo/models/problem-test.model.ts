@@ -1,5 +1,5 @@
-import { mongoose } from '../connection'
-import type { ProblemTest, TestCase } from '../../types/problem.types'
+import { mongoose } from "../connection";
+import type { ProblemTest, TestCase } from "../../types/problems/problem.types";
 
 const TestCaseSchema = new mongoose.Schema(
   {
@@ -11,16 +11,16 @@ const TestCaseSchema = new mongoose.Schema(
     is_sample: { type: Boolean, default: false },
   },
   { _id: false },
-)
+);
 
 const ProblemTestSchema = new mongoose.Schema(
   {
     problem_id: { type: String, required: true, index: true },
     type: {
       type: String,
-      enum: ['public', 'hidden', 'stress', 'ai_eval'],
+      enum: ["public", "hidden", "stress", "ai_eval"],
       required: true,
-      default: 'public',
+      default: "public",
     },
     cases: {
       type: [TestCaseSchema],
@@ -30,18 +30,18 @@ const ProblemTestSchema = new mongoose.Schema(
   {
     timestamps: true,
   },
-)
+);
 
 ProblemTestSchema.index(
   { problem_id: 1, type: 1 },
-  { unique: true, name: 'problem_test_unique_by_type' },
-)
+  { unique: true, name: "problem_test_unique_by_type" },
+);
 
 // Re-export domain types for backwards compatibility
-export type { ProblemTest, TestCase } from '../../types/problem.types'
+export type { ProblemTest, TestCase } from "../../types/problems/problem.types";
 
-export type ProblemTestDocument = ProblemTest & mongoose.Document
+export type ProblemTestDocument = ProblemTest & mongoose.Document;
 
 export const ProblemTestModel =
   mongoose.models.ProblemTest ||
-  mongoose.model<ProblemTestDocument>('ProblemTest', ProblemTestSchema)
+  mongoose.model<ProblemTestDocument>("ProblemTest", ProblemTestSchema);
