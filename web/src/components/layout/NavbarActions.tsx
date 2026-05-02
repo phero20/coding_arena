@@ -43,7 +43,6 @@ export const NavbarActions = () => {
   const [open, setOpen] = useState(false);
 
   const username = user?.username || user?.id;
-  console.log(user);
   const handleAction = (pathOrAction: string | (() => void)) => {
     setOpen(false);
     if (typeof pathOrAction === "string") {

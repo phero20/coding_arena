@@ -48,7 +48,6 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
   // 2. Force close WebSocket on mount to prevent lag
   useEffect(() => {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      console.log("[Results] Closing socket to prevent lag");
       socket.close();
       setSocket(null);
       setIsConnected(false);
@@ -66,7 +65,6 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
   // Invalidate stats and history when results are finalized
   useEffect(() => {
     if (serverResults && currentUser?.username) {
-      console.log("[Results] Finalized. Invalidating profile stats and history...");
       queryClient.invalidateQueries({
         queryKey: ["stats", "profile", currentUser.username],
       });

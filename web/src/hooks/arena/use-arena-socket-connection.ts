@@ -12,8 +12,6 @@ export function useArenaSocketConnection() {
   const socketManagerRef = useRef<ArenaSocketManager | null>(null);
 
   const disconnect = useCallback(() => {
-    console.log(`[Arena Provider] Explicit Disconnect requested.`);
-    
     // 1. Force manager cleanup immediately
     if (socketManagerRef.current) {
       socketManagerRef.current.disconnect();
@@ -29,7 +27,6 @@ export function useArenaSocketConnection() {
     // 1. [IDEMPOTENCY GUARD] Check manager ref directly (Atomic)
     const currentManager = socketManagerRef.current;
     if (currentManager && currentManager.getRoomId() === roomId) {
-      console.log(`[Arena Provider] Already connected to room ${roomId}, skipping.`);
       return;
     }
 
@@ -48,8 +45,6 @@ export function useArenaSocketConnection() {
       const token = await getToken();
       if (!token) return;
 
-      console.log(`[Arena Provider] Initializing connection for room: ${roomId}`);
-      
       const manager = new ArenaSocketManager(
         roomId,
         userId,

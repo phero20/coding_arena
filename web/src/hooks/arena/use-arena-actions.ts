@@ -45,12 +45,10 @@ export function useArenaTransitions(
     const executeTransition = () => {
       if (status === "PLAYING" && !matchEnded) {
         if (!window.location.pathname.includes(`/arena/match/${roomId}`)) {
-          console.log(`[Arena Transition] Matching -> ${roomId}`);
           router.push(`/arena/match/${roomId}`);
         }
       } else if (status === "FINISHED" || matchEnded) {
         if (!window.location.pathname.includes(`/results`)) {
-          console.log(`[Arena Transition] Concluding -> /arena/match/${roomId}/results`);
           router.push(`/arena/match/${roomId}/results`);
         }
       }

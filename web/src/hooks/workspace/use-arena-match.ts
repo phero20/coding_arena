@@ -44,7 +44,7 @@ export function useArenaMatch({ problem, roomId }: UseArenaMatchProps) {
   // 2. Observer for Match End (Signals UI to show overlay)
   useEffect(() => {
     if (matchEnded && room?.status === "FINISHED") {
-      console.log("[Arena] Match concluded. UI should show overlay.");
+      // Signal UI to show overlay
     }
   }, [matchEnded, room?.status]);
 
