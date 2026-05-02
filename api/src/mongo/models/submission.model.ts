@@ -1,5 +1,8 @@
-import { mongoose } from '../connection'
-import type { Submission, SubmissionStatus } from '../../types/submission.types'
+import { mongoose } from "../connection";
+import type {
+  Submission,
+  SubmissionStatus,
+} from "../../types/submissions/submission.types";
 
 const SubmissionSchema = new mongoose.Schema(
   {
@@ -24,17 +27,17 @@ const SubmissionSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        'PENDING',
-        'RUNNING',
-        'ACCEPTED',
-        'WRONG_ANSWER',
-        'TLE',
-        'RUNTIME_ERROR',
-        'COMPILATION_ERROR',
-        'SYSTEM_ERROR',
+        "PENDING",
+        "RUNNING",
+        "ACCEPTED",
+        "WRONG_ANSWER",
+        "TLE",
+        "RUNTIME_ERROR",
+        "COMPILATION_ERROR",
+        "SYSTEM_ERROR",
       ],
       required: true,
-      default: 'PENDING',
+      default: "PENDING",
       index: true,
     },
     time: {
@@ -50,18 +53,21 @@ const SubmissionSchema = new mongoose.Schema(
   {
     timestamps: true,
   },
-)
+);
 
 SubmissionSchema.index(
   { problemId: 1, userId: 1, createdAt: -1 },
-  { name: 'submission_by_problem_user_created_at' },
-)
+  { name: "submission_by_problem_user_created_at" },
+);
 
 // Re-export domain types for backwards compatibility
-export type { Submission, SubmissionStatus } from '../../types/submission.types'
+export type {
+  Submission,
+  SubmissionStatus,
+} from "../../types/submissions/submission.types";
 
-export type SubmissionDocument = Submission & mongoose.Document
+export type SubmissionDocument = Submission & mongoose.Document;
 
 export const SubmissionModel =
   mongoose.models.Submission ||
-  mongoose.model<SubmissionDocument>('Submission', SubmissionSchema)
+  mongoose.model<SubmissionDocument>("Submission", SubmissionSchema);
