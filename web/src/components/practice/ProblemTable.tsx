@@ -27,6 +27,8 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
   isUpdating,
   topicFilter,
   onRetry,
+  isFetchingNextPage,
+  hasNextPage,
 }) => {
   return (
     <Card className="border rounded-lg border-border/60 bg-card/70 backdrop-blur-sm overflow-hidden">
@@ -81,6 +83,9 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
                     }
                   />
                 ))}
+                {isFetchingNextPage && (
+                  <ProblemRowSkeleton count={5} fragment />
+                )}
               </TableBody>
             </Table>
           )}

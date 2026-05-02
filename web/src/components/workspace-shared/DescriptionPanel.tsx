@@ -107,10 +107,9 @@ export const DescriptionPanel = React.memo(
                     </div>
                   </header>
                   <div
-                    className="text-sm leading-relaxed text-foreground/80 prose prose-invert max-w-full wrap-break-word"
+                    className="text-sm leading-relaxed text-foreground/80 prose prose-invert max-w-full wrap-break-word pb-4"
                     dangerouslySetInnerHTML={{ __html: problem.description }}
                   />
-
                   {problem.examples && problem.examples.length > 0 && (
                     <div className="w-full min-w-0 overflow-hidden space-y-12">
                       <h3 className="text-sm font-bold flex items-center gap-2 text-foreground/90">

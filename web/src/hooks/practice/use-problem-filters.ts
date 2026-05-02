@@ -29,7 +29,8 @@ export function useProblemFilters(
       list = list.filter(
         (p) =>
           p.title.toLowerCase().includes(q) ||
-          p.problem_slug.toLowerCase().includes(q),
+          p.problem_slug.toLowerCase().includes(q) ||
+          p.problem_id.toString().includes(q),
       );
     }
 

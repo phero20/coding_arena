@@ -67,6 +67,7 @@ interface EnvConfig {
 
   // AI
   groqApiKey?: string;
+  geminiApiKey?: string;
 
   // Redis
   redisUrl: string;
@@ -118,6 +119,7 @@ export const config: EnvConfig = {
 
   // AI
   groqApiKey: Bun.env.GROQ_API_KEY,
+  geminiApiKey: Bun.env.GEMINI_API_KEY,
 
   // Redis
   redisUrl: Bun.env.REDIS_URL || "redis://localhost:6379",

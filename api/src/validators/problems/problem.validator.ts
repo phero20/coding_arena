@@ -11,5 +11,13 @@ export const createProblemSchema = z.object({
   description: z.string().min(1, "Description is required"),
   topics: z.array(z.string()).optional(),
   category: z.string().optional(),
+  function_signature: z.object({
+    name: z.string().min(1, "Function name is required"),
+    return_type: z.string().min(1, "Return type is required"),
+    params: z.array(z.object({
+      name: z.string().min(1, "Param name is required"),
+      type: z.string().min(1, "Param type is required"),
+    })).default([]),
+  }),
 });
 export type CreateProblemInput = z.infer<typeof createProblemSchema>;

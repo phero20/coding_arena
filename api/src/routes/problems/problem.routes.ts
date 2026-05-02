@@ -28,6 +28,7 @@ export const registerProblemRoutes = (
   // Public problem list access
   app.get(
     "/problems",
+    zValidator("query", PaginationQuerySchema),
     problemController.action(problemController.getProblems, {
       requireAuth: false,
     }),

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/navigation";
 import type { PracticeProblemListProps } from "@/types/component.types";
 import { toast } from "sonner";
-import { useProblemsQuery } from "@/hooks/queries/use-problem.queries";
+import { useProblemsQuery, useInfiniteProblemsQuery } from "@/hooks/queries/use-problem.queries";
 import { useCreateArena, useUpdateArenaProblem } from "@/hooks/arena/use-arena-actions";
 import { useProblemFilters } from "@/hooks/practice/use-problem-filters";
 import { useProblemSelectionHandler } from "@/hooks/practice/use-problem-selection";
@@ -25,11 +26,32 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
   const { hostArena, isHosting } = useCreateArena();
   const { updateProblem, isUpdating } = useUpdateArenaProblem(roomId || "");
 
-  const [page, setPage] = useState(1);
-  const { data, isLoading, error, refetch } = useProblemsQuery(page, 20); 
-  const problems = data?.problems;
-  const meta = data?.meta;
-  
+  const { 
+    data, 
+    isLoading, 
+    error, 
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage 
+  } = useInfiniteProblemsQuery(20);
+
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0.1,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage, isLoading]);
+
+  // Flatten the infinite pages into a single array
+  const allProblems = useMemo(() => {
+    const problems = data?.pages.flatMap((page) => page.problems) || [];
+    return problems;
+  }, [data]);
+
   const {
     search,
     setSearch,
@@ -39,7 +61,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
     setDifficultyFilter,
     filteredProblems,
     resetFilters: handleResetFilters
-  } = useProblemFilters(problems || [], setPage);
+  } = useProblemFilters(allProblems, () => {}); 
 
   const {
     selectingId,
@@ -82,15 +104,18 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
         isUpdating={isUpdating}
         topicFilter={topicFilter}
         onRetry={refetch}
+        isFetchingNextPage={isFetchingNextPage}
+        hasNextPage={hasNextPage}
       />
 
-      {meta && (
-        <ProblemPagination
-          page={page}
-          totalPages={meta.totalPages}
-          setPage={setPage}
-        />
-      )}
+      {/* Infinite Scroll Trigger */}
+      <div ref={loadMoreRef} className="py-4 flex justify-center w-full">
+        {!hasNextPage && allProblems.length > 0 && !isLoading && (
+          <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-2">
+            You've reached the end of the list.
+          </p>
+        )}
+      </div>
 
       <LanguageSelectDialog
         isOpen={isDialogOpen}

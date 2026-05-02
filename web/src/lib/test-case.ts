@@ -1,14 +1,20 @@
 /**
- * Formats a raw value into a string with appropriate quoting.
- * Numbers and booleans are preserved.
- * Single characters are wrapped in single quotes.
- * Strings are wrapped in double quotes.
+ * Formats a raw value into a string with appropriate quoting for display.
  */
-export const formatValue = (v: string): string => {
-  const t = v.trim();
-  if (/^(true|false)$/i.test(t)) return t.toLowerCase();
-  if (!isNaN(Number(t)) && t !== "") return t;
-  if (t.length === 1) return `'${t}'`;
+export const formatValue = (v: any): string => {
+  if (v === null || v === undefined) return "null";
+  if (typeof v === "boolean") return String(v);
+  if (typeof v === "number") return String(v);
+  if (Array.isArray(v)) {
+    return `[${v.map(formatValue).join(",")}]`;
+  }
+  if (typeof v === "object") {
+    return JSON.stringify(v);
+  }
+  
+  // For strings, handle quotes
+  const t = String(v).trim();
+  if (t.length === 1 && !isNaN(Number(t)) === false) return `'${t}'`;
   if (
     (t.startsWith('"') && t.endsWith('"')) ||
     (t.startsWith("'") && t.endsWith("'"))
@@ -18,16 +24,30 @@ export const formatValue = (v: string): string => {
 };
 
 /**
- * Heuristically parses raw competitive programming input into a LeetCode-style display.
- * - Detects length-prefixed arrays and transforms them into [val1,val2,...valN].
- * - Brackets space-separated collections.
- * - Joins multiple arguments with a comma.
+ * Transforms test case input/output into a professional display format.
+ * - If input is an object: formats as "key1 = val1, key2 = val2"
+ * - If input is a string: uses legacy heuristic parsing
  */
-export const beautifyTestCaseInput = (raw: string): string => {
+export const beautifyTestCaseInput = (raw: any): string => {
+  if (!raw) return "";
+
+  // New Structured Format (Object)
+  if (typeof raw === "object" && !Array.isArray(raw)) {
+    return Object.entries(raw)
+      .map(([key, val]) => `${key} = ${formatValue(val)}`)
+      .join(", ");
+  }
+
+  // Fallback/Output Format (Array or primitive)
+  if (Array.isArray(raw) || typeof raw !== "string") {
+    return formatValue(raw);
+  }
+
+  // Legacy String Heuristic
   const lines = raw
     .trim()
     .split("\n")
-    .map((l) => l.trim())
+    .map((l: string) => l.trim())
     .filter(Boolean);
   const result: string[] = [];
 
@@ -35,7 +55,6 @@ export const beautifyTestCaseInput = (raw: string): string => {
     const current = lines[i];
     const next = lines[i + 1];
 
-    // Heuristic: Length-prefixed array (N \n val1 val2 ... valN)
     if (next && /^\d+$/.test(current)) {
       const len = parseInt(current, 10);
       const parts = next.split(/\s+/).filter(Boolean);
@@ -46,7 +65,6 @@ export const beautifyTestCaseInput = (raw: string): string => {
       }
     }
 
-    // Heuristic: Space-separated collection
     const parts = current.split(/\s+/).filter(Boolean);
     if (parts.length > 1) {
       result.push(`[${parts.map(formatValue).join(",")}]`);

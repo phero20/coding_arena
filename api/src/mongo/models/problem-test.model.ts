@@ -3,8 +3,8 @@ import type { ProblemTest, TestCase } from "../../types/problems/problem.types";
 
 const TestCaseSchema = new mongoose.Schema(
   {
-    input: { type: String, required: true },
-    expected_output: { type: String, required: true },
+    input: { type: mongoose.Schema.Types.Mixed, required: true },
+    expected_output: { type: mongoose.Schema.Types.Mixed, required: true },
     timeout_ms: { type: Number },
     memory_limit_mb: { type: Number },
     weight: { type: Number, default: 1 },

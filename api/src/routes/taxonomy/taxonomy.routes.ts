@@ -3,7 +3,7 @@ import { zValidator } from '@hono/zod-validator';
 import { type TaxonomyController } from '../../controllers/taxonomy/taxonomy.controller';
 import { type AuthMiddleware } from '../../middlewares/security/auth.middleware';
 import { type AuthorizationMiddleware } from '../../middlewares/security/authorization.middleware';
-import { createCategorySchema, mapProblemSchema } from '../../validators/taxonomy/taxonomy.validator';
+import { createCategorySchema, mapProblemSchema, batchMapProblemSchema } from '../../validators/taxonomy/taxonomy.validator';
 import type { AppEnv } from '../../types/infrastructure/hono.types';
 
 export interface TaxonomyRouteDeps {
@@ -39,6 +39,15 @@ export const registerTaxonomyRoutes = (app: Hono<AppEnv>, deps: TaxonomyRouteDep
   );
 
   /**
+   * GET /api/v1/taxonomy/detail/:id
+   * Public: Retrieves a specific category with its problems by ID.
+   */
+  app.get(
+    '/taxonomy/detail/:id',
+    taxonomyController.action(taxonomyController.getCategoryDetailById.bind(taxonomyController), { requireAuth: false }),
+  );
+
+  /**
    * POST /api/v1/taxonomy/categories
    * Admin only: Creates a new category node.
    */
@@ -60,6 +69,18 @@ export const registerTaxonomyRoutes = (app: Hono<AppEnv>, deps: TaxonomyRouteDep
     (c, next) => authorizationMiddleware.requireRoles('admin')(c, next),
     zValidator('json', mapProblemSchema),
     taxonomyController.action(taxonomyController.mapProblem.bind(taxonomyController)),
+  );
+
+  /**
+   * POST /api/v1/taxonomy/map/batch
+   * Admin only: Bulk maps problems to a category.
+   */
+  app.post(
+    '/taxonomy/map/batch',
+    (c, next) => authMiddleware.handle(c, next),
+    (c, next) => authorizationMiddleware.requireRoles('admin')(c, next),
+    zValidator('json', batchMapProblemSchema),
+    taxonomyController.action(taxonomyController.batchMapProblems.bind(taxonomyController)),
   );
 
   /**

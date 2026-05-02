@@ -6,9 +6,9 @@ import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 /**
  * Problem Table Row Skeleton (Ghost of ProblemRow)
  */
-export const ProblemRowSkeleton = ({ count = 8 }: { count?: number }) => (
-  <SkeletonProvider noWrapper>
-    <TableBody>
+export const ProblemRowSkeleton = ({ count = 8, fragment = false }: { count?: number; fragment?: boolean }) => {
+  const content = (
+    <>
       {Array.from({ length: count }).map((_, i) => (
         <TableRow key={i} className="border-t border-border/40 hover:bg-transparent">
           {/* ID Column */}
@@ -45,9 +45,25 @@ export const ProblemRowSkeleton = ({ count = 8 }: { count?: number }) => (
           </TableCell>
         </TableRow>
       ))}
-    </TableBody>
-  </SkeletonProvider>
-);
+    </>
+  );
+
+  if (fragment) {
+    return (
+      <SkeletonProvider noWrapper>
+        {content}
+      </SkeletonProvider>
+    );
+  }
+
+  return (
+    <SkeletonProvider noWrapper>
+      <TableBody>
+        {content}
+      </TableBody>
+    </SkeletonProvider>
+  );
+};
 
 /**
  * Submission History Item Skeleton (Ghost of SubmissionHistory items)

@@ -90,6 +90,7 @@ import { type ContestCache } from "../cache/contest/contest.cache";
 import { type UserStatsCache } from "../cache/user/user-stats.cache";
 import { type LeetCodeCache } from "../cache/user/leetcode.cache";
 import { type TaxonomyCache } from "../cache/taxonomy/taxonomy.cache";
+import { GeminiLlmService } from "../services/ai/gemini-llm.service";
 
 export interface ICradle {
   // Infrastructure
@@ -118,7 +119,8 @@ export interface ICradle {
   statsSubmissionService: StatsSubmissionService;
   statsService: IStatsService;
   groqLlmService: GroqLlmService;
-  llm: GroqLlmService;
+  geminiLlmService: GeminiLlmService;
+  llm: GeminiLlmService;
   aiProblemService: AiProblemService;
   arenaMatchService: ArenaMatchService;
   rawArenaMatchService: IArenaMatchService;

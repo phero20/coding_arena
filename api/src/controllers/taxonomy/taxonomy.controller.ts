@@ -5,7 +5,9 @@ import { type ControllerRequest } from '../../types/infrastructure/hono.types';
 import {
   type CreateCategoryPayload,
   type MapProblemPayload,
+  type BatchMapProblemPayload,
   type SlugParams,
+  type IdParams,
   type MapParams,
 } from '../../types/taxonomy/taxonomy.types';
 
@@ -34,6 +36,14 @@ export class TaxonomyController extends BaseController {
   }
 
   /**
+   * GET /api/v1/taxonomy/detail/:id
+   * Public: Returns category details by UUID.
+   */
+  async getCategoryDetailById(req: ControllerRequest<never, IdParams>): Promise<any> {
+    return this.taxonomyService.getCategoryDetailById(req.params.id);
+  }
+
+  /**
    * POST /api/v1/taxonomy/categories
    * Admin only: Creates a new node in the taxonomy tree.
    */
@@ -59,6 +69,15 @@ export class TaxonomyController extends BaseController {
       req.params.categoryId,
       req.params.problemId,
     );
+    return { success: true };
+  }
+
+  /**
+   * POST /api/v1/taxonomy/map/batch
+   * Admin only: Bulk links multiple problems to a category.
+   */
+  async batchMapProblems(req: ControllerRequest<BatchMapProblemPayload>): Promise<{ success: boolean }> {
+    await this.taxonomyService.batchMapProblemsToCategory(req.body);
     return { success: true };
   }
 }

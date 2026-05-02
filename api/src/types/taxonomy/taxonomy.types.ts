@@ -17,13 +17,21 @@ export interface CategoryDetail extends Category {
   problems: any[]; // Enriched with Mongo problem data
 }
 
-/**
- * Payload for mapping a problem to a category.
- */
 export interface MapProblemPayload {
   categoryId: string;
   problemId: string;
   order?: number;
+}
+
+/**
+ * Payload for batch mapping problems to a category.
+ */
+export interface BatchMapProblemPayload {
+  categoryId: string;
+  mappings: {
+    problemId: string;
+    order?: number;
+  }[];
 }
 
 /**
@@ -40,6 +48,10 @@ export interface CreateCategoryPayload {
 // Route param shapes for controller typing
 export interface SlugParams {
   slug: string;
+}
+
+export interface IdParams {
+  id: string;
 }
 
 export interface MapParams {

@@ -1,7 +1,7 @@
 import { createLogger } from "../../libs/utils/logger";
 import { redis } from "../../libs/core/redis";
 import type { ITaxonomyService, TaxonomyService } from "../../services/taxonomy/taxonomy.service";
-import type { CategoryTreeNode, CategoryDetail, CreateCategoryPayload, MapProblemPayload } from "../../types/taxonomy/taxonomy.types";
+import type { CategoryTreeNode, CategoryDetail, CreateCategoryPayload, MapProblemPayload, BatchMapProblemPayload } from "../../types/taxonomy/taxonomy.types";
 import { type ICradle } from "../../libs/awilix-container";
 
 const logger = createLogger("taxonomy-cache");
@@ -60,6 +60,29 @@ export class TaxonomyCache implements ITaxonomyService {
     return detail;
   }
 
+  async getCategoryDetailById(id: string): Promise<CategoryDetail> {
+    const key = `taxonomy:category:id:${id}`;
+
+    try {
+      const cached = await redis.get(key);
+      if (cached) return JSON.parse(cached);
+    } catch (err) {
+      logger.error({ id, err }, "Redis get error");
+    }
+
+    const detail = await this.rawTaxonomyService.getCategoryDetailById(id);
+
+    if (detail) {
+      try {
+        await redis.set(key, JSON.stringify(detail), "EX", this.CACHE_TTL);
+      } catch (err) {
+        logger.error({ id, err }, "Redis set error");
+      }
+    }
+
+    return detail;
+  }
+
   async createCategory(payload: CreateCategoryPayload): Promise<any> {
     const result = await this.rawTaxonomyService.createCategory(payload);
     await this.invalidateTaxonomyCaches();
@@ -68,6 +91,11 @@ export class TaxonomyCache implements ITaxonomyService {
 
   async mapProblemToCategory(payload: MapProblemPayload): Promise<void> {
     await this.rawTaxonomyService.mapProblemToCategory(payload);
+    await this.invalidateTaxonomyCaches();
+  }
+
+  async batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void> {
+    await this.rawTaxonomyService.batchMapProblemsToCategory(payload);
     await this.invalidateTaxonomyCaches();
   }
 

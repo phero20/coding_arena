@@ -11,6 +11,7 @@ export interface ITaxonomyRepository {
   getProblemMappings(categoryId: string): Promise<CategoryProblem[]>;
   createCategory(category: NewCategory): Promise<Category>;
   mapProblem(mapping: CategoryProblem): Promise<void>;
+  batchMapProblems(mappings: CategoryProblem[]): Promise<void>;
   unmapProblem(categoryId: string, problemId: string): Promise<void>;
   getProblemCount(categoryId: string): Promise<number>;
   getProblemCountRecursive(categoryId: string): Promise<number>;
@@ -72,6 +73,18 @@ export class TaxonomyRepository implements ITaxonomyRepository {
       .onConflictDoUpdate({
         target: [schema.categoryProblems.categoryId, schema.categoryProblems.problemId],
         set: { order: mapping.order },
+      });
+  }
+
+  async batchMapProblems(mappings: CategoryProblem[]): Promise<void> {
+    if (mappings.length === 0) return;
+    
+    await db
+      .insert(schema.categoryProblems)
+      .values(mappings)
+      .onConflictDoUpdate({
+        target: [schema.categoryProblems.categoryId, schema.categoryProblems.problemId],
+        set: { order: sql`EXCLUDED.order` },
       });
   }
 

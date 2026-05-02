@@ -23,6 +23,23 @@ const CodeSnippetsSchema = new mongoose.Schema(
   { _id: false, strict: false },
 );
 
+const FunctionParameterSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    type: { type: String, required: true },
+  },
+  { _id: false },
+);
+
+const FunctionSignatureSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    return_type: { type: String, required: true },
+    params: { type: [FunctionParameterSchema], default: [] },
+  },
+  { _id: false },
+);
+
 const ProblemSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -41,6 +58,7 @@ const ProblemSchema = new mongoose.Schema(
     follow_ups: { type: [String], default: [] },
     hints: { type: [String], default: [] },
     code_snippets: { type: CodeSnippetsSchema, default: {} },
+    function_signature: { type: FunctionSignatureSchema, required: true },
     solutions: { type: String },
   },
   {

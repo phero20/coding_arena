@@ -80,12 +80,13 @@ export class ProblemRepository
       this.model
         .find()
         .sort({ problem_id: 1 })
+        .collation({ locale: "en", numericOrdering: true }) // Forces numeric sort on strings
         .skip(skip)
         .limit(limit)
         .lean()
         .exec(),
-      // estimatedDocumentCount uses collection metadata — near-instant vs full scan
-      this.model.estimatedDocumentCount(),
+      // countDocuments is more reliable than estimatedDocumentCount for exact pagination
+      this.model.countDocuments({}),
     ]);
 
     return {

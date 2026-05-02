@@ -6,6 +6,7 @@ import {
   type CategoryDetail,
   type CreateCategoryPayload,
   type MapProblemPayload,
+  BatchMapProblemPayload,
 } from '../../types/taxonomy/taxonomy.types';
 import { AppError } from '../../utils/app-error';
 import { ERRORS } from '../../constants/errors';
@@ -13,8 +14,10 @@ import { ERRORS } from '../../constants/errors';
 export interface ITaxonomyService {
   getTaxonomyTree(): Promise<CategoryTreeNode[]>;
   getCategoryDetail(slug: string): Promise<CategoryDetail>;
+  getCategoryDetailById(id: string): Promise<CategoryDetail>;
   createCategory(payload: CreateCategoryPayload): Promise<any>;
   mapProblemToCategory(payload: MapProblemPayload): Promise<void>;
+  batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void>;
   unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void>;
 }
 
@@ -100,6 +103,31 @@ export class TaxonomyService implements ITaxonomyService {
     };
   }
 
+  async getCategoryDetailById(id: string): Promise<CategoryDetail> {
+    const category = await this.taxonomyRepo.findCategoryById(id);
+    if (!category) {
+      throw AppError.notFound('Category not found');
+    }
+
+    const [parent, children, mappings] = await Promise.all([
+      category.parentId
+        ? this.taxonomyRepo.findCategoryById(category.parentId)
+        : Promise.resolve(null),
+      this.taxonomyRepo.findChildren(category.id),
+      this.taxonomyRepo.getProblemMappings(category.id),
+    ]);
+
+    const problemIds = mappings.map((m) => m.problemId);
+    const problems = await this.problemRepo.findManyByProblemIds(problemIds);
+
+    return {
+      ...category,
+      parent: parent ?? null,
+      children,
+      problems,
+    };
+  }
+
   async createCategory(payload: CreateCategoryPayload): Promise<any> {
     const existing = await this.taxonomyRepo.findCategoryBySlug(payload.slug);
     if (existing) {
@@ -122,6 +150,19 @@ export class TaxonomyService implements ITaxonomyService {
       problemId: payload.problemId,
       order: payload.order ?? 0,
     });
+  }
+
+  async batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void> {
+    const category = await this.taxonomyRepo.findCategoryById(payload.categoryId);
+    if (!category) throw AppError.notFound('Category not found');
+
+    const mappings = payload.mappings.map((m: { problemId: string; order?: number }) => ({
+      categoryId: payload.categoryId,
+      problemId: m.problemId,
+      order: m.order ?? 0,
+    }));
+
+    await this.taxonomyRepo.batchMapProblems(mappings);
   }
 
   async unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void> {

@@ -1,5 +1,5 @@
-import type { Example, CodeSnippets } from "../../mongo/models/problem.model";
-import type { TestCase } from "../../mongo/models/problem-test.model";
+import type { Example, CodeSnippets, FunctionSignature } from "./problem.types";
+import type { TestCase } from "./problem.types";
 
 export interface ImportedProblemPayload {
   title: string;
@@ -14,6 +14,7 @@ export interface ImportedProblemPayload {
   follow_ups?: string[];
   hints?: string[];
   code_snippets?: CodeSnippets;
+  function_signature?: FunctionSignature;
   solutions?: string;
   solution?: string;
 }
@@ -31,6 +32,7 @@ export interface AiGeneratedProblem {
   follow_ups: string[];
   hints: string[];
   code_snippets: CodeSnippets;
+  function_signature: FunctionSignature;
   solutions?: string;
 }
 

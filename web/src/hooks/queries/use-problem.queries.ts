@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { 
   getProblemBySlug, 
   getProblemById, 
@@ -32,22 +32,26 @@ export function useProblemByIdQuery(id: string) {
 }
 
 /**
- * Fetch a bulk list of problems for tables or carousels.
+ * Fetch a bulk list of problems for tables or carousels (Paginated).
  */
 export function useProblemsQuery(page = 1, limit = 20) {
   return useQuery({
     queryKey: ["problems", page, limit],
-    queryFn: async () => {
-      const data = await getProblems(page, limit);
-      return {
-        ...data,
-        problems: [...data.problems].sort((a, b) => {
-          const numA = Number(a.problem_id);
-          const numB = Number(b.problem_id);
-          if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-          return a.problem_id.localeCompare(b.problem_id);
-        })
-      };
+    queryFn: () => getProblems(page, limit),
+  });
+}
+
+/**
+ * Fetch an infinite list of problems (for infinite scroll).
+ */
+export function useInfiniteProblemsQuery(limit = 20) {
+  return useInfiniteQuery({
+    queryKey: ["problems", "infinite", limit],
+    queryFn: ({ pageParam = 1 }) => getProblems(pageParam, limit),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const { currentPage, totalPages } = lastPage.meta;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
     },
   });
 }

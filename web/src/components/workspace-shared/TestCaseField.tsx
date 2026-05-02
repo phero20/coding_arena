@@ -8,8 +8,6 @@ import { cn } from "@/lib/utils";
 import { beautifyTestCaseInput } from "@/lib/test-case";
 import { Card } from "@/components/ui/card";
 
-
-
 const CopyButton: React.FC<{ value: string }> = ({ value }) => {
   const [copied, setCopied] = useState(false);
 

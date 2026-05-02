@@ -33,6 +33,17 @@ export interface ProblemCodeSnippets {
   [language: string]: string | undefined;
 }
 
+export interface FunctionParameter {
+  name: string;
+  type: string;
+}
+
+export interface FunctionSignature {
+  name: string;
+  return_type: string;
+  params: FunctionParameter[];
+}
+
 export interface Problem {
   title: string;
   problem_id: string;
@@ -46,6 +57,7 @@ export interface Problem {
   follow_ups: string[];
   hints: string[];
   code_snippets: ProblemCodeSnippets;
+  function_signature: FunctionSignature;
   solutions?: string;
   createdAt: string;
   updatedAt: string;
@@ -56,8 +68,8 @@ export type ProblemDifficulty = Problem["difficulty"];
 export type ProblemTestType = "public" | "hidden" | "stress" | "ai_eval";
 
 export interface ProblemTestCase {
-  input: string;
-  expected_output: string;
+  input: any; // Now supports structured JSON objects
+  expected_output: any; // Now supports structured JSON arrays/objects
   timeout_ms?: number;
   memory_limit_mb?: number;
   weight?: number;

@@ -27,7 +27,7 @@ export const ProblemFilters: React.FC<ProblemFiltersProps> = ({
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="flex-1">
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-            {isSelectPage ? "Select Problem" : "Practice"}
+            {isSelectPage ? "Select Problem" : "Problems"}
           </h1>
           <p className="text-sm text-muted-foreground mt-1 text-balance">
             {isSelectPage
@@ -62,7 +62,7 @@ export const ProblemFilters: React.FC<ProblemFiltersProps> = ({
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by title or slug"
+            placeholder="Search by title or slug or number"
             className="h-10 flex-1 border border-border bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
           />
         </div>

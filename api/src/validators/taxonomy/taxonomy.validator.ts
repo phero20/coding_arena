@@ -20,5 +20,17 @@ export const mapProblemSchema = z.object({
   order: z.number().int().optional().default(0),
 });
 
+/**
+ * Validator for batch mapping problems to a category.
+ */
+export const batchMapProblemSchema = z.object({
+  categoryId: z.string().uuid('categoryId must be a valid UUID'),
+  mappings: z.array(z.object({
+    problemId: z.string().min(1, 'Problem ID is required'),
+    order: z.number().int().optional().default(0),
+  })).min(1, 'At least one mapping is required'),
+});
+
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type MapProblemInput = z.infer<typeof mapProblemSchema>;
+export type BatchMapProblemInput = z.infer<typeof batchMapProblemSchema>;

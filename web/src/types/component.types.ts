@@ -114,6 +114,8 @@ export interface ProblemTableProps {
   isUpdating: boolean;
   topicFilter: string;
   onRetry?: () => void;
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean;
 }
 
 // ProblemWorkspace.tsx
@@ -214,7 +216,7 @@ export interface SubmissionHistoryProps {
 // TestCaseField.tsx
 export interface TestCaseFieldProps {
   label: string;
-  value: string;
+  value: any;
   isOutput?: boolean;
 }
 
