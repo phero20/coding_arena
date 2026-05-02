@@ -112,7 +112,7 @@ export const ActivitySkeleton = () => (
 /**
  * Recent Activities Skeleton (Ghost of RecentActivities)
  */
-export const RecentActivitiesSkeleton = ({ count = 5 }: { count?: number }) => (
+export const RecentActivitiesSkeleton = ({ count = 10 }: { count?: number }) => (
   <SkeletonProvider noWrapper>
     <div className="p-6 border border-border/40 rounded-xl bg-card/10 space-y-4 overflow-hidden">
       {/* Header Ghost */}

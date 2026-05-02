@@ -28,9 +28,20 @@ export class ArenaController extends BaseController {
   async getUserHistory(req: ControllerRequest<never, { userId: string }>) {
     const userId = req.params.userId;
     if (!userId) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
-
+    
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-    return await this.arenaMatchService.getMatchHistory(userId, limit);
+    const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
+
+    const result = await this.arenaMatchService.getMatchHistory(userId, limit, offset);
+    
+    return {
+      ...result,
+      pagination: {
+        total: result.total,
+        limit,
+        offset
+      }
+    };
   }
 
   async createRoom(req: ControllerRequest<CreateRoomInput>) {

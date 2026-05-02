@@ -90,7 +90,7 @@ export const Hero = () => {
           className="flex flex-col md:flex-row items-center md:items-center justify-between max-w-7xl mx-auto mb-20 gap-12 lg:gap-20 pb-10 px-2 md:px-4 lg:px-0"
         >
           {/* Left Side: Brand Name */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease }}
@@ -98,7 +98,9 @@ export const Hero = () => {
           >
             <h1 className="text-[clamp(2.75rem,14vw,7.5rem)] font-bold tracking-tight text-foreground leading-none flex items-baseline whitespace-nowrap max-w-full">
               SlaveCode
-              <span className="ml-1 text-[clamp(2.75rem,14vw,7.5rem)] leading-none text-primary/60">.</span>
+              <span className="ml-1 text-[clamp(2.75rem,14vw,7.5rem)] leading-none text-primary/60">
+                .
+              </span>
             </h1>
           </motion.div>
 
@@ -111,7 +113,11 @@ export const Hero = () => {
               transition={{ duration: 0.8, delay: 0.2, ease }}
               className="text-3xl lg:text-4xl xl:text-5xl font-medium tracking-[-0.02em] leading-[1.2] mb-8 text-muted-foreground/70"
             >
-              The <span className="text-foreground tracking-tight font-semibold">platform</span> <br className="hidden md:block"/> for elite developers.
+              Your{" "}
+              <span className="text-foreground tracking-tight font-semibold">
+                code
+              </span>{" "}
+              is your master. <br className="hidden md:block" /> Serve it well.
             </motion.h2>
 
             {/* Left-bordered section with paragraph and button */}
@@ -122,8 +128,10 @@ export const Hero = () => {
               className="border-l-2 border-border/60 pl-3 max-w-md py-1"
             >
               <p className="text-muted-foreground text-[15px] leading-relaxed mb-6">
-                Master algorithms, compete in real-time arena Matches, and showcase
-                your grit on a platform built by developers, for developers.
+                Stop thinking and start delivering. The industry doesn&apos;t
+                want your creativity; it wants your total submission to the
+                roadmap. Survive the whip of the grind and prove you have the
+                grit to be a top-tier unit of labor.
               </p>
 
               <div className="flex flex-row items-start gap-4 mt-2">
@@ -133,7 +141,12 @@ export const Hero = () => {
                     Problems
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="h-11 px-6 font-semibold text-muted-foreground hover:text-foreground">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="h-11 px-6 font-semibold text-muted-foreground hover:text-foreground"
+                >
                   <Link href="/compilers">
                     <Terminal className="mr-2 size-4" />
                     Compilers

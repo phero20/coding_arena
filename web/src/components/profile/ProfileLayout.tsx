@@ -9,6 +9,8 @@ import { SocialTab } from "./SocialTab";
 import { ProfileSidebar } from "./ProfileSidebar";
 import { ArenaHistoryTab } from "./ArenaHistoryTab";
 import { useProfileStore } from "@/store/use-profile-store";
+import { RecentActivities } from "../stats/RecentActivities";
+import { Code2 } from "lucide-react";
 
 interface ProfileLayoutProps {
   username: string;
@@ -49,7 +51,13 @@ export function ProfileLayout({
 
   // Smart state management: Initial load and username changes
   React.useEffect(() => {
-    initTab({ tabParam, router, pathname, searchParams, username });
+    initTab({ 
+      tabParam, 
+      router, 
+      pathname, 
+      searchParams, 
+      username 
+    });
   }, [username, tabParam, initTab, router, pathname, searchParams]);
 
   const isOwner = user?.username === username;
@@ -91,6 +99,21 @@ export function ProfileLayout({
 
         <TabsContent value="arena" className="mt-0 focus-visible:ring-0">
           <ArenaHistoryTab userId={clerkUserId} />
+        </TabsContent>
+
+        <TabsContent value="submissions" className="mt-0 focus-visible:ring-0">
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-black tracking-tight flex items-center gap-2">
+                <Code2 className="h-5 w-5 text-primary" />
+                RECENT SUBMISSIONS
+              </h2>
+              <p className="text-xs text-muted-foreground font-medium mt-1 uppercase tracking-widest">
+                Full history of code submissions and verdicts
+              </p>
+            </div>
+            <RecentActivities username={username} hideHeader className="p-0 border-0 bg-transparent" />
+          </div>
         </TabsContent>
       </main>
     </Tabs>

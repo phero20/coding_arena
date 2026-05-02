@@ -183,14 +183,23 @@ export class ArenaMatchRepository extends MongoBaseRepository<
     return this.toDomain(doc as any);
   }
 
-  async getHistoryByUserId(userId: string, limit = 10): Promise<ArenaMatch[]> {
-    const docs = await this.model
-      .find({ "players.userId": userId })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .exec();
+  async getHistoryByUserId(userId: string, limit = 10, offset = 0): Promise<{ matches: ArenaMatch[], total: number }> {
+    const query = { "players.userId": userId };
+    
+    const [docs, total] = await Promise.all([
+      this.model
+        .find(query)
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec(),
+      this.model.countDocuments(query).exec()
+    ]);
 
-    return this.toDomainArray(docs);
+    return {
+      matches: this.toDomainArray(docs),
+      total
+    };
   }
 
   /**

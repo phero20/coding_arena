@@ -41,8 +41,11 @@ export function QueryGuard<T>({
   emptyMessage,
   emptyAction,
 }: QueryGuardProps<T>) {
-  // 1. Loading Path: Render high-fidelity skeleton if provided
-  if (loading) {
+  // 1. Loading Path: Render high-fidelity skeleton if we have no data yet
+  // We check for !data OR an empty array to ensure initial fetches show the skeleton, not the empty state.
+  const hasNoData = data === undefined || data === null || (Array.isArray(data) && data.length === 0);
+  
+  if (loading && hasNoData) {
     return skeleton ? <>{skeleton}</> : null;
   }
 

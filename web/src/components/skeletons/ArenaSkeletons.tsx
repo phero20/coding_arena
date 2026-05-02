@@ -164,10 +164,10 @@ export const MatchResultsSkeleton = () => (
  * Arena History Skeleton
  * Mirrors the ArenaMatchCard list view in the profile
  */
-export const ArenaHistorySkeleton = () => (
+export const ArenaHistorySkeleton = ({ count = 10 }: { count?: number }) => (
   <SkeletonProvider noWrapper>
     <div className="space-y-4">
-      {Array.from({ length: 4 }).map((_, i) => (
+      {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="border border-border/40 rounded-xl overflow-hidden bg-card/10">
           <div className="py-4 px-4 sm:px-6 flex items-center justify-between">
             {/* Match Info Sector Ghost */}

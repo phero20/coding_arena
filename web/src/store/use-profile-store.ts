@@ -4,11 +4,13 @@ interface ProfileState {
   // UI State
   activeTab: string;
   socialType: "followers" | "following";
+  arenaTab: "records" | "submissions";
   lastUsername?: string; // Track username for smart resets
   
   // Actions
   setActiveTab: (tab: string) => void;
   setSocialType: (type: "followers" | "following") => void;
+  setArenaTab: (tab: "records" | "submissions") => void;
   
   // Logic Migrated to Store
   syncTab: (params: {
@@ -21,6 +23,7 @@ interface ProfileState {
   
   initTab: (params: {
     tabParam: string | null;
+    arenaSubTab?: string | null;
     router: any;
     pathname: string;
     searchParams: any;
@@ -33,11 +36,13 @@ interface ProfileState {
 export const useProfileStore = create<ProfileState>((set, get) => ({
   activeTab: "stats",
   socialType: "followers",
+  arenaTab: "records",
   lastUsername: undefined,
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
   setSocialType: (type) => set({ socialType: type, activeTab: "social" }),
+  setArenaTab: (tab) => set({ arenaTab: tab, activeTab: "arena" }),
 
   syncTab: ({ value, router, pathname, searchParams, redirectSettings = true }) => {
     if (value === "settings" && redirectSettings) {
@@ -52,13 +57,17 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   },
 
-  initTab: ({ tabParam, router, pathname, searchParams, username }) => {
-    const validTabs = ["stats", "profile", "social", "arena", "settings", "appearance", "editor"];
+  initTab: ({ tabParam, arenaSubTab, router, pathname, searchParams, username }) => {
+    const validTabs = ["stats", "profile", "social", "arena", "submissions", "settings", "appearance", "editor"];
     
     // If username changed, we should reset
     if (username && get().lastUsername !== username) {
       get().reset();
       set({ lastUsername: username });
+    }
+
+    if (arenaSubTab === "submissions") {
+      set({ arenaTab: "submissions" });
     }
 
     // If no tab is present in URL, default to 'stats' and update URL
@@ -79,5 +88,5 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     }
   },
 
-  reset: () => set({ activeTab: "stats", socialType: "followers" }),
+  reset: () => set({ activeTab: "stats", socialType: "followers", arenaTab: "records" }),
 }));

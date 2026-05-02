@@ -4,6 +4,9 @@ import {
   Loader2,
   Code2,
   Timer,
+  Clock2,
+  TrendingUp,
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,92 +20,170 @@ import { Badge } from "@/components/ui/badge";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { QueryGuard } from "@/components/shared/QueryGuard";
-import { useActivityFeed } from "@/hooks/stats/use-activity-feed";
 import { RecentActivitiesSkeleton } from "../shared/Skeletons";
 import { VerdictBadge } from "../ui/verdict-badge";
+import { useProfileStore } from "@/store/use-profile-store";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationEllipsis, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from "@/components/ui/pagination";
+import { useActivityPagination } from "@/hooks/stats/use-activity-pagination";
+import { Card } from "../ui/card";
 
 interface RecentActivitiesProps {
   username?: string;
   className?: string;
+  redirectOnLoadMore?: boolean;
+  hideHeader?: boolean;
 }
 
 /**
  * RecentActivities: Live accordion-based submission feed.
- * Powered by useActivityFeed hook — mirrors MatchResults design language.
+ * Powered by useActivityPagination hook.
  */
-export function RecentActivities({ username, className }: RecentActivitiesProps) {
+export function RecentActivities({ 
+  username, 
+  className,
+  redirectOnLoadMore,
+  hideHeader
+}: RecentActivitiesProps) {
+  const { setActiveTab, setArenaTab } = useProfileStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const { 
     activities, 
     isLoading, 
+    isFetching,
     isError, 
     error,
-    loadMore, 
-    hasMore,
-    isFetchingMore,
-    totalCount,
-    refetch
-  } = useActivityFeed(username, 10);
+    refetch,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    totalCount
+  } = useActivityPagination(username, 10);
+
+  const handleLoadMoreRedirect = () => {
+    setActiveTab("submissions");
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", "submissions");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const expectedCount = totalCount > 0 
+    ? Math.min(10, totalCount - (currentPage - 1) * 10)
+    : 10;
 
   return (
-    <div className={cn("p-6 border border-border/50 bg-card rounded-xl space-y-4", className)}>
+    <Card
+      className={cn(
+        "p-6 shadow-none space-y-3",
+        className,
+      )}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border/50 pb-3">
-        <div className="flex items-center gap-2">
-          <Code2 size={14} className="text-difficulty-easy" />
-          <span className="text-xs font-bold uppercase tracking-wider">Recent Submissions</span>
+      {!hideHeader && (
+        <div className="flex items-center justify-between border-b border-border/50 pb-3">
+          <div className="flex items-center gap-2">
+            <Code2 size={14} className="text-difficulty-easy" />
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Recent Submissions
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
       <QueryGuard
-        loading={isLoading}
+        loading={isLoading || (isFetching && activities.length === 0)}
         error={isError ? error : null}
         data={activities}
         onRetry={refetch}
-        skeleton={<RecentActivitiesSkeleton count={5} />}
+        skeleton={<RecentActivitiesSkeleton count={expectedCount} />}
         emptyTitle="No submissions yet"
-        emptyMessage={username ? "This user hasn't submitted any code yet." : "No submissions yet. Start solving!"}
+        emptyMessage={
+          username
+            ? "This user hasn't submitted any code yet."
+            : "No submissions yet. Start solving!"
+        }
         emptyIcon={Code2}
       >
         {(activityList) => (
           <>
-            <div className="max-h-[650px] overflow-y-auto custom-scrollbar">
-              <Accordion type="single" collapsible className="w-full space-y-3">
-                {activityList.map((submission) => {
+            <div
+              className={cn(
+                "overflow-y-auto custom-scrollbar transition-opacity duration-200"
+              )}
+            >
+              {isFetching ? (
+                <RecentActivitiesSkeleton count={expectedCount} />
+              ) : (
+                <Accordion type="single" collapsible className="w-full space-y-4">
+                  {activityList.map((submission) => {
                   return (
                     <AccordionItem
                       key={submission.id}
                       value={submission.id}
-                      className="border border-border/40 bg-muted/20 rounded-lg overflow-hidden transition-all data-[state=open]:border-primary"
+                      className="rounded-lg border border-border bg-card overflow-hidden transition-all data-[state=open]:border-primary"
                     >
-                      <AccordionTrigger className="w-full pl-3 pr-6 py-3 hover:no-underline [&>svg]:hidden group relative">
-                        <div className="grid grid-cols-[1fr_auto] sm:grid-cols-[220px_90px_90px_1fr_auto] items-center gap-2 sm:gap-4 w-full text-left">
-                          <div className="flex flex-col min-w-0 pr-1">
-                            <span className="text-xs sm:text-sm font-bold tracking-tight truncate">
-                              {submission.problemTitle ?? submission.problemId}
-                            </span>
-                            <p className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-tighter mt-1">
-                              {submission.timeAgo}
-                            </p>
-                          </div>
-
-                          <div className="hidden sm:flex items-center justify-center shrink-0 w-[90px]">
-                            <Badge className="uppercase">
-                              {submission.formattedLang}
-                            </Badge>
-                          </div>
-
-                          {submission.time != null && (
-                            <div className="hidden sm:flex items-center justify-center shrink-0 w-[90px] gap-1 text-muted-foreground/60">
-                              <Timer size={11} />
-                              <span className="text-[10px] font-medium">{submission.time} ms</span>
+                      <AccordionTrigger className="w-full pl-4 pr-4 sm:pl-6 sm:pr-6 py-4 hover:no-underline [&>svg]:hidden group relative">
+                        <div className="flex items-center justify-between w-full gap-4">
+                          {/* Submission Info Sector */}
+                          <div className="flex-1 min-w-0 space-y-1 text-left">
+                            <div className="flex items-center gap-4">
+                              <h3 className="font-extrabold text-sm sm:text-base tracking-tight truncate text-primary uppercase">
+                                {submission.problemTitle ??
+                                  submission.problemId}
+                              </h3>
+                              <div className="hidden sm:flex items-center gap-2 shrink-0">
+                                <Badge
+                                  variant="secondary"
+                                  className="text-[10px] uppercase font-bold tracking-tight"
+                                >
+                                  {submission.formattedLang}
+                                </Badge>
+                              </div>
                             </div>
-                          )}
 
-                          {/* Spacer to push verdict to the right */}
-                          <div className="hidden sm:block flex-1" />
+                            <div className="flex items-center gap-3 text-[10px] text-muted-foreground/50 font-black uppercase tracking-widest">
+                              <span className="flex items-center gap-1.5 shrink-0">
+                                <Clock2 className="h-3 w-3 opacity-60" />
+                                {submission.timeAgo}
+                              </span>
+                            </div>
+                          </div>
 
-                          <div className="flex justify-end">
-                            <VerdictBadge verdict={submission.status} />
+                          {/* Stats Sector */}
+                          <div className="flex items-center gap-4 sm:gap-8 shrink-0 border-l border-border/10 pl-4 sm:pl-8">
+                            <div className="flex flex-col items-center justify-center text-center">
+                              <VerdictBadge verdict={submission.status} />
+                            </div>
+
+                            {/* <div className="hidden sm:flex flex-col items-center justify-center text-center">
+                              <div className="flex items-center justify-center gap-1 text-[8px] font-black text-muted-foreground tracking-widest uppercase mb-1 opacity-70">
+                                <Timer className="h-2.5 w-2.5" />
+                                <span className="hidden sm:inline">
+                                  RUNTIME
+                                </span>
+                              </div>
+                              <span className="text-xs sm:text-sm font-black tabular-nums leading-none">
+                                {submission.time ? `${submission.time}ms` : "—"}
+                              </span>
+                            </div> */}
+
+                            <div className="flex flex-col items-center justify-center text-center">
+                              <Button size="sm">
+                                <Code2 className="w-3 h-3" />
+                                <span className="hidden sm:inline">Code</span>
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </AccordionTrigger>
@@ -110,7 +191,10 @@ export function RecentActivities({ username, className }: RecentActivitiesProps)
                       <AccordionContent className="border-t border-border bg-muted p-0">
                         {submission.sourceCode ? (
                           <SyntaxHighlighter
-                            language={submission.languageId?.toLowerCase() || "javascript"}
+                            language={
+                              submission.languageId?.toLowerCase() ||
+                              "javascript"
+                            }
                             style={vscDarkPlus}
                             PreTag="div"
                             customStyle={{
@@ -137,47 +221,118 @@ export function RecentActivities({ username, className }: RecentActivitiesProps)
                         ) : (
                           <div className="flex flex-col items-center justify-center py-10 opacity-30 text-center">
                             <Code2 className="size-8 mb-2" />
-                            <p className="text-[10px] font-black uppercase italic">Code not available</p>
+                            <p className="text-[10px] font-black uppercase italic">
+                              Code not available
+                            </p>
                           </div>
                         )}
                       </AccordionContent>
                     </AccordionItem>
                   );
                 })}
-              </Accordion>
+                </Accordion>
+              )}
             </div>
 
-            {/* Pagination Metadata & Load More Button */}
-            <div className="space-y-3 pt-2">
-              {hasMore && (
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={() => loadMore()}
-                  disabled={isFetchingMore}
-                  className=""
-                >
-                  {isFetchingMore ? (
-                    <Loader2 size={12} className="animate-spin mr-2" />
-                  ) : (
-                    <ChevronRight size={12} className="rotate-90 mr-2" />
-                  )}
-                  {isFetchingMore ? "Loading..." : "Load more submissions"}
-                </Button>
+            {/* Pagination Controls */}
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              {totalCount > 0 && (
+                <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                  Showing{" "}
+                  <span className="text-muted-foreground/60">
+                    {(currentPage - 1) * 10 + 1}-
+                    {Math.min(currentPage * 10, totalCount)}
+                  </span>{" "}
+                  of{" "}
+                  <span className="text-muted-foreground/60">{totalCount}</span>
+                </div>
               )}
 
-              {totalCount > 0 && (
-                <div className="flex items-center justify-end gap-4 text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  <div className="flex items-center gap-1">
-                    <span>Total Submissions:</span>
-                    <span className="text-muted-foreground/60">{totalCount}</span>
-                  </div>
-                </div>
+              {redirectOnLoadMore ? (
+                <Button
+                  
+                  onClick={handleLoadMoreRedirect}
+                  className="text-[10px] font-bold uppercase tracking-widest"
+                >
+                  View all submissions
+                  <ChevronRight size={12} />
+                </Button>
+              ) : (
+                totalPages > 1 && (
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage > 1) setCurrentPage((p) => p - 1);
+                          }}
+                          className={cn(
+                            currentPage === 1 &&
+                              "pointer-events-none opacity-50",
+                          )}
+                        />
+                      </PaginationItem>
+
+                      {[...Array(totalPages)].map((_, i) => {
+                        const page = i + 1;
+                        // Basic sliding window for many pages
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationLink
+                                href="#"
+                                isActive={currentPage === page}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCurrentPage(page);
+                                }}
+                              >
+                                {page}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
+                        if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationEllipsis />
+                            </PaginationItem>
+                          );
+                        }
+                        return null;
+                      })}
+
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (currentPage < totalPages)
+                              setCurrentPage((p) => p + 1);
+                          }}
+                          className={cn(
+                            currentPage === totalPages &&
+                              "pointer-events-none opacity-50",
+                          )}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )
               )}
             </div>
           </>
         )}
       </QueryGuard>
-    </div>
+    </Card>
   );
 }

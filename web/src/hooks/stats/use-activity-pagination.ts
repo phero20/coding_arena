@@ -1,25 +1,25 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { useRecentSubmissionsQuery } from "@/hooks/queries/use-submission.queries";
+import { useRecentSubmissionsPaginationQuery } from "@/hooks/queries/use-submission.queries";
 import { type ExecutionVerdict } from "@/types/submission";
 
+export function useActivityPagination(username?: string, limit: number = 10) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const offset = (currentPage - 1) * limit;
 
-export function useActivityFeed(username?: string, pageSize: number = 10) {
   const { 
     data, 
     isLoading, 
     isError, 
-    fetchNextPage, 
-    hasNextPage,
-    isFetchingNextPage,
     error,
-    refetch
-  } = useRecentSubmissionsQuery(pageSize, username);
+    refetch,
+    isFetching
+  } = useRecentSubmissionsPaginationQuery(limit, offset, username);
 
   const activities = useMemo(() => {
-    const rawSubmissions = data?.pages.flatMap(page => page.submissions) ?? [];
+    const rawSubmissions = data?.submissions || [];
     
-    return rawSubmissions.map((submission) => {
+    return rawSubmissions.map((submission: any) => {
       const status = (submission.status || "SYSTEM_ERROR") as ExecutionVerdict | "PENDING";
       
       return {
@@ -33,19 +33,21 @@ export function useActivityFeed(username?: string, pageSize: number = 10) {
           : "—",
       };
     });
-  }, [data?.pages]);
+  }, [data?.submissions]);
 
-  const latestPagination = data?.pages?.at(-1)?.pagination;
+  const totalCount = data?.pagination?.total || 0;
+  const totalPages = Math.ceil(totalCount / limit);
 
   return {
     activities,
     isLoading,
+    isFetching,
     isError,
-    loadMore: fetchNextPage,
-    hasMore: hasNextPage,
-    isFetchingMore: isFetchingNextPage,
-    totalCount: latestPagination?.total || 0,
     error,
-    refetch
+    refetch,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    totalCount
   };
 }

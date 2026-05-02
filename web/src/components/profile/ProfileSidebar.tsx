@@ -72,6 +72,7 @@ export function ProfileSidebar({
   const navItems = [
     { value: "stats", label: "Statistics", icon: BarChart3 },
     { value: "arena", label: "Arena Records", icon: Trophy },
+    { value: "submissions", label: "Submissions", icon: Code2 },
     {
       value: "social",
       label: `Social`,

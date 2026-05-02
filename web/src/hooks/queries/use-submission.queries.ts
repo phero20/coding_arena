@@ -40,6 +40,9 @@ export function useSubmissionStatusQuery(submissionId: string | null) {
       queryClient.invalidateQueries({
         queryKey: ["recent-submissions-infinite"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["recent-submissions-paginated"],
+      });
     }
   }, [isFinished, user?.username, queryClient]);
 
@@ -69,5 +72,14 @@ export function useRecentSubmissionsQuery(limit: number = 10, username?: string)
       const nextOffset = lastPage.pagination.offset + lastPage.pagination.limit;
       return nextOffset < lastPage.pagination.total ? nextOffset : undefined;
     },
+  });
+}
+/**
+ * Fetch the chronological history of recent submissions with standard pagination support.
+ */
+export function useRecentSubmissionsPaginationQuery(limit: number = 10, offset: number = 0, username?: string) {
+  return useQuery({
+    queryKey: ["recent-submissions-paginated", limit, offset, username],
+    queryFn: () => getRecentSubmissions(limit, offset, username),
   });
 }

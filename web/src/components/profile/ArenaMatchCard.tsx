@@ -88,19 +88,21 @@ export const ArenaMatchCard: React.FC<ArenaMatchCardProps> = ({
 
           {/* Performance Sector */}
           <div className="flex items-center gap-4 sm:gap-8 shrink-0 border-l border-border/10 pl-4 sm:pl-8">
-            <div className="flex flex-col items-center">
-              <span className="text-[8px] font-black text-muted-foreground tracking-widest uppercase mb-0.5">
-                RANK
-              </span>
-              <span className="text-xs sm:text-base text-primary font-black tabular-nums">
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="flex items-center justify-center gap-1 text-[8px] font-black text-muted-foreground tracking-widest uppercase mb-1">
+                <Trophy className="h-2.5 w-2.5" />
+                <span className="hidden sm:inline">RANK</span>
+              </div>
+              <span className="text-xs sm:text-base text-primary font-black tabular-nums leading-none">
                 {myResult?.submissionOrder || "--"}
               </span>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-[8px] font-black text-muted-foreground tracking-widest uppercase mb-0.5 opacity-70">
-                PARTICIPANTS
-              </span>
-              <span className="text-xs sm:text-base font-black  tabular-nums">
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="flex items-center justify-center gap-1 text-[8px] font-black text-muted-foreground tracking-widest uppercase mb-1 opacity-70">
+                <Users className="h-2.5 w-2.5" />
+                <span className="hidden sm:inline">PARTICIPANTS</span>
+              </div>
+              <span className="text-xs sm:text-base font-black tabular-nums leading-none">
                 {match.players.length}
               </span>
             </div>

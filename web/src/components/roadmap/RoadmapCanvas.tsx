@@ -117,7 +117,7 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
         dagreGraph.setGraph({
           rankdir: isLR ? "LR" : "TB",
           ranksep: isLR ? 360 : 130, // horizontal gap if LR, vertical if TB
-          nodesep: isLR ? 130 : 360, // vertical gap if LR, horizontal if TB
+          nodesep: isLR ? 90 : 360, // vertical gap if LR, horizontal if TB
           marginx: 0,
           marginy: 80,
         });

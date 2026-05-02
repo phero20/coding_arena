@@ -95,7 +95,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
 
       {/* Row 4: The Tactical Log */}
       <div className="w-full">
-        <RecentActivities username={data.user.username} />
+        <RecentActivities username={data.user.username} redirectOnLoadMore={true} />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { AppearanceSection } from "./AppearanceSection";
 import { EditorSection } from "./EditorSection";
 import { ProfileSection } from "./ProfileSection";
-import { Paintbrush, Code, User } from "lucide-react";
+import { Paintbrush, Code, User, Code2 } from "lucide-react";
 import { useProfileStore } from "@/store/use-profile-store";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,7 @@ export const SettingsTabs = () => {
               {[
                 { id: "profile", label: "Profile", icon: User },
                 { id: "appearance", label: "Appearance", icon: Paintbrush },
-                { id: "editor", label: "Editor", icon: Code },
+                { id: "editor", label: "Editor", icon: Code2 },
               ].map((tab) => (
                 <TabsTrigger
                   key={tab.id}
