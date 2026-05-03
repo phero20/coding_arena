@@ -1,26 +1,27 @@
 import { Hono } from "hono";
 import { container } from "../libs/awilix-container";
-import type { AppEnv } from "../types/hono.types";
+import type { AppEnv } from "../types/infrastructure/hono.types";
 
-import { registerAuthRoutes } from "./auth.routes";
-import { registerProblemRoutes } from "./problem.routes";
-import { registerProblemTestRoutes } from "./problem-test.routes";
-import { registerSubmissionRoutes } from "./submission.routes";
-import { registerAiProblemRoutes } from "./ai-problem.routes";
-import { registerArenaRoutes } from "./arena.routes";
+import { registerAuthRoutes } from "./auth/auth.routes";
+import { registerProblemRoutes } from "./problems/problem.routes";
+import { registerProblemTestRoutes } from "./problems/problem-test.routes";
+import { registerSubmissionRoutes } from "./submissions/submission.routes";
+import { registerAiProblemRoutes } from "./problems/ai-problem.routes";
+import { registerArenaRoutes } from "./arena/arena.routes";
 
-import { healthRoutes } from "./health.routes";
+import { healthRoutes } from "./system/health.routes";
 
-const { 
-  authController, 
-  clerkWebhookController, 
-  problemController, 
-  problemTestController, 
-  submissionController, 
-  aiProblemController, 
+const {
+  authController,
+  clerkWebhookController,
+  problemController,
+  problemTestController,
+  submissionController,
+  aiProblemController,
   arenaController,
   authMiddleware,
-  authorizationMiddleware
+  authorizationMiddleware,
+  rateLimitMiddleware,
 } = container.cradle;
 
 export const registerRoutes = (app: Hono<AppEnv>) => {
@@ -55,6 +56,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     authMiddleware,
     authorizationMiddleware,
     submissionController,
+    rateLimitMiddleware,
   });
 
   registerAiProblemRoutes(v1, {
