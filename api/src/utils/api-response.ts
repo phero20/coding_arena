@@ -1,3 +1,10 @@
+import { merge, omit, isObject } from "lodash-es";
+
+/**
+ * Standard fields to omit from all API responses to prevent data leaks.
+ */
+const FORBIDDEN_FIELDS = ["__v", "password", "clerkId"];
+
 export interface PaginationMeta {
   totalItems: number
   itemCount: number
@@ -45,10 +52,7 @@ export class ApiResponse<T = unknown> {
     return new ApiResponse<T>({
       success: true,
       data,
-      meta: {
-        ...pagination,
-        ...extraMeta,
-      },
+      meta: merge({}, pagination, extraMeta),
     })
   }
 
@@ -67,8 +71,22 @@ export class ApiResponse<T = unknown> {
     })
   }
 
+  private static sanitize<T>(data: T): T {
+    if (Array.isArray(data)) {
+      return data.map((item) => this.sanitize(item)) as unknown as T;
+    }
+    if (isObject(data)) {
+      return omit(data as object, FORBIDDEN_FIELDS) as unknown as T;
+    }
+    return data;
+  }
+
   toJSON(): ApiResponsePayload<T> {
-    return this.payload
+    const payload = { ...this.payload };
+    if (payload.data !== undefined) {
+      payload.data = ApiResponse.sanitize(payload.data);
+    }
+    return payload;
   }
 }
 
