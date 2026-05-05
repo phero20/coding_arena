@@ -1,5 +1,5 @@
 import { container, type ICradle } from "../api/src/libs/awilix-container";
-import { createLogger } from "../api/src/libs/logger";
+import { createLogger } from "../api/src/libs/utils/logger";
 
 const logger = createLogger("health-check-test");
 
