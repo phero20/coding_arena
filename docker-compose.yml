@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/api.Dockerfile
-    container_name: coding-arena-api
+    container_name: slavecode-api
     env_file:
       - ./api/.env
     ports:
@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/arena.Dockerfile
-    container_name: coding-arena-worker
+    container_name: slavecode-worker
     env_file:
       - ./arena/.env
     ports:
@@ -36,7 +36,7 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: coding-arena-redis
+    container_name: slavecode-redis
     ports:
       - "6379:6379"
     restart: unless-stopped
