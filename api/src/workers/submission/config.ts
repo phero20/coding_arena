@@ -9,7 +9,7 @@ export const workerOptions: WorkerOptions = {
     host: redisUrl.hostname || "localhost",
     port: parseInt(redisUrl.port || "6379"),
   },
-  concurrency: 1, // Process 1 job at a time to respect Groq rate limits
+  concurrency: 10, // Increased to support 200+ active users with minimal queue lag
 };
 
 
