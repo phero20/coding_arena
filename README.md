@@ -17,7 +17,7 @@
 ![](./docs/diagrams/uml_activity.png) -->
 .
 
-gRPC for Internal Communication
+<!-- gRPC for Internal Communication
 The Tech: Instead of the Bun API talking to the Go Hub via standard HTTP or Webhooks, use gRPC.
 Why: It uses Protocol Buffers (Protobuf), which are binary-encoded and much faster than JSON. It’s the gold standard for "internal" service-to-service communication in high-performance systems.
 2. Edge Computing (Cloudflare Workers / Next.js Edge)
@@ -68,4 +68,4 @@ Summary of other languages:
 Go: Has TinyGo which creates very small Wasm files.
 Zig: Gaining huge popularity for Wasm because it's even smaller than Rust.
 Python: You can run Pyodide, which is the full Python data science stack (NumPy, Pandas) inside the browser!
-My take: For SlaveCode, keep Wasm in your "Phase 3" plans. Once you have thousands of users, using Wasm to offload "Logic Checking" and "Result Parsing" to the user's own computer will save you a fortune in server costs! 🏁🦾🏎️💨_
+My take: For SlaveCode, keep Wasm in your "Phase 3" plans. Once you have thousands of users, using Wasm to offload "Logic Checking" and "Result Parsing" to the user's own computer will save you a fortune in server costs! 🏁🦾🏎️💨_ -->
