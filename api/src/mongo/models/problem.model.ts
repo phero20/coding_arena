@@ -36,6 +36,8 @@ const FunctionSignatureSchema = new mongoose.Schema(
     name: { type: String, required: true },
     return_type: { type: String, required: true },
     params: { type: [FunctionParameterSchema], default: [] },
+    param_order: { type: [String], default: undefined },
+    testcase_serialization_version: { type: String, default: undefined },
   },
   { _id: false },
 );

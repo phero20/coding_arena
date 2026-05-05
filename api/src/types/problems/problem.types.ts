@@ -24,7 +24,17 @@ export interface FunctionSignature {
   name: string;
   return_type: string;
   params: FunctionParameter[];
+  /** Set after canonical import; optional on raw dataset rows. */
+  param_order?: string[];
+  /** Wire format for testcase values after canonical coercion. */
+  testcase_serialization_version?: string;
 }
+
+/** Signature returned by enrichSignatureForDriver (always has driver metadata). */
+export type DriverReadyFunctionSignature = FunctionSignature & {
+  param_order: string[];
+  testcase_serialization_version: string;
+};
 
 export interface Problem {
   title: string;

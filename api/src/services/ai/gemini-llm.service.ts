@@ -12,7 +12,7 @@ export interface GeminiJsonResponse<T> {
 export class GeminiLlmService {
   private readonly clock: IClockService;
   private readonly genAI: GoogleGenerativeAI;
-  private readonly model = "gemini-3.1-flash-lite-preview";
+  private readonly model = "gemini-1.5-flash";
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
@@ -31,10 +31,13 @@ export class GeminiLlmService {
     temperature?: number;
     maxTokens?: number;
   }): Promise<GeminiJsonResponse<T>> {
-    const model = this.genAI.getGenerativeModel({
-      model: this.model,
-      systemInstruction: opts.systemPrompt,
-    });
+    const model = this.genAI.getGenerativeModel(
+      {
+        model: this.model,
+        systemInstruction: opts.systemPrompt,
+      },
+      { apiVersion: "v1beta" },
+    );
 
     const startTime = this.clock.now();
 
@@ -58,13 +61,44 @@ export class GeminiLlmService {
     }
 
     try {
-      // Robust JSON extraction: Find the first '{' and the last '}'
-      let cleaned = content;
-      const start = content.indexOf("{");
-      const end = content.lastIndexOf("}");
-      
-      if (start !== -1 && end !== -1) {
-        cleaned = content.substring(start, end + 1);
+      // 1. Strip Markdown code blocks if present
+      let cleaned = content.replace(/^```json\n?|```$/g, "").trim();
+
+      // 2. Advanced JSON Repair for Truncated Responses
+      // Check if the last character is inside a string
+      const quoteCount = (cleaned.match(/"/g) || []).length;
+      if (quoteCount % 2 !== 0) {
+        cleaned += '"'; // Close the hanging string
+      }
+
+      // Remove trailing commas which break JSON.parse
+      cleaned = cleaned.replace(/,\s*([}\]])/g, "$1"); // case: {"a": 1, } -> {"a": 1}
+      cleaned = cleaned.replace(/,\s*$/g, ""); // case: {"a": 1, -> {"a": 1
+
+      // 3. Extract JSON part (First '{' to last possible closing)
+      const firstBrace = cleaned.indexOf("{");
+      if (firstBrace !== -1) {
+        cleaned = cleaned.substring(firstBrace);
+
+        // Count nesting
+        let braceStack = 0;
+        let bracketStack = 0;
+        let inString = false;
+
+        for (let i = 0; i < cleaned.length; i++) {
+          const char = cleaned[i];
+          if (char === '"' && cleaned[i - 1] !== "\\") inString = !inString;
+          if (!inString) {
+            if (char === "{") braceStack++;
+            if (char === "}") braceStack--;
+            if (char === "[") bracketStack++;
+            if (char === "]") bracketStack--;
+          }
+        }
+
+        // Repair truncated nesting
+        if (bracketStack > 0) cleaned += "]".repeat(bracketStack);
+        if (braceStack > 0) cleaned += "}".repeat(braceStack);
       }
 
       const parsed = JSON.parse(cleaned) as T;
@@ -73,7 +107,9 @@ export class GeminiLlmService {
         raw: result,
       };
     } catch (err) {
-      console.error("CRITICAL: Gemini returned invalid JSON. Raw Content follows:");
+      console.error(
+        "CRITICAL: Gemini returned invalid JSON. Raw Content follows:",
+      );
       console.error("-------------------------------------------");
       console.error(content);
       console.error("-------------------------------------------");

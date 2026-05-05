@@ -42,6 +42,8 @@ export interface FunctionSignature {
   name: string;
   return_type: string;
   params: FunctionParameter[];
+  param_order?: string[];
+  testcase_serialization_version?: string;
 }
 
 export interface Problem {

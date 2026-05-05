@@ -7,6 +7,14 @@ import {
   sanitizeDescriptionForAi,
   SANITIZE_PROFILES,
 } from "../../libs/security/prompt-sanitizer";
+import {
+  enrichSignatureForDriver,
+  normalizeTestSuite,
+} from "./testcase-canonical";
+import type {
+  DriverReadyFunctionSignature,
+  FunctionSignature,
+} from "../../types/problems/problem.types";
 
 export interface AiRewriteResult {
   problem: AiProblemOutput["problem"];
@@ -17,9 +25,30 @@ export interface AiRewriteResult {
 
 import { type ICradle } from "../../libs/awilix-container";
 
+function mergeFunctionSignature(
+  input: ImportedProblemPayload,
+  aiProblem: AiProblemOutput["problem"],
+): FunctionSignature {
+  const fromAi = aiProblem.function_signature;
+  const fromInput = input.function_signature;
+
+  const aiOk = (fromAi?.params?.length ?? 0) > 0 && fromAi?.name && fromAi?.return_type;
+  const inputOk =
+    (fromInput?.params?.length ?? 0) > 0 && fromInput?.name && fromInput?.return_type;
+
+  if (aiOk) return fromAi as FunctionSignature;
+  if (inputOk) return fromInput as FunctionSignature;
+  if (fromAi) return fromAi as FunctionSignature;
+  if (fromInput) return fromInput as FunctionSignature;
+
+  throw new Error(
+    "AI response missing function_signature with params; cannot validate test cases.",
+  );
+}
+
 /**
  * Orchestrates the AI-based augmentation of imported problems.
- * Focuses on preserving narrative integrity while generating technical metadata.
+ * Test cases are validated against a canonical type engine; on failure, one retry is attempted.
  */
 export class AiProblemService {
   private readonly llm: GeminiLlmService;
@@ -31,7 +60,6 @@ export class AiProblemService {
   async rewriteAndGenerate(
     input: ImportedProblemPayload,
   ): Promise<AiRewriteResult> {
-    // Check if solution already exists
     const existingSolution = input.solutions || input.solution;
     const shouldGenerateSolution =
       !existingSolution || existingSolution.trim() === "";
@@ -44,25 +72,31 @@ export class AiProblemService {
       "1. PRESERVE ORIGINAL FIELDS (CRITICAL):",
       "   - Return these exactly as they appear in input: 'title', 'difficulty', 'problem_slug', 'topics', 'description', 'examples', 'constraints', 'follow_ups', 'code_snippets'.",
       "",
-      "2. FUNCTION SIGNATURE GENERATION:",
-      "   - You MUST generate a 'function_signature' object that defines how the user's code should be called.",
-      "   - return_type: Use standard types like 'int', 'string', 'boolean', 'int[]', 'string[]', 'ListNode', 'TreeNode'.",
-      "   - params: An array of { name: string, type: string } matching the problem requirements.",
+      "2. FUNCTION SIGNATURE (must be executable / driver-ready):",
+      "   - function_signature.name: method name users implement.",
+      "   - return_type: use LeetCode-style strings: int, long, double, boolean, string, char, int[], int[][], string[], ListNode, TreeNode, or List<Integer> / vector<int> style wrappers.",
+      "   - params: { name, type } for every argument; names must match testcase input keys exactly.",
       "",
-      "3. TEST CASE GENERATION (STRUCTURED JSON):",
-      "   - You MUST format 'input' as a JSON object for EVERY test case.",
-      "   - CRITICAL: The 'input' object MUST contain ALL keys defined in your 'function_signature.params'.",
-      "   - JSON TYPE ENFORCEMENT:",
-      "     * CRITICAL: For any 'int[]' or 'long[]' parameters, DO NOT output a JSON array.",
-      "     * Instead, output a COMMA-SEPARATED STRING: \"2, 7, 11, 15\".",
-      "     * This prevents tokenization compression. The backend will convert it back to an array.",
-      "   - FEW-SHOT EXAMPLE:",
-      "     * INPUT: \"nums = [2,7,11,15], target = 9\"",
-      "     * SIGNATURE: { \"name\": \"twoSum\", \"return_type\": \"int[]\", \"params\": [{\"name\": \"nums\", \"type\": \"int[]\"}, {\"name\": \"target\", \"type\": \"int\"}] }",
-      "     * OUTPUT TEST CASE: { \"input\": { \"nums\": \"2, 7, 11, 15\", \"target\": 9 }, \"expected_output\": \"0, 1\" }",
-      "   - Generate 3 'public' (sample) and 10 'hidden' (comprehensive) tests.",
+      "3. TEST CASES — STRICT JSON (preferred):",
+      "   - Each testcase has 'input' as a JSON OBJECT whose keys are EXACTLY the param names, in any order.",
+      "   - Use NATIVE JSON types:",
+      "     * int / long / double: JSON number",
+      "     * boolean: JSON true/false",
+      "     * string / char: JSON string",
+      "     * int[] / string[]: JSON array, e.g. [2,7,11,15]",
+      "     * int[][] / matrix: JSON array of arrays, e.g. [[1,2,3],[4,5,6]]",
+      "     * ListNode: JSON array of integers, e.g. [1,2,3]",
+      "     * TreeNode: level-order JSON array with nulls, e.g. [1,null,2,3] (use JSON null, not the string \"null\", inside arrays)",
+      "   - expected_output: SAME typing rules as return_type (e.g. int[] => JSON array; int => number; boolean => true/false).",
+      "   - LEGACY (only if JSON arrays are impossible in your output): 1D int[] may be a comma-separated string \"2, 7, 11\"; 2D int[][] may use semicolon rows: \"1,2;3,4\". Prefer JSON arrays whenever possible.",
       "",
-      "4. SOLUTION HANDLING:",
+      "4. EXAMPLE (Two Sum):",
+      '   signature: { "name": "twoSum", "return_type": "int[]", "params": [{ "name": "nums", "type": "int[]" }, { "name": "target", "type": "int" }] }',
+      '   testcase: { "input": { "nums": [2,7,11,15], "target": 9 }, "expected_output": [0,1] }',
+      "",
+      "5. Generate 3 public (is_sample true) and 10 hidden (is_sample false) tests.",
+      "",
+      "6. SOLUTION HANDLING:",
       `   - STATUS: ${shouldGenerateSolution ? "MISSING (Generate now)" : "PRESENT (Skip generation)"}`,
       "   - If MISSING, generate a solution in this EXACT Markdown format:",
       "     [TOC]",
@@ -70,15 +104,13 @@ export class AiProblemService {
       "     ---## Solution",
       "     ---",
       "     ### Overview",
-      "     (Brief overview)",
       "     ### Approach 1: (Name)",
       "     #### Intuition",
       "     #### Algorithm",
       "     #### Implementation (Java Fenced Code)",
       "     #### Complexity Analysis",
       "",
-      "5. HINT AUGMENTATION:",
-      "   - Ensure AT LEAST 5 hints total. Add new ones if necessary.",
+      "7. HINTS: at least 5 hints total.",
       "",
       "=== OUTPUT SCHEMA (JSON) ===",
       "{",
@@ -97,25 +129,11 @@ export class AiProblemService {
       '    "solutions": "string (ONLY if generated)"',
       "  },",
       '  "tests": {',
-      '    "public": [{ "input": {}, "expected_output": any, "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": true }],',
-      '    "hidden": [{ "input": {}, "expected_output": any, "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": false }]',
+      '    "public": [{ "input": {}, "expected_output": null, "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": true }],',
+      '    "hidden": [{ "input": {}, "expected_output": null, "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": false }]',
       "  }",
       "}",
     ].join("\n");
-
-    const userPromptParts = [
-      "Process this problem JSON and return the augmented version in JSON mode.",
-      "1. Preserve original narrative fields.",
-      "2. GENERATE accurate 'function_signature'.",
-      shouldGenerateSolution
-        ? "3. GENERATE solution in [TOC] format."
-        : "3. Solution exists. Leave 'solutions' field null.",
-      "4. Augment hints to AT LEAST 5.",
-      "5. Generate 13+ test cases (3 sample, 10 hidden).",
-      "6. STRUCTURED INPUTS: Use JSON objects for 'input' matching the signature params.",
-      "",
-      "Original Data:",
-    ];
 
     const originalData = JSON.stringify({
       ...input,
@@ -127,93 +145,107 @@ export class AiProblemService {
       ),
     });
 
-    const userPrompt = [...userPromptParts, originalData].join("\n");
+    let lastValidationError: string | null = null;
+    let rawAggregate: GeminiJsonResponse<AiProblemOutput>["raw"] | undefined;
 
-    console.log("DEBUG: Final User Prompt for Groq:", userPrompt);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const userPromptParts = [
+        "Process this problem JSON and return the augmented version in JSON mode.",
+        "1. Preserve original narrative fields.",
+        "2. GENERATE accurate function_signature matching the problem.",
+        shouldGenerateSolution
+          ? "3. GENERATE solution in [TOC] format."
+          : "3. Solution exists. Omit or null 'solutions' in output.",
+        "4. At least 5 hints.",
+        "5. Exactly 3 public + 10 hidden tests; inputs must match signature param names and types.",
+        "6. Prefer NATIVE JSON arrays/matrices for all array-typed params and for expected_output.",
+        "",
+        lastValidationError
+          ? [
+              "=== PREVIOUS ATTEMPT FAILED VALIDATION ===",
+              "Fix ONLY testcases and/or function_signature/return_type so every testcase passes structural typing.",
+              "Errors:",
+              lastValidationError,
+              "",
+            ].join("\n")
+          : "",
+        "Original Data:",
+        originalData,
+      ];
 
-    const { data, raw } =
-      await this.llm.generateJson<AiProblemOutput>({
-        systemPrompt,
-        userPrompt,
-        temperature: 0,
-        maxTokens: 8192,
-      });
+      const userPrompt = userPromptParts.filter(Boolean).join("\n");
 
-    if (!data.problem) {
-      throw new Error("AI response did not include a problem object");
-    }
-
-    const finalProblem = {
-      ...data.problem,
-      solutions: existingSolution || data.problem.solutions || "",
-      // Restore narrative from original input to guarantee 100% fidelity
-      title: input.title || data.problem.title,
-      description: input.description || data.problem.description,
-      problem_slug: input.problem_slug || data.problem.problem_slug,
-      difficulty: input.difficulty || data.problem.difficulty,
-      problem_id: input.problem_id || data.problem.problem_id,
-      topics: input.topics || data.problem.topics || [],
-      examples: input.examples || data.problem.examples || [],
-      constraints: input.constraints || data.problem.constraints || [],
-      follow_ups: input.follow_ups || data.problem.follow_ups || [],
-      code_snippets: input.code_snippets || data.problem.code_snippets || {},
-      function_signature: input.function_signature || data.problem.function_signature,
-    };
-
-    // Expand comma-separated strings back into arrays based on type signature
-    const expandTests = (tests: any[]) => {
-      const sig = finalProblem.function_signature;
-      if (!sig) return tests;
-
-      const isArrayType = (type: string) => type.endsWith("[]");
-      const isNumericType = (type: string) => 
-        type === "int" || type === "int[]" || type === "long" || type === "long[]" || type === "double" || type === "double[]";
-
-      return tests.map((t) => {
-        const expandedInput: any = { ...t.input };
-        
-        // Expand Inputs
-        sig.params.forEach(param => {
-          let val = expandedInput[param.name];
-          if (isArrayType(param.type) && typeof val === "string") {
-            // Split by comma and trim
-            const parts = val.split(",").map(s => s.trim()).filter(s => s !== "");
-            if (isNumericType(param.type)) {
-              expandedInput[param.name] = parts.map(Number);
-            } else {
-              expandedInput[param.name] = parts;
-            }
-          } else if (isNumericType(param.type) && typeof val === "string") {
-             expandedInput[param.name] = Number(val);
-          }
+      const { data, raw } =
+        await this.llm.generateJson<AiProblemOutput>({
+          systemPrompt,
+          userPrompt,
+          temperature: 0,
+          maxTokens: 16384,
         });
 
-        // Expand Expected Output
-        let expandedOutput = t.expected_output;
-        if (isArrayType(sig.return_type) && typeof expandedOutput === "string") {
-          const parts = expandedOutput.split(",").map(s => s.trim()).filter(s => s !== "");
-          if (isNumericType(sig.return_type)) {
-            expandedOutput = parts.map(Number);
-          } else {
-            expandedOutput = parts;
-          }
-        } else if (isNumericType(sig.return_type) && typeof expandedOutput === "string") {
-          expandedOutput = Number(expandedOutput);
-        }
+      rawAggregate = raw;
+
+      if (!data.problem) {
+        throw new Error("AI response did not include a problem object");
+      }
+
+      if (!data.tests?.public?.length || !data.tests?.hidden?.length) {
+        lastValidationError =
+          "AI failed to return both public and hidden test arrays with at least one case each.";
+        continue;
+      }
+
+      const finalProblemBase = {
+        ...data.problem,
+        solutions: existingSolution || data.problem.solutions || "",
+        title: input.title || data.problem.title,
+        description: input.description || data.problem.description,
+        problem_slug: input.problem_slug || data.problem.problem_slug,
+        difficulty: input.difficulty || data.problem.difficulty,
+        problem_id: input.problem_id || data.problem.problem_id,
+        topics: input.topics || data.problem.topics || [],
+        examples: input.examples || data.problem.examples || [],
+        constraints: input.constraints || data.problem.constraints || [],
+        follow_ups: input.follow_ups || data.problem.follow_ups || [],
+        code_snippets: input.code_snippets || data.problem.code_snippets || {},
+      };
+
+      let signature: DriverReadyFunctionSignature;
+      try {
+        signature = enrichSignatureForDriver(
+          mergeFunctionSignature(input, data.problem),
+        );
+      } catch (e: any) {
+        lastValidationError = e?.message ?? String(e);
+        continue;
+      }
+
+      const mergedProblem = {
+        ...finalProblemBase,
+        function_signature: signature,
+      };
+
+      try {
+        const { publicTests, hiddenTests } = normalizeTestSuite(
+          data.tests.public as any[],
+          data.tests.hidden as any[],
+          signature,
+        );
 
         return {
-          ...t,
-          input: expandedInput,
-          expected_output: expandedOutput,
+          problem: mergedProblem,
+          publicTests,
+          hiddenTests,
+          rawLlmResponse: rawAggregate ?? raw,
         };
-      });
-    };
+      } catch (e: any) {
+        lastValidationError = e?.message ?? String(e);
+      }
+    }
 
-    return {
-      problem: finalProblem,
-      publicTests: expandTests(data.tests.public),
-      hiddenTests: expandTests(data.tests.hidden),
-      rawLlmResponse: raw,
-    };
+    throw new Error(
+      lastValidationError ??
+        "AI import failed after retries: testcase validation did not pass.",
+    );
   }
 }

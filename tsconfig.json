@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "lib": ["ESNext"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@driver/*": ["driver/*"],
+      "@api/*": ["api/src/*"]
+    }
+  },
+  "include": ["api/src", "driver", "web/src", "testings/test-generator.ts"],
+  "exclude": ["node_modules"]
+}
