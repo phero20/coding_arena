@@ -1,8 +1,11 @@
-import { ProblemTestRepository } from "../../repositories/problem-test.repository";
-import { AiJudgeCache } from "../../cache/ai-judge.cache";
-import { TestResult, SubmissionEvaluationResult } from "../../types/queue.types";
-import { getLanguageName } from "../../libs/languages";
-import { createLogger } from "../../libs/logger";
+import { ProblemTestRepository } from "../../repositories/problems/problem-test.repository";
+import { AiJudgeCache } from "../../cache/judge/ai-judge.cache";
+import {
+  TestResult,
+  SubmissionEvaluationResult,
+} from "../../types/infrastructure/queue.types";
+import { getLanguageName } from "../../libs/utils/languages";
+import { createLogger } from "../../libs/utils/logger";
 
 const logger = createLogger("submission-evaluator");
 
@@ -12,11 +15,16 @@ interface TestCase {
   expected_output: string;
 }
 
+import { type ICradle } from "../../libs/awilix-container";
+
 export class SubmissionEvaluator {
-  constructor(
-    private problemTestRepository: ProblemTestRepository,
-    private aiJudgeCache: AiJudgeCache,
-  ) {}
+  private readonly problemTestRepository: ProblemTestRepository;
+  private readonly aiJudgeCache: AiJudgeCache;
+
+  constructor({ problemTestRepository, aiJudgeCache }: ICradle) {
+    this.problemTestRepository = problemTestRepository;
+    this.aiJudgeCache = aiJudgeCache;
+  }
 
   async evaluate(data: {
     problemId: string;
@@ -27,9 +35,8 @@ export class SubmissionEvaluator {
     const { problemId, languageId, sourceCode, submissionId } = data;
 
     // 1. Fetch problem details and test cases (both public AND private)
-    const problemTests = await this.problemTestRepository.findAllByProblem(
-      problemId,
-    );
+    const problemTests =
+      await this.problemTestRepository.findAllByProblem(problemId);
 
     if (!problemTests || problemTests.length === 0) {
       throw new Error(`No test cases found for problem ${problemId}`);
@@ -40,9 +47,7 @@ export class SubmissionEvaluator {
     let testIndex = 0;
 
     // Add public test cases first
-    const publicTestsData = problemTests.find(
-      (pt) => pt.type === "public",
-    );
+    const publicTestsData = problemTests.find((pt) => pt.type === "public");
     if (publicTestsData?.cases) {
       publicTestsData.cases.forEach((testCase) => {
         allTestCases.push({
@@ -54,9 +59,7 @@ export class SubmissionEvaluator {
     }
 
     // Add private test cases
-    const privateTestsData = problemTests.find(
-      (pt) => pt.type === "hidden",
-    );
+    const privateTestsData = problemTests.find((pt) => pt.type === "hidden");
     if (privateTestsData?.cases) {
       privateTestsData.cases.forEach((testCase: any) => {
         allTestCases.push({
