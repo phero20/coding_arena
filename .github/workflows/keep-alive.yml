@@ -1,0 +1,16 @@
+name: servers Keep Alive
+
+on:
+  schedule:
+    - cron: '*/12 * * * *'
+  workflow_dispatch:      
+
+jobs:
+  ping_servers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wake up Servers
+        run: |
+          curl -I https://leetcode-api-9jjp.onrender.com/ping
+          curl -I https://slavecode.onrender.com
+          curl -I https://coding-arena-h6hz.onrender.com/health
