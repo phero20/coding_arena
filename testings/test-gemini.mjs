@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // NEW KEY
-const API_KEY = "AIzaSyDRudUFqh2Z39VfOWsmARPLzErOW2I-xU0";
+const API_KEY = process.env.GEMINI_API_KEY; // Removed hardcoded key for security
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function test() {
