@@ -1,5 +1,5 @@
-import { JobFailureEvent } from "../../types/queue.types";
-import { createLogger } from "../../libs/logger";
+import { JobFailureEvent } from "../../types/infrastructure/queue.types";
+import { createLogger } from "../../libs/utils/logger";
 
 const logger = createLogger("submission-events");
 
@@ -19,7 +19,8 @@ export function setupWorkerEvents(worker: any, queue: any) {
       error: err,
       isRateLimitError: err.message?.includes("429"),
       isNetworkError:
-        err.message?.includes("ECONNREFUSED") || err.message?.includes("timeout"),
+        err.message?.includes("ECONNREFUSED") ||
+        err.message?.includes("timeout"),
     };
 
     logger.error(failureEvent, "Job failed after all retry attempts");
