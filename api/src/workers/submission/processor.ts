@@ -2,30 +2,38 @@ import type { Job } from "bullmq";
 import type {
   SubmissionEvaluationJob,
   SubmissionEvaluationResult,
-} from "../../types/queue.types";
-import type { SubmissionRepository } from "../../repositories/submission.repository";
-import { ArenaMatchService } from "../../services/arena-match.service";
+} from "../../types/infrastructure/queue.types";
+import type { SubmissionRepository } from "../../repositories/submissions/submission.repository";
+import { ArenaMatchService } from "../../services/arena/arena-match.service";
 import { SubmissionEvaluator } from "./evaluator";
-import { createLogger } from "../../libs/logger";
-import { metrics } from "../../libs/metrics";
+import { createLogger } from "../../libs/utils/logger";
+import { metrics } from "../../libs/core/metrics";
+import type { EvaluationResultData } from "../../types/submissions/submission.types";
 
 const logger = createLogger("submission-processor");
 let jobsProcessed = 0;
+
+import type { IClockService } from "../../services/common/clock.service";
 
 export function createSubmissionProcessor(
   submissionRepository: SubmissionRepository,
   arenaMatchService: ArenaMatchService,
   evaluator: SubmissionEvaluator,
+  clock: IClockService,
 ) {
   return async function processSubmissionJob(
     job: Job<SubmissionEvaluationJob>,
   ): Promise<SubmissionEvaluationResult> {
     const jobData = job.data;
-    const requestStartTime = Date.now();
+    const requestStartTime = clock.now();
     const traceId = jobData.requestId || `job-${job.id}`;
+    const options = { traceId };
 
     // Create a traced child logger for this specific job execution
-    const tracedLogger = logger.child({ traceId, submissionId: jobData.submissionId });
+    const tracedLogger = logger.child({
+      traceId,
+      submissionId: jobData.submissionId,
+    });
 
     tracedLogger.info(
       {
@@ -38,25 +46,28 @@ export function createSubmissionProcessor(
 
     try {
       // 1. Evaluate
-      const evaluation = await evaluator.evaluate({
+      const evaluation: EvaluationResultData = await evaluator.evaluate({
         problemId: jobData.problemId,
         languageId: jobData.languageId,
         sourceCode: jobData.sourceCode,
         submissionId: jobData.submissionId,
       });
 
-      const executionTime = Date.now() - requestStartTime;
+      const executionTime = clock.now() - requestStartTime;
 
       // 2. Update standard submission
-      await submissionRepository.updateSubmissionStatus({
-        id: jobData.submissionId,
-        status: evaluation.status,
-        details: {
-          tests: evaluation.tests,
-          evaluatedAt: new Date().toISOString(),
-          evaluationDuration: executionTime,
+      await submissionRepository.updateSubmissionStatus(
+        {
+          id: jobData.submissionId,
+          status: evaluation.status,
+          details: {
+            tests: evaluation.tests,
+            evaluatedAt: clock.nowIso(),
+            evaluationDuration: executionTime,
+          },
         },
-      });
+        options,
+      );
 
       // 3. Match Logic (Delegated to Service)
       if (jobData.arenaMatchId) {
@@ -69,6 +80,7 @@ export function createSubmissionProcessor(
             status: evaluation.status,
             tests: evaluation.tests,
           },
+          traceId,
         });
       }
 
@@ -86,8 +98,9 @@ export function createSubmissionProcessor(
 
       return {
         ...evaluation,
+        status: evaluation.status as any, // Terminal status union mismatch
         executionTime,
-      };
+      } as SubmissionEvaluationResult;
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
@@ -113,15 +126,18 @@ export function createSubmissionProcessor(
         );
 
         try {
-          await submissionRepository.updateSubmissionStatus({
-            id: jobData.submissionId,
-            status: "SYSTEM_ERROR",
-            details: {
-              error: errorMessage,
-              failedAfterAttempts: attemptNumber,
-              evaluatedAt: new Date().toISOString(),
+          await submissionRepository.updateSubmissionStatus(
+            {
+              id: jobData.submissionId,
+              status: "SYSTEM_ERROR",
+              details: {
+                error: errorMessage,
+                failedAfterAttempts: attemptNumber,
+                evaluatedAt: clock.nowIso(),
+              },
             },
-          });
+            options,
+          );
         } catch (dbErr) {
           tracedLogger.error(
             {
