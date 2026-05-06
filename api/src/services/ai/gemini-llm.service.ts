@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { config } from "../../configs/env";
 import { metrics } from "../../libs/core/metrics";
+import { logger } from "../../libs/utils/logger";
 import { type ICradle } from "../../libs/awilix-container";
 import { type IClockService } from "../common/clock.service";
 
@@ -12,7 +13,7 @@ export interface GeminiJsonResponse<T> {
 export class GeminiLlmService {
   private readonly clock: IClockService;
   private readonly genAI: GoogleGenerativeAI;
-  private readonly model = "gemini-1.5-flash";
+  private readonly model = "gemini-3.1-flash-lite-preview";
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
@@ -107,12 +108,7 @@ export class GeminiLlmService {
         raw: result,
       };
     } catch (err) {
-      console.error(
-        "CRITICAL: Gemini returned invalid JSON. Raw Content follows:",
-      );
-      console.error("-------------------------------------------");
-      console.error(content);
-      console.error("-------------------------------------------");
+      logger.error({ content }, "CRITICAL: Gemini returned invalid JSON");
       throw new Error(`Gemini returned invalid JSON: ${(err as any).message}`);
     }
   }

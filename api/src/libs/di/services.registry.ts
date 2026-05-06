@@ -14,6 +14,8 @@ import { ArenaService } from "../../services/arena/arena.service";
 import { ArenaMatchService } from "../../services/arena/arena-match.service";
 import { MatchValidatorService } from "../../services/arena/match-validator.service";
 import { AiCodeJudgeService } from "../../services/judge/ai-code-judge.service";
+import { AiVerdictAuditService } from "../../services/judge/ai-verdict-audit.service";
+import { DriverJudgeExecutionService } from "../../services/judge/driver-judge-execution.service";
 import { Judge0Service } from "../../services/judge/judge0.service";
 import { WandboxService } from "../../services/judge/wandbox.service";
 import { CompilerService } from "../../services/compiler/compiler.service";
@@ -69,6 +71,8 @@ export const servicesRegistry = {
   matchDomainEngine: asClass(MatchDomainEngine).singleton(),
   matchBroadcaster: asClass(MatchBroadcasterService).singleton(),
   executionService: asClass(ExecutionService).singleton(),
+  aiVerdictAuditService: asClass(AiVerdictAuditService).singleton(),
+  driverJudgeExecutionService: asClass(DriverJudgeExecutionService).singleton(),
   judge0Service: asClass(Judge0Service).singleton(),
   wandboxService: asClass(WandboxService).singleton(),
   compilerService: asClass(CompilerService).singleton(),

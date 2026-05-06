@@ -320,6 +320,9 @@ export interface RawTestCase {
   memory_limit_mb?: number;
   weight?: number;
   is_sample?: boolean;
+  determinism_check?: "unique" | "multi_valid";
+  comparator_mode?: "strict" | "problem_specific";
+  comparator_notes?: string;
 }
 
 function mergeErrors(

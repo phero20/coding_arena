@@ -192,8 +192,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
               </AlertDialogContent>
             </AlertDialog>
 
-         
-                <Link href="/settings?tab=editor">
+            <Link href="/settings?tab=editor">
               <Button
                 variant="ghost"
                 size="icon"
@@ -203,8 +202,6 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 <Settings className="size-3.5" />
               </Button>
             </Link>
-        
-            
           </div>
         )}
 

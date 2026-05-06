@@ -5,17 +5,15 @@
     "moduleResolution": "bundler",
     "strict": true,
     "lib": ["ESNext"],
+    "types": ["bun-types"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@driver/*": ["driver/*"],
-      "@api/*": ["api/src/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["api/src", "driver", "web/src", "testings/test-generator.ts"],
+  "include": ["."],
   "exclude": ["node_modules"]
 }
+

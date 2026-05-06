@@ -2,16 +2,22 @@ FROM oven/bun:1
 
 WORKDIR /app
 
-# Install dependencies
-COPY api/package.json api/bun.lock ./
-RUN bun install --production
+# 1. Copy Monorepo configuration
+COPY package.json bun.lock ./
+COPY api/package.json ./api/
+COPY driver/package.json ./driver/
+COPY web/package.json ./web/
 
-# Copy source code
-COPY api/src ./src
+# 2. Install dependencies for the entire workspace
+# (This ensures the @slavecode/driver link is created)
+RUN bun install
 
-# Expose application port (must match PORT env)
+# 3. Copy source code for both the API and the shared Driver
+COPY api/src ./api/src
+COPY driver ./driver
+
+# 4. Final step: run from the API directory
+WORKDIR /app/api
 EXPOSE 3000
 
-# Start Hono app with Bun
 CMD ["bun", "run", "src/index.ts"]
-

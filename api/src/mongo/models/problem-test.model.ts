@@ -9,6 +9,17 @@ const TestCaseSchema = new mongoose.Schema(
     memory_limit_mb: { type: Number },
     weight: { type: Number, default: 1 },
     is_sample: { type: Boolean, default: false },
+    determinism_check: {
+      type: String,
+      enum: ["unique", "multi_valid"],
+      default: undefined,
+    },
+    comparator_mode: {
+      type: String,
+      enum: ["strict", "problem_specific"],
+      default: undefined,
+    },
+    comparator_notes: { type: String, default: undefined },
   },
   { _id: false },
 );
