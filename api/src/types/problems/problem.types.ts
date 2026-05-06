@@ -26,8 +26,29 @@ export interface FunctionSignature {
   params: FunctionParameter[];
   /** Set after canonical import; optional on raw dataset rows. */
   param_order?: string[];
+  inplace_param_index?: number;
   /** Wire format for testcase values after canonical coercion. */
   testcase_serialization_version?: string;
+}
+
+export interface MethodSignature {
+  name: string;
+  return_type: string;
+  params: FunctionParameter[];
+}
+
+export interface ClassSignature {
+  class_name: string;
+  constructor_params: FunctionParameter[];
+  methods: MethodSignature[];
+}
+
+export interface JudgingPolicy {
+  comparator_mode?: 'strict' | 'problem_specific';
+  multi_answer?: boolean;
+  validation_policy?: string;
+  output_order?: 'strict' | 'any_order';
+  audit_hints?: string[];
 }
 
 /** Signature returned by enrichSignatureForDriver (always has driver metadata). */
@@ -49,7 +70,10 @@ export interface Problem {
   follow_ups: string[];
   hints: string[];
   code_snippets: CodeSnippets;
-  function_signature: FunctionSignature;
+  problem_type: 'function' | 'class' | 'interactive';
+  function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
   solutions?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -68,7 +92,10 @@ export interface CreateOrUpdateProblemInput {
   follow_ups?: string[];
   hints?: string[];
   code_snippets?: CodeSnippets;
+  problem_type?: 'function' | 'class' | 'interactive';
   function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
   solutions?: string;
 }
 
@@ -81,6 +108,9 @@ export interface TestCase {
   memory_limit_mb?: number;
   weight?: number;
   is_sample?: boolean;
+  determinism_check?: 'unique' | 'multi_valid';
+  comparator_mode?: 'strict' | 'problem_specific';
+  comparator_notes?: string;
 }
 
 export interface ProblemTest {

@@ -6,75 +6,108 @@ import { generateExecutionPackage } from "../driver/index";
  * Run with: bun driver/test-generator.ts
  */
 
-const SAMPLE_SIGNATURE = {
-  name: "addTwoNumbers",
-  return_type: "ListNode",
-  params: [
-    { name: "l1", type: "ListNode" },
-    { name: "l2", type: "ListNode" },
+const LRU_SIGNATURE = {
+  class_name: "LRUCache",
+  constructor_params: [{ name: "capacity", type: "int" }],
+  methods: [
+    {
+      name: "get",
+      return_type: "int",
+      params: [{ name: "key", type: "int" }],
+    },
+    {
+      name: "put",
+      return_type: "void",
+      params: [
+        { name: "key", type: "int" },
+        { name: "value", type: "int" },
+      ],
+    },
   ],
-  param_order: ["l1", "l2"],
 };
 
-const SAMPLE_TEST_CASES = [
+const LRU_TEST_CASES = [
   {
     input: {
-      l1: [2, 4, 3],
-      l2: [5, 6, 4],
+      commands: [
+        "LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get",
+      ],
+      arguments: [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]],
     },
-    expected_output: [7, 0, 8],
-  },
-  {
-    input: {
-      l1: [0],
-      l2: [0],
-    },
-    expected_output: [0],
-  },
-  {
-    input: {
-      l1: [9, 9, 9, 9, 9, 9, 9],
-      l2: [9, 9, 9, 9],
-    },
-    expected_output: [8, 9, 9, 9, 0, 0, 0, 1],
+    expected_output: [null, null, null, 1, null, -1, null, -1, 3, 4],
   },
 ];
 
-const USER_CODE = `class Solution {
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode dummy = new ListNode(0); 
-        ListNode current = dummy;
-        int carry = 0;
+const USER_CODE = `import java.util.HashMap;
+import java.util.Map;
 
-        while (l1 != null || l2 != null || carry != 0) {
-            int sum = carry;
-            if (l1 != null) {
-                sum += l1.val;
-                l1 = l1.next;
-            }
-            if (l2 != null) {
-                sum += l2.val;
-                l2 = l2.next;
-            }
+class LRUCache {
+    class Node {
+        int key;
+        int value;
+        Node prev;
+        Node next;
+        Node(int k, int v) { key = k; value = v; }
+    }
 
-            carry = sum / 10;
-            current.next = new ListNode(sum % 10);
-            current = current.next;
+    private Map<Integer, Node> map;
+    private int capacity;
+    private Node head, tail;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.map = new HashMap<>();
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        if (map.containsKey(key)) {
+            Node node = map.get(key);
+            remove(node);
+            insertAtHead(node);
+            return node.value;
         }
+        return -1;
+    }
 
-        return dummy.next;
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            remove(map.get(key));
+        }
+        if (map.size() == capacity) {
+            map.remove(tail.prev.key);
+            remove(tail.prev);
+        }
+        Node newNode = new Node(key, value);
+        insertAtHead(newNode);
+        map.put(key, newNode);
+    }
+
+    private void remove(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void insertAtHead(Node node) {
+        node.next = head.next;
+        node.next.prev = node;
+        head.next = node;
+        node.prev = head;
     }
 }`;
 
 async function runTest() {
-  console.log("🚀 Generating Execution Package for Java...");
+  console.log("🚀 Generating Execution Package for LRUCache...");
 
   try {
     const pkg = await generateExecutionPackage({
       language: "java",
       userCode: USER_CODE,
-      signature: SAMPLE_SIGNATURE,
-      testCases: SAMPLE_TEST_CASES,
+      signature: LRU_SIGNATURE as any,
+      testCases: LRU_TEST_CASES as any,
     });
 
     console.log("\n--- GENERATED SOURCE CODE ---");

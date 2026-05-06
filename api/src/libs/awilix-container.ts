@@ -34,6 +34,8 @@ import {
 
 import { type MatchValidatorService } from "../services/arena/match-validator.service";
 import { type AiCodeJudgeService } from "../services/judge/ai-code-judge.service";
+import { type AiVerdictAuditService } from "../services/judge/ai-verdict-audit.service";
+import { type DriverJudgeExecutionService } from "../services/judge/driver-judge-execution.service";
 import { type ExecutionService } from "../services/submissions/execution.service";
 import { type ProblemValidatorService } from "../services/problems/problem-validator.service";
 import { type MatchDomainEngine } from "../services/arena/match-domain-engine.service";
@@ -129,6 +131,8 @@ export interface ICradle {
   matchValidatorService: MatchValidatorService;
   problemValidatorService: ProblemValidatorService;
   aiCodeJudgeService: AiCodeJudgeService;
+  aiVerdictAuditService: AiVerdictAuditService;
+  driverJudgeExecutionService: DriverJudgeExecutionService;
   matchDomainEngine: MatchDomainEngine;
   matchBroadcaster: MatchBroadcasterService;
   judge0Service: Judge0Service;

@@ -21,3 +21,6 @@ export async function generateExecutionPackage(opts: DriverOptions): Promise<Exe
 
 export * from "./core/types";
 export * from "./core/constants";
+export * from "./core/type-ast";
+export * from "./core/compare";
+export * from "./core/codec-registry";

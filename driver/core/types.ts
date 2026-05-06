@@ -13,6 +13,21 @@ export interface FunctionSignature {
   return_type: string;
   params: FunctionParam[];
   param_order: string[];
+  inplace_param_index?: number;
+  inplace_param_indices?: number[];
+  testcase_serialization_version?: string;
+}
+
+export interface MethodSignature {
+  name: string;
+  return_type: string;
+  params: FunctionParam[];
+}
+
+export interface ClassSignature {
+  class_name: string;
+  constructor_params: FunctionParam[];
+  methods: MethodSignature[];
 }
 
 export interface TestCase {
@@ -24,8 +39,15 @@ export interface TestCase {
 export interface DriverOptions {
   language: string;
   userCode: string;
-  signature: FunctionSignature;
+  signature: FunctionSignature | ClassSignature;
   testCases: TestCase[];
+  comparator?: {
+    float_epsilon?: number;
+    unordered_arrays?: boolean;
+  };
+  diagnostics?: {
+    verbose?: boolean;
+  };
 }
 
 export interface ExecutionPackage {

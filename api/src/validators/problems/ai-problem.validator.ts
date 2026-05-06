@@ -20,6 +20,13 @@ export const importedProblemSchema = z.object({
       type: z.string(),
     })),
   }).optional(),
+  judging_policy: z.object({
+    comparator_mode: z.enum(["strict", "problem_specific"]).optional(),
+    multi_answer: z.boolean().optional(),
+    validation_policy: z.string().optional(),
+    output_order: z.enum(["strict", "any_order"]).optional(),
+    audit_hints: z.array(z.string()).optional(),
+  }).optional(),
 }).passthrough();
 
 export type ImportedProblemInput = z.infer<typeof importedProblemSchema>;

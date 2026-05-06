@@ -6,7 +6,7 @@ import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import { useTheme } from "next-themes";
 import { useEditorStore } from "@/store/use-editor-store";
-import { WrapText, Code2, RefreshCw } from "lucide-react";
+import { WrapText, Code2, RefreshCw, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getLangConfig } from "@/constants/compiler-languages";
@@ -16,6 +16,7 @@ import {
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Link from "next/link";
 
 interface Props {
   code: string;
@@ -96,6 +97,16 @@ export const CompilerEditor: React.FC<Props> = ({
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+          <Link href="/settings?tab=editor">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 text-muted-foreground hover:text-primary transition-colors shrink-0"
+              title="Editor Settings"
+            >
+              <Settings className="size-3.5" />
+            </Button>
+          </Link>
         </div>
 
         <div className="ml-auto flex items-center h-full">

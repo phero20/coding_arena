@@ -1,4 +1,17 @@
 {
+  "name": "slavecode-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "api",
+    "web",
+    "driver"
+  ],
+  "scripts": {
+    "dev:api": "bun --cwd api run dev",
+    "dev:web": "bun --cwd web run dev",
+    "test:driver": "bun --cwd driver run test"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.1"
   }

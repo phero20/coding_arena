@@ -1,4 +1,10 @@
-import type { Example, CodeSnippets, FunctionSignature } from "./problem.types";
+import type {
+  Example,
+  CodeSnippets,
+  FunctionSignature,
+  ClassSignature,
+  JudgingPolicy,
+} from "./problem.types";
 import type { TestCase } from "./problem.types";
 
 export interface ImportedProblemPayload {
@@ -14,7 +20,10 @@ export interface ImportedProblemPayload {
   follow_ups?: string[];
   hints?: string[];
   code_snippets?: CodeSnippets;
+  problem_type?: "function" | "class" | "interactive";
   function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
   solutions?: string;
   solution?: string;
 }
@@ -32,7 +41,10 @@ export interface AiGeneratedProblem {
   follow_ups: string[];
   hints: string[];
   code_snippets: CodeSnippets;
-  function_signature: FunctionSignature;
+  problem_type: "function" | "class" | "interactive";
+  function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
   solutions?: string;
 }
 
