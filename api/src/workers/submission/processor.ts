@@ -64,6 +64,8 @@ export function createSubmissionProcessor(
           status: evaluation.status,
           details: {
             tests: evaluation.tests,
+            compileOutput: evaluation.compileOutput,
+            stderr: evaluation.stderr,
             evaluatedAt: clock.nowIso(),
             evaluationDuration: executionTime,
           },

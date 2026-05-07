@@ -25,7 +25,7 @@ export const STATUS_CONFIG: Record<
     icon: CheckCircle2,
     label: "Accepted",
     badgeClass:
-      "bg-status-accepted text-status-accepted border-status-accepted/20",
+      "bg-status-accepted text-status-accepted border-status-accepted",
     textColor: "text-status-accepted",
     variant: "outline",
   },
@@ -33,14 +33,14 @@ export const STATUS_CONFIG: Record<
     icon: XCircle,
     label: "Wrong Answer",
     badgeClass:
-      "bg-status-wrong-answer text-status-wrong-answer border-status-wrong-answer/20",
+      "bg-status-wrong-answer text-status-wrong-answer border-status-wrong-answer",
     textColor: "text-status-wrong-answer",
     variant: "destructive",
   },
   TLE: {
     icon: Clock,
     label: "Time Limit",
-    badgeClass: "bg-status-tle text-status-tle border-status-tle/20",
+    badgeClass: "bg-status-tle text-status-tle border-status-tle",
     textColor: "text-status-tle",
     variant: "outline",
   },
@@ -48,7 +48,7 @@ export const STATUS_CONFIG: Record<
     icon: AlertCircle,
     label: "Runtime Error",
     badgeClass:
-      "bg-status-runtime-error text-status-runtime-error border-status-runtime-error/20",
+      "bg-status-runtime-error text-status-runtime-error border-status-runtime-error",
     textColor: "text-status-runtime-error",
     variant: "secondary",
   },
@@ -56,7 +56,7 @@ export const STATUS_CONFIG: Record<
     icon: AlertCircle,
     label: "Compile Error",
     badgeClass:
-      "bg-status-compile-error text-status-compile-error border-status-compile-error/20",
+      "bg-status-compile-error text-status-compile-error border-status-compile-error",
     textColor: "text-status-compile-error",
     variant: "secondary",
   },
@@ -64,7 +64,7 @@ export const STATUS_CONFIG: Record<
     icon: AlertCircle,
     label: "System Error",
     badgeClass:
-      "bg-status-system-error text-status-system-error border-status-system-error/20",
+      "bg-status-system-error text-status-system-error border-status-system-error",
     textColor: "text-status-system-error",
     variant: "secondary",
   },
@@ -72,7 +72,7 @@ export const STATUS_CONFIG: Record<
     icon: Loader2,
     label: "Pending",
     badgeClass:
-      "bg-status-pending text-status-pending border-status-pending/20",
+      "bg-status-pending text-status-pending border-status-pending",
     textColor: "text-status-pending",
     variant: "outline",
   },
@@ -80,7 +80,7 @@ export const STATUS_CONFIG: Record<
     icon: RefreshCw,
     label: "Running",
     badgeClass:
-      "bg-status-pending text-status-pending border-status-pending/20",
+      "bg-status-pending text-status-pending border-status-pending",
     textColor: "text-status-pending",
     variant: "outline",
   },

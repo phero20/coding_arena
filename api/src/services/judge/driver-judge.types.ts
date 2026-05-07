@@ -19,6 +19,8 @@ export interface DriverJudgeResult {
   overallStatus: SubmissionStatus;
   tests: ExecutionTestResult[];
   parserWarnings?: string[];
+  compileOutput?: string;
+  stderr?: string;
   driverVerdict: string;
   suspicion?: {
     score: number;

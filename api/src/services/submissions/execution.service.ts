@@ -16,6 +16,8 @@ export interface RunSamplesResult {
   submissionId?: string;
   overallStatus: SubmissionStatus;
   tests: ExecutionTestResult[];
+  compileOutput?: string;
+  stderr?: string;
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -68,16 +70,20 @@ export class ExecutionService {
           sourceCode: input.sourceCode,
           tests: testsDoc.cases.map((testCase, index) => ({
             index,
-            input: testCase.input,
-            expected_output: testCase.expected_output,
+            input: JSON.stringify(testCase.input),
+            expected_output: JSON.stringify(testCase.expected_output),
           })),
         });
     const tests: ExecutionTestResult[] = result.tests;
     const overallStatus: SubmissionStatus = result.overallStatus;
+    const compileOutput = "compileOutput" in result ? (result.compileOutput as string) : undefined;
+    const stderr = "stderr" in result ? (result.stderr as string) : undefined;
 
     return {
       overallStatus,
       tests,
+      compileOutput,
+      stderr,
     };
   }
 
@@ -151,10 +157,14 @@ export class ExecutionService {
 
     const tests: ExecutionTestResult[] = result.tests;
     const overallStatus: SubmissionStatus = result.overallStatus;
+    const compileOutput = "compileOutput" in result ? (result.compileOutput as string) : undefined;
+    const stderr = "stderr" in result ? (result.stderr as string) : undefined;
 
     return {
       overallStatus,
       tests,
+      compileOutput,
+      stderr,
     };
   }
 }

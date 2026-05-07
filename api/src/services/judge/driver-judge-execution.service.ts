@@ -11,7 +11,7 @@ import type { Judge0SubmissionResult } from "./judge0.service";
 import { createLogger } from "../../libs/utils/logger";
 import type { ExecutionTestResult } from "../../libs/utils/verdict.util";
 import { AppError } from "../../utils/app-error";
-import { getLanguageName } from "../../libs/utils/languages";
+// import { getLanguageName } from "../../libs/utils/languages";
 import type { AiVerdictAuditService } from "./ai-verdict-audit.service";
 import {
   type DriverJudgeInput,
@@ -22,7 +22,9 @@ import { evaluateSuspicion } from "./suspicion/suspicion-evaluator";
 import { type ICradle } from "../../libs/awilix-container";
 
 const logger = createLogger("driver-judge-execution-service");
-const JAVA_LANGUAGE_IDS = new Set(["62"]);
+import { getLanguageName, normalizeLanguageId } from "../../libs/utils/languages";
+
+const SUPPORTED_LANGUAGE_IDS = new Set(["62", "71"]);
 
 export class DriverJudgeExecutionService {
   private readonly judge0Service: ICradle["judge0Service"];
@@ -43,10 +45,11 @@ export class DriverJudgeExecutionService {
   }
 
   supportsLanguage(languageId: string): boolean {
-    return JAVA_LANGUAGE_IDS.has(languageId);
+    return SUPPORTED_LANGUAGE_IDS.has(normalizeLanguageId(languageId));
   }
 
   async evaluate(input: DriverJudgeInput): Promise<DriverJudgeResult> {
+    const normalizedLanguageId = normalizeLanguageId(input.languageId);
     const [problem, publicTests, hiddenTests] = await Promise.all([
       this.problemRepository.findByProblemId(input.problemId),
       this.problemTestRepository.findByProblemAndType(input.problemId, "public"),
@@ -66,11 +69,25 @@ export class DriverJudgeExecutionService {
       throw AppError.badRequest("No tests configured for this problem");
     }
 
-    if (problem.problem_type !== "function" || !problem.function_signature) {
-      throw AppError.badRequest("Driver execution currently supports function problems only");
+    if (problem.problem_type === "function") {
+      if (!problem.function_signature) {
+        throw AppError.badRequest("Function signature missing for function-type problem");
+      }
+    } else if (problem.problem_type === "class") {
+      if (!problem.class_signature) {
+        throw AppError.badRequest("Class signature missing for class-type problem");
+      }
+    } else {
+      throw AppError.badRequest(`Driver execution currently supports function and class problems only. Found: ${problem.problem_type}`);
     }
 
-    const signature = problem.function_signature;
+    const signature = problem.problem_type === "class" 
+      ? problem.class_signature! 
+      : {
+          ...problem.function_signature!,
+          param_order: problem.function_signature!.param_order ?? problem.function_signature!.params.map((p) => p.name)
+        };
+
     const testCases = selectedCases.map((testCase) => ({
       input: testCase.input,
       expected_output: testCase.expected_output,
@@ -78,13 +95,9 @@ export class DriverJudgeExecutionService {
     }));
 
     const executionPackage = await generateExecutionPackage({
-      language: "java",
+      language: normalizedLanguageId === "71" ? "python" : "java",
       userCode: input.sourceCode,
-      signature: {
-        ...signature,
-        param_order:
-          signature.param_order ?? signature.params.map((param) => param.name),
-      },
+      signature: signature as any,
       testCases,
     });
 
@@ -115,13 +128,33 @@ export class DriverJudgeExecutionService {
       judgeRaw,
       driverOverallStatus,
     });
+    logger.info(
+      {
+        traceId: input.traceId,
+        problemId: input.problemId,
+        judge0Status: judgeRaw.status,
+        driverOverallStatus,
+        suspicionScore: suspicion.score,
+        suspicionReasons: suspicion.reasons,
+      },
+      "Primary verdict generated from Judge0 + driver parser",
+    );
 
     let aiAudit: DriverJudgeResult["aiAudit"];
     if (suspicion.needAiAudit) {
+      logger.info(
+        {
+          traceId: input.traceId,
+          problemId: input.problemId,
+          suspicionScore: suspicion.score,
+          suspicionReasons: suspicion.reasons,
+        },
+        "AI audit triggered for suspicious Judge0 verdict",
+      );
       const aiResult = await this.aiVerdictAuditService.audit({
         problemId: input.problemId,
-        languageId: input.languageId,
-        languageName: getLanguageName(input.languageId),
+        languageId: normalizedLanguageId,
+        languageName: getLanguageName(normalizedLanguageId),
         sourceCode: input.sourceCode,
         tests,
         driverOverallStatus,
@@ -176,12 +209,31 @@ export class DriverJudgeExecutionService {
         },
         "Suspicious verdict detected, AI audit executed",
       );
+    } else {
+      logger.info(
+        {
+          traceId: input.traceId,
+          problemId: input.problemId,
+          finalSource: "judge0_driver",
+          finalStatus: driverOverallStatus,
+        },
+        "Final verdict source: Judge0 only (AI audit not needed)",
+      );
+    }
+
+    if (judgeRaw.compile_output) {
+      logger.error(
+        { traceId: input.traceId, compileOutput: judgeRaw.compile_output },
+        "Judge0 compilation error detected",
+      );
     }
 
     return {
       overallStatus: driverOverallStatus,
       tests,
       parserWarnings: parsed.parsingWarnings,
+      compileOutput: judgeRaw.compile_output ?? undefined,
+      stderr: judgeRaw.stderr ?? undefined,
       driverVerdict: parsed.verdict,
       suspicion: {
         score: suspicion.score,

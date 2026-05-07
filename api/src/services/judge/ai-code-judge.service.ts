@@ -44,6 +44,7 @@ export interface IAiJudgeService {
 export interface AiRunSamplesResult {
   overallStatus: SubmissionStatus;
   tests: ExecutionTestResult[];
+  compileOutput?: string;
   rawLlmResponse: GroqJsonResponse<AiRunSamplesOutput>["raw"];
   cached?: boolean;
 }
@@ -52,12 +53,12 @@ const verdictToStatusId: Record<
   ExecutionVerdict,
   { id: number; description: string }
 > = {
-  ACCEPTED: { id: 3, description: "Accepted (AI)" },
-  WRONG_ANSWER: { id: 4, description: "Wrong Answer (AI)" },
-  TLE: { id: 5, description: "Time Limit Exceeded (AI)" },
-  COMPILATION_ERROR: { id: 6, description: "Compilation Error (AI)" },
-  RUNTIME_ERROR: { id: 7, description: "Runtime Error (AI)" },
-  SYSTEM_ERROR: { id: 13, description: "Internal Error (AI)" },
+  ACCEPTED: { id: 3, description: "Accepted" },
+  WRONG_ANSWER: { id: 4, description: "Wrong Answer" },
+  TLE: { id: 5, description: "Time Limit Exceeded" },
+  COMPILATION_ERROR: { id: 6, description: "Compilation Error" },
+  RUNTIME_ERROR: { id: 7, description: "Runtime Error (SIGSEGV)" },
+  SYSTEM_ERROR: { id: 13, description: "Internal Error" },
 };
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -175,7 +176,7 @@ export class AiCodeJudgeService implements IAiJudgeService {
         status: verdict,
         rawStatus,
         time: null,
-        memory: undefined,
+        memory: null,
       };
     });
 

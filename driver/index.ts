@@ -1,9 +1,10 @@
 import { DriverOptions, ExecutionPackage } from "./core/types";
 import { JavaProvider } from "./languages/java/java-provider";
+import { PythonProvider } from "./languages/python/python-provider";
 
 const providers = {
   java: new JavaProvider(),
-  // python: new PythonProvider(), (Coming soon)
+  python: new PythonProvider(),
 };
 
 /**

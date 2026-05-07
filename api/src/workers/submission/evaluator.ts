@@ -135,6 +135,8 @@ export class SubmissionEvaluator {
       status: finalStatus as SubmissionEvaluationResult["status"],
       tests: testResults,
       executionTime: 0, // Will be calculated by processor
+      compileOutput: evaluationResult.compileOutput,
+      stderr: evaluationResult.stderr,
       cached: "cached" in evaluationResult ? evaluationResult.cached : false,
     };
   }
