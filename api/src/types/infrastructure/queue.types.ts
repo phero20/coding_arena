@@ -106,6 +106,16 @@ export interface SubmissionEvaluationResult {
   executionTime?: number
 
   /**
+   * Compilation output from Judge0
+   */
+  compileOutput?: string
+
+  /**
+   * Runtime error stderr from Judge0
+   */
+  stderr?: string
+
+  /**
    * Error message if evaluation failed
    */
   error?: string

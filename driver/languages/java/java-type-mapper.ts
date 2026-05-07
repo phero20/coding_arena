@@ -1,13 +1,12 @@
 import { ClassSignature, FunctionParam, FunctionSignature } from "../../core/types";
 import { boxIfPrimitive, javaType, parseType, TypeNode } from "../../core/type-ast";
+import { BaseTypeMapper } from "../../core/base-type-mapper";
 
 /**
  * Ultimate Java Type Mapper.
  * Supports Lists, Nested Lists, Base64 Strings, and all standard primitives.
  */
-export class JavaTypeMapper {
-  private varCounter = 0;
-
+export class JavaTypeMapper extends BaseTypeMapper {
   public mapToJavaType(type: string): string {
     return javaType(parseType(type));
   }
@@ -258,143 +257,5 @@ export class JavaTypeMapper {
     lines.push(`                System.out.println("@@RESULT@@:" + __resSb + " @@EXPECTED@@:" + __expSb + " @@PASS@@:" + __allPass + " @@TIME@@:" + duration);`);
 
     return lines.join("\n");
-  }
-
-  /**
-   * Flattens a test case input object into the "Flat-Line" protocol string.
-   */
-  public flattenInput(input: Record<string, any>, sig: FunctionSignature): string {
-    const parts: string[] = [];
-    
-    sig.params.forEach(param => {
-      this.flattenValue(input[param.name], parseType(param.type), parts);
-    });
-
-    // expected output
-    this.flattenValue((input as any).__expected_output ?? (input as any).expected_output, parseType(sig.return_type), parts);
-
-    return parts.join(" ");
-  }
-
-  public flattenClassInput(input: Record<string, any>, sig: ClassSignature, expectedOutput?: any[]): string {
-    const parts: string[] = [];
-    const commands = input.commands as string[];
-    const args = input.arguments as any[][];
-
-    parts.push(String(commands.length));
-
-    for (let i = 0; i < commands.length; i++) {
-        const cmd = commands[i];
-        parts.push(Buffer.from(cmd).toString("base64"));
-
-        if (cmd === sig.class_name) {
-            sig.constructor_params.forEach((p, idx) => {
-                this.flattenValue(args[i]?.[idx] ?? null, parseType(p.type), parts);
-            });
-        } else {
-            const method = sig.methods.find(m => m.name === cmd);
-            if (method) {
-                method.params.forEach((p, idx) => {
-                    this.flattenValue(args[i]?.[idx] ?? null, parseType(p.type), parts);
-                });
-            } else {
-                throw new Error(`Unknown class command in testcase: ${cmd}`);
-            }
-        }
-    }
-
-    // Append expected output array so the Java driver can emit @@PASS@@
-    // Each token is "null" (literal) or Base64-serialized string of the expected value
-    const exp = expectedOutput ?? [];
-    parts.push(String(exp.length));
-    for (const v of exp) {
-      if (v === null || v === undefined) {
-        parts.push("null");
-      } else {
-        parts.push(Buffer.from(String(v)).toString("base64"));
-      }
-    }
-
-    return parts.join(" ");
-  }
-
-  private flattenValue(val: any, type: TypeNode, parts: string[]): void {
-    const MAX_COLLECTION_ITEMS = 200000;
-    // Fix #5: null/undefined guard — emit safe zero-value instead of crashing
-    if (val === null || val === undefined) {
-      if (type.kind === "primitive") {
-        if (type.primitive === "string" || type.primitive === "char") {
-          parts.push(Buffer.from("").toString("base64")); // empty string
-        } else if (type.primitive === "boolean") {
-          parts.push("false");
-        } else {
-          parts.push("0"); // int / long / double / float
-        }
-      } else if (type.kind === "node" || type.kind === "array" || type.kind === "list" || type.kind === "set" || type.kind === "map") {
-        parts.push("0"); // empty collection / null node
-      }
-      return;
-    }
-
-    if (type.kind === "primitive") {
-      if (type.primitive === "string" || type.primitive === "char") {
-        parts.push(Buffer.from(String(val ?? "")).toString("base64"));
-      } else {
-        parts.push(String(val));
-      }
-      return;
-    }
-
-    if (type.kind === "node") {
-      const arr = Array.isArray(val) ? val : [];
-      parts.push(String(arr.length));
-      if (type.nodeType === "TreeNode") {
-        parts.push(...arr.map((v: any) => (v === null ? "null" : String(v))));
-      } else {
-        parts.push(...arr.map((v: any) => String(v)));
-      }
-      return;
-    }
-
-    if (type.kind === "array" || type.kind === "list") {
-      const arr = Array.isArray(val) ? val : [];
-      if (arr.length > MAX_COLLECTION_ITEMS) {
-        throw new Error(`Collection too large for driver flattening: ${arr.length}`);
-      }
-      parts.push(String(arr.length));
-      for (const item of arr) {
-        this.flattenValue(item, type.element, parts);
-      }
-      return;
-    }
-
-    if (type.kind === "set") {
-      const arr = Array.isArray(val) ? val : Array.from(val ?? []);
-      if (arr.length > MAX_COLLECTION_ITEMS) {
-        throw new Error(`Set too large for driver flattening: ${arr.length}`);
-      }
-      parts.push(String(arr.length));
-      for (const item of arr) {
-        this.flattenValue(item, type.element, parts);
-      }
-      return;
-    }
-
-    if (type.kind === "map") {
-      const entries = Array.isArray(val)
-        ? val
-        : val && typeof val === "object"
-          ? Object.entries(val)
-          : [];
-      if (entries.length > MAX_COLLECTION_ITEMS) {
-        throw new Error(`Map too large for driver flattening: ${entries.length}`);
-      }
-      parts.push(String(entries.length));
-      for (const [k, v] of entries as [any, any][]) {
-        this.flattenValue(k, type.key, parts);
-        this.flattenValue(v, type.value, parts);
-      }
-      return;
-    }
   }
 }

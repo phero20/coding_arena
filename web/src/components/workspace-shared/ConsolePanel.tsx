@@ -3,6 +3,8 @@
 import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Terminal, AlertCircle, RefreshCw } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestCaseSkeleton, ResultSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay, ErrorDisplay } from "@/components/shared/StatusState";
 import { QueryGuard } from "@/components/shared/QueryGuard";
@@ -61,17 +63,17 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
             >
               {(testCases) => (
                 <div className="space-y-6">
-                  <ButtonGroup className="flex flex-wrap">
+                  <ButtonGroup className="flex flex-wrap gap-2">
                     {testCases.map((tc, idx) => (
                       <Button
                         key={idx}
                         type="button"
+                        variant={idx === activeIndex ? "secondary" : "ghost"}
+                        size="sm"
                         onClick={() => setActiveIndex(idx)}
                         className={cn(
-                          "px-4 py-1.5 rounded-md text-[11px] font-black uppercase tracking-wider border transition-all duration-300",
-                          idx === activeIndex
-                            ? "bg-primary/10 border-primary/50 text-foreground ring-1 ring-primary/20 hover:bg-primary/20"
-                            : "bg-muted/10 border-border/40 text-muted-foreground hover:bg-muted/20 hover:border-border/60",
+                          "h-8 text-xs font-medium",
+                          idx === activeIndex && "bg-secondary"
                         )}
                       >
                         Case {idx + 1}
@@ -102,13 +104,13 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
           >
             {runError && (
               <ErrorDisplay
-                title={isForbiddenError ? "Match Concluded" : "Execution Error"}
+                title={isForbiddenError ? "Submission Complete" : "Execution Error"}
                 message={
                   isForbiddenError 
-                    ? "Your final submission has been recorded. The simulation sector is now locked."
+                    ? "Your final submission has been recorded and the editor is now locked."
                     : (typeof runError === "string" 
                         ? runError 
-                        : (runError as Error)?.message || "An unexpected simulation error occurred.")
+                        : (runError as Error)?.message || "An unexpected error occurred during execution.")
                 }
                 className="h-full border-none shadow-none bg-transparent"
               />
@@ -121,10 +123,10 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
             {!runError && !isTabLoading && !showResultsSection && (
               <EmptyDisplay
                 icon={hasSubmitted ? RefreshCw : Terminal}
-                title={hasSubmitted ? "Submission Finalized" : "Ready for Simulation"}
+                title={hasSubmitted ? "Submission Received" : "Ready to Run"}
                 message={hasSubmitted 
-                  ? "Your performance has been logged. Results are synced across the arena." 
-                  : "Click Run or Submit to initialize the match simulation."}
+                  ? "Your code has been submitted for evaluation. Results will appear here shortly." 
+                  : "Click Run or Submit to test your solution against the test cases."}
                 className="h-full"
               />
             )}
@@ -136,7 +138,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                 <div className="flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
                     <Terminal className="size-4 text-muted-foreground" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                    <span className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-tight">
                       Overall Status:
                     </span>
                     <VerdictBadge 
@@ -145,9 +147,28 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                   </div>
                 </div>
 
+                {/* Global Error Display (Compile/Runtime) */}
+                {(runResult?.compileOutput || runResult?.stderr) && (
+                  <Alert variant="destructive" className="shrink-0 bg-destructive/10 border-destructive/20 py-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="size-4" />
+                      <AlertTitle className="text-xs font-bold uppercase tracking-widest m-0 leading-none">
+                        {runResult?.compileOutput ? "Compilation Error" : "Runtime Error"}
+                      </AlertTitle>
+                    </div>
+                    <AlertDescription>
+                      <ScrollArea className="h-full max-h-48 rounded-md border border-destructive/10 bg-background p-3">
+                        <pre className="text-[11px] font-mono leading-relaxed text-destructive/90 whitespace-pre-wrap break-all">
+                          {runResult?.compileOutput || runResult?.stderr}
+                        </pre>
+                      </ScrollArea>
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 {/* Tabbed Case Selector - Exactly like Tests tab */}
                 <div className="space-y-6 flex flex-col flex-1 min-h-0 overflow-y-auto">
-                  <ButtonGroup className="flex flex-wrap shrink-0">
+                  <ButtonGroup className="flex flex-wrap gap-2 shrink-0">
                     {effectiveTestResults.map((t, idx) => {
                       const caseVerdict = (t.status || "SYSTEM_ERROR") as ExecutionVerdict | "PENDING" | "RUNNING";
                       const caseConfig = STATUS_CONFIG[caseVerdict] ?? STATUS_CONFIG.SYSTEM_ERROR;
@@ -156,24 +177,22 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                         <Button
                           key={t.index}
                           type="button"
+                          variant={idx === activeResultIndex ? "secondary" : "ghost"}
+                          size="sm"
                           onClick={() => setActiveResultIndex(idx)}
                           className={cn(
-                            "px-4 py-1.5 rounded-md text-[11px] font-black uppercase tracking-wider border transition-all duration-300 relative overflow-hidden",
-                            idx === activeResultIndex
-                              ? "bg-primary/10 border-primary/50 text-foreground ring-1 ring-primary/20 hover:bg-primary/20"
-                              : "bg-muted/10 border-border/40 text-muted-foreground hover:bg-muted/20 hover:border-border/60",
+                            "h-8 text-xs font-medium gap-2",
+                            idx === activeResultIndex && "bg-secondary shadow-sm"
                           )}
                         >
-                          <span className="relative z-10 flex items-center gap-2">
-                            Case {idx + 1}
-                            <div
-                              className={cn(
-                                "size-1.5 rounded-full shrink-0",
-                                caseVerdict === "RUNNING" ? "animate-spin" : "",
-                                caseConfig.textColor.replace("text-", "bg-")
-                              )}
-                            />
-                          </span>
+                          Case {idx + 1}
+                          <div
+                            className={cn(
+                              "size-1.5 rounded-full shrink-0",
+                              caseVerdict === "RUNNING" ? "animate-pulse" : "",
+                              caseConfig.textColor.replace("text-", "bg-")
+                            )}
+                          />
                         </Button>
                       );
                     })}
@@ -186,7 +205,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                     return (
                       <div className="space-y-5 flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground/60">
+                          <span className="text-xs font-semibold text-muted-foreground/80 uppercase tracking-tight">
                             Result Details
                           </span>
                           <VerdictBadge 

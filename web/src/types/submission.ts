@@ -22,13 +22,19 @@ export interface ExecutionTestResult {
   status: ExecutionVerdict;
   rawStatus: ExecutionStatus;
   time: string | null;
-  memory?: number;
+  memory?: number | null;
 }
 
 export interface RunSubmissionResponse {
-  submissionId: string;
-  overallStatus: string;
+  submissionId?: string;
+  overallStatus: ExecutionVerdict;
   tests: ExecutionTestResult[];
+  compileOutput?: string;
+  stderr?: string;
+  driverVerdict?: string;
+  parserWarnings?: string[];
+  suspicion?: { score: number; reasons: string[]; aiAuditTriggered: boolean };
+  aiAudit?: { overallStatus: ExecutionVerdict; disagreedWithDriver: boolean };
 }
 
 export interface RunSubmissionPayload {
@@ -48,7 +54,17 @@ export interface Submission {
   status: ExecutionVerdict | "PENDING";
   time?: number;
   memory?: number;
-  details?: any;
+  details?: {
+    tests?: ExecutionTestResult[];
+    compileOutput?: string;
+    stderr?: string;
+    evaluatedAt?: string;
+    evaluationDuration?: number;
+    driverVerdict?: string;
+    parserWarnings?: string[];
+    suspicion?: { score: number; reasons: string[]; aiAuditTriggered: boolean };
+    aiAudit?: { overallStatus: ExecutionVerdict; disagreedWithDriver: boolean };
+  };
   createdAt: string;
   updatedAt: string;
 }

@@ -32,6 +32,8 @@ export interface EvaluationResultData {
   tests?: TestCaseResult[];
   testsPassed?: number;
   totalTests?: number;
+  compileOutput?: string;
+  stderr?: string;
   error?: string;
 }
 

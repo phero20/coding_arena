@@ -25,6 +25,8 @@ export interface EvaluationResult {
   status: ExecutionVerdict | "PENDING" | "IDLE" | "ERROR";
   overallStatus: ExecutionVerdict | "PENDING" | "IDLE" | "ERROR"; // Alias for compatibility
   tests: ExecutionTestResult[];
+  compileOutput?: string;
+  stderr?: string;
   isLoading: boolean;
   error: string | null;
   type: "run" | "submit" | null;
@@ -67,6 +69,7 @@ export const useTaskEvaluation = ({
     onMutate: () => {
       setEvaluationType("run");
       setSubmissionId(null);
+      setLastRunResult(null);
     },
     onSuccess: (data) => {
       setLastRunResult(data);
@@ -88,6 +91,7 @@ export const useTaskEvaluation = ({
     onMutate: () => {
       setEvaluationType("submit");
       setLastRunResult(null);
+      setSubmissionId(null);
     },
     onSuccess: (data) => {
       setSubmissionId(data.submissionId);
@@ -104,8 +108,8 @@ export const useTaskEvaluation = ({
   const statusPolling = useMemo(() => {
     if (!pollingData) return null;
     return {
-      overallStatus: (pollingData.status as any) || "PENDING",
-      tests: pollingData.details?.tests || [],
+      overallStatus: pollingData.status || "PENDING",
+      tests: pollingData.details?.tests ?? [],
       isLoading: isPolling,
       error: pollingError ? (pollingError as Error).message : null,
     };
@@ -119,12 +123,14 @@ export const useTaskEvaluation = ({
 
   const evaluation: EvaluationResult = useMemo(() => {
     if (evaluationType === "run" && lastRunResult) {
-      const status = (lastRunResult.overallStatus as any) || "ACCEPTED";
+      const status = lastRunResult.overallStatus || "ACCEPTED";
       return {
-        submissionId: lastRunResult.submissionId,
+        submissionId: lastRunResult.submissionId ?? null,
         status,
         overallStatus: status,
         tests: lastRunResult.tests || [],
+        compileOutput: lastRunResult.compileOutput,
+        stderr: lastRunResult.stderr,
         isLoading: runMutation.isPending,
         error: getErrorMessage(runMutation.error),
         type: "run",
@@ -132,12 +138,14 @@ export const useTaskEvaluation = ({
     }
 
     if (evaluationType === "submit") {
-      const status = (statusPolling?.overallStatus as any) || "PENDING";
+      const status = statusPolling?.overallStatus || "PENDING";
       return {
         submissionId: submissionId,
         status,
         overallStatus: status,
         tests: statusPolling?.tests || [],
+        compileOutput: pollingData?.details?.compileOutput,
+        stderr: pollingData?.details?.stderr,
         isLoading: submitMutation.isPending || !!statusPolling?.isLoading,
         error: getErrorMessage(submitMutation.error || statusPolling?.error),
         type: "submit",

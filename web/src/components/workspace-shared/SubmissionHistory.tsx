@@ -55,8 +55,8 @@ export const SubmissionHistory: React.FC<SubmissionHistoryProps> = ({
       error={error}
       data={submissions}
       skeleton={<SubmissionSkeleton />}
-      emptyTitle="Empty History"
-      emptyMessage="You haven't submitted any solutions yet. Your journey starts with a single Run!"
+      emptyTitle="No Submissions"
+      emptyMessage="No submission history found. Your evaluated results will be listed here."
       emptyIcon={Terminal}
       onRetry={onRetry}
     >
