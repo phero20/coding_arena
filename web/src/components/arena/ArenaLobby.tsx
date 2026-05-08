@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { ArenaPlayerCard } from "./ArenaPlayerCard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -24,17 +23,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useArenaLobby } from "@/hooks/arena/use-arena-lobby";
-
-interface ArenaLobbyProps {
-  roomId: string;
-}
+import type { ArenaLobbyProps } from "@/types/component.types";
+import { useIsMounted } from "@/hooks/shared/use-is-mounted";
 
 export function ArenaLobby({ roomId }: ArenaLobbyProps) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  const isMounted = useIsMounted();
 
   const {
     room,
@@ -62,7 +55,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
     <div
       className={cn(
         "relative flex flex-col items-center gap-6 md:gap-12 pt-28 md:pt-42 pb-20 duration-500 w-full min-h-screen",
-        hasMounted ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0",
+        isMounted ? "animate-in fade-in slide-in-from-bottom-4" : "opacity-0",
       )}
     >
       {/* Action Buttons */}
@@ -231,9 +224,9 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
         <div className="w-full">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {players.map((player) => (
-              <ArenaPlayerCard 
-                key={player.userId} 
-                player={player} 
+              <ArenaPlayerCard
+                key={player.userId}
+                player={player}
                 isHost={isHost}
                 canKick={isHost && !player.isCreator}
                 onKick={kickPlayer}
