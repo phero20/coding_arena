@@ -4,7 +4,7 @@ import React, { use, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { MatchWorkspace } from "@/components/arena/match-editor/MatchWorkspace";
-import { useProblem } from "@/hooks/api/use-problem";
+import { useProblemQuery } from "@/hooks/queries/use-problem.queries";
 import { useArenaRoom } from "@/hooks/arena/use-arena-room";
 import { useArenaTransitions } from "@/hooks/arena/use-arena-actions";
 import { WorkspaceSkeleton } from "@/components/shared/Skeletons";
@@ -24,10 +24,10 @@ const MatchDetailPage = ({ params }: ArenaMatchPageProps) => {
 
   const problemIdentifier = room?.problemSlug || room?.problemId;
   const {
-    problem,
+    data: problem,
     isLoading: isLoadingProblem,
     error: problemError,
-  } = useProblem(problemIdentifier);
+  } = useProblemQuery(room?.problemSlug || "");
 
   const isLoading = isLoadingRoom || (!!room && isLoadingProblem);
   const error = roomError || (!!room && problemError);
@@ -61,10 +61,10 @@ const MatchDetailPage = ({ params }: ArenaMatchPageProps) => {
 
   return (
     <main className="min-h-screen bg-background relative">
-      <MatchWorkspace 
+      <MatchWorkspace
         key={`${roomId}-${room?.status}-${room?.language}`}
-        problem={problem} 
-        roomId={roomId} 
+        problem={problem}
+        roomId={roomId}
       />
     </main>
   );
