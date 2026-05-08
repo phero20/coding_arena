@@ -31,6 +31,7 @@ type ArenaPlayer struct {
 	IsOffline       bool              `json:"isOffline"`
 	JoinedAt        time.Time         `json:"joinedAt"`
 	SubmissionOrder int               `json:"submissionOrder"`
+	TimeTaken       int               `json:"timeTaken,omitempty"`
 }
 
 type ArenaRoom struct {
