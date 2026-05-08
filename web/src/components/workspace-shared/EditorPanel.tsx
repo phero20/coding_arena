@@ -120,7 +120,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
       className="flex flex-col h-full w-full overflow-hidden bg-background"
     >
       {/* ── Single header row: language selector (left) + tabs (right) ── */}
-      <header className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto hide-scrollbar">
+      <header className="h-11 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto hide-scrollbar">
         {/* Language selector — only meaningful on Code tab */}
         {activeTab === "code" && (
           <div className="flex items-center gap-2 shrink-0">

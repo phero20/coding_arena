@@ -8,6 +8,7 @@ export interface Judge0SubmissionPayload {
   cpu_time_limit?: number;
   memory_limit?: number;
   base64_encoded?: boolean;
+  compiler_options?: string;
 }
 
 export interface Judge0SubmissionToken {
@@ -87,19 +88,25 @@ export class Judge0Service {
 
   /**
    * Creates a batch of submissions in Judge0 and returns their tokens.
-   *
-   * This method is a thin wrapper over POST /submissions/batch.
    */
   async createBatchSubmissions(
     submissions: Judge0SubmissionPayload[],
   ): Promise<Judge0SubmissionToken[]> {
+    const encodedSubmissions = submissions.map(s => ({
+      ...s,
+      source_code: Buffer.from(s.source_code).toString("base64"),
+      stdin: s.stdin ? Buffer.from(s.stdin).toString("base64") : undefined,
+      expected_output: s.expected_output ? Buffer.from(s.expected_output).toString("base64") : undefined,
+      base64_encoded: true
+    }));
+
     const body = JSON.stringify({
-      submissions,
+      submissions: encodedSubmissions,
     });
 
     const result = await this.request<
       Judge0CreateBatchResponse | Judge0SubmissionToken[]
-    >("/submissions/batch", {
+    >("/submissions/batch?base64_encoded=true", {
       method: "POST",
       body,
     });
@@ -119,18 +126,13 @@ export class Judge0Service {
 
   /**
    * Fetches the results for a batch of submission tokens.
-   *
-   * This is a thin wrapper over GET /submissions/batch?tokens=...
    */
   async getBatchResults(tokens: string[]): Promise<Judge0SubmissionResult[]> {
     if (tokens.length === 0) return [];
 
     const params = new URLSearchParams({
       tokens: tokens.join(","),
-      // We are currently sending plain (non-base64) payloads.
-      base64_encoded: "false",
-      // Ask Judge0 to include detailed fields so we can surface
-      // compilation/runtime errors in our API response.
+      base64_encoded: "true",
       fields: "stdout,stderr,compile_output,message,status,time,memory",
     });
 
@@ -140,18 +142,21 @@ export class Judge0Service {
       method: "GET",
     });
 
-    if (Array.isArray(result)) {
-      return result as Judge0SubmissionResult[];
+    const submissions = Array.isArray(result) 
+      ? result 
+      : (result as { submissions: Judge0SubmissionResult[] }).submissions;
+
+    if (!Array.isArray(submissions)) {
+      throw new Error("Unexpected Judge0 batch results response format");
     }
 
-    if (
-      Array.isArray(
-        (result as { submissions: Judge0SubmissionResult[] }).submissions,
-      )
-    ) {
-      return (result as { submissions: Judge0SubmissionResult[] }).submissions;
-    }
-
-    throw new Error("Unexpected Judge0 batch results response format");
+    // Decode base64 responses back to UTF-8
+    return submissions.map(s => ({
+      ...s,
+      stdout: s.stdout ? Buffer.from(s.stdout, "base64").toString("utf-8") : s.stdout,
+      stderr: s.stderr ? Buffer.from(s.stderr, "base64").toString("utf-8") : s.stderr,
+      compile_output: s.compile_output ? Buffer.from(s.compile_output, "base64").toString("utf-8") : s.compile_output,
+      message: s.message ? Buffer.from(s.message, "base64").toString("utf-8") : s.message,
+    }));
   }
 }

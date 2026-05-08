@@ -14,7 +14,10 @@ export const JUDGE0_LANGUAGE_IDS: Record<string, number> = {
   java: 62,      // OpenJDK 13
   python: 71,    // Python 3.8.1
   cpp: 54,       // C++ (GCC 9.2.0)
-  javascript: 63 // Node.js 12.14.0
+  c: 50,         // C (GCC 9.2.0)
+  javascript: 63, // Node.js 12.14.0
+  typescript: 74, // TypeScript 3.7.4
+  csharp: 51      // C# (Mono 6.6.0.161)
 };
 
 export const RESULT_DELIMITER = "@@RESULT@@";

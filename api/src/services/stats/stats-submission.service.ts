@@ -1,4 +1,5 @@
 import { createLogger } from "../../libs/utils/logger";
+import { getLanguageName, normalizeLanguageId, getLanguageSlug } from "../../libs/utils/languages";
 import { type ICradle } from "../../libs/awilix-container";
 import type { IStatsRepository } from "../../repositories/stats/stats.repository";
 import type { IProblemRepository } from "../../repositories/problems/problem.repository";
@@ -185,32 +186,34 @@ export class StatsSubmissionService {
     // Language counter — runs on every ACCEPTED, gated by its own (problem, language) dedup.
     // Separate from isNewSolve so solving the same problem in a new language still counts.
     if (submission.languageId) {
+      const langSlug = getLanguageSlug(submission.languageId);
       logger.info(
         {
           userId: postgresUserId,
           problemId: submission.problemId,
           languageId: submission.languageId,
+          langSlug,
         },
         "Processing language solve recording...",
       );
       const isNewLang = await this.statsRepository.recordSolvedLanguage(
         postgresUserId,
         submission.problemId,
-        submission.languageId,
+        langSlug,
       );
 
       if (isNewLang) {
         logger.info(
-          { userId: postgresUserId, languageId: submission.languageId },
+          { userId: postgresUserId, languageId: langSlug },
           "New language solve detected! Incrementing counter...",
         );
         await this.statsRepository.updateLanguageCount(
           postgresUserId,
-          submission.languageId,
+          langSlug,
         );
       } else {
         logger.info(
-          { userId: postgresUserId, languageId: submission.languageId },
+          { userId: postgresUserId, languageId: langSlug },
           "Language solve already recorded for this problem. Skipping counter.",
         );
       }

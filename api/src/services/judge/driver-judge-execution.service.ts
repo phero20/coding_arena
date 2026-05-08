@@ -24,7 +24,7 @@ import { type ICradle } from "../../libs/awilix-container";
 const logger = createLogger("driver-judge-execution-service");
 import { getLanguageName, normalizeLanguageId } from "../../libs/utils/languages";
 
-const SUPPORTED_LANGUAGE_IDS = new Set(["62", "71"]);
+const SUPPORTED_LANGUAGE_IDS = new Set(["62", "71", "54", "50", "63", "74", "51"]);
 
 export class DriverJudgeExecutionService {
   private readonly judge0Service: ICradle["judge0Service"];
@@ -95,23 +95,24 @@ export class DriverJudgeExecutionService {
     }));
 
     const executionPackage = await generateExecutionPackage({
-      language: normalizedLanguageId === "71" ? "python" : "java",
+      language: this.resolveLanguageKey(normalizedLanguageId),
       userCode: input.sourceCode,
       signature: signature as any,
       testCases,
     });
 
-    const judgeRaw = await this.executeAndPoll(
-      {
-        source_code: executionPackage.sourceCode,
-        language_id: executionPackage.languageId,
-        stdin: executionPackage.stdin,
-      },
-      input.traceId,
-    );
+    const payload: any = {
+      source_code: executionPackage.sourceCode,
+      language_id: executionPackage.languageId,
+      stdin: executionPackage.stdin,
+    };
+    if (String(executionPackage.languageId) === "74") {
+      payload.compiler_options = "--target ESNext --lib ESNext,DOM";
+    }
+    const judgeRaw = await this.executeAndPoll(payload, input.traceId);
 
     const parsed = parseDriverResult(
-      judgeRaw as RawJudge0Result,
+      judgeRaw as any,
       selectedCases.length,
     );
 
@@ -248,6 +249,7 @@ export class DriverJudgeExecutionService {
     payload: {
       source_code: string;
       language_id: number;
+      compiler_options?: string;
       stdin: string;
     },
     traceId?: string,
@@ -335,5 +337,14 @@ export class DriverJudgeExecutionService {
       default:
         return "SYSTEM_ERROR";
     }
+    }
+  private resolveLanguageKey(languageId: string): string {
+    if (languageId === "71") return "python";
+    if (languageId === "54") return "cpp";
+    if (languageId === "50") return "c";
+    if (languageId === "63") return "javascript";
+    if (languageId === "74") return "typescript";
+    if (languageId === "51") return "csharp";
+    return "java";
   }
 }

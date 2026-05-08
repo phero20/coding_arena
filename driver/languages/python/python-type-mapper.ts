@@ -74,7 +74,7 @@ export class PythonTypeMapper extends BaseTypeMapper {
       `            __phase = "compare"`,
       `            pass_status = DeepComparator.equals(${resultSource}, __expected, EPS, UNORDERED)`,
       `            print(f"@@RESULT@@:{serialize(${resultSource})} @@EXPECTED@@:{serialize(__expected)} @@PASS@@:{str(pass_status).lower()} @@TIME@@:{duration}")`
-    ].map(l => `            ${l.trim()}`).join("\n");
+    ].join("\n");
   }
 
   public generateClassExecutionBlock(sig: ClassSignature): string {
@@ -133,6 +133,6 @@ export class PythonTypeMapper extends BaseTypeMapper {
     lines.push(`            exp_str = "[" + ",".join(exp_list) + "]"`);
     lines.push(`            print(f"@@RESULT@@:{res_str} @@EXPECTED@@:{exp_str} @@PASS@@:{str(all_pass).lower()} @@TIME@@:{duration}")`);
 
-    return lines.map(l => `            ${l.trim()}`).join("\n");
+    return lines.join("\n");
   }
 }

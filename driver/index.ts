@@ -1,10 +1,20 @@
 import { DriverOptions, ExecutionPackage } from "./core/types";
 import { JavaProvider } from "./languages/java/java-provider";
 import { PythonProvider } from "./languages/python/python-provider";
+import { CppProvider } from "./languages/cpp/cpp-provider";
+import { CProvider } from "./languages/c/c-provider";
+import { JavaScriptProvider } from "./languages/javascript/javascript-provider";
+import { TypeScriptProvider } from "./languages/typescript/typescript-provider";
+import { CSharpProvider } from "./languages/csharp/csharp-provider";
 
 const providers = {
   java: new JavaProvider(),
   python: new PythonProvider(),
+  cpp: new CppProvider(),
+  c: new CProvider(),
+  javascript: new JavaScriptProvider(),
+  typescript: new TypeScriptProvider(),
+  csharp: new CSharpProvider(),
 };
 
 /**

@@ -113,5 +113,30 @@ export const normalizeLanguageId = (languageId: string): string => {
   return LANGUAGE_ALIAS_TO_ID[normalized] ?? normalized;
 }
 
+export const getLanguageSlug = (languageId: string): string => {
+  const id = normalizeLanguageId(languageId);
+  const mapping: Record<string, string> = {
+    "62": "java",
+    "71": "python",
+    "54": "cpp",
+    "63": "javascript",
+    "74": "typescript",
+    "50": "c",
+    "73": "rust",
+    "60": "go",
+    "83": "swift",
+    "72": "ruby",
+    "78": "kotlin",
+    "81": "scala",
+    "68": "php",
+    "82": "sql",
+    "61": "haskell",
+    "64": "lua",
+    "46": "bash",
+    "51": "csharp",
+  };
+  return mapping[id] ?? id;
+};
+
 export const getLanguageName = (languageId: string): string =>
   LANGUAGE_ID_TO_NAME[normalizeLanguageId(languageId)] ?? `Language ${languageId}`

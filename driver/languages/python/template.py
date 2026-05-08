@@ -20,7 +20,7 @@ def main():
     for i in range(num_cases):
         __phase = "parse_inputs"
         try:
-            # {{DRIVER_LOGIC_PLACEHOLDER}}
+# {{DRIVER_LOGIC_PLACEHOLDER}}
             pass
         except Exception as e:
             err_msg = traceback.format_exc()

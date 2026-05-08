@@ -30,8 +30,8 @@ export abstract class BaseTypeMapper {
 
   public flattenClassInput(input: Record<string, any>, sig: ClassSignature, expectedOutput?: any[]): string {
     const parts: string[] = [];
-    const commands = input.commands as string[];
-    const args = input.arguments as any[][];
+    const commands = (input.commands || input.operations || []) as string[];
+    const args = (input.arguments || input.parameters || []) as any[][];
 
     parts.push(String(commands.length));
 

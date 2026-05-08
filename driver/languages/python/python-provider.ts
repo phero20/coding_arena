@@ -57,11 +57,13 @@ export class PythonProvider extends LanguageProvider {
       ];
     } else {
       const sig = options.signature as any;
-      const extractionLines = sig.params
-        .map((p: any) => this.mapper.generateExtractionLine(p))
-        .join("\n            ");
+      const extractionLines = sig.params.length > 0 
+        ? "            " + sig.params
+            .map((p: any) => this.mapper.generateExtractionLine(p))
+            .join("\n            ")
+        : "";
       const executionBlock = this.mapper.generateExecutionBlock(sig);
-      driverLogic = `${extractionLines}\n${executionBlock}`;
+      driverLogic = extractionLines ? `${extractionLines}\n${executionBlock}` : executionBlock;
       stdinLines = [
         options.testCases.length.toString(),
         ...options.testCases.map((tc) =>
@@ -73,11 +75,21 @@ export class PythonProvider extends LanguageProvider {
       ];
     }
 
-    const sourceCode = template
+    let sourceCode = template
         .replace("EPS = 1e-6", `EPS = ${options.comparator?.float_epsilon ?? 1e-6}`)
         .replace("UNORDERED = False", `UNORDERED = ${options.comparator?.unordered_arrays ? "True" : "False"}`)
         .replace("# {{DRIVER_LOGIC_PLACEHOLDER}}", driverLogic)
         .replace("# {{USER_CODE}}", options.userCode);
+
+    // Fix Conflict: If user provides their own ListNode or TreeNode, disable the platform defaults and helpers
+    if (options.userCode.includes("class ListNode")) {
+      sourceCode = sourceCode.replace(/class ListNode:[\s\S]*?self\.next = next/, "# ListNode overridden by user");
+      sourceCode = sourceCode.replace(/def build_list\([\s\S]*?return head/, "# build_list removed (ListNode overridden)");
+    }
+    if (options.userCode.includes("class TreeNode")) {
+      sourceCode = sourceCode.replace(/class TreeNode:[\s\S]*?self\.right = right/, "# TreeNode overridden by user");
+      sourceCode = sourceCode.replace(/def build_tree\([\s\S]*?return root/, "# build_tree removed (TreeNode overridden)");
+    }
 
     return {
       sourceCode,
