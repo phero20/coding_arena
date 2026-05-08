@@ -3,13 +3,13 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { ProblemWorkspace } from "@/components/problem-editor/ProblemWorkspace";
-import { useProblem } from "@/hooks/api/use-problem";
+import { useProblemQuery } from "@/hooks/queries/use-problem.queries";
 import { WorkspaceSkeleton } from "@/components/shared/Skeletons";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 
 const ProblemDetailPage = () => {
   const { problemId } = useParams() as { problemId: string };
-  const { problem, isLoading, error } = useProblem(problemId);
+  const { data: problem, isLoading, error } = useProblemQuery(problemId);
 
   if (isLoading) {
     return <WorkspaceSkeleton />;
