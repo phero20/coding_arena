@@ -1,4 +1,4 @@
-# 🖼️ Coding Arena: Complete Visual Architecture & UML Suite
+<!-- # 🖼️ Coding Arena: Complete Visual Architecture & UML Suite
 
 ## Architectural Diagrams
 ![](./docs/diagrams/system_architecture.png)
@@ -14,4 +14,4 @@
 ![](./docs/diagrams/uml_component.png)
 ![](./docs/diagrams/uml_deployment.png)
 ![](./docs/diagrams/uml_sequence.png)
-![](./docs/diagrams/uml_activity.png)
+![](./docs/diagrams/uml_activity.png) -->
