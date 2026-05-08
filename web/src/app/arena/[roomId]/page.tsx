@@ -33,12 +33,10 @@ export default function ArenaRoomPage({ params }: ArenaRoomPageProps) {
     isLoading: isRoomLoading,
   } = useArenaRoom(roomId);
 
-  const {
-    matchEnded,
-  } = useArenaStore(
+  const { matchEnded } = useArenaStore(
     useShallow((state: any) => ({
       matchEnded: state.matchEnded,
-    }))
+    })),
   );
 
   // 2. Centralized Transitions
