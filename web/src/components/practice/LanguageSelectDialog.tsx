@@ -13,16 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector";
 import type { Problem } from "@/types/api";
-
-interface LanguageSelectDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  problem: Problem | null;
-  selectedLanguage: string;
-  setSelectedLanguage: (lang: string) => void;
-  onConfirm: () => void;
-  isActionLoading: boolean;
-}
+import type { LanguageSelectDialogProps } from "@/types/component.types";
 
 export const LanguageSelectDialog: React.FC<LanguageSelectDialogProps> = ({
   isOpen,
@@ -53,10 +44,10 @@ export const LanguageSelectDialog: React.FC<LanguageSelectDialogProps> = ({
               <LanguageSelector
                 value={selectedLanguage}
                 onChange={setSelectedLanguage}
-                languages={Object.keys(problem.code_snippets || {}).map(
+                languages={(problem ? Object.keys(problem.code_snippets) : []).map(
                   (lang) => ({
                     id: lang,
-                    label: lang.toUpperCase(),
+                    name: lang.toUpperCase(),
                   }),
                 )}
               />
