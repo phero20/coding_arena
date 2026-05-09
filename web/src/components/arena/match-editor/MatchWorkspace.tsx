@@ -10,14 +10,12 @@ import { DescriptionPanel } from "@/components/workspace-shared/DescriptionPanel
 import { EditorPanel } from "@/components/workspace-shared/EditorPanel";
 import { Problem } from "@/types/api";
 import { BaseWorkspace } from "@/components/shared/BaseWorkspace";
+import type { MatchWorkspaceProps } from "@/types/component.types";
 import { useArenaMatch } from "@/hooks/workspace/use-arena-match";
 
 import { useRouter } from "next/navigation";
 
-interface MatchWorkspaceProps {
-  problem: Problem;
-  roomId: string;
-}
+
 
 export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
   problem,
