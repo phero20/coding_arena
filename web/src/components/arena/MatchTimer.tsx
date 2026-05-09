@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useId } from "react";
+import React from "react";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -8,9 +8,11 @@ import {
   motion,
   useSpring,
   useTransform,
-  motionValue,
 } from "framer-motion";
 import useMeasure from "react-use-measure";
+import type { MatchTimerProps } from "@/types/component.types";
+import { useMatchCountdown } from "@/hooks/arena/use-match-countdown";
+import { useIsMounted } from "@/hooks/shared/use-is-mounted";
 
 const TRANSITION = {
   type: "spring" as const,
@@ -21,10 +23,10 @@ const TRANSITION = {
 
 function Digit({ value, place }: { value: number; place: number }) {
   const valueRoundedToPlace = Math.floor(value / place) % 10;
-  const initial = motionValue(valueRoundedToPlace);
+  const initial = valueRoundedToPlace;
   const animatedValue = useSpring(initial, TRANSITION);
 
-  useEffect(() => {
+  React.useEffect(() => {
     animatedValue.set(valueRoundedToPlace);
   }, [animatedValue, valueRoundedToPlace]);
 
@@ -39,7 +41,7 @@ function Digit({ value, place }: { value: number; place: number }) {
 }
 
 function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
-  const uniqueId = useId();
+  const uniqueId = React.useId();
   const [ref, bounds] = useMeasure();
 
   const y = useTransform(mv, (latest) => {
@@ -105,33 +107,11 @@ function SlidingNumber({ value, padStart = false }: SlidingNumberProps) {
   );
 }
 
-interface MatchTimerProps {
-  endTime: number | string;
-}
-
 export const MatchTimer: React.FC<MatchTimerProps> = ({ endTime }) => {
-  const [timeLeft, setTimeLeft] = useState<number>(0);
-  const [hasMounted, setHasMounted] = useState(false);
+  const isMounted = useIsMounted();
+  const { minutes, seconds, isWarning, isDanger, isExpired } = useMatchCountdown(endTime);
 
-  useEffect(() => {
-    setHasMounted(true);
-    const end = typeof endTime === "number" ? endTime : new Date(endTime).getTime();
-
-    const calculateTimeLeft = () => {
-      const now = Date.now();
-      return Math.max(0, Math.floor((end - now) / 1000));
-    };
-
-    setTimeLeft(calculateTimeLeft());
-
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [endTime]);
-
-  if (!hasMounted) {
+  if (!isMounted) {
     return (
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-sm font-bold border bg-card border-border/50 text-foreground opacity-50">
         <Clock className="w-4 h-4" />
@@ -140,17 +120,11 @@ export const MatchTimer: React.FC<MatchTimerProps> = ({ endTime }) => {
     );
   }
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  
-  const isWarning = timeLeft > 0 && timeLeft <= 60; // Last 60 seconds
-  const isDanger = timeLeft > 0 && timeLeft <= 10; // Last 10 seconds
-
   return (
     <div className={cn(
       "flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-[15px] font-bold border-2 transition-all duration-200",
       "shadow-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-default",
-      timeLeft === 0 ? "bg-destructive text-destructive-foreground border-destructive-foreground/50" :
+      isExpired ? "bg-destructive text-destructive-foreground border-destructive-foreground/50" :
       isDanger ? "bg-destructive/15 text-destructive border-destructive" :
       isWarning ? "bg-accent text-accent-foreground border-foreground/30" :
       "bg-card border-border text-foreground"
@@ -165,3 +139,4 @@ export const MatchTimer: React.FC<MatchTimerProps> = ({ endTime }) => {
     </div>
   );
 };
+
