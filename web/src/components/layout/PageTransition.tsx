@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { useIsMounted } from "@/hooks/shared/use-is-mounted";
 
 export const PageTransition = ({ children }: { children: React.ReactNode }) => {
-  const [mounted, setMounted] = useState(false);
+  const isMounted = useIsMounted();
   const pathname = usePathname();
 
-  // Ensure handles hydration correctly: content only becomes visible once mounted on client
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  if (!isMounted) {
     return <div className="opacity-0">{children}</div>;
   }
 
