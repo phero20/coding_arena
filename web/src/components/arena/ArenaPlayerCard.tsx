@@ -1,18 +1,14 @@
 import { memo } from "react";
-import { ArenaPlayer } from "@/services/arena.service";
+import { ArenaPlayer } from "@/types/arena";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Crown, X, Timer } from "lucide-react";
+import type { ArenaPlayerCardProps } from "@/types/component.types";
+import { Crown, X, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn, formatSolveTime } from "@/lib/utils";
 
-interface ArenaPlayerCardProps {
-  player: ArenaPlayer;
-  isHost?: boolean;
-  canKick?: boolean;
-  onKick?: (userId: string) => void;
-}
+
 
 export const ArenaPlayerCard = memo(function ArenaPlayerCard({ 
   player, 
@@ -46,7 +42,7 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
             </div>
             {player.timeTaken && (
               <div className="flex items-center gap-1 mt-0.5">
-                <Timer className="size-2.5 text-primary" />
+                <Clock className="size-2.5 text-primary" />
                 <span className="text-[10px] font-extrabold text-primary/80 tracking-tight">
                   {formatSolveTime(player.timeTaken)}
                 </span>
