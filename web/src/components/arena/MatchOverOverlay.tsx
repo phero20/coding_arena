@@ -4,15 +4,11 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, ArrowRight, Timer, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { MatchOverOverlayProps } from "@/types/component.types";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-interface MatchOverOverlayProps {
-  roomId: string;
-  isOpen: boolean;
-  onViewResults?: () => void;
-  playersCount: number;
-}
+
 
 export const MatchOverOverlay = ({ 
   roomId, 
