@@ -1,4 +1,5 @@
     // --- BUILDER HELPERS ---
+    /* [[BUILD_LIST_START]] */
     private static ListNode buildList(int n, FastScanner sc) throws Exception {
         if (n == 0) return null;
         ListNode dummy = new ListNode(0);
@@ -9,7 +10,9 @@
         }
         return dummy.next;
     }
+    /* [[BUILD_LIST_END]] */
 
+    /* [[BUILD_TREE_START]] */
     private static TreeNode buildTree(int n, FastScanner sc) throws Exception {
         if (n == 0) return null;
         String[] nodes = new String[n];
@@ -35,3 +38,4 @@
         }
         return root;
     }
+    /* [[BUILD_TREE_END]] */

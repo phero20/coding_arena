@@ -17,10 +17,13 @@ export interface SuspicionInput {
 export function evaluateSuspicion(input: SuspicionInput): SuspicionResult {
   let score = 0;
   const reasons: string[] = [];
-  const comparatorMode = input.problem.judging_policy?.comparator_mode ?? "strict";
+  const comparatorMode =
+    input.problem.judging_policy?.comparator_mode ?? "strict";
   const multiAnswerRisk =
     input.problem.judging_policy?.multi_answer === true ||
-    input.problem.problem_slug === "two-sum";
+    ["two-sum", "longest-palindromic-substring"].includes(
+      input.problem.problem_slug,
+    );
 
   if (input.parsedWarnings.length > 0) {
     score += 3;
@@ -43,12 +46,15 @@ export function evaluateSuspicion(input: SuspicionInput): SuspicionResult {
   }
 
   const failedCount = input.tests.filter((t) => t.status !== "ACCEPTED").length;
-  if (multiAnswerRisk && failedCount === 1 && input.tests.length > 1) {
-    score += 2;
-    reasons.push("single_failure_on_multi_answer_problem");
+  if (multiAnswerRisk && failedCount > 0) {
+    score += 4;
+    reasons.push("multi_answer_failure_detected");
   }
 
-  if (input.judgeRaw.status.id === 3 && input.driverOverallStatus === "SYSTEM_ERROR") {
+  if (
+    input.judgeRaw.status.id === 3 &&
+    input.driverOverallStatus === "SYSTEM_ERROR"
+  ) {
     score += 1;
     reasons.push("judge0_parsed_mismatch_pattern");
   }

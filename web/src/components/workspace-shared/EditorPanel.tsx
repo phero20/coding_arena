@@ -113,6 +113,28 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
 
   const monacoOptions = useMonacoConfig(preferences);
 
+  const handleEditorWillMount = (monaco: any) => {
+    // Disable validation for JS/TS to provide a LeetCode-like experience
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+    });
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+    });
+
+    // Disable CSS/JSON validation as well
+    if (monaco.languages.css) {
+      monaco.languages.css.cssDefaults.setDiagnosticsOptions({ validate: false });
+      monaco.languages.css.lessDefaults.setDiagnosticsOptions({ validate: false });
+      monaco.languages.css.scssDefaults.setDiagnosticsOptions({ validate: false });
+    }
+    if (monaco.languages.json) {
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({ validate: false });
+    }
+  };
+
   return (
     <Tabs
       value={activeTab as string}
@@ -120,7 +142,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
       className="flex flex-col h-full w-full overflow-hidden bg-background"
     >
       {/* ── Single header row: language selector (left) + tabs (right) ── */}
-      <header className="h-11 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto hide-scrollbar">
+      <header className="h-14 md:h-12 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto hide-scrollbar">
         {/* Language selector — only meaningful on Code tab */}
         {activeTab === "code" && (
           <div className="flex items-center gap-2 shrink-0">
@@ -206,17 +228,17 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
         )}
 
         {/* Tabs — pushed to the right via ml-auto */}
-        <TabsList className="bg-transparent h-10 p-0 gap-0 ml-auto shrink-0">
+        <TabsList className="bg-transparent h-10 p-0 gap-0 md:gap-2 ml-auto shrink-0">
           <TabsTrigger value="code" className={TAB_CLS}>
-            <Code2 className="size-3 mr-1.5 shrink-0" />
+            <Code2 className="size-4 md:mr-1 shrink-0" />
             <span className="hidden sm:inline">Code</span>
           </TabsTrigger>
           <TabsTrigger value="testcase" className={TAB_CLS}>
-            <Terminal className="size-3 mr-1.5 shrink-0" />
+            <Terminal className="size-4 md:mr-1 shrink-0" />
             <span className="hidden sm:inline">Tests</span>
           </TabsTrigger>
           <TabsTrigger value="result" className={TAB_CLS}>
-            <CheckCircle2 className="size-3 mr-1.5 shrink-0" />
+            <CheckCircle2 className="size-4 md:mr-1 shrink-0" />
             <span className="hidden sm:inline">Result</span>
           </TabsTrigger>
         </TabsList>
@@ -230,6 +252,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
         <div className="h-[990px] md:h-full w-full ">
           <Editor
             height="100%"
+            beforeMount={handleEditorWillMount}
             defaultLanguage={
               mode === "arena" ? enforcedLanguage : monacoLanguage
             }

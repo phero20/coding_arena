@@ -130,10 +130,27 @@ export interface RawJudge0Result {
 
 /**
  * Matches: @@RESULT@@:<actual> @@EXPECTED@@:<expected> @@PASS@@:<bool> @@TIME@@:<ms>
- * Groups:   1=actual  2=expected  3=true|false  4=time_ms
+ * We use a more robust regex that handles spaces within the values by looking for the delimiters.
  */
 const RESULT_RE =
-  /^@@RESULT@@:(.+?) @@EXPECTED@@:(.+?) @@PASS@@:(true|false) @@TIME@@:([\d.]+)$/;
+  /^@@RESULT@@:(.*) @@EXPECTED@@:(.*) @@PASS@@:(true|false) @@TIME@@:([\d.]+)$/;
+// The above greedy regex might fail if values contain " @@EXPECTED@@:". 
+// A better way is to split by the known delimiters.
+function parseResultLine(line: string) {
+  const resIdx = line.indexOf("@@RESULT@@:");
+  const expIdx = line.indexOf(" @@EXPECTED@@:");
+  const passIdx = line.indexOf(" @@PASS@@:");
+  const timeIdx = line.indexOf(" @@TIME@@:");
+
+  if (resIdx === -1 || expIdx === -1 || passIdx === -1 || timeIdx === -1) return null;
+
+  const actual = line.slice(resIdx + "@@RESULT@@:".length, expIdx);
+  const expected = line.slice(expIdx + " @@EXPECTED@@:".length, passIdx);
+  const passStr = line.slice(passIdx + " @@PASS@@:".length, timeIdx);
+  const timeStr = line.slice(timeIdx + " @@TIME@@:".length);
+
+  return { actual, expected, passStr, timeStr };
+}
 
 /**
  * Matches: @@ERROR@@:case=<N> phase=<word> msg=<rest>
@@ -262,9 +279,9 @@ export function parseDriverResult(
 
   for (const line of lines) {
     // ── 4a. SUCCESS line ──────────────────────────────────────────────────
-    const resultMatch = RESULT_RE.exec(line);
-    if (resultMatch) {
-      const [, actual, expected, passStr, timeStr] = resultMatch;
+    const result = parseResultLine(line);
+    if (result) {
+      const { actual, expected, passStr, timeStr } = result;
       const passed = passStr === "true";
       tests.push({
         index: nextResultIndex,

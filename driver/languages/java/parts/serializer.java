@@ -1,5 +1,6 @@
     // --- DECODER HELPERS ---
     private static String decodeString(String s) {
+        if (s.equals("-")) return "";
         return new String(Base64.getDecoder().decode(s));
     }
 

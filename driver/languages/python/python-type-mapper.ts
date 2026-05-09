@@ -17,7 +17,9 @@ export class PythonTypeMapper extends BaseTypeMapper {
   public generateReadExpr(type: TypeNode): string {
     if (type.kind === "primitive") {
       if (type.primitive === "string") return "decode_string(sc.next())";
-      if (type.primitive === "char") return "decode_string(sc.next())[0] if decode_string(sc.next()) else ''";
+      if (type.primitive === "char") {
+        return "(lambda s: s[0] if s else '')(decode_string(sc.next()))";
+      }
       if (type.primitive === "boolean") return "sc.next_bool()";
       if (type.primitive === "double" || type.primitive === "float") return "sc.next_float()";
       return "sc.next_int()";

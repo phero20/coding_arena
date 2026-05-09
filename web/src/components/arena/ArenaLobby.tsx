@@ -75,7 +75,6 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
             <SelectValue placeholder="Time" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1">5 mins</SelectItem>
             <SelectItem value="10">10 mins</SelectItem>
             <SelectItem value="20">20 mins</SelectItem>
             <SelectItem value="30">30 mins</SelectItem>
@@ -121,7 +120,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
         <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center border border-border/50">
           <Sword className="w-6 h-6 text-primary-foreground" />
         </div>
-        <h1 className="text-3xl font-black tracking-tight uppercase italic opacity-90">
+        <h1 className="text-3xl font-black tracking-tight uppercase opacity-90">
           Arena Lobby
         </h1>
       </div>
@@ -199,12 +198,12 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
       <div className="flex flex-col gap-4 w-full max-w-7xl">
         <div className="flex items-center justify-between px-1 w-full">
           <div className="flex items-center gap-2">
-            <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] text-foreground/40">
-              Participants
+            <h3 className="text-sm font-bold tracking-wider text-foreground/40">
+              Participants : 
             </h3>
             <Badge
               variant="outline"
-              className="h-5 px-1.5 text-[10px] font-bold border-border/10 bg-muted/10"
+              className="h-5 text-[10px] font-bold border-border/10 bg-muted/10"
             >
               {players.length} / 50
             </Badge>

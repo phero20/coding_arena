@@ -60,7 +60,7 @@ export const DescriptionPanel = React.memo(
           defaultValue="description"
           className="flex-1 flex flex-col md:h-full md:overflow-hidden"
         >
-          <div className="sticky top-0 z-20 px-4 bg-background/95 md:bg-muted/20 backdrop-blur-md border-b border-border/20 overflow-x-auto no-scrollbar">
+          <div className="sticky top-0 z-20 px-4 bg-background md:bg-muted/20 border-b border-border/20 overflow-x-auto no-scrollbar">
             <TabsList className="bg-transparent h-10 p-0 flex flex-wrap justify-start w-max min-w-full gap-4 sm:gap-6">
               {tabs.map((tab) => (
                 <TabsTrigger
@@ -69,10 +69,10 @@ export const DescriptionPanel = React.memo(
                   className={cn(
                     "data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none",
                     "border-b-2 border-transparent data-[state=active]:border-primary",
-                    "rounded-none h-10 px-0 text-xs font-bold transition-all flex items-center gap-2",
+                    "rounded-none h-10 px-0 text-xs font-bold transition-all flex items-center gap-1",
                   )}
                 >
-                  <tab.icon className="size-3.5" />
+                  <tab.icon className="size-4" />
                   <span className="hidden lg:inline-block">{tab.label}</span>
                 </TabsTrigger>
               ))}

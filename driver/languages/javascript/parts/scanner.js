@@ -4,7 +4,7 @@ class Scanner {
         this.offset = 0;
     }
 
-    nextString() {
+    nextToken() {
         while (this.offset < this.buffer.length && this.buffer[this.offset] <= 32) {
             this.offset++;
         }
@@ -16,30 +16,41 @@ class Scanner {
         return this.buffer.toString('utf8', start, this.offset);
     }
 
+    nextString() {
+        const s = this.nextToken();
+        if (s === "-" || s === "" || s === null) return "";
+        if (s === "null") return null;
+        try {
+            return Buffer.from(s, 'base64').toString('utf8');
+        } catch (e) {
+            return s;
+        }
+    }
+
     nextInt() {
-        const s = this.nextString();
+        const s = this.nextToken();
         return s === null ? 0 : parseInt(s, 10);
     }
 
     nextFloat() {
-        const s = this.nextString();
+        const s = this.nextToken();
         return s === null ? 0 : parseFloat(s);
     }
 
     nextBool() {
-        const s = this.nextString();
+        const s = this.nextToken();
         return s === "true" || s === "1";
     }
 
     nextBigInt() {
-        const s = this.nextString();
+        const s = this.nextToken();
         return s === null ? 0n : BigInt(s);
     }
 
     nextAny() {
-        const s = this.nextString();
+        const s = this.nextToken();
         if (s === null || s === "null") return null;
-        // Basic Base64 decoding if needed, or just return as is
+        if (s === "-") return "";
         try {
             return JSON.parse(Buffer.from(s, 'base64').toString('utf8'));
         } catch (e) {

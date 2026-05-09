@@ -235,4 +235,6 @@ export interface WorkspaceHeaderProps {
   confirmSubmit?: boolean;
   /** Hide the Submit button entirely (e.g. Compiler Playground) */
   hideSubmit?: boolean;
+  onToggleScratchpad?: () => void;
+  isScratchpadOpen?: boolean;
 }

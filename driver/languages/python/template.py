@@ -21,12 +21,16 @@ def main():
         __phase = "parse_inputs"
         try:
 # {{DRIVER_LOGIC_PLACEHOLDER}}
-            pass
+            __phase = "verify_sync"
+            sentinel = sc.next()
+            if sentinel != "@@CASE_END@@":
+                raise Exception(f"Input desync detected! Expected @@CASE_END@@ but got: {sentinel}")
         except Exception as e:
-            err_msg = traceback.format_exc()
-            print(f"@@ERROR@@:{{__phase}}:{err_msg}")
-            # Do not exit, try next case
-            continue
+            # We print the structured error for the parser
+            print(f"@@ERROR@@:case={i} phase={__phase} msg={type(e).__name__}:{str(e)}")
+            # We also print the full traceback to stderr for debugging
+            traceback.print_exc(file=sys.stderr)
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()

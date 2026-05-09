@@ -17,8 +17,14 @@ public class Main {
             String __phase = "parse_inputs";
             try {
                 // {{DRIVER_LOGIC_PLACEHOLDER}}
+                __phase = "verify_sync";
+                String sentinel = sc.next();
+                if (!sentinel.equals("@@CASE_END@@")) {
+                    throw new RuntimeException("Input desync detected! Expected @@CASE_END@@ but got: " + sentinel);
+                }
             } catch (Exception e) {
                 System.out.println("@@ERROR@@:case=" + i + " phase=" + __phase + " msg=" + e.getClass().getSimpleName() + ":" + e.getMessage());
+                return;
             }
         }
     }

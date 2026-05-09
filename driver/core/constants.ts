@@ -17,7 +17,9 @@ export const JUDGE0_LANGUAGE_IDS: Record<string, number> = {
   c: 50,         // C (GCC 9.2.0)
   javascript: 63, // Node.js 12.14.0
   typescript: 74, // TypeScript 3.7.4
-  csharp: 51      // C# (Mono 6.6.0.161)
+  csharp: 51,     // C# (Mono 6.6.0.161)
+  rust: 73,       // Rust (1.40.0)
+  go: 60          // Go (1.13.5)
 };
 
 export const RESULT_DELIMITER = "@@RESULT@@";

@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
+import { Scratchpad } from "@/components/workspace-shared/Scratchpad";
 import { CompilerEditor } from "./CompilerEditor";
 import { CompilerConsole } from "./CompilerConsole";
 import { useCompilerWorkspace } from "@/hooks/workspace/use-compiler-workspace";
@@ -18,20 +19,35 @@ export const CompilerWorkspace: React.FC = () => {
     isExecuting, setLanguage, setCode, setStdin, runCode,
   } = useCompilerWorkspace();
 
+  const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
+  const playgroundProblem = { 
+    problem_id: "compiler-playground", 
+    title: "Compiler Playground" 
+  } as any;
+
   function handleReset() {
     localStorage.removeItem("coding-arena-playground-state");
     window.location.reload();
   }
   const router = useRouter();
+
   return (
     <div className="h-screen w-full bg-background flex flex-col">
       <WorkspaceHeader
-        problem={{ title: "Compiler Playground" } as any}
+        problem={playgroundProblem}
         onRun={runCode}
         onExit={() => router.push("/")}
         exitText="Home"
         isLoading={isExecuting}
         hideSubmit
+        onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
+        isScratchpadOpen={isScratchpadOpen}
+      />
+
+      <Scratchpad 
+        isOpen={isScratchpadOpen} 
+        onClose={() => setIsScratchpadOpen(false)} 
+        problem={playgroundProblem}
       />
 
       {/* Desktop */}

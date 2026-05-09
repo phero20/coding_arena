@@ -32,4 +32,5 @@ class Scanner:
 
 def decode_string(s):
     if s == "null": return None
+    if s == "-": return ""
     return base64.b64decode(s).decode("utf-8")

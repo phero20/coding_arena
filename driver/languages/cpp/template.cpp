@@ -12,6 +12,7 @@
 #include <iomanip>
 #include <chrono>
 #include <stdexcept>
+#include <cstdlib>
 
 using namespace std;
 
@@ -37,10 +38,17 @@ int main() {
         string __phase = "parse_inputs";
         try {
             // {{DRIVER_LOGIC_PLACEHOLDER}}
+            __phase = "verify_sync";
+            string sentinel = sc.next();
+            if (sentinel != "@@CASE_END@@") {
+                throw runtime_error("Input desync detected! Expected @@CASE_END@@ but got: " + sentinel);
+            }
         } catch (const exception& e) {
-            cerr << "@@ERROR@@:" << __phase << ":" << e.what() << endl;
+            cout << "@@ERROR@@:case=" << i << " phase=" << __phase << " msg=" << e.what() << endl;
+            exit(1);
         } catch (...) {
-            cerr << "@@ERROR@@:" << __phase << ":Unknown exception" << endl;
+            cout << "@@ERROR@@:case=" << i << " phase=" << __phase << " msg=UnknownException" << endl;
+            exit(1);
         }
     }
 

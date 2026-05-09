@@ -108,15 +108,17 @@ export class JavaProvider extends LanguageProvider {
     }
 
     // Fix Duplicate Class conflict: If user provides their own ListNode or TreeNode, comment out the platform defaults
-    if (cleanUserCode.includes("class ListNode")) {
-      sourceCode = sourceCode.replace(/class ListNode\s*\{[\s\S]*?\}\s*\}/, "// ListNode overridden by user");
+    const codeWithoutComments = stripComments(cleanUserCode);
+    
+    if (/\bclass\s+ListNode\b/.test(codeWithoutComments)) {
+      sourceCode = sourceCode.replace(/\/\* \[\[LIST_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[LIST_NODE_END\]\] \*\//, "// ListNode overridden by user");
       // Also remove builders that depend on the default ListNode
-      sourceCode = sourceCode.replace(/private static ListNode buildList\s*\([\s\S]*?\n    \}/, "// buildList removed (ListNode overridden)");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_LIST_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_LIST_END\]\] \*\//, "// buildList removed (ListNode overridden)");
     }
-    if (cleanUserCode.includes("class TreeNode")) {
-      sourceCode = sourceCode.replace(/class TreeNode\s*\{[\s\S]*?\}\s*\}/, "// TreeNode overridden by user");
+    if (/\bclass\s+TreeNode\b/.test(codeWithoutComments)) {
+      sourceCode = sourceCode.replace(/\/\* \[\[TREE_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[TREE_NODE_END\]\] \*\//, "// TreeNode overridden by user");
       // Also remove builders that depend on the default TreeNode
-      sourceCode = sourceCode.replace(/private static TreeNode buildTree\s*\([\s\S]*?\n    \}/, "// buildTree removed (TreeNode overridden)");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_TREE_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_TREE_END\]\] \*\//, "// buildTree removed (TreeNode overridden)");
     }
 
     return {
@@ -125,4 +127,12 @@ export class JavaProvider extends LanguageProvider {
       languageId: this.judge0Id,
     };
   }
+}
+
+function stripComments(code: string): string {
+  // Remove multi-line comments first
+  let result = code.replace(/\/\*[\s\S]*?\*\//g, "");
+  // Remove single-line comments
+  result = result.replace(/\/\/.*$/gm, "");
+  return result;
 }

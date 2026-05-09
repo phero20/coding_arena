@@ -24,7 +24,7 @@ import { type ICradle } from "../../libs/awilix-container";
 const logger = createLogger("driver-judge-execution-service");
 import { getLanguageName, normalizeLanguageId } from "../../libs/utils/languages";
 
-const SUPPORTED_LANGUAGE_IDS = new Set(["62", "71", "54", "50", "63", "74", "51"]);
+const SUPPORTED_LANGUAGE_IDS = new Set(["62", "71", "54", "50", "63", "74", "51", "73","60"]);
 
 export class DriverJudgeExecutionService {
   private readonly judge0Service: ICradle["judge0Service"];
@@ -345,6 +345,8 @@ export class DriverJudgeExecutionService {
     if (languageId === "63") return "javascript";
     if (languageId === "74") return "typescript";
     if (languageId === "51") return "csharp";
+    if (languageId === "73") return "rust";
+    if (languageId === "60") return "go";
     return "java";
   }
 }

@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { ChevronLeft, Play, Send, RefreshCw, X } from "lucide-react";
+import { ChevronLeft, Play, Send, RefreshCw, X, Pencil } from "lucide-react";
 import type { WorkspaceHeaderProps } from "@/types/component.types";
 import { Problem } from "@/types/api";
 import { useAuth } from "@clerk/nextjs";
@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { NavbarActions } from "@/components/layout/NavbarActions";
+import { cn } from "@/lib/utils";
 
 
 
@@ -40,6 +41,8 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
   hasSubmitted,
   confirmSubmit,
   hideSubmit,
+  onToggleScratchpad,
+  isScratchpadOpen,
 }) => {
   const { isLoaded } = useAuth();
   const isInteractionDisabled =
@@ -49,6 +52,20 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
 
   const renderActions = () => (
     <ButtonGroup orientation="horizontal" className="flex items-center">
+      <Button
+        variant={isScratchpadOpen ? "secondary" : "outline"}
+        size="sm"
+        type="button"
+        onClick={onToggleScratchpad}
+        className={cn(
+          "hidden md:inline-flex px-2.5 md:px-3 h-8 md:h-9",
+          isScratchpadOpen && "bg-primary/10 border-primary/30 text-primary"
+        )}
+        title="Toggle Scratchpad"
+      >
+        <Pencil className="size-3.5 md:mr-1" />
+        <span className="hidden md:inline">Scratchpad</span>
+      </Button>
       <Button
         variant="outline"
         size="sm"

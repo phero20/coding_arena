@@ -99,6 +99,6 @@ public:
 };
 
 string decode_string(string s) {
-    if (s == "null" || s == "") return "";
+    if (s == "null" || s == "" || s == "-") return "";
     return base64_decode(s);
 }

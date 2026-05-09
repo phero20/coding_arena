@@ -9,6 +9,8 @@ import {
 import type { Problem } from "@/types/api";
 import type { BaseWorkspaceProps } from "@/types/component.types";
 import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
+import { Scratchpad } from "@/components/workspace-shared/Scratchpad";
+import { useState } from "react";
 
 /**
  * Industrial-Standard Base Workspace Component.
@@ -29,6 +31,8 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
   exitText,
   confirmSubmit,
 }) => {
+  const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
+
   return (
     <div className="h-screen w-full bg-background flex flex-col">
       <WorkspaceHeader
@@ -43,6 +47,14 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
         isSubmitting={isSubmitting}
         hasSubmitted={hasSubmitted}
         confirmSubmit={confirmSubmit}
+        onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
+        isScratchpadOpen={isScratchpadOpen}
+      />
+
+      <Scratchpad 
+        isOpen={isScratchpadOpen} 
+        onClose={() => setIsScratchpadOpen(false)} 
+        problem={problem}
       />
 
       {/* Desktop: standard resizable two-panel split */}

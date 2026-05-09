@@ -25,6 +25,8 @@ export abstract class BaseTypeMapper {
     // expected output
     this.flattenValue((input as any).__expected_output ?? (input as any).expected_output, parseType(sig.return_type), parts);
 
+    parts.push("@@CASE_END@@");
+
     return parts.join(" ");
   }
 
@@ -66,6 +68,7 @@ export abstract class BaseTypeMapper {
       }
     }
 
+    parts.push("@@CASE_END@@");
     return parts.join(" ");
   }
 
@@ -74,9 +77,9 @@ export abstract class BaseTypeMapper {
     
     if (val === null || val === undefined) {
       if (type.kind === "primitive") {
-        if (type.primitive === "string" || type.primitive === "char") {
-          parts.push(Buffer.from("").toString("base64"));
-        } else if (type.primitive === "boolean") {
+      if (type.primitive === "string" || type.primitive === "char") {
+        parts.push("-");
+      } else if (type.primitive === "boolean") {
           parts.push("false");
         } else {
           parts.push("0");
@@ -89,7 +92,8 @@ export abstract class BaseTypeMapper {
 
     if (type.kind === "primitive") {
       if (type.primitive === "string" || type.primitive === "char") {
-        parts.push(Buffer.from(String(val ?? "")).toString("base64"));
+        const b64 = Buffer.from(String(val ?? "")).toString("base64");
+        parts.push(b64 === "" ? "-" : b64);
       } else {
         parts.push(String(val));
       }

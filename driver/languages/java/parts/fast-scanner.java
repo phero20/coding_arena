@@ -32,31 +32,24 @@
             while ((c = read()) != -1 && !Character.isWhitespace(c)) {
                 sb.append((char) c);
             }
+            if (sb.length() == 0) throw new NoSuchElementException("End of input");
             return sb.toString();
         }
-
+ 
         int nextInt() throws IOException {
-            String s = next();
-            if (s.length() == 0) return 0;
-            return Integer.parseInt(s);
+            return Integer.parseInt(next());
         }
-
+ 
         long nextLong() throws IOException {
-            String s = next();
-            if (s.length() == 0) return 0L;
-            return Long.parseLong(s);
+            return Long.parseLong(next());
         }
-
+ 
         double nextDouble() throws IOException {
-            String s = next();
-            if (s.length() == 0) return 0.0;
-            return Double.parseDouble(s);
+            return Double.parseDouble(next());
         }
-
+ 
         float nextFloat() throws IOException {
-            String s = next();
-            if (s.length() == 0) return 0.0f;
-            return Float.parseFloat(s);
+            return Float.parseFloat(next());
         }
 
         boolean nextBoolean() throws IOException {

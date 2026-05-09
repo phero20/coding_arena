@@ -6,6 +6,8 @@ import { CProvider } from "./languages/c/c-provider";
 import { JavaScriptProvider } from "./languages/javascript/javascript-provider";
 import { TypeScriptProvider } from "./languages/typescript/typescript-provider";
 import { CSharpProvider } from "./languages/csharp/csharp-provider";
+import { RustProvider } from "./languages/rust/rust-provider";
+import { GoProvider } from "./languages/go/go-provider";
 
 const providers = {
   java: new JavaProvider(),
@@ -15,6 +17,8 @@ const providers = {
   javascript: new JavaScriptProvider(),
   typescript: new TypeScriptProvider(),
   csharp: new CSharpProvider(),
+  rust: new RustProvider(),
+  go: new GoProvider(),
 };
 
 /**
