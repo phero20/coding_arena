@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useJoinArena } from "@/hooks/arena/use-arena-actions";
+import { useJoinArenaForm } from "@/hooks/arena/use-join-arena-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,21 +13,13 @@ import {
 import { KeyRound, ArrowRight, RefreshCw } from "lucide-react";
 
 export function JoinArenaCard() {
-  const [roomId, setRoomId] = useState("");
-  const [isJoining, setIsJoining] = useState(false);
-  const { joinArena } = useJoinArena();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!roomId.trim() || isJoining) return;
-
-    setIsJoining(true);
-    try {
-      await joinArena(roomId);
-    } finally {
-      setIsJoining(false);
-    }
-  };
+  const {
+    roomId,
+    setRoomId,
+    isJoining,
+    handleSubmit,
+    canSubmit,
+  } = useJoinArenaForm();
 
   return (
     <Card className="">
@@ -55,7 +46,7 @@ export function JoinArenaCard() {
           />
           <Button
             type="submit"
-            disabled={!roomId.trim() || isJoining}
+            disabled={!canSubmit}
             size="icon"
             className="h-12 w-12 shrink-0 group-active:scale-95 transition-transform"
           >
@@ -70,3 +61,4 @@ export function JoinArenaCard() {
     </Card>
   );
 }
+
