@@ -5,10 +5,7 @@ import Link from "next/link";
 import { Swords } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-interface ArenaSelectionBannerProps {
-  roomId?: string;
-}
+import type { ArenaSelectionBannerProps } from "@/types/component.types";
 
 export const ArenaSelectionBanner: React.FC<ArenaSelectionBannerProps> = ({
   roomId,
