@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { cn, formatSolveTime } from "@/lib/utils";
-import { ArenaPlayerResult } from "@/services/arena.service";
+import { ArenaPlayerResult } from "@/types/arena";
+import type { MatchResultsProps } from "@/types/component.types";
 import {
   LogOut,
   Trophy,
@@ -20,40 +21,15 @@ import {
   Terminal,
   Info,
   ChevronRight,
-  Timer,
+  Clock,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
-interface MatchResultsProps {
-  rankings: ArenaPlayerResult[];
-  isHost: boolean;
-  onClose: () => void;
-}
-
+import { useMatchRanking } from "@/hooks/arena/use-match-ranking";
 
 export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
-  const [expandedUser, setExpandedUser] = React.useState<string | undefined>(
-    undefined,
-  );
-
-  const sortedRankings = React.useMemo(() => {
-    return [...rankings].sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      
-      // Speed tie-breaker
-      const aTime = a.timeTaken ?? Infinity;
-      const bTime = b.timeTaken ?? Infinity;
-      if (aTime !== bTime) return aTime - bTime;
-
-      if (a.submissionOrder && b.submissionOrder)
-        return a.submissionOrder - b.submissionOrder;
-      if (a.submissionOrder) return -1;
-      if (b.submissionOrder) return 1;
-      return 0;
-    });
-  }, [rankings]);
-
-  const topThree = sortedRankings.slice(0, 3);
+  const { sortedRankings, topThree, expandedUser, setExpandedUser } =
+    useMatchRanking(rankings);
 
   const getVerdictBadge = (verdict: string) => {
     const isAccepted = verdict === "ACCEPTED";
@@ -144,56 +120,75 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                   isWinner && "border-primary/20 bg-primary/5",
                 )}
               >
-                <AccordionTrigger className="px-5 py-4 hover:no-underline [&>svg]:hidden group" disabled={!player.sourceCode}>
-                  <div className="flex w-full items-center justify-between pr-2">
-                    <div className="flex items-center gap-4">
-                      {/* Rank Indicator */}
-                      <Badge className="">
-                        {index + 1}
-                      </Badge>
-
-                      <div className="flex items-center gap-3">
-                        <Avatar className="size-8 md:size-9 border-2 border-background shadow-md shrink-0">
-                          <AvatarImage src={player.avatarUrl} />
-                          <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
-                            {player.username.slice(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col items-start gap-0 min-w-0">
-                          <span className="text-xs md:text-sm font-bold tracking-tight truncate">
-                            {player.username}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <p className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-tighter">
-                              {player.testsPassed}/{player.totalTests} Tests
-                            </p>
-                            {player.timeTaken && (
-                              <>
-                                <span className="text-[8px] text-muted-foreground/30">•</span>
-                                <div className="flex items-center gap-0.5 text-[9px] font-black text-primary/60 uppercase tracking-tighter">
-                                  <Timer className="size-2.5" />
-                                  {formatSolveTime(player.timeTaken)}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                <AccordionTrigger
+                  className="w-full px-2 py-3 hover:no-underline [&>svg]:hidden group"
+                  disabled={!player.sourceCode}
+                >
+                  <div className="grid grid-cols-[auto_auto_1fr_auto] sm:grid-cols-[auto_auto_1fr_auto_auto] items-center gap-2 sm:gap-4 w-full text-left">
+                    {/* Rank */}
+                    <div className="shrink-0 flex items-center justify-center p-0">
+                      <Badge variant="default">{index + 1}</Badge>
                     </div>
 
-                    <div className="flex items-center gap-8">
-                      {getVerdictBadge(player.verdict)}
-                      <Button
-                        disabled={!player.sourceCode}
-                        className={cn(
-                          "flex items-center justify-center size-8 rounded-full transition-all",
-                          player.sourceCode
-                            ? "text-primary/40 group-hover:text-primary  group-data-[state=open]:text-primary"
-                            : "text-muted-foreground/10",
-                        )}
-                      >
-                        <Button size="sm">Code</Button>
-                      </Button>
+                    {/* Avatar */}
+                    <div className="shrink-0">
+                      <Avatar className="size-6 sm:size-9 border border-background shadow-sm">
+                        <AvatarImage src={player.avatarUrl} />
+                        <AvatarFallback className="text-[8px] sm:text-[10px] bg-primary/10 text-primary font-bold">
+                          {player.username.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+
+                    {/* Name & Tests */}
+                    <div className="flex flex-col min-w-0 pr-1">
+                      <span className="text-xs sm:text-sm font-bold tracking-tight wrap-break-word line-clamp-2">
+                        {player.username}
+                      </span>
+                      <p className="text-[9px] font-bold text-muted-foreground/50 uppercase tracking-tighter mt-0.5">
+                        {player.testsPassed}/{player.totalTests} Tests
+                      </p>
+                    </div>
+
+                    {/* Time (Desktop) */}
+                    <div className="hidden sm:flex items-center justify-center shrink-0 min-w-[70px]">
+                      {player.timeTaken ? (
+                        <Badge variant="default" className="py-1 flex gap-1">
+                          <Clock className="size-3" />
+                          <span className="text-xs font-black uppercase tracking-widest">
+                            {formatSolveTime(player.timeTaken)}
+                          </span>
+                        </Badge>
+                      ) : null}
+                    </div>
+
+                    {/* Actions & Mobile Time */}
+                    <div className="flex items-center gap-2 sm:gap-4 shrink-0 justify-end">
+                      {/* Verdict Col + Mobile Time */}
+                      <div className="flex flex-col items-end sm:items-center justify-center gap-1 sm:gap-0">
+                        {player.timeTaken ? (
+                          <Badge variant="default" className="flex sm:hidden">
+                            <Clock className="size-2.5" />
+                            <span className="translate-y-px">
+                              {formatSolveTime(player.timeTaken)}
+                            </span>
+                          </Badge>
+                        ) : null}
+                        <div className="shrink-0">
+                          {getVerdictBadge(player.verdict)}
+                        </div>
+                      </div>
+
+                      {/* Code Button */}
+                      <div className="block shrink-0">
+                        <Button
+                          size="sm"
+                          variant="default"
+                          disabled={!player.sourceCode}
+                        >
+                          <span>Code</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </AccordionTrigger>
@@ -303,7 +298,7 @@ function PodiumProfile({
         </p>
         {player.timeTaken && (
           <div className="flex items-center gap-1 text-[10px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
-            <Timer className="size-3" />
+            <Clock className="size-3" />
             {formatSolveTime(player.timeTaken)}
           </div>
         )}
