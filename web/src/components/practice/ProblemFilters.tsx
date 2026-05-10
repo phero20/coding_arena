@@ -2,22 +2,15 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import type { ProblemFiltersProps } from "@/types/component.types";
 import { ButtonGroup } from "../ui/button-group";
 import type { Problem } from "@/types/api";
 
 export type DifficultyFilter = "All" | Problem["difficulty"];
 
-interface ProblemFiltersProps {
-  search: string;
-  setSearch: (value: string) => void;
-  difficultyFilter: DifficultyFilter;
-  setDifficultyFilter: (value: DifficultyFilter) => void;
-  topicFilter: string;
-  setTopicFilter: (value: string) => void;
-  onReset: () => void;
-  isSelectPage: boolean;
-}
+
 
 export const ProblemFilters: React.FC<ProblemFiltersProps> = ({
   search,

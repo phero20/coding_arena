@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
+import type { ProblemPaginationProps } from "@/types/component.types";
 import { Button } from "@/components/ui/button";
 
-interface ProblemPaginationProps {
-  page: number;
-  totalPages: number;
-  setPage: (page: number | ((p: number) => number)) => void;
-}
+
 
 export const ProblemPagination: React.FC<ProblemPaginationProps> = ({
   page,
