@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import type { ProblemRowProps } from "@/types/component.types";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
@@ -20,12 +21,7 @@ const difficultyBg: Record<Problem["difficulty"], string> = {
   Hard: "bg-rose-400/10 border-rose-500/30",
 };
 
-interface ProblemRowProps {
-  problem: Problem;
-  isSelectPage: boolean;
-  onSelect: () => void;
-  isHosting: boolean;
-}
+
 
 export const ProblemRow: React.FC<ProblemRowProps> = ({
   problem,
