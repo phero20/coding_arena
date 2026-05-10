@@ -8,9 +8,7 @@ import { BaseWorkspace } from "@/components/shared/BaseWorkspace";
 import { useRouter } from "next/navigation";
 import { usePracticeWorkspace } from "@/hooks/workspace/use-practice-workspace";
 
-interface ProblemWorkspaceProps {
-  problem: Problem;
-}
+import type { ProblemWorkspaceProps } from "@/types/component.types";
 
 export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
   problem,
