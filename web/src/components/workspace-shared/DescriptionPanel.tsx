@@ -21,20 +21,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArenaRoom } from "@/services/arena.service";
+import { ArenaRoom } from "@/types/arena";
 import { useWorkspaceTabs } from "@/hooks/workspace/use-workspace-tabs";
-import { useUserSubmissions } from "@/hooks/api/use-user-submissions";
+import { useUserSubmissionsQuery } from "@/hooks/queries/use-submission.queries";
 import { OpponentsPanel } from "./OpponentsPanel";
 import { SolutionViewer } from "./SolutionViewer";
 import { SubmissionHistory } from "./SubmissionHistory";
+import type { DescriptionPanelProps } from "@/types/component.types";
 
-interface DescriptionPanelProps {
-  problem: Problem;
-  mode?: "practice" | "arena";
-  room?: ArenaRoom | null;
-  currentUserId?: string | null;
-  roomId?: string;
-}
+
 
 const difficultyColor: Record<Problem["difficulty"], string> = {
   Easy: "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
@@ -54,9 +49,7 @@ export const DescriptionPanel = React.memo(
       data: submissions,
       isLoading: isSubmissionsLoading,
       error: submissionsError,
-    } = useUserSubmissions({
-      problemId: problem.problem_id,
-    });
+    } = useUserSubmissionsQuery(problem.problem_id);
 
     const tabs = useWorkspaceTabs(mode);
 
