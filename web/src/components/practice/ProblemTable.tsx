@@ -11,21 +11,9 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProblemRow } from "./ProblemRow";
-import type { Problem } from "@/types/api";
 import { ProblemRowSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay } from "@/components/shared/StatusState";
-
-interface ProblemTableProps {
-  problems: Problem[];
-  isLoading: boolean;
-  error: any;
-  isSelectPage: boolean;
-  onSelect: (problem: Problem) => void;
-  selectingId: string | null;
-  isHosting: boolean;
-  isUpdating: boolean;
-  topicFilter: string;
-}
+import type { ProblemTableProps } from "@/types/component.types";
 
 export const ProblemTable: React.FC<ProblemTableProps> = ({
   problems,
@@ -65,7 +53,11 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
             <TableCell colSpan={5}>
               <EmptyDisplay
                 title="No Problems Found"
-                message={topicFilter ? `No challenges match the topic "${topicFilter}".` : "Try adjusting your filters or search terms."}
+                message={
+                  topicFilter
+                    ? `No challenges match the topic "${topicFilter}".`
+                    : "Try adjusting your filters or search terms."
+                }
               />
             </TableCell>
           </TableRow>
