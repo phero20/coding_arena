@@ -5,6 +5,7 @@ import Editor from "@monaco-editor/react";
 import { LanguageSelector } from "./LanguageSelector";
 import { ConsolePanel } from "./ConsolePanel";
 import { Button } from "@/components/ui/button";
+import type { EditorPanelProps } from "@/types/component.types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,10 +19,10 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useProblemEditor } from "@/hooks/workspace/use-problem-editor";
-import { useProblemTests } from "@/hooks/api/use-problem-tests";
+import { useProblemTestsQuery } from "@/hooks/queries/use-problem.queries";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useArenaStore } from "@/store/useArenaStore";
-import type { ExecutionVerdict, ExecutionTestResult, RunSubmissionResponse } from "@/services/submission.service";
+import type { ExecutionVerdict, ExecutionTestResult, RunSubmissionResponse } from "@/types/submission";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import {
   AlertDialog,
@@ -35,25 +36,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-interface EditorPanelProps {
-  problem: Problem;
-  mode?: "practice" | "arena";
-  runResult?: RunSubmissionResponse | null;
-  isRunning?: boolean;
-  runError?: Error | string | null;
-  activeTab?: string;
-  onTabChange?: (tab: any) => void;
-  // Arena specific
-  enforcedLanguage?: string;
-  roomId?: string;
-  // Practice specific
-  verdict?: ExecutionVerdict | "PENDING" | null;
-  isEvaluating?: boolean;
-  pollingTests?: ExecutionTestResult[] | null;
-  hasSubmitted?: boolean;
-}
 
-/** Tab trigger style shared across Code / Test Cases / Result */
 const TAB_CLS =
   "h-10 rounded-none px-3 text-[11px] font-black uppercase tracking-wide " +
   "border-b-2 border-transparent shrink-0 " +
@@ -102,9 +85,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
     mode === "arena" ? (matchId as string | null) : undefined,
   );
 
-  const { tests, isLoading, error } = useProblemTests(problem.problem_id, {
-    type: "public",
-  });
+  const { data: tests, isLoading, error } = useProblemTestsQuery(problem.problem_id, "PUBLIC");
   const publicTests = Array.isArray(tests) ? (tests[0] ?? null) : tests;
 
   const preferences = useEditorStore((state) => state.preferences);
