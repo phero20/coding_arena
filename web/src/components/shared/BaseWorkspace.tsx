@@ -6,24 +6,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Problem } from "@/types/api";
+import type { Problem } from "@/types/api";
+import type { BaseWorkspaceProps } from "@/types/component.types";
 import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
-
-interface BaseWorkspaceProps {
-  problem: Problem;
-  descriptionSlot: React.ReactNode;
-  editorSlot: React.ReactNode;
-  onRun: () => void;
-  onSubmit: () => void;
-  onExit?: () => void;
-  onAbort?: () => void;
-  exitText?: string;
-  endTime?: number | string;
-  isLoading?: boolean;
-  isSubmitting?: boolean;
-  hasSubmitted?: boolean;
-  confirmSubmit?: boolean;
-}
 
 /**
  * Industrial-Standard Base Workspace Component.
