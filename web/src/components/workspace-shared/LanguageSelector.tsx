@@ -16,18 +16,8 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown, Terminal } from "lucide-react";
+import type { LanguageSelectorProps, LanguageOption } from "@/types/component.types";
 import { cn } from "@/lib/utils";
-
-interface LanguageOption {
-  id: string;
-  label: string;
-}
-
-interface LanguageSelectorProps {
-  value: string;
-  onChange: (value: string) => void;
-  languages: LanguageOption[];
-}
 
 export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   value,
@@ -50,7 +40,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           <div className="flex items-center gap-2 overflow-hidden">
             <Terminal className="size-3 text-primary shrink-0" />
             <span className="truncate">
-              {selectedLanguage ? selectedLanguage.label : "Select language..."}
+              {selectedLanguage ? selectedLanguage.name : "Select language..."}
             </span>
           </div>
           <ChevronsUpDown className="ml-1 size-3 shrink-0 opacity-50" />
@@ -83,7 +73,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                     }}
                     className={`text-[11px] font-medium py-2 cursor-pointer focus:bg-primary/20 focus:text-primary aria-selected:bg-primary/20 aria-selected:text-primary flex items-center justify-between ${value === lang.id ? "bg-primary/20 text-primary" : ""}`}
                   >
-                    <span className="truncate">{lang.label}</span>
+                    <span className="truncate">{lang.name}</span>
                     <Check
                       className={cn(
                         "ml-auto size-3 shrink-0",
