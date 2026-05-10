@@ -1,96 +1,38 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Terminal, AlertCircle, RefreshCw } from "lucide-react";
 import { ConsoleSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay } from "@/components/shared/StatusState";
-import type { ProblemTest } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { TestCaseField } from "./TestCaseField";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import type {
-  RunSubmissionResponse,
-  ExecutionVerdict,
-  ExecutionTestResult,
-} from "@/services/submission.service";
 import { Badge } from "@/components/ui/badge";
+import type { ConsolePanelProps } from "@/types/component.types";
+import { useConsoleViewState } from "@/hooks/workspace/use-console-view-state";
 
-interface ConsolePanelProps {
-  tests: ProblemTest | null;
-  isLoading: boolean;
-  error: Error | null;
-  /** Which sub-tab to open by default. Defaults to "testcase". */
-  initialTab?: "testcase" | "result";
-  /** Optional latest run result to display in the Result tab. */
-  runResult?: RunSubmissionResponse | null;
-  /** Whether a run submission is currently loading. */
-  runResultLoading?: boolean;
-  /** Optional error from the run submission API. */
-  runError?: Error | string | null;
-  /** Current submission verdict from polling (for submit flow) */
-  verdict?: ExecutionVerdict | "PENDING" | null;
-  /** Whether currently evaluating a submission */
-  isEvaluating?: boolean;
-  /** Test results from polling (for submit flow) */
-  pollingTests?: ExecutionTestResult[] | null;
-  hasSubmitted?: boolean;
-}
+export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
+  const {
+    activeTab,
+    setActiveTab,
+    activeIndex,
+    setActiveIndex,
+    activeResultIndex,
+    setActiveResultIndex,
+    cases,
+    activeCase,
+    effectiveTestResults,
+    hasTestResults,
+    isTabLoading,
+    showResultsSection,
+    isForbiddenError,
+    activeResult,
+    currentStatus,
+  } = useConsoleViewState(props);
 
-export const ConsolePanel: React.FC<ConsolePanelProps> = ({
-  tests,
-  isLoading,
-  error,
-  initialTab = "testcase",
-  runResult,
-  runResultLoading,
-  runError,
-  verdict,
-  isEvaluating,
-  pollingTests,
-  hasSubmitted,
-}) => {
-  const [activeTab, setActiveTab] = useState(initialTab);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [activeResultIndex, setActiveResultIndex] = useState(0);
-
-  // Sync internal activeTab with initialTab prop when it changes
-  React.useEffect(() => {
-    setActiveTab(initialTab);
-  }, [initialTab]);
-
-  // Reset result index when new results arrive
-  React.useEffect(() => {
-    setActiveResultIndex(0);
-  }, [runResult, pollingTests]);
-
-  const cases = useMemo(() => tests?.cases ?? [], [tests]);
-  const activeCase = cases[activeIndex] ?? null;
-
-
-  const effectiveTestResults = runResult?.tests ?? pollingTests ?? [];
-  const hasTestResults = effectiveTestResults.length > 0;
-  
-  const currentStatus = verdict || runResult?.overallStatus;
-  const isPending = currentStatus === "PENDING" || verdict === "PENDING";
-  const isProcessing = runResultLoading || isEvaluating || isPending;
-  const isTabLoading = isProcessing && !hasTestResults;
-
-  const hasValidStatus = currentStatus && currentStatus !== "IDLE" && currentStatus !== "PENDING";
-  const showResultsSection = !runError && (hasValidStatus || hasTestResults);
-
-  // Derive if this is a "Forbidden" error (Already Submitted)
-  const isForbiddenError = useMemo(() => {
-    if (!runError) return false;
-    const msg = typeof runError === "string" ? runError : runError.message;
-    return msg.includes("403") || msg.toLowerCase().includes("already submitted") || msg.toLowerCase().includes("recorded");
-  }, [runError]);
-
-  const activeResult = useMemo(
-    () => effectiveTestResults[activeResultIndex] ?? null,
-    [effectiveTestResults, activeResultIndex],
-  );
+  const { isLoading, error, runError, hasSubmitted, verdict, runResult } = props;
 
   return (
     <div className="flex flex-col h-full border-t border-border/20 overflow-hidden">
@@ -223,7 +165,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = ({
                     Executing Code...
                   </p>
                   <p className="text-[11px] text-muted-foreground max-w-[200px] leading-relaxed mx-auto font-medium">
-                    {isEvaluating || verdict === "PENDING" ? "Evaluating your submission against all test cases." : "Running your solution against the selected test cases."}
+                    {currentStatus === "PENDING" || verdict === "PENDING" ? "Evaluating your submission against all test cases." : "Running your solution against the selected test cases."}
                   </p>
                 </div>
               </div>
