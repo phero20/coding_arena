@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { SolutionViewerProps } from "@/types/component.types";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -17,9 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // Import KaTeX CSS for math rendering
 import "katex/dist/katex.min.css";
 
-interface SolutionViewerProps {
-  content?: string;
-}
+
 
 export const SolutionViewer: React.FC<SolutionViewerProps> = ({ content }) => {
   if (!content) {
