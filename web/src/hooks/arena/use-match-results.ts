@@ -6,8 +6,8 @@ import { useArenaStore } from "@/store/useArenaStore";
 import { 
   ArenaPlayerResult, 
   ArenaPlayer 
-} from "@/services/arena.service";
-import { useArenaRoomQuery, useMatchResultsQuery } from "@/hooks/api/use-arena-api";
+} from "@/types/arena";
+import { useArenaRoomQuery, useMatchResultsQuery } from "@/hooks/queries/use-arena.queries";
 import { useShallow } from "zustand/react/shallow";
 
 interface UseMatchResultsProps {
