@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { Check, Copy } from "lucide-react";
+import type { TestCaseFieldProps } from "@/types/component.types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { beautifyTestCaseInput } from "@/lib/test-case";
 import { Card } from "@/components/ui/card";
 
-interface TestCaseFieldProps {
-  label: string;
-  value: string;
-  isOutput?: boolean;
-}
+
 
 const CopyButton: React.FC<{ value: string }> = ({ value }) => {
   const [copied, setCopied] = useState(false);
