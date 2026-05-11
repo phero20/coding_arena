@@ -3,7 +3,8 @@
 import { useEffect, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { arenaService, ArenaRoomStatus } from "@/services/arena.service";
+import { createRoom, updateRoomProblem } from "@/services/mutations/arena.mutations";
+import type { ArenaRoomStatus } from "@/types/arena";
 import { useArenaStore } from "@/store/useArenaStore";
 import { useEditorStore } from "@/store/use-editor-store";
 import { toast } from "sonner";
@@ -83,7 +84,7 @@ export function useCreateArena() {
       problemSlug: string;
       difficulty: string;
       language?: string;
-    }) => arenaService.createRoom(params),
+    }) => createRoom(params),
     onSuccess: (room) => {
       toast.success("Arena Room Created!");
       router.push(`/arena/${room.roomId}`);
@@ -103,6 +104,34 @@ export function useCreateArena() {
     }) => mutation.mutate(params as any),
     isHosting: mutation.isPending,
     error: mutation.error as Error | null,
+  };
+}
+
+export function useUpdateArenaProblem(roomId: string) {
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationKey: ["update-arena-problem", roomId],
+    mutationFn: (params: {
+      problemId: string;
+      problemSlug: string;
+      difficulty: string;
+      language?: string;
+    }) => updateRoomProblem(roomId, params),
+    onSuccess: () => {
+      toast.success("Problem updated successfully!");
+      router.push(`/arena/${roomId}`);
+    },
+    onError: (err: any) => {
+      console.error("Update Arena Problem Error:", err);
+      toast.error(err.message || "Failed to update problem");
+    },
+  });
+
+  return {
+    updateProblem: mutation.mutate,
+    isUpdating: mutation.isPending,
+    error: mutation.error,
   };
 }
 
