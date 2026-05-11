@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { ChevronLeft, Play, Send, RefreshCw, X } from "lucide-react";
+import type { WorkspaceHeaderProps } from "@/types/component.types";
 import { Problem } from "@/types/api";
 import { useAuth } from "@clerk/nextjs";
 import { MatchTimer } from "@/components/arena/MatchTimer";
@@ -19,19 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-interface WorkspaceHeaderProps {
-  problem: Problem;
-  onRun?: () => void;
-  onSubmit?: () => void;
-  onExit?: () => void;
-  onAbort?: () => void;
-  exitText?: string;
-  endTime?: number | string;
-  isLoading?: boolean;
-  isSubmitting?: boolean;
-  hasSubmitted?: boolean;
-  confirmSubmit?: boolean;
-}
+
 
 /**
  * WorkspaceHeader provides the top navigation and action controls for the problem editor.
