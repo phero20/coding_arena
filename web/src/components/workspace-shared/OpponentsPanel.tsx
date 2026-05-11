@@ -1,19 +1,18 @@
 import React from "react";
-import { Users, Trophy, Medal } from "lucide-react";
+import { Users, Trophy, Medal, Timer, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArenaPlayer } from "@/services/arena.service";
+import { ArenaPlayer } from "@/types/arena";
 import { cn, formatSolveTime } from "@/lib/utils";
 import { useArenaStore } from "@/store/useArenaStore";
-import { useArenaRoomQuery } from "@/hooks/api/use-arena-api";
+import type { OpponentsPanelProps } from "@/types/component.types";
+import { useArenaRoomQuery } from "@/hooks/queries/use-arena.queries";
 import { useAuth } from "@clerk/nextjs";
 import { useShallow } from "zustand/react/shallow";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-interface OpponentsPanelProps {
-  roomId: string;
-}
+
 
 export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
   const { userId: currentUserId } = useAuth();
@@ -130,7 +129,7 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center  gap-3">
                         <Badge
                           variant="secondary"
                           className={cn(
@@ -146,9 +145,15 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                           {player.testsPassed}/{player.totalTests} Tests
                         </span>
                         {player.timeTaken && (
-                          <span className="text-[9px] font-black text-primary/70 uppercase tracking-tighter">
-                            {formatSolveTime(player.timeTaken)}
-                          </span>
+                          <Badge
+                            variant="default"
+                            className="flex items-center gap-1 ml-auto py-1"
+                          >
+                            <Clock className="size-3" />
+                            <span className="uppercase tracking-tighter translate-y-[0.5px]">
+                              {formatSolveTime(player.timeTaken)}
+                            </span>
+                          </Badge>
                         )}
                       </div>
                     </div>
