@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
-import { userService } from "@/services/user.service";
+import { getCurrentUser } from "@/services/queries/user.queries";
 import type { BackendUser } from "@/types/api";
 
 interface UseCurrentUserResult {
@@ -14,7 +14,7 @@ export const useCurrentUser = (): UseCurrentUserResult => {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["current-user", isSignedIn],
-    queryFn: () => userService.getCurrentUser(),
+    queryFn: () => getCurrentUser(),
     enabled: isLoaded && isSignedIn,
     staleTime: 5 * 60 * 1000,
     retry: (failureCount, error: any) => {
