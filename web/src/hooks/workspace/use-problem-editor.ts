@@ -97,7 +97,7 @@ export function useProblemEditor(
     () =>
       Object.keys(problem.code_snippets || {}).map((key) => ({
         id: key,
-        label: key.toUpperCase(),
+        name: key.toUpperCase(),
       })),
     [problem.code_snippets],
   );
