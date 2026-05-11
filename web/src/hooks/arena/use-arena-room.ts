@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useArenaStore } from "@/store/useArenaStore";
 import { useArenaSocket } from "@/hooks/arena/use-arena-socket";
-import { useArenaRoomQuery, useStartMatchMutation } from "@/hooks/api/use-arena-api";
+import { useArenaRoomQuery } from "@/hooks/queries/use-arena.queries";
+import { useStartMatchMutation } from "@/hooks/mutations/use-arena.mutations";
 
 export function useArenaRoom(roomId: string) {
   // 1. Reactive Store Data (Zustand)
