@@ -2,6 +2,7 @@
 
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
+import type { SubmissionHistoryProps } from "@/types/component.types";
 import {
   CheckCircle2,
   XCircle,
@@ -17,7 +18,7 @@ import { SubmissionSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay } from "@/components/shared/StatusState";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { Submission } from "@/services/submission.service";
+import type { Submission } from "@/types/submission";
 import {
   Accordion,
   AccordionContent,
@@ -28,11 +29,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card } from "@/components/ui/card";
 
-interface SubmissionHistoryProps {
-  submissions: Submission[];
-  isLoading: boolean;
-  error: any;
-}
+
 
 const statusMap: Record<
   string,
