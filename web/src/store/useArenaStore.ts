@@ -5,7 +5,7 @@ import {
   ArenaPlayer,
   ArenaWSMessage,
   ArenaPlayerResult,
-} from "@/services/arena.service";
+} from "@/types/arena";
 import { ArenaEventProcessor } from "@/services/arena-event-processor";
 
 export interface ArenaEvaluation {
