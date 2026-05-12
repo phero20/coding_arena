@@ -1,4 +1,4 @@
-import { ArenaWSMessage } from "./arena.service";
+import { ArenaWSMessage } from "@/types/arena";
 import { useArenaStore } from "@/store/useArenaStore";
 import { useEditorStore } from "@/store/use-editor-store";
 
