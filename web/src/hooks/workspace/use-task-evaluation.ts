@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { submissionService } from "@/services/submission.service";
-import { useSubmissionStatus } from "../api/use-submission-status";
+import { runSubmission, submitCode } from "@/services/mutations/submission.mutations";
+import { useSubmissionStatusQuery } from "@/hooks/queries/use-submission.queries";
 import type { 
   ExecutionVerdict, 
   ExecutionTestResult,
   RunSubmissionResponse 
-} from "@/services/submission.service";
+} from "@/types/submission";
 
 export type EvaluationMode = "practice" | "arena";
 
@@ -58,7 +58,7 @@ export const useTaskEvaluation = ({
   const runMutation = useMutation({
     mutationKey: ["run-code", problemId, languageId],
     mutationFn: (sourceCode: string) =>
-      submissionService.runSubmission({
+      runSubmission({
         problemId,
         languageId,
         sourceCode,
@@ -79,7 +79,7 @@ export const useTaskEvaluation = ({
   const submitMutation = useMutation({
     mutationKey: ["submit-code", problemId, languageId, mode],
     mutationFn: (sourceCode: string) =>
-      submissionService.submitCode({
+      submitCode({
         problemId,
         languageId,
         sourceCode,
@@ -97,16 +97,25 @@ export const useTaskEvaluation = ({
   /**
    * Polling for "Submit" status
    */
-  const statusPolling = useSubmissionStatus(
-    evaluationType === "submit" ? submissionId : null,
-    { pollInterval: 500 }
+  const { data: pollingData, isLoading: isPolling, error: pollingError } = useSubmissionStatusQuery(
+    evaluationType === "submit" ? submissionId : null
   );
+
+  const statusPolling = useMemo(() => {
+    if (!pollingData) return null;
+    return {
+      overallStatus: (pollingData.status as any) || "PENDING",
+      tests: pollingData.details?.tests || [],
+      isLoading: isPolling,
+      error: pollingError ? (pollingError as Error).message : null,
+    };
+  }, [pollingData, isPolling, pollingError]);
 
   /**
    * Derived states
    */
-  const isLoading = runMutation.isPending || submitMutation.isPending || !!statusPolling?.isLoading;
-  const error = getErrorMessage(runMutation.error || submitMutation.error || statusPolling?.error);
+  const isLoading = runMutation.isPending || submitMutation.isPending || isPolling;
+  const error = getErrorMessage(runMutation.error || submitMutation.error || pollingError);
 
   const evaluation: EvaluationResult = useMemo(() => {
     if (evaluationType === "run" && lastRunResult) {

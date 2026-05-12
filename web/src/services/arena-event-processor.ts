@@ -1,4 +1,4 @@
-import { ArenaRoom, ArenaPlayer, ArenaPlayerResult } from "./arena.service";
+import { ArenaRoom, ArenaPlayer, ArenaPlayerResult } from "@/types/arena";
 
 /**
  * Industry Standard: Match Event Processor
