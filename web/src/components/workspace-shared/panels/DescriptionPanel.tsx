@@ -73,10 +73,10 @@ export const DescriptionPanel = React.memo(
     const cleanedDescription = React.useMemo(() => {
       if (!problem.description) return "";
       return problem.description
-        .replace(/(?:<p>)?<strong>Example\s*\d+:?.*$/is, "")
-        .replace(/(?:<p>)?Example\s*\d+:?.*$/is, "")
-        .replace(/(?:<p>)?<strong>Constraints:?.*$/is, "")
-        .replace(/(?:<p>)?Constraints:?.*$/is, "")
+        .replace(/(?:<p>)?<strong>Example\s*\d+:?[\s\S]*$/i, "")
+        .replace(/(?:<p>)?Example\s*\d+:?[\s\S]*$/i, "")
+        .replace(/(?:<p>)?<strong>Constraints:?[\s\S]*$/i, "")
+        .replace(/(?:<p>)?Constraints:?[\s\S]*$/i, "")
         .trim();
     }, [problem.description]);
 
