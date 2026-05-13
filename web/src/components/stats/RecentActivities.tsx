@@ -98,6 +98,11 @@ export function RecentActivities({
               Recent Submissions
             </span>
           </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="p-2">
+              {totalCount} TOTAL SUBMISSIONS
+            </Badge>
+          </div>
         </div>
       )}
 
@@ -138,7 +143,7 @@ export function RecentActivities({
                           {/* Submission Info Sector */}
                           <div className="flex-1 min-w-0 space-y-1 text-left">
                             <div className="flex items-center gap-4">
-                              <h3 className="font-extrabold text-sm sm:text-base tracking-tight truncate text-primary uppercase">
+                              <h3 className="font-bold text-sm tracking-tight truncate text-foreground/90 uppercase">
                                 {submission.problemTitle ??
                                   submission.problemId}
                               </h3>

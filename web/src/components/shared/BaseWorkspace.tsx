@@ -8,8 +8,7 @@ import {
 } from "@/components/ui/resizable";
 import type { Problem } from "@/types/api";
 import type { BaseWorkspaceProps } from "@/types/component.types";
-import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
-import { Scratchpad } from "@/components/workspace-shared/Scratchpad";
+import { WorkspaceHeader, Scratchpad } from "@/components/workspace-shared";
 import { useState } from "react";
 
 /**
@@ -30,6 +29,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
   hasSubmitted,
   exitText,
   confirmSubmit,
+  isArena,
 }) => {
   const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
 
@@ -49,11 +49,12 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
         confirmSubmit={confirmSubmit}
         onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
         isScratchpadOpen={isScratchpadOpen}
+        isArena={isArena}
       />
 
-      <Scratchpad 
-        isOpen={isScratchpadOpen} 
-        onClose={() => setIsScratchpadOpen(false)} 
+      <Scratchpad
+        isOpen={isScratchpadOpen}
+        onClose={() => setIsScratchpadOpen(false)}
         problem={problem}
       />
 
@@ -64,7 +65,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
           className="h-full w-full items-stretch"
         >
           <ResizablePanel
-            defaultSize={42}
+            defaultSize={50}
             minSize={25}
             className="bg-card/30 backdrop-blur-md border-r border-border/40"
           >
@@ -76,7 +77,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
             className="bg-border/20 hover:bg-primary/50 transition-colors"
           />
 
-          <ResizablePanel defaultSize={58} minSize={30}>
+          <ResizablePanel defaultSize={50} minSize={30}>
             {editorSlot}
           </ResizablePanel>
         </ResizablePanelGroup>

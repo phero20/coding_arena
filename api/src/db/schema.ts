@@ -150,3 +150,40 @@ export type Category = typeof categories.$inferSelect
 export type NewCategory = typeof categories.$inferInsert
 export type CategoryProblem = typeof categoryProblems.$inferSelect
 
+// --- Solutions Layer ---
+
+export const solutions = pgTable('solutions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  problemId: text('problem_id').notNull(), // MongoDB Problem ID
+  problemTitle: text('problem_title'),
+  problemSlug: text('problem_slug'),
+  title: text('title').notNull(),
+  content: text('content').notNull(), // Markdown content
+  language: text('language'), // e.g., 'java', 'python'
+  upvotes: integer('upvotes').notNull().default(0),
+  downvotes: integer('downvotes').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    problemIdx: index('solutions_problem_id_idx').on(table.problemId),
+    userIdx: index('solutions_user_id_idx').on(table.userId),
+  }
+})
+
+export const solutionVotes = pgTable('solution_votes', {
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  solutionId: uuid('solution_id').references(() => solutions.id, { onDelete: 'cascade' }).notNull(),
+  voteType: integer('vote_type').notNull(), // 1 for upvote, -1 for downvote
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    pk: primaryKey({ columns: [table.userId, table.solutionId] }),
+  }
+})
+
+export type Solution = typeof solutions.$inferSelect
+export type NewSolution = typeof solutions.$inferInsert
+export type SolutionVote = typeof solutionVotes.$inferSelect
+export type NewSolutionVote = typeof solutionVotes.$inferInsert

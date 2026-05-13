@@ -59,7 +59,7 @@ export const ArenaMatchCard: React.FC<ArenaMatchCardProps> = ({
           {/* Match Info Sector */}
           <div className="flex-1 min-w-0 space-y-1">
             <div className="flex items-center gap-4">
-              <h3 className="font-extrabold text-sm sm:text-base tracking-tight truncate text-primary uppercase">
+              <h3 className="font-bold text-sm tracking-tight truncate text-foreground/90 uppercase">
                 {match.problemTitle || match.problemSlug || "Arena Match"}
               </h3>
               {match.difficulty && (

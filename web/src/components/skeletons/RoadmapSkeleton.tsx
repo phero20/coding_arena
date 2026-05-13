@@ -26,17 +26,22 @@ export const RoadmapSkeleton = () => {
             <div key={idx} className="flex flex-col items-center gap-1">
               {/* Vertical Connector Ghost (except first level) */}
               {idx !== 0 && (
-                <div className="h-3 w-px bg-border/20 border-l border-dashed border-border/40" />
+                <div className="h-2 w-px bg-border/40 border-l border-dashed border-border/40" />
               )}
 
               {/* Horizontal Row of Nodes */}
               <div className="flex flex-wrap justify-center gap-4 md:gap-12 w-full">
                 {Array.from({ length: level.nodes }).map((_, nIdx) => (
-                  <div 
-                    key={nIdx} 
-                    className="p-1 border border-border/40 rounded bg-card/10 flex items-center gap-1.5 min-w-[60px] md:min-w-[90px]"
+                  <div
+                    key={nIdx}
+                    className="p-1 border border-border/40 rounded bg-card/10 flex items-center gap-1.5 min-w-[60px] md:min-w-[120px] py-2"
                   >
-                    <Skeleton circle width={10} height={10} className="opacity-20" />
+                    <Skeleton
+                      circle
+                      width={10}
+                      height={10}
+                      className="opacity-20"
+                    />
                     <Skeleton width={40} height={6} className="rounded-sm" />
                   </div>
                 ))}

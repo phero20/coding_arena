@@ -9,6 +9,7 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { RankIndicator } from "../stats/leaderboard/RankIndicator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -132,7 +133,9 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                     <TableRow
                       className={cn(
                         "group cursor-pointer",
-
+                        index === 0 && "bg-rank-1-row",
+                        index === 1 && "bg-rank-2-row",
+                        index === 2 && "bg-rank-3-row",
                         isExpanded && "border-b border-primary",
                       )}
                       onClick={() =>
@@ -140,7 +143,7 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                       }
                     >
                       <TableCell className="pl-6 py-4">
-                        <Badge className="">{index + 1}</Badge>
+                        <RankIndicator rank={index + 1} />
                       </TableCell>
                       <TableCell className="py-4">
                         <div className="pr-4 min-w-[140px] flex items-center gap-2">
@@ -150,7 +153,10 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                               {player.username?.[0]?.toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
-                          <Link href={`/u/${player.username}`} className="flex flex-col">
+                          <Link
+                            href={`/u/${player.username}`}
+                            className="flex flex-col"
+                          >
                             <span className="font-bold text-sm tracking-tight truncate text-primary group-hover:underline transition-all">
                               {player.fullName || player.username}
                             </span>
@@ -188,11 +194,7 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                         </div>
                       </TableCell>
                       <TableCell className="text-right pr-6 py-4">
-                        <Button
-                          size="sm"
-                         
-                          disabled={!player.sourceCode}
-                        >
+                        <Button size="sm" disabled={!player.sourceCode}>
                           <Code2 className="w-3 h-3" />
                           Code
                         </Button>
@@ -200,15 +202,12 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                     </TableRow>
                     {isExpanded && (
                       <TableRow className="bg-muted hover:bg-muted">
-                        <TableCell
-                          colSpan={7}
-                          className=""
-                        >
+                        <TableCell colSpan={7} className="">
                           {!player.sourceCode ? (
-                            <div className="flex flex-col items-center justify-center py-10 opacity-30 text-center">
-                              <Eye className="size-8 mb-2" />
-                              <p className="text-[10px] font-black uppercase italic">
-                                Code not available.
+                            <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
+                              <Code2 className="size-6" />
+                              <p className="text-sm font-black ">
+                                User has not submitted any solution.
                               </p>
                             </div>
                           ) : (
@@ -268,8 +267,20 @@ function PodiumProfile({
   const sizes = {
     sm: "size-14 md:size-20",
     md: "size-16 md:size-24",
-    lg: "size-24 md:size-32 border-primary",
+    lg: "size-24 md:size-32",
   };
+
+  const rankThemes = {
+    1: "bg-rank-1-badge text-rank-1 border-rank-1",
+    2: "bg-rank-2-badge text-rank-2 border-rank-2",
+    3: "bg-rank-3-badge text-rank-3 border-rank-3",
+  }[rank as 1 | 2 | 3];
+
+  const borderThemes = {
+    1: "border-[var(--rank-1)] ",
+    2: "border-[var(--rank-2)] ",
+    3: "border-[var(--rank-3)] ",
+  }[rank as 1 | 2 | 3];
 
   return (
     <div
@@ -284,41 +295,48 @@ function PodiumProfile({
       >
         <Avatar
           className={cn(
-            "border-4 border-card shadow-2xl transition-all group-hover:scale-105 group-hover:border-primary/50",
+            "border-4 border-card transition-all group-hover:scale-105",
             sizes[size],
+            borderThemes,
           )}
         >
           <AvatarImage src={player.avatarUrl} />
-          <AvatarFallback className="text-lg md:text-xl font-black italic">
+          <AvatarFallback className="text-lg md:text-xl font-black italic bg-muted">
             {player.username.slice(0, 1).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <div
+        <Badge
+          variant="secondary"
           className={cn(
-            "absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-[9px] md:text-[10px] font-black z-10 shadow-lg",
-            rank === 1
-              ? "bg-primary text-primary-foreground"
-              : "bg-card text-foreground border",
+            "absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1.5 text-[10px] md:text-[11px] font-black z-10 border rounded-full",
+            borderThemes,
           )}
         >
           {rank}
-        </div>
+        </Badge>
       </div>
-      <div className="text-center max-w-[120px] flex flex-col items-center gap-1">
-        <Link href={`/u/${player.username}`} className="font-semibold text-xs md:text-sm truncate w-full tracking-tight text-primary">
+      <div className="text-center max-w-[120px] flex flex-col items-center gap-1 mt-2">
+        <Link
+          href={`/u/${player.username}`}
+          className="font-bold text-xs md:text-sm truncate w-full tracking-tight text-primary hover:underline"
+        >
           {player.fullName || player.username}
         </Link>
-        {player.fullName && (
-          <p className="text-[10px] text-muted-foreground truncate w-full -mt-1 tracking-tight">
-            {player.username}
-          </p>
-        )}
-        {player.timeTaken && (
-          <Badge className="flex gap-1">
-            <Clock className="size-3" />
-            {formatSolveTime(player.timeTaken)}
-          </Badge>
-        )}
+        <div className="flex flex-col items-center gap-1">
+          {player.fullName && (
+            <p className="text-[10px] text-muted-foreground truncate w-full tracking-tight -mt-1">
+              {player.username}
+            </p>
+          )}
+          {player.timeTaken && (
+            <Badge className="flex gap-1">
+              <Clock className="size-3" />
+              <span className="text-xs font-bold tabular-nums mb-0.5">
+                {formatSolveTime(player.timeTaken)}
+              </span>
+            </Badge>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { DynamicEditor as Editor } from "./DynamicEditor";
-import { LanguageSelector } from "./LanguageSelector";
+import { DynamicEditor as Editor } from "../editor/DynamicEditor";
+import { LanguageSelector } from "../editor/LanguageSelector";
 import { ConsolePanel } from "./ConsolePanel";
 import { Button } from "@/components/ui/button";
 import type { EditorPanelProps } from "@/types/component.types";
@@ -190,23 +190,23 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                   <RefreshCw className="size-3.5" />
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="bg-card/95 backdrop-blur-xl border-border/40">
+              <AlertDialogContent className="bg-card">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-sm font-bold">
+                  <AlertDialogTitle className="text-md text-primary font-bold">
                     Reset Code?
                   </AlertDialogTitle>
-                  <AlertDialogDescription className="text-xs text-muted-foreground">
+                  <AlertDialogDescription className="text-sm text-muted-foreground">
                     This will permanently delete your current progress for this
                     language and restore the default boilerplate.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel className="h-8 text-xs font-bold border-border/40">
+                  <AlertDialogCancel className="h-8 text-xs font-bold border-border">
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={resetCode}
-                    className="h-8 text-xs font-bold bg-primary text-primary-foreground hover:opacity-90"
+                    className="h-8 text-xs font-bold"
                   >
                     Reset Progress
                   </AlertDialogAction>

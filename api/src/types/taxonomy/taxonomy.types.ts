@@ -6,6 +6,7 @@ import { type Category } from '../../db/schema';
 export interface CategoryTreeNode extends Category {
   children: CategoryTreeNode[];
   problemCount: number;
+  solvedCount?: number;
 }
 
 /**
@@ -14,7 +15,7 @@ export interface CategoryTreeNode extends Category {
 export interface CategoryDetail extends Category {
   parent: Category | null;
   children: Category[];
-  problems: any[]; // Enriched with Mongo problem data
+  problems: (any & { isSolved?: boolean })[]; // Enriched with Mongo problem data and solve status
 }
 
 export interface MapProblemPayload {

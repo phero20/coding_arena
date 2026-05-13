@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
   Background,
   ConnectionLineType,
@@ -21,9 +21,18 @@ import TaxonomyNode from "./TaxonomyNode";
 import { useRoadmapStore } from "@/store/use-roadmap-store";
 import type { CategoryTreeNode } from "@/types/taxonomy";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, ZoomIn, ZoomOut, MousePointer2 } from "lucide-react";
+import {
+  RefreshCw,
+  ZoomIn,
+  ZoomOut,
+  MousePointer2,
+  Search,
+  BookOpen,
+} from "lucide-react";
+import { RoadmapSidebar } from "./RoadmapSidebar";
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
+import { ButtonGroup, ButtonGroupSeparator } from "../ui/button-group";
 
 const nodeTypes = {
   taxonomyNode: TaxonomyNode,
@@ -75,9 +84,18 @@ interface RoadmapCanvasProps {
 }
 
 const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
+  const [selectedLeafId, setSelectedLeafId] = useState<string | null>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { fitView, zoomTo } = useReactFlow();
+  const { fitView, zoomIn, zoomOut } = useReactFlow();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const {
     drilledRootId,
@@ -298,43 +316,43 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
           [...(parentNodeData.children || [])]
             .sort((a, b) => b.order - a.order)
             .forEach((child) => {
-            const isExpanded = expandedNodeIds.has(child.id);
-            const isActive = activeNodeId === child.id;
+              const isExpanded = expandedNodeIds.has(child.id);
+              const isActive = activeNodeId === child.id;
 
-            subNodes.push({
-              id: child.id,
-              type: "taxonomyNode",
-              data: {
-                ...child,
-                depth,
-                isExpanded,
-                isActive,
-                isRoot: false,
-                direction: "LR",
-              },
-              position: { x: 0, y: 0 },
+              subNodes.push({
+                id: child.id,
+                type: "taxonomyNode",
+                data: {
+                  ...child,
+                  depth,
+                  isExpanded,
+                  isActive,
+                  isRoot: false,
+                  direction: "LR",
+                },
+                position: { x: 0, y: 0 },
+              });
+
+              subLocalEdges.push({
+                id: `e-${currentVisualParentId}-${child.id}`,
+                source: currentVisualParentId,
+                target: child.id,
+                type: "default",
+                animated: isExpanded || isActive,
+                style: {
+                  strokeWidth: isExpanded || isActive ? 6 : 4,
+                  stroke:
+                    isExpanded || isActive
+                      ? "var(--primary)"
+                      : "color-mix(in srgb, var(--primary), transparent 70%)",
+                  transition: "all 0.5s ease",
+                },
+              });
+
+              if (isExpanded) {
+                addChildren(child, child.id, depth + 1);
+              }
             });
-
-            subLocalEdges.push({
-              id: `e-${currentVisualParentId}-${child.id}`,
-              source: currentVisualParentId,
-              target: child.id,
-              type: "default",
-              animated: isExpanded || isActive,
-              style: {
-                strokeWidth: isExpanded || isActive ? 6 : 4,
-                stroke:
-                  isExpanded || isActive
-                    ? "var(--primary)"
-                    : "color-mix(in srgb, var(--primary), transparent 70%)",
-                transition: "all 0.5s ease",
-              },
-            });
-
-            if (isExpanded) {
-              addChildren(child, child.id, depth + 1);
-            }
-          });
         };
 
         // Start recursion from subroot
@@ -394,7 +412,14 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
           }
         }
       } else {
-        toggleNodeExpansion(realId);
+        const isLeaf = !category.children || category.children.length === 0;
+
+        if (isLeaf) {
+          setSelectedLeafId(realId);
+        } else {
+          toggleNodeExpansion(realId);
+        }
+
         // If we expanded it, center on it, if collapsed, center on parent
         targetNodeId = realId;
       }
@@ -407,8 +432,8 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
         fitView({
           nodes: [{ id: targetNodeId }],
           duration: 1000,
-          padding: 1.5,
-          maxZoom: 0.5,
+          padding: 1.2,
+          maxZoom: 0.45,
         });
       }, 100);
 
@@ -426,7 +451,7 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
   );
 
   return (
-    <div className="w-full h-full bg-background relative">
+    <div className="w-full h-full bg-background relative flex items-center">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -437,7 +462,7 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
         connectionMode={ConnectionMode.Loose}
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
-        fitViewOptions={{ padding: 0.3 }}
+        fitViewOptions={{ padding: 0.12 }}
         minZoom={0.1}
         maxZoom={2}
       >
@@ -446,36 +471,62 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
           gap={24}
           size={2}
           className="text-muted-foreground/10"
-        /> */}
-        {/* Floating Control Hub */}
-        <Panel position="bottom-center" className="mb-6">
-          <Card className="flex items-center gap-2 p-2 bg-card border">
+        />        {/* Responsive Floating Control Hub */}
+        <Panel
+          position={isMobile ? "bottom-center" : "top-left"}
+          className={cn(
+            isMobile ? "mb-6" : "ml-6 !top-1/2 !-translate-y-1/2",
+            "transition-all duration-500",
+          )}
+        >
+          <ButtonGroup
+            orientation={isMobile ? "horizontal" : "vertical"}
+            className="bg-card rounded-xl border p-1"
+          >
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => zoomTo(nodes.length > 0 ? 0.5 : 1)}
+              className="h-10 w-10"
+              onClick={() => zoomIn({ duration: 300 })}
             >
-              <ZoomOut className="w-4 h-4" />
+              <ZoomIn className="size-5" />
             </Button>
-            <Separator orientation="vertical" className="h-4" />
+            <ButtonGroupSeparator
+              orientation={isMobile ? "vertical" : "horizontal"}
+              className="bg-background/20"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10"
+              onClick={() => zoomOut({ duration: 300 })}
+            >
+              <ZoomOut className="size-5" />
+            </Button>
+            <ButtonGroupSeparator
+              orientation={isMobile ? "vertical" : "horizontal"}
+              className="bg-background/20"
+            />
             <Button
               variant="secondary"
-              className="gap-2 px-4 font-bold text-xs uppercase tracking-widest"
+              size="icon"
+              className="h-10 w-10"
               onClick={() => {
                 resetRoadmap();
-                setTimeout(() => fitView({ duration: 1000, padding: 0.3 }), 50);
+                setTimeout(() => fitView({ duration: 1000, padding: 0.12 }), 50);
               }}
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Reset View
+              <RefreshCw className="size-4" />
             </Button>
-            <Separator orientation="vertical" className="h-4" />
-            <Button variant="ghost" size="icon" onClick={() => zoomTo(1.2)}>
-              <ZoomIn className="w-4 h-4" />
-            </Button>
-          </Card>
+          </ButtonGroup>
         </Panel>
       </ReactFlow>
+
+      {/* Node Detail Sidebar */}
+      <RoadmapSidebar
+        nodeId={selectedLeafId}
+        onClose={() => setSelectedLeafId(null)}
+      />
     </div>
   );
 };

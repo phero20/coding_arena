@@ -12,7 +12,7 @@ import {
 import { EmptyDisplay, ErrorDisplay } from "@/components/shared/StatusState";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { cn } from "@/lib/utils";
-import { TestCaseField } from "./TestCaseField";
+import { TestCaseField } from "../ui/TestCaseField";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Badge } from "@/components/ui/badge";

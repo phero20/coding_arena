@@ -85,3 +85,35 @@ export interface ProblemTest {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Solution {
+  id: string;
+  userId: string;
+  problemId: string;
+  title: string;
+  content: string;
+  language?: string;
+  upvotes: number;
+  downvotes: number;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    username: string;
+    avatarUrl?: string | null;
+    fullName?: string | null;
+  };
+  problemTitle?: string;
+  problemSlug?: string;
+}
+
+export interface CreateSolutionInput {
+  title: string;
+  content: string;
+  language?: string;
+  problemTitle?: string;
+  problemSlug?: string;
+}
+
+export interface VoteSolutionInput {
+  voteType: 1 | -1;
+}

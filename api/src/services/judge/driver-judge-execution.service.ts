@@ -22,9 +22,22 @@ import { evaluateSuspicion } from "./suspicion/suspicion-evaluator";
 import { type ICradle } from "../../libs/awilix-container";
 
 const logger = createLogger("driver-judge-execution-service");
-import { getLanguageName, normalizeLanguageId } from "../../libs/utils/languages";
+import {
+  getLanguageName,
+  normalizeLanguageId,
+} from "../../libs/utils/languages";
 
-const SUPPORTED_LANGUAGE_IDS = new Set(["62", "71", "54", "50", "63", "74", "51", "73","60"]);
+const SUPPORTED_LANGUAGE_IDS = new Set([
+  "62",
+  "71",
+  "54",
+  "50",
+  "63",
+  "74",
+  "51",
+  "73",
+  "60",
+]);
 
 export class DriverJudgeExecutionService {
   private readonly judge0Service: ICradle["judge0Service"];
@@ -52,8 +65,14 @@ export class DriverJudgeExecutionService {
     const normalizedLanguageId = normalizeLanguageId(input.languageId);
     const [problem, publicTests, hiddenTests] = await Promise.all([
       this.problemRepository.findByProblemId(input.problemId),
-      this.problemTestRepository.findByProblemAndType(input.problemId, "public"),
-      this.problemTestRepository.findByProblemAndType(input.problemId, "hidden"),
+      this.problemTestRepository.findByProblemAndType(
+        input.problemId,
+        "public",
+      ),
+      this.problemTestRepository.findByProblemAndType(
+        input.problemId,
+        "hidden",
+      ),
     ]);
 
     if (!problem) {
@@ -71,22 +90,31 @@ export class DriverJudgeExecutionService {
 
     if (problem.problem_type === "function") {
       if (!problem.function_signature) {
-        throw AppError.badRequest("Function signature missing for function-type problem");
+        throw AppError.badRequest(
+          "Function signature missing for function-type problem",
+        );
       }
     } else if (problem.problem_type === "class") {
       if (!problem.class_signature) {
-        throw AppError.badRequest("Class signature missing for class-type problem");
+        throw AppError.badRequest(
+          "Class signature missing for class-type problem",
+        );
       }
     } else {
-      throw AppError.badRequest(`Driver execution currently supports function and class problems only. Found: ${problem.problem_type}`);
+      throw AppError.badRequest(
+        `Driver execution currently supports function and class problems only. Found: ${problem.problem_type}`,
+      );
     }
 
-    const signature = problem.problem_type === "class" 
-      ? problem.class_signature! 
-      : {
-          ...problem.function_signature!,
-          param_order: problem.function_signature!.param_order ?? problem.function_signature!.params.map((p) => p.name)
-        };
+    const signature =
+      problem.problem_type === "class"
+        ? problem.class_signature!
+        : {
+            ...problem.function_signature!,
+            param_order:
+              problem.function_signature!.param_order ??
+              problem.function_signature!.params.map((p) => p.name),
+          };
 
     const testCases = selectedCases.map((testCase) => ({
       input: testCase.input,
@@ -111,16 +139,19 @@ export class DriverJudgeExecutionService {
     }
     const judgeRaw = await this.executeAndPoll(payload, input.traceId);
 
-    const parsed = parseDriverResult(
-      judgeRaw as any,
-      selectedCases.length,
-    );
+    const parsed = parseDriverResult(judgeRaw as any, selectedCases.length);
 
     const tests = parsed.tests.map((driverTest, index) =>
-      this.mapDriverCaseToExecutionResult(driverTest, selectedCases[index], judgeRaw),
+      this.mapDriverCaseToExecutionResult(
+        driverTest,
+        selectedCases[index],
+        judgeRaw,
+      ),
     );
 
-    const driverOverallStatus = this.mapDriverVerdictToSubmissionStatus(parsed.verdict);
+    const driverOverallStatus = this.mapDriverVerdictToSubmissionStatus(
+      parsed.verdict,
+    );
     const suspicion = evaluateSuspicion({
       problem,
       selectedCases,
@@ -172,7 +203,10 @@ export class DriverJudgeExecutionService {
         overallStatus: aiResult.overallStatus,
         disagreedWithDriver: aiResult.overallStatus !== driverOverallStatus,
       };
-      if (shouldUseAuditVerdict && aiResult.overallStatus !== driverOverallStatus) {
+      if (
+        shouldUseAuditVerdict &&
+        aiResult.overallStatus !== driverOverallStatus
+      ) {
         logger.warn(
           {
             traceId: input.traceId,
@@ -276,7 +310,9 @@ export class DriverJudgeExecutionService {
     }
 
     logger.error({ traceId, token }, "Judge0 polling timed out");
-    throw new Error("Judge0 execution timed out while polling submission result");
+    throw new Error(
+      "Judge0 execution timed out while polling submission result",
+    );
   }
 
   private mapDriverCaseToExecutionResult(
@@ -320,7 +356,9 @@ export class DriverJudgeExecutionService {
     }
   }
 
-  private mapDriverVerdictToSubmissionStatus(verdict: string): SubmissionStatus {
+  private mapDriverVerdictToSubmissionStatus(
+    verdict: string,
+  ): SubmissionStatus {
     switch (verdict) {
       case "ACCEPTED":
         return "ACCEPTED";
@@ -337,7 +375,7 @@ export class DriverJudgeExecutionService {
       default:
         return "SYSTEM_ERROR";
     }
-    }
+  }
   private resolveLanguageKey(languageId: string): string {
     if (languageId === "71") return "python";
     if (languageId === "54") return "cpp";

@@ -16,16 +16,12 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // List of paths where the Navbar should be hidden
   const HIDDEN_NAVBAR_PATHS = ["/problems/", "/arena/match", "/compilers"];
-
   const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some((path) =>
     pathname.startsWith(path),
   );
@@ -33,53 +29,44 @@ export const Navbar = () => {
   if (shouldHideNavbar) return null;
 
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "py-2 bg-background border-b border-border"
-          : "py-3 bg-background border-b border-transparent",
-      )}
-    >
-      <Container className="flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="SlaveCode Logo"
-            width={52}
-            height={40}
-            className="object-contain -mr-2"
-          />
-          <span className="text-xl font-bold tracking-tight">
-            SlaveCode<span className="text-primary">.</span>
-          </span>
-        </Link>
+    <>
+      <nav
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-background",
+          scrolled
+            ? "py-2  border-b border-border shadow-sm"
+            : "py-4 border-b border-transparent",
+        )}
+      >
+        <Container className="flex items-center justify-between">
+          {/* Brand Logo */}
+          <Link href="/" className="flex items-center group">
+            <Image
+              src="/logo.png"
+              alt="SlaveCode Logo"
+              width={50}
+              height={40}
+              className="object-contain -mr-1"
+            />
+            <span className="text-xl font-black tracking-tighter">
+              SLAVECODE<span className="text-primary">.</span>
+            </span>
+          </Link>
 
-        {/* Actions Container */}
-        <div className="flex items-center gap-2 md:gap-4">
-          {/* Desktop Only Links */}
-          <div className="hidden md:flex items-center gap-6 mr-2">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-8">
             <NavLinks />
-            <div className="h-4 w-px bg-border/50 mx-2" />
-          </div>
-
-          {/* Search: Desktop Only */}
-          <div className="hidden md:block">
+            <div className="h-4 w-px bg-border/50" />
             <UserSearch />
-          </div>
-
-          {/* Desktop Only Actions */}
-          <div className="hidden md:block">
             <NavbarActions />
           </div>
 
-          {/* Mobile Menu Trigger */}
-          <div className="md:hidden">
+          {/* Mobile Profile/Menu Trigger */}
+          <div className="lg:hidden flex items-center gap-2">
             <MobileMenu navItems={navItems} pathname={pathname} />
           </div>
-        </div>
-      </Container>
-    </nav>
+        </Container>
+      </nav>
+    </>
   );
 };

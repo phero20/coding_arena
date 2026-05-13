@@ -118,20 +118,24 @@ export const useTaskEvaluation = ({
   /**
    * Derived states
    */
-  const isLoading = runMutation.isPending || submitMutation.isPending || isPolling;
+  const isLoading = 
+    runMutation.isPending || 
+    submitMutation.isPending || 
+    isPolling || 
+    ((pollingData?.status as string) === "PENDING");
   const error = getErrorMessage(runMutation.error || submitMutation.error || pollingError);
 
   const evaluation: EvaluationResult = useMemo(() => {
-    if (evaluationType === "run" && lastRunResult) {
-      const status = lastRunResult.overallStatus || "ACCEPTED";
+    if (evaluationType === "run") {
+      const status = lastRunResult?.overallStatus || "PENDING";
       return {
-        submissionId: lastRunResult.submissionId ?? null,
+        submissionId: lastRunResult?.submissionId ?? null,
         status,
         overallStatus: status,
-        tests: lastRunResult.tests || [],
-        compileOutput: lastRunResult.compileOutput,
-        stderr: lastRunResult.stderr,
-        isLoading: runMutation.isPending,
+        tests: lastRunResult?.tests || [],
+        compileOutput: lastRunResult?.compileOutput,
+        stderr: lastRunResult?.stderr,
+        isLoading: runMutation.isPending || (status as string) === "PENDING",
         error: getErrorMessage(runMutation.error),
         type: "run",
       };
@@ -146,7 +150,7 @@ export const useTaskEvaluation = ({
         tests: statusPolling?.tests || [],
         compileOutput: pollingData?.details?.compileOutput,
         stderr: pollingData?.details?.stderr,
-        isLoading: submitMutation.isPending || !!statusPolling?.isLoading,
+        isLoading: submitMutation.isPending || (status as string) === "PENDING" || !!statusPolling?.isLoading,
         error: getErrorMessage(submitMutation.error || statusPolling?.error),
         type: "submit",
       };

@@ -114,25 +114,25 @@ export function createSubmissionProcessor(
         executionTime,
       } as SubmissionEvaluationResult;
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
-      const attemptNumber = job.attemptsMade || 1;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const currentAttempt = job.attemptsMade + 1;
       const maxAttempts = job.opts?.attempts || 3;
 
       tracedLogger.error(
         {
           jobId: job.id,
           error: errorMessage,
-          attempt: attemptNumber,
+          attempt: currentAttempt,
+          maxAttempts,
         },
         "Submission evaluation failed",
       );
 
       // Handle final failure
-      if (attemptNumber >= maxAttempts) {
+      if (currentAttempt >= maxAttempts) {
         tracedLogger.error(
           {
-            attempts: attemptNumber,
+            attempts: currentAttempt,
           },
           "Max retry attempts reached, marking as SYSTEM_ERROR",
         );
@@ -144,12 +144,27 @@ export function createSubmissionProcessor(
               status: "SYSTEM_ERROR",
               details: {
                 error: errorMessage,
-                failedAfterAttempts: attemptNumber,
+                failedAfterAttempts: currentAttempt,
                 evaluatedAt: clock.nowIso(),
               },
             },
             options,
           );
+
+          // 3.5 Also notify Match Logic on final failure if it's an arena submission
+          if (jobData.arenaMatchId) {
+            await arenaMatchService.handleMatchSubmission({
+              submissionId: jobData.submissionId,
+              matchId: jobData.arenaMatchId,
+              userId: jobData.userId,
+              clerkId: jobData.clerkId,
+              evaluation: {
+                status: "SYSTEM_ERROR",
+                tests: [],
+              },
+              traceId,
+            });
+          }
         } catch (dbErr) {
           tracedLogger.error(
             {

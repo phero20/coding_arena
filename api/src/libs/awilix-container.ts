@@ -20,10 +20,11 @@ import { type ArenaSubmissionRepository } from "../repositories/arena/arena-subm
 import { type StatsRepository } from "../repositories/stats/stats.repository";
 import { type ContestRepository } from "../repositories/contest/contest.repository";
 import { type TaxonomyRepository } from "../repositories/taxonomy/taxonomy.repository";
+import { type SolutionRepository } from "../repositories/solutions/solution.repository";
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
-import { type SubmissionService } from "../services/submissions/submission.service";
+import { ISubmissionService, type SubmissionService } from "../services/submissions/submission.service";
 import { type GroqLlmService } from "../services/ai/groq-llm.service";
 import { type AiProblemService } from "../services/problems/ai-problem.service";
 import { type ArenaService } from "../services/arena/arena.service";
@@ -49,11 +50,14 @@ import { type ContestService } from "../services/contest/contest.service";
 import { type TaxonomyService } from "../services/taxonomy/taxonomy.service";
 import { type StatsController } from "../controllers/stats/stats.controller";
 import { type ContestController } from "../controllers/contest/contest.controller";
+import { type SolutionController } from "../controllers/solutions/solution.controller";
 import { type ILeetCodeService } from "../services/stats/leetcode.service";
 
 import { type ProblemCache } from "../cache/problems/problem.cache";
 import { type ProblemTestCache } from "../cache/problems/problem-test.cache";
 import { type AiJudgeCache } from "../cache/judge/ai-judge.cache";
+import { type SubmissionCache } from "../cache/submissions/submission.cache";
+import { type SolutionCache } from "../cache/solutions/solution.cache";
 
 import { type AuthMiddleware } from "../middlewares/security/auth.middleware";
 import { type AuthorizationMiddleware } from "../middlewares/security/authorization.middleware";
@@ -91,6 +95,7 @@ import { type IUserService } from "../services/user/user.service";
 import { type ContestCache } from "../cache/contest/contest.cache";
 import { type UserStatsCache } from "../cache/user/user-stats.cache";
 import { type LeetCodeCache } from "../cache/user/leetcode.cache";
+import { type LeaderboardCache } from "../cache/stats/leaderboard.cache";
 import { type TaxonomyCache } from "../cache/taxonomy/taxonomy.cache";
 import { GeminiLlmService } from "../services/ai/gemini-llm.service";
 
@@ -112,12 +117,13 @@ export interface ICradle {
   statsRepository: StatsRepository;
   contestRepository: ContestRepository;
   taxonomyRepository: TaxonomyRepository;
+  solutionRepository: SolutionRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
   problemService: ProblemService;
   problemTestService: ProblemTestService;
-  submissionService: SubmissionService;
+  submissionService: ISubmissionService;
   statsSubmissionService: StatsSubmissionService;
   statsService: IStatsService;
   groqLlmService: GroqLlmService;
@@ -141,6 +147,7 @@ export interface ICradle {
   clistService: ClistService;
   contestService: ContestService;
   taxonomyService: TaxonomyService;
+  solutionService: import("../services/solutions/solution.service").ISolutionService;
   leetcodeService: ILeetCodeService;
 
   // Raw Services
@@ -150,6 +157,8 @@ export interface ICradle {
   rawStatsService: IStatsService;
   rawLeetCodeService: ILeetCodeService;
   rawTaxonomyService: TaxonomyService;
+  rawSubmissionService: SubmissionService;
+  rawSolutionService: import("../services/solutions/solution.service").SolutionService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -170,6 +179,9 @@ export interface ICradle {
   contestCache: ContestCache;
   leetcodeCache: LeetCodeCache;
   taxonomyCache: TaxonomyCache;
+  leaderboardCache: LeaderboardCache;
+  submissionCache: SubmissionCache;
+  solutionCache: SolutionCache;
 
   // Controllers
   authController: AuthController;
@@ -184,6 +196,7 @@ export interface ICradle {
   compilerController: CompilerController;
   contestController: ContestController;
   taxonomyController: TaxonomyController;
+  solutionController: SolutionController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

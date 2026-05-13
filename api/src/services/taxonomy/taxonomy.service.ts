@@ -13,8 +13,10 @@ import { ERRORS } from '../../constants/errors';
 
 export interface ITaxonomyService {
   getTaxonomyTree(): Promise<CategoryTreeNode[]>;
-  getCategoryDetail(slug: string): Promise<CategoryDetail>;
-  getCategoryDetailById(id: string): Promise<CategoryDetail>;
+  getUserRoadmapProgress(userId: string): Promise<{ counts: Record<string, number>; solvedIds: string[] }>;
+  getCategoryDetail(slug: string, userId?: string): Promise<CategoryDetail>;
+  getCategoryDetailById(id: string, userId?: string): Promise<CategoryDetail>;
+  invalidateUserProgress(userId: string): Promise<void>;
   createCategory(payload: CreateCategoryPayload): Promise<any>;
   mapProblemToCategory(payload: MapProblemPayload): Promise<void>;
   batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void>;
@@ -69,6 +71,10 @@ export class TaxonomyService implements ITaxonomyService {
     return roots;
   }
 
+  async getUserRoadmapProgress(userId: string): Promise<{ counts: Record<string, number>; solvedIds: string[] }> {
+    return this.taxonomyRepo.getUserRoadmapProgress(userId);
+  }
+
   /**
    * Returns full details for a category including enriched problems.
    *
@@ -77,7 +83,7 @@ export class TaxonomyService implements ITaxonomyService {
    *   2. findChildren() + getProblemMappings() + parent lookup — parallel
    *   3. findManyByProblemIds()   — single MongoDB $in query
    */
-  async getCategoryDetail(slug: string): Promise<CategoryDetail> {
+  async getCategoryDetail(slug: string, userId?: string): Promise<CategoryDetail> {
     const category = await this.taxonomyRepo.findCategoryBySlug(slug);
     if (!category) {
       throw AppError.notFound('Category not found');
@@ -93,17 +99,23 @@ export class TaxonomyService implements ITaxonomyService {
 
     // Single $in query instead of N individual Mongo lookups
     const problemIds = mappings.map((m) => m.problemId);
-    const problems = await this.problemRepo.findManyByProblemIds(problemIds);
+    const [problems, solvedIds] = await Promise.all([
+      this.problemRepo.findManyByProblemIds(problemIds),
+      userId ? this.taxonomyRepo.getSolvedProblemIds(userId, problemIds) : Promise.resolve(new Set<string>()),
+    ]);
 
     return {
       ...category,
       parent: parent ?? null,
       children,
-      problems,
+      problems: problems.map(p => ({
+        ...p,
+        isSolved: solvedIds.has(p.problem_id)
+      })),
     };
   }
 
-  async getCategoryDetailById(id: string): Promise<CategoryDetail> {
+  async getCategoryDetailById(id: string, userId?: string): Promise<CategoryDetail> {
     const category = await this.taxonomyRepo.findCategoryById(id);
     if (!category) {
       throw AppError.notFound('Category not found');
@@ -118,13 +130,19 @@ export class TaxonomyService implements ITaxonomyService {
     ]);
 
     const problemIds = mappings.map((m) => m.problemId);
-    const problems = await this.problemRepo.findManyByProblemIds(problemIds);
+    const [problems, solvedIds] = await Promise.all([
+      this.problemRepo.findManyByProblemIds(problemIds),
+      userId ? this.taxonomyRepo.getSolvedProblemIds(userId, problemIds) : Promise.resolve(new Set<string>()),
+    ]);
 
     return {
       ...category,
       parent: parent ?? null,
       children,
-      problems,
+      problems: problems.map(p => ({
+        ...p,
+        isSolved: solvedIds.has(p.problem_id)
+      })),
     };
   }
 
@@ -163,6 +181,10 @@ export class TaxonomyService implements ITaxonomyService {
     }));
 
     await this.taxonomyRepo.batchMapProblems(mappings);
+  }
+
+  async invalidateUserProgress(_userId: string): Promise<void> {
+    // No-op in the raw service, implemented in the Cache layer
   }
 
   async unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void> {

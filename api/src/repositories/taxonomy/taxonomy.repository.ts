@@ -1,5 +1,5 @@
 import { db, schema } from '../../db';
-import { eq, sql, and } from 'drizzle-orm';
+import { eq, sql, and, inArray } from 'drizzle-orm';
 import type { Category, NewCategory, CategoryProblem } from '../../db/schema';
 import { type ICradle } from '../../libs/awilix-container';
 
@@ -17,6 +17,8 @@ export interface ITaxonomyRepository {
   getProblemCountRecursive(categoryId: string): Promise<number>;
   /** Batch: returns a map of categoryId -> recursive problem count in ONE query. */
   getAllProblemCounts(): Promise<Map<string, number>>;
+  getUserRoadmapProgress(userId: string): Promise<{ counts: Record<string, number>; solvedIds: string[] }>;
+  getSolvedProblemIds(userId: string, problemIds: string[]): Promise<Set<string>>;
 }
 
 export class TaxonomyRepository implements ITaxonomyRepository {
@@ -155,5 +157,49 @@ export class TaxonomyRepository implements ITaxonomyRepository {
       countMap.set(row.category_id as string, Number(row.count ?? 0));
     }
     return countMap;
+  }
+
+  async getUserRoadmapProgress(userId: string): Promise<{ counts: Record<string, number>; solvedIds: string[] }> {
+    // 1. Fetch all solved problems with their categories
+    const solvedData = await db
+      .select({
+        categoryId: schema.categoryProblems.categoryId,
+        problemId: schema.userSolvedProblems.problemId,
+      })
+      .from(schema.userSolvedProblems)
+      .innerJoin(
+        schema.categoryProblems,
+        eq(schema.categoryProblems.problemId, schema.userSolvedProblems.problemId),
+      )
+      .where(eq(schema.userSolvedProblems.userId, userId));
+
+    const counts: Record<string, number> = {};
+    const solvedIdsSet = new Set<string>();
+
+    for (const row of solvedData) {
+      // Aggregate counts per category
+      counts[row.categoryId] = (counts[row.categoryId] || 0) + 1;
+      // Collect unique solved IDs
+      solvedIdsSet.add(row.problemId);
+    }
+
+    return {
+      counts,
+      solvedIds: Array.from(solvedIdsSet),
+    };
+  }
+
+  async getSolvedProblemIds(userId: string, problemIds: string[]): Promise<Set<string>> {
+    if (problemIds.length === 0) return new Set();
+    const result = await db
+      .select({ problemId: schema.userSolvedProblems.problemId })
+      .from(schema.userSolvedProblems)
+      .where(
+        and(
+          eq(schema.userSolvedProblems.userId, userId),
+          inArray(schema.userSolvedProblems.problemId, problemIds),
+        ),
+      );
+    return new Set(result.map((r) => r.problemId));
   }
 }

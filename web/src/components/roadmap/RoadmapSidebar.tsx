@@ -1,204 +1,269 @@
 "use client";
 
-import React from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useCategoryDetailByIdQuery } from "@/hooks/queries/use-taxonomy.queries";
+import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
+import { QueryGuard } from "@/components/shared/QueryGuard";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { 
-  Trophy, 
-  Clock, 
-  CheckCircle2,
-  AlertCircle,
-  HelpCircle,
-  ArrowRight,
-  Flame,
-  LayoutGrid,
-  Map
-} from "lucide-react";
-import { useRoadmapStore } from "@/store/use-roadmap-store";
-import { useCategoryDetailQuery } from "@/hooks/queries/use-taxonomy.queries";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { ChevronRight, Code2, CheckCircle2, GripVertical } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import Skeleton from "react-loading-skeleton";
+import { RoadmapSidebarSkeleton } from "@/components/skeletons/RoadmapSkeletons";
+import { Problem } from "@/types/api";
 
-const RoadmapSidebar = () => {
-  const { activeNodeId, setActiveNodeId } = useRoadmapStore();
-  
-  // We use the activeNodeId as the slug for the query.
-  // In our taxonomy repo, findCategoryBySlug is used. 
-  // We should make sure we have the slug. In our tree, the "id" we passed to React Flow was node.id.
-  // Actually, our getCategoryDetail API uses SLUG.
-  // I need to make sure the store stores the SLUG or I find the slug from the ID.
-  
-  // HACK: For now, I'll assume activeNodeId IS the slug if we passed node.slug as ID in RoadmapCanvas.
-  // Let's check RoadmapCanvas. I passed node.id. 
-  // I should update RoadmapCanvas to pass node.slug as the ID if I want to use it here.
-  // OR I can use the slug from the node data.
-  
-  const { data: category, isLoading } = useCategoryDetailQuery(activeNodeId || "");
+interface RoadmapSidebarProps {
+  nodeId: string | null;
+  onClose: () => void;
+}
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Easy": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
-      case "Medium": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
-      case "Hard": return "text-rose-500 bg-rose-500/10 border-rose-500/20";
-      default: return "text-muted-foreground bg-muted/50";
+export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
+  nodeId,
+  onClose,
+}) => {
+  const { data: detail, isLoading, error } = useCategoryDetailByIdQuery(nodeId);
+  const { solvedIds } = useRoadmapData();
+
+  const [width, setWidth] = useState(800);
+  const [isMobile, setIsMobile] = useState(false);
+  const isResizing = useRef(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing.current || isMobile) return;
+    const newWidth = window.innerWidth - e.clientX;
+    if (newWidth > 700 && newWidth < window.innerWidth * 0.95) {
+      setWidth(newWidth);
     }
+  }, [isMobile]);
+
+  const stopResizing = useCallback(() => {
+    isResizing.current = false;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", stopResizing);
+    document.body.style.cursor = "default";
+    document.body.style.userSelect = "auto";
+  }, [handleMouseMove]);
+
+  const startResizing = useCallback((e: React.MouseEvent) => {
+    if (isMobile) return;
+    isResizing.current = true;
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", stopResizing);
+    document.body.style.cursor = "ew-resize";
+    document.body.style.userSelect = "none";
+  }, [handleMouseMove, stopResizing, isMobile]);
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", stopResizing);
+    };
+  }, [handleMouseMove, stopResizing]);
+
+  const difficultyBg: Record<Problem["difficulty"], string> = {
+    Easy: "bg-difficulty-easy border-difficulty-easy",
+    Medium: "bg-difficulty-medium border-difficulty-medium",
+    Hard: "bg-difficulty-hard border-difficulty-hard",
   };
 
+  const difficultyColor: Record<Problem["difficulty"], string> = {
+    Easy: "text-difficulty-easy",
+    Medium: "text-difficulty-medium",
+    Hard: "text-difficulty-hard",
+  };
   return (
-    <Sheet open={!!activeNodeId} onOpenChange={(open) => !open && setActiveNodeId(null)}>
-      <SheetContent className="sm:max-w-md border-l bg-card/80 backdrop-blur-2xl flex flex-col p-0 shadow-2xl">
-        {isLoading ? (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-lg shadow-primary/20" />
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground animate-pulse">Syncing Data...</p>
-            </div>
-          </div>
-        ) : category ? (
-          <>
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
-            
-            <SheetHeader className="p-8 pb-6 space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
-                  <Flame className="w-3.5 h-3.5 text-primary animate-pulse" />
-                  <span className="text-[10px] font-black text-primary uppercase tracking-widest">In Focus</span>
-                </div>
-                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-50">
-                  Pattern ID: {category.id.split('-')[0]}
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <SheetTitle className="text-3xl font-black tracking-tighter leading-none text-foreground uppercase italic">
-                  {category.name}
-                </SheetTitle>
-                <SheetDescription className="text-sm text-muted-foreground leading-relaxed font-medium">
-                  {category.description || "Master this specific algorithmic pattern to level up your technical skills."}
-                </SheetDescription>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 py-4">
-                <div className="p-4 bg-muted/30 rounded-2xl border border-border/50">
-                  <span className="text-[9px] uppercase text-muted-foreground font-black tracking-widest block mb-1">Missions</span>
-                  <span className="text-2xl font-black tabular-nums tracking-tighter">{category.problems?.length || 0}</span>
-                </div>
-                <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10">
-                  <span className="text-[9px] uppercase text-primary font-black tracking-widest block mb-1">XP Gain</span>
-                  <span className="text-2xl font-black tabular-nums tracking-tighter text-primary">+{ (category.problems?.length || 0) * 100 }</span>
-                </div>
-              </div>
-            </SheetHeader>
-
-            <Separator className="opacity-50" />
-
-            <ScrollArea className="flex-1 px-8">
-              <div className="py-8 space-y-6">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
-                    <LayoutGrid className="w-4 h-4 text-primary" />
-                    Curated Queue
-                  </h4>
-                  <Badge variant="outline" className="text-[9px] font-bold uppercase tracking-tighter opacity-60">
-                    Auto-Sorted
-                  </Badge>
-                </div>
-                
-                <div className="space-y-3">
-                  {category.problems && category.problems.length > 0 ? (
-                    category.problems.map((problem, index) => (
-                      <Link 
-                        key={problem.problem_id} 
-                        href={`/practice/${problem.problem_slug}`}
-                        className="group block"
-                      >
-                        <div className="relative p-4 rounded-2xl bg-muted/20 border border-border/50 hover:border-primary/50 hover:bg-muted/40 transition-all duration-300 active:scale-[0.98] overflow-hidden">
-                          <div className="absolute top-0 left-0 w-1 h-full bg-primary/20 group-hover:bg-primary transition-colors" />
-                          
-                          <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-4">
-                              <div className="text-lg font-black text-muted-foreground/30 tabular-nums italic group-hover:text-primary/40 transition-colors">
-                                {String(index + 1).padStart(2, '0')}
-                              </div>
-                              <div className="space-y-1">
-                                <p className="text-sm font-bold group-hover:text-primary transition-colors tracking-tight">
-                                  {problem.title}
-                                </p>
-                                <div className="flex items-center gap-2">
-                                  <Badge className={cn("text-[8px] px-1.5 h-3.5 font-black uppercase tracking-tighter border-none", getDifficultyColor(problem.difficulty))}>
-                                    {problem.difficulty}
-                                  </Badge>
-                                  <div className="flex items-center gap-1 text-[9px] font-bold text-muted-foreground/60 uppercase">
-                                    <Clock className="w-2.5 h-2.5" />
-                                    15-20m
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <div className="w-8 h-8 rounded-full bg-background border flex items-center justify-center text-muted-foreground group-hover:text-primary group-hover:border-primary transition-all">
-                              <ArrowRight className="w-4 h-4" />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <div className="text-center py-20 px-6 space-y-4 bg-muted/10 rounded-3xl border border-dashed border-border/50">
-                      <div className="w-16 h-16 bg-muted/20 rounded-full flex items-center justify-center mx-auto">
-                        <Map className="w-8 h-8 text-muted-foreground opacity-30" />
-                      </div>
-                      <div className="space-y-1">
-                        <p className="font-bold text-muted-foreground tracking-tight">No Missions Found</p>
-                        <p className="text-[11px] text-muted-foreground/60 font-medium">This pattern is currently being populated by the arena masters.</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-[10px] font-bold uppercase tracking-widest h-8 px-4 rounded-full border-muted-foreground/20">
-                        Stay Alert
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </ScrollArea>
-
-            <div className="p-8 bg-muted/20 border-t border-border/50 backdrop-blur-md">
-              <Button className="w-full h-12 shadow-2xl shadow-primary/20 rounded-2xl font-black uppercase tracking-widest italic flex items-center justify-center gap-3" size="lg">
-                <Trophy className="w-4 h-4" />
-                Initialize Training
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6">
-            <div className="p-4 bg-destructive/10 rounded-full border border-destructive/20">
-              <AlertCircle className="w-12 h-12 text-destructive" />
-            </div>
-            <div className="space-y-2">
-              <p className="font-black text-2xl tracking-tighter uppercase italic">Offline Link</p>
-              <p className="text-sm text-muted-foreground font-medium leading-relaxed">The connection to this node was severed. Attempting to reconnect...</p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="font-bold uppercase tracking-widest h-12 px-8 rounded-2xl border-2"
-              onClick={() => setActiveNodeId(null)}
+    <Sheet open={!!nodeId} onOpenChange={(open) => !open && onClose()}>
+      <AnimatePresence>
+        {nodeId && (
+          <SheetContent
+            side="right"
+            forceMount
+            className="p-0 border-none bg-transparent shadow-none sm:max-w-none transition-none overflow-visible"
+            style={{ width: isMobile ? "100%" : `${width}px` }}
+          >
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="flex flex-col h-full bg-background border-l-2 border-primary/10 relative"
             >
-              Back to Roadmap
-            </Button>
-          </div>
+              {/* Tactical Resize Handle - Styled to match Shadcn Resizable */}
+              <div
+                onMouseDown={startResizing}
+                className="absolute -left-1 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-primary/20 transition-all group z-50 hidden sm:flex items-center justify-center"
+              >
+                <div className="z-10 flex h-7 w-4 items-center justify-center rounded-md border bg-muted group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                  <GripVertical className="h-4 w-4" />
+                </div>
+              </div>
+              <QueryGuard
+                loading={isLoading}
+                error={error}
+                data={detail}
+                skeleton={<RoadmapSidebarSkeleton />}
+              >
+                {(cat) => (
+                  <>
+                    <SheetHeader className="px-4 md:px-8 pt-8 pb-6 ">
+                      <div className="flex flex-col gap-4 text-start">
+                        <div className="flex items-center justify-between">
+                          <Badge>
+                            Parent: {cat.parent?.name || "Main Topic"}
+                          </Badge>
+                        </div>
+                        <SheetTitle className="text-4xl font-black tracking-tighter text-foreground">
+                          {cat.name}
+                        </SheetTitle>
+                        {cat.description && (
+                          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl text-start">
+                            {cat.description}
+                          </p>
+                        )}
+                      </div>
+                    </SheetHeader>
+
+                    <div
+                      className={cn(
+                        "flex-1 overflow-y-auto mt-2",
+                        cat.problems.length === 0 ? "px-4" : "",
+                      )}
+                    >
+                      <QueryGuard
+                        data={cat.problems}
+                        loading={false} // Already handled by parent
+                        error={null} // Already handled by parent
+                        emptyTitle="No Problems Found"
+                        emptyMessage="This node doesn't have any problems mapped to it yet."
+                        emptyIcon={Code2}
+                      >
+                        <Table>
+                          <TableHeader className="bg-muted/40">
+                            <TableRow className="hover:bg-transparent border-none">
+                              <TableHead className="w-[30px] pl-4 font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                                ID
+                              </TableHead>
+                              <TableHead className="font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                                Title
+                              </TableHead>
+                              <TableHead className="w-[120px] font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                                Difficulty
+                              </TableHead>
+                              <TableHead className="w-[100px] text-right pr-6 font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                                Action
+                              </TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {cat.problems.map((prob) => {
+                              const isSolved = solvedIds.has(prob.problem_id);
+                              return (
+                                <TableRow
+                                  key={prob.problem_id}
+                                  className={cn(
+                                    "group border-b border-border transition-colors",
+                                    isSolved
+                                      ? "bg-primary/20 hover:bg-primary/15"
+                                      : "hover:bg-primary/5",
+                                  )}
+                                >
+                                  <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
+                                    {prob.problem_id.padStart(2, "0")}
+                                  </TableCell>
+                                  <TableCell className="px-0 md:px-4 py-3 align-middle min-w-0">
+                                    <div className="flex flex-col min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <div className="text-sm truncate font-bold text-foreground group-hover:text-primary transition-colors">
+                                          <Link
+                                            href={`/problems/${prob.problem_slug}?from=roadmap`}
+                                          >
+                                            <Button
+                                              className="p-0 h-auto "
+                                              variant="link"
+                                            >
+                                              {prob.title}
+                                            </Button>
+                                          </Link>
+                                        </div>
+                                      </div>
+                                      {/* <span className="mt-0.5 truncate text-[10px] uppercase font-bold tracking-tight text-muted-foreground/60">
+                                  {prob.problem_slug}
+                                </span> */}
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="px-4 py-3 align-middle">
+                                    <span
+                                      className={cn(
+                                        "inline-flex items-center rounded-md border px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest",
+                                        difficultyBg[prob.difficulty],
+                                        difficultyColor[prob.difficulty],
+                                        "border-transparent",
+                                      )}
+                                    >
+                                      {prob.difficulty}
+                                    </span>
+                                  </TableCell>
+                                  <TableCell className="pr-6 py-4 text-right">
+                                    <Link
+                                      href={`/problems/${prob.problem_slug}?from=roadmap`}
+                                    >
+                                      <Button
+                                        size="sm"
+                                        variant={
+                                          isSolved ? "secondary" : "default"
+                                        }
+                                      >
+                                        {isSolved ? (
+                                          <div className="flex items-center gap-2 text-difficulty-easy">
+                                            <CheckCircle2 className="size-4 shrink-0" />
+                                            <span className="hidden sm:block">
+                                              Solved
+                                            </span>
+                                          </div>
+                                        ) : (
+                                          "Solve"
+                                        )}
+                                      </Button>
+                                    </Link>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </QueryGuard>
+                    </div>
+                  </>
+                )}
+              </QueryGuard>
+            </motion.div>
+          </SheetContent>
         )}
-      </SheetContent>
+      </AnimatePresence>
     </Sheet>
   );
 };
-
-export default RoadmapSidebar;

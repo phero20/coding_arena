@@ -13,6 +13,7 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   search(query: string, limit: number): Promise<User[]>;
+  findAll(): Promise<User[]>;
   create(user: NewUser): Promise<User>;
   update(clerkId: string, user: Partial<NewUser>): Promise<User | null>;
   deleteByClerkId(clerkId: string): Promise<boolean>;
@@ -76,6 +77,10 @@ export class UserRepository implements IUserRepository {
         ),
       )
       .limit(limit);
+  }
+
+  async findAll(): Promise<User[]> {
+    return await db.select().from(schema.users);
   }
 
   async create(user: NewUser): Promise<User> {

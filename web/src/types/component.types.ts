@@ -1,7 +1,12 @@
 import * as React from "react";
 import type { Problem, ProblemTest } from "@/types/api";
 import type { ArenaPlayer, ArenaPlayerResult, ArenaRoom } from "@/types/arena";
-import type { ExecutionVerdict, ExecutionTestResult, RunSubmissionResponse, Submission } from "@/types/submission";
+import type {
+  ExecutionVerdict,
+  ExecutionTestResult,
+  RunSubmissionResponse,
+  Submission,
+} from "@/types/submission";
 
 // Container.tsx
 export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -59,7 +64,7 @@ export interface MatchResultsProps {
 // MatchTimer.tsx
 export type SlidingNumberProps = {
   value: number;
-}
+};
 
 export interface MatchTimerProps {
   endTime: number | string;
@@ -138,6 +143,7 @@ export interface BaseWorkspaceProps {
   isSubmitting?: boolean;
   hasSubmitted?: boolean;
   confirmSubmit?: boolean;
+  isArena?: boolean;
 }
 
 // ConsolePanel.tsx
@@ -160,7 +166,6 @@ export interface DescriptionPanelProps {
   problem: Problem;
   mode?: "practice" | "arena";
   room?: ArenaRoom | null;
-  currentUserId?: string | null;
   roomId?: string;
 }
 
@@ -202,7 +207,12 @@ export interface OpponentsPanelProps {
 
 // SolutionViewer.tsx
 export interface SolutionViewerProps {
-  content?: string;
+  problemId: string;
+  problemTitle: string;
+  problemSlug: string;
+  officialSolution?: string;
+  onAddSolution?: () => void;
+  defaultTab?: string;
 }
 
 // SubmissionHistory.tsx
@@ -237,4 +247,5 @@ export interface WorkspaceHeaderProps {
   hideSubmit?: boolean;
   onToggleScratchpad?: () => void;
   isScratchpadOpen?: boolean;
+  isArena?: boolean;
 }

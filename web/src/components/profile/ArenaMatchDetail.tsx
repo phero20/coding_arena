@@ -10,7 +10,14 @@ import {
   ShieldCheck,
   ChevronRight,
   Eye,
+  CheckCircle2,
+  X,
+  AlertCircle,
+  Users,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
+import { RankIndicator } from "../stats/leaderboard/RankIndicator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -36,6 +43,7 @@ import { VerdictBadge } from "@/components/ui/verdict-badge";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Link from "next/link";
+import NotFound from "@/app/not-found";
 
 interface ArenaMatchDetailProps {
   match: ArenaMatch;
@@ -151,18 +159,21 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                       <TableRow
                         className={cn(
                           "group cursor-pointer transition-colors border-b border-border/5",
+                          index === 0 && "bg-rank-1-row",
+                          index === 1 && "bg-rank-2-row",
+                          index === 2 && "bg-rank-3-row",
                           isExpanded && "bg-muted/50 border-primary/20",
                         )}
                         onClick={() => toggleExpand(player.userId)}
                       >
                         <TableCell className="pl-6 py-4">
-                          <div
-                            className={cn(
-                              "h-7 w-7 rounded-md flex items-center justify-center text-[10px] font-black ring-1 ring-inset",
-                            )}
-                          >
-                            {player.submissionOrder || "--"}
-                          </div>
+                          {player.submissionOrder ? (
+                            <RankIndicator rank={player.submissionOrder} />
+                          ) : (
+                            <div className="flex items-center justify-center h-7 w-7 text-xs text-muted-foreground/30">
+                              --
+                            </div>
+                          )}
                         </TableCell>
                         <TableCell className="py-4">
                           <div className="flex items-center gap-3 min-w-[160px]">
@@ -263,10 +274,10 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                                   </SyntaxHighlighter>
                                 </div>
                               ) : (
-                                <div className="flex flex-col items-center justify-center py-10 opacity-30 text-center">
-                                  <ShieldCheck className="size-8 mb-2" />
-                                  <p className="text-[10px] font-black uppercase italic">
-                                    Code not available.
+                                <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
+                                  <Code2 className="size-6" />
+                                  <p className="text-sm font-black ">
+                                    User has not submitted any solution.
                                   </p>
                                 </div>
                               )}

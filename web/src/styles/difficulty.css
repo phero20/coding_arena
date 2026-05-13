@@ -1,6 +1,6 @@
 :root {
   /* Difficulty Colors (Solid) */
-  --difficulty-easy: #10b981; /* Emerald 500 */
+  --difficulty-easy: #01aa72; /* Emerald 500 */
   --difficulty-medium: #f59e0b; /* Amber 500 */
   --difficulty-hard: #f43f5e; /* Rose 500 */
 
@@ -38,19 +38,29 @@
   --status-pending-bg: rgba(107, 114, 128, 0.1);
 
   /* Rank Colors (Podium) */
-  --rank-1: #f59e0b; /* Amber 500 - Gold */
+  --rank-1: #eab308; /* Yellow 500 - Gold */
   --rank-2: #94a3b8; /* Slate 400 - Silver */
-  --rank-3: #ea580c; /* Orange 600 - Bronze */
+  --rank-3: #c2410c; /* Orange 700 - Bronze */
 
-  /* Rank Backgrounds (10% Opacity) */
-  --rank-1-bg: rgba(245, 158, 11, 0.1);
+  /* Rank Badge Backgrounds (10% Opacity) */
+  --rank-1-bg: rgba(234, 179, 8, 0.1);
   --rank-2-bg: rgba(148, 163, 184, 0.1);
-  --rank-3-bg: rgba(234, 88, 12, 0.1);
+  --rank-3-bg: rgba(194, 65, 12, 0.1);
+
+  /* Rank Row Backgrounds (8% Opacity) */
+  --rank-1-row-bg: rgba(234, 179, 8, 0.08);
+  --rank-2-row-bg: rgba(148, 163, 184, 0.08);
+  --rank-3-row-bg: rgba(194, 65, 12, 0.08);
+
+  /* Rank Row Hover (9% Opacity) */
+  --rank-1-row-hover: rgba(234, 179, 8, 0.10);
+  --rank-2-row-hover: rgba(148, 163, 184, 0.10);
+  --rank-3-row-hover: rgba(194, 65, 12, 0.10);
 
   /* Rank Borders (20% Opacity) */
-  --rank-1-border: rgba(245, 158, 11, 0.2);
+  --rank-1-border: rgba(234, 179, 8, 0.2);
   --rank-2-border: rgba(148, 163, 184, 0.2);
-  --rank-3-border: rgba(234, 88, 12, 0.2);
+  --rank-3-border: rgba(194, 65, 12, 0.2);
 }
 
 /* Utility Classes for Difficulties */
@@ -149,3 +159,25 @@
 .bg-status-pending {
   background-color: var(--status-pending-bg) !important;
 }
+
+/* Rank Utility Classes */
+.text-rank-1 { color: var(--rank-1) !important; }
+.text-rank-2 { color: var(--rank-2) !important; }
+.text-rank-3 { color: var(--rank-3) !important; }
+
+.bg-rank-1-badge { background-color: var(--rank-1-bg) !important; }
+.bg-rank-2-badge { background-color: var(--rank-2-bg) !important; }
+.bg-rank-3-badge { background-color: var(--rank-3-bg) !important; }
+
+.border-rank-1 { border-color: var(--rank-1-border) !important; }
+.border-rank-2 { border-color: var(--rank-2-border) !important; }
+.border-rank-3 { border-color: var(--rank-3-border) !important; }
+
+.bg-rank-1-row { background-color: var(--rank-1-row-bg) !important; }
+.bg-rank-1-row:hover { background-color: var(--rank-1-row-hover) !important; }
+
+.bg-rank-2-row { background-color: var(--rank-2-row-bg) !important; }
+.bg-rank-2-row:hover { background-color: var(--rank-2-row-hover) !important; }
+
+.bg-rank-3-row { background-color: var(--rank-3-row-bg) !important; }
+.bg-rank-3-row:hover { background-color: var(--rank-3-row-hover) !important; }

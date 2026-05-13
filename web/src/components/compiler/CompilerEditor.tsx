@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DynamicEditor as Editor } from "@/components/workspace-shared/DynamicEditor";
-import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector";
+import { DynamicEditor as Editor, LanguageSelector } from "@/components/workspace-shared";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import { useTheme } from "next-themes";
 import { useEditorStore } from "@/store/use-editor-store";

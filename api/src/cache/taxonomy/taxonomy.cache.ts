@@ -1,7 +1,16 @@
 import { createLogger } from "../../libs/utils/logger";
 import { redis } from "../../libs/core/redis";
-import type { ITaxonomyService, TaxonomyService } from "../../services/taxonomy/taxonomy.service";
-import type { CategoryTreeNode, CategoryDetail, CreateCategoryPayload, MapProblemPayload, BatchMapProblemPayload } from "../../types/taxonomy/taxonomy.types";
+import type {
+  ITaxonomyService,
+  TaxonomyService,
+} from "../../services/taxonomy/taxonomy.service";
+import type {
+  CategoryTreeNode,
+  CategoryDetail,
+  CreateCategoryPayload,
+  MapProblemPayload,
+  BatchMapProblemPayload,
+} from "../../types/taxonomy/taxonomy.types";
 import { type ICradle } from "../../libs/awilix-container";
 
 const logger = createLogger("taxonomy-cache");
@@ -94,13 +103,51 @@ export class TaxonomyCache implements ITaxonomyService {
     await this.invalidateTaxonomyCaches();
   }
 
-  async batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void> {
+  async batchMapProblemsToCategory(
+    payload: BatchMapProblemPayload,
+  ): Promise<void> {
     await this.rawTaxonomyService.batchMapProblemsToCategory(payload);
     await this.invalidateTaxonomyCaches();
   }
 
-  async unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void> {
-    await this.rawTaxonomyService.unmapProblemFromCategory(categoryId, problemId);
+  async getUserRoadmapProgress(userId: string): Promise<{ counts: Record<string, number>; solvedIds: string[] }> {
+    const key = `user:roadmap:progress:${userId}`;
+
+    try {
+      const cached = await redis.get(key);
+      if (cached) return JSON.parse(cached);
+    } catch (err) {
+      logger.error({ userId, err }, "Redis get progress error");
+    }
+
+    const progress = await this.rawTaxonomyService.getUserRoadmapProgress(userId);
+
+    try {
+      await redis.set(key, JSON.stringify(progress), "EX", 3600 * 2); // 2 hour cache for user progress
+    } catch (err) {
+      logger.error({ userId, err }, "Redis set progress error");
+    }
+
+    return progress;
+  }
+
+  async invalidateUserProgress(userId: string): Promise<void> {
+    const key = `user:roadmap:progress:${userId}`;
+    try {
+      await redis.del(key);
+    } catch (err) {
+      logger.error({ userId, err }, "Redis delete progress error");
+    }
+  }
+
+  async unmapProblemFromCategory(
+    categoryId: string,
+    problemId: string,
+  ): Promise<void> {
+    await this.rawTaxonomyService.unmapProblemFromCategory(
+      categoryId,
+      problemId,
+    );
     await this.invalidateTaxonomyCaches();
   }
 

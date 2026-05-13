@@ -8,9 +8,12 @@ import { type UserStats } from "@/types/stats";
 import { SocialTab } from "./SocialTab";
 import { ProfileSidebar } from "./ProfileSidebar";
 import { ArenaHistoryTab } from "./ArenaHistoryTab";
+import { SolutionsTab } from "./SolutionsTab";
 import { useProfileStore } from "@/store/use-profile-store";
 import { RecentActivities } from "../stats/RecentActivities";
-import { Code2 } from "lucide-react";
+import { useActivityPagination } from "@/hooks/stats/use-activity-pagination";
+import { Code2, BookOpen } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface ProfileLayoutProps {
   username: string;
@@ -47,6 +50,7 @@ export function ProfileLayout({
   const tabParam = searchParams.get("tab");
 
   const { user } = useUser();
+  const { totalCount } = useActivityPagination(username, 10);
   const { activeTab, initTab, syncTab } = useProfileStore();
 
   // Smart state management: Initial load and username changes
@@ -101,18 +105,34 @@ export function ProfileLayout({
           <ArenaHistoryTab userId={clerkUserId} />
         </TabsContent>
 
+        <TabsContent value="solutions" className="mt-0 focus-visible:ring-0">
+          <SolutionsTab userId={clerkUserId} />
+        </TabsContent>
+
         <TabsContent value="submissions" className="mt-0 focus-visible:ring-0">
           <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-black tracking-tight flex items-center gap-2">
-                <Code2 className="h-5 w-5 text-primary" />
-                RECENT SUBMISSIONS
-              </h2>
-              <p className="text-xs text-muted-foreground font-medium mt-1 uppercase tracking-widest">
-                Full history of code submissions and verdicts
-              </p>
+            <div className="flex items-center justify-between px-1">
+              <div>
+                <h2 className="text-xl font-black tracking-tight flex items-center gap-2">
+                  <Code2 className="h-5 w-5 text-primary" />
+                  RECENT SUBMISSIONS
+                </h2>
+                <p className="text-xs text-muted-foreground font-medium mt-1 uppercase tracking-widest">
+                  Full history of code submissions and verdicts
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="p-2">
+                  {totalCount} TOTAL SUBMISSIONS
+                </Badge>
+              </div>
             </div>
-            <RecentActivities username={username} hideHeader className="p-0 border-0 bg-transparent" />
+            
+            <RecentActivities
+              username={username}
+              hideHeader
+              className="p-0 border-0 bg-transparent"
+            />
           </div>
         </TabsContent>
       </main>

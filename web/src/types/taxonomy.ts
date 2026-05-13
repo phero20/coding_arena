@@ -7,7 +7,8 @@ export interface Category {
   parentId: string | null;
   description: string | null;
   order: number;
-  problemCount?: number;
+  problemCount: number;
+  solvedCount: number;
   createdAt: string;
 }
 

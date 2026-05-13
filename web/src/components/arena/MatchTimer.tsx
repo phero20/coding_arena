@@ -84,7 +84,7 @@ type SlidingNumberProps = {
   padStart?: boolean;
 };
 
-function SlidingNumber({ value, padStart = false }: SlidingNumberProps) {
+export function SlidingNumber({ value, padStart = false }: SlidingNumberProps) {
   const absValue = Math.abs(value);
   // Ensure we consistently use 2 digits for times smaller than 100
   const stringValue = padStart ? String(absValue).padStart(2, "0") : String(absValue);

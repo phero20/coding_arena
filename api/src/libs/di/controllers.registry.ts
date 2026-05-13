@@ -25,6 +25,7 @@ import { UserController } from "../../controllers/user/user.controller";
 import { CompilerController } from "../../controllers/compiler/compiler.controller";
 import { ContestController } from "../../controllers/contest/contest.controller";
 import { TaxonomyController } from "../../controllers/taxonomy/taxonomy.controller";
+import { SolutionController } from "../../controllers/solutions/solution.controller";
 
 
 /**
@@ -57,4 +58,5 @@ export const controllersRegistry = {
   compilerController: asClass(CompilerController).singleton(),
   contestController: asClass(ContestController).singleton(),
   taxonomyController: asClass(TaxonomyController).singleton(),
+  solutionController: asClass(SolutionController).singleton(),
 };

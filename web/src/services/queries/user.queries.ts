@@ -1,4 +1,5 @@
 import { apiClient } from "@/lib/api-client";
+import type { BackendUser } from "@/types/api";
 
 /**
  * Perform a global search for users.
@@ -17,10 +18,10 @@ export async function searchUsers(query: string) {
 /**
  * Fetch the currently authenticated user from our backend database.
  */
-export async function getCurrentUser() {
-  const response = await apiClient.get(`/users/me`);
+export async function getCurrentUser(): Promise<BackendUser> {
+  const response = await apiClient.get(`/auth/me`);
   
-  if (!response.data.success) {
+  if (!response.data.success || !response.data.data) {
     throw new Error(response.data.error?.message || "Failed to fetch current user");
   }
 

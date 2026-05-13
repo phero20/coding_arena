@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
+import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
 import { ChevronLeft, Play, Send, RefreshCw, X, Pencil } from "lucide-react";
 import type { WorkspaceHeaderProps } from "@/types/component.types";
 import { Problem } from "@/types/api";
@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { NavbarActions } from "@/components/layout/NavbarActions";
 import { cn } from "@/lib/utils";
+import { PracticeStopwatch } from "./PracticeStopwatch";
+import { useWorkspaceStore } from "@/store/workspace/use-workspace-store";
 
 
 
@@ -43,12 +45,13 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
   hideSubmit,
   onToggleScratchpad,
   isScratchpadOpen,
+  isArena: isArenaProp,
 }) => {
   const { isLoaded } = useAuth();
   const isInteractionDisabled =
     !isLoaded || isLoading || isSubmitting || hasSubmitted;
 
-  // Debugging Blocked State removed as requested
+  const isArena = isArenaProp || !!onAbort;
 
   const renderActions = () => (
     <ButtonGroup orientation="horizontal" className="flex items-center">
@@ -59,7 +62,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         onClick={onToggleScratchpad}
         className={cn(
           "hidden md:inline-flex px-2.5 md:px-3 h-8 md:h-9",
-          isScratchpadOpen && "bg-primary/10 border-primary/30 text-primary"
+          isScratchpadOpen && "bg-primary/10 border-primary/30 text-primary",
         )}
         title="Toggle Scratchpad"
       >
@@ -81,12 +84,14 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         )}
         <span className="hidden md:inline">Run</span>
       </Button>
+      
       {!hideSubmit && renderSubmitButton()}
     </ButtonGroup>
   );
 
   const renderSubmitButton = () => {
     const submitBtn = (
+      
       <Button
         size="sm"
         type="button"
@@ -110,21 +115,21 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         <AlertDialogTrigger asChild>{submitBtn}</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-sm font-bold">
+            <AlertDialogTitle className="text-md text-primary font-bold">
               Submit Final Solution?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-xs text-muted-foreground">
+            <AlertDialogDescription className="text-sm text-muted-foreground">
               You have only 1 attempt. This will lock your current code and
               submit it for final evaluation. Are you sure you want to proceed?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="h-8 text-xs font-bold border-border/40">
+            <AlertDialogCancel className="h-8 text-xs font-bold border-border">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={onSubmit}
-              className="h-8 text-xs font-bold bg-primary text-primary-foreground hover:opacity-90"
+              className="h-8 text-xs font-bold"
             >
               Submit Now
             </AlertDialogAction>
@@ -133,8 +138,6 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
       </AlertDialog>
     );
   };
-
-  const isArena = !!onAbort;
 
   return (
     <header className="relative h-14 px-2 md:px-4 border-b border-border/40 bg-card/20 backdrop-blur-sm flex items-center justify-between shrink-0">
@@ -183,8 +186,9 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
       {/* Right: Mobile Buttons & Navbar Actions & Arena Actions */}
       <div className="z-10 flex-1 flex justify-end items-center gap-4">
         {!isArena ? (
-          <div className="hidden md:block">
-            <NavbarActions />
+          <div className="flex items-center gap-4">
+            <PracticeStopwatch />
+            <div className="hidden md:flex"><NavbarActions /></div>
           </div>
         ) : (
           <div className="hidden md:flex">

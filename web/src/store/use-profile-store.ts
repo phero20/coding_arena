@@ -58,7 +58,7 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
   },
 
   initTab: ({ tabParam, arenaSubTab, router, pathname, searchParams, username }) => {
-    const validTabs = ["stats", "profile", "social", "arena", "submissions", "settings", "appearance", "editor"];
+    const validTabs = ["stats", "profile", "social", "arena", "submissions", "solutions", "settings", "appearance", "editor"];
     
     // If username changed, we should reset
     if (username && get().lastUsername !== username) {

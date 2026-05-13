@@ -6,8 +6,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
-import { Scratchpad } from "@/components/workspace-shared/Scratchpad";
+import { WorkspaceHeader, Scratchpad } from "@/components/workspace-shared";
 import { CompilerEditor } from "./CompilerEditor";
 import { CompilerConsole } from "./CompilerConsole";
 import { useCompilerWorkspace } from "@/hooks/workspace/use-compiler-workspace";

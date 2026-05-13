@@ -5,22 +5,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { 
-  Code2, 
   Swords, 
+  LayoutGrid, 
+  Cpu, 
   Trophy, 
-  Terminal,
-  Activity,
-  Map
+  Mountain 
 } from "lucide-react";
 
 import { motion } from "framer-motion";
 
 export const navItems = [
   { name: "Arena", href: "/arena", icon: Swords },
-  { name: "Problems", href: "/problems", icon: Code2 },
-  { name: "Compilers", href: "/compilers", icon: Terminal },
+  { name: "Problems", href: "/problems", icon: LayoutGrid },
+  { name: "Compilers", href: "/compilers", icon: Cpu },
   { name: "Contests", href: "/contests", icon: Trophy },
-  { name: "Roadmap", href: "/roadmap", icon: Map },
+  { name: "Roadmap", href: "/roadmap", icon: Mountain },
 ];
 
 export const NavLinks = () => {

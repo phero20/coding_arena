@@ -26,7 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { DynamicHighlighter as SyntaxHighlighter } from "./DynamicHighlighter";
+import { DynamicHighlighter as SyntaxHighlighter } from "../editor/DynamicHighlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card } from "@/components/ui/card";
 

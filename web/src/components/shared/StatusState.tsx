@@ -42,7 +42,7 @@ export const ErrorDisplay = ({
   >
     <Card className="max-w-md w-full">
       <CardHeader className="flex flex-col items-center gap-4 text-center pb-2">
-        <div className="size-12 rounded-full bg-destructive/10 flex items-center justify-center border border-destructive/20">
+        <div className="size-12 rounded-full bg-destructive/20 flex items-center justify-center border border-destructive/20">
           <AlertCircle className="size-6 text-destructive" />
         </div>
         <CardTitle className="text-xl font-black uppercase tracking-tight  text-destructive">
@@ -151,7 +151,7 @@ export const ConnectionBadge = ({
     <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4 duration-500">
       <Badge
         variant="secondary"
-        className="px-4 py-1.5 rounded-full border border-secondary/20 shadow-2xl backdrop-blur-md"
+        className="px-4 py-1.5"
       >
         <span className="relative flex h-2 w-2 mr-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>

@@ -10,6 +10,7 @@ export interface UserStats {
   currentStreak: number;
   bestStreak: number;
   languageCounts?: Record<string, number>; // e.g. { java: 12, python: 5 }
+  rank?: number | null;
 }
 
 export interface UserActivityLog {
@@ -60,7 +61,18 @@ export interface UserProfileData {
   leetcode?: LeetCodeStats | null;
 }
 
-export interface LeaderboardEntry extends UserStats {
-  // If we ever join with username in the repo, we'd add it here
-  // For now, it matches UserStats
+export interface LeaderboardEntry {
+  userId: string;
+  username: string;
+  fullName: string | null;
+  avatarUrl: string | null;
+  points: number;
+  rank: number;
+  totalSolved: number;
+}
+
+export interface LeaderboardResponse {
+  entries: LeaderboardEntry[];
+  total: number;
+  viewerRank?: LeaderboardEntry | null;
 }

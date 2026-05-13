@@ -36,7 +36,7 @@ const TaxonomyNode = ({ data, selected }: NodeProps<TaxonomyNodeData>) => {
         position={isLR ? Position.Left : Position.Top}
         className={cn(
           "!bg-primary/20 !border-none !rounded-none",
-          isLR ? "!w-2 !h-8 !py-5" : "!w-8 !h-2 !px-5"
+          isLR ? "!w-2 !h-8 !py-5" : "!w-8 !h-2 !px-5",
         )}
       />
 
@@ -48,42 +48,74 @@ const TaxonomyNode = ({ data, selected }: NodeProps<TaxonomyNodeData>) => {
       >
         <Card
           className={cn(
-            "min-w-[480px] transition-all duration-500 border-2 border-primary/50 relative overflow-hidden",
+            "min-w-[500px] transition-all duration-500 relative overflow-hidden border-2 border-border",
             data.isActive
               ? "border-primary bg-card"
               : "hover:border-primary bg-card shadow-2xl",
           )}
         >
-          <CardContent className="p-10 relative z-10">
-            <div className="flex items-center justify-between gap-6">
-              <h3
-                className={cn(
-                  "font-bold  transition-colors",
-                  data.isRoot ? "text-[40px]" : "text-[32px]",
-                  data.isActive
-                    ? "text-foreground"
-                    : "text-foreground/80 group-hover:text-primary/80",
-                )}
-              >
-                {data.name}
-              </h3>
-
-              {!isLeaf && (
-                <div
-                  className={cn(
-                    "p-2 rounded-full transition-all duration-500 shrink-0",
-                    data.isExpanded
-                      ? "bg-primary/20 text-primary group-hover:bg-primary/10 group-hover:text-primary"
-                      : "bg-muted text-foreground group-hover:text-primary",
-                  )}
-                >
-                  {data.isExpanded ? (
-                    <ChevronDown className="w-8 h-8" />
-                  ) : (
-                    <ChevronRight className="w-8 h-8" />
-                  )}
+          <CardContent className="p-8 relative z-10">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center justify-between gap-8">
+                <div className="flex items-center gap-4 min-w-0">
+                  <h3
+                    className={cn(
+                      "font-bold  transition-colors truncate",
+                      data.isRoot ? "text-[40px]" : "text-[32px]",
+                      data.isActive
+                        ? "text-foreground"
+                        : "text-foreground/80 group-hover:text-primary/80",
+                    )}
+                  >
+                    {data.name}
+                  </h3>
+                  {(data.problemCount ?? 0) > 0 &&
+                    (data.solvedCount ?? 0) >= (data.problemCount ?? 0) && (
+                      <CheckCircle2 className="size-8 text-primary animate-in zoom-in duration-500" />
+                    )}
                 </div>
-              )}
+
+                {!isLeaf && (
+                  <div
+                    className={cn(
+                      "p-2 rounded-full transition-all duration-500 shrink-0",
+                      data.isExpanded
+                        ? "bg-primary/20 text-primary group-hover:bg-primary/10 group-hover:text-primary"
+                        : "bg-muted text-foreground group-hover:text-primary",
+                    )}
+                  >
+                    {data.isExpanded ? (
+                      <ChevronDown className="w-8 h-8" />
+                    ) : (
+                      <ChevronRight className="w-8 h-8" />
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Tactical Progress Section */}
+              <div className="flex items-center gap-6">
+                <div className="flex-1 h-6 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className={cn(
+                      "h-full bg-primary transition-all duration-1000 ease-in-out",
+                      (data.problemCount ?? 0) > 0 && (data.solvedCount ?? 0) >= (data.problemCount ?? 0) &&
+                        "bg-primary",
+                    )}
+                    style={{
+                      width: `${Math.min(100, ((data.solvedCount || 0) / (data.problemCount || 1)) * 100)}%`,
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2 text-2xl font-black tracking-tighter text-muted-foreground">
+                  <span className="text-foreground">
+                    {data.solvedCount || 0}
+                  </span>
+                  <span className="opacity-90">/</span>
+                  <span>{data.problemCount || 0}</span>
+                </div>
+              </div>
+
             </div>
           </CardContent>
         </Card>
@@ -95,7 +127,7 @@ const TaxonomyNode = ({ data, selected }: NodeProps<TaxonomyNodeData>) => {
         position={isLR ? Position.Right : Position.Bottom}
         className={cn(
           "!bg-primary/20 !border-none !rounded-none",
-          isLR ? "!w-2 !h-8 !py-5" : "!w-8 !h-2 !px-5"
+          isLR ? "!w-2 !h-8 !py-5" : "!w-8 !h-2 !px-5",
         )}
       />
     </div>

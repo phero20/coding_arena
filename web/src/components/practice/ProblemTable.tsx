@@ -39,6 +39,25 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
           data={problems}
           skeleton={
             <Table className="table-fixed">
+              <TableHeader className="bg-muted/40">
+                <TableRow className="border-b border-border/40 hover:bg-transparent">
+                  <TableHead className="pl-4 pr-0 md:pr-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-12">
+                    ID
+                  </TableHead>
+                  <TableHead className="px-4 md:px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
+                    Title
+                  </TableHead>
+                  <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-20 sm:w-32">
+                    Difficulty
+                  </TableHead>
+                  <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-40 hidden md:table-cell">
+                    Topics
+                  </TableHead>
+                  <TableHead className="px-4 py-3 h-12 text-right font-bold text-xs uppercase tracking-widest w-24 sm:w-28">
+                    Action
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
               <ProblemRowSkeleton />
             </Table>
           }

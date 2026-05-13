@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ReactFlowProvider } from "reactflow";
-import { useTaxonomyTreeQuery } from "@/hooks/queries/use-taxonomy.queries";
+import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
 import RoadmapCanvas from "@/components/roadmap/RoadmapCanvas";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { RoadmapSkeleton } from "@/components/skeletons/RoadmapSkeleton";
@@ -21,14 +21,14 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
 const RoadmapPage = () => {
-  const { data: tree, isLoading, error } = useTaxonomyTreeQuery();
+  const { data: tree, isLoading, error } = useRoadmapData();
 
   return (
     <div className="flex flex-col h-screen bg-background overflow-hidden relative">
 
 
       {/* Main Roadmap Area */}
-      <main className="flex-1 relative">
+      <main className="flex-1 relative min-h-0 w-full overflow-hidden">
         <QueryGuard
           loading={isLoading}
           error={error}
@@ -40,7 +40,7 @@ const RoadmapPage = () => {
         >
           {(data) => (
             <ReactFlowProvider>
-              <div className="absolute inset-0">
+              <div className="w-full h-full pt-12 ">
                 <RoadmapCanvas data={data || []} />
               </div>
             </ReactFlowProvider>

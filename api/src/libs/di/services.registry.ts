@@ -31,6 +31,7 @@ import { ClistService } from "../../services/contest/clist.service";
 import { ContestService } from "../../services/contest/contest.service";
 import { LeetCodeService } from "../../services/stats/leetcode.service";
 import { TaxonomyService } from "../../services/taxonomy/taxonomy.service";
+import { SolutionService } from "../../services/solutions/solution.service";
 
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
@@ -41,6 +42,9 @@ import { ArenaMatchCache } from "../../cache/arena/arena-match.cache";
 import { ContestCache } from "../../cache/contest/contest.cache";
 import { LeetCodeCache } from "../../cache/user/leetcode.cache";
 import { TaxonomyCache } from "../../cache/taxonomy/taxonomy.cache";
+import { LeaderboardCache } from "../../cache/stats/leaderboard.cache";
+import { SubmissionCache } from "../../cache/submissions/submission.cache";
+import { SolutionCache } from "../../cache/solutions/solution.cache";
 
 /**
  * Service layer registrations.
@@ -49,7 +53,6 @@ import { TaxonomyCache } from "../../cache/taxonomy/taxonomy.cache";
 export const servicesRegistry = {
   clockService: asClass(SystemClockService).singleton(),
   authService: asClass(AuthService).singleton(),
-  submissionService: asClass(SubmissionService).singleton(),
   groqLlmService: asClass(GroqLlmService).singleton(),
   geminiLlmService: asClass(GeminiLlmService).singleton(),
 
@@ -64,6 +67,8 @@ export const servicesRegistry = {
   rawArenaMatchService: asClass(ArenaMatchService).singleton(),
   rawLeetCodeService: asClass(LeetCodeService).singleton(),
   rawTaxonomyService: asClass(TaxonomyService).singleton(),
+  rawSubmissionService: asClass(SubmissionService).singleton(),
+  rawSolutionService: asClass(SolutionService).singleton(),
 
   arenaService: asClass(ArenaService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
@@ -87,6 +92,9 @@ export const servicesRegistry = {
   contestCache: asClass(ContestCache).singleton(),
   leetcodeCache: asClass(LeetCodeCache).singleton(),
   taxonomyCache: asClass(TaxonomyCache).singleton(),
+  leaderboardCache: asClass(LeaderboardCache).singleton(),
+  submissionCache: asClass(SubmissionCache).singleton(),
+  solutionCache: asClass(SolutionCache).singleton(),
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -116,5 +124,11 @@ export const servicesRegistry = {
   
   taxonomyService: asFunction(
     ({ taxonomyCache }: ICradle) => taxonomyCache,
+  ).singleton(),
+  submissionService: asFunction(
+    ({ submissionCache }: ICradle) => submissionCache,
+  ).singleton(),
+  solutionService: asFunction(
+    ({ solutionCache }: ICradle) => solutionCache,
   ).singleton(),
 };

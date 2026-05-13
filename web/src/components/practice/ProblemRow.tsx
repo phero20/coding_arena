@@ -50,9 +50,9 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
               </Link>
             )}
           </div>
-          <span className="mt-0.5 truncate text-[10px] uppercase font-bold tracking-tight text-muted-foreground/60 hidden sm:block">
+          {/* <span className="mt-0.5 truncate text-[10px] uppercase font-bold tracking-tight text-muted-foreground/60 hidden sm:block">
             {problem.problem_slug}
-          </span>
+          </span> */}
         </div>
       </TableCell>
       <TableCell className="px-4 py-3 align-middle">

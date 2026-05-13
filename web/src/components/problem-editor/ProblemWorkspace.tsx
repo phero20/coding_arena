@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
-import { DescriptionPanel } from "@/components/workspace-shared/DescriptionPanel";
-import { EditorPanel } from "@/components/workspace-shared/EditorPanel";
+import { DescriptionPanel, EditorPanel } from "@/components/workspace-shared";
 import { Problem } from "@/types/api";
 import { BaseWorkspace } from "@/components/shared/BaseWorkspace";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { usePracticeWorkspace } from "@/hooks/workspace/use-practice-workspace";
 
 import type { ProblemWorkspaceProps } from "@/types/component.types";
@@ -24,9 +23,18 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
     submitCode,
   } = usePracticeWorkspace({ problem });
 
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+
   const handleExit = () => {
-    router.push("/problems");
+    if (from === "roadmap") {
+      router.push("/roadmap");
+    } else {
+      router.push("/problems");
+    }
   };
+
+  const exitText = from === "roadmap" ? "Roadmap" : "Problems";
 
   return (
     <BaseWorkspace
@@ -34,7 +42,7 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
       onRun={runCode}
       onSubmit={submitCode}
       onExit={handleExit}
-      exitText="Problems"
+      exitText={exitText}
       isLoading={isLoading && evaluation.type === "run"}
       isSubmitting={isLoading && evaluation.type === "submit"}
       descriptionSlot={<DescriptionPanel mode="practice" problem={problem} />}

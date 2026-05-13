@@ -6,7 +6,6 @@ import { SignInButton, useUser, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserSearch } from "./UserSearch";
 import {
   Popover,
   PopoverContent,
@@ -19,9 +18,12 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { User, LogOut, LayoutDashboard, ChevronRight } from "lucide-react";
+import { LogOut, ChevronRight, User, BarChart2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRoadmapStore } from "@/store/use-roadmap-store";
 import { cn } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 const Show = ({
   when,
@@ -40,7 +42,20 @@ export const NavbarActions = () => {
   const { user } = useUser();
   const { signOut } = useClerk();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { resetRoadmap } = useRoadmapStore();
   const [open, setOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    // 1. Purge all cached API data
+    queryClient.clear();
+    // 2. Reset UI state
+    resetRoadmap();
+    // 3. Perform Sign Out
+    await signOut();
+    // 4. Redirect
+    router.push("/");
+  };
 
   const username = user?.username || user?.id;
   const handleAction = (pathOrAction: string | (() => void)) => {
@@ -113,33 +128,47 @@ export const NavbarActions = () => {
                   <CommandGroup>
                     <CommandItem
                       onSelect={() => handleAction(`/u/${username}`)}
-                      className="flex items-center gap-3 p-1.5 cursor-pointer rounded-lg group"
+                      className="flex items-center gap-3 p-1.5 cursor-pointer  group"
                     >
-                      <div className="p-1.5 rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <User size={8} className="text-primary" />
-                      </div>
+                      <Badge variant={"outline"} className="p-1.5 group-hover:bg-card transition-colors">
+                        <User size={12} className="text-primary" />
+                      </Badge>
                       <span className="flex-1 font-semibold text-sm">
                         Profile
                       </span>
                       <ChevronRight
-                        size={8}
+                        size={12}
+                        className="text-muted-foreground/80 group-hover:text-primary/50 transition-colors"
+                      />
+                    </CommandItem>
+
+                    <CommandItem
+                      onSelect={() => handleAction("/leaderboard")}
+                      className="flex items-center gap-3 p-1.5 cursor-pointer  group mt-1"
+                    >
+                       <Badge variant={"outline"} className="p-1.5 group-hover:bg-card transition-colors">
+                        <BarChart2 size={12} className="text-primary" />
+                      </Badge>
+                      <span className="flex-1 font-semibold text-sm">
+                        Leaderboard
+                      </span>
+                      <ChevronRight
+                        size={12}
                         className="text-muted-foreground/80 group-hover:text-primary/50 transition-colors"
                       />
                     </CommandItem>
                   </CommandGroup>
 
-                  <CommandSeparator className="my-1 bg-border/40" />
+                  <CommandSeparator className="my-1 bg-border/60" />
 
                   <CommandGroup>
                     <CommandItem
-                      onSelect={() =>
-                        handleAction(() => signOut(() => router.push("/")))
-                      }
-                      className="flex items-center gap-3 p-1.5 cursor-pointer rounded-lg group text-destructive hover:bg-destructive"
+                      onSelect={() => handleAction(handleSignOut)}
+                      className="flex items-center gap-3 p-1.5 cursor-pointer group text-destructive"
                     >
-                      <div className="p-1.5 rounded-md bg-destructive/10 group-hover:bg-destructive/20 transition-colors">
+                     <Badge variant={"outline"} className="p-1.5 group-hover:bg-card transition-colors">
                         <LogOut size={8} className="text-destructive" />
-                      </div>
+                      </Badge>
                       <span className="flex-1 font-semibold text-sm">
                         Sign out
                       </span>

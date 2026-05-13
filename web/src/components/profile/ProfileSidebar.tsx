@@ -20,6 +20,8 @@ import {
   Edit,
   Code2,
   Trophy,
+  BookOpen,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type UserStats } from "@/types/stats";
@@ -29,6 +31,7 @@ import { useRouter } from "next/navigation";
 
 import { useProfileStore } from "@/store/use-profile-store";
 import { useUser, useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 
 interface ProfileSidebarProps {
   username: string;
@@ -73,6 +76,7 @@ export function ProfileSidebar({
     { value: "stats", label: "Statistics", icon: BarChart3 },
     { value: "arena", label: "Arena Records", icon: Trophy },
     { value: "submissions", label: "Submissions", icon: Code2 },
+    { value: "solutions", label: "Solutions", icon: CheckCircle2 },
     {
       value: "social",
       label: `Social`,
@@ -104,12 +108,14 @@ export function ProfileSidebar({
               <p className="text-xs font-bold text-muted-foreground tracking-wider lowercase truncate">
                 {username}
               </p>
-              <div className="mt-4">
+              <Link href="/leaderboard" className="mt-4">
                 <p className="text-[10px] font-black uppercase text-muted-foreground/60 tracking-widest leading-none">
-                  Rank
+                  Global Rank
                 </p>
-                <p className="text-sm font-black mt-1">3,14,914</p>
-              </div>
+                <p className="text-sm font-black mt-1 text-primary hover:underline">
+                  {stats?.rank ? `${stats.rank.toLocaleString()}` : "--:--"}
+                </p>
+              </Link>
             </div>
           </div>
 
@@ -263,7 +269,7 @@ export function ProfileSidebar({
 
           if (entries.length === 0) {
             return (
-              <p className="text-[10px] text-muted-foreground px-1 italic">
+              <p className="text-[10px] text-muted-foreground px-1">
                 No solve data recorded yet.
               </p>
             );
@@ -272,7 +278,7 @@ export function ProfileSidebar({
           const visibleEntries = isExpanded ? entries : entries.slice(0, 5);
 
           return (
-            <div className="space-y-3 px-1">
+            <div className="space-y-3 px-1 border-b border-border py-2">
               <div className="space-y-3">
                 {visibleEntries.map(([lang, count]) => (
                   <div
@@ -295,12 +301,14 @@ export function ProfileSidebar({
               </div>
 
               {entries.length > 5 && (
-                <button
+                <Button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="w-full text-center text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors pt-1"
+                  variant="link"
+                  size="sm"
+                  className="w-full text-center text-xs font-medium text-muted-foreground hover:text-primary pt-1"
                 >
                   {isExpanded ? "Show less" : "Show more"}
-                </button>
+                </Button>
               )}
             </div>
           );

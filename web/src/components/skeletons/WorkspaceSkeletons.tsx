@@ -203,3 +203,38 @@ export const ResultSkeleton = () => (
     </div>
   </SkeletonProvider>
 );
+
+/**
+ * Solutions List Skeleton
+ */
+export const SolutionsSkeleton = () => (
+  <SkeletonProvider noWrapper>
+    <div className="space-y-6 py-4">
+      <div className="flex items-center gap-3 mb-6">
+        <Skeleton width={150} height={24} className="rounded-md" />
+      </div>
+      
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="p-5 border border-border/40 rounded-xl bg-card/10 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Skeleton circle width={32} height={32} />
+              <div className="space-y-1">
+                <Skeleton width={100} height={12} />
+                <Skeleton width={60} height={10} className="opacity-50" />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Skeleton width={40} height={24} className="rounded-md" />
+              <Skeleton width={40} height={24} className="rounded-md" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Skeleton width="90%" height={12} />
+            <Skeleton width="40%" height={12} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </SkeletonProvider>
+);

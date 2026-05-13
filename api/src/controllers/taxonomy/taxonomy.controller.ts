@@ -28,11 +28,20 @@ export class TaxonomyController extends BaseController {
   }
 
   /**
+   * GET /api/v1/taxonomy/user/progress
+   * Private: Returns a map of categoryId -> direct solved count for the user.
+   */
+  async getUserProgress(req: ControllerRequest): Promise<any> {
+    if (!req.user?.id) return {};
+    return this.taxonomyService.getUserRoadmapProgress(req.user.id);
+  }
+
+  /**
    * GET /api/v1/taxonomy/:slug
    * Public: Returns category details including parent, children, and mapped problems.
    */
   async getCategoryDetail(req: ControllerRequest<never, SlugParams>): Promise<any> {
-    return this.taxonomyService.getCategoryDetail(req.params.slug);
+    return this.taxonomyService.getCategoryDetail(req.params.slug, req.user?.id);
   }
 
   /**
@@ -40,7 +49,7 @@ export class TaxonomyController extends BaseController {
    * Public: Returns category details by UUID.
    */
   async getCategoryDetailById(req: ControllerRequest<never, IdParams>): Promise<any> {
-    return this.taxonomyService.getCategoryDetailById(req.params.id);
+    return this.taxonomyService.getCategoryDetailById(req.params.id, req.user?.id);
   }
 
   /**

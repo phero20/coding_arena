@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Terminal, Keyboard, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { TestCaseField } from "@/components/workspace-shared/TestCaseField";
+import { TestCaseField } from "@/components/workspace-shared";
 import { ResultSkeleton } from "@/components/skeletons/WorkspaceSkeletons";
 import type { CompilerExecuteResponse } from "@/types/compiler";
 

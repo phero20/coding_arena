@@ -10,6 +10,7 @@ import { StatsRepository } from "../../repositories/stats/stats.repository";
 import { FollowRepository } from "../../repositories/user/follow.repository";
 import { ContestRepository } from "../../repositories/contest/contest.repository";
 import { TaxonomyRepository } from "../../repositories/taxonomy/taxonomy.repository";
+import { SolutionRepository } from "../../repositories/solutions/solution.repository";
 
 /**
  * Repository layer registrations.
@@ -27,4 +28,5 @@ export const repositoriesRegistry = {
   followRepository: asClass(FollowRepository).singleton(),
   contestRepository: asClass(ContestRepository).singleton(),
   taxonomyRepository: asClass(TaxonomyRepository).singleton(),
+  solutionRepository: asClass(SolutionRepository).singleton(),
 };

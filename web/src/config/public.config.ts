@@ -11,11 +11,11 @@ export const PUBLIC_CONFIG = {
   ARENA_WS_URL: process.env.NEXT_PUBLIC_ARENA_WS_URL,
 
   // GitHub Link
-  REPO_URL: "https://github.com/phero20/coding_arena",
+  REPO_URL: "https://github.com/phero20/slavecode",
 
   // Site Meta
-  SITE_NAME: "Coding Arena",
-  SITE_DESCRIPTION: "The ultimate battleground for elite developers.",
+  SITE_NAME: "SlaveCode",
+  SITE_DESCRIPTION: "A complete platform for competitive programming and coding practice.",
 } as const;
 
 // Safety check for critical production config

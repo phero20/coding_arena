@@ -11,6 +11,8 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useClerk } from "@clerk/nextjs";
 import { LogOut, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRoadmapStore } from "@/store/use-roadmap-store";
 import { cn } from "@/lib/utils";
 import { UserSearch } from "./UserSearch";
 
@@ -37,8 +39,15 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
   const { user } = useUser();
   const { signOut } = useClerk();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { resetRoadmap } = useRoadmapStore();
 
   const handleSignOut = async () => {
+    // 1. Purge all cached API data
+    queryClient.clear();
+    // 2. Reset UI state
+    resetRoadmap();
+    // 3. Perform Sign Out
     await signOut();
     router.push("/");
     setIsOpen(false);
@@ -106,9 +115,6 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
 
               {/* Main Links */}
               <div className="space-y-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 ml-1">
-                  Navigation
-                </span>
                 <div className="grid grid-cols-1 gap-1">
                   {navItems.map((item) => (
                     <Link
@@ -124,7 +130,7 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
                     >
                       <item.icon
                         className={cn(
-                          "h-5 w-5",
+                          "h-4 w-4",
                           pathname === item.href
                             ? "text-primary"
                             : "text-muted-foreground/60",

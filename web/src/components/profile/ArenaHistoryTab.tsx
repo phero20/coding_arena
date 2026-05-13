@@ -91,6 +91,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
         <div className="flex items-center gap-2">
           <Badge
             variant="secondary"
+            className="p-2"
           >
             {totalCount} TOTAL MATCHES
           </Badge>

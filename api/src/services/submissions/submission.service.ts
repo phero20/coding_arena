@@ -24,7 +24,20 @@ import {
 } from "../validation/submission.validator";
 import { type StatsSubmissionService } from "../stats/stats-submission.service";
 
-export class SubmissionService {
+export interface ISubmissionService {
+  createSubmission(input: CreateSubmissionInput, traceId?: string): Promise<Submission>;
+  updateSubmissionStatus(input: UpdateSubmissionStatusInput, traceId?: string): Promise<Submission | null>;
+  getSubmissionById(id: string): Promise<Submission | null>;
+  getUserSubmissions(userId: string, problemId: string, clerkId?: string): Promise<Submission[]>;
+  getArenaMatchById(id: string): Promise<ArenaMatch | null>;
+  getArenaRoom(roomId: string): Promise<any>;
+  getRecentSubmissions(userId: string, limit?: number, offset?: number): Promise<{
+    submissions: Submission[];
+    pagination: { total: number; limit: number; offset: number };
+  }>;
+}
+
+export class SubmissionService implements ISubmissionService {
   private readonly submissionRepository: ISubmissionRepository;
   private readonly arenaMatchRepository: ArenaMatchRepository;
   private readonly arenaRepository: ArenaRepository;

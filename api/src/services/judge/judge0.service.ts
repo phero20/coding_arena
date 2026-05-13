@@ -92,12 +92,14 @@ export class Judge0Service {
   async createBatchSubmissions(
     submissions: Judge0SubmissionPayload[],
   ): Promise<Judge0SubmissionToken[]> {
-    const encodedSubmissions = submissions.map(s => ({
+    const encodedSubmissions = submissions.map((s) => ({
       ...s,
       source_code: Buffer.from(s.source_code).toString("base64"),
       stdin: s.stdin ? Buffer.from(s.stdin).toString("base64") : undefined,
-      expected_output: s.expected_output ? Buffer.from(s.expected_output).toString("base64") : undefined,
-      base64_encoded: true
+      expected_output: s.expected_output
+        ? Buffer.from(s.expected_output).toString("base64")
+        : undefined,
+      base64_encoded: true,
     }));
 
     const body = JSON.stringify({
@@ -142,8 +144,8 @@ export class Judge0Service {
       method: "GET",
     });
 
-    const submissions = Array.isArray(result) 
-      ? result 
+    const submissions = Array.isArray(result)
+      ? result
       : (result as { submissions: Judge0SubmissionResult[] }).submissions;
 
     if (!Array.isArray(submissions)) {
@@ -151,12 +153,20 @@ export class Judge0Service {
     }
 
     // Decode base64 responses back to UTF-8
-    return submissions.map(s => ({
+    return submissions.map((s) => ({
       ...s,
-      stdout: s.stdout ? Buffer.from(s.stdout, "base64").toString("utf-8") : s.stdout,
-      stderr: s.stderr ? Buffer.from(s.stderr, "base64").toString("utf-8") : s.stderr,
-      compile_output: s.compile_output ? Buffer.from(s.compile_output, "base64").toString("utf-8") : s.compile_output,
-      message: s.message ? Buffer.from(s.message, "base64").toString("utf-8") : s.message,
+      stdout: s.stdout
+        ? Buffer.from(s.stdout, "base64").toString("utf-8")
+        : s.stdout,
+      stderr: s.stderr
+        ? Buffer.from(s.stderr, "base64").toString("utf-8")
+        : s.stderr,
+      compile_output: s.compile_output
+        ? Buffer.from(s.compile_output, "base64").toString("utf-8")
+        : s.compile_output,
+      message: s.message
+        ? Buffer.from(s.message, "base64").toString("utf-8")
+        : s.message,
     }));
   }
 }
