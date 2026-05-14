@@ -12,8 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RankIndicator } from "../stats/leaderboard/RankIndicator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { CodeViewer } from "@/components/ui/code-viewer";
 import { cn, formatSolveTime } from "@/lib/utils";
 import { ArenaPlayerResult } from "@/types/arena";
 import type { MatchResultsProps } from "@/types/component.types";
@@ -132,20 +131,30 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                   <React.Fragment key={player.userId}>
                     <TableRow
                       className={cn(
-                        "group cursor-pointer",
+                        "group cursor-pointer transition-colors",
                         index === 0 && "bg-rank-1-row",
                         index === 1 && "bg-rank-2-row",
                         index === 2 && "bg-rank-3-row",
-                        isExpanded && "border-b border-primary",
+                        isExpanded && "bg-muted/50",
                       )}
                       onClick={() =>
                         setExpandedUser(isExpanded ? "" : player.userId)
                       }
                     >
-                      <TableCell className="pl-6 py-4">
+                      <TableCell
+                        className={cn(
+                          "pl-6 py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         <RankIndicator rank={index + 1} />
                       </TableCell>
-                      <TableCell className="py-4">
+                      <TableCell
+                        className={cn(
+                          "py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         <div className="pr-4 min-w-[140px] flex items-center gap-2">
                           <Avatar className="h-8 w-8 border-2 border-background ring-1 ring-border/20">
                             <AvatarImage src={player.avatarUrl} />
@@ -168,10 +177,20 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                           </Link>
                         </div>
                       </TableCell>
-                      <TableCell className="text-center py-4 font-black text-sm tabular-nums">
+                      <TableCell
+                        className={cn(
+                          "text-center py-4 font-black text-sm tabular-nums border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         {player.score || 0}
                       </TableCell>
-                      <TableCell className="text-center py-4">
+                      <TableCell
+                        className={cn(
+                          "text-center py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         <div className="flex flex-col items-center">
                           <span className="text-xs font-bold text-status-accepted">
                             {player.testsPassed}/{player.totalTests}
@@ -181,19 +200,34 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-center py-4">
+                      <TableCell
+                        className={cn(
+                          "text-center py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         <div className="flex flex-col items-center">
                           <span className="text-xs font-bold text-primary">
                             {formatSolveTime(player.timeTaken)}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right py-4">
+                      <TableCell
+                        className={cn(
+                          "text-right py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         <div className="flex justify-end">
                           <VerdictBadge verdict={player.verdict} />
                         </div>
                       </TableCell>
-                      <TableCell className="text-right pr-6 py-4">
+                      <TableCell
+                        className={cn(
+                          "text-right pr-6 py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
                         <Button size="sm" disabled={!player.sourceCode}>
                           <Code2 className="w-3 h-3" />
                           Code
@@ -201,44 +235,24 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                       </TableCell>
                     </TableRow>
                     {isExpanded && (
-                      <TableRow className="bg-muted hover:bg-muted">
-                        <TableCell colSpan={7} className="">
-                          {!player.sourceCode ? (
-                            <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
-                              <Code2 className="size-6" />
-                              <p className="text-sm font-black ">
-                                User has not submitted any solution.
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="relative">
-                              <SyntaxHighlighter
+                      <TableRow className="bg-muted/20 hover:bg-muted/20 border-none">
+                        <TableCell colSpan={7} className="p-0 border-none">
+                          <div className="animate-in slide-in-from-top-2 duration-300">
+                            {!player.sourceCode ? (
+                              <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
+                                <Code2 className="size-6" />
+                                <p className="text-sm font-black ">
+                                  User has not submitted any solution.
+                                </p>
+                              </div>
+                            ) : (
+                              <CodeViewer
+                                code={player.sourceCode}
                                 language={player.languageId || "javascript"}
-                                style={vscDarkPlus}
-                                PreTag="div"
-                                customStyle={{
-                                  margin: 0,
-                                  padding: "1.5rem",
-                                  fontSize: "0.75rem",
-                                  lineHeight: "1.8",
-                                  background: "transparent",
-                                  overflowX: "hidden",
-                                  whiteSpace: "pre-wrap",
-                                  wordBreak: "break-all",
-                                }}
-                                codeTagProps={{
-                                  style: {
-                                    whiteSpace: "pre-wrap",
-                                    wordBreak: "break-all",
-                                    display: "block",
-                                    maxWidth: "100%",
-                                  },
-                                }}
-                              >
-                                {player.sourceCode}
-                              </SyntaxHighlighter>
-                            </div>
-                          )}
+                                label={`${player.languageId || "javascript"}`}
+                              />
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     )}

@@ -73,7 +73,9 @@ export const ArenaMatchCard: React.FC<ArenaMatchCardProps> = ({
                   >
                     {match.difficulty}
                   </Badge>
-                  <Badge className="uppercase">{match.language}</Badge>
+                  <Badge variant="secondary" className="uppercase">
+                    {match.language}
+                  </Badge>
                 </div>
               )}
             </div>
@@ -94,7 +96,7 @@ export const ArenaMatchCard: React.FC<ArenaMatchCardProps> = ({
                 <span className="hidden sm:inline">RANK</span>
               </div>
               <span className="text-xs sm:text-base text-primary font-black tabular-nums leading-none">
-                {myResult?.submissionOrder || "--"}
+                {myResult?.submissionOrder || "-:-"}
               </span>
             </div>
             <div className="flex flex-col items-center justify-center text-center">

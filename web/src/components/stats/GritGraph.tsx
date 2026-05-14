@@ -55,7 +55,7 @@ export function GritGraph({
   };
 
   const levelColors = [
-    "bg-muted/70",         // 0: Empty/Min
+    "bg-background/50",         // 0: Empty/Min
     "bg-[#064e3b]",        // 1: Emerald 900 (Deepest)
     "bg-[#047857]",        // 2: Emerald 700 (Dark Green)
     "bg-[#10b981]",        // 3: Emerald 500 (Vibrant Green)

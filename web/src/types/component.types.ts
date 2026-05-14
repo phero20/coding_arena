@@ -152,10 +152,10 @@ export interface ConsolePanelProps {
   isLoading: boolean;
   error: Error | null;
   initialTab?: "testcase" | "result";
-  runResult?: RunSubmissionResponse | null;
+  runResult?: (RunSubmissionResponse & { overallStatus?: ExecutionVerdict | "IDLE" }) | null;
   runResultLoading?: boolean;
   runError?: Error | string | null;
-  verdict?: ExecutionVerdict | "PENDING" | null;
+  verdict?: ExecutionVerdict | "PENDING" | "IDLE" | null;
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;
@@ -173,14 +173,14 @@ export interface DescriptionPanelProps {
 export interface EditorPanelProps {
   problem: Problem;
   mode?: "practice" | "arena";
-  runResult?: RunSubmissionResponse | null;
+  runResult?: (RunSubmissionResponse & { overallStatus?: ExecutionVerdict | "IDLE" }) | null;
   isRunning?: boolean;
   runError?: Error | string | null;
   activeTab?: string;
   onTabChange?: (tab: any) => void;
   enforcedLanguage?: string;
   roomId?: string;
-  verdict?: ExecutionVerdict | "PENDING" | null;
+  verdict?: ExecutionVerdict | "PENDING" | "IDLE" | null;
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;

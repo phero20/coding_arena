@@ -2,20 +2,12 @@
 
 import React from "react";
 import { useAuth } from "@clerk/nextjs";
-import { useUserSolutions } from "@/hooks/queries/use-solution.queries";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { formatDistanceToNow } from "date-fns";
 import { 
   ThumbsUp, 
-  ChevronRight, 
-  FileCode2,
-  Clock,
-  ExternalLink,
-  BookOpen,
   CheckCircle2
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -31,6 +23,14 @@ import {
   PaginationPrevious 
 } from "@/components/ui/pagination";
 import { useSolutionPagination } from "@/hooks/use-solution-pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface SolutionsTabProps {
   userId: string;
@@ -91,71 +91,64 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
         }
       >
         {(sols) => (
-          <>
+          <div className="overflow-hidden border border-border/40 rounded-xl bg-card/60">
             {isFetching ? (
               <SolutionsSkeleton count={expectedCount} />
             ) : (
-              <div className="flex flex-col gap-3">
-                {sols.map((sol) => (
-                  <Card key={sol.id} className="group">
-                    <CardContent className="py-4 px-4 sm:px-6">
-                      <div className="flex flex-row items-center justify-between gap-4">
-                        {/* Primary Info Sector */}
-                        <div className="flex-1 min-w-0 flex items-center gap-4">
-                          <div className="min-w-0 flex-1 space-y-1.5">
-                            <div className="flex items-center gap-3 min-w-0">
-                              <h3 className="font-bold text-sm tracking-tight truncate text-foreground/90 uppercase whitespace-nowrap overflow-hidden group-hover:text-primary transition-colors">
-                                {sol.title}
-                              </h3>
-                            </div>
-
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-                                <span className="text-muted-foreground/40">
-                                  PROBLEM
-                                </span>
-                                <span className="text-foreground/80">
-                                  {sol.problemTitle || "Unknown"}
-                                </span>
-                              </span>
-                              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-                                <Clock className="size-3 text-muted-foreground/40" />
-                                {formatDistanceToNow(new Date(sol.createdAt), {
-                                  addSuffix: true,
-                                })}
-                              </span>
-                            </div>
-                          </div>
+              <Table className="table-fixed border-separate border-spacing-0 w-full">
+                <TableHeader className="bg-muted/40">
+                  <TableRow className="hover:bg-transparent border-b border-border/10">
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 w-[100px] text-muted-foreground">
+                      Votes
+                    </TableHead>
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+                      Solution
+                    </TableHead>
+                    <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[120px] text-muted-foreground">
+                      Submitted
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sols.map((sol) => (
+                    <TableRow
+                      key={sol.id}
+                      className="group cursor-pointer transition-colors hover:bg-muted/30"
+                    >
+                      <TableCell className="py-4 pl-6 border-b border-border/40">
+                        <div className="flex items-center gap-1.5">
+                          <ThumbsUp className="size-3 text-primary" />
+                          <span className="text-xs font-black tabular-nums text-foreground/90">
+                            {sol.upvotes}
+                          </span>
                         </div>
-
-                        {/* Stats & Actions */}
-                        <div className="flex items-center justify-end gap-3 shrink-0">
-                          <Button variant="secondary" className="h-9 px-3 gap-2">
-                            <ThumbsUp className="size-4 text-primary/60" />
-                            <span className="text-sm font-black tabular-nums leading-none">
-                              {sol.upvotes}
-                            </span>
-                          </Button>
-
-                          <Link
-                            href={`/problems/${sol.problemSlug || sol.problemId}?tab=solutions&solTab=my-solutions&solId=${sol.id}`}
-                            className="shrink-0"
-                          >
-                            <Button size="sm" className="h-9 font-bold uppercase tracking-tight gap-1">
-                              <span className="hidden sm:block">View Solution</span>
-                              <ChevronRight className="size-4" />
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      </TableCell>
+                      <TableCell className="py-4 pl-0 border-b border-border/40">
+                        <Link
+                          href={`/problems/${sol.problemSlug || sol.problemId}?tab=solutions&solTab=my-solutions&solId=${sol.id}`}
+                          className="flex flex-col min-w-0"
+                        >
+                          <span className="font-bold text-xs tracking-tight truncate text-foreground/90 uppercase group-hover:text-primary transition-colors">
+                            {sol.title}
+                          </span>
+                          <span className="text-[10px] font-black text-muted-foreground/40 truncate">
+                            {sol.problemTitle || "Unknown Problem"}
+                          </span>
+                        </Link>
+                      </TableCell>
+                      <TableCell className="py-4 text-right pr-6 border-b border-border/40 text-[10px] font-bold text-muted-foreground/70">
+                        {formatDistanceToNow(new Date(sol.createdAt), {
+                          addSuffix: true,
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
 
             {/* Pagination Controls */}
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border/10">
               {totalCount > 0 && (
                 <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
                   Showing <span className="text-muted-foreground/60">{(currentPage - 1) * 10 + 1}-{Math.min(currentPage * 10, totalCount)}</span> of <span className="text-muted-foreground/60">{totalCount}</span>
@@ -222,7 +215,7 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
                 </Pagination>
               )}
             </div>
-          </>
+          </div>
         )}
       </QueryGuard>
     </div>

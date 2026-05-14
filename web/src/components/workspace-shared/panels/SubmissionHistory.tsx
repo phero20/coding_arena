@@ -3,17 +3,7 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import type { SubmissionHistoryProps } from "@/types/component.types";
-import {
-  CheckCircle2,
-  XCircle,
-  Clock,
-  Activity,
-  Code2,
-  AlertCircle,
-  ChevronRight,
-  Terminal,
-  Zap,
-} from "lucide-react";
+import { Code2, Terminal, X, PenLine, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SubmissionSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay } from "@/components/shared/StatusState";
@@ -21,17 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ExecutionVerdict, Submission } from "@/types/submission";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { DynamicHighlighter as SyntaxHighlighter } from "../editor/DynamicHighlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Card } from "@/components/ui/card";
-
-
-
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CodeViewer } from "@/components/ui/code-viewer";
 import { VerdictBadge } from "@/components/ui/verdict-badge";
 
 const languageMap: Record<string, string> = {
@@ -49,6 +36,12 @@ export const SubmissionHistory: React.FC<SubmissionHistoryProps> = ({
   error,
   onRetry,
 }) => {
+  const [expandedId, setExpandedId] = React.useState<string | null>(null);
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
   return (
     <QueryGuard
       loading={isLoading}
@@ -61,92 +54,112 @@ export const SubmissionHistory: React.FC<SubmissionHistoryProps> = ({
       onRetry={onRetry}
     >
       {(submissionList) => (
-        <Card className="border-none bg-transparent shadow-none">
-          <Accordion type="single" collapsible className="w-full space-y-3">
-            {submissionList.map((sub, idx) => {
-              const status = (sub.status || "SYSTEM_ERROR") as ExecutionVerdict | "PENDING" | "RUNNING";
+        <div className="">
+          <Table className="table-fixed border-separate border-spacing-0">
+            <TableHeader className="bg-muted/40">
+              <TableRow className="hover:bg-transparent border-b border-border/10">
+                <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 w-[160px] text-muted-foreground">
+                  Status
+                </TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+                  Language
+                </TableHead>
+                <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[100px] sm:w-[140px] text-muted-foreground">
+                  Submitted
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {submissionList.map((sub, idx) => {
+                const subId = sub.id || idx.toString();
+                const isExpanded = expandedId === subId;
+                const status = (sub.status || "SYSTEM_ERROR") as
+                  | ExecutionVerdict
+                  | "PENDING"
+                  | "RUNNING";
 
-              // Extremely safe property access for legacy data
-              const rawLangId = sub.languageId || (sub as any).language_id;
-              const langLabel = languageMap[String(rawLangId)] || String(rawLangId || "Unknown");
-              const syntaxLang = (languageMap[String(rawLangId)] || String(rawLangId || "javascript")).toLowerCase();
-              const sourceCode = sub.sourceCode || (sub as any).source_code || "";
+                // Extremely safe property access for legacy data
+                const rawLangId = sub.languageId || (sub as any).language_id;
+                const langLabel =
+                  languageMap[String(rawLangId)] ||
+                  String(rawLangId || "Unknown");
+                const syntaxLang = (
+                  languageMap[String(rawLangId)] ||
+                  String(rawLangId || "javascript")
+                ).toLowerCase();
+                const sourceCode =
+                  sub.sourceCode || (sub as any).source_code || "";
 
-              return (
-                <AccordionItem
-                  key={sub.id || idx}
-                  value={sub.id || idx.toString()}
-                  className="border bg-card rounded-lg px-1 overflow-hidden transition-all data-[state=open]:border-primary"
-                >
-                  <AccordionTrigger className="px-5 py-3 hover:no-underline [&>svg]:hidden group">
-                    <div className="flex w-full items-center justify-between pr-2">
-                      <div className="flex items-center gap-4">
-                        <div className="text-left">
-                          <div className="flex items-center gap-2">
-                            <VerdictBadge verdict={status} />
-                            <Badge className="uppercase text-xs">
-                              {langLabel}
-                            </Badge>
-                          </div>
-                          <p className="text-[10px] font-medium text-muted-foreground/50 mt-2 uppercase">
+                return (
+                  <React.Fragment key={subId}>
+                    <TableRow
+                      className={cn(
+                        "group cursor-pointer transition-colors hover:bg-muted/30",
+                        isExpanded && "bg-muted/50",
+                      )}
+                      onClick={() => toggleExpand(subId)}
+                    >
+                      <TableCell
+                        className={cn(
+                          "py-4 pl-6 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/40",
+                        )}
+                      >
+                        <VerdictBadge
+                          verdict={status}
+                          className="text-[10px]"
+                        />
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          "py-4 pl-0 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/40",
+                        )}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="uppercase">
+                            {langLabel}
+                          </Badge>
+                        </div>
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          "py-4 text-right pr-6 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/40",
+                        )}
+                      >
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-[10px] font-bold text-muted-foreground/70 whitespace-nowrap">
                             {sub.createdAt
                               ? formatDistanceToNow(new Date(sub.createdAt), {
                                   addSuffix: true,
                                 })
                               : "Recently"}
-                          </p>
+                          </span>
                         </div>
-                      </div>
+                      </TableCell>
+                    </TableRow>
 
-                      <div className="flex items-center gap-3">
-                        {sub.time !== undefined && (
-                          <div className="flex items-center gap-1 text-[10px]  text-muted-foreground/40 mr-2 ">
-                            <Zap className="size-3" />
-                            <span>{sub.time}s</span>
+                    {isExpanded && (
+                      <TableRow className="bg-muted/40 hover:bg-muted/40 border-none">
+                        <TableCell colSpan={3} className="p-0 border-none">
+                          <div className="animate-in slide-in-from-top-2 duration-300">
+                            <CodeViewer
+                              code={sourceCode}
+                              language={syntaxLang}
+                              label={`${langLabel}`}
+                            />
                           </div>
-                        )}
-                        <Button size="sm">
-                          <Code2 className="w-3 h-3" />
-                          Code
-                        </Button>
-                      </div>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="border-t border-border bg-muted p-0">
-                    <div className="relative">
-                      <SyntaxHighlighter
-                        language={syntaxLang}
-                        style={vscDarkPlus}
-                        PreTag="div"
-                        customStyle={{
-                          margin: 0,
-                          padding: "1.2rem",
-                          fontSize: "0.75rem",
-                          lineHeight: "1.8",
-                          background: "transparent",
-                          overflowX: "hidden",
-                          whiteSpace: "pre-wrap",
-                          wordBreak: "break-all",
-                        }}
-                        codeTagProps={{
-                          style: {
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-all",
-                            display: "block",
-                            maxWidth: "100%",
-                          },
-                        }}
-                      >
-                        {sourceCode}
-                      </SyntaxHighlighter>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              );
-        })}
-        </Accordion>
-      </Card>
-    )}
-  </QueryGuard>
-);
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+    </QueryGuard>
+  );
 };

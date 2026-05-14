@@ -165,7 +165,7 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({
         onValueChange={(val) => setActiveMainTab(val as SolTab)}
         className="w-full flex flex-col min-w-0"
       >
-        <div className="sticky top-0 z-30 bg-background flex items-center justify-between mb-4 border-b border-border/30 shrink-0 px-4 py-2">
+        <div className="sticky top-0 z-30 bg-background flex items-center justify-between mb-0 border-b border-border/30 shrink-0 px-4 py-2">
           <TabsList className="bg-transparent h-10 p-0 gap-6">
             <TabsTrigger
               value="official"
@@ -195,10 +195,10 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({
           </Button>
         </div>
 
-        <div className="custom-scrollbar min-w-0 p-4">
+        <div className="custom-scrollbar min-w-0">
           <TabsContent
             value="official"
-            className="mt-0 border-none outline-none animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 "
+            className="mt-0 border-none outline-none animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 p-4"
           >
             <OfficialSolution officialSolution={officialSolution} />
           </TabsContent>

@@ -1,6 +1,14 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonProvider } from "./BaseSkeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 /**
  * Arena Lobby Skeleton (Ghost of ArenaLobby)
@@ -159,44 +167,64 @@ export const MatchResultsSkeleton = () => (
     </div>
   </SkeletonProvider>
 );
-
 /**
  * Arena History Skeleton
  * Mirrors the ArenaMatchCard list view in the profile
  */
 export const ArenaHistorySkeleton = ({ count = 10 }: { count?: number }) => (
   <SkeletonProvider noWrapper>
-    <div className="space-y-4">
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="border border-border/40 rounded-xl overflow-hidden bg-card/10">
-          <div className="py-4 px-4 sm:px-6 flex items-center justify-between">
-            {/* Match Info Sector Ghost */}
-            <div className="flex-1 min-w-0 space-y-3">
-              <div className="flex items-center gap-4">
-                <Skeleton width={200} height={18} className="sm:h-5 rounded-sm" />
-                <div className="hidden sm:flex gap-2">
-                  <Skeleton width={60} height={20} className="rounded-md opacity-40" />
-                  <Skeleton width={70} height={20} className="rounded-md opacity-40" />
+    <div className="overflow-hidden border border-border/40 rounded-xl bg-card/10">
+      <Table className="table-fixed border-separate border-spacing-0 w-full">
+        <TableHeader className="bg-muted/40">
+          <TableRow className="hover:bg-transparent border-b border-border/10">
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-4 sm:pl-6 w-[60px] sm:w-[100px] text-muted-foreground">
+              Rank
+            </TableHead>
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+              Match
+            </TableHead>
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 w-[60px] sm:w-[100px] text-muted-foreground">
+              Players
+            </TableHead>
+            <TableHead className="hidden xs:table-cell text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[120px] text-muted-foreground">
+              Date
+            </TableHead>
+            <TableHead className="w-[50px] sm:w-[60px] pr-0 sm:pr-6" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: count }).map((_, i) => (
+            <TableRow key={i} className="hover:bg-transparent">
+              <TableCell className="py-4 pl-4 sm:pl-6 border-b border-border/40">
+                <div className="flex items-center gap-1.5">
+                  <Skeleton circle width={12} height={12} className="opacity-20" />
+                  <Skeleton width={16} height={14} className="rounded-sm" />
                 </div>
-              </div>
-              <Skeleton width={120} height={10} className="rounded-sm opacity-30" />
-            </div>
-
-            {/* Performance Sector Ghost */}
-            <div className="flex items-center gap-4 sm:gap-8 shrink-0 border-l border-border/10 pl-4 sm:pl-8">
-              <div className="flex flex-col items-center gap-1.5">
-                <Skeleton width={32} height={8} className="opacity-30" />
-                <Skeleton width={24} height={20} className="rounded-sm" />
-              </div>
-              <div className="flex flex-col items-center gap-1.5">
-                <Skeleton width={60} height={8} className="opacity-30" />
-                <Skeleton width={24} height={20} className="rounded-sm" />
-              </div>
-              <Skeleton width={36} height={36} className="rounded-md" />
-            </div>
-          </div>
-        </div>
-      ))}
+              </TableCell>
+              <TableCell className="py-4 pl-0 border-b border-border/40">
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <Skeleton width="80%" height={14} className="rounded-sm" />
+                  <Skeleton width="40%" height={10} className="rounded-sm opacity-30" />
+                </div>
+              </TableCell>
+              <TableCell className="py-4 pl-0 border-b border-border/40">
+                <div className="flex items-center gap-1.5">
+                  <Skeleton circle width={12} height={12} className="opacity-20" />
+                  <Skeleton width={16} height={10} className="rounded-sm opacity-40" />
+                </div>
+              </TableCell>
+              <TableCell className="hidden xs:table-cell py-4 text-right pr-6 border-b border-border/40">
+                <Skeleton width={60} height={10} className="ml-auto rounded-sm opacity-30" />
+              </TableCell>
+              <TableCell className="py-4 pr-2 sm:pr-6 border-b border-border/40">
+                <div className="flex justify-center sm:justify-end">
+                  <Skeleton width={32} height={32} className="rounded-md opacity-20" />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   </SkeletonProvider>
 );

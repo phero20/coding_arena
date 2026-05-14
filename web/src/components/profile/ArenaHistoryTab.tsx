@@ -2,18 +2,16 @@
 
 import React from "react";
 import { useAuth } from "@clerk/nextjs";
-import { useArenaHistoryQuery, useArenaMatchDetailsQuery } from "@/hooks/queries/use-arena.queries";
+import { useArenaMatchDetailsQuery } from "@/hooks/queries/use-arena.queries";
 import { QueryGuard } from "@/components/shared/QueryGuard";
-import { ArenaMatchCard } from "./ArenaMatchCard";
 import { ArenaMatchDetail } from "./ArenaMatchDetail";
 import { ArenaHistorySkeleton } from "@/components/skeletons/ArenaSkeletons";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Trophy, Swords } from "lucide-react";
+import { Trophy, Swords, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import type { ArenaMatch } from "@/types/arena";
+import { formatDistanceToNow } from "date-fns";
 
 import { 
   Pagination, 
@@ -25,6 +23,14 @@ import {
   PaginationPrevious 
 } from "@/components/ui/pagination";
 import { useArenaPagination } from "@/hooks/use-arena-pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ArenaHistoryTabProps {  
   userId: string;
@@ -118,24 +124,93 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
         ) : undefined}
       >
         {(matchList) => (
-          <>
+          <div className="overflow-hidden border border-border/40 rounded-xl bg-card/60">
             {isFetching ? (
                <ArenaHistorySkeleton count={expectedCount} />
             ) : (
-              <div className="grid gap-4 transition-opacity duration-200">
-                {matchList.map((match) => (
-                  <ArenaMatchCard
-                    key={match.id}
-                    match={match}
-                    currentUserId={userId}
-                    onSelect={(m) => setSelectedMatchId(m.id)}
-                  />
-                ))}
-              </div>
+              <Table className="table-fixed border-separate border-spacing-0 w-full">
+                <TableHeader className="bg-muted/40">
+                  <TableRow className="hover:bg-transparent border-b border-border/10">
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-4 sm:pl-6 w-[60px] sm:w-[100px] text-muted-foreground">
+                      Rank
+                    </TableHead>
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+                      Match
+                    </TableHead>
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 w-[60px] sm:w-[100px] text-muted-foreground">
+                      Players
+                    </TableHead>
+                    <TableHead className="hidden xs:table-cell text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[120px] text-muted-foreground">
+                      Date
+                    </TableHead>
+                    <TableHead className="w-[50px] sm:w-[60px] pr-0 sm:pr-6 text-center">
+                      <span className="sr-only">Action</span>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {matchList.map((match) => {
+                    const myResult = match.players.find((p) => p.userId === userId);
+                    return (
+                      <TableRow
+                        key={match.id}
+                        className="group cursor-pointer transition-colors hover:bg-muted/30"
+                        onClick={() => setSelectedMatchId(match.id)}
+                      >
+                        <TableCell className="py-4 pl-4 sm:pl-6 border-b border-border/40">
+                          <div className="flex items-center gap-1.5">
+                            <Trophy className="size-3 text-primary" />
+                            <span className="text-xs font-black tabular-nums text-foreground/90">
+                              {myResult?.submissionOrder || "-"}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-4 pl-0 border-b border-border/40">
+                          <div className="flex flex-col min-w-0">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="font-bold text-xs tracking-tight truncate text-foreground/90 uppercase group-hover:text-primary transition-colors">
+                                {match.problemTitle || match.problemSlug || "Arena Match"}
+                              </span>
+                              {match.difficulty && (
+                                <Badge variant="secondary" className="uppercase text-[9px] font-black h-5 px-1.5 shrink-0 hidden md:flex">
+                                  {match.difficulty}
+                                </Badge>
+                              )}
+                            </div>
+                            <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-tighter truncate">
+                              {match.language}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-4 pl-0 border-b border-border/40">
+                          <div className="flex items-center gap-1.5">
+                            <Users className="size-3 text-muted-foreground/60" />
+                            <span className="text-[10px] font-black tabular-nums text-muted-foreground/80">
+                              {match.players.length}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xs:table-cell py-4 text-right pr-6 border-b border-border/40 text-[10px] font-bold text-muted-foreground/70">
+                          {formatDistanceToNow(new Date(match.startedAt), {
+                            addSuffix: true,
+                          })}
+                        </TableCell>
+                        <TableCell className="py-4 pr-2 sm:pr-6 border-b border-border/40">
+                          <div className="flex justify-center sm:justify-end">
+                            <Button size="icon" variant="secondary" className="size-8">
+                              <ArrowRight className="size-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
             )}
 
             {/* Pagination Controls */}
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border/10 bg-card/60">
               {totalCount > 0 && (
                 <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
                   Showing <span className="text-muted-foreground/60">{(currentPage - 1) * 10 + 1}-{Math.min(currentPage * 10, totalCount)}</span> of <span className="text-muted-foreground/60">{totalCount}</span>
@@ -202,7 +277,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
                 </Pagination>
               )}
             </div>
-          </>
+          </div>
         )}
       </QueryGuard>
     </div>

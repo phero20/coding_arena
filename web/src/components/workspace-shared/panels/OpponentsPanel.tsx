@@ -65,7 +65,7 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
           </div>
         ) : (
           <Table>
-            <TableHeader className="bg-muted/10 sticky top-0 z-10 backdrop-blur-sm">
+            <TableHeader className="bg-muted/10 sticky top-0 z-10">
               <TableRow className="hover:bg-transparent border-border/40">
                 <TableHead className="w-10 text-center text-[10px] font-black uppercase tracking-tighter">#</TableHead>
                 <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0">Player</TableHead>

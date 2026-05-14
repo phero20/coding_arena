@@ -1,24 +1,12 @@
 import React from "react";
 import {
+  TrendingUp,
+  Code2,
   ChevronRight,
   Loader2,
-  Code2,
-  Timer,
-  Clock2,
-  TrendingUp,
-  ArrowRight
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { RecentActivitiesSkeleton } from "../shared/Skeletons";
 import { VerdictBadge } from "../ui/verdict-badge";
@@ -35,6 +23,16 @@ import {
 } from "@/components/ui/pagination";
 import { useActivityPagination } from "@/hooks/stats/use-activity-pagination";
 import { Card } from "../ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CodeViewer } from "@/components/ui/code-viewer";
+import { Button } from "../ui/button";
 
 interface RecentActivitiesProps {
   username?: string;
@@ -43,10 +41,6 @@ interface RecentActivitiesProps {
   hideHeader?: boolean;
 }
 
-/**
- * RecentActivities: Live accordion-based submission feed.
- * Powered by useActivityPagination hook.
- */
 export function RecentActivities({ 
   username, 
   className,
@@ -57,6 +51,7 @@ export function RecentActivities({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [expandedId, setExpandedId] = React.useState<string | null>(null);
 
   const { 
     activities, 
@@ -71,6 +66,10 @@ export function RecentActivities({
     totalCount
   } = useActivityPagination(username, 10);
 
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
   const handleLoadMoreRedirect = () => {
     setActiveTab("submissions");
     const params = new URLSearchParams(searchParams.toString());
@@ -84,23 +83,21 @@ export function RecentActivities({
 
   return (
     <Card
-      className={cn(
-        "p-6 shadow-none space-y-3",
-        className,
-      )}
+      className={cn("overflow-hidden border border-border/40 bg-card/60", className)}
     >
       {/* Header */}
       {!hideHeader && (
-        <div className="flex items-center justify-between border-b border-border/50 pb-3">
+        <div className="flex items-center justify-between border-b border-border/50 p-4 py-5">
           <div className="flex items-center gap-2">
-            <Code2 size={14} className="text-difficulty-easy" />
-            <span className="text-xs font-bold uppercase tracking-wider">
-              Recent Submissions
+            <Code2 size={14} className="text-primary" />
+            <span className="text-xs font-black uppercase tracking-widest">
+              Recent Activity
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="p-2">
-              {totalCount} TOTAL SUBMISSIONS
+            <Badge variant="secondary">
+              {totalCount} TOTAL{" "}
+              <span className="hidden sm:block">SOLUTIONS</span>
             </Badge>
           </div>
         </div>
@@ -122,125 +119,104 @@ export function RecentActivities({
       >
         {(activityList) => (
           <>
-            <div
-              className={cn(
-                "overflow-y-auto custom-scrollbar transition-opacity duration-200"
-              )}
-            >
-              {isFetching ? (
-                <RecentActivitiesSkeleton count={expectedCount} />
-              ) : (
-                <Accordion type="single" collapsible className="w-full space-y-4">
+            <div className="overflow-hidden border border-border/40 bg-card/50">
+              <Table className="table-fixed border-separate border-spacing-0 w-full">
+                <TableHeader className="bg-muted/30">
+                  <TableRow className="hover:bg-transparent border-b border-border/10">
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-3 w-[140px] text-muted-foreground">
+                      Status
+                    </TableHead>
+                    <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+                      Problem
+                    </TableHead>
+                    <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[100px] text-muted-foreground">
+                      Submitted
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {activityList.map((submission) => {
-                  return (
-                    <AccordionItem
-                      key={submission.id}
-                      value={submission.id}
-                      className="rounded-lg border border-border bg-card overflow-hidden transition-all data-[state=open]:border-primary"
-                    >
-                      <AccordionTrigger className="w-full pl-4 pr-4 sm:pl-6 sm:pr-6 py-4 hover:no-underline [&>svg]:hidden group relative">
-                        <div className="flex items-center justify-between w-full gap-4">
-                          {/* Submission Info Sector */}
-                          <div className="flex-1 min-w-0 space-y-1 text-left">
-                            <div className="flex items-center gap-4">
-                              <h3 className="font-bold text-sm tracking-tight truncate text-foreground/90 uppercase">
+                    const subId = submission.id;
+                    const isExpanded = expandedId === subId;
+
+                    return (
+                      <React.Fragment key={subId}>
+                        <TableRow
+                          className={cn(
+                            "group cursor-pointer transition-colors border-b border-border/5",
+                            isExpanded && "bg-muted/50",
+                          )}
+                          onClick={() => toggleExpand(subId)}
+                        >
+                          <TableCell
+                            className={cn(
+                              "py-4 pl-3 border-b transition-colors",
+                              isExpanded
+                                ? "border-primary/20"
+                                : "border-border/40",
+                            )}
+                          >
+                            <VerdictBadge
+                              verdict={submission.status}
+                              className="text-[10px]"
+                            />
+                          </TableCell>
+                          <TableCell
+                            className={cn(
+                              "py-4 pl-0 border-b transition-colors",
+                              isExpanded
+                                ? "border-primary/20"
+                                : "border-border/40",
+                            )}
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="font-bold text-xs tracking-tight truncate text-foreground/90 uppercase">
                                 {submission.problemTitle ??
                                   submission.problemId}
-                              </h3>
-                              <div className="hidden sm:flex items-center gap-2 shrink-0">
-                                <Badge
-                                  variant="secondary"
-                                  className="text-[10px] uppercase font-bold tracking-tight"
-                                >
-                                  {submission.formattedLang}
-                                </Badge>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-3 text-[10px] text-muted-foreground/50 font-black uppercase tracking-widest">
-                              <span className="flex items-center gap-1.5 shrink-0">
-                                <Clock2 className="h-3 w-3 opacity-60" />
-                                {submission.timeAgo}
                               </span>
+                              <Badge
+                                variant="secondary"
+                               className="uppercase"
+                              >
+                                {submission.formattedLang}
+                              </Badge>
                             </div>
-                          </div>
-
-                          {/* Stats Sector */}
-                          <div className="flex items-center gap-4 sm:gap-8 shrink-0 border-l border-border/10 pl-4 sm:pl-8">
-                            <div className="flex flex-col items-center justify-center text-center">
-                              <VerdictBadge verdict={submission.status} />
-                            </div>
-
-                            {/* <div className="hidden sm:flex flex-col items-center justify-center text-center">
-                              <div className="flex items-center justify-center gap-1 text-[8px] font-black text-muted-foreground tracking-widest uppercase mb-1 opacity-70">
-                                <Timer className="h-2.5 w-2.5" />
-                                <span className="hidden sm:inline">
-                                  RUNTIME
-                                </span>
-                              </div>
-                              <span className="text-xs sm:text-sm font-black tabular-nums leading-none">
-                                {submission.time ? `${submission.time}ms` : "—"}
-                              </span>
-                            </div> */}
-
-                            <div className="flex flex-col items-center justify-center text-center">
-                              <Button size="sm">
-                                <Code2 className="w-3 h-3" />
-                                <span className="hidden sm:inline">Code</span>
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionTrigger>
-
-                      <AccordionContent className="border-t border-border bg-muted p-0">
-                        {submission.sourceCode ? (
-                          <SyntaxHighlighter
-                            language={
-                              submission.languageId?.toLowerCase() ||
-                              "javascript"
-                            }
-                            style={vscDarkPlus}
-                            PreTag="div"
-                            customStyle={{
-                              margin: 0,
-                              padding: "1.5rem",
-                              fontSize: "0.75rem",
-                              lineHeight: "1.8",
-                              background: "transparent",
-                              overflowX: "hidden",
-                              whiteSpace: "pre-wrap",
-                              wordBreak: "break-all",
-                            }}
-                            codeTagProps={{
-                              style: {
-                                whiteSpace: "pre-wrap",
-                                wordBreak: "break-all",
-                                display: "block",
-                                maxWidth: "100%",
-                              },
-                            }}
+                          </TableCell>
+                          <TableCell
+                            className={cn(
+                              "py-4 text-right pr-6 border-b transition-colors text-[10px] font-bold text-muted-foreground/70",
+                              isExpanded
+                                ? "border-primary/20"
+                                : "border-border/40",
+                            )}
                           >
-                            {submission.sourceCode}
-                          </SyntaxHighlighter>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center py-10 opacity-30 text-center">
-                            <Code2 className="size-8 mb-2" />
-                            <p className="text-[10px] font-black uppercase italic">
-                              Code not available
-                            </p>
-                          </div>
+                            {submission.timeAgo}
+                          </TableCell>
+                        </TableRow>
+
+                        {isExpanded && (
+                          <TableRow className="bg-muted/20 hover:bg-muted/20 border-none">
+                            <TableCell colSpan={3} className="p-0 border-none">
+                              <div className="animate-in slide-in-from-top-2 duration-300">
+                                <CodeViewer
+                                  code={submission.sourceCode}
+                                  language={submission.languageId}
+                                  label={submission.formattedLang}
+                                  showHeader={true}
+                                />
+                              </div>
+                            </TableCell>
+                          </TableRow>
                         )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  );
-                })}
-                </Accordion>
-              )}
+                      </React.Fragment>
+                    );
+                  })}
+                </TableBody>
+              </Table>
             </div>
 
             {/* Pagination Controls */}
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-card/60">
               {totalCount > 0 && (
                 <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
                   Showing{" "}
@@ -255,7 +231,6 @@ export function RecentActivities({
 
               {redirectOnLoadMore ? (
                 <Button
-                  
                   onClick={handleLoadMoreRedirect}
                   className="text-[10px] font-bold uppercase tracking-widest"
                 >

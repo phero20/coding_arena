@@ -1,6 +1,14 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonProvider } from "./BaseSkeleton";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@/components/ui/table";
 
 /**
  * Identity Sidebar Skeleton (Ghost of ProfileSidebar)
@@ -112,41 +120,51 @@ export const ActivitySkeleton = () => (
 /**
  * Recent Activities Skeleton (Ghost of RecentActivities)
  */
-export const RecentActivitiesSkeleton = ({ count = 10 }: { count?: number }) => (
+export const RecentActivitiesSkeleton = ({ count = 15 }: { count?: number }) => (
   <SkeletonProvider noWrapper>
-    <div className="p-6 border border-border/40 rounded-xl bg-card/10 space-y-4 overflow-hidden">
+    <div className="overflow-hidden border border-border/40 rounded-xl bg-card/10">
       {/* Header Ghost */}
-      <div className="flex items-center justify-between border-b border-border/40 pb-3">
+      <div className="flex items-center justify-between border-b border-border/40 p-4 py-5">
         <div className="flex items-center gap-2">
           <Skeleton circle width={14} height={14} className="opacity-30" />
-          <Skeleton width={150} height={12} className="rounded-sm opacity-60 uppercase" />
+          <Skeleton width={120} height={12} className="rounded-sm opacity-60 uppercase" />
         </div>
+        <Skeleton width={80} height={20} className="rounded-md opacity-40" />
       </div>
 
-      {/* Accordion Feed Ghost */}
-      <div className="space-y-3">
-        {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="px-3 pr-6 py-3 border border-border/40 bg-muted/10 rounded-lg flex items-center justify-between">
-            <div className="flex-1 grid grid-cols-[220px_90px_90px_1fr_auto] items-center gap-4">
-              <div className="flex flex-col gap-1.5">
-                <Skeleton width={160} height={14} className="rounded-sm" />
-                <Skeleton width={80} height={10} className="opacity-30 uppercase" />
-              </div>
-              <div className="flex justify-center">
-                <Skeleton width={60} height={20} className="rounded-md opacity-40" />
-              </div>
-              <div className="flex justify-center items-center gap-1.5">
-                <Skeleton circle width={10} height={10} className="opacity-20" />
-                <Skeleton width={45} height={12} className="opacity-30" />
-              </div>
-              <div />
-              <div className="flex justify-end">
-                <Skeleton width={85} height={24} className="rounded-md" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <Table className="table-fixed border-separate border-spacing-0 w-full">
+        <TableHeader className="bg-muted/40">
+          <TableRow className="hover:bg-transparent border-b border-border/10">
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-3 w-[140px] text-muted-foreground">
+              Status
+            </TableHead>
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+              Problem
+            </TableHead>
+            <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[100px] text-muted-foreground">
+              Submitted
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: count }).map((_, i) => (
+            <TableRow key={i} className="hover:bg-transparent">
+              <TableCell className="py-4 pl-3 border-b border-border/40">
+                <Skeleton width={90} height={18} className="rounded-md" />
+              </TableCell>
+              <TableCell className="py-4 pl-0 border-b border-border/40">
+                <div className="flex items-center gap-2">
+                  <Skeleton width={140} height={14} className="rounded-sm" />
+                  <Skeleton width={45} height={16} className="rounded-md opacity-30" />
+                </div>
+              </TableCell>
+              <TableCell className="py-4 text-right pr-6 border-b border-border/40">
+                <Skeleton width={60} height={10} className="rounded-sm opacity-40" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   </SkeletonProvider>
 );

@@ -1,7 +1,14 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonProvider } from "./BaseSkeleton";
-import { TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { 
+  Table,
+  TableHeader,
+  TableBody, 
+  TableCell, 
+  TableHead,
+  TableRow 
+} from "@/components/ui/table";
 
 /**
  * Problem Table Row Skeleton (Ghost of ProblemRow)
@@ -68,35 +75,44 @@ export const ProblemRowSkeleton = ({ count = 8, fragment = false }: { count?: nu
 /**
  * Submission History Item Skeleton (Ghost of SubmissionHistory items)
  */
-export const SubmissionSkeleton = ({ count = 3 }: { count?: number }) => (
+/**
+ * Submission History Item Skeleton (Ghost of SubmissionHistory items)
+ */
+export const SubmissionSkeleton = ({ count = 10 }: { count?: number }) => (
   <SkeletonProvider noWrapper>
-    <div className="space-y-3">
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex w-full items-center justify-between px-5 py-3 border border-border/40 rounded-lg bg-card/30">
-          <div className="flex items-center gap-4">
-            <div className="text-left space-y-2.5">
-              <div className="flex items-center gap-2">
-                {/* Verdict Badge */}
-                <Skeleton width={80} height={20} className="rounded-md" />
-                {/* Language Badge */}
-                <Skeleton width={60} height={20} className="rounded-md" />
-              </div>
-              {/* Date/Time */}
-              <Skeleton width={100} height={10} className="rounded-sm opacity-40" />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {/* Zap/Runtime */}
-            <div className="hidden xs:flex items-center gap-1.5">
-              <Skeleton circle width={12} height={12} className="opacity-30" />
-              <Skeleton width={35} height={10} className="opacity-30" />
-            </div>
-            {/* Code Button */}
-            <Skeleton width={68} height={32} className="rounded-md" />
-          </div>
-        </div>
-      ))}
+    <div className="overflow-hidden border border-border/40 rounded-xl bg-card/10">
+      <Table className="table-fixed border-separate border-spacing-0 w-full">
+        <TableHeader className="bg-muted/40">
+          <TableRow className="hover:bg-transparent border-b border-border/10">
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 w-[160px] text-muted-foreground">
+              Status
+            </TableHead>
+            <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+              Language
+            </TableHead>
+            <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[120px] text-muted-foreground">
+              Submitted
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: count }).map((_, i) => (
+            <TableRow key={i} className="hover:bg-transparent">
+              <TableCell className="py-4 pl-6 border-b border-border/40">
+                <Skeleton width={80} height={18} className="rounded-md" />
+              </TableCell>
+              <TableCell className="py-4 pl-0 border-b border-border/40">
+                <Skeleton width={60} height={16} className="rounded-md" />
+              </TableCell>
+              <TableCell className="py-4 text-right pr-6 border-b border-border/40">
+                <div className="flex flex-col items-end gap-1">
+                  <Skeleton width={70} height={10} className="rounded-sm opacity-40" />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   </SkeletonProvider>
 );

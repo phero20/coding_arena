@@ -40,8 +40,7 @@ import { cn, formatSolveTime } from "@/lib/utils";
 import type { ArenaMatch } from "@/types/arena";
 import { format } from "date-fns";
 import { VerdictBadge } from "@/components/ui/verdict-badge";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { CodeViewer } from "@/components/ui/code-viewer";
 import Link from "next/link";
 import NotFound from "@/app/not-found";
 
@@ -109,8 +108,8 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
       </div>
 
       {/* Main Leaderboard Card */}
-      <Card className="overflow-hidden border-border/40 shadow-xl shadow-background/20 bg-card/30 backdrop-blur-md">
-        <CardHeader className="border-b border-border/10 bg-muted/20 py-4">
+      <Card className="overflow-hidden border-border/40 bg-card/30">
+        <CardHeader className="border-b border-border/10 bg-muted/40 py-4">
           <div className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-primary" />
             <CardTitle className="text-sm font-black uppercase tracking-widest">
@@ -238,41 +237,15 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                       </TableRow>
 
                       {isExpanded && (
-                        <TableRow className="bg-muted hover:bg-muted">
+                        <TableRow className="bg-muted/40 hover:bg-muted/40 border-none">
                           <TableCell colSpan={7} className="p-0">
                             <div className="animate-in slide-in-from-top-2 duration-300">
                               {player.sourceCode ? (
-                                <div className="relative">
-                                  <SyntaxHighlighter
-                                    language={
-                                      player.languageId?.toLowerCase() ||
-                                      match.language?.toLowerCase() ||
-                                      "javascript"
-                                    }
-                                    style={vscDarkPlus}
-                                    PreTag="div"
-                                    customStyle={{
-                                      margin: 0,
-                                      padding: "1.5rem",
-                                      fontSize: "0.75rem",
-                                      lineHeight: "1.8",
-                                      background: "transparent",
-                                      overflowX: "hidden",
-                                      whiteSpace: "pre-wrap",
-                                      wordBreak: "break-all",
-                                    }}
-                                    codeTagProps={{
-                                      style: {
-                                        whiteSpace: "pre-wrap",
-                                        wordBreak: "break-all",
-                                        display: "block",
-                                        maxWidth: "100%",
-                                      },
-                                    }}
-                                  >
-                                    {player.sourceCode}
-                                  </SyntaxHighlighter>
-                                </div>
+                                <CodeViewer
+                                  code={player.sourceCode}
+                                  language={player.languageId || match.language}
+                                  label={`${player.languageId}`}
+                                />
                               ) : (
                                 <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
                                   <Code2 className="size-6" />

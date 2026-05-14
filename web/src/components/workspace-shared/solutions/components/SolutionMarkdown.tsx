@@ -54,7 +54,7 @@ export const SolutionMarkdown: React.FC<SolutionMarkdownProps> = ({
                 {...props}
               />
             </div>
-            <Separator className="bg-primary/20 h-[1px] w-full" />
+            <Separator className="bg-primary/20 h-px w-full" />
           </div>
         ),
         h3: ({ node, ...props }) => (

@@ -16,6 +16,7 @@ import {
   PenLine,
   X,
   Edit,
+  Edit2,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
@@ -58,6 +59,12 @@ export const DescriptionPanel = React.memo(
     } = useWorkspaceStore();
 
     const [showEditor, setShowEditor] = React.useState(false);
+    const [localTab, setLocalTab] = React.useState<string>(activeTab);
+
+    // Sync localTab with store's activeTab when it changes from outside (e.g. URL)
+    React.useEffect(() => {
+      setLocalTab(activeTab);
+    }, [activeTab]);
 
     // 2. Smart Reset: Clear workspace state when switching problems,
     // but ONLY if we are not landing on a deep link (?tab=...)
@@ -89,11 +96,19 @@ export const DescriptionPanel = React.memo(
 
     const tabs = useWorkspaceTabs(mode);
 
+    const handleTabChange = (val: string) => {
+      setLocalTab(val);
+      // Only sync permanent tabs to the URL/Store
+      if (val !== "new-solution") {
+        setActiveTab(val as MainTab);
+      }
+    };
+
     return (
       <div className="flex flex-col bg-card/10 w-full h-full overflow-hidden">
         <Tabs
-          value={activeTab}
-          onValueChange={(val) => setActiveTab(val as MainTab)}
+          value={localTab}
+          onValueChange={handleTabChange}
           className="flex-1 flex flex-col h-full overflow-hidden"
         >
           <div className="sticky top-0 z-20 px-4 bg-background md:bg-muted/20 border-b border-border/20 overflow-x-auto no-scrollbar">
@@ -112,6 +127,33 @@ export const DescriptionPanel = React.memo(
                   <span className="hidden lg:inline-block">{tab.label}</span>
                 </TabsTrigger>
               ))}
+
+              {showEditor && (
+                <TabsTrigger
+                  value="new-solution"
+                  className={cn(
+                    "data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none",
+                    "border-b-2 border-transparent data-[state=active]:border-primary",
+                    "rounded-none h-10 px-0 text-xs font-bold transition-all flex items-center gap-2 animate-in slide-in-from-left-2 group",
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    <Edit className="size-4" />
+                    <span className="hidden lg:inline-block">New Solution</span>
+                  </div>
+                  <Badge
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowEditor(false);
+                      setLocalTab("solutions");
+                    }}
+                    variant="destructive" 
+                    className="p-1 bg-transparent"
+                  >
+                    <X className="size-4" />
+                  </Badge>
+                </TabsTrigger>
+              )}
             </TabsList>
           </div>
 
@@ -256,50 +298,43 @@ export const DescriptionPanel = React.memo(
                 value="solutions"
                 className="m-0 border-none outline-none"
               >
-                <div className="relative">
-                  {showEditor ? (
-                    <div className="p-4 animate-in slide-in-from-right-4 duration-300">
-                      <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-sm font-bold flex items-center gap-2">
-                          <PenLine className="size-4 text-primary" />
-                          Write Solution
-                        </h2>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setShowEditor(false)}
-                          className="size-8 p-0"
-                        >
-                          <X className="size-4" />
-                        </Button>
-                      </div>
-                      <SolutionEditor
-                        problemId={problem.problem_id}
-                        problemTitle={problem.title}
-                        problemSlug={problem.problem_slug}
-                        onSuccess={() => {
-                          setShowEditor(false);
-                          setSolTab("my-solutions");
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <SolutionViewer
+                <SolutionViewer
+                  problemId={problem.problem_id}
+                  problemTitle={problem.title}
+                  problemSlug={problem.problem_slug}
+                  officialSolution={problem.solutions}
+                  onAddSolution={() => {
+                    setShowEditor(true);
+                    setLocalTab("new-solution");
+                  }}
+                />
+              </TabsContent>
+
+              {showEditor && (
+                <TabsContent
+                  value="new-solution"
+                  className="m-0 border-none outline-none animate-in slide-in-from-right-4 duration-300"
+                >
+                  <div className="">
+                    <SolutionEditor
                       problemId={problem.problem_id}
                       problemTitle={problem.title}
                       problemSlug={problem.problem_slug}
-                      officialSolution={problem.solutions}
-                      onAddSolution={() => setShowEditor(true)}
+                      onSuccess={() => {
+                        setShowEditor(false);
+                        setSolTab("my-solutions");
+                        setLocalTab("solutions");
+                      }}
                     />
-                  )}
-                </div>
-              </TabsContent>
+                  </div>
+                </TabsContent>
+              )}
 
               <TabsContent
                 value="submissions"
                 className="m-0 border-none outline-none"
               >
-                <div className="p-4 md:p-6">
+                <div>
                   <SubmissionHistory
                     submissions={submissions || []}
                     isLoading={isSubmissionsLoading}

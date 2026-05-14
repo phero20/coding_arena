@@ -29,7 +29,7 @@ export const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ entry, isViewer 
       </TableCell>
       <TableCell className="pl-0 md:pl-6 py-3">
         <Link 
-          href={`/profile/${entry.username}`}
+          href={`/u/${entry.username}`}
           className="flex items-center gap-3 w-fit max-w-[140px] sm:max-w-[280px]"
         >
           <Avatar className="h-9 w-9 border border-border/60 flex-shrink-0">
