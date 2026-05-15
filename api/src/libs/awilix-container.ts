@@ -32,6 +32,8 @@ import { type ExecutionService } from "../services/submissions/execution.service
 import { type ProblemValidatorService } from "../services/problems/problem-validator.service";
 import { type MatchDomainEngine } from "../services/arena/match-domain-engine.service";
 import { type MatchBroadcasterService } from "../services/arena/match-broadcaster.service";
+import { type IStatsService } from "../services/stats/stats.service";
+import { type StatsController } from "../controllers/stats/stats.controller";
 
 import { type ProblemCache } from "../cache/problems/problem.cache";
 import { type ProblemTestCache } from "../cache/problems/problem-test.cache";
@@ -55,11 +57,18 @@ import { type ArenaController } from "../controllers/arena/arena.controller";
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
 
 import { type StatsSubmissionService } from "../services/stats/stats-submission.service";
+import { createClerkClient } from "@clerk/backend";
+import { config } from "../configs/env";
 
 /**
  * Type Definition for the DI Container Cradle.
  * This is the ultimate source of truth for dependencies across the platform.
  */
+import { FollowRepository } from "../repositories/user/follow.repository";
+import { type IFollowService } from "../services/user/follow.service";
+import { FollowController } from "../controllers/user/follow.controller";
+import { ProfileController } from "../controllers/user/profile.controller";
+
 export interface ICradle {
   // Infrastructure
   submissionQueue: Queue;
@@ -83,6 +92,7 @@ export interface ICradle {
   problemTestService: ProblemTestService;
   submissionService: SubmissionService;
   statsSubmissionService: StatsSubmissionService;
+  statsService: IStatsService;
   groqLlmService: GroqLlmService;
   llm: GroqLlmService;
   aiProblemService: AiProblemService;
@@ -123,6 +133,14 @@ export interface ICradle {
   submissionController: SubmissionController;
   aiProblemController: AiProblemController;
   arenaController: ArenaController;
+  statsController: StatsController;
+
+  // Third Party
+  clerkClient: ReturnType<typeof createClerkClient>;
+  followRepository: FollowRepository;
+  followService: IFollowService;
+  followController: FollowController;
+  profileController: ProfileController;
 }
 
 const container = createContainer<ICradle>({
@@ -143,6 +161,9 @@ container.register({
   ...repositoriesRegistry,
   ...servicesRegistry,
   ...controllersRegistry,
+
+  // Third Party
+  clerkClient: asValue(createClerkClient({ secretKey: config.clerkSecretKey })),
 });
 
 export { container };
