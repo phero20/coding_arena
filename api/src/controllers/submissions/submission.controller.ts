@@ -15,6 +15,7 @@ import type { MatchValidatorService } from "../../services/arena/match-validator
 import type { ProblemValidatorService } from "../../services/problems/problem-validator.service";
 
 import { type IClockService } from "../../services/common/clock.service";
+import { type IUserRepository } from "../../repositories/user/user.repository";
 import { type ICradle } from "../../libs/awilix-container";
 
 /**
@@ -29,6 +30,7 @@ export class SubmissionController extends BaseController {
   private readonly matchValidatorService: MatchValidatorService;
   private readonly problemValidatorService: ProblemValidatorService;
   private readonly clock: IClockService;
+  private readonly userRepository: IUserRepository;
 
   constructor(cradle: ICradle) {
     super(cradle);
@@ -38,6 +40,7 @@ export class SubmissionController extends BaseController {
     this.matchValidatorService = cradle.matchValidatorService;
     this.problemValidatorService = cradle.problemValidatorService;
     this.clock = cradle.clockService;
+    this.userRepository = cradle.userRepository;
   }
 
   async run(req: ControllerRequest<RunSubmissionInput>) {
@@ -58,7 +61,8 @@ export class SubmissionController extends BaseController {
     const { problemId, languageId, sourceCode, arenaMatchId } = req.body;
 
     // 1. Business Rules: Delegate to Validator Services
-    await this.problemValidatorService.validateProblemExists(problemId);
+    // validateProblemExists returns the full problem so we can denormalize the title
+    const problem = await this.problemValidatorService.validateProblemExists(problemId);
 
     if (arenaMatchId) {
       await this.matchValidatorService.validateSubmissionEligibility(
@@ -71,6 +75,7 @@ export class SubmissionController extends BaseController {
     const submission = await this.submissionService.createSubmission(
       {
         problemId,
+        problemTitle: problem?.title,
         userId: req.user!.id,
         languageId,
         sourceCode,
@@ -144,6 +149,37 @@ export class SubmissionController extends BaseController {
       req.user!.id,
       problemId,
       req.clerkUserId,
+    );
+  }
+
+  async getRecentSubmissions(
+    req: ControllerRequest<never, never, { limit: number; offset: number; username?: string }>,
+  ) {
+    const { limit, offset, username } = req.query;
+
+    // Use specific target or fallback to current user
+    let targetUserId = req.user?.id;
+
+    if (username) {
+      const user = await this.userRepository.findByUsername(username);
+      if (!user) {
+        throw AppError.notFound(`Username @${username} not found`);
+      }
+      targetUserId = user.id;
+    }
+
+    if (!targetUserId) {
+       // This handles the public access case where neither a username nor a login exists
+       return {
+         submissions: [],
+         pagination: { total: 0, limit, offset }
+       };
+    }
+
+    return await this.submissionService.getRecentSubmissions(
+      targetUserId,
+      limit,
+      offset,
     );
   }
 }
