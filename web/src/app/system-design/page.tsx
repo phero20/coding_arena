@@ -1,11 +1,16 @@
 "use client";
 
-import { DiagramCanvas } from "@/components/diagram/DiagramCanvas";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Download, Share2, Undo2, Redo2, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+
+const DiagramCanvas = dynamic(
+  () => import("@/components/diagram/DiagramCanvas").then((mod) => mod.DiagramCanvas),
+  { ssr: false }
+);
 
 export default function DiagramPage() {
   const [editor, setEditor] = useState<any>(null);
