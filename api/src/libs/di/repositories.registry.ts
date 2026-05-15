@@ -7,6 +7,7 @@ import { ArenaRepository } from "../../repositories/arena/arena.repository";
 import { ArenaMatchRepository } from "../../repositories/arena/arena-match.repository";
 import { ArenaSubmissionRepository } from "../../repositories/arena/arena-submission.repository";
 import { StatsRepository } from "../../repositories/stats/stats.repository";
+import { FollowRepository } from "../../repositories/user/follow.repository";
 
 /**
  * Repository layer registrations.
@@ -21,4 +22,5 @@ export const repositoriesRegistry = {
   arenaMatchRepository: asClass(ArenaMatchRepository).singleton(),
   arenaSubmissionRepository: asClass(ArenaSubmissionRepository).singleton(),
   statsRepository: asClass(StatsRepository).singleton(),
+  followRepository: asClass(FollowRepository).singleton(),
 };
