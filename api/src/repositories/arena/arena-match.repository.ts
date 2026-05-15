@@ -346,4 +346,16 @@ export class ArenaMatchRepository extends MongoBaseRepository<
     const doc = await query.exec();
     return this.toDomain(doc as any);
   }
+  async updateMatch(
+    matchId: string,
+    updates: UpdateQuery<ArenaMatchDocument>,
+    options?: RepositoryOptions,
+  ): Promise<ArenaMatch | null> {
+    const query = this.model.findByIdAndUpdate(matchId, updates, {
+      returnDocument: "after",
+    }).lean();
+    this.applyOptions(query, options);
+    const doc = await query.exec();
+    return this.toDomain(doc as any);
+  }
 }
