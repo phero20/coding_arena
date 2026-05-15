@@ -1,0 +1,78 @@
+:root {
+  /* Difficulty Colors (Solid) */
+  --difficulty-easy: #10b981;    /* Emerald 500 */
+  --difficulty-medium: #f59e0b;  /* Amber 500 */
+  --difficulty-hard: #f43f5e;    /* Rose 500 */
+
+  /* Metric Colors (Solid) */
+  --metric-views: #3b82f6;       /* Blue 500 */
+  --metric-solutions: #10b981;   /* Emerald 500 */
+  --metric-discuss: #f43f5e;     /* Rose 500 */
+  --metric-reputation: #f59e0b;  /* Amber 500 */
+
+  /* Difficulty Backgrounds (10% Opacity) */
+  --difficulty-easy-bg: rgba(16, 185, 129, 0.1);
+  --difficulty-medium-bg: rgba(245, 158, 11, 0.1);
+  --difficulty-hard-bg: rgba(244, 63, 94, 0.1);
+
+  /* Metric Backgrounds (10% Opacity) */
+  --metric-views-bg: rgba(59, 130, 246, 0.1);
+  --metric-solutions-bg: rgba(16, 185, 129, 0.1);
+
+  /* Submission Status Colors (Solid) */
+  --status-accepted: #10b981;      /* Emerald 500 */
+  --status-wrong-answer: #f43f5e;  /* Rose 500 */
+  --status-tle: #f59e0b;           /* Amber 500 */
+  --status-runtime-error: #f43f5e; /* Rose 500 */
+  --status-compile-error: #f59e0b; /* Amber 500 */
+  --status-system-error: #6b7280;  /* Gray 500 */
+  --status-pending: #6b7280;       /* Gray 500 */
+
+  /* Submission Status Backgrounds (10% Opacity) */
+  --status-accepted-bg: rgba(16, 185, 129, 0.1);
+  --status-wrong-answer-bg: rgba(244, 63, 94, 0.1);
+  --status-tle-bg: rgba(245, 158, 11, 0.1);
+  --status-runtime-error-bg: rgba(244, 63, 94, 0.1);
+  --status-compile-error-bg: rgba(245, 158, 11, 0.1);
+  --status-system-error-bg: rgba(107, 114, 128, 0.1);
+  --status-pending-bg: rgba(107, 114, 128, 0.1);
+}
+
+/* Utility Classes for Difficulties */
+.text-difficulty-easy { color: var(--difficulty-easy) !important; }
+.text-difficulty-medium { color: var(--difficulty-medium) !important; }
+.text-difficulty-hard { color: var(--difficulty-hard) !important; }
+
+.bg-difficulty-easy { background-color: var(--difficulty-easy-bg) !important; }
+.bg-difficulty-medium { background-color: var(--difficulty-medium-bg) !important; }
+.bg-difficulty-hard { background-color: var(--difficulty-hard-bg) !important; }
+
+.border-difficulty-easy { border-color: rgba(16, 185, 129, 0.2) !important; }
+.border-difficulty-medium { border-color: rgba(245, 158, 11, 0.2) !important; }
+.border-difficulty-hard { border-color: rgba(244, 63, 94, 0.2) !important; }
+
+/* Utility Classes for Metrics */
+.text-metric-views { color: var(--metric-views) !important; }
+.text-metric-solutions { color: var(--metric-solutions) !important; }
+.text-metric-discuss { color: var(--metric-discuss) !important; }
+.text-metric-reputation { color: var(--metric-reputation) !important; }
+
+.bg-metric-views { background-color: var(--metric-views-bg) !important; }
+.bg-metric-solutions { background-color: var(--metric-solutions-bg) !important; }
+
+/* Utility Classes for Submission Statuses */
+.text-status-accepted        { color: var(--status-accepted) !important; }
+.text-status-wrong-answer    { color: var(--status-wrong-answer) !important; }
+.text-status-tle             { color: var(--status-tle) !important; }
+.text-status-runtime-error   { color: var(--status-runtime-error) !important; }
+.text-status-compile-error   { color: var(--status-compile-error) !important; }
+.text-status-system-error    { color: var(--status-system-error) !important; }
+.text-status-pending         { color: var(--status-pending) !important; }
+
+.bg-status-accepted          { background-color: var(--status-accepted-bg) !important; }
+.bg-status-wrong-answer      { background-color: var(--status-wrong-answer-bg) !important; }
+.bg-status-tle               { background-color: var(--status-tle-bg) !important; }
+.bg-status-runtime-error     { background-color: var(--status-runtime-error-bg) !important; }
+.bg-status-compile-error     { background-color: var(--status-compile-error-bg) !important; }
+.bg-status-system-error      { background-color: var(--status-system-error-bg) !important; }
+.bg-status-pending           { background-color: var(--status-pending-bg) !important; }
