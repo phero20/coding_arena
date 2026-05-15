@@ -48,14 +48,23 @@ export class ClerkWebhookController extends BaseController {
           (e: any) => e.id === user.primary_email_address_id,
         )?.email_address ?? user.email_addresses?.[0]?.email_address;
 
+      const fullName = 
+        user.first_name && user.last_name 
+          ? `${user.first_name} ${user.last_name}` 
+          : user.first_name || user.last_name || null;
+
       await this.authService.syncUser({
         clerkId: user.id,
         username:
           user.username ||
           (primaryEmail ? primaryEmail.split("@")[0] : `user_${user.id}`),
+        fullName,
         email: primaryEmail ?? "",
         avatarUrl: user.image_url,
       });
+    } else if (event.type === "user.deleted") {
+      const user = event.data;
+      await this.authService.deleteUser(user.id);
     }
 
     const response = ApiResponse.success({
