@@ -6,6 +6,7 @@ import {
   AlertCircle,
   Loader2,
   RefreshCw,
+  Terminal,
 } from "lucide-react";
 import { type ExecutionVerdict } from "@/types/submission";
 
@@ -18,7 +19,7 @@ export interface StatusTheme {
 }
 
 export const STATUS_CONFIG: Record<
-  ExecutionVerdict | "PENDING" | "RUNNING",
+  ExecutionVerdict | "PENDING" | "RUNNING" | "IDLE",
   StatusTheme
 > = {
   ACCEPTED: {
@@ -82,6 +83,13 @@ export const STATUS_CONFIG: Record<
     badgeClass:
       "bg-status-pending text-status-pending border-status-pending",
     textColor: "text-status-pending",
+    variant: "outline",
+  },
+  IDLE: {
+    icon: Terminal,
+    label: "Ready",
+    badgeClass: "bg-muted text-muted-foreground border-border",
+    textColor: "text-muted-foreground",
     variant: "outline",
   },
 };

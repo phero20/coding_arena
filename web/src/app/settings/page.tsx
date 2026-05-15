@@ -25,10 +25,9 @@ const SettingsPage = () => {
               <ChevronLeft size={20} className="text-muted-foreground" />
             </Button>
             
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20 text-primary">
-                <Settings size={24} />
-              </div>
+            <div className="flex items-center gap-3 text-primary">
+
+                <Settings size={40} />
               <div>
                 <h1 className="text-2xl font-bold tracking-tight text-foreground">
                   Settings

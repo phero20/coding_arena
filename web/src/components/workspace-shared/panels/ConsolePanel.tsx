@@ -45,10 +45,11 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
     props;
 
   // Derive consolidated status config
-  const overallVerdict = (verdict || runResult?.overallStatus || "PENDING") as
+  const overallVerdict = (verdict || runResult?.overallStatus || "IDLE") as
     | ExecutionVerdict
     | "PENDING"
-    | "RUNNING";
+    | "RUNNING"
+    | "IDLE";
 
   return (
     <div className="flex flex-col h-full border-t border-border/20 overflow-hidden">

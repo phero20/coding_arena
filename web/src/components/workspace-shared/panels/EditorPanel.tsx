@@ -317,7 +317,7 @@ const ConsolePanelAdapter: React.FC<{
   runResult: RunSubmissionResponse | null;
   isExecutionRunning?: boolean;
   runError?: Error | string | null;
-  verdict?: ExecutionVerdict | "PENDING" | null;
+  verdict?: ExecutionVerdict | "PENDING" | "IDLE" | null;
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;

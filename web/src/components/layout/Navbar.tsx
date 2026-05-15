@@ -21,7 +21,7 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const HIDDEN_NAVBAR_PATHS = ["/problems/", "/arena/match", "/compilers"];
+  const HIDDEN_NAVBAR_PATHS = ["/problems/", "/arena/match", "/compilers", "/system-design"];
   const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some((path) =>
     pathname.startsWith(path),
   );
