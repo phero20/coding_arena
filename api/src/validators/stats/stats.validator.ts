@@ -5,8 +5,10 @@ export const DifficultySchema = z.enum(['easy', 'medium', 'hard']);
 export const UpdateStatsSchema = z.object({
   userId: z.string().uuid(),
   points: z.number().int().min(0),
+  arenaPoints: z.number().int().min(0).optional(),
   difficulty: DifficultySchema.optional(),
   isMatch: z.boolean().default(false),
+  languageId: z.string().optional(), // Language used in the winning submission
 });
 
 export const LeaderboardQuerySchema = z.object({
