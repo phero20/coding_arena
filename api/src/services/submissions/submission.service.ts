@@ -131,4 +131,28 @@ export class SubmissionService {
   getArenaRoom(roomId: string) {
     return this.arenaRepository.getRoom(roomId);
   }
+
+  /**
+   * Fetches recent chronological submissions for a user across all problems.
+   */
+  async getRecentSubmissions(
+    userId: string,
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<{
+    submissions: Submission[];
+    pagination: { total: number; limit: number; offset: number };
+  }> {
+    const { submissions, total } =
+      await this.submissionRepository.getRecentSubmissions(
+        userId,
+        limit,
+        offset,
+      );
+
+    return {
+      submissions,
+      pagination: { total, limit, offset },
+    };
+  }
 }
