@@ -38,6 +38,7 @@ export interface EvaluationResultData {
 export interface Submission {
   id: string;
   problemId: string;
+  problemTitle?: string;
   userId: string;
   languageId: string;
   sourceCode: string;
@@ -51,6 +52,7 @@ export interface Submission {
 
 export interface CreateSubmissionInput {
   problemId: string;
+  problemTitle?: string;
   userId: string;
   languageId: string;
   sourceCode: string;
