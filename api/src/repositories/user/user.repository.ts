@@ -14,6 +14,7 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<User | null>;
   create(user: NewUser): Promise<User>;
   update(clerkId: string, user: Partial<NewUser>): Promise<User | null>;
+  deleteByClerkId(clerkId: string): Promise<boolean>;
 }
 
 export class UserRepository implements IUserRepository {
@@ -76,5 +77,14 @@ export class UserRepository implements IUserRepository {
       .returning();
 
     return updated ?? null;
+  }
+
+  async deleteByClerkId(clerkId: string): Promise<boolean> {
+    const [deleted] = await db
+      .delete(schema.users)
+      .where(eq(schema.users.clerkId, clerkId))
+      .returning();
+
+    return !!deleted;
   }
 }

@@ -38,6 +38,12 @@ export interface ISubmissionRepository {
     problemId: string,
     excludeIds?: string[],
   ): Promise<Submission[]>;
+  getRecentSubmissions(
+    userId: string,
+    limit: number,
+    offset: number,
+    options?: RepositoryOptions,
+  ): Promise<{ submissions: Submission[]; total: number }>;
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -63,6 +69,7 @@ export class SubmissionRepository
       [
         {
           problemId: input.problemId,
+          problemTitle: input.problemTitle,
           userId: input.userId,
           languageId: input.languageId,
           sourceCode: input.sourceCode,
@@ -124,5 +131,30 @@ export class SubmissionRepository
     const docs = await mQuery.exec();
 
     return this.toDomainArray(docs);
+  }
+
+  async getRecentSubmissions(
+    userId: string,
+    limit: number = 10,
+    offset: number = 0,
+    options?: RepositoryOptions,
+  ): Promise<{ submissions: Submission[]; total: number }> {
+    const query = { userId };
+    
+    const [docs, total] = await Promise.all([
+      this.model
+        .find(query)
+        .sort({ createdAt: -1 })
+        .skip(offset)
+        .limit(limit)
+        .lean()
+        .exec(),
+      this.model.countDocuments(query).exec(),
+    ]);
+
+    return {
+      submissions: this.toDomainArray(docs as any),
+      total,
+    };
   }
 }
