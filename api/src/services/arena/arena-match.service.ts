@@ -30,6 +30,7 @@ export class ArenaMatchService {
   private readonly arenaRepository: ArenaRepository;
   private readonly matchDomainEngine: MatchDomainEngine;
   private readonly matchBroadcaster: MatchBroadcasterService;
+  private readonly statsSubmissionService: any; // Type added implicitly from cradle
   private readonly clock: IClockService;
 
   constructor({
@@ -39,6 +40,7 @@ export class ArenaMatchService {
     matchDomainEngine,
     matchBroadcaster,
     clockService,
+    statsSubmissionService,
   }: ICradle) {
     this.arenaMatchRepository = arenaMatchRepository;
     this.arenaSubmissionRepository = arenaSubmissionRepository;
@@ -46,6 +48,7 @@ export class ArenaMatchService {
     this.matchDomainEngine = matchDomainEngine;
     this.matchBroadcaster = matchBroadcaster;
     this.clock = clockService;
+    this.statsSubmissionService = statsSubmissionService;
   }
 
   async handleMatchSubmission(data: MatchSubmissionData) {
@@ -238,6 +241,21 @@ export class ArenaMatchService {
       finalizedMatch.players,
     );
 
+    // Update the scores in MongoDB to reflect the Rank-Based points
+    // Formula: (Total Participants - Rank + 1) * 25
+    const totalPlayers = finalRankings.length;
+    finalRankings.forEach((player, index) => {
+      const rank = index + 1;
+      player.score = (totalPlayers - rank + 1) * 25;
+    });
+
+    // Persist these final scores back to MongoDB
+    await this.arenaMatchRepository.updateMatch(
+      finalizedMatch.id,
+      { players: finalRankings },
+      options,
+    );
+
     // 3. Transition Redis Room to FINISHED (Atomic)
     await this.arenaRepository.finishRoom(roomId);
 
@@ -247,6 +265,18 @@ export class ArenaMatchService {
       finalizedMatch.id,
       finalRankings,
     );
+
+    // 4.5 Update Postgres Platform Stats (Points & Games)
+    try {
+      await this.statsSubmissionService.handleArenaMatchFinalization(
+        finalRankings,
+      );
+    } catch (statsErr) {
+      logger.error(
+        { roomId, statsErr },
+        "Non-blocking: Failed to finalize Postgres stats for Arena match.",
+      );
+    }
 
     // 5. Persistent Cleanup (No leaks, surviving restarts)
     try {
