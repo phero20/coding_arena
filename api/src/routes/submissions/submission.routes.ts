@@ -7,6 +7,7 @@ import {
 import {
   SubmissionIdParamSchema,
   ProblemIdParamSchema,
+  RecentSubmissionsQuerySchema,
 } from "../../validators/common/common.validator";
 import type { SubmissionController } from "../../controllers/submissions/submission.controller";
 import type { RateLimitMiddleware } from "../../middlewares/security/rate-limit.middleware";
@@ -56,6 +57,13 @@ export const registerSubmissionRoutes = (
   );
 
   // Check submission status - no rate limit (frequent polling expected)
+  
+  app.get(
+    "/submissions/recent",
+    zValidator("query", RecentSubmissionsQuerySchema),
+    submissionController.action(submissionController.getRecentSubmissions),
+  );
+
   app.get(
     "/submissions/:submissionId",
     zValidator("param", SubmissionIdParamSchema),
