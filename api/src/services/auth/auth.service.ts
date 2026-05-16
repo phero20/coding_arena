@@ -7,6 +7,7 @@ const logger = createLogger("auth-service");
 export interface AuthUserPayload {
   clerkId: string;
   username: string;
+  fullName?: string | null;
   email: string;
   avatarUrl?: string | null;
 }
@@ -17,13 +18,16 @@ import {
   validateServiceInput,
   SyncUserSchema,
 } from "../validation/auth.validator";
+import { createClerkClient } from "@clerk/backend";
 
 export class AuthService {
   private readonly userRepository: IUserRepository;
+  private readonly clerkClient: ReturnType<typeof createClerkClient>;
   private readonly clock: IClockService;
 
-  constructor({ userRepository, clockService }: ICradle) {
+  constructor({ userRepository, clerkClient, clockService }: ICradle) {
     this.userRepository = userRepository;
+    this.clerkClient = clerkClient;
     this.clock = clockService;
   }
 
@@ -38,11 +42,16 @@ export class AuthService {
     // Ensure unique username and email before creating
     const username = await this.generateUniqueUsername(payload.username);
 
+    // Back-sync to Clerk if the original payload didn't already have this username
+    // (This helps Google users get their first username into Clerk's world)
+    await this.pushUsernameToClerk(clerkId, username);
+
     logger.info({ clerkId, username }, "User found or created via ensureUser");
 
     return this.userRepository.create({
       clerkId,
       username,
+      fullName: payload.fullName,
       email: payload.email,
       avatarUrl: payload.avatarUrl ?? undefined,
       status: "active",
@@ -64,6 +73,7 @@ export class AuthService {
     if (existing) {
       const updated = await this.userRepository.update(clerkId, {
         username: payload.username,
+        fullName: payload.fullName,
         email: payload.email,
         avatarUrl: payload.avatarUrl ?? undefined,
       });
@@ -72,6 +82,9 @@ export class AuthService {
 
     // New user from webhook - ensure uniqueness
     const username = await this.generateUniqueUsername(payload.username);
+
+    // Back-sync to Clerk
+    await this.pushUsernameToClerk(clerkId, username);
 
     return this.userRepository.create({
       clerkId,
@@ -83,23 +96,56 @@ export class AuthService {
     });
   }
 
+  async deleteUser(clerkId: string): Promise<void> {
+    logger.info({ clerkId }, "Processing user deletion request...");
+    const deleted = await this.userRepository.deleteByClerkId(clerkId);
+    
+    if (deleted) {
+      logger.info({ clerkId }, "User and all associated data purged successfully ✅");
+    } else {
+      logger.warn({ clerkId }, "User not found for deletion, skipping.");
+    }
+  }
+
   private async generateUniqueUsername(baseUsername: string): Promise<string> {
-    let username = baseUsername;
+    const sanitizedBase = baseUsername.trim().replace(/\s+/g, "_").toLowerCase();
+    let username = sanitizedBase;
     let isUnique = false;
     let attempts = 0;
 
-    while (!isUnique && attempts < 10) {
+    while (!isUnique && attempts < 15) {
       const existing = await this.userRepository.findByUsername(username);
       if (!existing) {
         isUnique = true;
       } else {
         attempts++;
-        // Append a random 2-digit number for collision
-        const suffix = Math.floor(Math.random() * 90 + 10);
-        username = `${baseUsername}_${suffix}`;
+        // Append a random 4-digit number for collision (e.g. _1234)
+        const suffix = Math.floor(1000 + Math.random() * 9000);
+        username = `${sanitizedBase}_${suffix}`;
       }
     }
 
+    // High density fallback if 15 attempts fail (appending more randomness)
+    if (!isUnique) {
+      username = `${sanitizedBase}_${Date.now().toString().slice(-4)}`;
+    }
+
     return username;
+  }
+
+  /**
+   * Pushes a username back to Clerk. 
+   * Useful for Google signups where Clerk doesn't have a username initially.
+   */
+  private async pushUsernameToClerk(clerkId: string, username: string) {
+    try {
+      logger.info({ clerkId, username }, "Pushing generated username to Clerk...");
+      await this.clerkClient.users.updateUser(clerkId, { username });
+      logger.info({ clerkId }, "Clerk username updated successfully");
+    } catch (err) {
+      // We don't want to crash the whole sync if Clerk update fails (e.g. rate limits)
+      // but we log it as an error for visibility.
+      logger.error({ clerkId, username, err }, "Failed to push username back to Clerk");
+    }
   }
 }
