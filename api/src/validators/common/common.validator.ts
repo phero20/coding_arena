@@ -2,14 +2,17 @@ import { z } from "zod";
 
 /**
  * Common Zod schemas for URL parameters and query strings.
- * Centralizing these ensures consistent validation error messages 
+ * Centralizing these ensures consistent validation error messages
  * across the entire API.
  */
 
 // MongoDB ObjectId validator (24 hex characters)
 const ObjectIdSchema = z
   .string()
-  .regex(/^[0-9a-fA-F]{24}$/, "Invalid ID format. Expected 24-character hex string.");
+  .regex(
+    /^[0-9a-fA-F]{24}$/,
+    "Invalid ID format. Expected 24-character hex string.",
+  );
 
 /**
  * Standard ID parameter validator (e.g. :submissionId, :matchId)
@@ -45,14 +48,47 @@ export const RoomIdParamSchema = z.object({
  * Standard Slug parameter validator (e.g. :slug)
  */
 export const SlugParamSchema = z.object({
-  slug: z.string().min(1, "Slug is required.").regex(/^[a-z0-9-]+$/, "Invalid slug format."),
+  slug: z
+    .string()
+    .min(1, "Slug is required.")
+    .regex(/^[a-z0-9-]+$/, "Invalid slug format."),
 });
 
 /**
  * Standard pagination query validator
  */
 export const PaginationQuerySchema = z.object({
-  limit: z.string().optional().transform((val) => (val ? parseInt(val, 10) : 20)),
-  offset: z.string().optional().transform((val) => (val ? parseInt(val, 10) : 0)),
-  page: z.string().optional().transform((val) => (val ? parseInt(val, 10) : 1)),
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 20)),
+  offset: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 0)),
+  page: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 1)),
+});
+
+/**
+ * Standard query validator for recent submissions
+ */
+export const RecentSubmissionsQuerySchema = z.object({
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => {
+      const num = val ? parseInt(val, 10) : 10;
+      return isNaN(num) || num <= 0 ? 10 : Math.min(num, 50);
+    }),
+  offset: z
+    .string()
+    .optional()
+    .transform((val) => {
+      const num = val ? parseInt(val, 10) : 0;
+      return isNaN(num) || num < 0 ? 0 : num;
+    }),
+  username: z.string().optional(),
 });
