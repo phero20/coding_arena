@@ -135,7 +135,7 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({ content }) => {
               className={cn(
                 "text-xs md:text-sm font-bold mt-4 mb-2 not-prose wrap-break-word",
                 isComplexity
-                  ? "text-amber-400 flex items-center gap-2"
+                  ? "text-difficulty-medium flex items-center gap-2"
                   : "text-foreground/80",
               )}
               {...props}
