@@ -39,8 +39,8 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
         className={cn(
           "text-[9px] md:text-[10px] font-bold uppercase tracking-wider border-none whitespace-nowrap",
           isAccepted
-            ? "bg-emerald-500/10 text-emerald-500"
-            : "bg-destructive/10 text-destructive",
+            ? "bg-status-accepted text-status-accepted"
+            : "bg-status-wrong-answer text-status-wrong-answer",
         )}
       >
         {verdict.replace("_", " ")}
