@@ -135,8 +135,8 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                           className={cn(
                             "text-[8px] font-black uppercase tracking-widest px-1 h-3.5 border-none shrink-0 rounded-[2px]",
                             player.status === "SUBMITTED"
-                              ? "bg-secondary text-secondary-foreground"
-                              : "bg-muted text-muted-foreground",
+                              ? "bg-status-accepted text-status-accepted"
+                              : "bg-primary/10 text-primary",
                           )}
                         >
                           {player.status}
