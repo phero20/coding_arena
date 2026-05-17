@@ -10,15 +10,15 @@ import { cn } from "@/lib/utils";
 import type { Problem } from "@/types/api";
 
 const difficultyColor: Record<Problem["difficulty"], string> = {
-  Easy: "text-emerald-400",
-  Medium: "text-amber-400",
-  Hard: "text-rose-400",
+  Easy: "text-difficulty-easy",
+  Medium: "text-difficulty-medium",
+  Hard: "text-difficulty-hard",
 };
 
 const difficultyBg: Record<Problem["difficulty"], string> = {
-  Easy: "bg-emerald-400/10 border-emerald-500/30",
-  Medium: "bg-amber-400/10 border-amber-500/30",
-  Hard: "bg-rose-400/10 border-rose-500/30",
+  Easy: "bg-difficulty-easy border-difficulty-easy",
+  Medium: "bg-difficulty-medium border-difficulty-medium",
+  Hard: "bg-difficulty-hard border-difficulty-hard",
 };
 
 
