@@ -17,7 +17,6 @@ import {
 import {
   SignInButton,
   SignUpButton,
-  UserButton,
   useUser,
   Show,
 } from "@clerk/nextjs";
@@ -25,6 +24,7 @@ import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navItems = [
   { name: "Arena", href: "/arena", icon: Swords },
@@ -38,6 +38,7 @@ export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { isLoaded, isSignedIn, user } = useUser();
+  console.log(user)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +52,7 @@ export const Navbar = () => {
   const HIDDEN_NAVBAR_PATHS = ["/practice/problem", "/arena/match"]; // Add more prefixes here (e.g., "/battle/", "/editor/")
 
   const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some(
-    (path) => pathname.startsWith(path) && pathname !== path
+    (path) => pathname.startsWith(path) && pathname !== path,
   );
 
   if (shouldHideNavbar) return null;
@@ -121,12 +122,18 @@ export const Navbar = () => {
             </Show>
             <Show when="signed-in">
               <div className="flex items-center gap-4">
-                <Link href="/dashboard">
-                  <Button variant="outline" size="sm" className="font-semibold">
-                    Dashboard
-                  </Button>
+                <Link 
+                  href={`/u/${user?.username || user?.id}`}
+                  className="group relative h-9 w-9 overflow-hidden rounded-xl border border-border/40 hover:border-primary/40 transition-all duration-300 active:scale-95 shadow-sm"
+                >
+                  <Avatar className="h-full w-full rounded-none">
+                    <AvatarImage src={user?.imageUrl} alt={user?.username || "user"} />
+                    <AvatarFallback className="bg-primary/10 text-primary uppercase font-bold text-[10px]">
+                      {user?.username?.slice(0, 2) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
-                <UserButton />
               </div>
             </Show>
           </div>
@@ -184,9 +191,9 @@ export const Navbar = () => {
                   </SignUpButton>
                 </Show>
                 <Show when="signed-in">
-                  <Link href="/dashboard" className="w-full">
-                    <Button className="w-full">My Dashboard</Button>
-                  </Link>
+                  <div className="pt-2">
+                    {/* You can add a mobile profile link here if desired, but following 'just that' for now */}
+                  </div>
                 </Show>
               </div>
             </div>
