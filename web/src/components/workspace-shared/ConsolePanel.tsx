@@ -197,8 +197,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                       className={cn(
                         "text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded border",
                         (verdict || runResult?.overallStatus) === "ACCEPTED"
-                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/40"
-                          : "bg-destructive/10 text-destructive border-destructive/40",
+                          ? "bg-status-accepted text-status-accepted border-status-accepted"
+                          : "bg-status-wrong-answer text-status-wrong-answer border-status-wrong-answer",
                       )}
                     >
                       {verdict || runResult?.overallStatus || "PENDING"}
@@ -227,8 +227,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                             className={cn(
                               "size-1.5 rounded-full shrink-0",
                               t.status === "ACCEPTED"
-                                ? "bg-emerald-500"
-                                : "bg-destructive",
+                                ? "bg-status-accepted"
+                                : "bg-status-wrong-answer",
                             )}
                           />
                         </span>
@@ -247,8 +247,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                           className={cn(
                             "text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md border",
                             activeResult.status === "ACCEPTED"
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/40"
-                              : "bg-destructive/10 text-destructive border-destructive/40",
+                              ? "bg-status-accepted text-status-accepted border-status-accepted"
+                              : "bg-status-wrong-answer text-status-wrong-answer border-status-wrong-answer",
                           )}
                         >
                           {activeResult.status}
