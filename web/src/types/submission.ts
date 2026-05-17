@@ -41,6 +41,7 @@ export interface RunSubmissionPayload {
 export interface Submission {
   id: string;
   problemId: string;
+  problemTitle?: string;
   userId: string;
   languageId: string;
   sourceCode: string;
