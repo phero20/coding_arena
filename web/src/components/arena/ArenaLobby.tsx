@@ -138,10 +138,10 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
                 className={cn(
                   "font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none",
                   room.difficulty === "Easy"
-                    ? "bg-emerald-400/10 border-emerald-500/30 text-emerald-400"
+                    ? "bg-difficulty-easy text-difficulty-easy"
                     : room.difficulty === "Medium"
-                      ? "bg-amber-400/10 border-amber-500/30 text-amber-400"
-                      : "bg-rose-400/10 border-rose-500/30 text-rose-400",
+                      ? "bg-difficulty-medium text-difficulty-medium"
+                      : "bg-difficulty-hard text-difficulty-hard",
                 )}
               >
                 {room.difficulty}
