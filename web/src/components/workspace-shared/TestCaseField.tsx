@@ -32,7 +32,7 @@ const CopyButton: React.FC<{ value: string }> = ({ value }) => {
       title="Copy to clipboard"
     >
       {copied ? (
-        <Check className="size-3 text-emerald-500" />
+        <Check className="size-3 text-status-accepted" />
       ) : (
         <Copy className="size-3" />
       )}
