@@ -32,9 +32,9 @@ import type { DescriptionPanelProps } from "@/types/component.types";
 
 
 const difficultyColor: Record<Problem["difficulty"], string> = {
-  Easy: "text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
-  Medium: "text-amber-400 border-amber-500/30 bg-amber-500/5",
-  Hard: "text-rose-400 border-rose-500/30 bg-rose-500/5",
+  Easy: "text-difficulty-easy border-difficulty-easy bg-difficulty-easy",
+  Medium: "text-difficulty-medium border-difficulty-medium bg-difficulty-medium",
+  Hard: "text-difficulty-hard border-difficulty-hard bg-difficulty-hard",
 };
 
 export const DescriptionPanel = React.memo(
