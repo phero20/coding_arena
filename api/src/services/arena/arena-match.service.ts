@@ -316,4 +316,12 @@ export class ArenaMatchService {
       }
     });
   }
+
+  async getMatchHistory(userId: string, limit?: number) {
+    return await this.arenaMatchRepository.getHistoryByUserId(userId, limit);
+  }
+
+  async getMatchDetail(matchId: string) {
+    return await this.arenaMatchRepository.findByIdWithSubmissions(matchId);
+  }
 }
