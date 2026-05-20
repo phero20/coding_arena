@@ -61,4 +61,17 @@ export const registerArenaRoutes = (
     zValidator("param", MatchIdParamSchema),
     arenaController.action(arenaController.getMatchStatus),
   );
+
+  app.get(
+    "/arena/match/:matchId/details",
+    (c, next) => authMiddleware.handle(c, next),
+    zValidator("param", MatchIdParamSchema),
+    arenaController.action(arenaController.getMatchDetail),
+  );
+
+  app.get(
+    "/arena/u/:userId/history",
+    (c, next) => authMiddleware.handle(c, next),
+    arenaController.action(arenaController.getUserHistory),
+  );
 };
