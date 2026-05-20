@@ -1,5 +1,5 @@
 import { db, schema } from "../../db";
-import { eq } from "drizzle-orm";
+import { eq, or, ilike } from "drizzle-orm";
 import type { User, NewUser } from "../../db/schema";
 import { createLogger } from "../../libs/utils/logger";
 import { type ICradle } from "../../libs/awilix-container";
@@ -12,6 +12,7 @@ export interface IUserRepository {
   findById(id: string): Promise<User | null>;
   findByUsername(username: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
+  search(query: string, limit: number): Promise<User[]>;
   create(user: NewUser): Promise<User>;
   update(clerkId: string, user: Partial<NewUser>): Promise<User | null>;
   deleteByClerkId(clerkId: string): Promise<boolean>;
@@ -62,6 +63,19 @@ export class UserRepository implements IUserRepository {
       .limit(1);
 
     return user ?? null;
+  }
+
+  async search(query: string, limit: number): Promise<User[]> {
+    return await db
+      .select()
+      .from(schema.users)
+      .where(
+        or(
+          ilike(schema.users.username, `%${query}%`),
+          ilike(schema.users.fullName, `%${query}%`),
+        ),
+      )
+      .limit(limit);
   }
 
   async create(user: NewUser): Promise<User> {
