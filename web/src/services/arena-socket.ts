@@ -14,6 +14,7 @@ export class ArenaSocketManager {
   private token: string;
   private username: string;
   private avatarUrl?: string;
+  private fullName?: string;
 
   constructor(
     roomId: string,
@@ -21,12 +22,14 @@ export class ArenaSocketManager {
     token: string,
     username: string,
     avatarUrl?: string,
+    fullName?: string,
   ) {
     this.roomId = roomId;
     this.userId = userId;
     this.token = token;
     this.username = username;
     this.avatarUrl = avatarUrl;
+    this.fullName = fullName;
   }
 
   public getRoomId() {
@@ -47,6 +50,7 @@ export class ArenaSocketManager {
     url.searchParams.set("userId", this.userId);
     url.searchParams.set("username", this.username);
     if (this.avatarUrl) url.searchParams.set("avatarUrl", this.avatarUrl);
+    if (this.fullName) url.searchParams.set("fullName", this.fullName);
 
     this.socket = new WebSocket(url.toString());
 
