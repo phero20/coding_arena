@@ -12,6 +12,7 @@ import { z } from "zod";
 export const zArenaPlayerDetailed = z.object({
   userId: z.string(),
   username: z.string(),
+  fullName: z.string().optional(),
   avatarUrl: z.string().optional(),
   finalRank: z.number().optional(),
   submissionOrder: z.number().default(0),
@@ -38,6 +39,9 @@ export const zArenaMatchDetailed = z.object({
   roomId: z.string(),
   hostId: z.string(),
   problemId: z.string(),
+  problemTitle: z.string().optional(),
+  problemSlug: z.string().optional(),
+  difficulty: z.string().optional(),
   language: z.string(),
   status: z.enum(["WAITING", "PLAYING", "COMPLETED"]),
   expiresAt: z.coerce.date(),
