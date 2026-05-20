@@ -15,6 +15,7 @@ const ArenaPlayerResultSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
     username: { type: String, required: true },
+    fullName: { type: String },
     avatarUrl: { type: String },
     finalRank: { type: Number },
     submissionOrder: { type: Number, default: 0 },
@@ -57,6 +58,15 @@ const ArenaMatchSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    problemTitle: {
+      type: String,
+    },
+    problemSlug: {
+      type: String,
+    },
+    difficulty: {
+      type: String,
+    },
     language: {
       type: String,
       required: true,
@@ -84,12 +94,14 @@ const ArenaMatchSchema = new mongoose.Schema(
 );
 
 ArenaMatchSchema.index({ hostId: 1, createdAt: -1 });
+ArenaMatchSchema.index({ "players.userId": 1, createdAt: -1 });
 ArenaMatchSchema.index({ createdAt: -1 });
 ArenaMatchSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export interface ArenaPlayerResult {
   userId: string;
   username: string;
+  fullName?: string;
   finalRank?: number;
   submissionOrder: number;
   verdict: ArenaSubmissionVerdict;
@@ -105,6 +117,9 @@ export interface ArenaMatch {
   roomId: string;
   hostId: string;
   problemId: string;
+  problemTitle?: string;
+  problemSlug?: string;
+  difficulty?: string;
   language: string;
   status: ArenaMatchStatus;
   startedAt?: Date;
