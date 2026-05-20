@@ -30,9 +30,12 @@ export class StatsService implements IStatsService {
 
     // 1. Resolve Identity (Try Username first, then Clerk ID)
     let user = await this.userRepository.findByUsername(identifier);
-    
+
     if (!user) {
-      logger.info({ identifier }, "User not found by username, trying Clerk ID lookup...");
+      logger.info(
+        { identifier },
+        "User not found by username, trying Clerk ID lookup...",
+      );
       user = await this.userRepository.findByClerkId(identifier);
     }
 
@@ -51,6 +54,7 @@ export class StatsService implements IStatsService {
     return {
       user: {
         id: user.id,
+        clerkId: user.clerkId,
         username: user.username,
         fullName: user.fullName,
         avatarUrl: user.avatarUrl,
@@ -82,7 +86,10 @@ export class StatsService implements IStatsService {
     if (viewerClerkId) {
       const viewer = await this.userRepository.findByClerkId(viewerClerkId);
       if (viewer) {
-        isFollowing = await this.followRepository.isFollowing(viewer.id, targetUserId);
+        isFollowing = await this.followRepository.isFollowing(
+          viewer.id,
+          targetUserId,
+        );
       }
     }
 
