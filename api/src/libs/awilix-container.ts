@@ -52,6 +52,7 @@ import { type ProblemTestController } from "../controllers/problems/problem-test
 import { type SubmissionController } from "../controllers/submissions/submission.controller";
 import { type AiProblemController } from "../controllers/problems/ai-problem.controller";
 import { type ArenaController } from "../controllers/arena/arena.controller";
+import { type UserController } from "../controllers/user/user.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -68,6 +69,7 @@ import { FollowRepository } from "../repositories/user/follow.repository";
 import { type IFollowService } from "../services/user/follow.service";
 import { FollowController } from "../controllers/user/follow.controller";
 import { ProfileController } from "../controllers/user/profile.controller";
+import { type IUserService } from "../services/user/user.service";
 
 export interface ICradle {
   // Infrastructure
@@ -134,6 +136,7 @@ export interface ICradle {
   aiProblemController: AiProblemController;
   arenaController: ArenaController;
   statsController: StatsController;
+  userController: UserController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;
@@ -141,6 +144,7 @@ export interface ICradle {
   followService: IFollowService;
   followController: FollowController;
   profileController: ProfileController;
+  userService: IUserService;
 }
 
 const container = createContainer<ICradle>({
