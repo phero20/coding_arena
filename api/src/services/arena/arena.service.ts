@@ -72,6 +72,7 @@ export class ArenaService {
     const creator: ArenaPlayer = {
       userId: clerkUserId,
       username: user.username,
+      fullName: user.fullName || undefined,
       avatarUrl: user.avatarUrl || "",
       isCreator: true,
       score: 0,
@@ -189,6 +190,7 @@ export class ArenaService {
         (p) => ({
           userId: p.userId || "",
           username: p.username || "",
+          fullName: p.fullName,
           avatarUrl: p.avatarUrl || "",
           submissionOrder: 0,
           verdict: "NOT_SUBMITTED",
@@ -203,6 +205,9 @@ export class ArenaService {
           roomId: room.roomId,
           hostId: clerkUserId,
           problemId: room.problemId!,
+          problemTitle: room.topic,
+          problemSlug: room.problemSlug,
+          difficulty: room.difficulty,
           language: room.language || "javascript",
           players,
         },
