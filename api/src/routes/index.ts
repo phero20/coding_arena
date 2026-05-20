@@ -11,6 +11,7 @@ import { registerArenaRoutes } from "./arena/arena.routes";
 import { registerStatsRoutes } from "./stats/stats.routes";
 import { registerFollowRoutes } from "./user/follow.routes";
 import { registerProfileRoutes } from "./user/profile.routes";
+import { registerUserRoutes } from "./user/user.routes";
 
 
 import { healthRoutes } from "./system/health.routes";
@@ -27,6 +28,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     statsController,
     followController,
     profileController,
+    userController,
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -87,6 +89,11 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
 
   registerProfileRoutes(v1, {
     profileController,
+    authMiddleware,
+  });
+
+  registerUserRoutes(v1, {
+    userController,
     authMiddleware,
   });
  
