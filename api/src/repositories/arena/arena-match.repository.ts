@@ -24,6 +24,9 @@ export interface CreateArenaMatchInput {
   roomId: string;
   hostId: string;
   problemId: string;
+  problemTitle?: string;
+  problemSlug?: string;
+  difficulty?: string;
   language: string;
   players: ArenaPlayerResult[];
 }
@@ -74,9 +77,12 @@ export class ArenaMatchRepository extends MongoBaseRepository<
           roomId: input.roomId,
           hostId: input.hostId,
           problemId: input.problemId,
-          language: input.language,
+          problemTitle: input.problemTitle,
+          problemSlug: input.problemSlug,
+          difficulty: input.difficulty,
           status: "WAITING",
           players: input.players || [],
+          language: input.language,
         },
       ],
       { session: options?.session },
@@ -254,6 +260,9 @@ export class ArenaMatchRepository extends MongoBaseRepository<
             roomId: { $first: "$roomId" },
             hostId: { $first: "$hostId" },
             problemId: { $first: "$problemId" },
+            problemTitle: { $first: "$problemTitle" },
+            problemSlug: { $first: "$problemSlug" },
+            difficulty: { $first: "$difficulty" },
             language: { $first: "$language" },
             status: { $first: "$status" },
             expiresAt: { $first: "$expiresAt" },
