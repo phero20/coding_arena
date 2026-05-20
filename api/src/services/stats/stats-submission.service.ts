@@ -172,7 +172,11 @@ export class StatsSubmissionService {
     // Separate from isNewSolve so solving the same problem in a new language still counts.
     if (submission.languageId) {
       logger.info(
-        { userId: postgresUserId, problemId: submission.problemId, languageId: submission.languageId },
+        {
+          userId: postgresUserId,
+          problemId: submission.problemId,
+          languageId: submission.languageId,
+        },
         "Processing language solve recording...",
       );
       const isNewLang = await this.statsRepository.recordSolvedLanguage(
@@ -180,7 +184,7 @@ export class StatsSubmissionService {
         submission.problemId,
         submission.languageId,
       );
-      
+
       if (isNewLang) {
         logger.info(
           { userId: postgresUserId, languageId: submission.languageId },
