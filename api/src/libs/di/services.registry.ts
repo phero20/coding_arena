@@ -20,6 +20,7 @@ import { MatchBroadcasterService } from "../../services/arena/match-broadcaster.
 import { StatsSubmissionService } from "../../services/stats/stats-submission.service";
 import { StatsService } from "../../services/stats/stats.service";
 import { FollowService } from "../../services/user/follow.service";
+import { UserService } from "../../services/user/user.service";
 
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
@@ -71,4 +72,5 @@ export const servicesRegistry = {
   statsSubmissionService: asClass(StatsSubmissionService).singleton(),
   statsService: asClass(StatsService).singleton(),
   followService: asClass(FollowService).singleton(),
+  userService: asClass(UserService).singleton(),
 };
