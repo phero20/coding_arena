@@ -25,7 +25,8 @@ import { type SubmissionService } from "../services/submissions/submission.servi
 import { type GroqLlmService } from "../services/ai/groq-llm.service";
 import { type AiProblemService } from "../services/problems/ai-problem.service";
 import { type ArenaService } from "../services/arena/arena.service";
-import { type ArenaMatchService } from "../services/arena/arena-match.service";
+import { type ArenaMatchService, type IArenaMatchService } from "../services/arena/arena-match.service";
+
 import { type MatchValidatorService } from "../services/arena/match-validator.service";
 import { type AiCodeJudgeService } from "../services/judge/ai-code-judge.service";
 import { type ExecutionService } from "../services/submissions/execution.service";
@@ -70,6 +71,7 @@ import { type IFollowService } from "../services/user/follow.service";
 import { FollowController } from "../controllers/user/follow.controller";
 import { ProfileController } from "../controllers/user/profile.controller";
 import { type IUserService } from "../services/user/user.service";
+import { UserStatsCache } from "../cache/user/user-stats.cache";
 
 export interface ICradle {
   // Infrastructure
@@ -99,6 +101,8 @@ export interface ICradle {
   llm: GroqLlmService;
   aiProblemService: AiProblemService;
   arenaMatchService: ArenaMatchService;
+  rawArenaMatchService: IArenaMatchService;
+  arenaMatchCache: IArenaMatchService;
   arenaService: ArenaService;
   matchValidatorService: MatchValidatorService;
   problemValidatorService: ProblemValidatorService;
@@ -110,6 +114,7 @@ export interface ICradle {
   rawProblemService: ProblemService;
   rawProblemTestService: ProblemTestService;
   rawAiCodeJudgeService: AiCodeJudgeService;
+  rawStatsService: IStatsService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -126,6 +131,8 @@ export interface ICradle {
   problemCache: ProblemCache;
   problemTestCache: ProblemTestCache;
   aiJudgeCache: AiJudgeCache;
+  userStatsCache: UserStatsCache;
+
 
   // Controllers
   authController: AuthController;
