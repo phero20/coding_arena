@@ -21,6 +21,7 @@ const (
 type ArenaPlayer struct {
 	UserID      string            `json:"userId"`
 	Username    string            `json:"username"`
+	FullName    string            `json:"fullName,omitempty"`
 	AvatarURL   string            `json:"avatarUrl,omitempty"`
 	IsCreator   bool              `json:"isCreator"`
 	Score       int               `json:"score"`
