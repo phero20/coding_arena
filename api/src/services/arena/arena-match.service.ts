@@ -12,7 +12,6 @@ import { createLogger } from "../../libs/utils/logger";
 import { ClientSession } from "mongoose";
 
 const logger = createLogger("arena-match-service");
-
 export interface MatchSubmissionData {
   submissionId: string;
   matchId: string;
@@ -24,7 +23,22 @@ export interface MatchSubmissionData {
 
 import type { IClockService } from "../common/clock.service";
 
-export class ArenaMatchService {
+export interface IArenaMatchService {
+
+  handleMatchSubmission(data: MatchSubmissionData): Promise<any>;
+  finalizeMatch(
+    roomId: string,
+    match: any,
+    traceId?: string,
+    session?: ClientSession,
+  ): Promise<void>;
+  forceFinishMatch(roomId: string): Promise<void>;
+  getMatchHistory(userId: string, limit?: number): Promise<any[]>;
+  getMatchDetail(matchId: string): Promise<any | null>;
+}
+
+export class ArenaMatchService implements IArenaMatchService {
+
   private readonly arenaMatchRepository: ArenaMatchRepository;
   private readonly arenaSubmissionRepository: ArenaSubmissionRepository;
   private readonly arenaRepository: ArenaRepository;
