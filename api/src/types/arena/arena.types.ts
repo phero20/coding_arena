@@ -5,6 +5,7 @@ export type ArenaRoomStatus = "WAITING" | "LOBBY" | "PLAYING" | "FINISHED";
 export interface ArenaPlayer {
   userId: string;
   username: string;
+  fullName?: string;
   avatarUrl?: string;
   isCreator: boolean;
   score: number;

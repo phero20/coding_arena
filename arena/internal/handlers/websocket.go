@@ -50,6 +50,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 			username = "Stranger"
 		}
 		avatarUrl := c.Query("avatarUrl")
+		fullName := c.Query("fullName")
 
 		slog.Info("WS Connection Attempt", "roomId", roomId, "userId", userId, "authMethod", authMethod) // Changed from log.Printf
 
@@ -64,7 +65,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 		}
 
 		// Handle Join Logic (Persists in Redis)
-		room, isNewPlayer, err := s.HandleJoin(context.Background(), roomId, userId, username, avatarUrl)
+		room, isNewPlayer, err := s.HandleJoin(context.Background(), roomId, userId, username, avatarUrl, fullName)
 		if err != nil {
 			slog.Error("WS Join Error", "userId", userId, "error", err) // Changed from log.Printf
 			c.WriteJSON(models.ArenaWSMessage{
