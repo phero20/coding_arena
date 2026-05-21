@@ -4,6 +4,8 @@ import type { IStatsRepository } from "../../repositories/stats/stats.repository
 import type { IProblemRepository } from "../../repositories/problems/problem.repository";
 import type { IUserRepository } from "../../repositories/user/user.repository";
 import type { Submission } from "../../types/submissions/submission.types";
+import { type IStatsService } from "./stats.service";
+
 
 const logger = createLogger("stats-submission-service");
 
@@ -11,12 +13,20 @@ export class StatsSubmissionService {
   private readonly statsRepository: IStatsRepository;
   private readonly problemRepository: IProblemRepository;
   private readonly userRepository: IUserRepository;
+  private readonly statsService: IStatsService;
 
-  constructor({ statsRepository, problemRepository, userRepository }: ICradle) {
+  constructor({
+    statsRepository,
+    problemRepository,
+    userRepository,
+    statsService,
+  }: ICradle) {
     this.statsRepository = statsRepository;
     this.problemRepository = problemRepository;
     this.userRepository = userRepository;
+    this.statsService = statsService;
   }
+
 
   /**
    * Orchestrates all analytics updates following a submission status change.
@@ -167,6 +177,10 @@ export class StatsSubmissionService {
     // Update Solve Streak - runs on every ACCEPTED solve (any problem)
     logger.info({ userId: postgresUserId }, "Updating user solve streak...");
     await this.statsRepository.updateStreak(postgresUserId);
+
+    // Invalidate User Stats Cache via modular service
+    await this.statsService.invalidateProfile(postgresUserId);
+
 
     // Language counter — runs on every ACCEPTED, gated by its own (problem, language) dedup.
     // Separate from isNewSolve so solving the same problem in a new language still counts.
