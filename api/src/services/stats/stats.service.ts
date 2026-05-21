@@ -9,6 +9,7 @@ const logger = createLogger("stats-service");
 export interface IStatsService {
   getProfileStats(identifier: string, viewerClerkId?: string): Promise<any>;
   getLeaderboard(limit?: number, offset?: number): Promise<any>;
+  invalidateProfile(userId: string): Promise<void>;
 }
 
 export class StatsService implements IStatsService {
@@ -21,6 +22,15 @@ export class StatsService implements IStatsService {
     this.userRepository = userRepository;
     this.followRepository = followRepository;
   }
+
+  /**
+   * No-op implementation. 
+   * The actual invalidation is handled by the caching decorator.
+   */
+  async invalidateProfile(userId: string): Promise<void> {
+    return;
+  }
+
 
   /**
    * Retrieves full profile analytics for a user by their identifier (username or clerkId).
