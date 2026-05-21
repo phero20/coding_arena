@@ -4,7 +4,10 @@ import { type ICradle } from "../../libs/awilix-container";
 import { createLogger } from "../../libs/utils/logger";
 import { AppError } from "../../utils/app-error";
 
+import { type IStatsService } from "../stats/stats.service";
+
 const logger = createLogger("follow-service");
+
 
 export interface IFollowService {
   followUser(followerClerkId: string, followingUsername: string): Promise<void>;
@@ -23,11 +26,14 @@ export interface IFollowService {
 export class FollowService implements IFollowService {
   private readonly followRepository: IFollowRepository;
   private readonly userRepository: IUserRepository;
+  private readonly statsService: IStatsService;
 
-  constructor({ followRepository, userRepository }: ICradle) {
+  constructor({ followRepository, userRepository, statsService }: ICradle) {
     this.followRepository = followRepository;
     this.userRepository = userRepository;
+    this.statsService = statsService;
   }
+
 
   async followUser(
     followerClerkId: string,
@@ -54,10 +60,18 @@ export class FollowService implements IFollowService {
     }
 
     await this.followRepository.follow(follower.id, following.id);
+
+    // Invalidate caches for both sides
+    await Promise.all([
+      this.statsService.invalidateProfile(follower.id),
+      this.statsService.invalidateProfile(following.id),
+    ]);
+
     logger.info(
       { followerId: follower.id, followingId: following.id },
       "User followed successfully",
     );
+
   }
 
   async unfollowUser(
@@ -78,7 +92,15 @@ export class FollowService implements IFollowService {
     if (!deleted) {
       throw AppError.badRequest("You were not following this user");
     }
+
+    // Invalidate caches for both sides
+    await Promise.all([
+      this.statsService.invalidateProfile(follower.id),
+      this.statsService.invalidateProfile(target.id),
+    ]);
+
     return true;
+
   }
 
   async getFollowers(username: string): Promise<any[]> {
