@@ -26,6 +26,10 @@ import { UserService } from "../../services/user/user.service";
 import { ProblemCache } from "../../cache/problems/problem.cache";
 import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
 import { AiJudgeCache } from "../../cache/judge/ai-judge.cache";
+import { UserStatsCache } from "../../cache/user/user-stats.cache";
+import { ArenaMatchCache } from "../../cache/arena/arena-match.cache";
+
+
 
 /**
  * Service layer registrations.
@@ -44,8 +48,13 @@ export const servicesRegistry = {
   rawProblemService: asClass(ProblemService).singleton(),
   rawProblemTestService: asClass(ProblemTestService).singleton(),
   rawAiCodeJudgeService: asClass(AiCodeJudgeService).singleton(),
+  rawStatsService: asClass(StatsService).singleton(),
+  rawArenaMatchService: asClass(ArenaMatchService).singleton(),
 
-  arenaMatchService: asClass(ArenaMatchService).singleton(),
+
+
+  // arenaMatchService: asClass(ArenaMatchService).singleton(), -> Moved to function below
+
   arenaService: asClass(ArenaService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
   problemValidatorService: asClass(ProblemValidatorService).singleton(),
@@ -58,6 +67,10 @@ export const servicesRegistry = {
   problemCache: asClass(ProblemCache).singleton(),
   problemTestCache: asClass(ProblemTestCache).singleton(),
   aiJudgeCache: asClass(AiJudgeCache).singleton(),
+  userStatsCache: asClass(UserStatsCache).singleton(),
+  arenaMatchCache: asClass(ArenaMatchCache).singleton(),
+
+
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -70,7 +83,14 @@ export const servicesRegistry = {
     ({ aiJudgeCache }: ICradle) => aiJudgeCache,
   ).singleton(),
   statsSubmissionService: asClass(StatsSubmissionService).singleton(),
-  statsService: asClass(StatsService).singleton(),
+  statsService: asFunction(
+    ({ userStatsCache }: ICradle) => userStatsCache,
+  ).singleton(),
   followService: asClass(FollowService).singleton(),
+  arenaMatchService: asFunction(
+    ({ arenaMatchCache }: ICradle) => arenaMatchCache,
+  ).singleton(),
+
+
   userService: asClass(UserService).singleton(),
 };
