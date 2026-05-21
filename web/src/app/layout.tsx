@@ -40,7 +40,6 @@ export default function RootLayout({
         <body
           className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
         >
-          <Navbar />
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -48,7 +47,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster position="top-center" />
-            <Providers>{children}</Providers>
+            <Providers>
+              <Navbar />
+              {children}
+            </Providers>
           </ThemeProvider>
         </body>
       </html>
