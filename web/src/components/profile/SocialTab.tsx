@@ -57,7 +57,7 @@ const SocialUserCard = ({
             {targetUser.fullName || targetUser.username}
           </p>
           <p className="text-xs text-muted-foreground truncate hover:underline">
-            @{targetUser.username}
+            {targetUser.username}
           </p>
         </div>
         
