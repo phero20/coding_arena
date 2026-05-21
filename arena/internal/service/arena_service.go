@@ -18,7 +18,7 @@ func NewArenaService(repo *repository.ArenaRepository) *ArenaService {
 	return &ArenaService{repo: repo}
 }
 
-func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username, avatarUrl string) (*models.ArenaRoom, bool, error) {
+func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username, avatarUrl, fullName string) (*models.ArenaRoom, bool, error) {
 	roomId = strings.ToUpper(roomId)
 
 	// Create new player object
@@ -26,6 +26,7 @@ func (s *ArenaService) HandleJoin(ctx context.Context, roomId, userId, username,
 		UserID:    userId,
 		Username:  username,
 		AvatarURL: avatarUrl,
+		FullName:  fullName,
 		IsCreator: false,
 		Score:     0,
 		Status:    models.PlayerCoding,
