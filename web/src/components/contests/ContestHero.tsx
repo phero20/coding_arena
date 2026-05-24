@@ -188,7 +188,7 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
       </div>
 
       {/* Animated Countdown Section */}
-        <Card className="flex w-full shrink-0 flex-col gap-4 bg-muted p-5 sm:p-6 lg:w-auto">
+        <Card className="flex w-full shrink-0 flex-col gap-4 bg-muted p-5 sm:p-6 lg:w-auto shadow-none">
           <div className="flex items-center justify-between lg:justify-center lg:gap-6">
             <SlidingNumber
               value={duration?.days || 0}
@@ -222,7 +222,7 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
           </div>
 
           <Button
-            className="h-11 w-full bg-primary text-xs font-bold uppercase tracking-widest shadow-lg hover:translate-y-[-1px] transition-all"
+            className="h-11 w-full bg-primary text-xs font-bold uppercase tracking-widest hover:-translate-y-px  transition-all"
             size="sm"
             asChild
           >

@@ -33,8 +33,9 @@ type Client struct {
 	Repo    *repository.ArenaRepository
 	Conn    *websocket.Conn
 	Send    chan models.ArenaWSMessage
-	UserID  string
-	RoomID  string
+	UserID      string
+	RoomID      string
+	IsUnhealthy bool
 }
 
 func (c *Client) ReadPump() {
@@ -44,15 +45,15 @@ func (c *Client) ReadPump() {
 		updatedRoom, wasDeleted, _ := c.Service.HandleConnectionLoss(ctx, c.RoomID, c.UserID)
 		
 		if wasDeleted {
-			c.Hub.Broadcast <- Message{
+			c.Hub.BroadcastToRoom(c.RoomID, Message{
 				RoomID: c.RoomID,
 				Payload: models.ArenaWSMessage{
 					Type:    "ERROR",
 					Payload: "Host disconnected. Arena terminated.",
 				},
-			}
+			})
 		} else if updatedRoom != nil {
-			c.Hub.Broadcast <- Message{
+			c.Hub.BroadcastToRoom(c.RoomID, Message{
 				RoomID: c.RoomID,
 				Payload: models.ArenaWSMessage{
 					Type: "PLAYER_LEFT",
@@ -60,10 +61,10 @@ func (c *Client) ReadPump() {
 						"room": updatedRoom,
 					},
 				},
-			}
+			})
 		}
 
-		c.Hub.Unregister <- c
+		c.Hub.UnregisterFromRoom(c.RoomID, c)
 		c.Conn.Close()
 	}()
 
@@ -110,13 +111,13 @@ func (c *Client) ReadPump() {
 			var wasDeleted bool
 			updatedRoom, wasDeleted, handleErr = c.Service.HandleExplicitLeave(ctx, c.RoomID, c.UserID)
 			if wasDeleted {
-				c.Hub.Broadcast <- Message{
+				c.Hub.BroadcastToRoom(c.RoomID, Message{
 					RoomID: c.RoomID,
 					Payload: models.ArenaWSMessage{
 						Type:    "ERROR",
 						Payload: "Host has left. Arena terminated.",
 					},
-				}
+				})
 				return // Stop reading for this client
 			}
 			msg.Type = "PLAYER_LEFT"
@@ -142,8 +143,9 @@ func (c *Client) ReadPump() {
 				if handleErr == nil {
 					// 1. Notify the target user first so they can redirect
 					c.Hub.mu.RLock()
-					if clients, ok := c.Hub.Rooms[c.RoomID]; ok {
-						if targetClient, found := clients[data.TargetUserId]; found {
+					if room, ok := c.Hub.rooms[c.RoomID]; ok {
+						room.mu.RLock()
+						if targetClient, found := room.clients[data.TargetUserId]; found {
 							select {
 							case targetClient.Send <- models.ArenaWSMessage{
 								Type:    "YOU_ARE_KICKED",
@@ -152,6 +154,7 @@ func (c *Client) ReadPump() {
 							default:
 							}
 						}
+						room.mu.RUnlock()
 					}
 					c.Hub.mu.RUnlock()
 					
@@ -166,7 +169,7 @@ func (c *Client) ReadPump() {
 			}
 		default:
 			// Just broadcast other message types as is
-			c.Hub.Broadcast <- Message{RoomID: c.RoomID, Payload: msg}
+			c.Hub.BroadcastToRoom(c.RoomID, Message{RoomID: c.RoomID, Payload: msg})
 			continue
 		}
 
@@ -177,7 +180,7 @@ func (c *Client) ReadPump() {
 
 		// If room was updated, broadcast the new state
 		if updatedRoom != nil {
-			c.Hub.Broadcast <- Message{
+			c.Hub.BroadcastToRoom(c.RoomID, Message{
 				RoomID: c.RoomID,
 				Payload: models.ArenaWSMessage{
 					Type: msg.Type, // Echo back the type (e.g., PLAYER_READY)
@@ -185,7 +188,7 @@ func (c *Client) ReadPump() {
 						"room": updatedRoom,
 					},
 				},
-			}
+			})
 		}
 	}
 }
@@ -208,12 +211,14 @@ func (c *Client) WritePump() {
 			}
 
 			if err := c.Conn.WriteJSON(msg); err != nil {
+				slog.Error("Write error in client", "userId", c.UserID, "error", err)
 				return
 			}
 
 		case <-ticker.C:
 			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				slog.Error("Ping failed for client", "userId", c.UserID, "error", err)
 				return
 			}
 		}

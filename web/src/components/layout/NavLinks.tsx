@@ -12,7 +12,7 @@ import {
   Mountain,
   Network,
   ChevronDown,
-  ChevronRight,
+  GraduationCap
 } from "lucide-react";
 
 import { motion } from "framer-motion";
@@ -33,18 +33,31 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export const navItems = [
-  { name: "Arena", href: "/arena", icon: Swords },
+  { name: "Academy", href: "/academy/tracks", icon: GraduationCap },
   { name: "Problems", href: "/problems", icon: LayoutGrid },
   { name: "Compilers", href: "/compilers", icon: Cpu },
+  { name: "Arena", href: "/arena", icon: Swords },
   { name: "Contests", href: "/contests", icon: Trophy },
   { name: "Roadmap", href: "/roadmap", icon: Mountain },
-  { name: "System Design", href: "/system-design", icon: Network },
+  { name: "System Design", href: "/systemdesign-workspace", icon: Network },
 ];
 
 export const NavLinks = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setOpen(false);
+    }, 150);
+  };
 
   const visibleItems = navItems.slice(0, 4); // Arena, Problems, Compilers, Contests, Roadmap
   const moreItems = navItems.slice(4); // System Design, etc.
@@ -84,9 +97,11 @@ export const NavLinks = () => {
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               variant="ghost"
               className={cn(
-                "relative h-9 px-4 py-2 flex items-center gap-1 bg-transparent hover:bg-transparent text-muted-foreground hover:text-foreground",
+                "relative h-9 px-4 py-2 flex items-center gap-1 bg-transparent hover:bg-transparent text-muted-foreground hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none",
                 (open || isMoreActive) && "text-primary font-semibold",
               )}
             >
@@ -107,6 +122,8 @@ export const NavLinks = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             align="end"
             sideOffset={8}
             className="p-1 w-48 border-border bg-background"
@@ -125,10 +142,10 @@ export const NavLinks = () => {
                         }}
                         className={cn(
                           "cursor-pointer px-3 py-3 text-sm font-semibold transition-colors",
-                          "!bg-transparent hover:!bg-transparent data-[selected=true]:!bg-transparent",
+                          "bg-transparent! hover:bg-transparent! data-[selected=true]:bg-transparent!",
                           isActive
-                            ? "!text-primary"
-                            : "!text-muted-foreground hover:!text-foreground",
+                            ? "text-primary!"
+                            : "text-muted-foreground! hover:text-foreground!",
                         )}
                       >
                         {item.name}

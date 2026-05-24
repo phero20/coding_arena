@@ -1,7 +1,7 @@
 export interface Example {
   example_num: number;
   example_text: string;
-  images: string[];
+  images?: string[];
 }
 
 export interface CodeSnippets {

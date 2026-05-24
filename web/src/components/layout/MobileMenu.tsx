@@ -137,12 +137,6 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
                         )}
                       />
                       <span className="font-bold text-sm">{item.name}</span>
-                      {pathname === item.href && (
-                        <ChevronRight
-                          size={14}
-                          className="ml-auto opacity-50"
-                        />
-                      )}
                     </Link>
                   ))}
                 </div>

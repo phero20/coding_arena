@@ -65,7 +65,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
           className="h-full w-full items-stretch"
         >
           <ResizablePanel
-            defaultSize={50}
+            defaultSize={40}
             minSize={25}
             className="bg-card/30 backdrop-blur-md border-r border-border/40"
           >
@@ -77,7 +77,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
             className="bg-border/20 hover:bg-primary/50 transition-colors"
           />
 
-          <ResizablePanel defaultSize={50} minSize={30}>
+          <ResizablePanel defaultSize={60} minSize={30}>
             {editorSlot}
           </ResizablePanel>
         </ResizablePanelGroup>

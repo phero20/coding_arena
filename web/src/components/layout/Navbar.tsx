@@ -21,10 +21,11 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const HIDDEN_NAVBAR_PATHS = ["/problems/", "/arena/match", "/compilers", "/system-design"];
-  const shouldHideNavbar = HIDDEN_NAVBAR_PATHS.some((path) =>
-    pathname.startsWith(path),
-  );
+  const shouldHideNavbar =
+    pathname.startsWith("/problems/") ||
+    pathname.startsWith("/arena/match") ||
+    pathname.startsWith("/compilers") ||
+    /^\/systemdesign-workspace\/[^/]+\/diagram\//.test(pathname);
 
   if (shouldHideNavbar) return null;
 

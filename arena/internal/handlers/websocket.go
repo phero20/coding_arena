@@ -24,6 +24,19 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 	return websocket.New(func(c *websocket.Conn) {
 		slog.Info("WS connection handshake successful", "remoteAddr", c.RemoteAddr().String()) // Changed from log.Printf
 		
+		// Acquire semaphore slot for this connection's goroutines (ReadPump + WritePump)
+		if !h.GoroutineSem.TryAcquire(2) {
+			slog.Warn("Server at capacity, rejecting WS connection")
+			c.WriteJSON(models.ArenaWSMessage{
+				Type:    "ERROR",
+				Payload: "Server is currently at capacity. Please try again later.",
+			})
+			c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(1013, "Server at capacity"))
+			c.Close()
+			return
+		}
+		defer h.GoroutineSem.Release(2)
+		
 		// Panic Recovery for this specific connection
 		defer func() {
 			if r := recover(); r != nil {
@@ -88,7 +101,10 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 		}
 
 		// Register Client with Hub (Memory)
-		h.Register <- client
+		h.RegisterRoom <- &hub.RegisterRoomRequest{
+			Client: client,
+			RoomID: roomId,
+		}
 
 		// IMMEDIATE SYNC: Send the current room state directly to the client
 		c.WriteJSON(models.ArenaWSMessage{
@@ -100,7 +116,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 
 		// Only broadcast to OTHERS if it's a truly new player
 		if isNewPlayer {
-			h.Broadcast <- hub.Message{
+			h.BroadcastToRoom(roomId, hub.Message{
 				RoomID: roomId,
 				Payload: models.ArenaWSMessage{
 					Type: "PLAYER_JOINED",
@@ -108,7 +124,7 @@ func ArenaHandler(h *hub.Hub, s *service.ArenaService, r *repository.ArenaReposi
 						"room": room,
 					},
 				},
-			}
+			})
 		}
 
 		// Start Pumps

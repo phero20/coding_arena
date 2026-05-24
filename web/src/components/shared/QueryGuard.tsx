@@ -14,6 +14,7 @@ interface QueryGuardProps<T> {
   errorTitle?: string;
   errorMessage?: string;
   onRetry?: () => void;
+  retryText?: string;
   
   emptyIcon?: LucideIcon;
   emptyTitle?: string;
@@ -36,6 +37,7 @@ export function QueryGuard<T>({
   errorTitle,
   errorMessage,
   onRetry,
+  retryText,
   emptyIcon,
   emptyTitle,
   emptyMessage,
@@ -56,6 +58,7 @@ export function QueryGuard<T>({
         title={errorTitle || "System Error"}
         message={errorMessage || (error instanceof Error ? error.message : "The connection to the sector has been lost.")}
         onRetry={onRetry}
+        retryText={retryText}
       />
     );
   }

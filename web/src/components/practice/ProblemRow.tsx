@@ -30,7 +30,7 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
   isHosting,
 }) => {
   return (
-    <TableRow className="group border-t border-border/40 hover:bg-primary/3 transition-colors">
+    <TableRow className="group border-t border-border/40 transition-colors hover:bg-muted/30">
       <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
         {problem.problem_id}
       </TableCell>
@@ -38,9 +38,9 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
         <div className="flex flex-col min-w-0">
           <div className="text-sm truncate font-bold text-foreground group-hover:text-primary transition-colors">
             {isSelectPage ? (
-                <Button className="p-0" variant="link" onClick={onSelect}>
-                  {problem.title}
-                </Button>
+              <Button className="p-0" variant="link" onClick={onSelect}>
+                {problem.title}
+              </Button>
             ) : (
               <Link href={`/problems/${problem.problem_slug}`}>
                 {" "}

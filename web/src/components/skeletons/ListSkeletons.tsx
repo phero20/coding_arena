@@ -144,3 +144,4 @@ export const SocialListSkeleton = ({ count = 6 }: { count?: number }) => (
     </div>
   </SkeletonProvider>
 );
+
