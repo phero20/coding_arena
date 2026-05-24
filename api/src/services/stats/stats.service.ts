@@ -56,17 +56,19 @@ export class StatsService implements IStatsService {
     
     // 3. Process users and their stats
     let count = 0;
+    const usersData = [];
+    
+    // Note: We fetch stats sequentially here to avoid overwhelming Postgres,
+    // but we will pipeline ALL Redis writes at the end.
     for (const user of users) {
       const stats = await this.statsRepository.getUserStats(user.id);
-      
-      await Promise.all([
-        this.leaderboardCache.updateScore(user.id, stats?.totalPoints || 0),
-        this.leaderboardCache.updateUserMetadata({
-          ...user,
-          totalSolved: stats?.totalSolved || 0
-        })
-      ]);
+      usersData.push({ user, stats });
       count++;
+    }
+
+    // 4. Batch write everything to Redis in a single pipeline
+    if (usersData.length > 0) {
+      await this.leaderboardCache.syncLeaderboardBatch(usersData);
     }
 
     logger.info({ total: count }, "Inclusive leaderboard sync completed ✅");
