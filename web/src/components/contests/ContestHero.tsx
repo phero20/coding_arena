@@ -61,7 +61,7 @@ function Number({ mv, number }: { mv: MotionValue<number>; number: number }) {
     </motion.span>
   );
 }
-
+//l
 function SlidingNumber({ value, padStart = false, label }: { value: number; padStart?: boolean; label: string }) {
   const absValue = Math.abs(value);
   const stringValue = padStart ? String(absValue).padStart(2, "0") : String(absValue);
