@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, integer, bigint, date, primaryKey, jsonb, foreignKey, index } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid, integer, bigint, date, primaryKey, jsonb, foreignKey, index, boolean } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -187,3 +187,67 @@ export type Solution = typeof solutions.$inferSelect
 export type NewSolution = typeof solutions.$inferInsert
 export type SolutionVote = typeof solutionVotes.$inferSelect
 export type NewSolutionVote = typeof solutionVotes.$inferInsert
+
+// --- System Design Workspaces & Diagrams Layer ---
+
+export const workspaces = pgTable('workspaces', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  name: text('name').notNull(),
+  isDefault: boolean('is_default').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    userIdx: index('workspaces_user_id_idx').on(table.userId),
+  }
+})
+
+export const diagrams = pgTable('diagrams', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  workspaceId: uuid('workspace_id').references(() => workspaces.id, { onDelete: 'cascade' }).notNull(),
+  title: text('title').notNull(),
+  documentState: jsonb('document_state'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    workspaceIdx: index('diagrams_workspace_id_idx').on(table.workspaceId),
+  }
+})
+
+export type Workspace = typeof workspaces.$inferSelect
+export type NewWorkspace = typeof workspaces.$inferInsert
+export type Diagram = typeof diagrams.$inferSelect
+export type NewDiagram = typeof diagrams.$inferInsert
+
+// --- System Design AI Chat Layer ---
+
+export const chatThreads = pgTable('chat_threads', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  diagramId: uuid('diagram_id').references(() => diagrams.id, { onDelete: 'cascade' }).notNull(),
+  title: text('title').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    diagramIdx: index('chat_threads_diagram_id_idx').on(table.diagramId),
+  }
+})
+
+export const chatMessages = pgTable('chat_messages', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  threadId: uuid('thread_id').references(() => chatThreads.id, { onDelete: 'cascade' }).notNull(),
+  role: text('role').notNull(), // 'user' | 'assistant'
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    threadIdx: index('chat_messages_thread_id_idx').on(table.threadId),
+  }
+})
+
+export type ChatThread = typeof chatThreads.$inferSelect
+export type NewChatThread = typeof chatThreads.$inferInsert
+export type ChatMessage = typeof chatMessages.$inferSelect
+export type NewChatMessage = typeof chatMessages.$inferInsert
