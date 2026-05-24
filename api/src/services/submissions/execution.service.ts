@@ -22,7 +22,12 @@ export interface RunSamplesResult {
 
 import { type ICradle } from "../../libs/awilix-container";
 
-export class ExecutionService {
+export interface IExecutionService {
+  runSamples(input: RunSamplesInput): Promise<RunSamplesResult>;
+  runFullSubmission(input: RunSamplesInput): Promise<RunSamplesResult>;
+}
+
+export class ExecutionService implements IExecutionService {
   private readonly problemTestService: IProblemTestService;
   private readonly aiCodeJudgeService: IAiJudgeService;
   private readonly driverJudgeExecutionService: DriverJudgeExecutionService;
