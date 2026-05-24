@@ -11,6 +11,9 @@ import { FollowRepository } from "../../repositories/user/follow.repository";
 import { ContestRepository } from "../../repositories/contest/contest.repository";
 import { TaxonomyRepository } from "../../repositories/taxonomy/taxonomy.repository";
 import { SolutionRepository } from "../../repositories/solutions/solution.repository";
+import { WorkspaceRepository } from "../../repositories/workspace/workspace.repository";
+import { ChatRepository } from "../../repositories/chat/chat.repository";
+import { AcademyRepository } from "../../repositories/academy/academy.repository";
 
 /**
  * Repository layer registrations.
@@ -29,4 +32,7 @@ export const repositoriesRegistry = {
   contestRepository: asClass(ContestRepository).singleton(),
   taxonomyRepository: asClass(TaxonomyRepository).singleton(),
   solutionRepository: asClass(SolutionRepository).singleton(),
+  workspaceRepository: asClass(WorkspaceRepository).singleton(),
+  chatRepository: asClass(ChatRepository).singleton(),
+  academyRepository: asClass(AcademyRepository).singleton(),
 };
