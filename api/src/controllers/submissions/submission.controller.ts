@@ -4,8 +4,8 @@ import type {
   RunSubmissionInput,
   SubmitSubmissionInput,
 } from "../../validators/submissions/submission.validator";
-import type { SubmissionService } from "../../services/submissions/submission.service";
-import type { ExecutionService } from "../../services/submissions/execution.service";
+import type { ISubmissionService } from "../../services/submissions/submission.service";
+import type { IExecutionService } from "../../services/submissions/execution.service";
 import type { Queue } from "bullmq";
 import { AppError } from "../../utils/app-error";
 import { ERRORS } from "../../constants/errors";
@@ -24,8 +24,8 @@ import { type ICradle } from "../../libs/awilix-container";
  */
 export class SubmissionController extends BaseController {
   private readonly logger = createLogger("submission-controller");
-  private readonly submissionService: SubmissionService;
-  private readonly executionService: ExecutionService;
+  private readonly submissionService: ISubmissionService;
+  private readonly executionService: IExecutionService;
   private readonly submissionQueue: Queue;
   private readonly matchValidatorService: MatchValidatorService;
   private readonly problemValidatorService: ProblemValidatorService;
