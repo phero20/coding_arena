@@ -41,7 +41,9 @@ const SettingsPage = () => {
           <div className="h-px w-full bg-border/40" />
         </div>
 
-        <SettingsTabs />
+        <React.Suspense fallback={<div className="h-100 w-full bg-muted/20 rounded-xl" />}>
+          <SettingsTabs />
+        </React.Suspense>
       </Container>
     </div>
   );
