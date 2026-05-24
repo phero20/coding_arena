@@ -1,9 +1,18 @@
 import { config } from '../configs/env'
-import { drizzle } from 'drizzle-orm/neon-http'
+import { Pool } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/neon-serverless'
 import * as schema from './schema'
 
-const db = drizzle(config.databaseUrl, {
+// Configure persistent WebSocket/TCP pooling instead of stateless HTTP
+const pool = new Pool({
+  connectionString: config.databaseUrl,
+  max: 20, // Maximum number of connections in the pool
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
+})
+
+const db = drizzle(pool, {
   schema,
 })
 
-export { db, schema }
+export { db, schema, pool }
