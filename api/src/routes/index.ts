@@ -16,6 +16,9 @@ import { registerCompilerRoutes } from "./compiler.routes";
 import { registerContestRoutes } from "./contest/contest.routes";
 import { registerTaxonomyRoutes } from "./taxonomy/taxonomy.routes";
 import { registerSolutionRoutes } from "./solutions/solution.routes";
+import { registerWorkspaceRoutes } from "./workspace/workspace.routes";
+import { registerChatRoutes } from "./chat/chat.routes";
+import { registerAcademyRoutes } from "./academy/academy.routes";
 
 
 import { healthRoutes } from "./system/health.routes";
@@ -37,6 +40,9 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     contestController,
     taxonomyController,
     solutionController,
+    workspaceController,
+    chatController,
+    academyController,
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -123,6 +129,20 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
   registerSolutionRoutes(v1, {
     solutionController,
     authMiddleware,
+  });
+
+  registerWorkspaceRoutes(v1, {
+    workspaceController,
+    authMiddleware,
+  });
+
+  registerChatRoutes(v1, {
+    chatController,
+    authMiddleware,
+  });
+  
+  registerAcademyRoutes(v1, {
+    academyController,
   });
  
   app.route("/api/v1", v1);
