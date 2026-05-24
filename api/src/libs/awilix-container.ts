@@ -21,6 +21,7 @@ import { type StatsRepository } from "../repositories/stats/stats.repository";
 import { type ContestRepository } from "../repositories/contest/contest.repository";
 import { type TaxonomyRepository } from "../repositories/taxonomy/taxonomy.repository";
 import { type SolutionRepository } from "../repositories/solutions/solution.repository";
+import { type WorkspaceRepository } from "../repositories/workspace/workspace.repository";
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
@@ -75,6 +76,17 @@ import { type ArenaController } from "../controllers/arena/arena.controller";
 import { type UserController } from "../controllers/user/user.controller";
 import { type CompilerController } from "../controllers/compiler/compiler.controller";
 import { type TaxonomyController } from "../controllers/taxonomy/taxonomy.controller";
+import { type WorkspaceController } from "../controllers/workspace/workspace.controller";
+import { type WorkspaceService, type IWorkspaceService } from "../services/workspace/workspace.service";
+import { type WorkspaceCache } from "../cache/workspace/workspace.cache";
+import { type ChatController } from "../controllers/chat/chat.controller";
+import { type ChatService, type IChatService } from "../services/chat/chat.service";
+import { type DiagramResolverService, type IDiagramResolverService } from "../services/ai/diagram-resolver.service";
+import { type GroqDiagramService, type IGroqDiagramService } from "../services/ai/groq-diagram.service";
+import { type ChatRepository, type IChatRepository } from "../repositories/chat/chat.repository";
+import { type IAcademyRepository } from "../repositories/academy/academy.repository";
+import { type IAcademyService } from "../services/academy/academy.service";
+import { type AcademyController } from "../controllers/academy/academy.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -118,6 +130,9 @@ export interface ICradle {
   contestRepository: ContestRepository;
   taxonomyRepository: TaxonomyRepository;
   solutionRepository: SolutionRepository;
+  workspaceRepository: WorkspaceRepository;
+  chatRepository: IChatRepository;
+  academyRepository: IAcademyRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
@@ -148,7 +163,12 @@ export interface ICradle {
   contestService: ContestService;
   taxonomyService: TaxonomyService;
   solutionService: import("../services/solutions/solution.service").ISolutionService;
+  workspaceService: IWorkspaceService;
+  chatService: IChatService;
+  diagramResolverService: IDiagramResolverService;
+  groqDiagramService: IGroqDiagramService;
   leetcodeService: ILeetCodeService;
+  academyService: IAcademyService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -159,6 +179,7 @@ export interface ICradle {
   rawTaxonomyService: TaxonomyService;
   rawSubmissionService: SubmissionService;
   rawSolutionService: import("../services/solutions/solution.service").SolutionService;
+  rawWorkspaceService: WorkspaceService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -182,6 +203,7 @@ export interface ICradle {
   leaderboardCache: LeaderboardCache;
   submissionCache: SubmissionCache;
   solutionCache: SolutionCache;
+  workspaceCache: WorkspaceCache;
 
   // Controllers
   authController: AuthController;
@@ -197,6 +219,9 @@ export interface ICradle {
   contestController: ContestController;
   taxonomyController: TaxonomyController;
   solutionController: SolutionController;
+  workspaceController: WorkspaceController;
+  chatController: ChatController;
+  academyController: AcademyController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;
