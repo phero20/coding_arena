@@ -32,6 +32,11 @@ import { ContestService } from "../../services/contest/contest.service";
 import { LeetCodeService } from "../../services/stats/leetcode.service";
 import { TaxonomyService } from "../../services/taxonomy/taxonomy.service";
 import { SolutionService } from "../../services/solutions/solution.service";
+import { WorkspaceService } from "../../services/workspace/workspace.service";
+import { ChatService } from "../../services/chat/chat.service";
+import { DiagramResolverService } from "../../services/ai/diagram-resolver.service";
+import { GroqDiagramService } from "../../services/ai/groq-diagram.service";
+import { AcademyService } from "../../services/academy/academy.service";
 
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
@@ -45,6 +50,7 @@ import { TaxonomyCache } from "../../cache/taxonomy/taxonomy.cache";
 import { LeaderboardCache } from "../../cache/stats/leaderboard.cache";
 import { SubmissionCache } from "../../cache/submissions/submission.cache";
 import { SolutionCache } from "../../cache/solutions/solution.cache";
+import { WorkspaceCache } from "../../cache/workspace/workspace.cache";
 
 /**
  * Service layer registrations.
@@ -69,6 +75,10 @@ export const servicesRegistry = {
   rawTaxonomyService: asClass(TaxonomyService).singleton(),
   rawSubmissionService: asClass(SubmissionService).singleton(),
   rawSolutionService: asClass(SolutionService).singleton(),
+  rawWorkspaceService: asClass(WorkspaceService).singleton(),
+  chatService: asClass(ChatService).singleton(),
+  diagramResolverService: asClass(DiagramResolverService).singleton(),
+  groqDiagramService: asClass(GroqDiagramService).singleton(),
 
   arenaService: asClass(ArenaService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
@@ -95,6 +105,7 @@ export const servicesRegistry = {
   leaderboardCache: asClass(LeaderboardCache).singleton(),
   submissionCache: asClass(SubmissionCache).singleton(),
   solutionCache: asClass(SolutionCache).singleton(),
+  workspaceCache: asClass(WorkspaceCache).singleton(),
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -121,6 +132,9 @@ export const servicesRegistry = {
   userService: asClass(UserService).singleton(),
   clistService: asClass(ClistService).singleton(),
   contestService: asClass(ContestService).singleton(),
+  workspaceService: asFunction(
+    ({ workspaceCache }: ICradle) => workspaceCache,
+  ).singleton(),
   
   taxonomyService: asFunction(
     ({ taxonomyCache }: ICradle) => taxonomyCache,
@@ -131,4 +145,5 @@ export const servicesRegistry = {
   solutionService: asFunction(
     ({ solutionCache }: ICradle) => solutionCache,
   ).singleton(),
+  academyService: asClass(AcademyService).singleton(),
 };
