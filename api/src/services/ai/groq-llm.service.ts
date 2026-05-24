@@ -1,13 +1,18 @@
 import { config } from "../../configs/env";
 import { metrics } from "../../libs/core/metrics";
+import { createLogger } from "../../libs/utils/logger";
+import { redis } from "../../libs/core/redis";
+import * as crypto from "crypto";
+
+const logger = createLogger("groq-llm.service");
 
 export interface GroqJsonResponse<T> {
   data: T;
   raw: unknown;
 }
 
+import { CircuitBreaker } from "../../libs/circuit-breaker";
 import { type ICradle } from "../../libs/awilix-container";
-
 import { type IClockService } from "../common/clock.service";
 
 /**
@@ -18,9 +23,11 @@ import { type IClockService } from "../common/clock.service";
  */
 export class GroqLlmService {
   private readonly clock: IClockService;
-  private readonly apiKey = config.groqApiKey;
-  private readonly baseUrl = "https://api.groq.com/openai/v1";
-  private readonly model = "llama-3.3-70b-versatile";
+  private readonly apiKey: string = config.groqApiKey as string;
+  private readonly baseUrl: string = "https://api.groq.com/openai/v1";
+  private readonly model: string = "openai/gpt-oss-120b";
+  
+  private circuitBreaker = new CircuitBreaker("Groq API", 3, 1, 60000);
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
@@ -58,16 +65,36 @@ export class GroqLlmService {
       response_format: { type: "json_object" },
     };
 
+    const promptHash = crypto
+      .createHash("sha256")
+      .update(opts.systemPrompt + opts.userPrompt)
+      .digest("hex");
+    const cacheKey = `ai:cache:diagram:${promptHash}`;
+
+    try {
+      const cached = await redis.get(cacheKey);
+      if (cached) {
+        logger.info({ cacheKey }, "🚀 CACHE HIT: Served LLM response from Redis");
+        return {
+          data: JSON.parse(cached),
+          raw: { cached: true },
+        };
+      }
+    } catch (err) {
+      logger.error({ err }, "Redis GET error in GroqLlmService");
+    }
+
     const startTime = this.clock.now();
 
-    const response = await fetch(`${this.baseUrl}/chat/completions`, {
+    const response = await this.circuitBreaker.execute(() => fetch(`${this.baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
         authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify(body),
-    });
+      signal: AbortSignal.timeout(30000), // 30 second timeout to prevent memory leaks/hangs
+    }));
 
     const duration = this.clock.now() - startTime;
     metrics.recordLlmLatency(duration);
@@ -89,12 +116,20 @@ export class GroqLlmService {
     try {
       // In JSON mode, the model should return a valid JSON string.
       const parsed = JSON.parse(content) as T;
+
+      // Cache the successful response
+      try {
+        await redis.set(cacheKey, JSON.stringify(parsed), "EX", 86400); // 24 hours
+      } catch (err) {
+        logger.error({ err }, "Redis SET error in GroqLlmService");
+      }
+
       return {
         data: parsed,
         raw: json,
       };
     } catch (err) {
-      console.error("Failed to parse Groq JSON content:", content);
+      logger.error({ content, err }, "Failed to parse Groq JSON content");
       throw new Error(
         "Groq returned invalid JSON despite JSON mode being enabled",
       );
