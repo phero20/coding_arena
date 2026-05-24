@@ -2,6 +2,7 @@ import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import { config } from "../../configs/env";
 import { metrics } from "../../libs/core/metrics";
 import { logger } from "../../libs/utils/logger";
+import { CircuitBreaker } from "../../libs/circuit-breaker";
 import { type ICradle } from "../../libs/awilix-container";
 import { type IClockService } from "../common/clock.service";
 
@@ -13,8 +14,10 @@ export interface GeminiJsonResponse<T> {
 export class GeminiLlmService {
   private readonly clock: IClockService;
   private readonly genAI: GoogleGenerativeAI;
-  private readonly primaryModel = "gemini-2.0-flash";
-  private readonly fallbackModel = "gemini-flash-latest";
+  private readonly primaryModel = "gemini-2.0-flash-001";
+  private readonly fallbackModel = "gemini-2.0-flash";
+  
+  private circuitBreaker = new CircuitBreaker("Gemini API", 3, 1, 60000);
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
@@ -37,7 +40,9 @@ export class GeminiLlmService {
       return await this._executeRequest<T>(this.primaryModel, opts);
     } catch (err: any) {
       const isQuotaError = err.message?.includes("429") || err.message?.includes("Quota exceeded");
-      if (isQuotaError) {
+      const isServerError = err.message?.includes("503") || err.status === 503 || err.cause?.status === 503;
+
+      if (isQuotaError || isServerError) {
         logger.warn({ error: err.message }, `Gemini 2.0 Flash quota exceeded. Falling back to ${this.fallbackModel}...`);
         return await this._executeRequest<T>(this.fallbackModel, opts);
       }
@@ -59,19 +64,19 @@ export class GeminiLlmService {
         model: modelName,
         systemInstruction: opts.systemPrompt,
       },
-      { apiVersion: "v1beta" },
+      { apiVersion: "v1beta", timeout: 30000 },
     );
 
     const startTime = this.clock.now();
 
-    const result = await model.generateContent({
+    const result = await this.circuitBreaker.execute(() => model.generateContent({
       contents: [{ role: "user", parts: [{ text: opts.userPrompt }] }],
       generationConfig: {
         temperature: opts.temperature ?? 0,
         maxOutputTokens: opts.maxTokens ?? 8192,
         responseMimeType: "application/json",
       },
-    });
+    }));
 
     const duration = this.clock.now() - startTime;
     metrics.recordLlmLatency(duration);
