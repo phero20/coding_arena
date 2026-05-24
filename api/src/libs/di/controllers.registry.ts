@@ -26,6 +26,10 @@ import { CompilerController } from "../../controllers/compiler/compiler.controll
 import { ContestController } from "../../controllers/contest/contest.controller";
 import { TaxonomyController } from "../../controllers/taxonomy/taxonomy.controller";
 import { SolutionController } from "../../controllers/solutions/solution.controller";
+import { WorkspaceController } from "../../controllers/workspace/workspace.controller";
+import { ChatController } from "../../controllers/chat/chat.controller";
+import { AcademyController } from "../../controllers/academy/academy.controller";
+
 
 
 /**
@@ -59,4 +63,7 @@ export const controllersRegistry = {
   contestController: asClass(ContestController).singleton(),
   taxonomyController: asClass(TaxonomyController).singleton(),
   solutionController: asClass(SolutionController).singleton(),
+  workspaceController: asClass(WorkspaceController).singleton(),
+  chatController: asClass(ChatController).singleton(),
+  academyController: asClass(AcademyController).singleton(),
 };
