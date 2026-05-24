@@ -442,9 +442,7 @@ export function normalizeTestSuite(
 export function enrichSignatureForDriver(
   signature: FunctionSignature,
 ): DriverReadyFunctionSignature {
-  const maybeVersion = (signature as Record<string, unknown>)[
-    "testcase_serialization_version"
-  ];
+  const maybeVersion = signature.testcase_serialization_version;
   const version =
     typeof maybeVersion === "string" && maybeVersion.length > 0
       ? maybeVersion
