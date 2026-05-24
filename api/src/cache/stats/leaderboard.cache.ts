@@ -60,6 +60,36 @@ export class LeaderboardCache {
   }
 
   /**
+   * Batch updates leaderboard scores and metadata using Redis pipeline
+   */
+  async syncLeaderboardBatch(usersData: Array<{ user: any; stats: any }>): Promise<void> {
+    const pipe = redis.pipeline();
+
+    for (const { user, stats } of usersData) {
+      const points = stats?.totalPoints || 0;
+      pipe.zadd(this.ZSET_KEY, points, user.id);
+
+      const key = `${this.META_PREFIX}${user.id}`;
+      const data: Record<string, string> = {};
+      if (user.username) data.username = user.username;
+      if (user.avatarUrl) data.avatarUrl = user.avatarUrl;
+      if (user.fullName) data.fullName = user.fullName;
+      data.totalSolved = (stats?.totalSolved || 0).toString();
+
+      if (Object.keys(data).length > 0) {
+        pipe.hset(key, data);
+        pipe.expire(key, 86400 * 7);
+      }
+    }
+
+    try {
+      await pipe.exec();
+    } catch (err) {
+      logger.error({ err }, "Failed to execute syncLeaderboardBatch pipeline");
+    }
+  }
+
+  /**
    * Retrieves a range of users from the leaderboard.
    */
   async getRange(limit: number = 50, offset: number = 0): Promise<LeaderboardEntry[]> {
@@ -72,14 +102,29 @@ export class LeaderboardCache {
 
       const entries: LeaderboardEntry[] = [];
       
-      // 2. Process pairs of [ID, Score]
+      // 2. Fetch Metadata for all users simultaneously via Pipeline
+      const pipe = redis.pipeline();
+      const userIds: string[] = [];
+      const userPoints: number[] = [];
+
       for (let i = 0; i < raw.length; i += 2) {
         const userId = raw[i];
-        const points = parseInt(raw[i + 1], 10);
-        const rank = offset + (i / 2) + 1;
+        userIds.push(userId);
+        userPoints.push(parseInt(raw[i + 1], 10));
+        pipe.hgetall(`${this.META_PREFIX}${userId}`);
+      }
 
-        // 3. Fetch Metadata from HASH
-        const meta = await redis.hgetall(`${this.META_PREFIX}${userId}`);
+      // Execute single network round-trip
+      const results = await pipe.exec();
+
+      // 3. Process pairs of [ID, Score] and Metadata
+      for (let i = 0; i < userIds.length; i++) {
+        const userId = userIds[i];
+        const points = userPoints[i];
+        const rank = offset + i + 1;
+        
+        // ioredis pipeline exec returns array of [error, result]
+        const meta = (results?.[i]?.[1] as Record<string, string>) || {};
 
         entries.push({
           userId,
