@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { Track } from "@/services/queries/academy.queries";
+import type { Track } from "@/types/academy";
 
 export function useTracksFilter(tracks: Track[]) {
   const [searchQuery, setSearchQuery] = useState("");

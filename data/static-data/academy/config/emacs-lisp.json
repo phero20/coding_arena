@@ -1,0 +1,1080 @@
+{
+  "language": "Emacs Lisp",
+  "slug": "emacs-lisp",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "Emacs Lisp is the extension language of the Emacs text editor. You can easily create you own extensions, which include preference files, but also full-fledged applications that use Emacs as a running environment in a fully integrated way.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2,
+    "highlightjs_language": "lisp"
+  },
+  "test_runner": {
+    "average_run_time": 2
+  },
+  "files": {
+    "solution": [
+      "%{kebab_slug}.el"
+    ],
+    "test": [
+      "%{kebab_slug}-test.el"
+    ],
+    "example": [
+      ".meta/example.el"
+    ],
+    "exemplar": [
+      ".meta/exemplar.el"
+    ]
+  },
+  "exercises": {
+    "practice": [
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "c4fdc935-885b-44bd-84e4-fae4a09e8c39",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "accumulate",
+        "name": "Accumulate",
+        "uuid": "093463bf-e8df-4dd9-b6e3-b5ec007cb781",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "a252e137-8a63-4f26-b119-7264f12a257a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "e0d7220f-5d3a-4f10-842e-3d49df714cac",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "bitwise_operations",
+          "control_flow_conditionals",
+          "integers",
+          "text_formatting"
+        ]
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "059141f0-f28d-4d10-a03a-7852dbfc2d2e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "binary",
+        "name": "Binary",
+        "uuid": "7307e13e-7a18-4654-8df4-96951d4dccc6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "status": "deprecated"
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "fb36c27f-0ad5-42d1-90c0-6718f01e61a4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "c02c7392-9478-4cfd-81eb-0cb8ebe78fe5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals",
+          "parsing",
+          "strings"
+        ]
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "1eadc0d0-2086-4ab4-a53c-386933bf30f8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "ca189b4e-713d-4722-b21e-c07d1b975b58",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "7b421b14-c33c-41a6-9e7e-4f9b6fbe6fcc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_loops",
+          "floating_point_numbers",
+          "integers",
+          "math"
+        ]
+      },
+      {
+        "slug": "dnd-character",
+        "name": "D&D Character",
+        "uuid": "79f913e1-9571-4b1e-81f5-f0f3160898cc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "9e10bc23-bd92-4b67-9921-6ff7555d3774",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "e9e27a75-143a-439f-98d0-a604724a7af2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "date",
+          "integers",
+          "time",
+          "transforming",
+          "variables"
+        ]
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "d219aab6-11ec-4e0c-b041-f06c8d523946",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "integers",
+          "variables"
+        ]
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "2bfb508e-7ceb-4ae1-8316-1e2daf771807",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals",
+          "control_flow_loops",
+          "equality",
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "63fc7e59-2448-487b-9b66-06c72ab8d6b0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_loops",
+          "strings"
+        ]
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "798056fc-11df-4705-b783-6eee56e6a1e2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "84eaff19-cb25-46af-a34e-1379e692e57b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals",
+          "equality",
+          "integers",
+          "logic"
+        ]
+      },
+      {
+        "slug": "list-ops",
+        "name": "List Ops",
+        "uuid": "883fdbef-ad97-4f08-8d51-d65bd91fc864",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "functional_programming",
+          "generics",
+          "lists",
+          "control_flow_loops"
+        ]
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "42222c98-e8d2-41bd-9d95-2ace63864359",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_loops",
+          "strings"
+        ]
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "30971b02-79fc-40a1-aa70-ada3fec85548",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "math",
+          "number_theory"
+        ]
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "c211045e-da97-479d-9df4-5d812573e2d0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "e946ec2a-749a-4018-877b-25c42d4ee5b0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "bfa1d997-f0bd-432b-aa29-7018607d772d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "9a97c992-3da0-4f6d-b2f6-1f2683417e3b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals",
+          "filtering",
+          "integers"
+        ]
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "dfc38e27-4c5f-416a-804e-d229e94a15b5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "1c55189e-2c58-48b4-92f1-9a05a9b9c6d6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "e63a974b-1d30-4323-8059-98d131d52f6e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "7b6767b9-2efc-414d-83f7-def9c371d63d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "575a40bd-2ff9-4623-ae98-c8d9b9f279a8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "c4875bc5-e295-4782-99c7-cb3370ac8e08",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals",
+          "control_flow_loops",
+          "integers",
+          "strings",
+          "text_formatting"
+        ]
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "4faa2bae-ecda-4c16-9f6d-148793117995",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "fb45c509-d83d-4f71-a8ef-f218c5426838",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "lists",
+          "strings"
+        ]
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "183eb493-2141-4823-8fe6-0f01ecbcb27a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "d74d3b6d-43db-4f46-a25d-b1a86df3fb47",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "strain",
+        "name": "Strain",
+        "uuid": "daff70f7-504a-4ba5-89a5-1a2860dcd98e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "0cabeae4-439c-4003-b532-f303c953a0aa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "lists",
+          "cond",
+          "case",
+          "if",
+          "multiple-clause-functions",
+          "pattern-matching",
+          "recursion"
+        ]
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "3df22483-1a7c-445d-9eca-131a00c74231",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "df52be2e-8709-4da5-a8c2-03a2fd137993",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "control_flow_conditionals"
+        ]
+      },
+      {
+        "slug": "trinary",
+        "name": "Trinary",
+        "uuid": "c5239cf6-c5a3-4d81-a4d9-504c292ff11e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "status": "deprecated",
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "36e5dc3a-2122-484a-ae82-beb7b813e2cd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "ef8598df-4c7d-4fa0-aeee-b7ca32f0b2ad",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "cb79cb42-7efe-49fe-98c4-68dbdc32f2a3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "3201c23c-e2eb-4e1a-8a44-b56acac572f5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "e55f5562-9126-4cc7-9f9e-a3cbdfd292b4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "2e10ca92-6232-418e-b9ea-506ac1eba195",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "21172aa9-a155-493c-ad9f-ab4884596488",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "control_flow_loops",
+          "math"
+        ]
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "7e6f3680-2906-414e-bc73-5c03985ab071",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "312bff7d-34f4-4ade-bbd3-479bce9bff58",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "house",
+        "name": "House",
+        "uuid": "18dfc1a9-aaa4-4492-943c-cc2a967f594a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "91b2ba1a-8995-4c5c-9682-1ef462cbcbf5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "control_flow_loops",
+          "strings"
+        ]
+      },
+      {
+        "slug": "line-up",
+        "name": "Line Up",
+        "uuid": "cb7d3d70-185d-47cb-b8b7-a0f6ce1c0cf5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "c000a3e1-3488-41ba-9d4c-6f06a96bc892",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "4f30e2a6-97d9-4082-a1fc-82fa8767ffe9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "4dfd9ac8-d0e8-4db5-a68c-75e8647b19c4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "cc71a6d5-efb2-4054-bf72-102b3e96e0bc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "59c6319b-2799-4e4c-bef1-e28626878446",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "simple-cipher",
+        "name": "Simple Cipher",
+        "uuid": "c3cc6d91-b633-44d6-b7e1-04abb33e712c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "twelve-days",
+        "name": "Twelve Days",
+        "uuid": "de31fc58-e80b-485f-9370-5409bb229cd8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "affine-cipher",
+        "name": "Affine Cipher",
+        "uuid": "7d966a40-3cf7-422a-99b1-c0bf05e151b2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "a101dd85-fe8b-4f3f-bece-bbd899a08ee7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "bitwise_operations",
+          "control_flow_conditionals",
+          "integers",
+          "math"
+        ]
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "d8906a7e-9d7e-4e8e-aff0-da877291d8dc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "equality",
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "89125ff6-f94b-46a4-9a5d-84539674238d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "control_flow_conditionals",
+          "control_flow_loops",
+          "sequences",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "circular-buffer",
+        "name": "Circular Buffer",
+        "uuid": "d2eaa3fa-42b3-4287-9b87-714a73ac0c65",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "884cd761-e764-4c1e-8240-bb4454b43ea9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "cryptograpy",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "d8f4c530-02f0-44d3-b5b8-858fec4b6a9d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "control_flow_loops",
+          "maps",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "66f266a8-9c5c-4aad-8a27-92810b288a2b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "31e7c5c0-17eb-4521-b4f9-0579e3917c83",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "control_flow_loops"
+        ]
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "ac1c0246-0fed-46e7-819a-0b013b2b4585",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "game-of-life",
+        "name": "Conway's Game of Life",
+        "uuid": "4e8130a9-bdde-46c5-bb50-e780c3af8670",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "control_flow_loops",
+          "lists"
+        ]
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "e5ab14bd-9eeb-4c63-8143-55e1e56b4ac1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "b0cbc3b5-1d6c-40b8-bdd1-5ba9089024aa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "linked-list",
+        "name": "Linked List",
+        "uuid": "ede3b6fb-b399-44a8-8aee-7bdcabec408e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "bb10d7e4-6006-4dfd-81ae-45062a0ec999",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "checksums",
+          "list_operations",
+          "strings"
+        ]
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "80000759-8ca8-4ff8-a88f-34c4244ac6c5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "58e8c0ba-6a1c-4285-bea3-4809a6987da0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "status": "deprecated",
+        "topics": [
+          "control_flow_loops"
+        ]
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "aaff28dd-718b-48d4-b507-a0b9b01bb6ad",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "control_flow_loops",
+          "maps",
+          "sorting",
+          "strings"
+        ]
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "3bee6827-8766-4d4d-9d0f-3facc3bfd3f4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "pythagorean-triplet",
+        "name": "Pythagorean Triplet",
+        "uuid": "f33d976d-5189-4fcb-b0ac-42879a1067bf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "rail-fence-cipher",
+        "name": "Rail Fence Cipher",
+        "uuid": "bcd4671e-4fb9-4abb-af98-315fc83daa52",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "rational-numbers",
+        "name": "Rational Numbers",
+        "uuid": "c95f7c1f-eb73-4506-abe2-0496fd365793",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "robot-name",
+        "name": "Robot Name",
+        "uuid": "55bc8c2a-1db3-4d26-b7c6-a778b61bf46b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "randomness",
+          "strings",
+          "variables"
+        ]
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "9e8f98f0-6fff-4389-a9a2-9ae43edefa21",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "cf5b4e6f-d3b0-4c53-b2d7-2476ca0d2b1e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "7a6c586a-c8fa-4313-8036-5ff21097702c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "4ce2b869-140a-4d5d-90dd-6fc717ef7696",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "1a3c64b1-8447-451f-985d-f7bd6d42bdb6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "control_flow_conditionals",
+          "control_flow_loops",
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "5d06fd6e-2ca7-425d-a3dd-892cb3f7bf65",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "satellite",
+        "name": "Satellite",
+        "uuid": "02d23d01-c4c6-4fd1-9e0b-f6a457c402ed",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "two-bucket",
+        "name": "Two Bucket",
+        "uuid": "2eb39d6e-52de-4822-8cd1-ef789c1f5e22",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "variable-length-quantity",
+        "name": "Variable Length Quantity",
+        "uuid": "5073fd82-3025-4370-ae93-37b661c17483",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "wordy",
+        "name": "Wordy",
+        "uuid": "4aab08ad-7c41-427c-966e-cd90f4dc7ba5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "dominoes",
+        "name": "Dominoes",
+        "uuid": "9260be95-c9a5-4975-a00e-21828f5e9241",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "41029de7-58a6-431b-9f82-6d4603604fb3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "topics": [
+          "control_flow_loops"
+        ]
+      },
+      {
+        "slug": "bank-account",
+        "name": "Bank Account",
+        "uuid": "edc5fa4b-35b3-4313-b4c3-16153708f0ac",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "zebra-puzzle",
+        "name": "Zebra Puzzle",
+        "uuid": "bd7c4195-2d89-436b-918f-24224a95610d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "parallel-letter-frequency",
+        "name": "Parallel Letter Frequency",
+        "uuid": "3daf3903-1eb0-49b9-827a-76e6b7ca25fb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 10
+      }
+    ]
+  },
+  "key_features": [
+    {
+      "title": "Simple syntax",
+      "content": "Emacs Lisp's syntax is simple, expressive and easy to learn.",
+      "icon": "easy"
+    },
+    {
+      "title": "S-expressions",
+      "content": "Both source code and data are expressed using nested lists.",
+      "icon": "homoiconic"
+    },
+    {
+      "title": "Macros",
+      "content": "It's easy to customize the language with Emacs Lisp's macro system.",
+      "icon": "powerful"
+    },
+    {
+      "title": "Multi-paradigm",
+      "content": "Emacs Lisp support imperative and functional programming styles.",
+      "icon": "multi-paradigm"
+    },
+    {
+      "title": "Scripting",
+      "content": "Emacs Lisp can be used as scripting language by using Emacs' batch mode.",
+      "icon": "embeddable"
+    },
+    {
+      "title": "Well Documented",
+      "content": "Emacs Lisp is well documented right inside the editor.",
+      "icon": "documentation"
+    }
+  ],
+  "tags": [
+    "execution_mode/interpreted",
+    "paradigm/functional",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "runtime/language_specific",
+    "typing/dynamic",
+    "typing/strong",
+    "used_for/scripts"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/emacs-lisp.svg",
+  "about_content": "# About\n\n[Emacs Lisp](https://www.gnu.org/software/emacs/manual/) is the language at the core of Emacs, the iconic text editor that is at the beginning of the Free Software movement.\nEmacs is made of more than a million lines of Emacs Lisp, and all the applications that run inside Emacs (IDEs for various programming languages, games, planners, etc.) are written in Emacs Lisp.\nUser preferences are also lists of Emacs Lisp expressions.\n\nKnowing Emacs Lisp is the first step into Lisp, the second oldest programming language still used (just turned 60 in 2018) and also a language that still influences so many other programming languages.\n\n[Quoting the creator of Emacs](https://www.gnu.org/gnu/rms-lisp.html):\n\"Multics Emacs proved to be a great success — programming new editing commands was so convenient that even the secretaries in his office started learning how to use it. They used a manual someone had written which showed how to extend Emacs, but didn't say it was a programming. So the secretaries, who believed they couldn't do programming, weren't scared off. They read the manual, discovered they could do useful things and they learned to program.\"\n"
+}

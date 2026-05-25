@@ -1,0 +1,732 @@
+{
+  "language": "SQLite",
+  "slug": "sqlite",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "SQLite is a lightweight, serverless relational database with a straightforward SQL syntax. It's tailored for simplicity and efficiency, making it perfect for mobile, embedded systems, and small to medium-scale projects. The self-contained engine eliminates the need for a separate server, emphasizing ease of use and practicality.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4,
+    "highlightjs_language": "pgsql"
+  },
+  "test_runner": {
+    "average_run_time": 2
+  },
+  "files": {
+    "solution": [
+      "%{kebab_slug}.sql"
+    ],
+    "test": [
+      "%{kebab_slug}_test.sql"
+    ],
+    "example": [
+      ".meta/example.sql"
+    ],
+    "exemplar": [
+      ".meta/exemplar.sql"
+    ]
+  },
+  "exercises": {
+    "practice": [
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "f3bab368-b048-42d0-984a-8b9102d56cb6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "c69f301c-126d-4f88-b301-626499f56a7c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "a3961350-2053-4e08-bf5d-fe9b43cb753c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "53ab1f3e-62ad-4d2a-a97d-cd2fac9b9187",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "efd89526-fceb-4490-a641-822b7699aaac",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "20b149ad-3bf5-40cb-afa9-f58424caca49",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "1885a049-6075-4619-914f-28a0ebc00a2b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "a0a1cb68-b587-4d30-bf1c-819814847637",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "edfe7d3b-cba7-4fb9-9120-c316576e4164",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "f11e9d34-d454-42a8-bd2f-d1a8b6000975",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "6a5f9c87-4c99-4fc0-88f1-25d517d4b074",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "a90a01fd-aa8c-45ee-a191-2898434fcf10",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "1d80ed96-17aa-44e2-a02f-3cdbdfd05990",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "71556996-0d47-4c34-bd8c-373d55ee03fd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "09b96007-c782-4b5e-b929-48bab73b5f69",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "415ddeb8-cadd-42c2-b9b5-b083ecca9961",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "a328f4f8-5acd-4913-9c24-d75c5e657387",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "8464ff68-5880-4b0a-b568-658fac1a7e33",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "clock",
+        "name": "Clock",
+        "uuid": "9f346edc-0b89-4616-b62c-2119325fde2a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "dnd-character",
+        "name": "D&D Character",
+        "uuid": "d2da9563-a621-4e02-b2e4-f9553f3b82fc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "f323bd0a-c65b-4d30-b4d2-fa5a3e32ccb0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "63792af3-0fce-4c90-8cc3-4844ad6b6861",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "a658e1ed-26f4-4f36-9d6c-41d6f23568f9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "cfa538ab-e637-4836-bb0c-b8fae94fa680",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "house",
+        "name": "House",
+        "uuid": "e684299c-9db3-4dce-b3c7-53c9aa38ceaa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "fb354d1a-c85d-42d0-b919-f554eaa27a08",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "6884edbe-4a2b-4415-8aa0-57c959b200c8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "d096731f-18cb-4baa-90e5-dde8d19f35f2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "5291aa5f-b3b8-4c28-b30a-ca006dbaadb0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "309666ba-cbde-429b-ae07-ddb05366bf0a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "f452c4fd-9ee7-49d6-b373-bc250445b4c8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "ff9d1780-bc8c-49d6-9c33-dba769d551fb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "2b10f220-4a5f-437f-b982-58914baa9ec1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "3fa9b650-df9f-457f-bfa0-51b62696f998",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "18ea92e5-6855-4dd6-b6d0-e2473d036fd4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "swift-scheduling",
+        "name": "Swift Scheduling",
+        "uuid": "51691c60-f878-4c1d-94e0-9e38e1e974d2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "twelve-days",
+        "name": "Twelve Days",
+        "uuid": "ff75a702-38b8-4d86-a384-ce019c067589",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "880388be-1e77-4092-bcf3-f237572c40e1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "36b4c4c7-c5a1-4885-bf2e-2b77130ab23a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "a4231e93-2e2c-4db2-a073-2b2c30b40185",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "e007fc26-80ac-4706-9df2-2d654a94266e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "171c0743-9e22-4152-af26-831ca097ea04",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "8a886fa2-2bd4-4fab-a065-101073fb9dcc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "bowling",
+        "name": "Bowling",
+        "uuid": "ef97039a-4f03-42dc-a44c-9dbc4fb8f03b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "b2644e1e-aa52-4503-80e6-cbac1c5b0f06",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "9fc46c57-3011-4dff-b4af-9259aeb2e170",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "8f223ea0-4bd2-4e40-99ac-d5d13d9726e5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "128ab281-7720-4383-be90-a2b311bd8c38",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "d1ea133e-1d3f-4894-975e-6ab91aa33a35",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "7ab3b905-bfaa-4d21-a665-7dcf2701cb3e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "cb4e76ba-23f4-44ce-9367-7508499f9799",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "66555259-8a28-428a-bca8-c0b06c889297",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "bde990ef-fb37-4b75-a3b1-a659b7f69f59",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "cc2a9d38-4d01-479a-a7d1-f1a5662cbc3e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "ocr-numbers",
+        "name": "OCR Numbers",
+        "uuid": "46c8fd20-887f-4cd6-ac3a-9717d169de1d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "fb614e0d-ad10-4710-8785-5ab07fd9eb5a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "8a7fedc5-e977-4ad7-848c-6e48f6a8c42f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "2c45ef99-047e-4d83-b11d-256acc20a175",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "poker",
+        "name": "Poker",
+        "uuid": "b9ec94e1-8c20-4095-b627-889b614e2a99",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "afebedda-e757-4811-825e-36be60fb8a4b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "10c51241-2399-4a0c-84cf-390a000f3c3b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "rail-fence-cipher",
+        "name": "Rail Fence Cipher",
+        "uuid": "7ca6ff97-ea27-450e-96dd-c39b9410c491",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "rest-api",
+        "name": "REST API",
+        "uuid": "51275817-1b95-48d9-b7ab-bbbf8720acb7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "cf1c3ed8-167a-47e8-af1a-2cc2d8403525",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "49dc9e30-e985-485b-b63f-6c2fd6bbfe23",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "f109325a-2bbb-46d7-a7ed-fe8484509985",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "76fd6c44-a09b-41a7-9fec-addf26b35059",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "065feae7-f6fc-46b9-a226-d3d9df9d192b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "d050e56b-9f86-416c-baa3-10a98f47b944",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "5b643efe-e63b-4598-95f8-a4cb319107de",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "ce167ca3-bb12-4238-88eb-c2c7e2cb7809",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "83a5f56d-b75b-424b-84e6-22609cff8da5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "285ad81c-e27b-4fe4-a2f6-36c9c502b62d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "state-of-tic-tac-toe",
+        "name": "State of Tic-Tac-Toe",
+        "uuid": "430f765b-090a-4d91-997e-9d23b59da50d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "8491674e-c9e1-4922-a25c-4a5d691158d4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "tournament",
+        "name": "Tournament",
+        "uuid": "3be4094d-0ca5-4640-bc9f-c94f2e9dc5b6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "transpose",
+        "name": "Transpose",
+        "uuid": "501d8d8b-4dd9-457d-866f-88120f046277",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "67ef66f1-4a18-42ba-86ca-59c296487c0d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "wordy",
+        "name": "Wordy",
+        "uuid": "b013d306-2212-44b6-abfb-5523a1b54c65",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "fe0f434b-dcf8-46ec-924a-09e47348f22d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "line-up",
+        "name": "Line up",
+        "uuid": "bb005a57-11f8-4379-b181-cfb799b04a8f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      }
+    ]
+  },
+  "key_features": [
+    {
+      "title": "Public domain",
+      "content": "The SQLite source code is in the public domain and doesn't require a license for use.",
+      "icon": "community"
+    },
+    {
+      "title": "Extensible",
+      "content": "SQLite provides APIs for extending the database system, including new functionality.",
+      "icon": "extensible"
+    },
+    {
+      "title": "Serverless",
+      "content": "There is no server process to manage access so processes can write directly to a SQLite database.",
+      "icon": "productive"
+    },
+    {
+      "title": "Reliable",
+      "content": "Transactions are ACID-compliant so all changes are applied or not at all, increasing reliability.",
+      "icon": "safe"
+    },
+    {
+      "title": "Portable",
+      "content": "SQLite doesn't require installation or configuration before use and can be used almost everywhere.",
+      "icon": "portable"
+    },
+    {
+      "title": "Compact",
+      "content": "The official SQLite library is less than a single megabyte.",
+      "icon": "small"
+    }
+  ],
+  "tags": [
+    "execution_mode/interpreted",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "runtime/language_specific",
+    "typing/weak",
+    "used_for/backends",
+    "used_for/cross_platform_development",
+    "used_for/web_development"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/sqlite.svg",
+  "about_content": "# About\n\n[SQLite][sqlite] is an open-source lightweight, serverless, and self-contained [relational database][relational-database] management system.\nIt is known for its simplicity, ease of use, and zero configuration requirements.\nSQLite can be embedded within applications, making it an ideal choice for apps, embedded systems, and small to medium-scale projects.\n\nCreated by [D. Richard Hipp][hipp], SQLite follows the [ACID][acid] properties, intended to facilitate reliable transactions.\nIt is widely used in various industries thanks to its minimal footprint and efficient performance.\n\nSQLite employs a straightforward SQL-based syntax for defining and interacting with databases.\nTables, indexes, and queries are created using standard SQL statements, providing developers with a familiar and expressive way to manage databases.\nThe database engine is self-contained, eliminating the need for a separate server process.\nThis simplicity, combined with its powerful capabilities, makes SQLite an excellent choice for projects where ease of use and efficiency are a priority.\n\nFor detailed information and documentation, refer to the [official SQLite documentation][sqlite docs].\nAdditionally, the community provides resources such as tutorials, FAQs, and more to support users of all levels.\n\n- [SQLite Quickstart Guide][sqlite quickstart]\n- [SQLite Language Reference][sqlite language reference]\n- [SQLite Command-Line Shell][sqlite shell]\n- [SQLite Frequently Asked Questions][sqlite faqs]\n\n[sqlite]: https://www.sqlite.org/\n[relational-database]: https://en.wikipedia.org/wiki/Relational_database \n[hipp]: https://ghostarchive.org/archive/wpteG\n[acid]: https://en.wikipedia.org/wiki/ACID\n[sqlite docs]: https://www.sqlite.org/docs.html\n[sqlite quickstart]: https://www.sqlite.org/quickstart.html\n[sqlite language reference]: https://www.sqlite.org/lang.html\n[sqlite shell]: https://www.sqlite.org/cli.html\n[sqlite faqs]: https://www.sqlite.org/faq.html\n"
+}

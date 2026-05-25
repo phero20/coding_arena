@@ -1,0 +1,1342 @@
+{
+  "language": "PowerShell",
+  "slug": "powershell",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "Task-based command-line shell and scripting language designed especially for system administration.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4,
+    "highlightjs_language": "powershell"
+  },
+  "test_runner": {
+    "average_run_time": 5
+  },
+  "files": {
+    "solution": [
+      "%{pascal_slug}.ps1"
+    ],
+    "test": [
+      "%{pascal_slug}.tests.ps1"
+    ],
+    "example": [
+      ".meta/%{pascal_slug}.example.ps1"
+    ],
+    "exemplar": [
+      ".meta/%{pascal_slug}.exemplar.ps1"
+    ]
+  },
+  "exercises": {
+    "concept": [
+      {
+        "slug": "jeffreys-juicy-lasagna",
+        "name": "Jeffrey's Juicy Lasagna",
+        "uuid": "00e439fb-a5f4-4e0c-b89c-ea23c586c9e3",
+        "concepts": [
+          "basics"
+        ],
+        "prerequisites": [],
+        "status": "wip"
+      },
+      {
+        "slug": "pacmans-powerful-pursuit",
+        "name": "Pacman's Powerful Pursuit",
+        "uuid": "49a52681-be7c-43db-862f-109ee13ac8a3",
+        "concepts": [
+          "bools"
+        ],
+        "prerequisites": [
+          "basics"
+        ],
+        "status": "wip"
+      }
+    ],
+    "practice": [
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "83c215e6-4a4e-4302-8d68-47f367478d2c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "e80b254a-0dd8-4efb-83e4-cee1cfc9431e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "control_flow_if_else_statements",
+          "strings"
+        ]
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "39447c38-8509-45fb-9070-3ff6be50c0d5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "errors",
+          "control_flow_if_else_statements",
+          "integers"
+        ]
+      },
+      {
+        "slug": "strain",
+        "name": "Strain",
+        "uuid": "c142d262-ae74-4a41-9a99-e2a00194619d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "09637d15-2f1e-45a1-9654-1b783147676e",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "43ea84ff-6525-497e-b871-b205bb1b429d",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "resistor-color-expert",
+        "name": "Resistor Color Expert",
+        "uuid": "ef3e6f0e-4981-4f18-8e6c-14abd4d1d897",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "5edb37eb-2903-48de-9f0e-83d8aceae03b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "df4403d1-3fb2-4c2c-a228-2bdb442d0680",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "arrays",
+          "math",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "d2378d74-bfb7-4f80-ad3e-dc0db0d90352",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "666f7921-e650-4c6d-9f4c-f9a653c33a1d",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "90a12652-946c-4771-83bd-741f884cd426",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "b1465d38-77af-407d-9298-c222ade4182c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "68b0b096-c6c0-493f-9f7f-081a413d7078",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "dictionaries",
+          "strings"
+        ]
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "f55b2158-a8f0-4593-b44a-6e750ebac0a5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "e62edbd6-861b-4cd6-bb03-6c9bcaa742a4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "control_flow_if_else_statements",
+          "integers"
+        ]
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "2673f9af-29a9-48b5-96f3-30588a402cd2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "65dcaf86-f61f-4576-82a9-1d84552e9d6e",
+        "practices": [
+          "control-flow-if-else-statements",
+          "integers"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "925e73f0-28a9-4e33-937b-5f328ac50163",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "4ec88a7f-7a15-4e61-8db7-acf8b7f7086d",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "304f117c-3868-41e0-a904-08ca3d90ea80",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "45f285c2-9358-451d-a931-1dee54df7b67",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "optional_values",
+          "strings"
+        ]
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "0cd45da4-4330-41e7-bc30-77bb56e8c627",
+        "practices": [
+          "arrays"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "1a204c41-7aea-41ff-8069-917ed65177ed",
+        "practices": [
+          "numbers"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "96c13659-37b2-4776-901e-ba4b9cc92984",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "b439d97f-3661-45d4-903d-6c739e4ab05f",
+        "practices": [
+          "bools"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "76c5078c-9255-44a6-97dd-aab7a1099907",
+        "practices": [
+          "dictionaries"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "house",
+        "name": "House",
+        "uuid": "e0be6456-880b-4cb4-8c62-4479f045fa93",
+        "practices": [
+          "loops"
+        ],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "micro-blog",
+        "name": "Micro Blog",
+        "uuid": "98453c90-f5a7-4798-b173-e388be646aa6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "85148e36-583b-4eba-9f66-daeb0c865daa",
+        "practices": [
+          "objects",
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "e8af8cb0-2c9f-4ba7-9045-82c08e9d700f",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "2daa9e3e-65c1-4fc3-b6ee-6f477a198fec",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "classes"
+        ]
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "b6937bc6-9101-4d9b-a45c-e82277daa0bd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "e297bc30-22c5-4ffb-ad44-8a36a9f238d2",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "accumulate",
+        "name": "Accumulate",
+        "uuid": "6554629d-0fb9-442a-89b7-c39192b2562c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "scriptblocks",
+          "functions"
+        ]
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "47da53d4-b6fd-4de0-9fbb-303f5a7d926d",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "e22e6595-b407-4e6e-b8df-00bbbb75af60",
+        "practices": [
+          "numbers"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "b2eb59e2-f3ec-49aa-bcd0-2e9cb86e62bc",
+        "practices": [
+          "numbers"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "298adaf6-5063-41d6-b27c-a0f34c457a2d",
+        "practices": [
+          "math"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "5bfe0f8f-2341-403b-9600-fb44789fa8be",
+        "practices": [
+          "numbers"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "84e522fc-d042-43fe-8dd2-84c9f1150d1e",
+        "practices": [
+          "regular-expressions"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "dnd-character",
+        "name": "D&D Character",
+        "uuid": "e7702910-5a0a-4180-bef9-9962304ef6c5",
+        "practices": [
+          "classes",
+          "random"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "70878de3-5da3-4ab6-bf14-e7c5edd53b5c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "e52a52e8-a08e-4060-9413-198c931d52d2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "c71cfb54-746a-492a-88f8-4258ee9bfe44",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "0c5a329e-fb07-4c6e-abbf-039b9fc17fcb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "84ab45f7-243e-43ee-bd56-4ac6267f4206",
+        "practices": [
+          "math"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "c21d45bc-2217-40cc-86ee-24e6938cfeca",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "f44f56dd-5220-4304-9214-e02b159868e6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "2ff69e4a-e939-483e-95da-11c01b2b983b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "970494d9-0fba-4ee8-9f9a-f949e6d72ba1",
+        "practices": [
+          "conditionals"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "transpose",
+        "name": "Transpose",
+        "uuid": "a7f94e61-5689-45e2-ad22-24721a6f6abd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "48571314-77a4-4b7a-b4d1-9c1626cf2e14",
+        "practices": [
+          "enums"
+        ],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "twelve-days",
+        "name": "Twelve Days",
+        "uuid": "afa5764e-7bc5-4d3f-88f0-9ac430d65423",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "e22994f6-95c0-456d-91a8-4945df343f93",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "8f632676-65c7-4edf-a395-5b6f6d0ca84e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "65fa1796-64de-4da7-8050-41b2a9addd9c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "line-up",
+        "name": "Line Up",
+        "uuid": "35d96adf-0fc2-4442-9299-76d880a70b3c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "parallel-letter-frequency",
+        "name": "Parallel Letter Frequency",
+        "uuid": "6382ecca-b108-4fae-9901-dc1a9591a9cb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "error-handling",
+        "name": "Error Handling",
+        "uuid": "1813c9f6-a653-43b1-a835-5b9edcbd1c68",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "wordy",
+        "name": "Wordy",
+        "uuid": "5c84e3b4-d6d1-42e5-9614-c0c394a6b08f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "list-ops",
+        "name": "List Ops",
+        "uuid": "83d28b1b-7ae5-4fdb-b3ec-47fe889827b4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "87aceeaa-3969-4ae0-b5ea-488837fcc15b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "bc5112c7-3c1c-4f10-8d02-90dd100a2180",
+        "practices": [
+          "regular-expressions"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "ed2cb05a-97e9-4a4c-b6d6-a9748d7436e8",
+        "practices": [
+          "bitwise-operators"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "1a7f48e6-df5c-4618-8046-d4674ff0ba1a",
+        "practices": [
+          "math"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "091aa0d4-cb3a-46f3-a184-b8c8a6f6e2e5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "3cbb336f-9824-46a2-817d-d7a6810f5778",
+        "practices": [
+          "classes"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "simple-cipher",
+        "name": "Simple Cipher",
+        "uuid": "d76c645e-d665-4e2b-9cee-fbb97572e9fd",
+        "practices": [
+          "classes"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "acac5b87-4691-467a-8f64-9bbe1ffa9959",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "b3f29283-9204-488a-8b8c-6552e7d4edfa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "512f0d92-57c1-403c-a96a-82b5066fd047",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "clock",
+        "name": "Clock",
+        "uuid": "31a5ba31-3f86-4957-87cd-8200eee0a0f4",
+        "practices": [
+          "classes",
+          "string"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "circular-buffer",
+        "name": "Circular Buffer",
+        "uuid": "a4693b2e-3450-4391-aa34-927f86030d04",
+        "practices": [
+          "classes"
+        ],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "6ce51845-26e8-494f-bd0c-c31861415704",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "pythagorean-triplet",
+        "name": "Pythagorean Triplet",
+        "uuid": "7d3309b4-8efb-4357-8893-c654ccee7e79",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "ocr-numbers",
+        "name": "OCR Numbers",
+        "uuid": "15fdacc6-2da7-42ae-bc59-98740fdbfa80",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "8e2f7042-da01-42ec-84ce-38930ed6e8b3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "169d1a37-1f0f-42ea-9b1d-8cff7e6f2ffc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "robot-name",
+        "name": "Robot Name",
+        "uuid": "0b35919e-ccba-4f45-8a03-504869e229ae",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "swift-scheduling",
+        "name": "Swift Scheduling",
+        "uuid": "8fb9b94d-9d56-4655-b272-f2718da9575e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "simple-linked-list",
+        "name": "Simple Linked List",
+        "uuid": "97477cc5-2cad-44a6-9d5b-d82afe02465e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "a2563791-b482-4f73-a9d1-4ba7c2870d67",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "0c19ece9-0271-40ff-b768-81c514bd29aa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "tournament",
+        "name": "Tournament",
+        "uuid": "242648c1-c6d8-440f-afe6-55f8d614452c",
+        "practices": [
+          "string"
+        ],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "a5aff23f-7829-403f-843a-d3312dca31e8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "d116b6c3-9a79-4b03-9dbb-0499d9e6d112",
+        "practices": [
+          "classes",
+          "string"
+        ],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "rail-fence-cipher",
+        "name": "Rail Fence Cipher",
+        "uuid": "33012310-6494-47ff-a29f-6cc168fe12b4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "d9887ff7-95fe-4e9c-b960-aa5a6a0baa61",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "variable-length-quantity",
+        "name": "Variable Length Quantity",
+        "uuid": "5cd2d0cc-b29b-4f12-ad7d-a812dff1bae9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "37534530-58c2-4993-ae27-9e743058dc8f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "complex-numbers",
+        "name": "Complex Numbers",
+        "uuid": "c84d1aaa-639b-4af6-88ec-6a1b0180b752",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "a70c28bc-4373-4549-a089-7fd0c355d21e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "b39e143f-dbf6-4157-9e18-220147b145a9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "killer-sudoku-helper",
+        "name": "Killer Sudoku Helper",
+        "uuid": "cdfc017a-30aa-4dcd-aa79-8a7dfcd7bca1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "e7ae59c8-29af-428b-929d-eec268e3a3e9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "palindrome-products",
+        "name": "Palindrome Products",
+        "uuid": "59929243-2d63-4434-8734-90d7401034e4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "relative-distance",
+        "name": "Relative Distance",
+        "uuid": "904aaf68-8cef-47dc-8f53-e6bba8e2859c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "hangman",
+        "name": "Hangman",
+        "uuid": "20058254-0d41-486f-99d9-d7ee3f3ccb44",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "baffling-birthdays",
+        "name": "Baffling Birthdays",
+        "uuid": "6f7add34-456f-4284-8e97-20fbd46e386e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "split-second-stopwatch",
+        "name": "Split Second Stopwatch",
+        "uuid": "09ae15d4-b79e-4666-ad37-58a6545bb4e9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "affine-cipher",
+        "name": "Affine Cipher",
+        "uuid": "0db7efd5-2ece-481a-b706-0e011aad52aa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "markdown",
+        "name": "Markdown",
+        "uuid": "125b3f79-6485-4e5a-af0c-0238f4128dc6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "change",
+        "name": "Change",
+        "uuid": "352d9205-5f01-4755-8844-e2a44d7b667b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "state-of-tic-tac-toe",
+        "name": "State of Tic-Tac-Toe",
+        "uuid": "c07e6ad9-9172-4dc8-871d-7d0581e1504f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "dominoes",
+        "name": "Dominoes",
+        "uuid": "c3ba77dc-ca14-4d76-b449-f9cabad16d00",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "binary-search-tree",
+        "name": "Binary Search Tree",
+        "uuid": "3cf07ef7-5445-4f5d-b60d-cca72ef07935",
+        "practices": [
+          "classes"
+        ],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "rational-numbers",
+        "name": "Rational Numbers",
+        "uuid": "5d76a98a-f130-41b3-af1f-1b8d32d2f6e6",
+        "practices": [
+          "operator-overloading"
+        ],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "dot-dsl",
+        "name": "DOT DSL",
+        "uuid": "79c56891-bb51-4de9-acb1-13edfa14573e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "connect",
+        "name": "Connect",
+        "uuid": "97aafbc5-da65-4539-aaeb-0d4507b1bf44",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "custom-set",
+        "name": "Custom Set",
+        "uuid": "8643e825-bdbf-4a18-8559-5974a7e1585c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "grep",
+        "name": "Grep",
+        "uuid": "7eec693f-d1b3-48c1-b599-2cd168da3dbc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "linked-list",
+        "name": "Linked List",
+        "uuid": "9650379f-9c97-4ba6-8fd1-c548642c8a0a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "ledger",
+        "name": "Ledger",
+        "uuid": "20bad781-7c4b-4133-8ce3-2160ab12a3a0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "tree-building",
+        "name": "Tree Building",
+        "uuid": "088fcf19-851f-4fb9-a740-7d9d14362432",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "game-of-life",
+        "name": "Conway's Game of Life",
+        "uuid": "9a66392e-acde-4c17-a8c6-281498eb635a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "intergalactic-transmission",
+        "name": "Intergalactic Transmission",
+        "uuid": "7ec4147a-392c-49f6-9587-f580ac61b48e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "camicia",
+        "name": "Camicia",
+        "uuid": "7aaaf5fa-1a22-433b-9c0d-0e1c035eba3d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "piecing-it-together",
+        "name": "Piecing It Together",
+        "uuid": "23b80d70-283c-44be-a360-8a23a42773f4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "rectangles",
+        "name": "Rectangles",
+        "uuid": "0c624e88-1baf-4760-b0ff-6a138e62113f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "two-bucket",
+        "name": "Two Bucket",
+        "uuid": "f16d5ba7-e15f-49e6-a391-e6a60c7171ff",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "word-search",
+        "name": "Word Search",
+        "uuid": "246b4736-2a13-4298-a989-fb7ebc394c1b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "e59c633c-f5d1-45e6-bfb3-b32f0bb12f18",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "bowling",
+        "name": "Bowling",
+        "uuid": "f374b4a0-d2a2-40c2-bd41-215b0fd64316",
+        "practices": [
+          "classes"
+        ],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "poker",
+        "name": "Poker",
+        "uuid": "12a4321d-886e-437f-8bf8-fc5d70b85c5c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "book-store",
+        "name": "Book Store",
+        "uuid": "890df47f-19d8-406a-b124-9d0613db486d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "satellite",
+        "name": "Satellite",
+        "uuid": "8f4635fb-a904-4cbf-badb-859d4aa9f84b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "rest-api",
+        "name": "REST API",
+        "uuid": "3eee7ed8-09ca-4072-8bd9-2bbc682a8dfb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "zipper",
+        "name": "Zipper",
+        "uuid": "ed6dc7be-1a8b-4261-a28a-0e4fe06ef466",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "forth",
+        "name": "Forth",
+        "uuid": "a66c762e-77fa-413d-a84b-03eb099700c2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "zebra-puzzle",
+        "name": "Zebra Puzzle",
+        "uuid": "66946bd7-5b80-4889-9de6-c0a02fa9df92",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "go-counting",
+        "name": "Go Counting",
+        "uuid": "11cba495-68a1-4871-88cd-48a6acc7b4f4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "sgf-parsing",
+        "name": "SGF Parsing",
+        "uuid": "d7163f3c-069d-451c-858c-a58a112c2a87",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9
+      },
+      {
+        "slug": "alphametics",
+        "name": "Alphametics",
+        "uuid": "b0fe9c19-f846-4e3d-b36b-6504f1740902",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9
+      },
+      {
+        "slug": "pov",
+        "name": "POV",
+        "uuid": "05773ba2-d938-44ac-bfcc-e16f5ff9851d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 10
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "23508af2-2bf3-4ef9-aac4-f41471afe76d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "status": "deprecated"
+      },
+      {
+        "slug": "scale-generator",
+        "name": "Scale Generator",
+        "uuid": "c2eaec94-826e-44e2-b92d-827a713dd373",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "status": "deprecated"
+      }
+    ]
+  },
+  "concepts": [
+    {
+      "uuid": "5151f982-fa99-494e-9036-af7e6a3af86f",
+      "slug": "basics",
+      "name": "Basics"
+    },
+    {
+      "uuid": "2981782d-98dd-4221-8936-b71d10b0fc59",
+      "slug": "bools",
+      "name": "Booleans"
+    }
+  ],
+  "key_features": [
+    {
+      "title": "Cross Platform",
+      "content": "Powershell runs on Windows, macOS, and Linux.",
+      "icon": "cross-platform"
+    },
+    {
+      "title": "Interop",
+      "content": "Leverage the .NET framework with ease.",
+      "icon": "interop"
+    },
+    {
+      "title": "Composable",
+      "content": "Leverage pipelines to chain commands together.",
+      "icon": "concurrency"
+    },
+    {
+      "title": "CLI",
+      "content": "Powerful command line interface, that lets you interact with the system.",
+      "icon": "tooling"
+    },
+    {
+      "title": "Customizable Trust Levels",
+      "content": "Set execution policy which allows you to control the level of trust for scripts.",
+      "icon": "safe"
+    },
+    {
+      "title": "Extensible",
+      "content": "Extensible with modules and scripts from the community, or create your own.",
+      "icon": "extensible"
+    }
+  ],
+  "tags": [
+    "execution_mode/interpreted",
+    "paradigm/procedural",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "typing/dynamic"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/powershell.svg",
+  "about_content": "# PowerShell\n\nAutomate everything!\nScript on any OS to manage files, processes, a data center, or cloud services.\nInteractively explore structured data like JSON, XML and CSV; work with every management interface from web APIs and CIM to command-line apps.\n\n# About PowerShell\n\nAn open-source, cross-platform .NET scripting language, shell, and configuration management framework, PowerShell helps IT professionals and power users control and automate just about anything.\n\nPowerShell is build on top of the .NET Framework, and transforms the classic unix pipe concept, extending it from passing just text or binary streams to support passing object instances which include type information (e.g. dates and times) and complex state with their structured data.\nWhere in a traditional shell you might use text processing to extract particular information from the output of a command, in PowerShell you have access to properties and methods (including ways of inspecting objects to determine which properties and methods are available).\nYou can work with CSV files, convert JSON to hashtables, navigate XML documents, and much more, making many tasks easily composable that would be difficult or impractical with text parsing.\n\nPowerShell is extensible.\nNot just via stand-along command-line tools, the way other shells are extensible, but via scripts, functions and cmdlets distributed in modules that actually fully integrate with PowerShell's help system, syntax highlighting command-line editor, automatic parameter discovery and tab-completion.\nYou can even extend the simple, explorable property + content syntax of the file system to data stores such as the Windows registry and certificate store, SQL Server, and even Azure!\n\nPowerShell includes many additional features:\n\n- Built-in \"cmdlets\" for common system administration tasks, such as managing files, services, processes, and even the registry, event logs, and Common Information Model (CIM), web requests, and more.\n- Compatibility with existing scripts and command-line tools.\n- Extensible interfaces, and easily discoverable modules and commands.\n- Full access to the .NET Framework, and extensibility via .NET assemblies from NuGet.\n- A rich command history with information about the success and duration of a command's execution.\n- Powerful object manipulation capabilities. Objects can be directly manipulated, serialized, and even sent to other tools or databases.\n\nDetailed documentation on PowerShell, the language, core concepts and features can be found with the installers at https://docs.microsoft.com/en-us/powershell.\n"
+}

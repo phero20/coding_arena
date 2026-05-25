@@ -1,0 +1,722 @@
+{
+  "language": "OCaml",
+  "slug": "ocaml",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "OCaml is a functional and object-oriented language, used both in industry and as a teaching language to elegantly solve problems. The strong type system, with type inference, is useful for catching mistakes.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2,
+    "highlightjs_language": "ocaml"
+  },
+  "test_runner": {
+    "average_run_time": 2
+  },
+  "files": {
+    "solution": [
+      "%{snake_slug}.ml"
+    ],
+    "test": [
+      "test.ml"
+    ],
+    "example": [
+      ".meta/example.ml"
+    ],
+    "exemplar": [
+      ".meta/exemplar.ml"
+    ],
+    "editor": [
+      "%{snake_slug}.mli"
+    ]
+  },
+  "exercises": {
+    "practice": [
+      {
+        "slug": "hexadecimal",
+        "name": "Hexadecimal",
+        "uuid": "d0c937ef-3c7b-40be-891d-3024129b443f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "status": "deprecated"
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "cda3b090-ae52-476b-a782-9cbf43953cf0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "setting_up_ocaml_dev_environment",
+          "strings"
+        ]
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "ea5ca675-e010-470b-8030-d4f84880d799",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "booleans",
+          "integers"
+        ]
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "ddbcf49c-adf8-415a-9682-4c47989f5970",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "c6b23754-4410-4450-81fc-a7d53278cff5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "7fbd4282-9e69-460d-a208-dfafb1850da0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "c25941d2-87cb-4558-a605-7d49829a1fc4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "bff47b0f-4555-40b7-b422-64eaa37cb2f6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "iterating_over_two_lists_at_once"
+        ]
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "0d7a23a9-31a1-4d52-afd6-887d0fc898e2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "counting"
+        ]
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "dd066b62-c63e-467c-8dfb-435bcc81d532",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "58c93fbe-5c57-41d0-9085-6007a488aaca",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "bf9a0fe0-99b2-4a95-8d75-fc02d0c8433c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "transforming"
+        ]
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "8157f71a-25ca-476c-8ac8-dcf660e5193b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "870a40d5-63f5-4ef9-a8de-3ab5ed318376",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "c4550644-e67a-4bf4-98dc-78fe45b90c53",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "f51e2ff7-3a25-4b2f-9db0-ec2bb05c2c50",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "bitwise_operations"
+        ]
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "7a3e7667-c7a2-4ba2-b448-599719f78ebc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "binary-search-tree",
+        "name": "Binary Search Tree",
+        "uuid": "ce05137f-d4e5-40f2-ae6b-6c43e00d458f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "recursion",
+          "searching",
+          "trees"
+        ]
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "9bcdf9a0-acf3-4437-b0f5-071bf0cf5e02",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "eedc9471-326b-4498-b763-5b1c8eedca88",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "be29288a-fcb6-4dce-acc3-be8d86e5454e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "transforming"
+        ]
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "870b1229-2f9a-4e23-bb6f-c579375ed701",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "transforming"
+        ]
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "408f5d5d-00f7-4dcb-bf57-8b8576ae903a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "fe419d81-481d-49af-8e24-80defb0692f2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "ae5a4fac-84c4-4929-b37e-b0452f761bf8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "0621077c-b5af-4e3b-a60c-b6aaa2565224",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "floats"
+        ]
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "33360ed8-c49c-4c7f-a1fb-7e242b0794c0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "0298b5aa-6a3b-43d6-893d-91b72f4178ad",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "a43c28f4-8f5c-40f7-90cb-79689c810f95",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "63134efd-e383-4f00-9f97-80ae75585ca6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "beer-song",
+        "name": "Beer Song",
+        "uuid": "83c807b1-0aa4-4493-8665-6581c019a6f5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "de60cf70-153d-439e-96c6-8252057c5d82",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "algorithms",
+          "arrays",
+          "search"
+        ]
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "c3bd5203-459c-4ea8-9b20-f4f5099808d8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "8d21e4be-5e9c-4c73-81c5-b4ee2517d9c7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "9f7b9da6-afff-4d2b-862e-df1b3a0a7cef",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "stacks"
+        ]
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "d7d076c6-8ed4-4dcd-ae15-199dc4b28cf7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "d9f93301-a8e8-4c90-bbff-e1ec65b435e5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "e127a984-ebb1-4709-9cc9-a740bceda94c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "db90c208-b8ca-4c8c-8061-b9148c80abfe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "counting",
+          "strings"
+        ]
+      },
+      {
+        "slug": "dnd-character",
+        "name": "D&D Character",
+        "uuid": "8fabd26a-9a2a-4afa-bcff-b5a89db7e4c3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "21c2449c-390a-45d4-ab27-77a036aec631",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "67d4fa19-c387-47c4-9262-a6e63d5c0a19",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "algorithms",
+          "math"
+        ]
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "8f7fcaad-c588-4495-9f9e-20611187a0a5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "4281cefe-e4b4-46d4-b6bb-0086448c080f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "algorithms",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "2efe0bf3-cb17-4135-ae95-d7b5b7b61f7f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "change",
+        "name": "Change",
+        "uuid": "202e8a9a-7a5e-486f-883b-56be298ed665",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6,
+        "topics": [
+          "algorithms",
+          "dynamic_programming"
+        ]
+      },
+      {
+        "slug": "list-ops",
+        "name": "List Ops",
+        "uuid": "ffde2a94-722a-4193-86b7-d2d591a7223d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6,
+        "topics": [
+          "functional_programming"
+        ]
+      },
+      {
+        "slug": "palindrome-products",
+        "name": "Palindrome Products",
+        "uuid": "8398d903-8208-4807-b735-b4cbf6976f29",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6,
+        "topics": [
+          "math"
+        ]
+      },
+      {
+        "slug": "rectangles",
+        "name": "Rectangles",
+        "uuid": "1b491d7e-40db-4782-a8bb-7cb3746588f5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6,
+        "topics": [
+          "search"
+        ]
+      },
+      {
+        "slug": "robot-name",
+        "name": "Robot Name",
+        "uuid": "51f4aff9-6666-4097-a37e-e2e51fd8f286",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6,
+        "topics": [
+          "mutable_state",
+          "randomness"
+        ]
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "020aa7d8-9b4b-4348-9fea-9fbaece3ac66",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "topics": [
+          "transforming"
+        ]
+      },
+      {
+        "slug": "bowling",
+        "name": "Bowling",
+        "uuid": "638b24d2-5288-4fc2-a70e-a178974f030e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "topics": [
+          "algorithms"
+        ]
+      },
+      {
+        "slug": "dominoes",
+        "name": "Dominoes",
+        "uuid": "791c17d4-09b5-4e11-a433-b45f0c1c752e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "topics": [
+          "algorithms",
+          "search"
+        ]
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "5e0945fe-1c46-4a2b-b66e-564330f3a92f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "a0468f9b-55d1-45dd-9a2f-476aaf4d6c2e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "status": "deprecated",
+        "topics": [
+          "arrays",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "connect",
+        "name": "Connect",
+        "uuid": "6a1e1746-c23c-4225-ac8f-f1b31814d6c2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8,
+        "topics": [
+          "search"
+        ]
+      },
+      {
+        "slug": "custom-set",
+        "name": "Custom Set",
+        "uuid": "0bc0bc18-c207-43d0-8b39-8e0e2e87aa72",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8,
+        "topics": [
+          "functional_programming"
+        ]
+      },
+      {
+        "slug": "forth",
+        "name": "Forth",
+        "uuid": "dc870c73-8a38-4b93-83b6-1144538f65bf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "topics": [
+          "interpreters"
+        ]
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "cd37ff33-d2c3-4420-9ad0-0121e2a04b61",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "topics": [
+          "dates"
+        ]
+      },
+      {
+        "slug": "hangman",
+        "name": "Hangman",
+        "uuid": "4a17796e-3faf-48e4-8db4-e39374fee716",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 10,
+        "topics": [
+          "reactive_programming"
+        ]
+      },
+      {
+        "slug": "react",
+        "name": "React",
+        "uuid": "6b2139a0-953d-414a-8d40-641b431318b1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 10,
+        "topics": [
+          "reactive_programming"
+        ]
+      },
+      {
+        "slug": "zipper",
+        "name": "Zipper",
+        "uuid": "f75ff9fa-59cd-4b23-a2e1-13494d206e92",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 10,
+        "topics": [
+          "functional_programming"
+        ]
+      }
+    ]
+  },
+  "key_features": [
+    {
+      "title": "Algebraic data types",
+      "content": "Powerful tools to define and manipulate complex data structures with ease.",
+      "icon": "powerful"
+    },
+    {
+      "title": "Immutable programming",
+      "content": "No need for destructive updates to data structures or accidental mutation.",
+      "icon": "functional"
+    },
+    {
+      "title": "Static typing",
+      "content": "Increased performance and reduced runtime errors.",
+      "icon": "statically-typed"
+    },
+    {
+      "title": "First class functions",
+      "content": "Can be passed like any value, used as arguments, and returned from other functions.",
+      "icon": "interop"
+    },
+    {
+      "title": "Type inference",
+      "content": "Automatic inference makes the code less verbose and developers more efficient.",
+      "icon": "fun"
+    },
+    {
+      "title": "Parametric polymorphism",
+      "content": "Construct abstractions that work across data types, like generics in Java and templates in C++.",
+      "icon": "extensible"
+    }
+  ],
+  "tags": [
+    "execution_mode/compiled",
+    "paradigm/functional",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "runtime/language_specific",
+    "typing/static",
+    "typing/strong",
+    "used_for/financial_systems",
+    "used_for/scientific_calculations"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/ocaml.svg",
+  "about_content": "# About\n\n[OCaml](https://ocaml.org/) is an industrial strength programming language supporting functional, imperative and object-oriented styles - but don't worry if you're not familiar with these, as it's used as a teaching language by a lot of institutions (including Cornell and Princeton). \n\nOne of the best features of OCaml is the rich and powerful [type system](https://en.wikipedia.org/wiki/Type_system) - this is useful to catch some mistakes early on saving developers a huge amount of frustration. \nAlso, [type inference](https://en.wikipedia.org/wiki/Type_inference) relieves developers from having to specify types in the code - the compiler will work these out for you!\n\nIt's used by Facebook (for static code analysis with [Infer](http://fbinfer.com/)) and Jane Street (for providing strong guarantees for their internal trading systems), and has influenced the [F# functional programming language](https://fsharp.org/) and [ReasonML](https://reasonml.github.io/).\n"
+}

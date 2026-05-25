@@ -1,0 +1,721 @@
+{
+  "language": "Objective-C",
+  "slug": "objective-c",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": false,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "Objective-C is a combination of C-like syntax with Smalltalk-like messaging. Unlike C, Objective-C includes an (optional) garbage collector. It is best known for being the standard programming language for macOS and iOS, until the introduction of Swift in 2014.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4,
+    "highlightjs_language": "objectivec"
+  },
+  "files": {
+    "solution": [
+      "%{pascal_slug}.m",
+      "%{pascal_slug}.h"
+    ],
+    "test": [
+      "%{pascal_slug}Test.m"
+    ],
+    "example": [
+      "%{pascal_slug}Example.m"
+    ],
+    "exemplar": [
+      ".meta/%{pascal_slug}Exemplar.m",
+      ".meta/%{pascal_slug}Exemplar.h"
+    ]
+  },
+  "exercises": {
+    "concept": [],
+    "practice": [
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "3438b44a-3e0e-4488-b4e1-57dadbed5f3a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "control_flow_if_else_statements",
+          "strings"
+        ]
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "30cfe053-ef80-42c8-b196-3a05f61e0190",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "integers",
+          "math"
+        ]
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "1ac87e91-5174-44c6-93b6-deef7c2f4438",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "dates"
+        ]
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "da5eb908-8cdf-4f99-93f7-c2b7dcb4fb37",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "optional_values",
+          "text_formatting"
+        ]
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "0b3db961-0ee2-4903-8237-4333dee92b68",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "integers"
+        ]
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "f90558fe-43a3-44e5-b720-edc664b7dc5f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "6a2ab923-5102-44f8-8d5b-4e967983766e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "discriminated_unions",
+          "floating_point_numbers"
+        ]
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "e9b0efd4-9da5-4036-a03f-a6f697ae786e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "lists",
+          "math",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two Fer",
+        "uuid": "46da53f3-a39b-4f19-8ade-87f434cf12ec",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "optional_values",
+          "text_formatting"
+        ]
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "7ff9aecb-2af3-4846-818c-00eddc87bf3b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "maps",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "af3bce9f-954a-4f46-97a0-9236436e3f08",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "lists",
+          "looping",
+          "searching"
+        ]
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "5b5c4168-cffa-4d4d-94f5-d8ac7bf8a25f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "maps",
+          "sorting"
+        ]
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "6a5a3dd6-a1d2-490c-b781-4e781f1e3289",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "25eb6063-e228-4862-9477-02ebcae02d3d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "a33b7e1b-7f37-4494-8943-719f7d7e6d28",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "maps",
+          "strings"
+        ]
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "1ab06e01-0a06-4d00-995f-078182fd97ec",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "integers",
+          "looping",
+          "math"
+        ]
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "4e16fc56-b8a8-4d48-8635-55e13795eb4d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "text_formatting"
+        ]
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "cdc9a509-ded9-45b8-b8b1-5903016b77ad",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "conditionals",
+          "loops",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "659b25c4-4f01-49d1-be97-7a45e762b56c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "maps",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "clock",
+        "name": "Clock",
+        "uuid": "fec4d906-3b0a-412d-ad54-b6e02bf8cabb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "structural_equality",
+          "time"
+        ]
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "d7d66773-e07f-4da1-932b-9431437d34d6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "integers",
+          "math"
+        ]
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "1d841c21-f251-42ff-9fbd-cc88330eb1c3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "integers"
+        ]
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "6339da5d-0fe7-489c-a2fe-6b6016afef42",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "discriminated_unions",
+          "integers",
+          "math"
+        ]
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "f290c133-81b1-4e94-90b0-85d665fdcfc6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "parsing",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "robot-name",
+        "name": "Robot Name",
+        "uuid": "de603240-aa3b-4f2d-8427-c442bf0067d2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "randomness",
+          "strings"
+        ]
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "f56b96e3-a642-4594-97a8-4bc82674547a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "transforming"
+        ]
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "f57cb4b4-5c22-4204-9006-8642af0e4678",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "bitwise_operations",
+          "lists"
+        ]
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "a56e3c85-715e-4730-966f-cc46616aaa95",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "integers",
+          "lists",
+          "looping"
+        ]
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "fd22b216-28c3-43cc-9627-e7584f4d3e27",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "filtering",
+          "math"
+        ]
+      },
+      {
+        "slug": "strain",
+        "name": "Strain",
+        "uuid": "052e5eaa-8d36-4e9a-95c2-2e350852967d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "filtering",
+          "sequences"
+        ]
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "1f3e9399-b1fa-4dec-92d7-7abf3b64f499",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "lists",
+          "looping"
+        ]
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "c90dbfe2-64ff-47d5-9b46-7827bf1cc06c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "topics": [
+          "discriminated_unions",
+          "integers"
+        ]
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "1644b429-041b-4cdb-a023-e6ce74c8fc89",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "8fe580b5-23e5-4120-9b8b-bb43240da325",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "integers",
+          "math",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "da7c4aa4-bdaa-4006-89ef-7f93e7a0abf7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "bitwise_operations",
+          "enumerations",
+          "filtering"
+        ]
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "0a08a2f5-cb37-407d-9bf7-d499b0e16258",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "filtering",
+          "strings"
+        ]
+      },
+      {
+        "slug": "beer-song",
+        "name": "Beer Song",
+        "uuid": "3f9eb775-a268-42fa-8c28-f8fd9d43bddf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "conditionals",
+          "looping",
+          "strings"
+        ]
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "1674a32a-3b75-4c75-a90b-d06a9aa01b4c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "integers",
+          "recursion",
+          "searching"
+        ]
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "74b484a9-ad9e-4fc1-820c-eb1bbb1fdb82",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "looping",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "12c53e14-9184-42ca-86a1-fc7cb8ae8401",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "integers",
+          "math",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "cea2e160-2269-4dde-9063-734c72cb7255",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "dates"
+        ]
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "924a7103-040c-4b49-a11d-16c9e811d84b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "integers",
+          "loops",
+          "math"
+        ]
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "567478d0-b93b-48fe-a727-d1969f9097ad",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "searching",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "f00fe4b4-7caf-4fe0-b8e6-c1684f71c5f6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "lists",
+          "math",
+          "recursion"
+        ]
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "9292d37e-2b5f-45a2-b995-ebcce9d90376",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "loops",
+          "parsing",
+          "text_formatting",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "transpose",
+        "name": "Transpose",
+        "uuid": "a6b0237b-3eeb-449c-92dc-d950fd379713",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "75cece67-bfa9-42d9-a497-2efd0862b3ef",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "topics": [
+          "maps",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "5afbe74a-af64-4558-938b-d075bc4d1f61",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "conditionals",
+          "looping",
+          "strings"
+        ]
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "989aaedc-4836-4d75-8579-0ac177c58120",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "algorithms",
+          "strings",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "fd0b00f9-0c19-46be-8d34-0f86564bf35e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "recursion",
+          "transforming"
+        ]
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "aac1ae62-744a-468f-ba22-53be185c5a6f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "algorithms",
+          "transforming"
+        ]
+      }
+    ]
+  },
+  "concepts": [],
+  "key_features": [
+    {
+      "title": "Auto Memory Management",
+      "content": "Automatic Reference Counting (ARC) allows memory to be managed automatically.",
+      "icon": "garbage-collected"
+    },
+    {
+      "title": "Dynamically Typed",
+      "content": "Flexible and easy to use.",
+      "icon": "dynamically-typed"
+    },
+    {
+      "title": "Interop",
+      "content": "Objective-C can work with C, C++, and Swift.",
+      "icon": "interop"
+    },
+    {
+      "title": "Build Apple Apps",
+      "content": "Use all Apple frameworks and libraries to develop apps for Apple's platforms.",
+      "icon": "productive"
+    },
+    {
+      "title": "Object-oriented",
+      "content": "Objective-C is an object-oriented language, inspired by Smalltalk.",
+      "icon": "embeddable"
+    },
+    {
+      "title": "Categories",
+      "content": "Allows the addition of methods to a class without subclassing or changing the actual class.",
+      "icon": "extensible"
+    }
+  ],
+  "tags": [
+    "paradigm/imperative",
+    "paradigm/procedural",
+    "paradigm/object_oriented",
+    "typing/static",
+    "typing/dynamic",
+    "typing/strong",
+    "execution_mode/compiled",
+    "platform/windows",
+    "platform/mac",
+    "platform/linux",
+    "platform/ios",
+    "runtime/language_specific",
+    "used_for/backends",
+    "used_for/frontends",
+    "used_for/mobile",
+    "used_for/guis"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/objective-c.svg",
+  "about_content": "# About\n\nObjective-C is a thin layer on top of C, and is a \"strict superset\" of C, meaning that it is possible to compile any C program with an Objective-C compiler, and to freely include C language code within an Objective-C class. \nObjective-C derives its object syntax from Smalltalk. \nAll of the syntax for non-object-oriented operations (including primitive variables, pre-processing, expressions, function declarations, and function calls) is identical to that of C, while the syntax for object-oriented features is an implementation of Smalltalk-style messaging. \n\nYou can find more information about the language and its history [here](https://en.wikipedia.org/wiki/Objective-C).\n"
+}

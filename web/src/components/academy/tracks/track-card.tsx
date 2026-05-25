@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dumbbell } from "lucide-react";
-import type { Track } from "@/services/queries/academy.queries";
+import type { Track } from "@/types/academy";
 
 interface TrackCardProps {
   track: Track;
@@ -24,7 +24,7 @@ export function TrackCard({ track }: TrackCardProps) {
 
       {/* Content Side */}
       <div className="flex flex-1 flex-col gap-2 min-w-0">
-        <h3 className="text-xl font-bold tracking-tight text-foreground truncate group-hover:text-primary">
+        <h3 className="text-xl font-bold tracking-tight text-foreground truncate group-hover:text-primary hover:underline">
           {track.title}
         </h3>
 

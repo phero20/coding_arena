@@ -28,7 +28,7 @@ export default function AcademyTracksPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Full-width container for Header */}
-      <div className="w-full border-b border-border/40 pt-24 pb-8 lg:pt-24 lg:pb-12">
+      <div className="w-full border-b border-border/40 pt-24 pb-8 lg:pt-28 lg:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <TracksHeader 
             totalTracks={tracks?.length || 0} 
@@ -66,7 +66,7 @@ export default function AcademyTracksPage() {
             {(data) => (
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
                 {data.map((track) => (
-                  <Link key={track.title} href={`/academy/tracks/${track.title}`} className="block focus:outline-none h-full">
+                  <Link key={track.slug} href={`/academy/tracks/${track.slug}`} className="block focus:outline-none h-full">
                     <TrackCard track={track} />
                   </Link>
                 ))}

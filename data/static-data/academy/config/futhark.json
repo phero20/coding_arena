@@ -1,0 +1,748 @@
+{
+  "language": "Futhark",
+  "slug": "futhark",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "Futhark is a purely functional programming language designed for high-performance data-parallel computing.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2
+  },
+  "test_runner": {
+    "average_run_time": 4
+  },
+  "files": {
+    "solution": [
+      "%{snake_slug}.fut"
+    ],
+    "test": [
+      "test.fut"
+    ],
+    "example": [
+      ".meta/example.fut"
+    ],
+    "exemplar": [
+      ".meta/examplar.fut"
+    ]
+  },
+  "exercises": {
+    "practice": [
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "35eba9b9-2d1c-496e-946c-a47dc92d8f8f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "3e7dfbab-7236-4caa-bda1-993043de4cf0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "f47fb89b-1226-4318-bb36-1c5c02b8d38a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "d8a3472c-a7ac-4ddc-8448-7f4645b51f38",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "47e0105b-d2c8-4555-8272-add142bb0cd6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "9b97b6c3-ef2b-4f90-a485-8dd98375076f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "49692bbb-bb7e-44be-bd1f-984f33cb30ab",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "5503c06f-9b33-49fb-96ec-1be8622c59cf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "11754734-7420-4b73-967b-d8936470d357",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "970bea05-1a05-4f88-9401-2977b8358f5d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "977f91d1-b99f-46e5-bf5d-84947d517030",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "84147404-fa0a-43e7-9df1-81a9e21e2c81",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "50685ca8-5989-4276-93e8-eae661c68ea0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "bd0da62d-ab3b-4867-b38c-e0673c387ccc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "09339a6a-7bc8-45a4-8134-2c3abef50210",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "9f098392-bd27-4fcc-b7a4-7a4081dc2bfe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "00c93347-a80d-4b75-b122-86550f824d0d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "line-up",
+        "name": "Line up",
+        "uuid": "ae5b1be6-a4b7-46a4-b8f0-faeaf3f1c911",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "24d20d07-4c11-43f7-9af7-2b279e87dc58",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "65e3f2a3-861a-4ce3-a1f3-0e30fed0d6a9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "17b57129-15ca-49a6-80b9-19d7477bf590",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "5673f805-e04c-47cd-88a2-af6898f20835",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "ff554013-d9a9-4fe4-83e2-0fafe504e803",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "e4b8a28c-56e7-4fec-9fe9-d52902743153",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "d7cb1f1e-0db4-4f50-ac36-8b5ec07ab04a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "cdcd3ed8-14a9-4cf8-8545-408986edb6fb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "265d40ff-ed23-4f24-8d86-70f2dc064bc4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "4c3bd9d3-ae20-4616-8db0-5bfa9ada43c1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "8ad75c62-4a5a-4722-b439-cd4e29c8f7ab",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "05c30dae-f899-4093-9382-45be2a2c455c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "2b9a606e-2715-42f4-b0e4-2835ea92e856",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "8e88bcf3-a492-4a09-8c3c-33718446ec1a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "3849a1ff-d7b2-4633-9963-1c4ecc62a230",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "dfefc340-114c-4a90-be7b-82829c8f0805",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "2f718017-3874-42dc-9451-a1d408d1682d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "house",
+        "name": "House",
+        "uuid": "16c14b43-da82-4e8e-a07e-9387fe69ad0a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "f857f948-e1ee-4614-bd55-575218635ed8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "4d1714d4-76ef-4a73-8d6f-7c24b11255ed",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "7157971c-c363-4c46-ac06-fdce983c74d6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "213bf83a-3a6b-44c5-b145-439b262cbd3d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "micro-blog",
+        "name": "Micro Blog",
+        "uuid": "5ec317e6-1d7e-4253-9aa2-de310588bdaa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "1d055a9e-8be3-43b7-b254-fe918d864c61",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "546929bd-ff42-498e-87dc-b50b07e2803b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "b8e8710d-fd7d-4a13-b138-00864b8fe0ad",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "eb574196-784b-4da5-ac15-b763d8108abd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "63af24ea-4dc9-485a-8977-223fe2ee0751",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "4f4ae55e-e180-47d9-90bf-be104a3f7b31",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "105acc5d-dc8b-4fb9-b8f3-5faab3990954",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "transpose",
+        "name": "Transpose",
+        "uuid": "7e710cec-4e92-4aac-87ca-eb9f6af5b334",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "fc69c36e-7c7f-40c3-a72c-dce5081b6117",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "affine-cipher",
+        "name": "Affine Cipher",
+        "uuid": "5c3b9731-2e1c-4bfc-bd92-71ae20e7a7c8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "d8725119-a411-4da7-98d0-26ea63e9e07c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "d833b43d-fd4a-4f0a-b80e-9b81b4f34ad1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "d20b330c-6018-4cc3-990e-9b4f6cf237fe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "e35d9981-453c-444d-b7a4-7c8646d0b2d0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "fe8e3e7e-f239-40dc-8f3e-e07fa099da36",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "901faf71-670a-4a8a-b948-e7df0b8ed248",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "9b14d6e1-bd0e-4450-817f-e6e2c3958a3d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "twelve-days",
+        "name": "Twelve Days",
+        "uuid": "cd0467e6-14ca-4372-b896-aa44f537225b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "variable-length-quantity",
+        "name": "Variable Length Quantity",
+        "uuid": "72798afc-0408-4cac-ab99-b4952942bd2e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "game-of-life",
+        "name": "Conway's Game of Life",
+        "uuid": "f38b0cc2-0d10-40e7-9f25-ad254e93084d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "4f7e2b00-eff5-4b71-98d0-f4b909e74ab0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "f0ba257c-3432-439e-b2b7-706e7f4ad87d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "38efaf36-0fd5-493b-ac3b-3662510e2d9a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "intergalactic-transmission",
+        "name": "Intergalactic Transmission",
+        "uuid": "e1a17d2a-9bf9-40ce-b1fa-75880354f2d5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "pythagorean-triplet",
+        "name": "Pythagorean Triplet",
+        "uuid": "5fbba379-44b1-445d-b2c2-7191e4706fae",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "6fc65865-1e9b-48d7-a2c6-6f50bea3b094",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "32d1e25e-86d6-4f2f-8f5e-5a5e8a2d3d32",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "state-of-tic-tac-toe",
+        "name": "State of Tic-Tac-Toe",
+        "uuid": "ece186e0-7498-4da5-985f-a0e318fada7b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "38f12f0f-13c0-4265-a00f-bbe3fc887dea",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "book-store",
+        "name": "Book Store",
+        "uuid": "c9333f25-a92f-4f47-bf5f-f5543fc028b3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "change",
+        "name": "Change",
+        "uuid": "3aa8ad23-2691-478f-9a50-4c14ad6b753e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "c0bd0c12-6ca9-424b-8300-adfda73aaaf4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "rail-fence-cipher",
+        "name": "Rail Fence Cipher",
+        "uuid": "4e80fefa-8209-43c4-9740-cf8e54b9aecd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "rectangles",
+        "name": "Rectangles",
+        "uuid": "93586bb2-3ee5-425f-ba18-ca9f1eecb17a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "dominoes",
+        "name": "Dominoes",
+        "uuid": "4415c54b-162c-47df-a8c7-c47ff0effdb7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "killer-sudoku-helper",
+        "name": "Killer Sudoku Helper",
+        "uuid": "5fa1804c-4164-497c-8ff4-695921048b03",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "6dcd24ed-902b-4fa4-9816-e28b87c157f0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "ocr-numbers",
+        "name": "OCR Numbers",
+        "uuid": "3fc91534-be00-4040-8bd8-bacc8face2ac",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "4d8c6bd6-0dbc-4360-a525-a6c80d3200f5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "wordy",
+        "name": "Wordy",
+        "uuid": "bcfdd937-5cbb-4ac3-80f9-818724d87c4c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "connect",
+        "name": "Connect",
+        "uuid": "8fb3be1e-e00a-4f82-858b-7fd21fbbd085",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9
+      },
+      {
+        "slug": "zebra-puzzle",
+        "name": "Zebra Puzzle",
+        "uuid": "c317b776-57ef-4776-9a1e-70a928171e2d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 10
+      }
+    ]
+  },
+  "key_features": [
+    {
+      "title": "Fast",
+      "content": "Futhark is designed for high-performance computing via its heavily optimising AOT compiler.",
+      "icon": "fast"
+    },
+    {
+      "title": "Parallel",
+      "content": "Most Futhark code is automatically parallelized, taking advantage of modern multi-core CPUs.",
+      "icon": "concurrency"
+    },
+    {
+      "title": "Multi-platform",
+      "content": "Futhark code compiles to either GPU code or multi-threaded CPU code.",
+      "icon": "cross-platform"
+    },
+    {
+      "title": "Interoperable",
+      "content": "Futhark is designed for easy interoperability with languages like C and Python.",
+      "icon": "interop"
+    },
+    {
+      "title": "Small",
+      "content": "Futhark is a small language with little syntax, making it easy to learn.",
+      "icon": "small"
+    },
+    {
+      "title": "Pure",
+      "content": "Futhark is a pure functional language without side-effects, making it easier to reason about code.",
+      "icon": "powerful"
+    }
+  ],
+  "tags": [
+    "execution_mode/compiled",
+    "paradigm/array",
+    "paradigm/functional",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "runtime/standalone_executable",
+    "typing/static",
+    "typing/strong",
+    "used_for/scientific_calculations"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/futhark.svg",
+  "about_content": "# About\n\nFuthark is a purely functional programming language designed for high-performance data-parallel computing.\nWhile it shares some similarities in syntax and structure with functional languages like Haskell and Standard ML, its focus lies elsewhere.\nRather than emphasizing rich type systems or maximum expressiveness, Futhark aims to generate efficient parallel code.\nCentral to Futhark are bulk array operations known as Second-Order Array Combinators (SOACs), such as `map`, `reduce`, and `filter`, which resemble the higher-order functions familiar from other functional languages.\nThese SOACs are defined with sequential semantics but are designed to be compiled into parallel execution, allowing for both clarity and performance.\n"
+}

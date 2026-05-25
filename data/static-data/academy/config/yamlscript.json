@@ -1,0 +1,539 @@
+{
+  "language": "YAMLScript",
+  "slug": "yamlscript",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "test_runner": {
+    "average_run_time": 1
+  },
+  "blurb": "YAMLScript is a dynamic, general purpose programming language. It has a clean YAML syntax and embeds nicely into existing YAML files, making the desired parts of them dynamic. When a YAMLScript program is run, the source code transpiles to Clojure code, and is evaluted by a native binary runtime interpreter called `ys` (not by the JVM).",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2
+  },
+  "files": {
+    "solution": [
+      "%{kebab_slug}.ys"
+    ],
+    "test": [
+      "%{kebab_slug}-test.ys",
+      "GNUmakefile",
+      "Makefile",
+      ".yamlscript/exercism-ys-installer"
+    ],
+    "example": [
+      ".meta/%{kebab_slug}.ys"
+    ]
+  },
+  "exercises": {
+    "practice": [
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "a307a3a9-7841-47e2-9962-e50e4ba035b8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "f4c93e64-d954-4d2d-b4c9-d27d87a3390f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ]
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "a6e60d12-8265-404a-b34e-69b6d00014fd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "d0f42bce-73e7-4ef0-b4cc-985bc1d4eef6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "9cc8f9a8-66c4-44e2-ad9d-c9ca4efa9dfc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "edb17966-2a6c-47c8-ac65-d66b00deb97b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "8a49347f-461f-415c-b203-bb491ac98fac",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "89681570-5734-4f20-b68f-de8b176accdc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "13e5f40a-3be8-4314-9950-f28bc15efd11",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "4f987e41-b47d-4e9a-a2d8-bb7b251fd4b7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "2adee0a9-1fdf-4ae0-a59d-7be53f2359c9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "0957cb25-13dd-43a0-ab3c-ba452ffa5508",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "69afd018-4769-431e-b1d3-84a678103736",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "d9beb726-00fe-4b2c-9a58-1cadcaa4f4b5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "db284b8d-a06d-4a34-9f8a-6c78ef56ce26",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "dd18fd4d-21de-40f8-9d92-2c5a1d1e7133",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "de0c68d4-f0c3-4bb7-9ab2-378f9034bc82",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "ebca30f3-2347-448d-b721-5b43da96dc22",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "53001741-514b-4675-8842-dfd61d45cb28",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "5ab55f94-fe14-4f17-acb7-772787f84d33",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "4e43c38f-500e-4f56-a502-91cbc1bade5f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "9ca8b2e6-5487-461d-a1a2-c54fb6a0ae2e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "62d68fed-0afd-4a9c-abb7-b93d99331026",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "4f7d162a-c0c3-4e2a-a08f-4acd199e649e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "b0d8cfbc-0709-4c01-8100-77fd8571471a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "2d1c6e45-0008-4473-97d2-dcb8062fc06d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "16d74aa7-6ca9-4a5f-927e-36aa756a5ccf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "73cd0f3a-edc4-43d6-9464-df0f4ba25d3d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "060241f1-798c-477f-861f-3e2971c25a58",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "strain",
+        "name": "Strain",
+        "uuid": "1306a71c-5ddb-4421-a119-c4b5f2f38efe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "494f403b-3bd7-47f1-a866-d07e9faea677",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "c4ced5bc-1728-4fcd-bbe9-de4f02eeca2e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "ff88e308-78fe-436e-8882-fbf00abd1fb0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "bank-account",
+        "name": "Bank Account",
+        "uuid": "37b26117-84b1-4327-8391-c81de2bd572e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "b7aa6a3a-925d-498c-9eb0-bf7993794f9d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "3f2a57d7-20fd-4212-8b40-04b7fbc27742",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "40b2b3ea-21ef-4cb3-8089-eafa597c985f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "list-ops",
+        "name": "List Ops",
+        "uuid": "ed3151c9-6a26-4fcd-aa4b-63a81ccae31d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "16fe7667-a386-42b4-b3b3-4b4306f1fb0e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "e2176eb3-3f20-4050-aa18-d627ad0628bd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "952906be-3237-43c6-96fa-85ae5fb52569",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "b9a97fab-932d-4b00-aae1-c028b68e6437",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "cd6dbea1-95f7-43d6-91ac-1d0a4572a2a6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "c4025a38-95ad-4e49-b632-bf59dbd574da",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "a8c8b02e-2662-42ff-b7eb-6a4239f10066",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "95d72ba7-f3f5-44a3-b289-f0c29f449108",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "cd3ce44e-1e5e-4d82-8cea-bcebd6e9b39d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "fa43daa5-91a7-4e04-84cc-e997b8b4752e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "c56d7d28-2857-4237-9d4c-997af386ed17",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "8dec480c-3ece-4f1c-9b87-d14e52f50db6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "e88753e1-3404-4bf0-beff-914cf048fc07",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "b907e51b-3272-4fb7-b43c-09bcf2005fbd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "fb4bd2e9-9ca0-41e3-90c7-1adad92d0dd1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "a6c79db6-925c-45c3-8a59-aa9d96a4740b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "e8fd0c68-bceb-4a21-8420-b26a71641dca",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "e1709823-93b9-4d38-88ea-cce9af07d979",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5
+      },
+      {
+        "slug": "two-bucket",
+        "name": "Two Bucket",
+        "uuid": "bc92b952-7aeb-4857-b8b9-3d9fddba0d04",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 6
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "5718019d-844a-4c0d-8a92-38ae3d34f632",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7
+      },
+      {
+        "slug": "circular-buffer",
+        "name": "Circular Buffer",
+        "uuid": "ebb62daf-c09a-4ee6-99a1-4f68be5152e4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "4e7dd5dd-a6b6-4d8c-be9c-7a5995a86de9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 8
+      }
+    ]
+  },
+  "tags": [
+    "execution_mode/compiled",
+    "execution_mode/interpreted",
+    "paradigm/declarative",
+    "paradigm/functional",
+    "paradigm/imperative",
+    "platform/linux",
+    "platform/mac",
+    "runtime/standalone_executable",
+    "typing/dynamic",
+    "used_for/backends",
+    "used_for/cross_platform_development",
+    "used_for/games",
+    "used_for/scientific_calculations",
+    "used_for/scripts"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/yamlscript.svg",
+  "about_content": "About YAMLscript\n================\n\nSo you're ready to learn [YAMLScript](https://yamlscript.org)?!\n\nCongratulations!\n\nYou are about to embark on a journey that will change the way you think about\ndata and programming.\n\nAlong the way you can expect to learn:\n\n* A lot more about the [YAML](https://wikipedia.org/wiki/YAML) data language\n  syntax\n* A lion's share of [Lisp](https://en.wikipedia.org/wiki/Lisp) programming\n  concepts\n* How to get things done with [Functional Programming](\n  https://wikipedia.org/wiki/Functional_programming) and immutable data\n  structures\n* Enough of the [Clojure](https://wikipedia.org/wiki/Clojure) programming\n  language to be dangerous\n\nYAMLscript is a new, functional, Open Source programming language with a YAML\nbased syntax that transpiles to Clojure code which is then evaluated by a\nnative binary runtime interpreter called `ys`.\n\nYAMLScript is an excellent choice for solving Exercism exercises.\nAll of the exercises in this track have been solved in 3-50 comfortably spaced\nlines of YAMLScript (10-15 on average).\n\nIt is a great language for learning functional programming and Lisp concepts,\nwhile using a clean, friendly and fairly painless syntax inspired by the best\nparts of YAML, Clojure, Perl, Python, JavaScript and CoffeeScript.\n\n\n<!-- Keep this comment:\n\n  This document contains a short introduction to the language.\n\n  The introduction should be relatively brief and touch upon what\n  makes the language interesting (and possibly unique). The goal\n  is to help students decide if they want to join this track.\n\n  The contents of this document are displayed on the track page,\n  provided the student has not joined the track.\n\n  See https://exercism.org/docs/building/tracks/docs for more information. -->\n"
+}

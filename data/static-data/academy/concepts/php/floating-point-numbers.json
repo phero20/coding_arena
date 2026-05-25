@@ -1,0 +1,6 @@
+{
+  "slug": "floating-point-numbers",
+  "name": "Floating Point Numbers",
+  "introduction": "# Floating Point Numbers\n\nFloating point numbers are used in PHP to represent a subset of real numbers.\nThey start with one or more digits separated by a decimal separator.\n\n```php\n<?php\n\n$a = 1.234; \n$b = 1.2e3; \n$c = 7E-10;\n$d = 1_234.567; // as of PHP 7.4.0\n```\n\n## Common pitfalls\n\nNot all numbers and arithmetic operations can be performed with floating point numbers.\nUsing floating point numbers to represent dollars and cents can lead to rounding errors.\n\n```php\n<?php\n\n$result = 0.1 + 0.2; // => 0.30000000000000004\n```",
+  "about": "# Floating Point Numbers\n\nFloating point numbers are used in PHP to represent a subset of real numbers.\nThey start with one or more digits separated by a decimal separator.\n\n```php\n<?php\n\n$a = 1.234; \n$b = 1.2e3; \n$c = 7E-10;\n$d = 1_234.567; // as of PHP 7.4.0\n```\n\n## Common pitfalls\n\nNot all numbers and arithmetic operations can be performed with floating point numbers.\nUsing floating point numbers to represent dollars and cents can often lead to rounding errors.\n\n```php\n<?php\n\n$result = 0.1 + 0.2; // => 0.30000000000000004\n```"
+}

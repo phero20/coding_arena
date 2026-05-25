@@ -15,6 +15,7 @@ RUN bun install
 # 3. Copy source code for both the API and the shared Driver
 COPY api/src ./api/src
 COPY driver ./driver
+COPY data ./data
 
 # 4. Final step: run from the API directory
 WORKDIR /app/api
