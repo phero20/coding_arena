@@ -1,0 +1,6 @@
+{
+  "slug": "explicit-casts",
+  "name": "Explicit Casts",
+  "introduction": "# Introduction\n\nWhere types cannot be cast implicitly, you must use an explicit cast operator.\nThe cast operator is nothing more than the target type in parentheses before the value you want to cast:\n\n```csharp\n\nint i = 7;\nbyte b = (byte)i; // Explicit cast from int to byte\n```",
+  "about": "# About\n\nWhere types cannot be cast implicitly, you must use an explicit cast [operator][cast-operator].\nThe cast operator is nothing more than the target type in parentheses before the value you want to cast:\n\n```csharp\n\nint i = 7;\nbyte b = (byte)i; // Explicit cast from int to byte\n```\n\nUsing an explicit cast is potentially dangerous. The two most common errors are:\n\n- Casting to an incompatible type. This will throw an exception at runtime.\n- Casting to a numeric value that is insufficiently \"wide\". This can result in a sign conflict or an overflow exception being thrown in the case of integers\n\nNote: an expression of type `int` can be explicitly cast to `char`. This may result in an invalid `char`.\n\n[cast-operator]: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/type-testing-and-cast#cast-expression"
+}
