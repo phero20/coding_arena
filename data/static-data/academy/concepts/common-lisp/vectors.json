@@ -1,0 +1,6 @@
+{
+  "slug": "vectors",
+  "name": "Vectors",
+  "introduction": "# Introduction\n\nA vector is a 1-dimensional array.\nThey may contain elements of different types.\n\n## Creating Vectors\n\nVectors can be created via the `vector` function or by using its reader form `#()`\n\n```lisp\n(vector 1 t \"foo\" 'b) ; => #(1 t \"foo\" B)\n#(2 nil \"bar\" a)      ; => #(2 nil \"bar\" A)\n```\n\n## Accessing Elements\n\nTo access elements of a vector use `aref`, the indexes are zero-based:\n\n```lisp\n(aref #(1 2 3) 1) ; => 2\n(aref #(a b c) 0) ; => A\n```",
+  "about": "# Introduction\n\nA vector is a 1-dimensional array.\nThey may contain elements of different types.\n\n## Creating Vectors\n\nVectors can be created via the `vector` function or by using its reader form `#()`\n\n```lisp\n(vector 1 t \"foo\" 'b) ; => #(1 T \"foo\" B)\n#(2 nil \"bar\" a)      ; => #(2 NIL \"bar\" A)\n```\n\nSince they are arrays they can also be created with `make-array`:\n\n```lisp\n(make-array 3 :initial-element 'x)        ; => #(X X X)\n(make-array 3 :initial-contents '(a b c)) ; => #(A B C)\n```\n\n## Vector Predicate\n\nTo check if object is a vector simply use the predicate `vectorp`.\n\n## Accessing Elements\n\nTo access elements of a vector use `aref`, the indexes are zero-based:\n\n```lisp\n(aref #(1 2 3) 1) ; => 2\n(aref #(a b c) 0) ; => A\n```"
+}
