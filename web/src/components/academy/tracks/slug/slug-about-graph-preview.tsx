@@ -31,7 +31,7 @@ export const SlugAboutGraphPreview = ({ config }: { config: TrackConfigResponse 
       </div>
 
       {/* Graph Container */}
-      <div className="relative h-[600px] overflow-hidden flex justify-center mb-8">
+      <div className="relative h-155 overflow-hidden flex justify-center mb-8">
         
         {/* Render the actual graph */}
         <div className="absolute top-0 w-full opacity-80 pointer-events-none">
@@ -39,7 +39,7 @@ export const SlugAboutGraphPreview = ({ config }: { config: TrackConfigResponse 
         </div>
 
         {/* Gradient Overlay to fade the bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-72 bg-linear-to-t from-background via-background/60 to-background/10 z-20 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-76 bg-linear-to-t from-background via-background/60 to-background/10 z-20 pointer-events-none" />
       </div>
 
       {/* Simple CTA Content - Totally Outside */}

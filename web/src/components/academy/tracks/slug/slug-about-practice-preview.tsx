@@ -18,7 +18,7 @@ export const SlugAboutPracticePreview = ({ config, solvedExercises = [] }: { con
   if (practiceExercises.length === 0) return null;
 
   // Show up to 4 exercises for the preview
-  const displayExercises = practiceExercises.slice(0, 4);
+  const displayExercises = practiceExercises.slice(0, 6);
 
   const goToPracticeTab = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -38,8 +38,8 @@ export const SlugAboutPracticePreview = ({ config, solvedExercises = [] }: { con
       {/* Cards Grid Container with Gradient Fade */}
       <div className="relative overflow-hidden mb-10 pb-4">
         {/* We limit height to show a teaser, e.g., 280px */}
-        <div className="relative h-[280px] overflow-hidden">
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-auto w-full pt-1">
+        <div className="relative h-[380px] overflow-hidden">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 mx-auto w-full pt-1 px-3 pointer-events-none">
             {displayExercises.map((exercise) => (
               <PracticeProblemCard 
                 key={exercise.slug} 
