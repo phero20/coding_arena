@@ -1,0 +1,30 @@
+{
+  "id": "zig:matching-brackets",
+  "trackSlug": "zig",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "3878b8dc-4c63-4c7d-9800-bd99ad38650d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "const std = @import(\"std\");\nconst mem = std.mem;\n\npub fn isBalanced(allocator: mem.Allocator, s: []const u8) !bool {\n    _ = allocator;\n    _ = s;\n    @compileError(\"please implement the isBalanced function\");\n}\n",
+  "example_solution": "const std = @import(\"std\");\nconst mem = std.mem;\n\nfn toClosing(c: u8) u8 {\n    return switch (c) {\n        '(' => ')',\n        '[' => ']',\n        '{' => '}',\n        else => unreachable,\n    };\n}\n\n/// Returns whether the characters `(`, `[`, and `{` are matched and correctly nested in `s`.\n/// Caller guarantees that the nesting depth of those characters in `s` is at most 100.\n// The tests use `try`, so this function returns `!bool` even though it cannot return an error.\npub fn isBalanced(_: mem.Allocator, s: []const u8) !bool {\n    var stack: [100]u8 = undefined;\n    var i: usize = 0;\n\n    for (s) |c| {\n        switch (c) {\n            '(', '[', '{' => {\n                stack[i] = toClosing(c);\n                i += 1;\n            },\n            ')', ']', '}' => {\n                if (i > 0 and stack[i - 1] == c) i -= 1 else return false;\n            },\n            else => continue,\n        }\n    }\n\n    return i == 0;\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst isBalanced = @import(\"matching_brackets.zig\").isBalanced;\n\ntest \"paired square brackets\" {\n    const actual = try isBalanced(testing.allocator, \"[]\");\n    try testing.expect(actual);\n}\n\ntest \"empty string\" {\n    const actual = try isBalanced(testing.allocator, \"\");\n    try testing.expect(actual);\n}\n\ntest \"unpaired brackets\" {\n    const actual = try isBalanced(testing.allocator, \"[[\");\n    try testing.expect(!actual);\n}\n\ntest \"wrong ordered brackets\" {\n    const actual = try isBalanced(testing.allocator, \"}{\");\n    try testing.expect(!actual);\n}\n\ntest \"wrong closing bracket\" {\n    const actual = try isBalanced(testing.allocator, \"{]\");\n    try testing.expect(!actual);\n}\n\ntest \"paired with whitespace\" {\n    const actual = try isBalanced(testing.allocator, \"{ }\");\n    try testing.expect(actual);\n}\n\ntest \"partially paired brackets\" {\n    const actual = try isBalanced(testing.allocator, \"{[])\");\n    try testing.expect(!actual);\n}\n\ntest \"simple nested brackets\" {\n    const actual = try isBalanced(testing.allocator, \"{[]}\");\n    try testing.expect(actual);\n}\n\ntest \"several paired brackets\" {\n    const actual = try isBalanced(testing.allocator, \"{}[]\");\n    try testing.expect(actual);\n}\n\ntest \"paired and nested brackets\" {\n    const actual = try isBalanced(testing.allocator, \"([{}({}[])])\");\n    try testing.expect(actual);\n}\n\ntest \"unopened closing brackets\" {\n    const actual = try isBalanced(testing.allocator, \"{[)][]}\");\n    try testing.expect(!actual);\n}\n\ntest \"unpaired and nested brackets\" {\n    const actual = try isBalanced(testing.allocator, \"([{])\");\n    try testing.expect(!actual);\n}\n\ntest \"paired and wrong nested brackets\" {\n    const actual = try isBalanced(testing.allocator, \"[({]})\");\n    try testing.expect(!actual);\n}\n\ntest \"paired and wrong nested brackets but innermost are correct\" {\n    const actual = try isBalanced(testing.allocator, \"[({}])\");\n    try testing.expect(!actual);\n}\n\ntest \"paired and incomplete brackets\" {\n    const actual = try isBalanced(testing.allocator, \"{}[\");\n    try testing.expect(!actual);\n}\n\ntest \"too many closing brackets\" {\n    const actual = try isBalanced(testing.allocator, \"[]]\");\n    try testing.expect(!actual);\n}\n\ntest \"early unexpected brackets\" {\n    const actual = try isBalanced(testing.allocator, \")()\");\n    try testing.expect(!actual);\n}\n\ntest \"early mismatched brackets\" {\n    const actual = try isBalanced(testing.allocator, \"{)()\");\n    try testing.expect(!actual);\n}\n\ntest \"math expression\" {\n    const actual = try isBalanced(testing.allocator, \"(((185 + 223.85) * 15) - 543)/2\");\n    try testing.expect(actual);\n}\n\ntest \"complex latex expression\" {\n    const s = \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\";\n    const actual = try isBalanced(testing.allocator, s);\n    try testing.expect(actual);\n}\n\ntest \"maximum required level of nesting\" {\n    const s = \"(((_[[[_{{{_()_}}}_]]]_)))\";\n    const actual = try isBalanced(testing.allocator, s);\n    try testing.expect(actual);\n}\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

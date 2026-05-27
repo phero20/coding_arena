@@ -1,0 +1,40 @@
+{
+  "id": "ruby:pig-latin",
+  "trackSlug": "ruby",
+  "slug": "pig-latin",
+  "name": "Pig Latin",
+  "uuid": "efc0e498-891a-4e91-a6aa-fae635573a83",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a program that translates from English to Pig Latin.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to translate text from English to Pig Latin.\nThe translation is defined using four rules, which look at the pattern of vowels and consonants at the beginning of a word.\nThese rules look at each word's use of vowels and consonants:\n\n- vowels: the letters `a`, `e`, `i`, `o`, and `u`\n- consonants: the other 21 letters of the English alphabet\n\n## Rule 1\n\nIf a word begins with a vowel, or starts with `\"xr\"` or `\"yt\"`, add an `\"ay\"` sound to the end of the word.\n\nFor example:\n\n- `\"apple\"` -> `\"appleay\"` (starts with vowel)\n- `\"xray\"` -> `\"xrayay\"` (starts with `\"xr\"`)\n- `\"yttria\"` -> `\"yttriaay\"` (starts with `\"yt\"`)\n\n## Rule 2\n\nIf a word begins with one or more consonants, first move those consonants to the end of the word and then add an `\"ay\"` sound to the end of the word.\n\nFor example:\n\n- `\"pig\"` -> `\"igp\"` -> `\"igpay\"` (starts with single consonant)\n- `\"chair\"` -> `\"airch\"` -> `\"airchay\"` (starts with multiple consonants)\n- `\"thrush\"` -> `\"ushthr\"` -> `\"ushthray\"` (starts with multiple consonants)\n\n## Rule 3\n\nIf a word starts with zero or more consonants followed by `\"qu\"`, first move those consonants (if any) and the `\"qu\"` part to the end of the word, and then add an `\"ay\"` sound to the end of the word.\n\nFor example:\n\n- `\"quick\"` -> `\"ickqu\"` -> `\"ickquay\"` (starts with `\"qu\"`, no preceding consonants)\n- `\"square\"` -> `\"aresqu\"` -> `\"aresquay\"` (starts with one consonant followed by `\"qu`\")\n\n## Rule 4\n\nIf a word starts with one or more consonants followed by `\"y\"`, first move the consonants preceding the `\"y\"`to the end of the word, and then add an `\"ay\"` sound to the end of the word.\n\nSome examples:\n\n- `\"my\"` -> `\"ym\"` -> `\"ymay\"` (starts with single consonant followed by `\"y\"`)\n- `\"rhythm\"` -> `\"ythmrh\"` -> `\"ythmrhay\"` (starts with multiple consonants followed by `\"y\"`)\n",
+  "introduction": "# Introduction\n\nYour parents have challenged you and your sibling to a game of two-on-two basketball.\nConfident they'll win, they let you score the first couple of points, but then start taking over the game.\nNeeding a little boost, you start speaking in [Pig Latin][pig-latin], which is a made-up children's language that's difficult for non-children to understand.\nThis will give you the edge to prevail over your parents!\n\n[pig-latin]: https://en.wikipedia.org/wiki/Pig_latin\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Pig Latin' exercise in this file. Make the tests in\n`pig_latin_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/pig-latin` directory.\n=end\n",
+  "example_solution": "class PigLatin\n  def self.translate(phrase)\n    phrase.split(' ').map do |word|\n      PigLatin.new(word).translate\n    end.join(' ')\n  end\n\n  def initialize(word)\n    @word = word.downcase.gsub(/[^a-z]/, '')\n  end\n\n  def translate\n    return (word + 'ay') if it_starts_with_vowel_sound?\n    start, remainder = parse_initial_consonant_sound_and_remainder\n    remainder + start + 'ay'\n  end\n\n  private\n\n  attr_reader :word\n\n  def it_starts_with_vowel_sound?\n    word.match /\\A([aeiou]|y[^aeiou]|xr)/\n  end\n\n  def parse_initial_consonant_sound_and_remainder\n    word.scan(/\\A([^aeiou]?qu|[^aeiou]+(?=y)|[^aeiou]+)(.*)/).first\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'pig_latin'\n\nclass PigLatinTest < Minitest::Test\n  def test_word_beginning_with_a\n    # skip\n    actual = PigLatin.translate('apple')\n    expected = 'appleay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_e\n    skip\n    actual = PigLatin.translate('ear')\n    expected = 'earay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_i\n    skip\n    actual = PigLatin.translate('igloo')\n    expected = 'iglooay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_o\n    skip\n    actual = PigLatin.translate('object')\n    expected = 'objectay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_u\n    skip\n    actual = PigLatin.translate('under')\n    expected = 'underay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_a_vowel_and_followed_by_a_qu\n    skip\n    actual = PigLatin.translate('equal')\n    expected = 'equalay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_p\n    skip\n    actual = PigLatin.translate('pig')\n    expected = 'igpay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_k\n    skip\n    actual = PigLatin.translate('koala')\n    expected = 'oalakay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_x\n    skip\n    actual = PigLatin.translate('xenon')\n    expected = 'enonxay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_q_without_a_following_u\n    skip\n    actual = PigLatin.translate('qat')\n    expected = 'atqay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_consonant_and_vowel_containing_qu\n    skip\n    actual = PigLatin.translate('liquid')\n    expected = 'iquidlay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_ch\n    skip\n    actual = PigLatin.translate('chair')\n    expected = 'airchay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_qu\n    skip\n    actual = PigLatin.translate('queen')\n    expected = 'eenquay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_qu_and_a_preceding_consonant\n    skip\n    actual = PigLatin.translate('square')\n    expected = 'aresquay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_th\n    skip\n    actual = PigLatin.translate('therapy')\n    expected = 'erapythay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_thr\n    skip\n    actual = PigLatin.translate('thrush')\n    expected = 'ushthray'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_sch\n    skip\n    actual = PigLatin.translate('school')\n    expected = 'oolschay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_yt\n    skip\n    actual = PigLatin.translate('yttria')\n    expected = 'yttriaay'\n    assert_equal expected, actual\n  end\n\n  def test_word_beginning_with_xr\n    skip\n    actual = PigLatin.translate('xray')\n    expected = 'xrayay'\n    assert_equal expected, actual\n  end\n\n  def test_y_is_treated_like_a_consonant_at_the_beginning_of_a_word\n    skip\n    actual = PigLatin.translate('yellow')\n    expected = 'ellowyay'\n    assert_equal expected, actual\n  end\n\n  def test_y_is_treated_like_a_vowel_at_the_end_of_a_consonant_cluster\n    skip\n    actual = PigLatin.translate('rhythm')\n    expected = 'ythmrhay'\n    assert_equal expected, actual\n  end\n\n  def test_y_as_second_letter_in_two_letter_word\n    skip\n    actual = PigLatin.translate('my')\n    expected = 'ymay'\n    assert_equal expected, actual\n  end\n\n  def test_a_whole_phrase\n    skip\n    actual = PigLatin.translate('quick fast run')\n    expected = 'ickquay astfay unray'\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "The Pig Latin exercise at Test First Teaching by Ultrasaurus",
+  "source_url": "https://github.com/ultrasaurus/test-first-teaching/tree/master/learn_ruby/pig_latin",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "dpneumo",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "kvsm",
+    "tryantwit"
+  ]
+}

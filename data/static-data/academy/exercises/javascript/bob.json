@@ -1,0 +1,43 @@
+{
+  "id": "javascript:bob",
+  "trackSlug": "javascript",
+  "slug": "bob",
+  "name": "Bob",
+  "uuid": "a5bf36f0-5d3c-41d4-8d54-e37e484e59cd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "conditionals",
+    "regular-expressions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine what Bob will reply to someone when they say something to him or ask him a question.\n\nBob only ever answers one of five things:\n\n- **\"Sure.\"**\n  This is his response if you ask him a question, such as \"How are you?\"\n  The convention used for questions is that it ends with a question mark.\n- **\"Whoa, chill out!\"**\n  This is his answer if you YELL AT HIM.\n  The convention used for yelling is ALL CAPITAL LETTERS.\n- **\"Calm down, I know what I'm doing!\"**\n  This is what he says if you yell a question at him.\n- **\"Fine. Be that way!\"**\n  This is how he responds to silence.\n  The convention used for silence is nothing, or various combinations of whitespace characters.\n- **\"Whatever.\"**\n  This is what he answers to anything else.\n",
+  "introduction": "# Introduction\n\nBob is a [lackadaisical][] teenager.\nHe likes to think that he's very cool.\nAnd he definitely doesn't get excited about things.\nThat wouldn't be cool.\n\nWhen people talk to him, his responses are pretty limited.\n\n[lackadaisical]: https://www.collinsdictionary.com/dictionary/english/lackadaisical\n",
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Bob' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const hey = (message) => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "const isSilence = (message) => message.replace(/\\s+/g, '') === '';\nconst isShouting = (message) =>\n  message.toUpperCase() === message && /[A-Z]/.test(message);\nconst isAQuestion = (message) => message.endsWith('?');\n\nexport const hey = (message) => {\n  if (isSilence(message)) {\n    return 'Fine. Be that way!';\n  }\n  if (isShouting(message)) {\n    if (isAQuestion(message)) {\n      return \"Calm down, I know what I'm doing!\";\n    }\n    return 'Whoa, chill out!';\n  }\n  if (isAQuestion(message.trim())) {\n    return 'Sure.';\n  }\n  return 'Whatever.';\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { hey } from './bob';\n\ndescribe('Bob', () => {\n  test('stating something', () => {\n    const result = hey('Tom-ay-to, tom-aaaah-to.');\n    expect(result).toEqual('Whatever.');\n  });\n\n  xtest('shouting', () => {\n    const result = hey('WATCH OUT!');\n    expect(result).toEqual('Whoa, chill out!');\n  });\n\n  xtest('shouting gibberish', () => {\n    const result = hey('FCECDFCAAB');\n    expect(result).toEqual('Whoa, chill out!');\n  });\n\n  xtest('asking a question', () => {\n    const result = hey('Does this cryogenic chamber make me look fat?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('asking a numeric question', () => {\n    const result = hey('You are, what, like 15?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('asking gibberish', () => {\n    const result = hey('fffbbcbeab?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('talking forcefully', () => {\n    const result = hey(\"Let's go make out behind the gym!\");\n    expect(result).toEqual('Whatever.');\n  });\n\n  xtest('using acronyms in regular speech', () => {\n    const result = hey(\"It's OK if you don't want to go to the DMV.\");\n    expect(result).toEqual('Whatever.');\n  });\n\n  xtest('forceful question', () => {\n    const result = hey('WHAT THE HELL WERE YOU THINKING?');\n    expect(result).toEqual(\"Calm down, I know what I'm doing!\");\n  });\n\n  xtest('shouting numbers', () => {\n    const result = hey('1, 2, 3 GO!');\n    expect(result).toEqual('Whoa, chill out!');\n  });\n\n  xtest('no letters', () => {\n    const result = hey('1, 2, 3');\n    expect(result).toEqual('Whatever.');\n  });\n\n  xtest('question with no letters', () => {\n    const result = hey('4?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('shouting with special characters', () => {\n    const result = hey('ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!');\n    expect(result).toEqual('Whoa, chill out!');\n  });\n\n  xtest('shouting with no exclamation mark', () => {\n    const result = hey('I HATE YOU');\n    expect(result).toEqual('Whoa, chill out!');\n  });\n\n  xtest('statement containing question mark', () => {\n    const result = hey('Ending with a ? means a question.');\n    expect(result).toEqual('Whatever.');\n  });\n\n  xtest('non-letters with question', () => {\n    const result = hey(':) ?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('prattling on', () => {\n    const result = hey('Wait! Hang on. Are you going to be OK?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('silence', () => {\n    const result = hey('');\n    expect(result).toEqual('Fine. Be that way!');\n  });\n\n  xtest('prolonged silence', () => {\n    const result = hey('          ');\n    expect(result).toEqual('Fine. Be that way!');\n  });\n\n  xtest('alternate silence', () => {\n    const result = hey('\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t');\n    expect(result).toEqual('Fine. Be that way!');\n  });\n\n  xtest('multiple line question', () => {\n    const result = hey('\\nDoes this cryogenic chamber make\\n me look fat?');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('starting with whitespace', () => {\n    const result = hey('         hmmmmmmm...');\n    expect(result).toEqual('Whatever.');\n  });\n\n  xtest('ending with whitespace', () => {\n    const result = hey('Okay if like my  spacebar  quite a bit?   ');\n    expect(result).toEqual('Sure.');\n  });\n\n  xtest('other whitespace', () => {\n    const result = hey('\\n\\r \\t');\n    expect(result).toEqual('Fine. Be that way!');\n  });\n\n  xtest('non-question ending with whitespace', () => {\n    const result = hey('This is a statement ending with whitespace      ');\n    expect(result).toEqual('Whatever.');\n  });\n});\n",
+  "source": "Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_06.html",
+  "authors": [
+    "rchavarria"
+  ],
+  "contributors": [
+    "amscotti",
+    "austinratcliff",
+    "brendan-c",
+    "draalger",
+    "hayashi-ay",
+    "jagdish-15",
+    "kytrinyx",
+    "matthewmorgan",
+    "ryanplusplus",
+    "serixscorpio",
+    "SleeplessByte",
+    "xarxziux"
+  ]
+}

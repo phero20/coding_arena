@@ -1,0 +1,26 @@
+{
+  "id": "vbnet:nth-prime",
+  "trackSlug": "vbnet",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "5734890a-67af-4eaf-8c78-7d7580b8db70",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module NthPrime\n    Public Function Prime(ByVal number As Integer)\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System\n\nPublic Module NthPrime\n    Public Function Prime(ByVal number As Integer)\n        If number < 1 Then\n            Throw New ArgumentOutOfRangeException(nameof(number), \"There are no negative nth primes\")\n        End If\n\n        Dim count = 0\n        Dim candidate = 2\n\n        While count < number\n            If IsPrime(candidate) Then\n                count += 1\n                If count = number Then\n                    Return candidate\n                End If\n            End If\n            candidate += 1\n        End While\n    End Function\n\n    Private Function IsPrime(ByVal num As Integer)\n        If num <= 1 Then\n            Return False\n        End If\n        If num = 2 Then\n            Return True\n        End If\n        If num Mod 2 = 0 Then\n            Return False\n        End If\n\n        Dim limit = Math.Floor(Math.Sqrt(num))\n\n        For i = 3 To limit Step 2\n            If num Mod i = 0 Then\n                Return False\n            End If\n        Next\n\n        Return True\n    End Function\nEnd Module\n",
+  "test_code": "Imports Xunit\n\nPublic Class NthPrimeTests\n    <Fact>\n    Public Sub FirstPrime()\n        Assert.Equal(2, Prime(1))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub SecondPrime()\n        Assert.Equal(3, Prime(2))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub SixthPrime()\n        Assert.Equal(13, Prime(6))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub BigPrime()\n        Assert.Equal(104743, Prime(10001))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub ThereIsNoZerothPrime()\n        Assert.Throws(Of ArgumentOutOfRangeException)(Function() Prime(0))\n    End Sub\nEnd Class\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

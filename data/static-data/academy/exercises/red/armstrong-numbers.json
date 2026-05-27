@@ -1,0 +1,26 @@
+{
+  "id": "red:armstrong-numbers",
+  "trackSlug": "red",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "7ee5d442-dbed-4831-aee1-3d58070dcc36",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Armstrong Numbers\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nis-armstrong-number: function [\n\tnumber\n] [\n\tcause-error 'user 'message \"You need to implement is-armstrong-number function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Armstrong Numbers\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nis-armstrong-number: function [\n\tnumber\n] [\n\tworking: 0\n\tdigits: to-string number\n\tforeach digit digits [\n\t\tworking: working + power to-integer form digit length? digits\n\t]\n\tworking == number\n]\n\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Armstrong Numbers\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %armstrong-numbers.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"Zero is an Armstrong number\"\n    input: #[\n        number: 0\n    ]\n    expected: true\n    function: \"is-armstrong-number\"\n    uuid: \"c1ed103c-258d-45b2-be73-d8c6d9580c7b\"\n] #[\n    description: \"Single-digit numbers are Armstrong numbers\"\n    input: #[\n        number: 5\n    ]\n    expected: true\n    function: \"is-armstrong-number\"\n    uuid: \"579e8f03-9659-4b85-a1a2-d64350f6b17a\"\n] #[\n    description: \"There are no two-digit Armstrong numbers\"\n    input: #[\n        number: 10\n    ]\n    expected: false\n    function: \"is-armstrong-number\"\n    uuid: \"2d6db9dc-5bf8-4976-a90b-b2c2b9feba60\"\n] #[\n    description: \"Three-digit number that is an Armstrong number\"\n    input: #[\n        number: 153\n    ]\n    expected: true\n    function: \"is-armstrong-number\"\n    uuid: \"509c087f-e327-4113-a7d2-26a4e9d18283\"\n] #[\n    description: {Three-digit number that is not an Armstrong number}\n    input: #[\n        number: 100\n    ]\n    expected: false\n    function: \"is-armstrong-number\"\n    uuid: \"7154547d-c2ce-468d-b214-4cb953b870cf\"\n] #[\n    description: \"Four-digit number that is an Armstrong number\"\n    input: #[\n        number: 9474\n    ]\n    expected: true\n    function: \"is-armstrong-number\"\n    uuid: \"6bac5b7b-42e9-4ecb-a8b0-4832229aa103\"\n] #[\n    description: \"Four-digit number that is not an Armstrong number\"\n    input: #[\n        number: 9475\n    ]\n    expected: false\n    function: \"is-armstrong-number\"\n    uuid: \"eed4b331-af80-45b5-a80b-19c9ea444b2e\"\n] #[\n    description: \"Seven-digit number that is an Armstrong number\"\n    input: #[\n        number: 9926315\n    ]\n    expected: true\n    function: \"is-armstrong-number\"\n    uuid: \"f971ced7-8d68-4758-aea1-d4194900b864\"\n] #[\n    description: {Seven-digit number that is not an Armstrong number}\n    input: #[\n        number: 9926314\n    ]\n    expected: false\n    function: \"is-armstrong-number\"\n    uuid: \"7ee45d52-5d35-4fbd-b6f1-5c8cd8a67f18\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

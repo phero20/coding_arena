@@ -1,0 +1,28 @@
+{
+  "id": "perl5:lasagna",
+  "trackSlug": "perl5",
+  "slug": "lasagna",
+  "name": "Lasagna",
+  "uuid": "ca84c27a-adaf-4055-9361-6acc5151c134",
+  "type": "concept",
+  "status": "beta",
+  "blurb": "Learn about the basics of Perl by following a lasagna recipe.",
+  "difficulty": null,
+  "concepts": [
+    "basics"
+  ],
+  "practices": null,
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYou're going to write some code to help you cook a lasagna from your favorite cookbook.\n\nYou have five tasks, all related to cooking your recipe.\n\n## 1. Define the expected oven time in minutes\n\nSet the `$Lasagna::ExpectedMinutesInOven` variable with how many minutes the lasagna should be in the oven. According to the cooking book, the expected oven time in minutes is 40:\n\n```perl\n$Lasagna::ExpectedMinutesInOven\n# => 40\n```\n\n## 2. Calculate the remaining oven time in minutes\n\nModify the `Lasagna::remaining_minutes_in_oven` subroutine, which takes the actual minutes the lasagna has been in the oven as an argument, to return how many minutes the lasagna still has to remain in the oven, based on the expected oven time in minutes from the previous task.\n\n```perl\nLasagna::remaining_minutes_in_oven(30)\n# => 10\n```\n\n## 3. Calculate the preparation time in minutes\n\nModify the `Lasagna::preparation_time_in_minutes` subroutine, which takes the number of layers you added to the lasagna as an argument, to return how many minutes you spent preparing the lasagna, assuming each layer takes you 2 minutes to prepare.\n\n```perl\nLasagna::preparation_time_in_minutes(2)\n# => 4\n```\n\n## 4. Calculate the total working time in minutes\n\nModify the `Lasagna::total_time_in_minutes` subroutine that takes two arguments: the first argument is the number of layers you added to the lasagna, and the second argument is the number of minutes the lasagna has been in the oven.\nThe subroutine should return how many minutes in total you've worked on cooking the lasagna, which is the sum of the preparation time in minutes, and the time in minutes the lasagna has spent in the oven at the moment.\n\n```perl\nLasagna::total_time_in_minutes(3, 20)\n# => 26\n```\n\n## 5. Create a notification that the lasagna is ready\n\nModify the `Lasagna::oven_alarm` subroutine, which does not take any arguments, to return a message indicating that the lasagna is ready to eat.\n\n```perl\nLasagna::oven_alarm()\n# => \"Ding!\"\n```\n",
+  "introduction": "",
+  "hints": "# Hints\n\n## 1. Define the expected oven time in minutes\n\n- You need to assign the correct value to the `$ExpectedMinutesInOven` variable.\n\n## 2. Calculate the remaining oven time in minutes\n\n- You can subtract numbers from each other using the `-` operator.\n\n## 3. Calculate the preparation time in minutes\n\n- You can multiply numbers using the `*` operator.\n\n## 4. Calculate the total working time in minutes\n\n- You can call other defined functions you might find useful, e.g., `function($arg)`.\n- You can add numbers to each other using the `+` operator.\n\n## 5. Create a notification that the lasagna is ready\n\n- You can create a string by enclosing text in either single `'` or double `\"` quotes.\n",
+  "starter_code": "package Lasagna;\n\nuse v5.40;\n\nour $ExpectedMinutesInOven = undef;\n\nsub remaining_minutes_in_oven ($actual_minutes_in_oven) {\n}\n\nsub preparation_time_in_minutes ($number_of_layers) {\n}\n\nsub total_time_in_minutes ( $number_of_layers, $actual_minutes_in_oven ) {\n}\n\nsub oven_alarm () {\n}\n\n1;\n",
+  "example_solution": "package Lasagna;\n\nuse v5.40;\n\nour $ExpectedMinutesInOven = 40;\n\nsub remaining_minutes_in_oven ($actual_minutes_in_oven) {\n    return $ExpectedMinutesInOven - $actual_minutes_in_oven;\n}\n\nsub preparation_time_in_minutes ($number_of_layers) {\n    return $number_of_layers * 2;\n}\n\nsub total_time_in_minutes ( $number_of_layers, $actual_minutes_in_oven ) {\n    return preparation_time_in_minutes($number_of_layers) + $actual_minutes_in_oven;\n}\n\nsub oven_alarm () {\n    return 'Ding!';\n}\n",
+  "test_code": "#!/usr/bin/env perl\n\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse Lasagna ();\n\nis( # begin: var task: 1\n    $Lasagna::ExpectedMinutesInOven,\n    40,\n    'expected minutes in oven',\n); # end: var\n\nis( # begin: remaining1 task: 2\n    Lasagna::remaining_minutes_in_oven(25),\n    15,\n    'some remaining minutes in oven',\n); # end: remaining1\n\nis( # begin: remaining2 task: 2\n    Lasagna::remaining_minutes_in_oven(40),\n    0,\n    'no more remaining minutes in oven',\n); # end: remaining2\n\nis( # begin: prep1 task: 3\n    Lasagna::preparation_time_in_minutes(1),\n    2,\n    'preparation time in minutes for one layer',\n); # end: prep1\n\nis( # begin: prep2 task: 3\n    Lasagna::preparation_time_in_minutes(4),\n    8,\n    'preparation time in minutes for multiple layers',\n); # end: prep2\n\nis( # begin: total1 task: 4\n    Lasagna::total_time_in_minutes( 1, 30 ),\n    32,\n    'total time in minutes for one layer',\n); # end: total1\n\nis( # begin: total2 task: 4\n    Lasagna::total_time_in_minutes( 4, 8 ),\n    16,\n    'total time in minutes for multiple layers',\n); # end: total2\n\nis( # begin: alarm task: 5\n    Lasagna::oven_alarm(),\n    'Ding!',\n    'notification message',\n); # end: alarm\n\ndone_testing;\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "m-dango"
+  ],
+  "contributors": null
+}

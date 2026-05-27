@@ -22,6 +22,7 @@ import { useCurrentUser } from "@/hooks/auth/use-current-user";
 import { SolutionList } from "./components/SolutionList";
 import { SolutionDetail } from "./components/SolutionDetail";
 import { OfficialSolution } from "./components/OfficialSolution";
+import { SolutionCodeBlock } from "./components/SolutionCodeBlock";
 import { SolutionsSkeleton } from "@/components/skeletons/WorkspaceSkeletons";
 import { SolutionEditor } from "./SolutionEditor";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,8 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({
   problemSlug,
   officialSolution,
   onAddSolution,
+  mode,
+  trackSlug,
 }) => {
   const { backendUser } = useCurrentUser();
   const currentUserId = backendUser?.id;
@@ -189,7 +192,7 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({
               <span className="hidden sm:block">My Solutions</span>
             </TabsTrigger>
           </TabsList>
-          <Button size="sm" className="mb-2 h-8 px-3" onClick={onAddSolution}>
+          <Button size="sm" className="h-8 px-3" onClick={onAddSolution}>
             <Edit className="size-3.5" />
             <span>Add Solution</span>
           </Button>
@@ -200,7 +203,14 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({
             value="official"
             className="mt-0 border-none outline-none animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 p-4"
           >
-            <OfficialSolution officialSolution={officialSolution} />
+            {mode === "exercise" && officialSolution ? (
+              <div className="space-y-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Example Solution</p>
+                <SolutionCodeBlock language={trackSlug || "text"} code={officialSolution} />
+              </div>
+            ) : (
+              <OfficialSolution officialSolution={officialSolution} />
+            )}
           </TabsContent>
 
           <TabsContent

@@ -1,0 +1,31 @@
+{
+  "id": "red:space-age",
+  "trackSlug": "red",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "623011e0-54b7-4497-b72c-3a012516a45e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "maths",
+    "blocks"
+  ],
+  "prerequisites": [
+    "maths"
+  ],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Space Age\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nage: function [\n\tplanet\n\tseconds\n] [\n\tcause-error 'user 'message [\"You need to implement this function.\"]\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Space Age\" exercise solution for exercism platform}\n\tauthor: \"loziniak\"\n]\n\nseconds-in-earth-year: 31557600\n\nearth-year-factors: [\n\t\"Mercury\" 0.2408467\n\t\"Venus\" 0.61519726\n\t\"Earth\" 1.0\n\t\"Mars\" 1.8808158\n\t\"Jupiter\" 11.862615\n\t\"Saturn\" 29.447498\n\t\"Uranus\" 84.016846\n\t\"Neptune\" 164.79132\n]\n\nage: function [\n\t\"Computes how many years pass on a planet during given seconds count\"\n\tplanet [string!]\n\tseconds [integer!]\n\treturn: [float!]\n] [\n\tround/to\n\t\tseconds / seconds-in-earth-year / select earth-year-factors planet\n\t\t0.01\n]\n",
+  "test_code": "Red [\n\tdescription: {Tests for Space Age Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %space-age.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"age on Earth\"\n    input: #[\n        planet: \"Earth\"\n        seconds: 1000000000\n    ]\n    expected: 31.69\n    function: \"age\"\n    uuid: \"84f609af-5a91-4d68-90a3-9e32d8a5cd34\"\n] #[\n    description: \"age on Mercury\"\n    input: #[\n        planet: \"Mercury\"\n        seconds: 2134835688\n    ]\n    expected: 280.88\n    function: \"age\"\n    uuid: \"ca20c4e9-6054-458c-9312-79679ffab40b\"\n] #[\n    description: \"age on Venus\"\n    input: #[\n        planet: \"Venus\"\n        seconds: 189839836\n    ]\n    expected: 9.78\n    function: \"age\"\n    uuid: \"502c6529-fd1b-41d3-8fab-65e03082b024\"\n] #[\n    description: \"age on Mars\"\n    input: #[\n        planet: \"Mars\"\n        seconds: 2129871239\n    ]\n    expected: 35.88\n    function: \"age\"\n    uuid: \"9ceadf5e-a0d5-4388-9d40-2c459227ceb8\"\n] #[\n    description: \"age on Jupiter\"\n    input: #[\n        planet: \"Jupiter\"\n        seconds: 901876382\n    ]\n    expected: 2.41\n    function: \"age\"\n    uuid: \"42927dc3-fe5e-4f76-a5b5-f737fc19bcde\"\n] #[\n    description: \"age on Saturn\"\n    input: #[\n        planet: \"Saturn\"\n        seconds: 2000000000\n    ]\n    expected: 2.15\n    function: \"age\"\n    uuid: \"8469b332-7837-4ada-b27c-00ee043ebcad\"\n] #[\n    description: \"age on Uranus\"\n    input: #[\n        planet: \"Uranus\"\n        seconds: 1210123456\n    ]\n    expected: 0.46\n    function: \"age\"\n    uuid: \"999354c1-76f8-4bb5-a672-f317b6436743\"\n] #[\n    description: \"age on Neptune\"\n    input: #[\n        planet: \"Neptune\"\n        seconds: 1821023456\n    ]\n    expected: 0.35\n    function: \"age\"\n    uuid: \"80096d30-a0d4-4449-903e-a381178355d8\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=01",
+  "authors": [
+    "loziniak"
+  ],
+  "contributors": null
+}

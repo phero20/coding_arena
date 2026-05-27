@@ -1,0 +1,26 @@
+{
+  "id": "cairo:difference-of-squares",
+  "trackSlug": "cairo",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "1f800542-7254-4d20-b5fa-d69da2cf65a7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn square_of_sum(number: u64) -> u64 {\n    panic!(\"implement `square_of_sum`\")\n}\n\npub fn sum_of_squares(number: u64) -> u64 {\n    panic!(\"implement `sum_of_squares`\")\n}\n\npub fn difference_of_squares(number: u64) -> u64 {\n    panic!(\"implement `difference_of_squares`\")\n}\n",
+  "example_solution": "pub fn square_of_sum(number: u64) -> u64 {\n    let mut sum = 0;\n    for current in 1..(number + 1) {\n        sum += current;\n    }\n    sum * sum\n}\n\npub fn sum_of_squares(number: u64) -> u64 {\n    let mut sum = 0;\n    for current in 1..(number + 1) {\n        sum += current * current;\n    }\n    sum\n}\n\npub fn difference_of_squares(number: u64) -> u64 {\n    square_of_sum(number) - sum_of_squares(number)\n}\n",
+  "test_code": "use difference_of_squares::{\n    difference_of_squares as diff_of_squares, square_of_sum, sum_of_squares,\n};\n\n#[test]\nfn square_of_sum_1() {\n    let output = square_of_sum(1);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn square_of_sum_5() {\n    let output = square_of_sum(5);\n    let expected = 225;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn square_of_sum_100() {\n    let output = square_of_sum(100);\n    let expected = 25502500;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn sum_of_squares_1() {\n    let output = sum_of_squares(1);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn sum_of_squares_5() {\n    let output = sum_of_squares(5);\n    let expected = 55;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn sum_of_squares_100() {\n    let output = sum_of_squares(100);\n    let expected = 338350;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn difference_of_squares_1() {\n    let output = diff_of_squares(1);\n    let expected = 0;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn difference_of_squares_5() {\n    let output = diff_of_squares(5);\n    let expected = 170;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn difference_of_squares_100() {\n    let output = diff_of_squares(100);\n    let expected = 25164150;\n    assert_eq!(output, expected);\n}\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

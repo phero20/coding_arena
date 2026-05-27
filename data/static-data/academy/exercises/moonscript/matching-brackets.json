@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:matching-brackets",
+  "trackSlug": "moonscript",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "34ca14e4-31a6-4da6-a5ce-44da523bfb12",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "{\n  is_paired: (input) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "push     = table.insert\npop      = table.remove\nis_empty = (t) -> not next t\n\nopener   = ']':'[', '}':'{', ')':'('\n\n\n{\n  is_paired: (input) ->\n    stack = {}\n\n    for char in input\\gmatch '.'\n      switch char\n        when '[', '{', '(' then push stack, char\n        when ']', '}', ')' then return false if opener[char] != pop stack\n\n    is_empty stack\n}\n",
+  "test_code": "import is_paired from require 'matching_brackets'\n\ndescribe 'matching-brackets:', ->\n  it 'paired square brackets', ->\n    assert.is_true is_paired '[]'\n\n  pending 'empty string', ->\n    assert.is_true is_paired ''\n\n  pending 'unpaired brackets', ->\n    assert.is_false is_paired '[['\n\n  pending 'wrong ordered brackets', ->\n    assert.is_false is_paired '}{'\n\n  pending 'wrong closing bracket', ->\n    assert.is_false is_paired '{]'\n\n  pending 'paired with whitespace', ->\n    assert.is_true is_paired '{ }'\n\n  pending 'partially paired brackets', ->\n    assert.is_false is_paired '{[])'\n\n  pending 'simple nested brackets', ->\n    assert.is_true is_paired '{[]}'\n\n  pending 'several paired brackets', ->\n    assert.is_true is_paired '{}[]'\n\n  pending 'paired and nested brackets', ->\n    assert.is_true is_paired '([{}({}[])])'\n\n  pending 'unopened closing brackets', ->\n    assert.is_false is_paired '{[)][]}'\n\n  pending 'unpaired and nested brackets', ->\n    assert.is_false is_paired '([{])'\n\n  pending 'paired and wrong nested brackets', ->\n    assert.is_false is_paired '[({]})'\n\n  pending 'paired and wrong nested brackets but innermost are correct', ->\n    assert.is_false is_paired '[({}])'\n\n  pending 'paired and incomplete brackets', ->\n    assert.is_false is_paired '{}['\n\n  pending 'too many closing brackets', ->\n    assert.is_false is_paired '[]]'\n\n  pending 'early unexpected brackets', ->\n    assert.is_false is_paired ')()'\n\n  pending 'early mismatched brackets', ->\n    assert.is_false is_paired '{)()'\n\n  pending 'math expression', ->\n    assert.is_true is_paired '(((185 + 223.85) * 15) - 543)/2'\n\n  pending 'complex latex expression', ->\n    assert.is_true is_paired '\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)'\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

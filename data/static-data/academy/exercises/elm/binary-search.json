@@ -1,0 +1,38 @@
+{
+  "id": "elm:binary-search",
+  "trackSlug": "elm",
+  "slug": "binary-search",
+  "name": "Binary Search",
+  "uuid": "5c859d35-f2fe-455c-a7d7-df9398355403",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a binary search algorithm.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "tail-call-recursion",
+    "array"
+  ],
+  "prerequisites": [
+    "comparison",
+    "tail-call-recursion",
+    "array",
+    "maybe"
+  ],
+  "instructions": "# Instructions\n\nYour task is to implement a binary search algorithm.\n\nA binary search algorithm finds an item in a list by repeatedly splitting it in half, only keeping the half which contains the item we're looking for.\nIt allows us to quickly narrow down the possible locations of our item until we find it, or until we've eliminated all possible locations.\n\n~~~~exercism/caution\nBinary search only works when a list has been sorted.\n~~~~\n\nThe algorithm looks like this:\n\n- Find the middle element of a _sorted_ list and compare it with the item we're looking for.\n- If the middle element is our item, then we're done!\n- If the middle element is greater than our item, we can eliminate that element and all the elements **after** it.\n- If the middle element is less than our item, we can eliminate that element and all the elements **before** it.\n- If every element of the list has been eliminated then the item is not in the list.\n- Otherwise, repeat the process on the part of the list that has not been eliminated.\n\nHere's an example:\n\nLet's say we're looking for the number 23 in the following sorted list: `[4, 8, 12, 16, 23, 28, 32]`.\n\n- We start by comparing 23 with the middle element, 16.\n- Since 23 is greater than 16, we can eliminate the left half of the list, leaving us with `[23, 28, 32]`.\n- We then compare 23 with the new middle element, 28.\n- Since 23 is less than 28, we can eliminate the right half of the list: `[23]`.\n- We've found our item.\n",
+  "introduction": "# Introduction\n\nYou have stumbled upon a group of mathematicians who are also singer-songwriters.\nThey have written a song for each of their favorite numbers, and, as you can imagine, they have a lot of favorite numbers (like [0][zero] or [73][seventy-three] or [6174][kaprekars-constant]).\n\nYou are curious to hear the song for your favorite number, but with so many songs to wade through, finding the right song could take a while.\nFortunately, they have organized their songs in a playlist sorted by the title — which is simply the number that the song is about.\n\nYou realize that you can use a binary search algorithm to quickly find a song given the title.\n\n[zero]: https://en.wikipedia.org/wiki/0\n[seventy-three]: https://en.wikipedia.org/wiki/73_(number)\n[kaprekars-constant]: https://en.wikipedia.org/wiki/6174_(number)\n",
+  "hints": null,
+  "starter_code": "module BinarySearch exposing (find)\n\nimport Array exposing (Array)\n\n\nfind : Int -> Array Int -> Maybe Int\nfind target xs =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module BinarySearch exposing (find)\n\nimport Array exposing (Array)\n\n\nfind : Int -> Array Int -> Maybe Int\nfind target xs =\n    find_ 0 (Array.length xs) target xs\n\n\nfind_ : Int -> Int -> Int -> Array Int -> Maybe Int\nfind_ min max target xs =\n    let\n        middle =\n            (min + max) // 2\n\n        middleComp =\n            Array.get middle xs\n                |> Maybe.map (compare target)\n    in\n    if max < min then\n        Nothing\n\n    else\n        case middleComp of\n            Just LT ->\n                find_ min (middle - 1) target xs\n\n            Just GT ->\n                find_ (middle + 1) max target xs\n\n            Just EQ ->\n                Just middle\n\n            Nothing ->\n                Nothing\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Array\nimport BinarySearch exposing (find)\nimport Expect\nimport Test exposing (Test, describe, skip, test)\n\n\ntests : Test\ntests =\n    describe \"binarySearch\"\n        [ test \"finds a value in an array with one element\" <|\n            \\() ->\n                Array.fromList [ 6 ]\n                    |> find 6\n                    |> Expect.equal (Just 0)\n        , skip <|\n            test \"finds a value in the middle of an array\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 4, 6, 8, 9, 11 ]\n                        |> find 6\n                        |> Expect.equal (Just 3)\n        , skip <|\n            test \"finds a value at the beginning of an array\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 4, 6, 8, 9, 11 ]\n                        |> find 1\n                        |> Expect.equal (Just 0)\n        , skip <|\n            test \"finds a value in an array of odd length\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 634 ]\n                        |> find 144\n                        |> Expect.equal (Just 9)\n        , skip <|\n            test \"finds a value in an array of even length\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377 ]\n                        |> find 21\n                        |> Expect.equal (Just 5)\n        , skip <|\n            test \"identifies that a value is not included in the array\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 4, 6, 8, 9, 11 ]\n                        |> find 7\n                        |> Expect.equal Nothing\n        , skip <|\n            test \"a value smaller than the array's smallest value is not included\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 4, 6, 8, 9, 11 ]\n                        |> find 0\n                        |> Expect.equal Nothing\n        , skip <|\n            test \"a value larger than the array's largest value is not included\" <|\n                \\() ->\n                    Array.fromList [ 1, 3, 4, 6, 8, 9, 11 ]\n                        |> find 13\n                        |> Expect.equal Nothing\n        , skip <|\n            test \"nothing is included in an empty array\" <|\n                \\() ->\n                    Array.empty\n                        |> find 1\n                        |> Expect.equal Nothing\n        ]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+  "authors": [
+    "churchie317"
+  ],
+  "contributors": [
+    "michaelglass",
+    "nathanielknight",
+    "tuxagon"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "cobol:scrabble-score",
+  "trackSlug": "cobol",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "5684d37f-9456-4aab-911f-a540894212c8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SCRABBLE-SCORE.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n      *Inputs\n       01 WS-WORD   PIC X(60).\n      *Outputs\n       01 WS-RESULT PIC 99.",
+  "example_solution": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SCRABBLE-SCORE.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n      *Inputs\n       01 WS-WORD   PIC X(60).\n       01 WS-LETTERS REDEFINES WS-WORD.\n        02 WS-LETTER PIC X OCCURS 60 TIMES\n         INDEXED BY LETTER-INDEX.\n        88 TEN-POINTER VALUES 'Q','Z'.\n        88 EIGHT-POINTER VALUES 'J','X'.\n        88 FIVE-POINTER VALUES 'K'.\n        88 FOUR-POINTER VALUES 'F','H','V','W','Y'.\n        88 THREE-POINTER VALUES 'B','C','M','P'.\n        88 TWO-POINTER VALUES 'D','G'.\n        88 ONE-POINTER VALUES 'A','E','I','O','U','L','N','R','S','T'.\n      *Outputs\n       01 WS-RESULT PIC 99.\n      *Working\n       01 TEN-POINTS   CONSTANT 10.\n       01 EIGHT-POINTS CONSTANT 8.\n       01 FIVE-POINTS  CONSTANT 5.\n       01 FOUR-POINTS  CONSTANT 4.\n       01 THREE-POINTS CONSTANT 3.\n       01 TWO-POINTS   CONSTANT 2.\n       01 ONE-POINTS   CONSTANT 1.\n       01 WS-UPPER-CASE PIC X(26) VALUE 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.\n       01 WS-LOWER-CASE PIC X(26) VALUE 'abcdefghijklmnopqrstuvwxyz'.\n\n       PROCEDURE DIVISION.\n       SCRABBLE-SCORE.\n        MOVE ZEROES TO WS-RESULT.\n      * Uppercase the word\n        INSPECT WS-WORD\n         CONVERTING WS-LOWER-CASE to WS-UPPER-CASE.\n        SET LETTER-INDEX TO 1.\n        PERFORM UNTIL WS-LETTER(LETTER-INDEX) = SPACE\n         IF TEN-POINTER(LETTER-INDEX)\n          ADD TEN-POINTS TO WS-RESULT\n         END-IF\n         IF EIGHT-POINTER(LETTER-INDEX)\n          ADD EIGHT-POINTS TO WS-RESULT\n         END-IF\n         IF FIVE-POINTER(LETTER-INDEX)\n          ADD FIVE-POINTS TO WS-RESULT\n         END-IF\n         IF FOUR-POINTER(LETTER-INDEX)\n          ADD FOUR-POINTS TO WS-RESULT\n         END-IF\n         IF THREE-POINTER(LETTER-INDEX)\n          ADD THREE-POINTS TO WS-RESULT\n         END-IF\n         IF TWO-POINTER(LETTER-INDEX)\n          ADD TWO-POINTS TO WS-RESULT\n         END-IF\n         IF ONE-POINTER(LETTER-INDEX)\n          ADD ONE-POINTS TO WS-RESULT\n         END-IF\n\n         SET LETTER-INDEX UP BY 1\n        END-PERFORM.\n",
+  "test_code": "TestCase \"lowercase letter\"\n\tMOVE \"a\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 1\n\nTestCase \"uppercase letter\"\n\tMOVE \"A\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 1\n\nTestCase \"valuable letter\"\n\tMOVE \"f\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 4\n\nTestCase \"short word\"\n\tMOVE \"at\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 2\n\nTestCase \"short, valuable word\"\n\tMOVE \"zoo\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 12\n\nTestCase \"medium word\"\n\tMOVE \"street\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 6\n\nTestCase \"medium, valuable word\"\n\tMOVE \"quirky\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 22\n\nTestCase \"long, mixed-case word\"\n\tMOVE \"OxyphenButazone\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 41\n\nTestCase \"english-like word\"\n\tMOVE \"pinata\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 8\n\nTestCase \"empty input\"\n\tMOVE SPACE TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 0\n\nTestCase \"entire alphabet available\"\n\tMOVE \"abcdefghijklmnopqrstuvwxyz\" TO WS-WORD\n\tPERFORM SCRABBLE-SCORE\n\tEXPECT WS-RESULT = 87\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "axtens"
+  ],
+  "contributors": null
+}

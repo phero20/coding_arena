@@ -1,0 +1,26 @@
+{
+  "id": "vlang:nucleotide-count",
+  "trackSlug": "vlang",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "27d24b09-71dc-462c-b80d-8408b62c69a1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn count_nucleotides(strand string) !map[string]int {\n}\n",
+  "example_solution": "module main\n\nfn count_nucleotides(strand string) !map[string]int {\n\tmut total_counts := {\n\t\t'A': 0\n\t\t'C': 0\n\t\t'G': 0\n\t\t'T': 0\n\t}\n\tfor letter in strand {\n\t\tletter_str := letter.ascii_str()\n\t\tif letter_str in total_counts {\n\t\t\ttotal_counts[letter_str] += 1\n\t\t} else {\n\t\t\treturn error('${letter_str} is not a valid nucleotide!')\n\t\t}\n\t}\n\treturn total_counts\n}\n",
+  "test_code": "module main\n\nfn test_empty_strand() {\n\tassert count_nucleotides('')! == {\n\t\t'A': 0\n\t\t'C': 0\n\t\t'G': 0\n\t\t'T': 0\n\t}\n}\n\nfn test_one_character_strand() {\n\tassert count_nucleotides('G')! == {\n\t\t'A': 0\n\t\t'C': 0\n\t\t'G': 1\n\t\t'T': 0\n\t}\n}\n\nfn test_repeated_character_strand() {\n\tassert count_nucleotides('GGGGGGG')! == {\n\t\t'A': 0\n\t\t'C': 0\n\t\t'G': 7\n\t\t'T': 0\n\t}\n}\n\nfn test_multiple_character_strand() {\n\tassert count_nucleotides('AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC')! == {\n\t\t'A': 20\n\t\t'C': 12\n\t\t'G': 17\n\t\t'T': 21\n\t}\n}\n\nfn test_invalid_character_strand() {\n\tif res := count_nucleotides('AGXXACT') {\n\t\tassert false, 'invalid characters should return an error'\n\t} else {\n\t\tassert err.msg() == 'X is not a valid nucleotide!'\n\t}\n}\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "1ethanhansen"
+  ],
+  "contributors": null
+}

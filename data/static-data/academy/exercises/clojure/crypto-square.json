@@ -1,0 +1,39 @@
+{
+  "id": "clojure:crypto-square",
+  "trackSlug": "clojure",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "7387b271-d765-497c-9b85-481c947439b6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns crypto-square)\n\n(defn normalize-plaintext [] ;; <- arglist goes here\n  ;; your code goes here\n)\n\n(defn square-size [] ;; <- arglist goes here\n  ;; your code goes here\n)\n\n(defn plaintext-segments [] ;; <- arglist goes here\n  ;; your code goes here\n)\n\n(defn ciphertext [] ;; <- arglist goes here\n  ;; your code goes here\n)\n\n(defn normalize-ciphertext [] ;; <- arglist goes here\n  ;; your code goes here\n)\n",
+  "example_solution": "(ns crypto-square\n  (:require [clojure.string :as str]))\n\n(defn normalize-plaintext [plaintext]\n  (str/lower-case (str/replace plaintext #\"[^\\w]\" \"\")))\n\n(defn square-size [plaintext]\n  (int (Math/ceil (Math/sqrt (count (normalize-plaintext plaintext))))))\n\n(defn plaintext-segments [plaintext]\n  (let [normalized-plaintext (normalize-plaintext plaintext)\n        size (square-size normalized-plaintext)]\n    (map #(apply str %) (partition size size nil normalized-plaintext))))\n\n(defn- padded-segments [plaintext pad]\n  (let [segments (plaintext-segments plaintext)\n        r (count (first segments))]\n        (map #(concat % (take (- r (count %)) (repeat pad))) segments)))\n\n(defn ciphertext [plaintext]\n  (apply str (apply mapcat vector (padded-segments plaintext nil))))\n\n(defn normalize-ciphertext [plaintext]\n  (str/join \" \" (map #(apply str %) (apply map vector (padded-segments plaintext \\ )))))\n",
+  "test_code": "(ns crypto-square-test\n  (:require [clojure.test :refer [deftest is]]\n            crypto-square))\n\n(deftest normalize-splunk\n  (is (= \"splunk\" (crypto-square/normalize-plaintext \"s#!@$%plunk\"))))\n(deftest normalize-with-punctuation\n  (is (= \"123go\" (crypto-square/normalize-plaintext \"1, 2, 3 GO!\"))))\n\n(deftest square-2\n  (is (= 2 (crypto-square/square-size \"1234\"))))\n(deftest square-3\n  (is (= 3 (crypto-square/square-size \"123456789\"))))\n(deftest square-4\n  (is (= 4 (crypto-square/square-size \"123456789abc\"))))\n\n(deftest segments\n  (is (= [\"neverv\", \"exthin\", \"eheart\", \"withid\", \"lewoes\"]\n         (crypto-square/plaintext-segments \"Never vex thine heart with idle woes.\"))))\n(deftest segments-2\n  (is (= [\"zomg\", \"zomb\", \"ies\"]\n         (crypto-square/plaintext-segments \"ZOMG! ZOMBIES!!!\"))))\n\n(deftest cipher-1\n  (is (= \"tasneyinicdsmiohooelntuillibsuuml\"\n         (crypto-square/ciphertext \"Time is an illusion. Lunchtime doubly so.\"))))\n(deftest cipher-2\n  (is (= \"wneiaweoreneawssciliprerlneoidktcms\"\n         (crypto-square/ciphertext \"We all know interspecies romance is weird.\"))))\n(deftest cipher-3\n  (is (= \"vrel aepe mset paoo irpo\"\n         (crypto-square/normalize-ciphertext \"Vampires are people too!\"))))\n(deftest cipher-4\n  (is (= \"msemo aanin dnin  ndla  etlt  shui \"\n         (crypto-square/normalize-ciphertext \"Madness, and then illumination.\"))))\n(deftest cipher-5\n  (is (= (str \"ageihdsednsh lsagtoonaepe lannswnccair hrditeaetnrh \"\n              \"ueethdnatoio mbqyewdnotto aouayicdwhod nranatosaef  \"\n              \"bnldrhnhrrb  efirersodir  irnieecusno  nedgnailoat \")\n         (let [plaintext (str \"All human beings are born free \"\n                              \"and equal in dignity and rights. \"\n                              \"They are endowed with reason and conscience \"\n                              \"and should act towards one another \"\n                              \"in a spirit of brotherhood.\")]\n           (crypto-square/normalize-ciphertext plaintext)))))\n(deftest cipher-6\n  (is (= \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n         (crypto-square/normalize-ciphertext \"If man was meant to stay on the ground, god would have given us roots.\"))))",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "canweriotnow",
+    "ClashTheBunny",
+    "dkinzer",
+    "geofflane",
+    "haus",
+    "kytrinyx",
+    "mathias",
+    "sjwarner-bp",
+    "yurrriq"
+  ]
+}

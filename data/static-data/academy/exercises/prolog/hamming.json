@@ -1,0 +1,28 @@
+{
+  "id": "prolog:hamming",
+  "trackSlug": "prolog",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "8449608f-b55e-452f-b65a-720914dde9af",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "hamming_distance(Str1, Str2, Dist).\n",
+  "example_solution": "hamming_distance(Str1, Str2, Distance) :-\n    string_length(Str1, Length),\n    string_length(Str2, Length),\n    string_chars(Str1, List1),\n    string_chars(Str2, List2),\n    hamming_distance_cmp(List1, List2, Distance).\n\nhamming_distance_cmp([], [], 0) :- !.\nhamming_distance_cmp([Char1|Chars1], [Char2|Chars2], Distance) :-\n    hamming_distance_cmp(Chars1, Chars2, NextDistance),\n    (Char1 == Char2 ->\n        Distance is NextDistance\n    ;\n        Distance is NextDistance + 1\n    ).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(hamming).\n\n    test(identical_strands, condition(true)) :-\n        hamming_distance(\"A\", \"A\", Result),\n            Result == 0.\n\n    test(long_identical_strands, condition(pending)) :-\n        hamming_distance(\"GGACTGA\", \"GGACTGA\", Result), Result == 0.\n\n    test(complete_distance_in_single_nucleotide_strands, condition(pending)) :-\n        hamming_distance(\"A\", \"G\", 1).\n\n    test(complete_distance_in_small_strands, condition(pending)) :-\n        hamming_distance(\"AG\", \"CT\", Result), Result == 2.\n\n    test(small_distance_in_small_strands, condition(pending)) :-\n        hamming_distance(\"AT\", \"CT\", Result), Result == 1.\n\n    test(small_distance, condition(pending)) :-\n        hamming_distance(\"GGACG\", \"GGTCG\", Result), Result == 1.\n\n    test(small_distance_in_long_strands, condition(pending)) :-\n        hamming_distance(\"ACCAGGG\", \"ACTATGG\", Result), Result == 2.\n\n    test(nonunique_character_in_first_strand, condition(pending)) :-\n        hamming_distance(\"AGA\", \"AGG\", Result), Result == 1.\n\n    test(nonunique_character_in_second_strand, condition(pending)) :-\n        hamming_distance(\"AGG\", \"AGA\", Result), Result == 1.\n\n    test(same_nucleotides_in_different_positions, condition(pending)) :-\n        hamming_distance(\"TAG\", \"GAT\", Result), Result == 2.\n\n    test(large_distance, condition(pending)) :-\n        hamming_distance(\"GATACA\", \"GCATAA\", Result), Result == 4.\n\n    test(large_distance_in_offbyone_strand, condition(pending)) :-\n        hamming_distance(\"GGACGGATTCTG\", \"AGGACGGATTCT\", Result), Result == 9.\n\n    test(empty_strands, condition(pending)) :-\n        hamming_distance(\"\", \"\", Result), Result == 0.\n\n    test(disallow_first_strand_longer, [fail, condition(pending)]) :-\n        hamming_distance(\"AATG\", \"AAA\", _).\n\n    test(disallow_second_strand_longer, [fail, condition(pending)]) :-\n        hamming_distance(\"ATA\", \"AGTG\", _).\n\n:- end_tests(hamming).\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "qjd2413"
+  ],
+  "contributors": [
+    "parkerl"
+  ]
+}

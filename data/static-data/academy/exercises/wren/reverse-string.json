@@ -1,0 +1,26 @@
+{
+  "id": "wren:reverse-string",
+  "trackSlug": "wren",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "6481a366-fd28-42d6-8594-3c20d87532b5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "class StringUtil {\n  static reverse(string) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class StringUtil {\n  static reverse(s) {\n    if (s == \"\") return \"\"\n    return s[-1..0]\n  }\n}\n",
+  "test_code": "import \"wren-testie/testie\" for Testie, Expect\nimport \"./reverse-string\" for StringUtil\n\nTestie.test(\"Hello World\") { |do, skip|\n  do.test(\"empty string\") {\n    var expected = \"\"\n    var actual = StringUtil.reverse(\"\")\n    Expect.value(actual).toEqual(expected)\n  }\n\n  skip.test(\"a word\") {\n    var expected = \"tobor\"\n    var actual = StringUtil.reverse(\"robot\")\n    Expect.value(actual).toEqual(expected)\n  }\n\n  skip.test(\"a capitalized word\") {\n    var expected = \"nemaR\"\n    var actual = StringUtil.reverse(\"Ramen\")\n    Expect.value(actual).toEqual(expected)\n  }\n\n  skip.test(\"a sentence with punctuation\") {\n    var expected = \"!yrgnuh ma I\"\n    var actual = StringUtil.reverse(\"I am hungry!\")\n    Expect.value(actual).toEqual(expected)\n  }\n\n  skip.test(\"a palindrome\") {\n    var expected = \"racecar\"\n    var actual = StringUtil.reverse(\"racecar\")\n    Expect.value(actual).toEqual(expected)\n  }\n\n  skip.test(\"an even-sized word\") {\n    var expected = \"reward\"\n    var actual = StringUtil.reverse(\"drawer\")\n    Expect.value(actual).toEqual(expected)\n  }\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,34 @@
+{
+  "id": "go:rectangles",
+  "trackSlug": "go",
+  "slug": "rectangles",
+  "name": "Rectangles",
+  "uuid": "e7e207dc-bf8b-4bbf-b06e-edd674e09a06",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the rectangles in an ASCII diagram.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCount the rectangles in an ASCII diagram like the one below.\n\n```text\n   +--+\n  ++  |\n+-++--+\n|  |  |\n+--+--+\n```\n\nThe above diagram contains these 6 rectangles:\n\n```text\n\n\n+-----+\n|     |\n+-----+\n```\n\n```text\n   +--+\n   |  |\n   |  |\n   |  |\n   +--+\n```\n\n```text\n   +--+\n   |  |\n   +--+\n\n\n```\n\n```text\n\n\n   +--+\n   |  |\n   +--+\n```\n\n```text\n\n\n+--+\n|  |\n+--+\n```\n\n```text\n\n  ++\n  ++\n\n\n```\n\nYou may assume that the input is always a proper rectangle (i.e. the length of every line equals the length of the first line).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package rectangles\n\nfunc Count(diagram []string) int {\n\tpanic(\"Please implement the Count function\")\n}\n",
+  "example_solution": "package rectangles\n\nfunc checkHorizontalSide(diagram []string, start, end, rowIndex int) bool {\n\tfor i := start; i < end; i++ {\n\t\ts := diagram[rowIndex][i]\n\t\tif s != '+' && s != '-' {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}\n\nfunc checkVerticalSide(diagram []string, start, end, colIndex int) bool {\n\tfor i := start; i < end; i++ {\n\t\ts := diagram[i][colIndex]\n\t\tif s != '+' && s != '|' {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}\n\n// Count counts rectangles in given diagram as lines\nfunc Count(diagram []string) int {\n\tcount, rows, cols := 0, len(diagram), 0\n\tif rows > 0 {\n\t\tcols = len(diagram[0])\n\t}\n\n\tfor y := 0; y < rows-1; y++ {\n\t\tfor x := 0; x < cols-1; x++ {\n\t\t\tif diagram[y][x] == '+' {\n\t\t\t\tfor j := y + 1; j < rows; j++ {\n\t\t\t\t\tfor i := x + 1; i < cols; i++ {\n\t\t\t\t\t\tif diagram[j][i] == '+' && diagram[y][i] == '+' && diagram[j][x] == '+' {\n\t\t\t\t\t\t\tif checkHorizontalSide(diagram, x+1, i, y) &&\n\t\t\t\t\t\t\t\tcheckHorizontalSide(diagram, x+1, i, j) &&\n\t\t\t\t\t\t\t\tcheckVerticalSide(diagram, y+1, j, x) &&\n\t\t\t\t\t\t\t\tcheckVerticalSide(diagram, y+1, j, i) {\n\t\t\t\t\t\t\t\tcount++\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn count\n}\n",
+  "test_code": "package rectangles\n\nimport (\n\t\"testing\"\n)\n\nfunc TestRectangles(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Count(tc.input); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Count(%#v) = %d, want: %d\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkRectangles(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tCount(tc.input)\n\t\t}\n\t}\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ferhatelmas"
+  ],
+  "contributors": [
+    "bitfield",
+    "ekingery",
+    "hilary",
+    "leenipper",
+    "sebito91",
+    "tleen",
+    "eklatzer"
+  ]
+}

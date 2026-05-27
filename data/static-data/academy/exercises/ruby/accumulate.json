@@ -1,0 +1,40 @@
+{
+  "id": "ruby:accumulate",
+  "trackSlug": "ruby",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "2c71fc3a-2c93-402b-b091-697b795ce3ba",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Accumulate' exercise in this file. Make the tests in\n`accumulate_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/accumulate` directory.\n=end\n",
+  "example_solution": "class Array\n  def accumulate\n    result = []\n    each do |e|\n      result << yield(e)\n    end\n    result\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'accumulate'\n\nclass ArrayTest < Minitest::Test\n  def test_empty_accumulation\n    assert_empty([].accumulate { |e| e * e })\n  end\n\n  def test_accumulate_squares\n    skip\n    result = [1, 2, 3].accumulate do |number|\n      number * number\n    end\n    assert_equal [1, 4, 9], result\n  end\n\n  def test_accumulate_upcases\n    skip\n    result = %w[hello world].accumulate(&:upcase)\n    assert_equal %w[HELLO WORLD], result\n  end\n\n  def test_accumulate_reversed_strings\n    skip\n    result = %w[the quick brown fox etc].accumulate(&:reverse)\n    assert_equal %w[eht kciuq nworb xof cte], result\n  end\n\n  def test_accumulate_recursively\n    skip\n    result = %w[a b c].accumulate do |char|\n      %w[1 2 3].accumulate do |digit|\n        \"#{char}#{digit}\"\n      end\n    end\n    assert_equal [%w[a1 a2 a3], %w[b1 b2 b3], %w[c1 c2 c3]], result\n  end\n\n  def test_do_not_change_in_place\n    skip\n    original = [1, 2, 3]\n    copy = original.dup\n    original.accumulate { |n| n * n }\n    assert_equal copy, original\n  end\nend\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "boddhisattva",
+    "budmc29",
+    "cadwallion",
+    "connermcd",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "njbbaer",
+    "prbroadfoot",
+    "raadler",
+    "tryantwit"
+  ]
+}

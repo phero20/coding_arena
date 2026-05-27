@@ -1,0 +1,26 @@
+{
+  "id": "wren:scrabble-score",
+  "trackSlug": "wren",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "13ab45df-40d9-4c4a-9a40-93a4e8f5f9af",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "class Scrabble {\n  static score(word) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class Strings {\n  static downcase(s) {\n    return s.bytes.map { |x|\n      if ((65..90).contains(x)) x = x + 32\n      return String.fromByte(x)\n    }.join(\"\")\n  }\n}\n\nvar LETTER_SCORES = {\n  \"a\": 1,\n  \"e\": 1,\n  \"i\": 1,\n  \"o\": 1,\n  \"u\": 1,\n  \"l\": 1,\n  \"n\": 1,\n  \"r\": 1,\n  \"s\": 1,\n  \"t\": 1,\n  \"d\": 2,\n  \"g\": 2,\n  \"b\": 3,\n  \"c\": 3,\n  \"m\": 3,\n  \"p\": 3,\n  \"f\": 4,\n  \"h\": 4,\n  \"v\": 4,\n  \"w\": 4,\n  \"y\": 4,\n  \"k\": 5,\n  \"j\": 8,\n  \"x\": 8,\n  \"q\": 10,\n  \"z\": 10,\n}\n\nclass Scrabble {\n  static score(word) { Scrabble.new(word).score }\n  construct new(word) { _word = Strings.downcase(word) }\n\n  letterScore(letter) { LETTER_SCORES[letter] || 0 }\n  score { _word.reduce(0) { |acc, char | acc + letterScore(char) } }\n}",
+  "test_code": "import \"wren-testie/testie\" for Testie, Expect\nimport \"./scrabble-score\" for Scrabble\n\nTestie.test(\"Scrabble\") { |do, skip|\n  do.test(\"lowercase letter\") {\n    Expect.value(Scrabble.score(\"a\")).toEqual(1)\n  }\n\n  skip.test(\"uppercase letter\") {\n    Expect.value(Scrabble.score(\"A\")).toEqual(1)\n  }\n\n  skip.test(\"valuable letter\") {\n    Expect.value(Scrabble.score(\"f\")).toEqual(4)\n  }\n\n  skip.test(\"short word\") {\n    Expect.value(Scrabble.score(\"at\")).toEqual(2)\n  }\n\n  skip.test(\"short, valuable word\") {\n    Expect.value(Scrabble.score(\"zoo\")).toEqual(12)\n  }\n\n  skip.test(\"medium word\") {\n    Expect.value(Scrabble.score(\"street\")).toEqual(6)\n  }\n\n  skip.test(\"medium, valuable word\") {\n    Expect.value(Scrabble.score(\"quirky\")).toEqual(22)\n  }\n\n  skip.test(\"long, mixed-case word\") {\n    Expect.value(Scrabble.score(\"OxyphenButazone\")).toEqual(41)\n  }\n\n  skip.test(\"english-like word\") {\n    Expect.value(Scrabble.score(\"pinata\")).toEqual(8)\n  }\n\n  skip.test(\"empty input\") {\n    Expect.value(Scrabble.score(\"\")).toEqual(0)\n  }\n\n  skip.test(\"entire alphabet available\") {\n    Expect.value(Scrabble.score(\"abcdefghijklmnopqrstuvwxyz\")).toEqual(87)\n  }\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

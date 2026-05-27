@@ -1,0 +1,26 @@
+{
+  "id": "sml:square-root",
+  "trackSlug": "sml",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "8f79d2ac-2407-4bba-91a8-6a47737e7f36",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "fun squareRoot (radicand: int): int =\n  raise Fail \"'squareRoot' is not implemented\"\n",
+  "example_solution": "(* We use Heron's method, with rounding to the nearest natural number.\n * https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Heron's_method\n * estimate = (guess + randicand / guess) / 2\n *          = (guess * guess + randicand) / (2 * guess)\n * To achieve rounding when using integer division,\n * we must increase the numerator by half the denominator.\n *)\nfun squareRoot (radicand: int): int =\n  let\n    fun recurse guess =\n      let\n        val estimate = (guess * (guess + 1) + radicand) div (2 * guess)\n      in\n        if estimate = guess then estimate\n        else recurse estimate\n      end\n  in\n    recurse 1\n  end\n",
+  "test_code": "(* version 1.0.0 *)\n\nuse \"testlib.sml\";\nuse \"square-root.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"square-root\" [\n    test \"root of 1\"\n      (fn _ => squareRoot 1 |> Expect.equalTo 1),\n\n    test \"root of 4\"\n      (fn _ => squareRoot 4 |> Expect.equalTo 2),\n\n    test \"root of 25\"\n      (fn _ => squareRoot 25 |> Expect.equalTo 5),\n\n    test \"root of 81\"\n      (fn _ => squareRoot 81 |> Expect.equalTo 9),\n\n    test \"root of 196\"\n      (fn _ => squareRoot 196 |> Expect.equalTo 14),\n\n    test \"root of 65025\"\n      (fn _ => squareRoot 65025 |> Expect.equalTo 255)\n  ]\n\nval _ = Test.run testsuite\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

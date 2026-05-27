@@ -1,0 +1,31 @@
+{
+  "id": "bash:resistor-color-duo",
+  "trackSlug": "bash",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "56e4993f-6e15-44e4-bf35-a031cd94aa49",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\n\ncolors=(\n    black brown red orange yellow \n    green blue violet grey white\n)\n\ncode() {\n    local code=\"\" i\n    for i in \"${!colors[@]}\"; do\n        if [[ ${colors[i]} == \"$1\" ]]; then\n            code=$i\n            break\n        fi\n    done\n\n    if [[ -n $code ]]; then\n        echo \"$code\"\n    else\n        echo \"invalid color: $1\" >&2\n        return 1\n    fi\n}\n\n# silently ignore extra colors\nresult=\"\"\nfor color in \"$1\" \"$2\"; do \n    if code=$(code \"$color\"); then\n        result+=\"$code\"\n    else\n        exit 1\n    fi\ndone\necho \"${result#0}\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 2.1.0.1\n# add test for invalid color\n\n@test \"brown black\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh brown black\n    assert_success\n    assert_output \"10\"\n}\n\n@test \"blue grey\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh blue grey\n    assert_success\n    assert_output \"68\"\n}\n\n@test \"yellow violet\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh yellow violet\n    assert_success\n    assert_output \"47\"\n}\n\n@test \"white red\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh white red\n    assert_success\n    assert_output \"92\"\n}\n\n@test \"orange orange\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh orange orange\n    assert_success\n    assert_output \"33\"\n}\n\n@test \"invalid color\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh foo\n    assert_failure\n    assert_output --partial \"invalid color\"\n}\n\n@test \"one valid color and one invalid color\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh blue foo\n    assert_failure\n    assert_output --partial \"invalid color\"\n}\n\n@test \"one invalid color and one valid color\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh foo blue\n    assert_failure\n    assert_output --partial \"invalid color\"\n}\n\n@test \"ignore too many colors\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh green brown orange\n    assert_success\n    assert_output \"51\"\n}\n\n@test \"black brown\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh black brown\n    assert_success\n    assert_output \"1\"\n}\n\n@test \"black grey\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash resistor_color_duo.sh black grey\n    assert_success\n    assert_output \"8\"\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "bkhl",
+    "guygastineau",
+    "IsaacG",
+    "kotp"
+  ]
+}

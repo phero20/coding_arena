@@ -1,0 +1,53 @@
+{
+  "id": "java:acronym",
+  "trackSlug": "java",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "c31bbc6d-bdcf-44f7-bf35-5f98752e38d0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "for-loops",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Acronym {\n\n    Acronym(String phrase) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    String get() {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}\n",
+  "example_solution": "import java.util.Arrays;\nimport java.util.stream.Collectors;\n\nclass Acronym {\n\n    private String acronym;\n\n    Acronym(String phrase) {\n        this.acronym = generateAcronym(phrase);\n    }\n\n\n    String get() {\n        return acronym;\n    }\n\n    private String generateAcronym(String phrase) {\n        String phraseWithoutUnderscores = phrase.replace(\"_\", \"\");\n        return Arrays.stream(phraseWithoutUnderscores.split(\"(?!')\\\\W\"))\n            .filter(word -> !word.isEmpty()) // Remove empty strings from the result of phrase.split\n            .map(word -> word.substring(0, 1)) // Get the first character of each word\n            .collect(Collectors.joining()) // Concatenate the characters\n            .toUpperCase();\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class AcronymTest {\n    \n    @Test\n    @DisplayName(\"basic\")\n    public void basic() {\n        assertThat(new Acronym(\"Portable Network Graphics\").get())\n                .isEqualTo(\"PNG\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"lowercase words\")\n    public void lowercaseWords() {\n        assertThat(new Acronym(\"Ruby on Rails\").get())\n                .isEqualTo(\"ROR\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"punctuation\")\n    public void punctuation() {\n        assertThat(new Acronym(\"First In, First Out\").get())\n                .isEqualTo(\"FIFO\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"all caps word\")\n    public void nonAcronymAllCapsWord() {\n        assertThat(new Acronym(\"GNU Image Manipulation Program\").get())\n                .isEqualTo(\"GIMP\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"punctuation without whitespace\")\n    public void punctuationWithoutWhitespace() {\n        assertThat(new Acronym(\"Complementary metal-oxide semiconductor\").get())\n                .isEqualTo(\"CMOS\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"very long abbreviation\")\n    public void veryLongAbbreviation() {\n        assertThat(new Acronym(\"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\").get())\n                .isEqualTo(\"ROTFLSHTMDCOALM\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"consecutive delimiters\")\n    public void consecutiveDelimiters() {\n        assertThat(new Acronym(\"Something - I made up from thin air\").get())\n                .isEqualTo(\"SIMUFTA\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"apostrophes\")\n    public void apostrophes() {\n        assertThat(new Acronym(\"Halley's Comet\").get())\n                .isEqualTo(\"HC\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"underscore emphasis\")\n    public void underscoreEmphasis() {\n        assertThat(new Acronym(\"The Road _Not_ Taken\").get())\n                .isEqualTo(\"TRNT\");\n    }\n\n\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "aadityakulkarni",
+    "FridaTveit",
+    "jmrunkle",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "miranikaran01",
+    "mirkoperillo",
+    "moaxcp",
+    "msomji",
+    "muzimuzhi",
+    "rohit1104",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "stkent",
+    "TimoleonLatinopoulos",
+    "vasouv",
+    "victorvess",
+    "vivshaw",
+    "Zaldrick",
+    "Zhiyuan-Amos"
+  ]
+}

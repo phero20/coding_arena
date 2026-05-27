@@ -1,0 +1,26 @@
+{
+  "id": "idris:scrabble-score",
+  "trackSlug": "idris",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "8ec610fd-0700-4869-9f78-072fd39bace5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "module ScrabbleScore\n\nexport\nscore : String -> Int\nscore word = ?score_rhs\n",
+  "example_solution": "module ScrabbleScore\n\nimport Data.String\n\nexport\nscore : String -> Int\nscore = sum . map letterScore . unpack . toUpper\n  where letterScore : Char -> Int\n        letterScore 'A' = 1\n        letterScore 'E' = 1\n        letterScore 'I' = 1\n        letterScore 'O' = 1\n        letterScore 'U' = 1\n        letterScore 'L' = 1\n        letterScore 'N' = 1\n        letterScore 'R' = 1\n        letterScore 'S' = 1\n        letterScore 'T' = 1\n        letterScore 'D' = 2\n        letterScore 'G' = 2\n        letterScore 'B' = 3\n        letterScore 'C' = 3\n        letterScore 'M' = 3\n        letterScore 'P' = 3\n        letterScore 'F' = 4\n        letterScore 'H' = 4\n        letterScore 'V' = 4\n        letterScore 'W' = 4\n        letterScore 'Y' = 4\n        letterScore 'K' = 5\n        letterScore 'J' = 8\n        letterScore 'X' = 8\n        letterScore 'Q' = 10\n        letterScore 'Z' = 10\n        letterScore _ = 0\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport ScrabbleScore\n\ntests : List Test\ntests =\n  [ test \"lowercase letter\"          (assertEq (score \"a\") 1)\n  , test \"uppercase letter\"          (assertEq (score \"A\") 1)\n  , test \"valuable letter\"           (assertEq (score \"f\") 4)\n  , test \"short word\"                (assertEq (score \"at\") 2)\n  , test \"short, valuable word\"      (assertEq (score \"zoo\") 12)\n  , test \"medium word\"               (assertEq (score \"street\") 6)\n  , test \"medium, valuable word\"     (assertEq (score \"quirky\") 22)\n  , test \"long, mixed-case word\"     (assertEq (score \"OxyphenButazone\") 41)\n  , test \"english-like word\"         (assertEq (score \"pinata\") 8)\n  , test \"empty input\"               (assertEq (score \"\") 0)\n  , test \"entire alphabet available\" (assertEq (score \"abcdefghijklmnopqrstuvwxyz\") 87)\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

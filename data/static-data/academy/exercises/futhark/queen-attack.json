@@ -1,0 +1,26 @@
+{
+  "id": "futhark:queen-attack",
+  "trackSlug": "futhark",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "b8e8710d-fd7d-4a13-b138-00864b8fe0ad",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "type Queen = { row: i32, column: i32 }\n\nlet create (row: i32) (column: i32): Queen = ???\n\nlet can_attack (white_queen: Queen) (black_queen: Queen): bool = ???\n",
+  "example_solution": "type Queen = { row: i32, column: i32 }\n\nlet create (row: i32) (column: i32): Queen =\n  assert (row >= 0 && row <= 7 && column >= 0 && column <= 7) { row, column }\n\nlet can_attack (white_queen: Queen) (black_queen: Queen): bool =\n  white_queen.row == black_queen.row ||\n  white_queen.column == black_queen.column ||\n  i32.abs (white_queen.row - black_queen.row) == i32.abs (white_queen.column - black_queen.column)\n",
+  "test_code": "import \"queen_attack\"\n\n-- queen with a valid position\n-- ==\n-- entry: test_create\n-- input { 2 2 }\n-- output { true }\n\n-- queen must have positive row\n-- ==\n-- entry: test_create\n-- input { -2 2 }\n-- error: Error*\n\n-- queen must have row on board\n-- ==\n-- entry: test_create\n-- input { 8 4 }\n-- error: Error*\n\n-- queen must have positive column\n-- ==\n-- entry: test_create\n-- input { 2 -2 }\n-- error: Error*\n\n-- queen must have column on board\n-- ==\n-- entry: test_create\n-- input { 4 8 }\n-- error: Error*\n\n-- cannot attack\n-- ==\n-- entry: test_can_attack\n-- input { 2 4 6 6 }\n-- output { false }\n\n-- can attack on same row\n-- ==\n-- entry: test_can_attack\n-- input { 2 4 2 6 }\n-- output { true }\n\n-- can attack on same column\n-- ==\n-- entry: test_can_attack\n-- input { 4 5 2 5 }\n-- output { true }\n\n-- can attack on first diagonal\n-- ==\n-- entry: test_can_attack\n-- input { 2 2 0 4 }\n-- output { true }\n\n-- can attack on second diagonal\n-- ==\n-- entry: test_can_attack\n-- input { 2 2 3 1 }\n-- output { true }\n\n-- can attack on third diagonal\n-- ==\n-- entry: test_can_attack\n-- input { 2 2 1 1 }\n-- output { true }\n\n-- can attack on fourth diagonal\n-- ==\n-- entry: test_can_attack\n-- input { 1 7 0 6 }\n-- output { true }\n\n-- cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal\n-- ==\n-- entry: test_can_attack\n-- input { 4 1 2 5 }\n-- output { false }\n\nentry test_create (row: i32) (column: i32): bool =\n  let queen = create row column\n  in queen.row == row && queen.column == column\n\nentry test_can_attack (white_queen_row: i32) (white_queen_column: i32) (black_queen_row: i32) (black_queen_column: i32): bool =\n  let white_queen = create white_queen_row white_queen_column\n  let black_queen = create black_queen_row black_queen_column\n  in can_attack white_queen black_queen\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

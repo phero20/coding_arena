@@ -1,0 +1,30 @@
+{
+  "id": "idris:accumulate",
+  "trackSlug": "idris",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "06242da7-4796-482a-a467-358b22128c32",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Accumulate\n\nexport\naccumulate : (a -> b) -> List a -> List b\naccumulate f xs = ?accumulate_rhs\n",
+  "example_solution": "module Accumulate\n\nexport\naccumulate : (a -> b) -> List a -> List b\naccumulate f [] = []\naccumulate f (x::xs) = f x :: accumulate f xs\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport Accumulate\nimport Data.String\n\ntests : List Test\ntests =\n  [ test \"accumulate empty\"            (assertEq (accumulate (\\x => x * x) []) (the (List Int) []))\n  , test \"accumulate squares\"          (assertEq (accumulate (\\x => x * x) [1, 2, 3]) [1, 4, 9])\n  , test \"accumulate upcases\"          (assertEq (accumulate Data.String.toUpper [\"Hello\", \"world\"]) [\"HELLO\", \"WORLD\"])\n  , test \"accumulate reversed strings\" (assertEq (accumulate (pack . reverse . unpack) [\"the\", \"quick\", \"brown\", \"fox\", \"etc\"]) [\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"])\n  , test \"accumulate recursively\"      (assertEq (accumulate (\\x => accumulate (\\y => x ++ y) [\"1\", \"2\", \"3\"]) [\"a\", \"b\", \"c\"]) [[\"a1\", \"a2\", \"a3\"], [\"b1\", \"b2\", \"b3\"], [\"c1\", \"c2\", \"c3\"]])\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [],
+  "contributors": [
+    "keiravillekode",
+    "ktosiek",
+    "kytrinyx",
+    "NobbZ",
+    "yurrriq"
+  ]
+}

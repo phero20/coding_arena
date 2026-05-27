@@ -1,0 +1,26 @@
+{
+  "id": "arturo:difference-of-squares",
+  "trackSlug": "arturo",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "e8bb8ee7-1740-43f1-b3d3-33a1754d483f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "squareOfSum: function [n][\n    panic \"Please implement the squareOfSum function\"\n]\n\nsumOfSquares: function [n][\n    panic \"Please implement the sumOfSquares function\"\n]\n\ndifferenceOfSquares: function [n][\n    panic \"Please implement the differenceOfSquares function\"\n]\n",
+  "example_solution": "square: $ => [& ^ 2]\nsquareOfSum: $ => [square sum 1..&]\nsumOfSquares: $ => [sum map 1..& => square]\ndifferenceOfSquares: $ [n][(squareOfSum n) - (sumOfSquares n)]\n",
+  "test_code": "import.version:3.0.0 {unitt}! \nimport {src/difference-of-squares}!\n\ndescribe \"Difference of Squares\"[\n    it \"square of sum 1\" [\n        expects.be:'equal? @[1 squareOfSum 1]\n    ]\n\n    it.skip \"square of sum 5\" [\n        expects.be:'equal? @[225 squareOfSum 5]\n    ]\n\n    it.skip \"square of sum 100\" [\n        expects.be:'equal? @[25502500 squareOfSum 100]\n    ]\n\n    it.skip \"sum of squares 1\" [\n        expects.be:'equal? @[1 sumOfSquares 1]\n    ]\n\n    it.skip \"sum of squares 5\" [\n        expects.be:'equal? @[55 sumOfSquares 5]\n    ]\n\n    it.skip \"sum of squares 100\" [\n        expects.be:'equal? @[338350 sumOfSquares 100]\n    ]\n\n    it.skip \"difference of squares 1\" [\n        expects.be:'equal? @[0 differenceOfSquares 1]\n    ]\n\n    it.skip \"difference of squares 5\" [\n        expects.be:'equal? @[170 differenceOfSquares 5]\n    ]\n\n    it.skip \"difference of squares 100\" [\n        expects.be:'equal? @[25164150 differenceOfSquares 100]\n    ]\n]\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

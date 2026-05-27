@@ -1,0 +1,41 @@
+{
+  "id": "fsharp:simple-linked-list",
+  "trackSlug": "fsharp",
+  "slug": "simple-linked-list",
+  "name": "Simple Linked List",
+  "uuid": "e86e88a0-802c-41f4-b2a1-c7a81b8e87de",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a simple linked list implementation that uses Elements and a List.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "interfaces",
+    "members"
+  ],
+  "prerequisites": [
+    "interfaces",
+    "lists",
+    "members",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nWrite a prototype of the music player application.\n\nFor the prototype, each song will simply be represented by a number.\nGiven a range of numbers (the song IDs), create a singly linked list.\n\nGiven a singly linked list, you should be able to reverse the list to play the songs in the opposite order.\n\n~~~~exercism/note\nThe linked list is a fundamental data structure in computer science, often used in the implementation of other data structures.\n\nThe simplest kind of linked list is a **singly** linked list.\nThat means that each element (or \"node\") contains data, along with something that points to the next node in the list.\n\nIf you want to dig deeper into linked lists, check out [this article][intro-linked-list] that explains it using nice drawings.\n\n[intro-linked-list]: https://medium.com/basecs/whats-a-linked-list-anyway-part-1-d8b7e6508b9d\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a music streaming company.\n\nYou've been tasked with creating a playlist feature for your music player application.\n",
+  "hints": null,
+  "starter_code": "module SimpleLinkedList\n\n//TODO: define LinkedList type\n\nlet nil = failwith \"You need to implement this function.\"\n\nlet create x n = failwith \"You need to implement this function.\"\n\nlet isNil x = failwith \"You need to implement this function.\"\n\nlet next x = failwith \"You need to implement this function.\"\n\nlet datum x = failwith \"You need to implement this function.\"\n\nlet toList x = failwith \"You need to implement this function.\"\n\nlet fromList xs = failwith \"You need to implement this function.\"\n\nlet reverse x = failwith \"You need to implement this function.\"",
+  "example_solution": "module SimpleLinkedList\n\ntype LinkedList<'a> = \n    | Nil \n    | Element of datum:'a * next:LinkedList<'a>\n\nlet nil = Nil\n\nlet create x n = Element (x, n)\n\nlet isNil x = \n    match x with\n    | Nil -> true\n    | _   -> false\n\nlet next x = \n    match x with\n    | Nil -> Nil\n    | Element (_, n) -> n\n\nlet datum x = \n    match x with\n    | Nil -> failwith \"The nil list has no datum.\"\n    | Element (y, _) -> y\n\nlet toList x = \n    let rec loop acc item = \n        match item with\n        | Nil -> acc |> List.rev\n        | Element (b, n) -> loop (b :: acc) n\n\n    loop [] x\n\nlet fromList xs = List.foldBack create xs Nil\n\nlet reverse x = x |> toList |> List.rev |> fromList",
+  "test_code": "// This file was created manually and its version is 1.0.0.\n\nmodule SimpleLinkedListTest\n\nopen Xunit\nopen FsUnit.Xunit\n\nopen SimpleLinkedList\n\n[<Fact>]\nlet ``Empty list`` () =\n    let list = nil\n    isNil list |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Single item list value`` () =\n    let list = create 1 nil\n    datum list |> should equal 1\n        \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Single item list has no next item`` () =\n    let list = create 1 nil\n    next list |> isNil |> should equal true\n        \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two item list first value`` () =\n    let list = create 2 (create 1 nil)\n    datum list |> should equal 2\n    \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two item list second value`` () =\n    let list = create 2 (create 1 nil)\n    next list |> datum |> should equal 1\n    \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two item list second item has no next`` () =\n    let list = create 2 (create 1 nil)\n    next list |> next |> isNil |> should equal true\n        \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``To list`` () =\n    let values = create 2 (create 1 nil) |> toList\n    values |> should equal [2; 1]\n        \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``From list`` () =\n    let list = fromList [11; 7; 5; 3; 2]\n    list |> datum |> should equal 11\n    list |> next |> datum |> should equal 7\n    list |> next |> next |> datum |> should equal 5\n    list |> next |> next |> next |> datum |> should equal 3\n    list |> next |> next |> next |> next |> datum |> should equal 2\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reverse length 1`` () =\n    let values = [1..1]\n    let list = fromList values\n    let reversed = reverse list\n    reversed |> toList |> should equal <| List.rev values\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reverse length 2`` () =\n    let values = [1..2]\n    let list = fromList values\n    let reversed = reverse list\n    reversed |> toList |> should equal <| List.rev values \n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reverse length 10`` () =\n    let values = [1..10]\n    let list = fromList values\n    let reversed = reverse list\n    reversed |> toList |> should equal <| List.rev values \n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reverse length 100`` () =\n    let values = [1..100]\n    let list = fromList values\n    let reversed = reverse list\n    reversed |> toList |> should equal <| List.rev values \n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Roundtrip length 1`` () =\n    let values = [1..1]\n    let listValues = fromList values\n    listValues |> toList |> should equal values\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Roundtrip length 2`` () =\n    let values = [1..2]\n    let listValues = fromList values\n    listValues |> toList |> should equal values\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Roundtrip length 10`` () =\n    let values = [1..10]\n    let listValues = fromList values\n    listValues |> toList |> should equal values\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Roundtrip length 100`` () =\n    let values = [1..100]\n    let listValues = fromList values\n    listValues |> toList |> should equal values\n",
+  "source": "Inspired by 'Data Structures and Algorithms with Object-Oriented Design Patterns in Ruby', singly linked-lists.",
+  "source_url": "https://web.archive.org/web/20160731005714/http://brpreiss.com/books/opus8/html/page96.html",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "alexyarovoy",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

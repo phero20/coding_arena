@@ -1,0 +1,28 @@
+{
+  "id": "dart:nth-prime",
+  "trackSlug": "dart",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "b470633d-6d2c-4245-92eb-37ea80500f2b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class NthPrime {\n  // Put your code here\n}\n",
+  "example_solution": "import 'dart:math';\n\nclass NthPrime {\n  int prime(int number) {\n    if (number < 1) {\n      throw new ArgumentError('There is no zeroth prime');\n    }\n\n    int primes = 0;\n    int i = 1;\n\n    while (primes < number) {\n      i += 1;\n      if (_isPrime(i)) {\n        primes += 1;\n      }\n    }\n    return i;\n  }\n\n  bool _isPrime(int n) {\n    if (n == 1) {\n      return false;\n    }\n    if (n == 2) {\n      return true;\n    }\n    for (int i = 2; i <= sqrt(n); i++) {\n      if (n % i == 0) {\n        return false;\n      }\n    }\n    return true;\n  }\n}\n",
+  "test_code": "import 'package:nth_prime/nth_prime.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  final nthPrime = NthPrime();\n\n  group('NthPrime', () {\n    test('first prime', () {\n      final result = nthPrime.prime(1);\n      expect(result, equals(2));\n    }, skip: false);\n\n    test('second prime', () {\n      final result = nthPrime.prime(2);\n      expect(result, equals(3));\n    }, skip: true);\n\n    test('sixth prime', () {\n      final result = nthPrime.prime(6);\n      expect(result, equals(13));\n    }, skip: true);\n\n    test('big prime', () {\n      final result = nthPrime.prime(10001);\n      expect(result, equals(104743));\n    }, skip: true);\n\n    test('there is no zeroth prime', () {\n      expect(\n          () => nthPrime.prime(0),\n          throwsA(isA<ArgumentError>()\n              .having((e) => e.toString(), 'message', 'Invalid argument(s): There is no zeroth prime')));\n    }, skip: true);\n  });\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

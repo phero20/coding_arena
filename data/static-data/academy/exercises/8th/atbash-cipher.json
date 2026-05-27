@@ -1,0 +1,30 @@
+{
+  "id": "8th:atbash-cipher",
+  "trackSlug": "8th",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "104bb694-ec6b-4213-bc9d-ddeebb0bcc2b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\\ encode TO a cipher\n: >atbash \\ s -- s\n;\n\n\\ decode FROM a cipher\n: atbash> \\ s -- s\n;\n",
+  "example_solution": "\"abcdefghijklmnopqrstuvwxyz\" s:rev constant cipher\n\n: (atbash)\n  /[^[:alnum:]]/ \"\" s:replace!\n  (\n    dup '0 '9 n:between\n    !if\n      'a n:-\n      cipher swap s:@ nip\n    then\n  ) s:map ;\n\n\n\\ Encode a string to atbash:\n: >atbash \\ s -- s\n  s:lc\n  (atbash)\n  [5] s:/\n  \" \" a:join ;\n\n\n\\ Decode a string from atbash:\n: atbash> \\ s -- s\n  (atbash) ;\n",
+  "test_code": "\"atbash-cipher.8th\" f:include\nneeds exercism/test\nwith: test\n14 tests\n\n\"encode yes\"\n  ( \"yes\" >atbash )\n  \"bvh\"\n  equal?\nSKIP-REST-OF-TESTS\n\"encode no\"\n  ( \"no\" >atbash )\n  \"ml\"\n  equal?\n\"encode OMG\"\n  ( \"OMG\" >atbash )\n  \"lnt\"\n  equal?\n\"encode spaces\"\n  ( \"O M G\" >atbash )\n  \"lnt\"\n  equal?\n\"encode mindblowingly\"\n  ( \"mindblowingly\" >atbash )\n  \"nrmwy oldrm tob\"\n  equal?\n\"encode numbers\"\n  ( \"Testing,1 2 3, testing.\" >atbash )\n  \"gvhgr mt123 gvhgr mt\"\n  equal?\n\"encode deep thought\"\n  ( \"Truth is fiction.\" >atbash )\n  \"gifgs rhurx grlm\"\n  equal?\n\"encode all the letters\"\n  ( \"The quick brown fox jumps over the lazy dog.\" >atbash )\n  \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n  equal?\n\n\"decode exercism\"\n  ( \"vcvix rhn\" atbash> )\n  \"exercism\"\n  equal?\n\"decode a sentence\"\n  ( \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\" atbash> )\n  \"anobstacleisoftenasteppingstone\"\n  equal?\n\"decode numbers\"\n  ( \"gvhgr mt123 gvhgr mt\" atbash> )\n  \"testing123testing\"\n  equal?\n\"decode all the letters\"\n  ( \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\" atbash> )\n  \"thequickbrownfoxjumpsoverthelazydog\"\n  equal?\n\"decode with too many spaces\"\n  ( \"vc vix    r hn\" atbash> )\n  \"exercism\"\n  equal?\n\"decode with no spaces\"\n  ( \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\" atbash> )\n  \"anobstacleisoftenasteppingstone\"\n  equal?\n\nend-of-tests\n;with\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "jalih",
+    "ronaaron",
+    "axtens"
+  ]
+}

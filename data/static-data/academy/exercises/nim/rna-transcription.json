@@ -1,0 +1,29 @@
+{
+  "id": "nim:rna-transcription",
+  "trackSlug": "nim",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "532d4c60-52ff-4271-a346-b7c00ca83560",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA Complement Transcription.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**) and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**) and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "proc toRna*(s: string): string =\n  discard\n",
+  "example_solution": "func toRna*(s: string): string =\n  result = newString(s.len)\n  for i, c in s:\n    result[i] =\n      case c\n      of 'A': 'U'\n      of 'G': 'C'\n      of 'C': 'G'\n      of 'T': 'A'\n      else:\n        raise newException(ValueError, \"Invalid nucleotide: \" & c)\n",
+  "test_code": "import unittest\nimport rna_transcription\n\nsuite \"RNA Transcription\":\n  test \"empty RNA sequence\":\n    check toRna(\"\") == \"\"\n\n  test \"RNA complement of cytosine is guanine\":\n    check toRna(\"C\") == \"G\"\n\n  test \"RNA complement of guanine is cytosine\":\n    check toRna(\"G\") == \"C\"\n\n  test \"RNA complement of thymine is adenine\":\n    check toRna(\"T\") == \"A\"\n\n  test \"RNA complement of adenine is uracil\":\n    check toRna(\"A\") == \"U\"\n\n  test \"RNA complement\":\n    check toRna(\"ACGTGGTCTTAA\") == \"UGCACCAGAAUU\"\n\n  test \"raise ValueError on invalid nucleotide\":\n    expect(ValueError):\n      discard toRna(\"Q\")\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "clementi"
+  ],
+  "contributors": [
+    "amscotti",
+    "ee7"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "r:robot-name",
+  "trackSlug": "r",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "445bd3fd-011d-4a8f-aa83-5acc53225679",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "new_robot <- function() {\n\n}\n\nreset_robot <- function(robot) {\n\n}\n",
+  "example_solution": "new_robot <- function() {\n  structure(\n    list(\n      name = random_name()\n    ),\n    class = \"robot\"\n  )\n}\n\nreset_robot <- function(robot) {\n  robot$name <- random_name()\n  robot\n}\n\nrandom_name <- function() {\n  paste0(\n    c(sample(LETTERS, 2, replace = TRUE), sample(0:9, 3, replace = TRUE)),\n    collapse = \"\"\n  )\n}\n",
+  "test_code": "source(\"./robot-name.R\")\nlibrary(testthat)\n\ntest_that(\"Robot has a class\", {\n  robot <- new_robot()\n  expect_s3_class(robot, \"robot\")\n})\n\ntest_that(\"Robot has a name\", {\n  robot <- new_robot()\n  expect_match(robot$name, \"^[A-Z]{2}\\\\d{3}$\")\n})\n\ntest_that(\"Name is the same each time\", {\n  robot <- new_robot()\n  expect_equal(robot$name, robot$name)\n})\n\ntest_that(\"Two different robots have different names\", {\n  robot1 <- new_robot()\n  robot2 <- new_robot()\n  expect_true(robot1$name != robot2$name)\n})\n\ntest_that(\"Can reset the name\", {\n  robot <- new_robot()\n  reset_robot <- reset_robot(robot)\n  expect_true(robot$name != reset_robot$name)\n})\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

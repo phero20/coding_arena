@@ -1,0 +1,28 @@
+{
+  "id": "d:isogram",
+  "trackSlug": "d",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "833e59f1-6f81-405f-9412-7d0c42aaa2cb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module isogram;\n\npure bool isIsogram(immutable string phrase)\n{\n    // implement this function\n}\n\nunittest\n{\n    immutable int allTestsEnabled = 0;\n\n    // Empty string\n    assert(isIsogram(\"\"));\n\n    static if (allTestsEnabled)\n    {\n        // Isogram with only lower case characters\n        assert(isIsogram(\"isogram\"));\n\n        // Word with one duplicated character\n        assert(!isIsogram(\"eleven\"));\n\n        // Word with one duplicated character from the end of the alphabet\n        assert(!isIsogram(\"zzyzx\"));\n\n        // Longest reported english isogram\n        assert(isIsogram(\"subdermatoglyphic\"));\n\n        // Word with duplicated character in mixed case\n        assert(!isIsogram(\"Alphabet\"));\n\n        // Word with duplicated character in mixed case, lowercase first\n        assert(!isIsogram(\"alphAbet\"));\n\n        // Hypothetical isogrammic word with hyphen\n        assert(isIsogram(\"thumbscrew-japingly\"));\n\n        // Hypothetical word with duplicated character following hyphen\n        assert(!isIsogram(\"thumbscrew-jappingly\"));\n\n        // Isogram with duplicated hyphen\n        assert(isIsogram(\"six-year-old\"));\n\n        // Made-up name that is an isogram\n        assert(isIsogram(\"Emily Jung Schwartzkopf\"));\n\n        // Duplicated character in the middle\n        assert(!isIsogram(\"accentor\"));\n\n        // Same first and last characters\n        assert(!isIsogram(\"angola\"));\n    }\n}\n",
+  "example_solution": "module isogram;\n\nimport std.algorithm : count, uniq;\nimport std.algorithm.iteration : filter;\nimport std.algorithm.sorting : sort;\nimport std.ascii : isAlpha;\nimport std.string : toLower;\nimport std.utf : byCodeUnit;\n\npure bool isIsogram(immutable string phrase)\n{\n    char[] phraseArray = phrase.toLower.dup;\n    auto clean = sort(phraseArray.byCodeUnit).filter!(isAlpha);\n    return clean.count == clean.uniq.count;\n}\n",
+  "test_code": "module isogram;\n\npure bool isIsogram(immutable string phrase)\n{\n    // implement this function\n}\n\nunittest\n{\n    immutable int allTestsEnabled = 0;\n\n    // Empty string\n    assert(isIsogram(\"\"));\n\n    static if (allTestsEnabled)\n    {\n        // Isogram with only lower case characters\n        assert(isIsogram(\"isogram\"));\n\n        // Word with one duplicated character\n        assert(!isIsogram(\"eleven\"));\n\n        // Word with one duplicated character from the end of the alphabet\n        assert(!isIsogram(\"zzyzx\"));\n\n        // Longest reported english isogram\n        assert(isIsogram(\"subdermatoglyphic\"));\n\n        // Word with duplicated character in mixed case\n        assert(!isIsogram(\"Alphabet\"));\n\n        // Word with duplicated character in mixed case, lowercase first\n        assert(!isIsogram(\"alphAbet\"));\n\n        // Hypothetical isogrammic word with hyphen\n        assert(isIsogram(\"thumbscrew-japingly\"));\n\n        // Hypothetical word with duplicated character following hyphen\n        assert(!isIsogram(\"thumbscrew-jappingly\"));\n\n        // Isogram with duplicated hyphen\n        assert(isIsogram(\"six-year-old\"));\n\n        // Made-up name that is an isogram\n        assert(isIsogram(\"Emily Jung Schwartzkopf\"));\n\n        // Duplicated character in the middle\n        assert(!isIsogram(\"accentor\"));\n\n        // Same first and last characters\n        assert(!isIsogram(\"angola\"));\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "petertseng"
+  ]
+}

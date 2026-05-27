@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:leap",
+  "trackSlug": "sqlite",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "edfe7d3b-cba7-4fb9-9120-c316576e4164",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "-- Schema: CREATE TABLE \"leap\" ( \"year\" INT, \"is_leap\" BOOL);\n-- Task: update the leap table and set the is_leap based on the year field.\n",
+  "example_solution": "UPDATE leap\nSET\n  is_leap = 1\nWHERE\n  year % 4 = 0\n  AND (\n    year % 100 != 0\n    OR year % 400 = 0\n  );\n",
+  "test_code": "-- Setup test table and read in student solution:\n.read ./test_setup.sql\n-- Test cases:\nINSERT INTO\n  tests (name, uuid, year, result)\nVALUES\n  (\n    'year not divisible by 4 in common year',\n    '6466b30d-519c-438e-935d-388224ab5223',\n    2015,\n    0\n  ),\n  (\n    'year divisible by 2, not divisible by 4 in common year',\n    'ac227e82-ee82-4a09-9eb6-4f84331ffdb0',\n    1970,\n    0\n  ),\n  (\n    'year divisible by 4, not divisible by 100 in leap year',\n    '4fe9b84c-8e65-489e-970b-856d60b8b78e',\n    1996,\n    1\n  ),\n  (\n    'year divisible by 4 and 5 is still a leap year',\n    '7fc6aed7-e63c-48f5-ae05-5fe182f60a5d',\n    1960,\n    1\n  ),\n  (\n    'year divisible by 100, not divisible by 400 in common year',\n    '78a7848f-9667-4192-ae53-87b30c9a02dd',\n    2100,\n    0\n  ),\n  (\n    'year divisible by 100 but not by 3 is still not a leap year',\n    '9d70f938-537c-40a6-ba19-f50739ce8bac',\n    1900,\n    0\n  ),\n  (\n    'year divisible by 400 is leap year',\n    '42ee56ad-d3e6-48f1-8e3f-c84078d916fc',\n    2000,\n    1\n  ),\n  (\n    'year divisible by 400 but not by 125 is still a leap year',\n    '57902c77-6fe9-40de-8302-587b5c27121e',\n    2400,\n    1\n  ),\n  (\n    'year divisible by 200, not divisible by 400 in common year',\n    'c30331f6-f9f6-4881-ad38-8ca8c12520c1',\n    1800,\n    0\n  );\n\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      year,\n      is_leap\n    FROM\n      leap\n  ) AS actual\nWHERE\n  (actual.year, actual.is_leap) = (tests.year, tests.result);\n\n-- Write results and debug info:\n.read ./test_reporter.sql\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "vaeng"
+  ],
+  "contributors": null
+}

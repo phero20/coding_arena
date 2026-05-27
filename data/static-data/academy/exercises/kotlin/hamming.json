@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:hamming",
+  "trackSlug": "kotlin",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "7151ff23-ebc6-43d7-86b6-81cf0dd45309",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "object Hamming {\n\n    fun compute(leftStrand: String, rightStrand: String): Int {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "object Hamming {\n\n    fun compute(leftStrand: String, rightStrand: String): Int {\n        require(leftStrand.length == rightStrand.length) { \"left and right strands must be of equal length\" }\n\n        val commonPairs = leftStrand.zip(rightStrand)\n        return commonPairs.count { it.first != it.second }\n    }\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport org.junit.Rule\nimport org.junit.rules.ExpectedException\nimport kotlin.test.assertEquals\n\nclass HammingTest {\n\n    @Rule\n    @JvmField\n    var expectedException: ExpectedException = ExpectedException.none()\n\n    @Test\n    fun `empty strands`() {\n        assertEquals(0, Hamming.compute(\"\", \"\"))\n    }\n\n    @Ignore\n    @Test\n    fun `single letter identical strands`() {\n        assertEquals(0, Hamming.compute(\"A\", \"A\"))\n    }\n\n    @Ignore\n    @Test\n    fun `single letter different strands`() {\n        assertEquals(1, Hamming.compute(\"G\", \"T\"))\n    }\n\n    @Ignore\n    @Test\n    fun `long identical strands`() {\n        assertEquals(0, Hamming.compute(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\"))\n    }\n\n    @Ignore\n    @Test\n    fun `long different strands`() {\n        assertEquals(9, Hamming.compute(\"GGACGGATTCTG\", \"AGGACGGATTCT\"))\n    }\n\n    @Ignore\n    @Test\n    fun `disallow first strand longer`() {\n        expectedException.expect(IllegalArgumentException::class.java)\n        expectedException.expectMessage(\"left and right strands must be of equal length\")\n\n        Hamming.compute(\"AATG\", \"AAA\")\n    }\n\n    @Ignore\n    @Test\n    fun `disallow second strand longer`() {\n        expectedException.expect(IllegalArgumentException::class.java)\n        expectedException.expectMessage(\"left and right strands must be of equal length\")\n\n        Hamming.compute(\"ATA\", \"AGTG\")\n    }\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "ErikSchierboom",
+    "jtigger",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "vlang:space-age",
+  "trackSlug": "vlang",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "a0a7fe2a-e8bf-4951-a42b-cbec858c0e62",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "module main\n\nfn age(seconds f64, planet string) !f64 {\n\t// age should return an error if the planet is not one of the 8 listed\n}\n",
+  "example_solution": "module main\n\nfn earth_years(seconds f64) f64 {\n\treturn seconds / 31557600\n}\n\nfn age(seconds f64, planet string) !f64 {\n\torbital_period := match planet {\n\t\t\"Mercury\" { 0.2408467} \n\t\t\"Venus\" { 0.61519726 }\n\t\t\"Earth\" { 1.0 }\n\t\t\"Mars\" { 1.8808158 }\n\t\t\"Jupiter\" { 11.862615 }\n\t\t\"Saturn\" { 29.447498 }\n\t\t\"Uranus\" { 84.016846 }\n\t\t\"Neptune\" { 164.79132 }\n\t\telse { -1 }\n\t}\n\tplanet_age := earth_years(seconds) / orbital_period\n\tif planet_age < 0 {\n\t\treturn error(\"$planet is not a valid planet\")\n\t}\n\treturn planet_age\n}",
+  "test_code": "module main\n\nimport math\n\nfn close_enough(a f64, b f64) bool {\n\treturn math.abs(a - b) < 0.01\n}\n\nfn test_age_on_mercury() {\n\tassert close_enough(age(2134835688, 'Mercury')!, 280.88)\n}\n\nfn test_age_on_venus() {\n\tassert close_enough(age(189839836, 'Venus')!, 9.78)\n}\n\nfn test_age_on_earth() {\n\tassert close_enough(age(1000000000, 'Earth')!, 31.69)\n}\n\nfn test_age_on_mars() {\n\tassert close_enough(age(2129871239, 'Mars')!, 35.88)\n}\n\nfn test_age_on_jupiter() {\n\tassert close_enough(age(901876382, 'Jupiter')!, 2.41)\n}\n\nfn test_age_on_saturn() {\n\tassert close_enough(age(2000000000, 'Saturn')!, 2.15)\n}\n\nfn test_age_on_uranus() {\n\tassert close_enough(age(1210123456, 'Uranus')!, 0.46)\n}\n\nfn test_age_on_neptune() {\n\tassert close_enough(age(1821023456, 'Neptune')!, 0.35)\n}\n\nfn test_age_on_sun() {\n\tif res := age(680804807, 'Sun') {\n\t\tassert false, 'trying to find age on the sun should return an error'\n\t} else {\n\t\tassert typeof(err).name == 'IError'\n\t}\n}\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "1ethanhansen"
+  ],
+  "contributors": null
+}

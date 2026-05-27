@@ -1,0 +1,29 @@
+{
+  "id": "emacs-lisp:acronym",
+  "trackSlug": "emacs-lisp",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "a252e137-8a63-4f26-b119-7264f12a257a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; acronym.el --- Acronym (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun acronym (phrase)\n (error \"Delete this S-Expression and write your own implementation\"))\n\n(provide 'acronym)\n;;; acronym.el ends here\n",
+  "example_solution": ";;; acronym.el --- Acronym (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(require 'cl-lib)\n\n(defun acronym (input)\n  (let ((words (split-string (string-replace \"'\" \"\" input) \"\\\\W+\")))\n    (mapconcat (lambda (word) (upcase (substring word 0 1))) words \"\")))\n\n(provide 'acronym)\n;;; acronym.el ends here\n",
+  "test_code": ";;; acronym-test.el --- Tests for Acronym (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code\n\n\n(load-file \"acronym.el\")\n(declare-function acronym \"acronym.el\" (phrase))\n\n\n(ert-deftest basic ()\n  (should (string= (acronym \"Portable Network Graphics\")\n                   \"PNG\")))\n\n\n(ert-deftest lowercase-words ()\n  (should (string= (acronym \"Ruby on Rails\")\n                   \"ROR\")))\n\n\n(ert-deftest punctuation ()\n  (should (string= (acronym \"First In, First Out\")\n                   \"FIFO\")))\n\n\n(ert-deftest all-caps-word ()\n  (should (string= (acronym \"GNU Image Manipulation Program\")\n                   \"GIMP\")))\n\n\n(ert-deftest punctuation-without-white-space ()\n  (should (string= (acronym \"Complementary metal-oxide semiconductor\")\n                   \"CMOS\")))\n\n\n(ert-deftest very-long-abbreviation ()\n  (should (string= (acronym \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\")\n                   \"ROTFLSHTMDCOALM\")))\n\n\n(ert-deftest consecutive-delimiters ()\n  (should (string= (acronym \"Something - I made up from thin air\")\n                   \"SIMUFTA\")))\n\n\n(ert-deftest apostrophes ()\n  (should (string= (acronym \"Halley's Comet\") \"HC\")))\n\n\n(ert-deftest underscore-emphasis ()\n  (should (string= (acronym \"The Road _Not_ Taken\") \"TRNT\")))\n\n\n(provide 'acronym-test)\n;;; acronym-test.el ends here\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "wasamasa"
+  ],
+  "contributors": [
+    "vermiculus",
+    "yurrriq"
+  ]
+}

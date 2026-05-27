@@ -1,0 +1,26 @@
+{
+  "id": "futhark:rotational-cipher",
+  "trackSlug": "futhark",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "cdcd3ed8-14a9-4cf8-8545-408986edb6fb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def rotate [n] (shift_key: i32) (text: [n]u8): [n]u8 = ???\n",
+  "example_solution": "def shift (shift_key: u8) (c: u8): u8 =\n  if c >= 'A' && c <= 'Z' then (c - 'A' + shift_key) % 26 + 'A' else\n  if c >= 'a' && c <= 'z' then (c - 'a' + shift_key) % 26 + 'a' else\n  c\n\ndef rotate [n] (shift_key: i32) (text: [n]u8): [n]u8 =\n  text\n  |> map (shift (u8.i32 shift_key))\n",
+  "test_code": "import \"rotational_cipher\"\n\n-- rotate a by 0, same output as input\n-- ==\n-- input { 0 \"a\" }\n-- output { \"a\" }\n\n-- rotate a by 1\n-- ==\n-- input { 1 \"a\" }\n-- output { \"b\" }\n\n-- rotate a by 26, same output as input\n-- ==\n-- input { 26 \"a\" }\n-- output { \"a\" }\n\n-- rotate m by 13\n-- ==\n-- input { 13 \"m\" }\n-- output { \"z\" }\n\n-- rotate n by 13 with wrap around alphabet\n-- ==\n-- input { 13 \"n\" }\n-- output { \"a\" }\n\n-- rotate capital letters\n-- ==\n-- input { 5 \"OMG\" }\n-- output { \"TRL\" }\n\n-- rotate spaces\n-- ==\n-- input { 5 \"O M G\" }\n-- output { \"T R L\" }\n\n-- rotate numbers\n-- ==\n-- input { 4 \"Testing 1 2 3 testing\" }\n-- output { \"Xiwxmrk 1 2 3 xiwxmrk\" }\n\n-- rotate punctuation\n-- ==\n-- input { 21 \"Let's eat, Grandma!\" }\n-- output { \"Gzo'n zvo, Bmviyhv!\" }\n\n-- rotate all letters\n-- ==\n-- input { 13 \"The quick brown fox jumps over the lazy dog.\" }\n-- output { \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\" }\n\nlet main (shift_key: i32) (text: []u8): []u8 =\n  rotate shift_key text\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

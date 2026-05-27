@@ -1,0 +1,32 @@
+{
+  "id": "csharp:knapsack",
+  "trackSlug": "csharp",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "677c9cf8-d94c-423c-aba1-45ff19805655",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "tuples"
+  ],
+  "prerequisites": [
+    "numbers",
+    "arrays",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "public static class Knapsack\n{\n    public static int MaximumValue(int maximumWeight, (int weight, int value)[] items)\n    {\n        throw new System.NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public static class Knapsack\n{\n    public static int MaximumValue(int maximumWeight, (int weight, int value)[] items)\n    {\n        var maxWeightForSize = new int[items.Length + 1, maximumWeight + 1];\n\n        for (var item = 1; item <= items.Length; item++)\n        {\n            for (var capacity = 1; capacity <= maximumWeight; capacity++)\n            {\n                var maxWithCurrent = \n                    capacity >= items[item - 1].weight\n                        ? maxWeightForSize[item - 1, capacity - items[item - 1].weight] + items[item - 1].value\n                        : 0;\n\n                maxWeightForSize[item, capacity] = Math.Max(maxWeightForSize[item - 1, capacity], maxWithCurrent);\n            }\n        }\n\n        return maxWeightForSize[items.Length, maximumWeight];\n    }\n}\n",
+  "test_code": "public class KnapsackTests\n{\n    [Fact]\n    public void No_items()\n    {\n        (int weight, int value)[] items = [];\n        Assert.Equal(0, Knapsack.MaximumValue(100, items));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void One_item_too_heavy()\n    {\n        (int weight, int value)[] items = [(weight: 100, value: 1)];\n        Assert.Equal(0, Knapsack.MaximumValue(10, items));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Five_items_cannot_be_greedy_by_weight()\n    {\n        (int weight, int value)[] items = [(weight: 2, value: 5), (weight: 2, value: 5), (weight: 2, value: 5), (weight: 2, value: 5), (weight: 10, value: 21)];\n        Assert.Equal(21, Knapsack.MaximumValue(10, items));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Five_items_cannot_be_greedy_by_value()\n    {\n        (int weight, int value)[] items = [(weight: 2, value: 20), (weight: 2, value: 20), (weight: 2, value: 20), (weight: 2, value: 20), (weight: 10, value: 50)];\n        Assert.Equal(80, Knapsack.MaximumValue(10, items));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Example_knapsack()\n    {\n        (int weight, int value)[] items = [(weight: 5, value: 10), (weight: 4, value: 40), (weight: 6, value: 30), (weight: 4, value: 50)];\n        Assert.Equal(90, Knapsack.MaximumValue(10, items));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Eight_items()\n    {\n        (int weight, int value)[] items = [(weight: 25, value: 350), (weight: 35, value: 400), (weight: 45, value: 450), (weight: 5, value: 20), (weight: 25, value: 70), (weight: 3, value: 8), (weight: 2, value: 5), (weight: 2, value: 5)];\n        Assert.Equal(900, Knapsack.MaximumValue(104, items));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Fifteen_items()\n    {\n        (int weight, int value)[] items = [(weight: 70, value: 135), (weight: 73, value: 139), (weight: 77, value: 149), (weight: 80, value: 150), (weight: 82, value: 156), (weight: 87, value: 163), (weight: 90, value: 173), (weight: 94, value: 184), (weight: 98, value: 192), (weight: 106, value: 201), (weight: 110, value: 210), (weight: 113, value: 214), (weight: 115, value: 221), (weight: 118, value: 229), (weight: 120, value: 240)];\n        Assert.Equal(1458, Knapsack.MaximumValue(750, items));\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

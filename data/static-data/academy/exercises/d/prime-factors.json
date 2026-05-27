@@ -1,0 +1,28 @@
+{
+  "id": "d:prime-factors",
+  "trackSlug": "d",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "9042f732-2aa4-438c-90ca-7f0da088b9eb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module prime_factors;\n\npure int[] factors(immutable long value)\n{\n    // implement this function\n}\n\nunittest\n{\n    immutable int allTestsEnabled = 0;\n\n    // No factors\n    assert(factors(1) == []);\n\n    static if (allTestsEnabled)\n    {\n        // Prime number\n        assert(factors(2) == [2]);\n\n        // Square of a prime\n        assert(factors(9) == [3, 3]);\n\n        // Cube of a prime\n        assert(factors(8) == [2, 2, 2]);\n\n        // Product of primes and non-primes\n        assert(factors(12) == [2, 2, 3]);\n\n        // Product of primes\n        assert(factors(901_255) == [5, 17, 23, 461]);\n\n        // Factors include a large prime\n        assert(factors(93_819_012_551) == [11, 9539, 894_119]);\n    }\n}\n",
+  "example_solution": "module prime_factors;\n\npure int[] factors(immutable long value)\n{\n    long n = value;\n    int d = 2;\n    int[] result;\n\n    while (n > 1)\n    {\n        while (n % d == 0)\n        {\n            n = n / d;\n            result ~= d;\n        }\n        d++;\n    }\n\n    return result;\n}\n",
+  "test_code": "module prime_factors;\n\npure int[] factors(immutable long value)\n{\n    // implement this function\n}\n\nunittest\n{\n    immutable int allTestsEnabled = 0;\n\n    // No factors\n    assert(factors(1) == []);\n\n    static if (allTestsEnabled)\n    {\n        // Prime number\n        assert(factors(2) == [2]);\n\n        // Square of a prime\n        assert(factors(9) == [3, 3]);\n\n        // Cube of a prime\n        assert(factors(8) == [2, 2, 2]);\n\n        // Product of primes and non-primes\n        assert(factors(12) == [2, 2, 3]);\n\n        // Product of primes\n        assert(factors(901_255) == [5, 17, 23, 461]);\n\n        // Factors include a large prime\n        assert(factors(93_819_012_551) == [11, 9539, 894_119]);\n    }\n}\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "petertseng"
+  ]
+}

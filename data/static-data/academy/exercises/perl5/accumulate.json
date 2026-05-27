@@ -1,0 +1,37 @@
+{
+  "id": "perl5:accumulate",
+  "trackSlug": "perl5",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "f9fcab93-a6d8-4e36-aee5-3333a1c874ce",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "arrays-and-lists",
+    "references",
+    "subroutines"
+  ],
+  "prerequisites": [
+    "references"
+  ],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package Accumulate;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<accumulate>;\n\nsub accumulate ( $list, $func ) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package Accumulate;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<accumulate>;\n\nsub accumulate ( $list, $func ) {\n    my @results;\n\n    for ( @{$list} ) {\n        push @results, $func->($_);\n    }\n\n    return \\@results;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse Accumulate   qw<accumulate>;\nuse experimental qw<signatures>;\n\nis( # begin: 64d97c14-36dd-44a8-9621-2cecebd6ed23\n    accumulate( [], sub ($x) { $x * $x } ),\n    [],\n    \"accumulate empty\",\n); # end: 64d97c14-36dd-44a8-9621-2cecebd6ed23\n\nis( # begin: 00008ed2-4651-4929-8c08-8b4dbd70872e\n    accumulate( [ 1, 2, 3 ], sub ($x) { $x * $x } ),\n    [ 1, 4, 9 ],\n    \"accumulate squares\",\n); # end: 00008ed2-4651-4929-8c08-8b4dbd70872e\n\nis( # begin: 551016da-4396-4cae-b0ec-4c3a1a264125\n    accumulate( [ \"Hello\", \"world\" ], sub ($x) { uc $x } ),\n    [ \"HELLO\", \"WORLD\" ],\n    \"accumulate upcases\",\n); # end: 551016da-4396-4cae-b0ec-4c3a1a264125\n\nis( # begin: cdf95597-b6ec-4eac-a838-3480d13d0d05\n    accumulate( [ \"the\", \"quick\", \"brown\", \"fox\", \"etc\" ], sub ($x) { scalar reverse $x } ),\n    [ \"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\" ],\n    \"accumulate reversed strings\",\n); # end: cdf95597-b6ec-4eac-a838-3480d13d0d05\n\nis( # begin: 0b357334-4cad-49e1-a741-425202edfc7c\n    accumulate( [ \"a\", \"b\", \"c\" ], sub ($x) {\n            accumulate( [ 1 .. 3 ], sub ($y) { $x . $y } );\n    } ),\n    [ [ \"a1\", \"a2\", \"a3\" ], [ \"b1\", \"b2\", \"b3\" ], [ \"c1\", \"c2\", \"c3\" ] ],\n    \"accumulate recursively\",\n); # end: 0b357334-4cad-49e1-a741-425202edfc7c\n\ndone_testing;\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "choroba",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "unison:collatz-conjecture",
+  "trackSlug": "unison",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "5be182a1-5f3a-4b93-aac4-1619508b6052",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "collatzConjecture.steps : Nat -> Optional Nat\ncollatzConjecture.steps n = todo \"implement steps\"\n",
+  "example_solution": "steps : Nat -> Optional Nat\nsteps = cases\n  n | n <= 0 -> None\n  n -> collatzHelper 0 n\n\ncollatzHelper : Nat -> Nat -> Optional Nat\ncollatzHelper t = cases\n  n | n == 1 -> Some t\n  n | Nat.isEven n -> collatzHelper (t + 1) (n / 2)\n  n -> collatzHelper (t + 1) (n * 3 + 1)\n",
+  "test_code": "collatzConjecture.test.ex1 = verify do\n  labeled \"zero steps for one\" do\n    expected = Some 0\n    actual = steps 1\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ncollatzConjecture.test.ex2 = verify do\n  labeled \"divide if even\" do\n    expected = Some 4\n    actual = steps 16\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ncollatzConjecture.test.ex3 = verify do\n  labeled \"even and odd steps\" do\n    expected = Some 9\n    actual = steps 12\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ncollatzConjecture.test.ex4 = verify do\n  labeled \"large number of even and odd steps\" do\n    expected = Some 152\n    actual = steps 1000000\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ncollatzConjecture.test.ex5 = verify do\n  labeled \"zero is an error\" do\n    expected = None\n    actual = steps 0\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ntest> collatzConjecture.tests = join [\n  collatzConjecture.test.ex1,\n  collatzConjecture.test.ex2,\n  collatzConjecture.test.ex3,\n  collatzConjecture.test.ex4,\n  collatzConjecture.test.ex5\n]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "rlmark"
+  ],
+  "contributors": null
+}

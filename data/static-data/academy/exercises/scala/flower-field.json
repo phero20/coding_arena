@@ -1,0 +1,31 @@
+{
+  "id": "scala:flower-field",
+  "trackSlug": "scala",
+  "slug": "flower-field",
+  "name": "Flower Field",
+  "uuid": "33043a5a-4360-43c6-a5bd-0e9c3f4b9069",
+  "type": "practice",
+  "status": null,
+  "blurb": "Mark all the flowers in a garden.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add flower counts to empty squares in a completed Flower Field garden.\nThe garden itself is a rectangle board composed of squares that are either empty (`' '`) or a flower (`'*'`).\n\nFor each empty square, count the number of flowers adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent flowers, leave it empty.\nOtherwise replace it with the count of adjacent flowers.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Flower Field][history] is a compassionate reimagining of the popular game Minesweeper.\nThe object of the game is to find all the flowers in the garden using numeric hints that indicate how many flowers are directly adjacent (horizontally, vertically, diagonally) to a square.\n\"Flower Field\" shipped in regional versions of Microsoft Windows in Italy, Germany, South Korea, Japan and Taiwan.\n\n[history]: https://web.archive.org/web/20020409051321fw_/http://rcm.usr.dsi.unimi.it/rcmweb/fnm/\n",
+  "hints": null,
+  "starter_code": "object FlowerField {\n  def annotate(board: List[String]): List[String] = ???\n}\n",
+  "example_solution": "class Board(rows: List[String]) {\n  lazy val annotate: List[String] =\n    (for (y <- 0 until numRows) yield annotateRow(y)).toList\n\n  private lazy val numRows = rows.length\n  private lazy val numCols = if (rows.isEmpty) 0 else rows.head.length\n  private lazy val boardVector = rows.toVector.map(_.toVector)\n\n  private def annotateRow(y: Int) =\n    (for (x <- 0 until numCols) yield annotateSquare(x, y)).mkString\n\n  private def annotateSquare(x: Int, y: Int) =\n    if (hasFlower(x, y)) flowerChar\n    else neighborsWithFlowers(x, y) match {\n      case 0 => ' '\n      case n => (n + '0').toChar\n    }\n\n  private def neighborsWithFlowers(x: Int, y: Int) = (for (\n    yNeighbor <- Math.max(0, y - 1) to Math.min(numRows - 1, y + 1);\n    xNeighbor <- Math.max(0, x - 1) to Math.min(numCols - 1, x + 1)\n      if (yNeighbor != y || xNeighbor != x) && hasFlower(xNeighbor, yNeighbor)\n  ) yield ()).length\n\n  private def hasFlower(x: Int, y: Int) = isFlowerChar(boardVector(y)(x))\n  private def isFlowerChar(c: Char) = c == flowerChar\n  private val flowerChar = '*'\n}\n\nobject FlowerField {\n  def annotate(board: List[String]): List[String] = new Board(board).annotate\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass FlowerFieldTest extends AnyFunSuite with Matchers {\n\n  test(\"no rows\") {\n    FlowerField.annotate(List()) should be(List())\n  }\n\n  test(\"no columns\") {\n    pending\n    FlowerField.annotate(List(\"\")) should be(List(\"\"))\n  }\n\n  test(\"no flowers\") {\n    pending\n    FlowerField.annotate(List(\"   \",\n                              \"   \",\n                              \"   \")) should be(\n      List(\"   \",\n           \"   \",\n           \"   \"))\n  }\n\n  test(\"garden with only flowers\") {\n    pending\n    FlowerField.annotate(List(\"***\",\n                              \"***\",\n                              \"***\")) should be(\n      List(\"***\",\n           \"***\",\n           \"***\"))\n  }\n\n  test(\"flower surrounded by spaces\") {\n    pending\n    FlowerField.annotate(List(\"   \",\n                              \" * \",\n                              \"   \")) should be(\n      List(\"111\",\n           \"1*1\",\n           \"111\"))\n  }\n\n  test(\"space surrounded by flowers\") {\n    pending\n    FlowerField.annotate(List(\"***\",\n                              \"* *\",\n                              \"***\")) should be(\n      List(\"***\",\n           \"*8*\",\n           \"***\"))\n  }\n\n  test(\"horizontal line\") {\n    pending\n    FlowerField.annotate(List(\" * * \")) should be(List(\"1*2*1\"))\n  }\n\n  test(\"horizontal line, flowers at edges\") {\n    pending\n    FlowerField.annotate(List(\"*   *\")) should be(List(\"*1 1*\"))\n  }\n\n  test(\"vertical line\") {\n    pending\n    FlowerField.annotate(List(\" \",\n                              \"*\",\n                              \" \",\n                              \"*\",\n                              \" \")) should be(\n      List(\"1\",\n           \"*\",\n           \"2\",\n           \"*\",\n           \"1\"))\n  }\n\n  test(\"vertical line, flowers at edges\") {\n    pending\n    FlowerField.annotate(List(\"*\",\n                              \" \",\n                              \" \",\n                              \" \",\n                              \"*\")) should be(\n      List(\"*\",\n           \"1\",\n           \" \",\n           \"1\",\n           \"*\"))\n  }\n\n  test(\"cross\") {\n    pending\n    FlowerField.annotate(List(\"  *  \",\n                              \"  *  \",\n                              \"*****\",\n                              \"  *  \",\n                              \"  *  \")) should be(\n      List(\" 2*2 \",\n           \"25*52\",\n           \"*****\",\n           \"25*52\",\n           \" 2*2 \"))\n  }\n\n  test(\"large garden\") {\n    pending\n    FlowerField.annotate(List(\" *  * \",\n                              \"  *   \",\n                              \"    * \",\n                              \"   * *\",\n                              \" *  * \",\n                              \"      \")) should be(\n      List(\"1*22*1\",\n           \"12*322\",\n           \" 123*2\",\n           \"112*4*\",\n           \"1*22*2\",\n           \"111111\"))\n  }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "keiravillekode",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

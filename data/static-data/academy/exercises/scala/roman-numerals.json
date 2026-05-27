@@ -1,0 +1,35 @@
+{
+  "id": "scala:roman-numerals",
+  "trackSlug": "scala",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "4c08ec90-4c5a-4dae-812c-52899b1a29cf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "import scala.annotation.tailrec\nimport scala.collection.immutable.ListMap\n\nobject RomanNumerals {\n  private def numeralValues = ListMap(\n    1000 -> \"M\",\n    900  -> \"CM\",\n    500  -> \"D\",\n    400  -> \"CD\",\n    100  -> \"C\",\n    90   -> \"XC\",\n    50   -> \"L\",\n    40   -> \"XL\",\n    10   -> \"X\",\n    9    -> \"IX\",\n    5    -> \"V\",\n    4    -> \"IV\",\n    1    -> \"I\"\n  )\n\n  def roman(n: Int) = fromNumber(n, \"\")\n\n  @tailrec\n  private def fromNumber(n: Int, numerals: String): String = {\n    numeralValues.find(_._1 <= n) match {\n      case Some((threshold, numeral)) => fromNumber(n - threshold, numerals + numeral)\n      case None => numerals\n    }\n  }\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.2.0 */\nclass RomanNumeralsTest extends AnyFunSuite with Matchers {\n\n  test(\"1 is a single I\") {\n    RomanNumerals.roman(1) should be (\"I\")\n  }\n\n  test(\"2 is two I's\") {\n    pending\n    RomanNumerals.roman(2) should be (\"II\")\n  }\n\n  test(\"3 is three I's\") {\n    pending\n    RomanNumerals.roman(3) should be (\"III\")\n  }\n\n  test(\"4, being 5 - 1, is IV\") {\n    pending\n    RomanNumerals.roman(4) should be (\"IV\")\n  }\n\n  test(\"5 is a single V\") {\n    pending\n    RomanNumerals.roman(5) should be (\"V\")\n  }\n\n  test(\"6, being 5 + 1, is VI\") {\n    pending\n    RomanNumerals.roman(6) should be (\"VI\")\n  }\n\n  test(\"9, being 10 - 1, is IX\") {\n    pending\n    RomanNumerals.roman(9) should be (\"IX\")\n  }\n\n  test(\"20 is two X's\") {\n    pending\n    RomanNumerals.roman(27) should be (\"XXVII\")\n  }\n\n  test(\"48 is not 50 - 2 but rather 40 + 8\") {\n    pending\n    RomanNumerals.roman(48) should be (\"XLVIII\")\n  }\n\n  test(\"49 is not 40 + 5 + 4 but rather 50 - 10 + 10 - 1\") {\n    pending\n    RomanNumerals.roman(49) should be (\"XLIX\")\n  }\n\n  test(\"50 is a single L\") {\n    pending\n    RomanNumerals.roman(59) should be (\"LIX\")\n  }\n\n  test(\"90, being 100 - 10, is XC\") {\n    pending\n    RomanNumerals.roman(93) should be (\"XCIII\")\n  }\n\n  test(\"100 is a single C\") {\n    pending\n    RomanNumerals.roman(141) should be (\"CXLI\")\n  }\n\n  test(\"60, being 50 + 10, is LX\") {\n    pending\n    RomanNumerals.roman(163) should be (\"CLXIII\")\n  }\n\n  test(\"400, being 500 - 100, is CD\") {\n    pending\n    RomanNumerals.roman(402) should be (\"CDII\")\n  }\n\n  test(\"500 is a single D\") {\n    pending\n    RomanNumerals.roman(575) should be (\"DLXXV\")\n  }\n\n  test(\"900, being 1000 - 100, is CM\") {\n    pending\n    RomanNumerals.roman(911) should be (\"CMXI\")\n  }\n\n  test(\"1000 is a single M\") {\n    pending\n    RomanNumerals.roman(1024) should be (\"MXXIV\")\n  }\n\n  test(\"3000 is three M's\") {\n    pending\n    RomanNumerals.roman(3000) should be (\"MMM\")\n  }\n}",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "abo64",
+    "kytrinyx",
+    "oujesky",
+    "ppartarr",
+    "rajeshpg",
+    "ricemery",
+    "sathish316",
+    "yanick"
+  ]
+}

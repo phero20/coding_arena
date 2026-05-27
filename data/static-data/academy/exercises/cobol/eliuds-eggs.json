@@ -1,0 +1,26 @@
+{
+  "id": "cobol:eliuds-eggs",
+  "trackSlug": "cobol",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "dd8e41b7-bf29-4cfa-b306-11d07b11d1de",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. ELIUDS-EGGS.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-INPUTVARS.\n           05 WS-INPUT             PIC 9(10).\n       01 WS-OUTPUTVARS.\n           05 WS-RESULT            PIC 9999.\n       \n       PROCEDURE DIVISION.\n\n       EGG-COUNT.\n\n",
+  "example_solution": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. ELIUDS-EGGS.\n       AUTHOR. kapitaali.\n       ENVIRONMENT DIVISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-INPUTVARS.\n           05 WS-INPUT             PIC 9(10).\n       01 WS-OUTPUTVARS.\n           05 WS-RESULT            PIC 9999.\n       \n       01 MY-WORKVARS.\n           05 REMAIN               PIC 9.\n\n       PROCEDURE DIVISION.\n\n       EGG-COUNT.\n           MOVE ZERO TO WS-RESULT.\n           PERFORM UNTIL WS-INPUT = 0\n              DIVIDE WS-INPUT BY 2 GIVING WS-INPUT REMAINDER REMAIN\n              IF REMAIN = 1\n                 ADD 1 TO WS-RESULT\n              END-IF\n           END-PERFORM.\n",
+  "test_code": "TestCase \"0 eggs\"\n\tMOVE 0 TO WS-INPUT\n\tPERFORM EGG-COUNT\n\tEXPECT WS-RESULT = 0\n\nTestCase \"1 egg\"\n\tMOVE 16 TO WS-INPUT\n\tPERFORM EGG-COUNT\n\tEXPECT WS-RESULT = 1\n\nTestCase \"4 eggs\"\n\tMOVE 89 TO WS-INPUT\n\tPERFORM EGG-COUNT\n\tEXPECT WS-RESULT = 4\n\nTestCase \"13 eggs\"\n\tMOVE 2000000000 TO WS-INPUT\n\tPERFORM EGG-COUNT\n\tEXPECT WS-RESULT = 13\n\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "kapitaali"
+  ],
+  "contributors": null
+}

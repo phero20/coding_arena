@@ -1,0 +1,26 @@
+{
+  "id": "coffeescript:rotational-cipher",
+  "trackSlug": "coffeescript",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "2861f6ab-d62c-4798-b99a-efe84d9a32bf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RotationalCipher\n  constructor: (shift) ->\n\n  rotate: (text) ->\n\nmodule.exports = RotationalCipher\n",
+  "example_solution": "class RotationalCipher\n  constructor: (@shift) ->\n\n  rotate: (text) ->\n    text.split('').map((char) =>\n      if char.match(/[a-z]/)\n        String.fromCharCode(((char.charCodeAt(0) - 97 + @shift) % 26) + 97)\n      else if char.match(/[A-Z]/)\n        String.fromCharCode(((char.charCodeAt(0) - 65 + @shift) % 26) + 65)\n      else\n        char).join ''\n\nmodule.exports = RotationalCipher\n",
+  "test_code": "RotationalCipher = require './rotational-cipher'\n\ndescribe 'Rotational Cipher', ->\n  it 'rotate a by 0, same output as input', ->\n    cipher = new RotationalCipher 0\n    result = cipher.rotate 'a'\n    expected = 'a'\n    expect(result).toEqual expected\n\n  xit 'rotate a by 1', ->\n    cipher = new RotationalCipher 1\n    result = cipher.rotate 'a'\n    expected = 'b'\n    expect(result).toEqual expected\n\n  xit 'rotate a by 26, same output as input', ->\n    cipher = new RotationalCipher 26\n    result = cipher.rotate 'a'\n    expected = 'a'\n    expect(result).toEqual expected\n\n  xit 'rotate m by 13', ->\n    cipher = new RotationalCipher 13\n    result = cipher.rotate 'm'\n    expected = 'z'\n    expect(result).toEqual expected\n\n  xit 'rotate n by 13 with wrap around alphabet', ->\n    cipher = new RotationalCipher 13\n    result = cipher.rotate 'n'\n    expected = 'a'\n    expect(result).toEqual expected\n\n  xit 'rotate capital letters', ->\n    cipher = new RotationalCipher 5\n    result = cipher.rotate 'OMG'\n    expected = 'TRL'\n    expect(result).toEqual expected\n\n  xit 'rotate spaces', ->\n    cipher = new RotationalCipher 5\n    result = cipher.rotate 'O M G'\n    expected = 'T R L'\n    expect(result).toEqual expected\n\n  xit 'rotate numbers', ->\n    cipher = new RotationalCipher 4\n    result = cipher.rotate 'Testing 1 2 3 testing'\n    expected = 'Xiwxmrk 1 2 3 xiwxmrk'\n    expect(result).toEqual expected\n\n  xit 'rotate punctuation', -> \n    cipher = new RotationalCipher 21\n    result = cipher.rotate \"Let's eat, Grandma!\"\n    expected = \"Gzo'n zvo, Bmviyhv!\"\n    expect(result).toEqual expected\n\n  xit 'rotate all letters', ->\n    cipher = new RotationalCipher 13\n    result = cipher.rotate \"The quick brown fox jumps over the lazy dog.\"\n    expected = \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n    expect(result).toEqual expected\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

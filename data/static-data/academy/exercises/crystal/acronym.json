@@ -1,0 +1,33 @@
+{
+  "id": "crystal:acronym",
+  "trackSlug": "crystal",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "5373e713-f2ab-4b1e-b934-92969174bc48",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "string-methods"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Acronym\n  def self.abbreviate(phrase : String) : String\n    # Write your code for the 'Acronym' exercise in this file.\n  end\nend\n",
+  "example_solution": "class Acronym\n  def self.abbreviate(phrase)\n    phrase.scan(/[A-Z]+['a-z]*|['a-z]+/).map do |word|\n      word[0][0].upcase\n    end.join\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Acronym\" do\n  it \"basic\" do\n    Acronym.abbreviate(\"Portable Network Graphics\").should eq(\"PNG\")\n  end\n\n  pending \"lowercase words\" do\n    Acronym.abbreviate(\"Ruby on Rails\").should eq(\"ROR\")\n  end\n\n  pending \"punctuation\" do\n    Acronym.abbreviate(\"First In, First Out\").should eq(\"FIFO\")\n  end\n\n  pending \"all caps word\" do\n    Acronym.abbreviate(\"GNU Image Manipulation Program\").should eq(\"GIMP\")\n  end\n\n  pending \"punctuation without whitespace\" do\n    Acronym.abbreviate(\"Complementary metal-oxide semiconductor\").should eq(\"CMOS\")\n  end\n\n  pending \"very long abbreviation\" do\n    Acronym.abbreviate(\"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\").should eq(\"ROTFLSHTMDCOALM\")\n  end\n\n  pending \"consecutive delimiters\" do\n    Acronym.abbreviate(\"Something - I made up from thin air\").should eq(\"SIMUFTA\")\n  end\n\n  pending \"apostrophes\" do\n    Acronym.abbreviate(\"Halley's Comet\").should eq(\"HC\")\n  end\n\n  pending \"underscore emphasis\" do\n    Acronym.abbreviate(\"The Road _Not_ Taken\").should eq(\"TRNT\")\n  end\nend\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "bmulvihill"
+  ],
+  "contributors": [
+    "amscotti",
+    "chastell",
+    "issyl0",
+    "mhelmetag"
+  ]
+}

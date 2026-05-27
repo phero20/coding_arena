@@ -1,0 +1,32 @@
+{
+  "id": "javascript:eliuds-eggs",
+  "trackSlug": "javascript",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "2a3ecf62-fb5d-4dac-8369-72e7976a8f57",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "regular-expressions",
+    "rest-and-spread",
+    "arrow-functions",
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Eliud's Eggs' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const eggCount = (displayValue) => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "export const eggCount = (displayValue) =>\n  [...displayValue.toString(2)].reduce(\n    (acc, curr) => (curr === '1' ? (acc += 1) : acc),\n    0,\n  );\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { eggCount } from './eliuds-eggs';\n\ndescribe('EliudsEggs', () => {\n  test('0 eggs', () => {\n    const expected = 0;\n    const actual = eggCount(0);\n    expect(actual).toEqual(expected);\n  });\n\n  xtest('1 egg', () => {\n    const expected = 1;\n    const actual = eggCount(16);\n    expect(actual).toEqual(expected);\n  });\n\n  xtest('4 eggs', () => {\n    const expected = 4;\n    const actual = eggCount(89);\n    expect(actual).toEqual(expected);\n  });\n\n  xtest('13 eggs', () => {\n    const expected = 13;\n    const actual = eggCount(2000000000);\n    expect(actual).toEqual(expected);\n  });\n});\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "Cool-Katt"
+  ],
+  "contributors": null
+}

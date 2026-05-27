@@ -13,6 +13,8 @@ export const apiClient = axios.create({
 
 // Singleton storage for the token getter function (provided by AuthInitializer)
 let getToken: (() => Promise<string | null>) | null = null;
+let isAuthLoaded = false;
+let requestQueue: Array<(tokenGetter: () => Promise<string | null>) => void> = [];
 
 /**
  * Injects the Clerk token getter into the API client.
@@ -20,11 +22,37 @@ let getToken: (() => Promise<string | null>) | null = null;
  */
 export const setTokenGetter = (fn: typeof getToken) => {
   getToken = fn;
+  isAuthLoaded = true;
+  
+  // Flush queued requests now that we have the token getter
+  if (getToken) {
+    requestQueue.forEach((resolve) => resolve(getToken as () => Promise<string | null>));
+  }
+  requestQueue = [];
 };
 
 // --- Request Interceptor ---
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    // If auth hasn't loaded yet, pause the request in the queue
+    if (!isAuthLoaded) {
+      await new Promise<void>((resolve) => {
+        requestQueue.push(async (getter) => {
+          try {
+            const token = await getter();
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+          } catch (err) {
+            console.error("[API Client] Error fetching auth token from queue:", err);
+          }
+          resolve();
+        });
+      });
+      return config;
+    }
+
+    // If auth is already loaded, proceed normally
     if (getToken) {
       try {
         const token = await getToken();

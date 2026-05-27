@@ -1,0 +1,43 @@
+{
+  "id": "ruby:collatz-conjecture",
+  "trackSlug": "ruby",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "af961c87-341c-4dd3-a1eb-272501b9b0e4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "loops",
+    "conditionals",
+    "numbers"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "loops",
+    "numbers",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Collatz Conjecture' exercise in this file. Make the tests in\n`collatz_conjecture_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/collatz-conjecture` directory.\n=end\n",
+  "example_solution": "module CollatzConjecture\n  def self.steps(num)\n    raise ArgumentError if num < 1\n    n = num\n    steps = 0\n    until n == 1\n      steps += 1\n      if n.even?\n        n /= 2\n      else\n        n = 3 * n + 1\n      end\n    end\n    steps\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'collatz_conjecture'\n\nclass CollatzConjectureTest < Minitest::Test\n  def test_zero_steps_for_one\n    # skip\n    assert_equal 0, CollatzConjecture.steps(1)\n  end\n\n  def test_divide_if_even\n    skip\n    assert_equal 4, CollatzConjecture.steps(16)\n  end\n\n  def test_even_and_odd_steps\n    skip\n    assert_equal 9, CollatzConjecture.steps(12)\n  end\n\n  def test_large_number_of_even_and_odd_steps\n    skip\n    assert_equal 152, CollatzConjecture.steps(1_000_000)\n  end\n\n  def test_zero_is_an_error\n    skip\n    assert_raises(ArgumentError) do\n      CollatzConjecture.steps(0)\n    end\n  end\n\n  def test_negative_value_is_an_error\n    skip\n    assert_raises(ArgumentError) do\n      CollatzConjecture.steps(-15)\n    end\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "Insti"
+  ],
+  "contributors": [
+    "ajwann",
+    "budmc29",
+    "cadwallion",
+    "iHiD",
+    "jpotts244",
+    "kotp",
+    "tryantwit"
+  ]
+}

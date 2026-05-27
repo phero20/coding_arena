@@ -1,0 +1,40 @@
+{
+  "id": "go:reverse-string",
+  "trackSlug": "go",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "e2df2756-7a48-4b45-b601-91be91027dbd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "runes"
+  ],
+  "prerequisites": [
+    "runes"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "package reversestring\n\nfunc Reverse(input string) string {\n\tpanic(\"Please implement the Reverse function\")\n}\n",
+  "example_solution": "package reversestring\n\n// Reverse reverses given string\nfunc Reverse(s string) string {\n\trunes := []rune(s)\n\tfor i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {\n\t\trunes[i], runes[j] = runes[j], runes[i]\n\t}\n\treturn string(runes)\n}\n",
+  "test_code": "package reversestring\n\nimport (\n\t\"testing\"\n\t\"testing/quick\"\n)\n\nfunc TestReverse(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Reverse(tc.input); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Reverse(%q) = %q, want: %q\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestReverseMultibyte(t *testing.T) {\n\tfor _, tc := range multiByteCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Reverse(tc.input); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Reverse(%q) = %q, want: %q\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestReverseOfReverse(t *testing.T) {\n\tassertion := func(s string) bool {\n\t\treturn s == Reverse(Reverse(s))\n\t}\n\tif err := quick.Check(assertion, nil); err != nil {\n\t\tt.Fatal(err)\n\t}\n}\n\nfunc BenchmarkReverse(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tReverse(tc.input)\n\t\t}\n\t}\n}\n\n// mutiByteCases adds UTF-8 multi-byte case,\n// since the canonical-data.json (generator data source for cases_test.go)\n// doesn't have any such cases.\nvar multiByteCases = []reverseTestCase{\n\t{\n\t\tdescription: \"a multi-byte test case\",\n\t\tinput:       \"Hello, 世界\",\n\t\texpected:    \"界世 ,olleH\",\n\t},\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "ferhatelmas"
+  ],
+  "contributors": [
+    "billglover",
+    "bitfield",
+    "ekingery",
+    "hilary",
+    "ilmanzo",
+    "leenipper",
+    "sbromberger",
+    "sebito91",
+    "eklatzer"
+  ]
+}

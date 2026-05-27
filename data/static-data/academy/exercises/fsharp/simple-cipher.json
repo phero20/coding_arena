@@ -1,0 +1,44 @@
+{
+  "id": "fsharp:simple-cipher",
+  "trackSlug": "fsharp",
+  "slug": "simple-cipher",
+  "name": "Simple Cipher",
+  "uuid": "df6f311b-9deb-4d07-9a29-3d881556513e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the Vigenère cipher, a simple substitution cipher.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "classes",
+    "members",
+    "randomness"
+  ],
+  "prerequisites": [
+    "classes",
+    "for-loops",
+    "members",
+    "randomness",
+    "strings",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the [Vigenère cipher][wiki].\nThe Vigenère cipher is a simple substitution cipher.\n\n## Cipher terminology\n\nA cipher is an algorithm used to encrypt, or encode, a string.\nThe unencrypted string is called the _plaintext_ and the encrypted string is called the _ciphertext_.\nConverting plaintext to ciphertext is called _encoding_ while the reverse is called _decoding_.\n\nIn a _substitution cipher_, each plaintext letter is replaced with a ciphertext letter which is computed with the help of a _key_.\n(Note, it is possible for replacement letter to be the same as the original letter.)\n\n## Encoding details\n\nIn this cipher, the key is a series of lowercase letters, such as `\"abcd\"`.\nEach letter of the plaintext is _shifted_ or _rotated_ by a distance based on a corresponding letter in the key.\nAn `\"a\"` in the key means a shift of 0 (that is, no shift).\nA `\"b\"` in the key means a shift of 1.\nA `\"c\"` in the key means a shift of 2, and so on.\n\nThe first letter of the plaintext uses the first letter of the key, the second letter of the plaintext uses the second letter of the key and so on.\nIf you run out of letters in the key before you run out of letters in the plaintext, start over from the start of the key again.\n\nIf the key only contains one letter, such as `\"dddddd\"`, then all letters of the plaintext are shifted by the same amount (three in this example), which would make this the same as a rotational cipher or shift cipher (sometimes called a Caesar cipher).\nFor example, the plaintext `\"iamapandabear\"` would become `\"ldpdsdqgdehdu\"`.\n\nIf the key only contains the letter `\"a\"` (one or more times), the shift distance is zero and the ciphertext is the same as the plaintext.\n\nUsually the key is more complicated than that, though!\nIf the key is `\"abcd\"` then letters of the plaintext would be shifted by a distance of 0, 1, 2, and 3.\nIf the plaintext is `\"hello\"`, we need 5 shifts so the key would wrap around, giving shift distances of 0, 1, 2, 3, and 0.\nApplying those shifts to the letters of `\"hello\"` we get `\"hfnoo\"`.\n\n## Random keys\n\nIf no key is provided, generate a key which consists of at least 100 random lowercase letters from the Latin alphabet.\n\n[wiki]: https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module SimpleCipher\n\ntype SimpleCipher(key: string) =\n    \n    member __.Key with get() = failwith \"You need to implement this function.\"\n    \n    member __.Encode(plaintext) = failwith \"You need to implement this function.\"\n    \n    member __.Decode(ciphertext) = failwith \"You need to implement this function.\"\n    \n    new() = failwith \"You need to implement this function.\"",
+  "example_solution": "module SimpleCipher\n\nopen System\n\nlet private letters = ['a'..'z']\nlet private keyLength = 100\n\nlet private random = System.Random()\n\nlet private generateKey() = \n    let numberOfLetters = List.length letters \n    Array.init keyLength (fun _ -> List.item (random.Next(numberOfLetters)) letters) \n    |> String\n\nlet private modulo x y = ((x % y) + y) % y\n\nlet private charToInt (c:char) = (int c) - (int 'a')\nlet private intToChar (i:int) = (char)((int 'a') + (modulo i 26))\n\nlet private shiftChar operation key char = operation (charToInt char) (charToInt key) |> intToChar\n\nlet shift operation (key:string) (input:string) =\n    input\n    |> Seq.mapi (fun i c -> shiftChar operation key.[i % key.Length] c) \n    |> Seq.toArray\n    |> String\n    \nlet encode key input = shift (+) key input   \nlet decode key input = shift (-) key input\n\ntype SimpleCipher(key: string) =\n    member __.Key with get() = key\n    \n    member __.Encode(plaintext: string) = encode key plaintext\n    \n    member __.Decode(ciphertext: string) = decode key ciphertext\n    \n    new() = SimpleCipher(generateKey())",
+  "test_code": "module SimpleCipherTests\n\nopen FsUnit.Xunit\nopen Xunit\nopen System.Text.RegularExpressions\nopen System\n\nopen SimpleCipher\n\n[<Fact>]\nlet ``Random key cipher - Can encode`` () =\n    let sut = SimpleCipher()\n    sut.Encode(\"aaaaaaaaaa\") |> should equal sut.Key.[0..9]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Random key cipher - Can decode`` () =\n    let sut = SimpleCipher()\n    sut.Decode(sut.Key.[0..9]) |> should equal \"aaaaaaaaaa\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Random key cipher - Is reversible. I.e., if you apply decode in a encoded result, you must see the same plaintext encode parameter as a result of the decode method`` () =\n    let sut = SimpleCipher()\n    sut.Decode(sut.Encode(\"abcdefghij\")) |> should equal \"abcdefghij\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Random key cipher - Key is made only of lowercase letters`` () =\n    let sut = SimpleCipher()\n    Regex.IsMatch(sut.Key, \"^[a-z]+$\") |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can encode`` () =\n    let sut = SimpleCipher(\"abcdefghij\")\n    sut.Encode(\"aaaaaaaaaa\") |> should equal \"abcdefghij\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can decode`` () =\n    let sut = SimpleCipher(\"abcdefghij\")\n    sut.Decode(\"abcdefghij\") |> should equal \"aaaaaaaaaa\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Is reversible. I.e., if you apply decode in a encoded result, you must see the same plaintext encode parameter as a result of the decode method`` () =\n    let sut = SimpleCipher(\"abcdefghij\")\n    sut.Decode(sut.Encode(\"abcdefghij\")) |> should equal \"abcdefghij\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can double shift encode`` () =\n    let sut = SimpleCipher(\"iamapandabear\")\n    sut.Encode(\"iamapandabear\") |> should equal \"qayaeaagaciai\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can wrap on encode`` () =\n    let sut = SimpleCipher(\"abcdefghij\")\n    sut.Encode(\"zzzzzzzzzz\") |> should equal \"zabcdefghi\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can wrap on decode`` () =\n    let sut = SimpleCipher(\"abcdefghij\")\n    sut.Decode(\"zabcdefghi\") |> should equal \"zzzzzzzzzz\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can encode messages longer than the key`` () =\n    let sut = SimpleCipher(\"abc\")\n    sut.Encode(\"iamapandabear\") |> should equal \"iboaqcnecbfcr\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substitution cipher - Can decode messages longer than the key`` () =\n    let sut = SimpleCipher(\"abc\")\n    sut.Decode(\"iboaqcnecbfcr\") |> should equal \"iamapandabear\"\n\n",
+  "source": "Substitution Cipher at Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Substitution_cipher",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "balazsbotond",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

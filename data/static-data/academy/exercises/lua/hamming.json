@@ -1,0 +1,32 @@
+{
+  "id": "lua:hamming",
+  "trackSlug": "lua",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "d5fcde07-bcef-4ee1-858b-fa4da55d7e0a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "local Hamming = {}\n\nfunction Hamming.compute(a, b)\nend\n\nreturn Hamming\n",
+  "example_solution": "local Hamming = {}\n\nfunction Hamming.compute(a, b)\n  assert(#a == #b, 'strands must be of equal length')\n  local distance = 0\n  for i = 1, a:len() do\n    if (a:sub(i, i) ~= b:sub(i, i)) then\n      distance = distance + 1\n    end\n  end\n  return distance\nend\n\nreturn Hamming\n",
+  "test_code": "local hamming = require('hamming')\n\ndescribe('hamming', function()\n  it('empty strands', function()\n    assert.are.equal(0, hamming.compute(\"\", \"\"))\n  end)\n\n  it('single letter identical strands', function()\n    assert.are.equal(0, hamming.compute(\"A\", \"A\"))\n  end)\n\n  it('single letter different strands', function()\n    assert.are.equal(1, hamming.compute(\"G\", \"T\"))\n  end)\n\n  it('long identical strands', function()\n    assert.are.equal(0, hamming.compute(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\"))\n  end)\n\n  it('long different strands', function()\n    assert.are.equal(9, hamming.compute(\"GGACGGATTCTG\", \"AGGACGGATTCT\"))\n  end)\n\n  it('disallow first strand longer', function()\n    assert.has_error(function()\n      hamming.compute(\"AATG\", \"AAA\")\n    end, \"strands must be of equal length\")\n  end)\n\n  it('disallow second strand longer', function()\n    assert.has_error(function()\n      hamming.compute(\"ATA\", \"AGTG\")\n    end, \"strands must be of equal length\")\n  end)\n\n  it('disallow empty first strand', function()\n    assert.has_error(function()\n      hamming.compute(\"\", \"G\")\n    end, \"strands must be of equal length\")\n  end)\n\n  it('disallow empty second strand', function()\n    assert.has_error(function()\n      hamming.compute(\"G\", \"\")\n    end, \"strands must be of equal length\")\n  end)\nend)\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "aarti"
+  ],
+  "contributors": [
+    "etandel",
+    "kytrinyx",
+    "robphoenix",
+    "ryanplusplus",
+    "trayo"
+  ]
+}

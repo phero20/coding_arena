@@ -1,0 +1,26 @@
+{
+  "id": "free-pascal:proverb",
+  "trackSlug": "free-pascal",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "c4f87fd8-f9f9-4871-a810-333abe0b257f",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit Proverb;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction recite(const strings : Array Of String) : string;\n\nimplementation\n\nuses SysUtils, Classes;\n\nfunction recite(const strings : Array Of String) : string;\nbegin\n\n  raise ENotImplemented.Create('Please implement your solution.'); result := IntToStr(length(strings));\n\nend;\n\nend.\n",
+  "example_solution": "unit Proverb;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction recite(const strings : array of string) : string;\n\nimplementation\n\nuses SysUtils, Classes;\n\nfunction recite(const strings : array of string) : string;\n\nvar\n  i     : integer;\n  rhyme : TStringList;\nbegin\n  if length(strings) = 0 then\n    begin\n      result := '';\n      exit;\n    end;\n\n  rhyme := TStringList.Create;\n  rhyme.TrailingLineBreak := False;\n  for i := low(strings) to high(strings) - 1 do\n    begin\n      rhyme.Add(\n        format(\n          'For want of a %s the %s was lost.',\n          [strings[i], strings[i + 1]]\n        )\n      );\n    end;\n  rhyme.Add(format('And all for the want of a %s.', [strings[0]]));\n  result := rhyme.Text;\n  rhyme.Free;\nend;\n\nend.\n",
+  "test_code": "unit TestCases;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nuses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;\n\ntype\n  ProverbTest = class(TTestCase)\n  published\n    procedure zero_pieces;\n    procedure one_piece;\n    procedure two_pieces;\n    procedure three_pieces;\n    procedure full_proverb;\n    procedure four_pieces_modernized;\n  end;\n\nimplementation\n\nuses Proverb;\n\n// e974b73e-7851-484f-8d6d-92e07fe742fc\nprocedure ProverbTest.zero_pieces;\nbegin\n  TapAssertTrue(Self, 'zero pieces', '', Proverb.recite([]));\nend;\n\n// 2fcd5f5e-8b82-4e74-b51d-df28a5e0faa4\nprocedure ProverbTest.one_piece;\nbegin\n  TapAssertTrue(Self, 'one piece', 'And all for the want of a nail.', Proverb.recite(['nail']));\nend;\n\n// d9d0a8a1-d933-46e2-aa94-eecf679f4b0e\nprocedure ProverbTest.two_pieces;\nbegin\n  TapAssertTrue(Self, 'two pieces', 'For want of a nail the shoe was lost.' + #10 + 'And all for the want of a nail.', Proverb.recite(['nail', 'shoe']));\nend;\n\n// c95ef757-5e94-4f0d-a6cb-d2083f5e5a83\nprocedure ProverbTest.three_pieces;\nbegin\n  TapAssertTrue(Self, 'three pieces', 'For want of a nail the shoe was lost.' + #10 + 'For want of a shoe the horse was lost.' + #10 + 'And all for the want of a nail.', Proverb.recite(['nail', 'shoe', 'horse']));\nend;\n\n// 433fb91c-35a2-4d41-aeab-4de1e82b2126\nprocedure ProverbTest.full_proverb;\nbegin\n  TapAssertTrue(Self, 'full proverb', 'For want of a nail the shoe was lost.' + #10 + 'For want of a shoe the horse was lost.' + #10 + 'For want of a horse the rider was lost.' + #10 + 'For want of a rider the message was lost.' + #10 + 'For want of a message the battle was lost.' + #10 + 'For want of a battle the kingdom was lost.' + #10 + 'And all for the want of a nail.', Proverb.recite(['nail', 'shoe', 'horse', 'rider', 'message', 'battle', 'kingdom']));\nend;\n\n// c1eefa5a-e8d9-41c7-91d4-99fab6d6b9f7\nprocedure ProverbTest.four_pieces_modernized;\nbegin\n  TapAssertTrue(Self, 'four pieces modernized', 'For want of a pin the gun was lost.' + #10 + 'For want of a gun the soldier was lost.' + #10 + 'For want of a soldier the battle was lost.' + #10 + 'And all for the want of a pin.', Proverb.recite(['pin', 'gun', 'soldier', 'battle']));\nend;\n\ninitialization\nRegisterTest(ProverbTest);\n\nend.\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

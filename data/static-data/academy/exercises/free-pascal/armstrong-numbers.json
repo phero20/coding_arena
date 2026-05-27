@@ -1,0 +1,26 @@
+{
+  "id": "free-pascal:armstrong-numbers",
+  "trackSlug": "free-pascal",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "20b9213a-a436-4476-a9d5-26d73a486b11",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit ArmstrongNumbers;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction IsArmstrongNumber(const number: qword) : boolean;\n\nimplementation\n\nuses SysUtils;\n\nfunction IsArmstrongNumber(const number: qword) : boolean;\nbegin\n\n  raise ENotImplemented.Create('Please implement your solution.'); result := number <> number;\n\nend;\n\nend.\n",
+  "example_solution": "unit ArmstrongNumbers;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction IsArmstrongNumber(const number: qword) : boolean;\n\nimplementation\n\nuses Math;\n\nvar\n  tmp              : qword;\n  nlen, digit, sum : integer;\n\nfunction IsArmstrongNumber(const number: qword) : boolean;\nbegin\n\n  tmp := number;\n  nlen := 1;\n  if number > 0 then nlen := floor(log10(number) + 1);\n  sum    := 0;\n\n  while tmp > 0 do\n    begin\n      digit := tmp mod 10;\n      tmp   := tmp div 10;\n      sum   := sum + digit ** nlen;\n    end;\n\n  result := number = sum;\n\nend;\n\nend.\n",
+  "test_code": "unit TestCases;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nuses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;\n\ntype\n  ArmstrongNumbersTest = class(TTestCase)\n  published\n    procedure zero_is_an_Armstrong_number;\n    procedure single_digit_numbers_are_Armstrong_numbers;\n    procedure there_are_no_two_digit_armstrong_numbers;\n    procedure three_digit_number_that_is_an_armstrong_number;\n    procedure three_digit_number_that_is_not_an_armstrong_number;\n    procedure four_digit_number_that_is_an_armstrong_number;\n    procedure four_digit_number_that_is_not_an_armstrong_number;\n    procedure seven_digit_number_that_is_an_armstrong_number;\n    procedure seven_digit_number_that_is_not_an_armstrong_number;\n  end;\n\nimplementation\n\nuses ArmstrongNumbers;\n\n// c1ed103c-258d-45b2-be73-d8c6d9580c7b\nprocedure ArmstrongNumbersTest.zero_is_an_Armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Zero is an Armstrong number', true, ArmstrongNumbers.IsArmstrongNumber(0));\nend;\n\n// 579e8f03-9659-4b85-a1a2-d64350f6b17a\nprocedure ArmstrongNumbersTest.single_digit_numbers_are_Armstrong_numbers;\nbegin\n  TapAssertTrue(Self, 'Single-digit numbers are Armstrong numbers', true, ArmstrongNumbers.IsArmstrongNumber(5));\nend;\n\n// 2d6db9dc-5bf8-4976-a90b-b2c2b9feba60\nprocedure ArmstrongNumbersTest.there_are_no_two_digit_armstrong_numbers;\nbegin\n  TapAssertTrue(Self, 'There are no two-digit Armstrong numbers', false, ArmstrongNumbers.IsArmstrongNumber(10));\nend;\n\n// 509c087f-e327-4113-a7d2-26a4e9d18283\nprocedure ArmstrongNumbersTest.three_digit_number_that_is_an_armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Three-digit number that is an Armstrong number', true, ArmstrongNumbers.IsArmstrongNumber(153));\nend;\n\n// 7154547d-c2ce-468d-b214-4cb953b870cf\nprocedure ArmstrongNumbersTest.three_digit_number_that_is_not_an_armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Three-digit number that is not an Armstrong number', false, ArmstrongNumbers.IsArmstrongNumber(100));\nend;\n\n// 6bac5b7b-42e9-4ecb-a8b0-4832229aa103\nprocedure ArmstrongNumbersTest.four_digit_number_that_is_an_armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Four-digit number that is an Armstrong number', true, ArmstrongNumbers.IsArmstrongNumber(9474));\nend;\n\n// eed4b331-af80-45b5-a80b-19c9ea444b2e\nprocedure ArmstrongNumbersTest.four_digit_number_that_is_not_an_armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Four-digit number that is not an Armstrong number', false, ArmstrongNumbers.IsArmstrongNumber(9475));\nend;\n\n// f971ced7-8d68-4758-aea1-d4194900b864\nprocedure ArmstrongNumbersTest.seven_digit_number_that_is_an_armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Seven-digit number that is an Armstrong number', true, ArmstrongNumbers.IsArmstrongNumber(9926315));\nend;\n\n// 7ee45d52-5d35-4fbd-b6f1-5c8cd8a67f18\nprocedure ArmstrongNumbersTest.seven_digit_number_that_is_not_an_armstrong_number;\nbegin\n  TapAssertTrue(Self, 'Seven-digit number that is not an Armstrong number', false, ArmstrongNumbers.IsArmstrongNumber(9926314));\nend;\n\ninitialization\nRegisterTest(ArmstrongNumbersTest);\n\nend.\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

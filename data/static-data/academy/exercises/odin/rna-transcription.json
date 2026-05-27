@@ -1,0 +1,28 @@
+{
+  "id": "odin:rna-transcription",
+  "trackSlug": "odin",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "6f0407a2-2050-47cf-969e-769728fed0d0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "package rna_transcription\n\nto_rna :: proc(dna: string) -> (rna: string, ok: bool) {\n\t// Implement the procedure.\n\treturn \"\", false\n}\n",
+  "example_solution": "package rna_transcription\n\nto_rna :: proc(dna: string) -> (rna: string, ok: bool) {\n\n\trna_strand := make([]byte, len(dna))\n\n\tfor x, i in dna {\n\t\tswitch x {\n\t\tcase 'G':\n\t\t\trna_strand[i] = 'C'\n\t\tcase 'C':\n\t\t\trna_strand[i] = 'G'\n\t\tcase 'T':\n\t\t\trna_strand[i] = 'A'\n\t\tcase 'A':\n\t\t\trna_strand[i] = 'U'\n\t\tcase:\n\t\t\treturn\n\t\t}\n\t}\n\trna = string(rna_strand)\n\tok = true\n\treturn\n}\n",
+  "test_code": "package rna_transcription\n\nimport \"core:mem\"\nimport \"core:testing\"\n\n@(test)\n/// description = Empty RNA sequence\ntest_empty_rna_sequence :: proc(t: ^testing.T) {\n\trna, ok := to_rna(\"\")\n\tdefer delete(rna)\n\n\ttesting.expect_value(t, rna, \"\")\n\ttesting.expect(t, ok)\n}\n\n@(test)\n/// description = RNA complement of cytosine is guanine\ntest_rna_complement_of_cytosine_is_guanine :: proc(t: ^testing.T) {\n\trna, ok := to_rna(\"C\")\n\tdefer delete(rna)\n\n\ttesting.expect_value(t, rna, \"G\")\n\ttesting.expect(t, ok)\n}\n\n@(test)\n/// description = RNA complement of guanine is cytosine\ntest_rna_complement_of_guanine_is_cytosine :: proc(t: ^testing.T) {\n\trna, ok := to_rna(\"G\")\n\tdefer delete(rna)\n\n\ttesting.expect_value(t, rna, \"C\")\n\ttesting.expect(t, ok)\n}\n\n@(test)\n/// description = RNA complement of thymine is adenine\ntest_rna_complement_of_thymine_is_adenine :: proc(t: ^testing.T) {\n\trna, ok := to_rna(\"T\")\n\tdefer delete(rna)\n\n\ttesting.expect_value(t, rna, \"A\")\n\ttesting.expect(t, ok)\n}\n\n@(test)\n/// description = RNA complement of adenine is uracil\ntest_rna_complement_of_adenine_is_uracil :: proc(t: ^testing.T) {\n\trna, ok := to_rna(\"A\")\n\tdefer delete(rna)\n\n\ttesting.expect_value(t, rna, \"U\")\n\ttesting.expect(t, ok)\n}\n\n@(test)\n/// description = RNA complement\ntest_rna_complement :: proc(t: ^testing.T) {\n\trna, ok := to_rna(\"ACGTGGTCTTAA\")\n\tdefer delete(rna)\n\n\ttesting.expect_value(t, rna, \"UGCACCAGAAUU\")\n\ttesting.expect(t, ok)\n}\n\n// This test is optional.\n// If you want to know if your solution has any memory leak,\n// then un-comment the test attribute below.\n// If you want to learn more about Odin's tracking allocation,\n// you can watch this You Tube video\n// https://www.youtube.com/watch?v=dg6qogN8kIE\n// @(test)\ntest_no_memory_leaks :: proc(t: ^testing.T) {\n\ttrack: mem.Tracking_Allocator\n\tmem.tracking_allocator_init(&track, context.allocator)\n\tdefer mem.tracking_allocator_destroy(&track)\n\tcontext.allocator = mem.tracking_allocator(&track)\n\ttest_rna_complement(t)\n\ttesting.expect_value(t, len(track.allocation_map), 0)\n\ttesting.expect_value(t, len(track.bad_free_array), 0)\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "gvrooyen"
+  ],
+  "contributors": [
+    "rmonnet"
+  ]
+}

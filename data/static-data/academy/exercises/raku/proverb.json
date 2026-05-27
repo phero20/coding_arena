@@ -1,0 +1,26 @@
+{
+  "id": "raku:proverb",
+  "trackSlug": "raku",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "ef243fad-2ac8-4313-a484-1c28a6d7ab21",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit module Proverb;\n\nsub recite (@nouns) is export {\n}\n",
+  "example_solution": "unit module Proverb;\n\nmulti recite ( $noun where $_ eq '' ) is export { }\nmulti recite ( $noun where $_ ne '' ) {\n  \"And all for the want of a $noun.\"\n}\nmulti recite ( @nouns ) {\n  join \"\\n\",\n  @nouns\n  .rotor(2=>-1)\n  .map( { \"For want of a {.head} the {.tail} was lost.\" } ),\n  recite @nouns.head\n}\n",
+  "test_code": "#!/usr/bin/env raku\nuse Test;\nuse lib $?FILE.IO.parent(2).add('lib');\nuse Proverb;\n\ncmp-ok( # begin: e974b73e-7851-484f-8d6d-92e07fe742fc\n  recite([]),\n  \"eq\",\n  \"\",\n  \"zero pieces\",\n); # end: e974b73e-7851-484f-8d6d-92e07fe742fc\n\ncmp-ok( # begin: 2fcd5f5e-8b82-4e74-b51d-df28a5e0faa4\n  recite([\"nail\"]),\n  \"eq\",\n  \"And all for the want of a nail.\",\n  \"one piece\",\n); # end: 2fcd5f5e-8b82-4e74-b51d-df28a5e0faa4\n\ncmp-ok( # begin: d9d0a8a1-d933-46e2-aa94-eecf679f4b0e\n  recite([\"nail\", \"shoe\"]),\n  \"eq\",\n  \"For want of a nail the shoe was lost.\\nAnd all for the want of a nail.\",\n  \"two pieces\",\n); # end: d9d0a8a1-d933-46e2-aa94-eecf679f4b0e\n\ncmp-ok( # begin: c95ef757-5e94-4f0d-a6cb-d2083f5e5a83\n  recite([\"nail\", \"shoe\", \"horse\"]),\n  \"eq\",\n  \"For want of a nail the shoe was lost.\\nFor want of a shoe the horse was lost.\\nAnd all for the want of a nail.\",\n  \"three pieces\",\n); # end: c95ef757-5e94-4f0d-a6cb-d2083f5e5a83\n\ncmp-ok( # begin: 433fb91c-35a2-4d41-aeab-4de1e82b2126\n  recite([\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]),\n  \"eq\",\n  \"For want of a nail the shoe was lost.\\nFor want of a shoe the horse was lost.\\nFor want of a horse the rider was lost.\\nFor want of a rider the message was lost.\\nFor want of a message the battle was lost.\\nFor want of a battle the kingdom was lost.\\nAnd all for the want of a nail.\",\n  \"full proverb\",\n); # end: 433fb91c-35a2-4d41-aeab-4de1e82b2126\n\ncmp-ok( # begin: c1eefa5a-e8d9-41c7-91d4-99fab6d6b9f7\n  recite([\"pin\", \"gun\", \"soldier\", \"battle\"]),\n  \"eq\",\n  \"For want of a pin the gun was lost.\\nFor want of a gun the soldier was lost.\\nFor want of a soldier the battle was lost.\\nAnd all for the want of a pin.\",\n  \"four pieces modernized\",\n); # end: c1eefa5a-e8d9-41c7-91d4-99fab6d6b9f7\n\ndone-testing;\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "habere-et-dispertire"
+  ],
+  "contributors": null
+}

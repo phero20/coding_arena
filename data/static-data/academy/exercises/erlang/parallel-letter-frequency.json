@@ -1,0 +1,33 @@
+{
+  "id": "erlang:parallel-letter-frequency",
+  "trackSlug": "erlang",
+  "slug": "parallel-letter-frequency",
+  "name": "Parallel Letter Frequency",
+  "uuid": "be69c23b-7559-44fe-9e21-94a865199de7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the frequency of letters in texts using parallel computation.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCount the frequency of letters in texts using parallel computation.\n\nParallelism is about doing things in parallel that can also be done sequentially.\nA common example is counting the frequency of letters.\nEmploy parallelism to calculate the total frequency of each letter in a list of texts.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-module(parallel_letter_frequency).\n\n-export([dict/1]).\n\ndict(_Strings) ->\n  undefined.\n",
+  "example_solution": "-module(example).\n\n-export( [dict/1] ).\n\ndict( Texts ) ->\n  Pids = [letter_frequency(X) || X <- Texts],\n  Dicts = [receive_dict(X) || X <- Pids],\n  merge_dicts( Dicts ).\n\n\nletter_frequency( String ) ->\n  My_pid = erlang:self(),\n  erlang:spawn( fun() -> My_pid ! {erlang:self(), letter_freqency_dict(String)} end ).\n\nletter_freqency_dict( String ) ->\n  lists:foldl( fun letter_freqency_dict/2, dict:new(), String ).\n\nletter_freqency_dict( Character, Dict ) -> dict:update_counter( Character, 1, Dict ).\n\nmerge_dicts( [Dict | Dicts] ) ->\n  lists:foldl( fun merge_dicts/2, Dict, Dicts ).\n\nmerge_dicts( Dict, Acc ) -> dict:merge( fun merge_dicts/3, Dict, Acc ).\n\nmerge_dicts( _Key, Value, Acc_value ) -> Value + Acc_value.\n\nreceive_dict( Pid ) ->\n  receive\n    {Pid, Dict} -> Dict\n  end.\n",
+  "test_code": "-module(parallel_letter_frequency_tests).\n\n-include_lib(\"erl_exercism/include/exercism.hrl\").\n-include_lib(\"eunit/include/eunit.hrl\").\n\nsingle_test() ->\n    ?assertEqual(\n        parallel_letter_frequency:dict([\"asd\"]),\n        dict:from_list([{$a, 1}, {$d, 1}, {$s, 1}])\n    ).\n\ndouble_test() ->\n    ?assertEqual(\n        parallel_letter_frequency:dict([\"asd\", \"asd\"]),\n        dict:from_list([{$a, 2}, {$d, 2}, {$s, 2}])\n    ).\n",
+  "source": null,
+  "source_url": null,
+  "authors": [],
+  "contributors": [
+    "ErikSchierboom",
+    "iHiD",
+    "JordanAdams",
+    "juhlig",
+    "kytrinyx",
+    "NobbZ",
+    "tmcgilchrist",
+    "xymbol"
+  ]
+}

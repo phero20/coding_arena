@@ -1,0 +1,29 @@
+{
+  "id": "julia:all-your-base",
+  "trackSlug": "julia",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "6fa91607-d772-47af-9520-de26bbb8addb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "# Implement number base conversion\n\nfunction all_your_base(digits, base_in, base_out)\n\nend\n",
+  "example_solution": "# Implement number base conversion\n\nfunction all_your_base(digits, input_base, output_base)\n    # error checking behavior\n    if input_base < 2\n        throw(DomainError(input_base, \"input base must be >= 2\"))\n    end\n\n    if output_base < 2\n        throw(DomainError(output_base, \"output base must be >= 2\"))\n    end\n\n    # short-circuit for [0] input; doesn't matter the base\n    if isempty(digits)\n        return [0]\n    end\n\n    # encode the list to a single number\n    total = 0\n    for i in digits\n        if i >= input_base || i < 0\n            throw(DomainError(input_base, \"all digits must satisfy 0 <= d < input base\"))\n        end\n        total = total * input_base + i\n    end\n\n    # decode to desired base\n    output = Int[]\n    while total > 0\n        (total, rem) = divrem(total, output_base)\n        push!(output, rem)\n    end\n\n    if isempty(output)\n        return [0]\n    end\n\n    return reverse!(output)\nend\n",
+  "test_code": "using Test\n\ninclude(\"all-your-base.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"single bit one to decimal\" begin\n        @test all_your_base([1], 2, 10) == [1]\n    end\n\n    @testset \"binary to single decimal\" begin\n        @test all_your_base([1, 0, 1], 2, 10) == [5]\n    end\n\n    @testset \"single decimal to binary\" begin\n        @test all_your_base([5], 10, 2) == [1, 0, 1]\n    end\n\n    @testset \"binary to multiple decimal\" begin\n        @test all_your_base([1, 0, 1, 0, 1, 0], 2, 10) == [4, 2]\n    end\n\n    @testset \"decimal to binary\" begin\n        @test all_your_base([4, 2], 10, 2) == [1, 0, 1, 0, 1, 0]\n    end\n\n    @testset \"trinary to hexadecimal\" begin\n        @test all_your_base([1, 1, 2, 0], 3, 16) == [2, 10]\n    end\n\n    @testset \"hexadecimal to trinary\" begin\n        @test all_your_base([2, 10], 16, 3) == [1, 1, 2, 0]\n    end\n\n    @testset \"15-bit integer\" begin\n        @test all_your_base([3, 46, 60], 97, 73) == [6, 10, 45]\n    end\n\n    @testset \"empty list\" begin\n        @test all_your_base([], 2, 10) == [0]\n    end\n\n    @testset \"single zero\" begin\n        @test all_your_base([0], 10, 2) == [0]\n    end\n\n    @testset \"multiple zeros\" begin\n        @test all_your_base([0, 0, 0], 10, 2) == [0]\n    end\n\n    @testset \"leading zeros\" begin\n        @test all_your_base([0, 6, 0], 7, 10) == [4, 2]\n    end\n\n    @testset \"input base is one\" begin\n        @test_throws DomainError all_your_base([0], 1, 10)\n    end\n\n    @testset \"input base is zero\" begin\n        @test_throws DomainError all_your_base([], 0, 10)\n    end\n\n    @testset \"input base is negative\" begin\n        @test_throws DomainError all_your_base([1], -2, 10)\n    end\n\n    @testset \"negative digit\" begin\n        @test_throws DomainError all_your_base([1, -1, 1, 0, 1, 0], 2, 10)\n    end\n\n    @testset \"invalid positive digit\" begin\n        @test_throws DomainError all_your_base([1, 2, 1, 0, 1, 0], 2, 10)\n    end\n\n    @testset \"output base is one\" begin\n        @test_throws DomainError all_your_base([1, 0, 1, 0, 1, 0], 2, 1)\n    end\n\n    @testset \"output base is zero\" begin\n        @test_throws DomainError all_your_base([7], 10, 0)\n    end\n\n    @testset \"output base is negative\" begin\n        @test_throws DomainError all_your_base([1], 2, -7)\n    end\n\n    @testset \"both bases are negative\" begin\n        @test_throws DomainError all_your_base([1], -2, -7)\n    end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "serialhex"
+  ],
+  "contributors": [
+    "cmcaine",
+    "SaschaMann"
+  ]
+}

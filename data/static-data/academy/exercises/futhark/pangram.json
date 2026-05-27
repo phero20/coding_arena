@@ -1,0 +1,26 @@
+{
+  "id": "futhark:pangram",
+  "trackSlug": "futhark",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "24d20d07-4c11-43f7-9af7-2b279e87dc58",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "def is_pangram (sentence: []u8): bool = ???\n",
+  "example_solution": "let all_letters = 0b11111111111111111111111111u32\n\ndef to_lower (c: u8): u8 = c | (1 << 5)\ndef is_lower (c: u8): bool = c >= 'a' && c <= 'z'\ndef to_mask (c: u8): u32 = 1u32 << u32.u8(c - 'a')\n\ndef is_pangram [n] (sentence: [n]u8): bool =\n  sentence\n  |> map to_lower\n  |> filter is_lower\n  |> map to_mask\n  |> reduce (|) 0u32\n  |> (== all_letters)\n",
+  "test_code": "import \"pangram\"\n\n-- empty sentence\n-- ==\n-- input { \"\" }\n-- output { false }\n\n-- perfect lower case\n-- ==\n-- input { \"abcdefghijklmnopqrstuvwxyz\" }\n-- output { true }\n\n-- only lower case\n-- ==\n-- input { \"the quick brown fox jumps over the lazy dog\" }\n-- output { true }\n\n-- missing the letter 'x'\n-- ==\n-- input { \"a quick movement of the enemy will jeopardize five gunboats\" }\n-- output { false }\n\n-- missing the letter 'h'\n-- ==\n-- input { \"five boxing wizards jump quickly at it\" }\n-- output { false }\n\n-- with underscores\n-- ==\n-- input { \"the_quick_brown_fox_jumps_over_the_lazy_dog\" }\n-- output { true }\n\n-- with numbers\n-- ==\n-- input { \"the 1 quick brown fox jumps over the 2 lazy dogs\" }\n-- output { true }\n\n-- missing letters replaced by numbers\n-- ==\n-- input { \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\" }\n-- output { false }\n\n-- mixed case and punctuation\n-- ==\n-- input { \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\" }\n-- output { true }\n\n-- a-m and A-M are 26 different characters but not a pangram\n-- ==\n-- input { \"abcdefghijklm ABCDEFGHIJKLM\" }\n-- output { false }\n\nlet main (sentence: []u8): bool =\n  is_pangram sentence\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

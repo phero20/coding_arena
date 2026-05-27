@@ -1,0 +1,26 @@
+{
+  "id": "free-pascal:leap",
+  "trackSlug": "free-pascal",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "23b6eaa2-d1f3-4757-8aa3-e12467411b03",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "unit Leap;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction LeapYear(const year : integer) : boolean;\n\nimplementation\n\nuses SysUtils;\n\nfunction LeapYear(const year : integer) : boolean;\nbegin\n\n  raise ENotImplemented.Create('Please implement your solution.'); result := year <> year;\n  // Try writing a simple algorithm using conditional expressions instead of the built-in function.\n\nend;\n\nend.\n",
+  "example_solution": "unit Leap;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction LeapYear(const year : integer) : boolean;\n\nimplementation\n\nfunction LeapYear(const year : integer) : boolean;\nbegin\n  result := (\n    (year mod 400 = 0) or ((year mod 4 = 0) and (year mod 100 <> 0))\n  );\nend;\n\nend.\n",
+  "test_code": "unit TestCases;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nuses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;\n\ntype\n  LeapTest = class(TTestCase)\n  published\n    procedure year_not_divisible_by_4_in_common_year;\n    procedure year_divisible_by_2_not_divisible_by_4_in_common_year;\n    procedure year_divisible_by_4_not_divisible_by_100_in_leap_year;\n    procedure year_divisible_by_4_and_5_is_still_a_leap_year;\n    procedure year_divisible_by_100_not_divisible_by_400_in_common_year;\n    procedure year_divisible_by_100_but_not_by_3_is_still_not_a_leap_year;\n    procedure year_divisible_by_400_is_leap_year;\n    procedure year_divisible_by_400_but_not_by_125_is_still_a_leap_year;\n    procedure year_divisible_by_200_not_divisible_by_400_in_common_year;\n  end;\n\nimplementation\n\nuses Leap;\n\n// 6466b30d-519c-438e-935d-388224ab5223\nprocedure LeapTest.year_not_divisible_by_4_in_common_year;\nbegin\n  TapAssertTrue(Self, 'year not divisible by 4 in common year', false, Leap.LeapYear(2015));\nend;\n\n// ac227e82-ee82-4a09-9eb6-4f84331ffdb0\nprocedure LeapTest.year_divisible_by_2_not_divisible_by_4_in_common_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 2, not divisible by 4 in common year', false, Leap.LeapYear(1970));\nend;\n\n// 4fe9b84c-8e65-489e-970b-856d60b8b78e\nprocedure LeapTest.year_divisible_by_4_not_divisible_by_100_in_leap_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 4, not divisible by 100 in leap year', true, Leap.LeapYear(1996));\nend;\n\n// 7fc6aed7-e63c-48f5-ae05-5fe182f60a5d\nprocedure LeapTest.year_divisible_by_4_and_5_is_still_a_leap_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 4 and 5 is still a leap year', true, Leap.LeapYear(1960));\nend;\n\n// 78a7848f-9667-4192-ae53-87b30c9a02dd\nprocedure LeapTest.year_divisible_by_100_not_divisible_by_400_in_common_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 100, not divisible by 400 in common year', false, Leap.LeapYear(2100));\nend;\n\n// 9d70f938-537c-40a6-ba19-f50739ce8bac\nprocedure LeapTest.year_divisible_by_100_but_not_by_3_is_still_not_a_leap_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 100 but not by 3 is still not a leap year', false, Leap.LeapYear(1900));\nend;\n\n// 42ee56ad-d3e6-48f1-8e3f-c84078d916fc\nprocedure LeapTest.year_divisible_by_400_is_leap_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 400 is leap year', true, Leap.LeapYear(2000));\nend;\n\n// 57902c77-6fe9-40de-8302-587b5c27121e\nprocedure LeapTest.year_divisible_by_400_but_not_by_125_is_still_a_leap_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 400 but not by 125 is still a leap year', true, Leap.LeapYear(2400));\nend;\n\n// c30331f6-f9f6-4881-ad38-8ca8c12520c1\nprocedure LeapTest.year_divisible_by_200_not_divisible_by_400_in_common_year;\nbegin\n  TapAssertTrue(Self, 'year divisible by 200, not divisible by 400 in common year', false, Leap.LeapYear(1800));\nend;\n\ninitialization\nRegisterTest(LeapTest);\n\nend.\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

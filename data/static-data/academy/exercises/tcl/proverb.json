@@ -1,0 +1,28 @@
+{
+  "id": "tcl:proverb",
+  "trackSlug": "tcl",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "0bf5e59e-9d7d-47d2-8f62-865325a33a4c",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc recite {items} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc recite {items} {\n    set len [llength $items]\n    set lines {}\n    for {set i 1} {$i < $len} {incr i} {\n        lassign [lrange $items $i-1 $i] this that\n        lappend lines \"For want of a $this the $that was lost.\" \n    }\n    if {$len > 0} {\n        lappend lines \"And all for the want of a [lindex $items 0].\"\n    }\n    return $lines\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"proverb.tcl\"\n\ntest proverb-1 \"zero pieces\" -body {\n    recite {}\n} -returnCodes ok -match orderedLists -result {}\n\nskip proverb-2\ntest proverb-2 \"one piece\" -body {\n    recite { nail }\n} -returnCodes ok -match orderedLists -result { \"And all for the want of a nail.\" }\n\nskip proverb-3\ntest proverb-3 \"two pieces\" -body {\n    recite { nail shoe }\n} -returnCodes ok -match orderedLists -result {\n    \"For want of a nail the shoe was lost.\"\n    \"And all for the want of a nail.\" \n}\n\nskip proverb-4\ntest proverb-4 \"three pieces\" -body {\n    recite { nail shoe horse }\n} -returnCodes ok -match orderedLists -result {\n    \"For want of a nail the shoe was lost.\"\n    \"For want of a shoe the horse was lost.\"\n    \"And all for the want of a nail.\" \n}\n\nskip proverb-5\ntest proverb-5 \"full proverb\" -body {\n    recite { nail shoe horse rider message battle kingdom }\n} -returnCodes ok -match orderedLists -result {\n    \"For want of a nail the shoe was lost.\"\n    \"For want of a shoe the horse was lost.\"\n    \"For want of a horse the rider was lost.\"\n    \"For want of a rider the message was lost.\"\n    \"For want of a message the battle was lost.\"\n    \"For want of a battle the kingdom was lost.\"\n    \"And all for the want of a nail.\" \n}\n\nskip proverb-6\ntest proverb-6 \"four pieces modernized\" -body {\n    recite { pin gun soldier battle }\n} -returnCodes ok -match orderedLists -result {\n    \"For want of a pin the gun was lost.\"\n    \"For want of a gun the soldier was lost.\"\n    \"For want of a soldier the battle was lost.\"\n    \"And all for the want of a pin.\" \n}\n\n\ncleanupTests\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "x86-64-assembly:collatz-conjecture",
+  "trackSlug": "x86-64-assembly",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "e0a4dc83-dd93-40b0-b365-01581b57f66c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "loops",
+    "integers"
+  ],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "ERROR_VALUE equ -1\n\nsection .text\nglobal steps\nsteps:\n    ; Provide your implementation here\n    ; The function has type signature int steps(int number)\n    ; The return value and the argument are of type int, which is a 32-bit signed integer type\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "example_solution": "section .text\n;\n; Find the number of steps to reach 1 using the Collatz conjecture\n;\n; Parameters:\n;   rdi - number\n; Returns:\n;   rax - number of steps\n;\nglobal steps\nsteps:\n    test    edi, edi                       ; check if arg is 0\n    jle     .fail\n    xor     eax, eax                       ; initialize step count\n    cmp     edi, 1                         ; return 0 if 1\n    je      .ret\n.loop:\n    add     eax, 1                         ; increment step count\n    test    dil, 1                         ; check if odd/even\n    jne     .odd\n    mov     edx, edi                       ; even : divide by 2\n    ; shr     edx, 31\n    ; add     edi, edx\n    sar     edi, 1\n    cmp     edi, 1                         ; check if loop ends\n    jne     .loop\n    ret\n.odd:\n    lea     edi, [rdi+1+rdi*2]            ; odd : number = (number * 3) + 1;\n    cmp     edi, 1                        ; check if loop ends\n    jne     .loop\n    ret\n.fail:\n    mov     eax, -1                       ; return ERROR_VALUE on failure\n.ret:\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#define ERROR_VALUE -1\n\nextern int steps(int number);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_zero_steps_for_one(void) {\n    TEST_ASSERT_EQUAL_INT(0, steps(1));\n}\n\nvoid test_divide_if_even(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(4, steps(16));\n}\n\nvoid test_even_and_odd_steps(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(9, steps(12));\n}\n\nvoid test_large_number_of_even_and_odd_steps(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(152, steps(1000000));\n}\n\nvoid test_zero_is_an_error(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(ERROR_VALUE, steps(0));\n}\n\nvoid test_negative_value_is_an_error(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(ERROR_VALUE, steps(-15));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_zero_steps_for_one);\n    RUN_TEST(test_divide_if_even);\n    RUN_TEST(test_even_and_odd_steps);\n    RUN_TEST(test_large_number_of_even_and_odd_steps);\n    RUN_TEST(test_zero_is_an_error);\n    RUN_TEST(test_negative_value_is_an_error);\n    return UNITY_END();\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "sudhackar"
+  ],
+  "contributors": null
+}

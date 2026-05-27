@@ -1,0 +1,30 @@
+{
+  "id": "scala:atbash-cipher",
+  "trackSlug": "scala",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "842f0674-fcf3-48c3-80ae-c6d43c65f270",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "object AtbashCipher {\n  private def substitute(c: Char) =\n    if (c.isDigit) c.toString\n    else if (c.isLetter) ('a' + ('z' - c.toLower)).toChar.toString\n    else \"\"\n\n  def encode(s: String): String =\n    s.foldLeft(\"\")((acc, c) => acc + substitute(c)).grouped(5).mkString(\" \")\n\n  def decode(s: String): String =\n    s.foldLeft(\"\")((acc, c) => acc + substitute(c))\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.2.0 */\nclass AtbashCipherTest extends AnyFunSuite with Matchers {\n\n  test(\"encode yes\") {\n    AtbashCipher.encode(\"yes\") should be(\"bvh\")\n  }\n\n  test(\"encode no\") {\n    pending\n    AtbashCipher.encode(\"no\") should be(\"ml\")\n  }\n\n  test(\"encode OMG\") {\n    pending\n    AtbashCipher.encode(\"OMG\") should be(\"lnt\")\n  }\n\n  test(\"encode spaces\") {\n    pending\n    AtbashCipher.encode(\"O M G\") should be(\"lnt\")\n  }\n\n  test(\"encode mindblowingly\") {\n    pending\n    AtbashCipher.encode(\"mindblowingly\") should be(\"nrmwy oldrm tob\")\n  }\n\n  test(\"encode numbers\") {\n    pending\n    AtbashCipher.encode(\"Testing,1 2 3, testing.\") should be(\n      \"gvhgr mt123 gvhgr mt\")\n  }\n\n  test(\"encode deep thought\") {\n    pending\n    AtbashCipher.encode(\"Truth is fiction.\") should be(\"gifgs rhurx grlm\")\n  }\n\n  test(\"encode all the letters\") {\n    pending\n    AtbashCipher.encode(\"The quick brown fox jumps over the lazy dog.\") should be(\n      \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n  }\n\n  test(\"decode exercism\") {\n    pending\n    AtbashCipher.decode(\"vcvix rhn\") should be(\"exercism\")\n  }\n\n  test(\"decode a sentence\") {\n    pending\n    AtbashCipher.decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\") should be(\n      \"anobstacleisoftenasteppingstone\")\n  }\n\n  test(\"decode numbers\") {\n    pending\n    AtbashCipher.decode(\"gvhgr mt123 gvhgr mt\") should be(\"testing123testing\")\n  }\n\n  test(\"decode all the letters\") {\n    pending\n    AtbashCipher.decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\") should be(\n      \"thequickbrownfoxjumpsoverthelazydog\")\n  }\n\n  test(\"decode with too many spaces\") {\n    pending\n    AtbashCipher.decode(\"vc vix    r hn\") should be(\"exercism\")\n  }\n\n  test(\"decode with no spaces\") {\n    pending\n    AtbashCipher.decode(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\") should be(\n      \"anobstacleisoftenasteppingstone\")\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

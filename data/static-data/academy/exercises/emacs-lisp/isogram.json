@@ -1,0 +1,26 @@
+{
+  "id": "emacs-lisp:isogram",
+  "trackSlug": "emacs-lisp",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "63fc7e59-2448-487b-9b66-06c72ab8d6b0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; isogram.el --- isogram (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun isogramp (phrase)\n  (error \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'isogram)\n;;; isogram.el ends here\n",
+  "example_solution": ";;; isogram.el --- isogram (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(require 'cl-lib)\n\n(defun upper-char-p (c)\n  \"Determine if char C is alphabetic and upper case.\"\n  (and\n   (>= c ?A)\n   (<= c ?Z)))\n\n(defun isogramp (phrase)\n  \"Determine if a given phrase is an isogram.\"\n  (let* ((bitset 0)\n         (updated 0)\n         (characters (cl-coerce (upcase phrase) 'list))\n         (letters (cl-remove-if-not 'upper-char-p characters)))\n    (cl-loop for c in letters\n      do (setq updated (logior bitset (ash 1 (- c ?A))))\n      always (> updated bitset)\n      do (setq bitset updated))))\n\n(provide 'isogram)\n;;; isogram.el ends here\n",
+  "test_code": ";;; isogram-test.el --- Tests for Isogram (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(load-file \"isogram.el\")\n(declare-function isogramp \"isogram.el\" (phrase))\n\n\n(ert-deftest empty-string ()\n  (should (isogramp \"\")))\n\n\n(ert-deftest isogram-with-only-lower-case-characters ()\n  (should (isogramp \"isogram\")))\n\n\n(ert-deftest word-with-one-duplicated-character ()\n  (should-not (isogramp \"eleven\")))\n\n\n(ert-deftest word-with-one-duplicated-character-from-the-end-of-the-alphabet ()\n  (should-not (isogramp \"zzyzx\")))\n\n\n(ert-deftest longest-reported-english-isogram ()\n  (should (isogramp \"subdermatoglyphic\")))\n\n\n(ert-deftest word-with-duplicated-character-in-mixed-case ()\n  (should-not (isogramp \"Alphabet\")))\n\n\n(ert-deftest word-with-duplicated-character-in-mixed-case-lowercase-first ()\n  (should-not (isogramp \"alphAbet\")))\n\n\n(ert-deftest hypothetical-isogrammic-word-with-hyphen ()\n  (should (isogramp \"thumbscrew-japingly\")))\n\n\n(ert-deftest hypothetical-word-with-duplicated-character-following-hyphen ()\n  (should-not (isogramp \"thumbscrew-jappingly\")))\n\n\n(ert-deftest isogram-with-duplicated-hyphen ()\n  (should (isogramp \"six-year-old\")))\n\n\n(ert-deftest made-up-name-that-is-an-isogram ()\n  (should (isogramp \"Emily Jung Schwartzkopf\")))\n\n\n(ert-deftest duplicated-character-in-the-middle ()\n  (should-not (isogramp \"accentor\")))\n\n\n(ert-deftest same-first-and-last-characters ()\n  (should-not (isogramp \"angola\")))\n\n\n(ert-deftest word-with-duplicated-character-and-with-two-hyphens ()\n  (should-not (isogramp \"up-to-date\")))\n\n\n(provide 'isogram-test)\n;;; isogram-test.el ends here\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

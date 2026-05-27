@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:game-of-life",
+  "trackSlug": "moonscript",
+  "slug": "game-of-life",
+  "name": "Conway's Game of Life",
+  "uuid": "a12cd1e2-4108-40ad-aa72-80706d1eeb30",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement Conway's Game of Life.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAfter each generation, the cells interact with their eight neighbors, which are cells adjacent horizontally, vertically, or diagonally.\n\nThe following rules are applied to each cell:\n\n- Any live cell with two or three live neighbors lives on.\n- Any dead cell with exactly three live neighbors becomes a live cell.\n- All other cells die or stay dead.\n\nGiven a matrix of 1s and 0s (corresponding to live and dead cells), apply the rules to each cell, and return the next generation.\n",
+  "introduction": "# Introduction\n\n[Conway's Game of Life][game-of-life] is a fascinating cellular automaton created by the British mathematician John Horton Conway in 1970.\n\nThe game consists of a two-dimensional grid of cells that can either be \"alive\" or \"dead.\"\n\nAfter each generation, the cells interact with their eight neighbors via a set of rules, which define the new generation.\n\n[game-of-life]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life\n",
+  "hints": null,
+  "starter_code": "{\n  tick: (matrix) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "Deltas = {\n  {-1, -1}, {-1, 0}, {-1, 1},\n  {0, -1},           {0, 1},\n  {1, -1},  {1, 0},  {1, 1}\n}\n\ntick = (matrix) ->\n  height = #matrix\n  return {} if height == 0\n  width = #matrix[1]\n\n  count_neighbours = (x, y) ->\n    count = 0\n    for d in *Deltas\n      dx, dy = x + d[1], y + d[2]\n      if 1 <= dx and dx <= height and 1 <= dy and dy <= width\n        count += matrix[dx][dy]\n    count\n\n  result = [{} for _ = 1, height]\n  for r = 1, height\n    for c = 1, width\n      result[r][c] = switch count_neighbours r, c\n        when 3 then 1\n        when 2 then matrix[r][c]\n        else 0\n  result\n\n\n{ :tick }\n",
+  "test_code": "GameOfLife = require 'game_of_life'\n\ndescribe 'game-of-life:', ->\n  it 'empty matrix', ->\n    matrix = {}\n    result = GameOfLife.tick matrix\n    expected = {}\n    assert.are.same expected, result\n\n  pending 'live cells with zero live neighbors die', ->\n    matrix = {\n      {0, 0, 0},\n      {0, 1, 0},\n      {0, 0, 0},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {0, 0, 0},\n      {0, 0, 0},\n      {0, 0, 0},\n    }\n    assert.are.same expected, result\n\n  pending 'live cells with only one live neighbor die', ->\n    matrix = {\n      {0, 0, 0},\n      {0, 1, 0},\n      {0, 1, 0},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {0, 0, 0},\n      {0, 0, 0},\n      {0, 0, 0},\n    }\n    assert.are.same expected, result\n\n  pending 'live cells with two live neighbors stay alive', ->\n    matrix = {\n      {1, 0, 1},\n      {1, 0, 1},\n      {1, 0, 1},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {0, 0, 0},\n      {1, 0, 1},\n      {0, 0, 0},\n    }\n    assert.are.same expected, result\n\n  pending 'live cells with three live neighbors stay alive', ->\n    matrix = {\n      {0, 1, 0},\n      {1, 0, 0},\n      {1, 1, 0},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {0, 0, 0},\n      {1, 0, 0},\n      {1, 1, 0},\n    }\n    assert.are.same expected, result\n\n  pending 'dead cells with three live neighbors become alive', ->\n    matrix = {\n      {1, 1, 0},\n      {0, 0, 0},\n      {1, 0, 0},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {0, 0, 0},\n      {1, 1, 0},\n      {0, 0, 0},\n    }\n    assert.are.same expected, result\n\n  pending 'live cells with four or more neighbors die', ->\n    matrix = {\n      {1, 1, 1},\n      {1, 1, 1},\n      {1, 1, 1},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {1, 0, 1},\n      {0, 0, 0},\n      {1, 0, 1},\n    }\n    assert.are.same expected, result\n\n  pending 'bigger matrix', ->\n    matrix = {\n      {1, 1, 0, 1, 1, 0, 0, 0},\n      {1, 0, 1, 1, 0, 0, 0, 0},\n      {1, 1, 1, 0, 0, 1, 1, 1},\n      {0, 0, 0, 0, 0, 1, 1, 0},\n      {1, 0, 0, 0, 1, 1, 0, 0},\n      {1, 1, 0, 0, 0, 1, 1, 1},\n      {0, 0, 1, 0, 1, 0, 0, 1},\n      {1, 0, 0, 0, 0, 0, 1, 1},\n    }\n    result = GameOfLife.tick matrix\n    expected = {\n      {1, 1, 0, 1, 1, 0, 0, 0},\n      {0, 0, 0, 0, 0, 1, 1, 0},\n      {1, 0, 1, 1, 1, 1, 0, 1},\n      {1, 0, 0, 0, 0, 0, 0, 1},\n      {1, 1, 0, 0, 1, 0, 0, 1},\n      {1, 1, 0, 1, 0, 0, 0, 1},\n      {1, 0, 0, 0, 0, 0, 0, 0},\n      {0, 0, 0, 0, 0, 0, 1, 1},\n    }\n    assert.are.same expected, result\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

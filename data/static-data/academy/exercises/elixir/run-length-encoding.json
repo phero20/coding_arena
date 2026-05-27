@@ -1,0 +1,47 @@
+{
+  "id": "elixir:run-length-encoding",
+  "trackSlug": "elixir",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "f4f759ea-53e1-42d6-a580-6e7b7d6a99a0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "regular-expressions"
+  ],
+  "prerequisites": [
+    "strings",
+    "regular-expressions",
+    "enum",
+    "if"
+  ],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule RunLengthEncoder do\n  @doc \"\"\"\n  Generates a string where consecutive elements are represented as a data value and count.\n  \"AABBBCCCC\" => \"2A3B4C\"\n  For this example, assume all input are strings, that are all uppercase letters.\n  It should also be able to reconstruct the data into its original form.\n  \"2A3B4C\" => \"AABBBCCCC\"\n  \"\"\"\n  @spec encode(String.t()) :: String.t()\n  def encode(string) do\n  end\n\n  @spec decode(String.t()) :: String.t()\n  def decode(string) do\n  end\nend\n",
+  "example_solution": "defmodule RunLengthEncoder do\n  @spec encode(String.t()) :: String.t()\n  def encode(string) do\n    Regex.scan(~r/([a-zA-Z\\s])\\1*/, string)\n    |> Enum.map_join(fn [run, c] ->\n      times = String.length(run)\n\n      number =\n        if times == 1 do\n          \"\"\n        else\n          times\n        end\n\n      \"#{number}#{c}\"\n    end)\n  end\n\n  @spec decode(String.t()) :: String.t()\n  def decode(string) do\n    Regex.scan(~r/(\\d*)(.)/, string)\n    |> Enum.map_join(fn [_, n, c] ->\n      times =\n        if n == \"\" do\n          1\n        else\n          String.to_integer(n)\n        end\n\n      String.duplicate(c, times)\n    end)\n  end\nend\n",
+  "test_code": "defmodule RunLengthEncoderTest do\n  use ExUnit.Case\n\n  test \"encode empty string\" do\n    assert RunLengthEncoder.encode(\"\") === \"\"\n  end\n\n  @tag :pending\n  test \"encode single characters only are encoded without count\" do\n    assert RunLengthEncoder.encode(\"XYZ\") === \"XYZ\"\n  end\n\n  @tag :pending\n  test \"encode string with no single characters\" do\n    assert RunLengthEncoder.encode(\"AABBBCCCC\") == \"2A3B4C\"\n  end\n\n  @tag :pending\n  test \"encode single characters mixed with repeated characters\" do\n    assert RunLengthEncoder.encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\") ===\n             \"12WB12W3B24WB\"\n  end\n\n  @tag :pending\n  test \"encode multiple whitespace mixed in string\" do\n    assert RunLengthEncoder.encode(\"  hsqq qww  \") === \"2 hs2q q2w2 \"\n  end\n\n  @tag :pending\n  test \"encode lowercase characters\" do\n    assert RunLengthEncoder.encode(\"aabbbcccc\") === \"2a3b4c\"\n  end\n\n  @tag :pending\n  test \"decode empty string\" do\n    assert RunLengthEncoder.decode(\"\") === \"\"\n  end\n\n  @tag :pending\n  test \"decode single characters only\" do\n    assert RunLengthEncoder.decode(\"XYZ\") === \"XYZ\"\n  end\n\n  @tag :pending\n  test \"decode string with no single characters\" do\n    assert RunLengthEncoder.decode(\"2A3B4C\") == \"AABBBCCCC\"\n  end\n\n  @tag :pending\n  test \"decode single characters with repeated characters\" do\n    assert RunLengthEncoder.decode(\"12WB12W3B24WB\") ===\n             \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"\n  end\n\n  @tag :pending\n  test \"decode multiple whitespace mixed in string\" do\n    assert RunLengthEncoder.decode(\"2 hs2q q2w2 \") === \"  hsqq qww  \"\n  end\n\n  @tag :pending\n  test \"decode lower case string\" do\n    assert RunLengthEncoder.decode(\"2a3b4c\") === \"aabbbcccc\"\n  end\n\n  @tag :pending\n  test \"encode followed by decode gives original string\" do\n    original = \"zzz ZZ  zZ\"\n    encoded = RunLengthEncoder.encode(original)\n    assert RunLengthEncoder.decode(encoded) === original\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "Teapane"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "CoderDennis",
+    "Cohen-Carlisle",
+    "dalexj",
+    "daveyarwood",
+    "devonestes",
+    "lex57ukr",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "waiting-for-dev"
+  ]
+}

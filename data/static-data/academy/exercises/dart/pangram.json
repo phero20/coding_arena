@@ -1,0 +1,28 @@
+{
+  "id": "dart:pangram",
+  "trackSlug": "dart",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "0ea556b0-afcd-479d-bbad-68bc4556c1d0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "class Pangram {\n  // Put your code here\n}\n",
+  "example_solution": "class Pangram {\n  bool isPangram(String sentence) {\n    Set<String> uniqueLetters = new Set();\n    String cleanSentence = sentence.toLowerCase().replaceAll(new RegExp(r\"[^a-zA-Z]\"), \"\");\n    uniqueLetters.addAll(cleanSentence.split(\"\"));\n\n    return uniqueLetters.length == 26;\n  }\n}\n",
+  "test_code": "import 'package:pangram/pangram.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  final pangram = Pangram();\n\n  group('Pangram', () {\n    test('empty sentence', () {\n      final result = pangram.isPangram('');\n      expect(result, equals(false));\n    }, skip: false);\n\n    test('perfect lower case', () {\n      final result = pangram.isPangram('abcdefghijklmnopqrstuvwxyz');\n      expect(result, equals(true));\n    }, skip: true);\n\n    test('only lower case', () {\n      final result = pangram.isPangram('the quick brown fox jumps over the lazy dog');\n      expect(result, equals(true));\n    }, skip: true);\n\n    test('missing the letter \\'x\\'', () {\n      final result = pangram.isPangram('a quick movement of the enemy will jeopardize five gunboats');\n      expect(result, equals(false));\n    }, skip: true);\n\n    test('missing the letter \\'h\\'', () {\n      final result = pangram.isPangram('five boxing wizards jump quickly at it');\n      expect(result, equals(false));\n    }, skip: true);\n\n    test('with underscores', () {\n      final result = pangram.isPangram('the_quick_brown_fox_jumps_over_the_lazy_dog');\n      expect(result, equals(true));\n    }, skip: true);\n\n    test('with numbers', () {\n      final result = pangram.isPangram('the 1 quick brown fox jumps over the 2 lazy dogs');\n      expect(result, equals(true));\n    }, skip: true);\n\n    test('missing letters replaced by numbers', () {\n      final result = pangram.isPangram('7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog');\n      expect(result, equals(false));\n    }, skip: true);\n\n    test('mixed case and punctuation', () {\n      final result = pangram.isPangram('\"Five quacking Zephyrs jolt my wax bed.\"');\n      expect(result, equals(true));\n    }, skip: true);\n\n    test('a-m and A-M are 26 different characters but not a pangram', () {\n      final result = pangram.isPangram('abcdefghijklm ABCDEFGHIJKLM');\n      expect(result, equals(false));\n    }, skip: true);\n  });\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

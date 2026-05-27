@@ -1,0 +1,30 @@
+{
+  "id": "clojure:log-levels",
+  "trackSlug": "clojure",
+  "slug": "log-levels",
+  "name": "Log Levels",
+  "uuid": "693e4ef3-bcf1-4b5f-8883-24d006164541",
+  "type": "concept",
+  "status": "beta",
+  "blurb": "Learn about strings by parsing application logs",
+  "difficulty": null,
+  "concepts": [
+    "strings"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nIn this exercise you'll be processing log-lines.\n\nEach log line is a string formatted as follows: `\"[<LEVEL>]: <MESSAGE>\"`.\n\nThere are three different log levels:\n\n- `INFO`\n- `WARNING`\n- `ERROR`\n\nYou have three tasks, each of which will take a log line and ask you to do something with it.\n\n## 1. Get message from a log line\n\nImplement the `message` function to return a log line's message:\n\n```clojure\n(message \"[ERROR]: Invalid operation\")\n;;=> \"Invalid operation\"\n```\n\nAny leading or trailing white space should be removed:\n\n```clojure\n(message \"[WARNING]:  Disk almost full\\r\\n\")\n;;=> \"Disk almost full\"\n```\n\n## 2. Get log level from a log line\n\nImplement the `log-level` function to return a log line's log level, which should be returned in lowercase:\n\n```clojure\n(log-level \"[ERROR]: Invalid operation\")\n;;=> \"error\"\n```\n\n## 3. Reformat a log line\n\nImplement the `reformat` function that reformats the log line, putting the message first and the log level after it in parentheses:\n\n```clojure\n(reformat \"[INFO]: Operation completed\")\n;;=> \"Operation completed (info)\"\n```\n",
+  "introduction": "# Introduction\n\nA `string` in Clojure is a Java string, which is an object that represents immutable text as a sequence of Unicode characters (letters, digits, punctuation, etc.) and is defined as follows:\n\n```clojure\n(def fruit \"Apple\")\n```\n\nThe `clojure.string` library provides many standard string manipulation and processing functions. In addition, all the usual Java methods for operating on strings are available via interop.\n",
+  "hints": "# Hints\n\n## General\n\n- The `clojure.string` namespace has many useful [string manipulation functions][string-ns].\n\n## 1. Get message from a log line\n\n- The [`split`][split] function can be used to split a string on a regular expression.\n- The [`trim`][trim] function can be used to remove whitespace from the ends of a string.\n\n## 2. Get log level from a log line\n\n- A `string` can be converted to lowercase using [`lower-case`][lower-case].\n\n## 3. Reformat a log line\n\n- The [`str`][str] function can be used to concatenate strings.\n\n[lower-case]: https://clojuredocs.org/clojure.string/lower-case\n[split]: https://clojuredocs.org/clojure.string/split\n[str]: https://clojuredocs.org/clojure.core/str\n[string-ns]: https://clojuredocs.org/clojure.string\n[trim]: https://clojuredocs.org/clojure.string/trim\n",
+  "starter_code": "(ns log-levels\n  (:require [clojure.string :as str]))\n\n(defn message\n  \"Takes a string representing a log line\n   and returns its message with whitespace trimmed.\"\n  [s]\n  )\n\n(defn log-level\n  \"Takes a string representing a log line\n   and returns its level in lower-case.\"\n  [s]\n  )\n\n(defn reformat\n  \"Takes a string representing a log line and formats it\n   with the message first and the log level in parentheses.\"\n  [s]\n  )\n",
+  "example_solution": "(ns log-levels\n  (:require [clojure.string :as str]))\n\n(defn message\n  \"Takes a string representing a log line\n   and returns its message with whitespace trimmed.\"\n  [s]\n  (str/trim (last (str/split s #\":\"))))\n\n(defn log-level\n  \"Takes a string representing a log line\n   and returns its level in lower-case.\"\n  [s]\n  (str/lower-case (subs (first (str/split s #\"]\")) 1)))\n\n(defn reformat\n  \"Takes a string representing a log line and formats it\n   with the message first and the log level in parentheses.\"\n  [s]\n  (str (message s) \" (\" (log-level s) \")\"))\n",
+  "test_code": "(ns log-levels-test\n  (:require [clojure.test :refer [deftest is]]\n            log-levels))\n\n(deftest ^{:task 1 :task-1 true :message true} message-error-test\n  (is (= \"Stack overflow\" (log-levels/message \"[ERROR]: Stack overflow\"))))\n\n(deftest ^{:task 1 :task-1 true :message true} message-warning-test\n  (is (= (log-levels/message \"[WARNING]: Disk almost full\") \"Disk almost full\")))\n\n(deftest ^{:task 1 :task-1 true :message true} message-info-test\n  (is (= (log-levels/message \"[INFO]: File moved\") \"File moved\")))\n\n(deftest ^{:task 1 :task-1 true :message true} message-trim-whitespace-test\n  (is (= \"Timezone not set\" (log-levels/message \"[WARNING]:   \\tTimezone not set  \\r\\n\"))))\n\n(deftest ^{:task 2 :task-2 true :log-level true} log-level-error-test\n  (is (= \"error\" (log-levels/log-level \"[ERROR]: Disk full\"))))\n\n(deftest ^{:task 2 :task-2 true :log-level true} log-level-warning-test\n  (is (= \"warning\" (log-levels/log-level \"[WARNING]: Unsafe password\"))))\n\n(deftest ^{:task 2 :task-2 true :log-level true} log-level-info-test\n  (is (= \"info\" (log-levels/log-level \"[INFO]: Timezone changed\"))))\n\n(deftest ^{:task 3 :task-3 true :reformat true} reformat-error-test\n  (is (= \"Segmentation fault (error)\" (log-levels/reformat \"[ERROR]: Segmentation fault\"))))\n\n(deftest ^{:task 3 :task-3 true :reformat true} reformat-warning-test\n  (is (= \"Decreased performance (warning)\" (log-levels/reformat \"[WARNING]: Decreased performance\"))))\n\n(deftest ^{:task 3 :task-3 true :reformat true} reformat-info-test\n  (is (= \"Disk defragmented (info)\" (log-levels/reformat \"[INFO]: Disk defragmented\"))))\n\n(deftest ^{:task 3 :task-3 true :reformat true} reformat-trim-whitespace-test\n  (is (= \"Corrupt disk (error)\" (log-levels/reformat \"[ERROR]: \\t Corrupt disk\\t \\t \\r\\n\"))))\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "bobbicodes"
+  ],
+  "contributors": null
+}

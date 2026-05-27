@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:spiral-matrix",
+  "trackSlug": "fsharp",
+  "slug": "spiral-matrix",
+  "name": "Spiral Matrix",
+  "uuid": "52f8f299-b93b-4f44-bd5b-b445741b285d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the size, return a square matrix of numbers in spiral order.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "multi-dimensional-arrays",
+    "numbers"
+  ],
+  "prerequisites": [
+    "if-then-else-expressions",
+    "lists",
+    "multi-dimensional-arrays",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nYour task is to return a square matrix of a given size.\n\nThe matrix should be filled with natural numbers, starting from 1 in the top-left corner, increasing in an inward, clockwise spiral order, like these examples:\n\n## Examples\n\n### Spiral matrix of size 3\n\n```text\n1 2 3\n8 9 4\n7 6 5\n```\n\n### Spiral matrix of size 4\n\n```text\n 1  2  3 4\n12 13 14 5\n11 16 15 6\n10  9  8 7\n```\n",
+  "introduction": "# Introduction\n\nIn a small village near an ancient forest, there was a legend of a hidden treasure buried deep within the woods.\nDespite numerous attempts, no one had ever succeeded in finding it.\nThis was about to change, however, thanks to a young explorer named Elara.\nShe had discovered an old document containing instructions on how to locate the treasure.\nUsing these instructions, Elara was able to draw a map that revealed the path to the treasure.\n\nTo her surprise, the path followed a peculiar clockwise spiral.\nIt was no wonder no one had been able to find the treasure before!\nWith the map in hand, Elara embarks on her journey to uncover the hidden treasure.\n",
+  "hints": null,
+  "starter_code": "module SpiralMatrix\n\nlet spiralMatrix size = failwith \"You need to implement this function.\"",
+  "example_solution": "module SpiralMatrix\n \nlet array2DToList array = \n  [ for x in Array2D.base1 array .. Array2D.length1 array - 1 ->\n    [ for y in Array2D.base2 array .. Array2D.length2 array - 1 -> array.[x, y] ] ]  \n\nlet spiralMatrix size = \n    let numbersToPlace = size * size\n\n    let mutable spiral = Array2D.create size size 0\n    let mutable currentSpiralValue = 1\n    let mutable firstPivot = 0\n    let mutable secondPivot = size - 1\n\n    let setValue x y = \n        spiral.[x, y] <- currentSpiralValue\n        currentSpiralValue <- currentSpiralValue + 1\n\n    while currentSpiralValue <= numbersToPlace do\n        [firstPivot .. secondPivot] \n        |> List.iter (fun i -> setValue firstPivot i)\n\n        [firstPivot + 1.. secondPivot] \n        |> List.iter (fun i -> setValue i secondPivot)\n\n        [secondPivot - 1 .. -1 .. firstPivot] \n        |> List.iter (fun i -> setValue secondPivot i)\n\n        [secondPivot - 1 .. -1 .. firstPivot + 1] \n        |> List.iter (fun i -> setValue i firstPivot)\n\n        firstPivot <- firstPivot + 1\n        secondPivot <- secondPivot - 1\n\n    array2DToList spiral",
+  "test_code": "module SpiralMatrixTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen SpiralMatrix\n\n[<Fact>]\nlet ``Empty spiral`` () =\n    spiralMatrix 0 |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Trivial spiral`` () =\n    spiralMatrix 1 |> should equal [[1]]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Spiral of size 2`` () =\n    spiralMatrix 2 |> should equal \n        [ [1; 2];\n          [4; 3] ]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Spiral of size 3`` () =\n    spiralMatrix 3 |> should equal \n        [ [1; 2; 3];\n          [8; 9; 4];\n          [7; 6; 5] ]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Spiral of size 4`` () =\n    spiralMatrix 4 |> should equal \n        [ [1; 2; 3; 4];\n          [12; 13; 14; 5];\n          [11; 16; 15; 6];\n          [10; 9; 8; 7] ]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Spiral of size 5`` () =\n    spiralMatrix 5 |> should equal \n        [ [1; 2; 3; 4; 5];\n          [16; 17; 18; 19; 6];\n          [15; 24; 25; 20; 7];\n          [14; 23; 22; 21; 8];\n          [13; 12; 11; 10; 9] ]\n\n",
+  "source": "Reddit r/dailyprogrammer challenge #320 [Easy] Spiral Ascension.",
+  "source_url": "https://web.archive.org/web/20230607064729/https://old.reddit.com/r/dailyprogrammer/comments/6i60lr/20170619_challenge_320_easy_spiral_ascension/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

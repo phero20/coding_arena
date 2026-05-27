@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:hello-world",
+  "trackSlug": "arm64-assembly",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "669a233b-b6c3-4d18-81d8-41b906ad5eb1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ".section .rodata\nmsg: .string \"Goodbye, Mars!\"\n\n.text\n.global hello\nhello:\n        adrp    x0, msg\n        add     x0, x0, :lo12:msg\n        ret\n",
+  "example_solution": ".section .rodata\nmsg: .string \"Hello, World!\"\n\n.text\n.global hello\nhello:\n        adrp    x0, msg\n        add     x0, x0, :lo12:msg\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\nextern const char *hello(void);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_say_hi(void) {\n    TEST_ASSERT_EQUAL_STRING(\"Hello, World!\", hello());\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_say_hi);\n    return UNITY_END();\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "bergjohan"
+  ],
+  "contributors": null
+}

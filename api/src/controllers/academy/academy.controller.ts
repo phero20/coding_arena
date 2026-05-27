@@ -57,4 +57,44 @@ export class AcademyController extends BaseController {
       throw new AppError("Failed to fetch concept", { statusCode: 500 });
     }
   }
+
+  async getTrackExercise(req: ControllerRequest<never, { trackSlug: string, exerciseSlug: string }, never>) {
+    const { trackSlug, exerciseSlug } = req.params;
+    
+    if (!trackSlug || !exerciseSlug) {
+      throw new AppError("Track slug and exercise slug are required", { statusCode: 400 });
+    }
+
+    try {
+      const exercise = await this.academyService.getTrackExercise(trackSlug, exerciseSlug);
+      return exercise;
+    } catch (error: any) {
+      if (error.code === 'ENOENT') {
+        throw new AppError("Exercise not found", { statusCode: 404 });
+      }
+      logger.error({ err: error, trackSlug, exerciseSlug }, "Failed to fetch exercise");
+      throw new AppError("Failed to fetch exercise", { statusCode: 500 });
+    }
+  }
+
+  async getSolvedExercises(req: ControllerRequest<never, { trackSlug: string }, never>) {
+    const { trackSlug } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new AppError("Unauthorized", { statusCode: 401 });
+    }
+
+    if (!trackSlug) {
+      throw new AppError("Track slug is required", { statusCode: 400 });
+    }
+
+    try {
+      const solved = await this.academyService.getSolvedExercises(userId, trackSlug);
+      return solved;
+    } catch (error: any) {
+      logger.error({ err: error, trackSlug, userId }, "Failed to fetch solved exercises");
+      throw new AppError("Failed to fetch solved exercises", { statusCode: 500 });
+    }
+  }
 }

@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:pangram",
+  "trackSlug": "moonscript",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "7efe4785-5328-4130-8821-5fc067f29586",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "is_pangram = (sentence) ->\n  error 'Implement me'\n\nreturn is_pangram\n",
+  "example_solution": "return (str) ->\n  seen = {}\n  count = 0\n  for char in str\\lower!\\gmatch(\"[a-z]\")\n    if not seen[char]\n      seen[char] = 1\n      count += 1\n      return true if count == 26\n  false\n",
+  "test_code": "is_pangram = require 'pangram'\n\ndescribe 'pangram:', ->\n  it 'empty sentence', ->\n    result = is_pangram ''\n    assert.is_false result\n\n  pending 'perfect lower case', ->\n    result = is_pangram 'abcdefghijklmnopqrstuvwxyz'\n    assert.is_true result\n\n  pending 'only lower case', ->\n    result = is_pangram 'the quick brown fox jumps over the lazy dog'\n    assert.is_true result\n\n  pending \"missing the letter 'x'\", ->\n    result = is_pangram 'a quick movement of the enemy will jeopardize five gunboats'\n    assert.is_false result\n\n  pending \"missing the letter 'h'\", ->\n    result = is_pangram 'five boxing wizards jump quickly at it'\n    assert.is_false result\n\n  pending 'with underscores', ->\n    result = is_pangram 'the_quick_brown_fox_jumps_over_the_lazy_dog'\n    assert.is_true result\n\n  pending 'with numbers', ->\n    result = is_pangram 'the 1 quick brown fox jumps over the 2 lazy dogs'\n    assert.is_true result\n\n  pending 'missing letters replaced by numbers', ->\n    result = is_pangram '7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog'\n    assert.is_false result\n\n  pending 'mixed case and punctuation', ->\n    result = is_pangram '\"Five quacking Zephyrs jolt my wax bed.\"'\n    assert.is_true result\n\n  pending 'a-m and A-M are 26 different characters but not a pangram', ->\n    result = is_pangram 'abcdefghijklm ABCDEFGHIJKLM'\n    assert.is_false result\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

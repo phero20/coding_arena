@@ -1,0 +1,28 @@
+{
+  "id": "prolog:rna-transcription",
+  "trackSlug": "prolog",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "e5e2ed3c-d93c-4e8f-a395-53ce6d7135f1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "rna_transcription(Dna, Rna).\n",
+  "example_solution": "rna_transcription(Rna, Dna) :-\n    string_chars(Rna, RnaList),\n    rna_transcription_list(RnaList, DnaList),\n    string_chars(Dna, DnaList).\n\nrna_transcription_list([], []) :- !.\nrna_transcription_list([RnaBase | Rna], [DnaBase | Dna]) :-\n    (RnaBase = 'C' ->\n        DnaBase = 'G';\n     RnaBase = 'G' ->\n        DnaBase = 'C';\n     RnaBase = 'T' ->\n        DnaBase = 'A';\n     RnaBase = 'A' ->\n        DnaBase = 'U'\n    ),\n    rna_transcription_list(Rna, Dna).\n\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(rna_transcription).\n\n    test(rna_complement_of_cytosine_is_guanine, condition(true)) :-\n        rna_transcription(\"C\", Result),\n        Result == \"G\".\n\n    test(rna_complement_of_guanine_is_cytosine, condition(pending)) :-\n        rna_transcription(\"G\", Result),\n        Result == \"C\".\n\n    test(rna_complement_of_thymine_is_adenine, condition(pending)) :-\n        rna_transcription(\"T\", Result),\n        Result == \"A\".\n\n    test(rna_complement_of_adenine_is_uracil, condition(pending)) :-\n        rna_transcription(\"A\", Result),\n        Result == \"U\".\n\n    test(rna_complement, condition(pending)) :-\n        rna_transcription(\"ACGTGGTCTTAA\", Result),\n        Result == \"UGCACCAGAAUU\".\n\n    test(dna_correctly_handles_invalid_input, [fail, condition(pending)]) :-\n        rna_transcription(\"U\", _).\n\n    test(dna_correctly_handles_completely_invalid_input, [fail, condition(pending)]) :-\n        rna_transcription(\"XXX\", _).\n\n    test(dna_correctly_handles_partially_invalid_input, [fail, condition(pending)]) :-\n        rna_transcription(\"ACGTXXXCTTAA\", _).\n\n:- end_tests(rna_transcription).\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "qjd2413"
+  ],
+  "contributors": [
+    "parkerl"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "cpp:isogram",
+  "trackSlug": "cpp",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "fcd69b30-63e4-485d-a3b5-71f5039a9180",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"isogram.h\"\n\nnamespace isogram {\n\n// TODO: add your solution here\n\n}  // namespace isogram\n",
+  "example_solution": "#include <unordered_set>\n\n#include \"isogram.h\"\n\nnamespace isogram {\n\nbool is_isogram(std::string const& input_str) {\n    std::unordered_set<char> chars;\n\n    for (char const ch : input_str) {\n        if (isalnum(ch)) {\n            auto ret = chars.insert(tolower(ch));\n            if (ret.second == false) {\n                return false;\n            }\n        }\n    }\n\n    return true;\n}\n\n}  // namespace isogram\n",
+  "test_code": "#include \"isogram.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nusing namespace std;\n\n// Isogram exercise test case data version 1.7.0\n\nTEST_CASE(\"empty_string\") {\n    const bool actual = isogram::is_isogram(\"\");\n\n    const bool expected{true};\n\n    REQUIRE(expected == actual);\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"isogram_with_only_lower_case_characters\") {\n    const bool actual = isogram::is_isogram(\"isogram\");\n\n    const bool expected{true};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"word_with_one_duplicated_character\") {\n    const bool actual = isogram::is_isogram(\"eleven\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"word_with_one_duplicated_character_from_the_end_of_the_alphabet\") {\n    const bool actual = isogram::is_isogram(\"zzyzx\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"longest_reported_english_isogram\") {\n    const bool actual = isogram::is_isogram(\"subdermatoglyphic\");\n\n    const bool expected{true};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"word_with_duplicated_character_in_mixed_case\") {\n    const bool actual = isogram::is_isogram(\"Alphabet\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"word_with_duplicated_character_in_mixed_case_lowercase_first\") {\n    const bool actual = isogram::is_isogram(\"alphAbet\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"hypothetical_isogrammic_word_with_hyphen\") {\n    const bool actual = isogram::is_isogram(\"thumbscrew-japingly\");\n\n    const bool expected{true};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"hypothetical_word_with_duplicated_character_following_hyphen\") {\n    const bool actual = isogram::is_isogram(\"thumbscrew-jappingly\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"isogram_with_duplicated_hyphen\") {\n    const bool actual = isogram::is_isogram(\"six-year-old\");\n\n    const bool expected{true};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"made_up_name_that_is_an_isogram\") {\n    const bool actual = isogram::is_isogram(\"Emily Jung Schwartzkopf\");\n\n    const bool expected{true};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"duplicated_character_in_the_middle\") {\n    const bool actual = isogram::is_isogram(\"accentor\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"same_first_and_last_characters\") {\n    const bool actual = isogram::is_isogram(\"angola\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"word_with_duplicated_character_and_with_two_hyphens\") {\n    const bool actual = isogram::is_isogram(\"up-to-date\");\n\n    const bool expected{false};\n\n    REQUIRE(expected == actual);\n}\n\n#endif\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "chgraef"
+  ],
+  "contributors": [
+    "elyashiv",
+    "KevinWMatthews",
+    "patricksjackson"
+  ]
+}

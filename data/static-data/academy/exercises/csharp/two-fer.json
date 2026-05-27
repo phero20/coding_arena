@@ -1,0 +1,41 @@
+{
+  "id": "csharp:two-fer",
+  "trackSlug": "csharp",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "57f02d0e-7b75-473b-892d-26a7d980c4ce",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "optional-parameters",
+    "string-formatting"
+  ],
+  "prerequisites": [
+    "optional-parameters",
+    "string-formatting"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "public static class TwoFer\n{\n    // In order to get the tests running, first you need to make sure the Speak method \n    // can be called both without any arguments and also by passing one string argument.\n    public static string Speak()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public static class TwoFer\n{\n    public static string Speak(string name = \"you\") =>\n        $\"One for {name}, one for me.\";\n}\n",
+  "test_code": "public class TwoFerTests\n{\n    [Fact]\n    public void No_name_given()\n    {\n        Assert.Equal(\"One for you, one for me.\", TwoFer.Speak());\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_name_given()\n    {\n        Assert.Equal(\"One for Alice, one for me.\", TwoFer.Speak(\"Alice\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Another_name_given()\n    {\n        Assert.Equal(\"One for Bob, one for me.\", TwoFer.Speak(\"Bob\"));\n    }\n}\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "jpreese"
+  ],
+  "contributors": [
+    "dmahnkopf",
+    "ErikSchierboom",
+    "j2jensen",
+    "NextNebula",
+    "robkeim",
+    "sjwarner",
+    "wolf99",
+    "Zureka"
+  ]
+}

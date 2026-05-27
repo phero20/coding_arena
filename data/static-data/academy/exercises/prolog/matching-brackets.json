@@ -1,0 +1,26 @@
+{
+  "id": "prolog:matching-brackets",
+  "trackSlug": "prolog",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "84170102-5a72-45e8-897d-845eebbb9297",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "paired(String).\n",
+  "example_solution": ":- use_module(library(dcg/basics)).\n:- set_prolog_flag(double_quotes, chars).\n\nparentheses --> \"(\", balanced, \")\".\nbrackets    --> \"[\", balanced, \"]\".\nbraces      --> \"{\", balanced, \"}\".\n\nbalanced --> (parentheses | brackets | braces), balanced.\nbalanced --> non_bracket, balanced.\nbalanced --> [].\n\nnon_bracket --> [C], { \\+ member(C, \"()[]{}\") }.\n\npaired(String) :-\n    string_chars(String, Chars),\n    phrase(balanced, Chars),\n    !.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(matching_brackets).\n\n    test(paired_square_brackets, condition(true)) :-\n        paired(\"[]\").\n\n    test(empty_string, condition(pending)) :-\n        paired(\"\").\n\n    test(unpaired_brackets, [fail, condition(pending)]) :-\n        paired(\"[[\").\n\n    test(wrong_ordered_brackets, [fail, condition(pending)]) :-\n        paired(\"}{\").\n\n    test(wrong_closing_bracket, [fail, condition(pending)]) :-\n        paired(\"{]\").\n\n    test(paired_with_whitespace, condition(pending)) :-\n        paired(\"{ }\").\n\n    test(partially_paired_brackets, [fail, condition(pending)]) :-\n        paired(\"{[])\").\n\n    test(simple_nested_brackets, condition(pending)) :-\n        paired(\"{[]}\").\n\n    test(several_paired_brackets, condition(pending)) :-\n        paired(\"{}[]\").\n\n    test(paired_and_nested_brackets, condition(pending)) :-\n        paired(\"([{}({}[])])\").\n\n    test(unopened_closing_brackets, [fail, condition(pending)]) :-\n        paired(\"{[)][]}\").\n\n    test(unpaired_and_nested_brackets, [fail, condition(pending)]) :-\n        paired(\"([{])\").\n\n    test(paired_and_wrong_nested_brackets, [fail, condition(pending)]) :-\n        paired(\"[({]})\").\n\n    test(paired_and_wrong_nested_brackets_but_innermost_are_correct, [fail, condition(pending)]) :-\n        paired(\"[({}])\").\n\n    test(paired_and_incomplete_brackets, [fail, condition(pending)]) :-\n        paired(\"{}[\").\n\n    test(too_many_closing_brackets, [fail, condition(pending)]) :-\n        paired(\"[]]\").\n\n    test(early_unexpected_brackets, [fail, condition(pending)]) :-\n        paired(\")()\").\n\n    test(early_mismatched_brackets, [fail, condition(pending)]) :-\n        paired(\"{)()\").\n\n    test(math_expression, condition(pending)) :-\n        paired(\"(((185 + 223.85) * 15) - 543)/2\").\n\n    test(complex_latex_expression, condition(pending)) :-\n        paired(\"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\").\n\n:- end_tests(matching_brackets).\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

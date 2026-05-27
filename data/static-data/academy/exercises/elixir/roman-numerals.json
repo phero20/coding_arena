@@ -1,0 +1,52 @@
+{
+  "id": "elixir:roman-numerals",
+  "trackSlug": "elixir",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "4c0ece49-5710-43a1-88b3-2fb149de8552",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "recursion"
+  ],
+  "prerequisites": [
+    "strings",
+    "recursion",
+    "guards",
+    "default-arguments",
+    "multiple-clause-functions",
+    "enum",
+    "maps",
+    "cond",
+    "case"
+  ],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "defmodule RomanNumerals do\n  @doc \"\"\"\n  Convert the number to a roman number.\n  \"\"\"\n  @spec numeral(pos_integer) :: String.t()\n  def numeral(number) do\n  end\nend\n",
+  "example_solution": "defmodule RomanNumerals do\n  @numerals [\n    [1000, \"M\"],\n    [900, \"CM\"],\n    [500, \"D\"],\n    [400, \"CD\"],\n    [100, \"C\"],\n    [90, \"XC\"],\n    [50, \"L\"],\n    [40, \"XL\"],\n    [10, \"X\"],\n    [9, \"IX\"],\n    [5, \"V\"],\n    [4, \"IV\"],\n    [1, \"I\"]\n  ]\n\n  def numeral(0), do: \"\"\n\n  def numeral(number) do\n    [part, letter] = largest_factor(number)\n    letter <> numeral(number - part)\n  end\n\n  defp largest_factor(number) do\n    hd(Enum.filter(@numerals, fn [p, _] -> p <= number end))\n  end\nend\n",
+  "test_code": "defmodule RomanNumeralsTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"1\" do\n    assert RomanNumerals.numeral(1) == \"I\"\n  end\n\n  @tag :pending\n  test \"2\" do\n    assert RomanNumerals.numeral(2) == \"II\"\n  end\n\n  @tag :pending\n  test \"3\" do\n    assert RomanNumerals.numeral(3) == \"III\"\n  end\n\n  @tag :pending\n  test \"4\" do\n    assert RomanNumerals.numeral(4) == \"IV\"\n  end\n\n  @tag :pending\n  test \"5\" do\n    assert RomanNumerals.numeral(5) == \"V\"\n  end\n\n  @tag :pending\n  test \"6\" do\n    assert RomanNumerals.numeral(6) == \"VI\"\n  end\n\n  @tag :pending\n  test \"9\" do\n    assert RomanNumerals.numeral(9) == \"IX\"\n  end\n\n  @tag :pending\n  test \"16\" do\n    assert RomanNumerals.numeral(16) == \"XVI\"\n  end\n\n  @tag :pending\n  test \"27\" do\n    assert RomanNumerals.numeral(27) == \"XXVII\"\n  end\n\n  @tag :pending\n  test \"48\" do\n    assert RomanNumerals.numeral(48) == \"XLVIII\"\n  end\n\n  @tag :pending\n  test \"59\" do\n    assert RomanNumerals.numeral(59) == \"LIX\"\n  end\n\n  @tag :pending\n  test \"66\" do\n    assert RomanNumerals.numeral(66) == \"LXVI\"\n  end\n\n  @tag :pending\n  test \"93\" do\n    assert RomanNumerals.numeral(93) == \"XCIII\"\n  end\n\n  @tag :pending\n  test \"141\" do\n    assert RomanNumerals.numeral(141) == \"CXLI\"\n  end\n\n  @tag :pending\n  test \"163\" do\n    assert RomanNumerals.numeral(163) == \"CLXIII\"\n  end\n\n  @tag :pending\n  test \"402\" do\n    assert RomanNumerals.numeral(402) == \"CDII\"\n  end\n\n  @tag :pending\n  test \"575\" do\n    assert RomanNumerals.numeral(575) == \"DLXXV\"\n  end\n\n  @tag :pending\n  test \"666\" do\n    assert RomanNumerals.numeral(666) == \"DCLXVI\"\n  end\n\n  @tag :pending\n  test \"911\" do\n    assert RomanNumerals.numeral(911) == \"CMXI\"\n  end\n\n  @tag :pending\n  test \"1024\" do\n    assert RomanNumerals.numeral(1024) == \"MXXIV\"\n  end\n\n  @tag :pending\n  test \"1666\" do\n    assert RomanNumerals.numeral(1666) == \"MDCLXVI\"\n  end\n\n  @tag :pending\n  test \"3000\" do\n    assert RomanNumerals.numeral(3000) == \"MMM\"\n  end\n\n  @tag :pending\n  test \"3001\" do\n    assert RomanNumerals.numeral(3001) == \"MMMI\"\n  end\n\n  @tag :pending\n  test \"3888\" do\n    assert RomanNumerals.numeral(3888) == \"MMMDCCCLXXXVIII\"\n  end\n\n  @tag :pending\n  test \"3999\" do\n    assert RomanNumerals.numeral(3999) == \"MMMCMXCIX\"\n  end\nend\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "cetinajero",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "jinyeow",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

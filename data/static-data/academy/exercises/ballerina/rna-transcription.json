@@ -1,0 +1,26 @@
+{
+  "id": "ballerina:rna-transcription",
+  "trackSlug": "ballerina",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "ca932192-53ef-48e3-a3c5-74367927d957",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "public function toRna(string dna) returns string {\n    // TODO: implement this function\n}\n",
+  "example_solution": "public function toRna(string dna) returns string {\n    map<string> rna = {\"C\": \"G\", \"G\": \"C\", \"T\": \"A\", \"A\": \"U\"};\n    return from string n in dna\n        select rna.get(n);\n}\n",
+  "test_code": "import ballerina/test;\n\n@test:Config\nfunction testEmptyRNASequence() {\n    string expected = toRna(\"\");\n    test:assertEquals(expected, \"\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRNAComplementOfCytosineIsGuanine() {\n    string expected = toRna(\"C\");\n    test:assertEquals(expected, \"G\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRNAComplementOfGuanineIsCytosine() {\n    string expected = toRna(\"G\");\n    test:assertEquals(expected, \"C\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRNAComplementOfThymineIsAdenine() {\n    string expected = toRna(\"T\");\n    test:assertEquals(expected, \"A\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRNAComplementOfAdenineIsUracil() {\n    string expected = toRna(\"A\");\n    test:assertEquals(expected, \"U\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRNAComplement() {\n    string expected = toRna(\"ACGTGGTCTTAA\");\n    test:assertEquals(expected, \"UGCACCAGAAUU\");\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

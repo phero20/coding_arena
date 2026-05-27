@@ -1,0 +1,30 @@
+{
+  "id": "typescript:atbash-cipher",
+  "trackSlug": "typescript",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "04de61fb-9fde-461c-b306-0b4ce52e2169",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "export function encode(plainText: unknown): unknown {\n  throw new Error('Remove this line and implement the function')\n}\n\nexport function decode(cipherText: unknown): unknown {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "const alphabet = 'abcdefghijklmnopqrstuvwxyz'\nconst numbers = '0123456789'\n\nexport function encode(plainText: string): string {\n  const lowerCaseLettersOnly = plainText\n    .toLowerCase()\n    .split('')\n    .filter((char) => alphabet.includes(char) || numbers.includes(char))\n    .join('')\n\n  return decode(lowerCaseLettersOnly)\n    .split('')\n    .reduce((accumulator: string[], _, index, array) => {\n      if (index % 5 === 0) {\n        accumulator.push(array.slice(index, index + 5).join(''))\n      }\n      return accumulator\n    }, [])\n    .join(' ')\n}\n\nexport function decode(cipherText: string): string {\n  return cipherText\n    .split(' ')\n    .join('')\n    .split('')\n    .map((char) =>\n      alphabet.includes(char) ? alphabet[25 - alphabet.indexOf(char)] : char\n    )\n    .join('')\n}\n",
+  "test_code": "import { describe, xdescribe, it, expect, xit } from '@jest/globals'\nimport { encode, decode } from './atbash-cipher.ts'\n\ndescribe('AtbashCipher', () => {\n  describe('encoding', () => {\n    it('encode yes', () => {\n      const cipherText = encode('yes')\n      expect(cipherText).toEqual('bvh')\n    })\n\n    xit('encode no', () => {\n      const cipherText = encode('no')\n      expect(cipherText).toEqual('ml')\n    })\n\n    xit('encode OMG', () => {\n      const cipherText = encode('OMG')\n      expect(cipherText).toEqual('lnt')\n    })\n\n    xit('encode spaces', () => {\n      const cipherText = encode('O M G')\n      expect(cipherText).toEqual('lnt')\n    })\n\n    xit('encode mindblowingly', () => {\n      const cipherText = encode('mindblowingly')\n      expect(cipherText).toEqual('nrmwy oldrm tob')\n    })\n\n    xit('encode numbers', () => {\n      const cipherText = encode('Testing,1 2 3, testing.')\n      expect(cipherText).toEqual('gvhgr mt123 gvhgr mt')\n    })\n\n    xit('encode deep thought', () => {\n      const cipherText = encode('Truth is fiction.')\n      expect(cipherText).toEqual('gifgs rhurx grlm')\n    })\n\n    xit('encode all the letters', () => {\n      const cipherText = encode('thequickbrownfoxjumpsoverthelazydog')\n      expect(cipherText).toEqual('gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt')\n    })\n  })\n\n  xdescribe('decode', () => {\n    xit('decode exercism', () => {\n      const plainText = decode('vcvix rhn')\n      expect(plainText).toEqual('exercism')\n    })\n\n    xit('decode a sentence', () => {\n      const cipherText = decode('zmlyh gzxov rhlug vmzhg vkkrm thglm v')\n      expect(cipherText).toEqual('anobstacleisoftenasteppingstone')\n    })\n\n    xit('decode numbers', () => {\n      const plainText = decode('gvhgr mt123 gvhgr mt')\n      expect(plainText).toEqual('testing123testing')\n    })\n\n    xit('decode all the letters', () => {\n      const cipherText = decode('gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt')\n      expect(cipherText).toEqual('thequickbrownfoxjumpsoverthelazydog')\n    })\n  })\n})\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "bward"
+  ],
+  "contributors": [
+    "masters3d",
+    "Roshanjossey",
+    "SleeplessByte"
+  ]
+}

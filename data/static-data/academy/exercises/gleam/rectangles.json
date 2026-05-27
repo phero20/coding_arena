@@ -1,0 +1,34 @@
+{
+  "id": "gleam:rectangles",
+  "trackSlug": "gleam",
+  "slug": "rectangles",
+  "name": "Rectangles",
+  "uuid": "68171b71-a9eb-4925-a2f3-df0bc27ce41d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the rectangles in an ASCII diagram.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "dicts"
+  ],
+  "prerequisites": [
+    "lists",
+    "strings",
+    "dicts",
+    "tuples",
+    "bools"
+  ],
+  "instructions": "# Instructions\n\nCount the rectangles in an ASCII diagram like the one below.\n\n```text\n   +--+\n  ++  |\n+-++--+\n|  |  |\n+--+--+\n```\n\nThe above diagram contains these 6 rectangles:\n\n```text\n\n\n+-----+\n|     |\n+-----+\n```\n\n```text\n   +--+\n   |  |\n   |  |\n   |  |\n   +--+\n```\n\n```text\n   +--+\n   |  |\n   +--+\n\n\n```\n\n```text\n\n\n   +--+\n   |  |\n   +--+\n```\n\n```text\n\n\n+--+\n|  |\n+--+\n```\n\n```text\n\n  ++\n  ++\n\n\n```\n\nYou may assume that the input is always a proper rectangle (i.e. the length of every line equals the length of the first line).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn rectangles(input: String) -> Int {\n  todo\n}\n",
+  "example_solution": "import gleam/dict.{type Dict}\nimport gleam/list\nimport gleam/string\n\ntype Wall {\n  Corner\n  Vertical\n  Horizontal\n}\n\npub fn rectangles(input: String) -> Int {\n  input\n  |> parse_input\n  |> find_rectangles\n}\n\nfn parse_input(input: String) -> Dict(#(Int, Int), Wall) {\n  input\n  |> string.split(\"\\n\")\n  |> list.index_map(fn(line, row) {\n    line\n    |> string.to_graphemes\n    |> list.index_map(fn(char, col) {\n      case char {\n        \"+\" -> [#(#(row, col), Corner)]\n        \"|\" -> [#(#(row, col), Vertical)]\n        \"-\" -> [#(#(row, col), Horizontal)]\n        _ -> []\n      }\n    })\n  })\n  |> list.flatten\n  |> list.flatten\n  |> dict.from_list\n}\n\nfn find_rectangles(map: Dict(#(Int, Int), Wall)) -> Int {\n  let corners = dict.filter(map, fn(_pos, wall) { wall == Corner })\n\n  dict.fold(from: 0, over: corners, with: fn(rectangles, position1, _corner) {\n    let #(x1, y1) = position1\n\n    dict.fold(\n      from: rectangles,\n      over: corners,\n      with: fn(rectangles, position2, _corner2) {\n        let #(x2, y2) = position2\n        let position3 = #(x1, y2)\n        let position4 = #(x2, y1)\n        let is_rectangle =\n          x1 < x2\n          && y1 < y2\n          && dict.has_key(corners, position3)\n          && dict.has_key(corners, position4)\n          && has_vertical_walls_between(map, position1, position4)\n          && has_vertical_walls_between(map, position3, position2)\n          && has_horizontal_walls_between(map, position1, position3)\n          && has_horizontal_walls_between(map, position4, position2)\n\n        case is_rectangle {\n          True -> rectangles + 1\n          False -> rectangles\n        }\n      },\n    )\n  })\n}\n\nfn has_vertical_walls_between(\n  map: Dict(#(Int, Int), Wall),\n  position1: #(Int, Int),\n  position2: #(Int, Int),\n) -> Bool {\n  let #(x1, y1) = position1\n  let #(x2, y2) = position2\n  let assert True = y1 == y2\n  let assert True = x1 < x2\n\n  list.range(x1, x2)\n  |> list.map(fn(x) { #(x, y1) })\n  |> list.all(fn(pos) {\n    case dict.get(map, pos) {\n      Ok(Corner) -> True\n      Ok(Vertical) -> True\n      _ -> False\n    }\n  })\n}\n\nfn has_horizontal_walls_between(\n  map: Dict(#(Int, Int), Wall),\n  position1: #(Int, Int),\n  position2: #(Int, Int),\n) -> Bool {\n  let #(x1, y1) = position1\n  let #(x2, y2) = position2\n  let assert True = x1 == x2\n  let assert True = y1 < y2\n\n  list.range(y1, y2)\n  |> list.map(fn(y) { #(x1, y) })\n  |> list.all(fn(pos) {\n    case dict.get(map, pos) {\n      Ok(Corner) -> True\n      Ok(Horizontal) -> True\n      _ -> False\n    }\n  })\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport rectangles\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn no_rows_test() {\n  rectangles.rectangles(\"\")\n  |> should.equal(0)\n}\n\npub fn no_columns_test() {\n  rectangles.rectangles(\n    \"\n     \n    \",\n  )\n  |> should.equal(0)\n}\n\npub fn no_rectangles_test() {\n  rectangles.rectangles(\" \")\n  |> should.equal(0)\n}\n\npub fn one_rectangle_test() {\n  rectangles.rectangles(\n    \"\n    +-+\n    | |\n    +-+\n    \",\n  )\n  |> should.equal(1)\n}\n\npub fn two_rectangles_without_shared_parts_test() {\n  rectangles.rectangles(\n    \"\n      +-+\n      | |\n    +-+-+\n    | |  \n    +-+  \n    \",\n  )\n  |> should.equal(2)\n}\n\npub fn five_rectangles_with_shared_parts_test() {\n  rectangles.rectangles(\n    \"\n      +-+\n      | |\n    +-+-+\n    | | |\n    +-+-+\n    \",\n  )\n  |> should.equal(5)\n}\n\npub fn rectangle_of_height_1_is_counted_test() {\n  rectangles.rectangles(\n    \"\n    +--+\n    +--+\n    \",\n  )\n  |> should.equal(1)\n}\n\npub fn rectangle_of_width_1_is_counted_test() {\n  rectangles.rectangles(\n    \"\n    ++\n    ||\n    ++\n    \",\n  )\n  |> should.equal(1)\n}\n\npub fn one_by_one_square_is_counted_test() {\n  rectangles.rectangles(\n    \"\n    ++\n    ++\n    \",\n  )\n  |> should.equal(1)\n}\n\npub fn only_complete_rectangles_are_counted_test() {\n  rectangles.rectangles(\n    \"\n      +-+\n        |\n    +-+-+\n    | | -\n    +-+-+\n    \",\n  )\n  |> should.equal(1)\n}\n\npub fn rectangles_can_be_of_different_sizes_test() {\n  rectangles.rectangles(\n    \"\n      +------+----+\n      |      |    |\n      +---+--+    |\n      |   |       |\n      +---+-------+\n    \",\n  )\n  |> should.equal(3)\n}\n\npub fn corner_is_required_for_a_rectangle_to_be_complete_test() {\n  rectangles.rectangles(\n    \"\n      +------+----+\n      |      |    |\n      +------+    |\n      |   |       |\n      +---+-------+\n    \",\n  )\n  |> should.equal(2)\n}\n\npub fn large_input_with_many_rectangles_test() {\n  rectangles.rectangles(\n    \"\n      +---+--+----+\n      |   +--+----+\n      +---+--+    |\n      |   +--+----+\n      +---+--+--+-+\n      +---+--+--+-+\n      +------+  | |\n                +-+\n    \",\n  )\n  |> should.equal(60)\n}\n\npub fn rectangles_must_have_four_sides_test() {\n  rectangles.rectangles(\n    \"\n      +-+ +-+\n      | | | |\n      +-+-+-+\n        | |  \n      +-+-+-+\n      | | | |\n      +-+ +-+\n    \",\n  )\n  |> should.equal(5)\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": null
+}

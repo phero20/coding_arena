@@ -1,0 +1,35 @@
+{
+  "id": "common-lisp:flatten-array",
+  "trackSlug": "common-lisp",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "008ae436-b9d5-4882-b1c7-8809baff70ea",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "reducing"
+  ],
+  "prerequisites": [
+    "functions",
+    "lists",
+    "conditionals",
+    "filtering",
+    "reducing"
+  ],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "(defpackage :flatten-array\n  (:use :cl)\n  (:export :flatten))\n\n(in-package :flatten-array)\n\n(defun flatten (nested))\n",
+  "example_solution": "(defpackage :flatten-array\n  (:use :cl)\n  (:export :flatten))\n\n(in-package :flatten-array)\n\n(defun flatten (nested)\n  (remove nil\n          (reduce #'(lambda (acc item)\n                      (append acc (if (atom item) (list item) (flatten item))))\n                  nested :initial-value (list))))\n",
+  "test_code": ";; Ensures that flatten-array.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"flatten-array\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from flatten-array and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :flatten-array-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :flatten-array-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* flatten-array-suite)\n\n(test empty\n    (let ((nested (list)))\n      (is (equal (list) (flatten-array:flatten nested)))))\n\n(test no-nesting\n    (let ((nested (list 0 1 2)))\n      (is (equal (list 0 1 2) (flatten-array:flatten nested)))))\n\n(test flattens-a-nested-array\n    (let ((nested (list (list (list)))))\n      (is (equal (list) (flatten-array:flatten nested)))))\n\n(test flattens-array-with-just-integers-present\n    (let ((nested (list 1 (list 2 3 4 5 6 7) 8)))\n      (is (equal (list 1 2 3 4 5 6 7 8) (flatten-array:flatten nested)))))\n\n(test 5-level-nesting\n    (let ((nested (list 0 2 (list (list 2 3) 8 100 4 (list (list (list 50)))) -2)))\n      (is (equal (list 0 2 2 3 8 100 4 50 -2) (flatten-array:flatten nested)))))\n\n(test 6-level-nesting\n    (let ((nested (list 1 (list 2 (list (list 3)) (list 4 (list (list 5))) 6 7) 8)))\n      (is (equal (list 1 2 3 4 5 6 7 8) (flatten-array:flatten nested)))))\n\n(test null-values-are-omitted-from-the-final-result\n    (let ((nested (list 1 2 NIL)))\n      (is (equal (list 1 2) (flatten-array:flatten nested)))))\n\n(test consecutive-null-values-at-the-front-of-the-list-are-omitted-from-the-final-result\n    (let ((nested (list NIL NIL 3)))\n      (is (equal (list 3) (flatten-array:flatten nested)))))\n\n(test consecutive-null-values-in-the-middle-of-the-list-are-omitted-from-the-final-result\n    (let ((nested (list 1 NIL NIL 4)))\n      (is (equal (list 1 4) (flatten-array:flatten nested)))))\n\n(test 6-level-nest-list-with-null-values\n    (let ((nested (list 0 2 (list (list 2 3) 8 (list (list 100)) NIL (list (list NIL))) -2)))\n      (is (equal (list 0 2 2 3 8 100 -2) (flatten-array:flatten nested)))))\n\n(test all-values-in-nested-list-are-null\n    (let ((nested (list NIL (list (list (list NIL))) NIL NIL (list (list NIL NIL) NIL) NIL)))\n      (is (equal (list) (flatten-array:flatten nested)))))\n\n(defun run-tests (&optional (test-or-suite 'flatten-array-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "PaulT89",
+    "verdammelt"
+  ],
+  "contributors": null
+}

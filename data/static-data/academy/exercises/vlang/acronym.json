@@ -1,0 +1,26 @@
+{
+  "id": "vlang:acronym",
+  "trackSlug": "vlang",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "0a23399d-b212-4453-b4b8-9c7b57d46e37",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn abbreviate(phrase string) string {\n}\n",
+  "example_solution": "module main\n\nimport strings\n\nfn abbreviate(phrase string) string {\n\tmut builder := strings.new_builder(10)\n\tmut in_word := false\n\tfor ch in phrase.to_upper() {\n\t\tif `A` <= ch && ch <= `Z` {\n\t\t\tif !in_word {\n\t\t\t\tbuilder.write_u8(ch)\n\t\t\t\tin_word = true\n\t\t\t}\n\t\t} else if ch == `-` || ch.is_space() {\n\t\t\tin_word = false\n\t\t}\n\t}\n\treturn builder.str()\n}\n",
+  "test_code": "module main\n\nfn test_basic() {\n\tphrase := 'Portable Network Graphics'\n\tassert abbreviate(phrase) == 'PNG'\n}\n\nfn test_lowercase_words() {\n\tphrase := 'Ruby on Rails'\n\tassert abbreviate(phrase) == 'ROR'\n}\n\nfn test_punctuation() {\n\tphrase := 'First In, First Out'\n\tassert abbreviate(phrase) == 'FIFO'\n}\n\nfn test_all_caps_word() {\n\tphrase := 'GNU Image Manipulation Program'\n\tassert abbreviate(phrase) == 'GIMP'\n}\n\nfn test_punctuation_without_whitespace() {\n\tphrase := 'Complementary metal-oxide semiconductor'\n\tassert abbreviate(phrase) == 'CMOS'\n}\n\nfn test_very_long_abbreviation() {\n\tphrase := 'Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'\n\tassert abbreviate(phrase) == 'ROTFLSHTMDCOALM'\n}\n\nfn test_consecutive_delimiters() {\n\tphrase := 'Something - I made up from thin air'\n\tassert abbreviate(phrase) == 'SIMUFTA'\n}\n\nfn test_apostrophes() {\n\tphrase := \"Halley's Comet\"\n\tassert abbreviate(phrase) == 'HC'\n}\n\nfn test_underscore_emphasis() {\n\tphrase := 'The Road _Not_ Taken'\n\tassert abbreviate(phrase) == 'TRNT'\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

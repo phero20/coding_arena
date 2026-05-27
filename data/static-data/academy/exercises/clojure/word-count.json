@@ -1,0 +1,45 @@
+{
+  "id": "clojure:word-count",
+  "trackSlug": "clojure",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "ea3cf3f6-35de-4da1-a74f-b7a13d89c39a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "conditionals",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "(ns word-count)\n\n(defn word-count\n  \"Counts how many times each word occurs in the given string.\"\n  [s]\n  ;; function body\n  )\n",
+  "example_solution": "(ns word-count)\n\n(defn word-count\n  [phrase]\n  (->> phrase\n       clojure.string/lower-case\n       (re-seq #\"\\b\\w+'?\\w*\\b\")\n       frequencies))\n",
+  "test_code": "(ns word-count-test\n  (:require [clojure.test :refer [deftest testing is]]\n            word-count))\n\n(deftest word-count_test_1\n  (testing \"count one word\"\n    (is (= {\"word\" 1}\n           (word-count/word-count \"word\")))))\n\n(deftest word-count_test_2\n  (testing \"count one of each word\"\n    (is (= {\"one\" 1\n            \"of\" 1\n            \"each\" 1}\n           (word-count/word-count \"one of each\")))))\n\n(deftest word-count_test_3\n  (testing \"multiple occurrences of a word\"\n    (is (= {\"one\" 1\n            \"fish\" 4\n            \"two\" 1\n            \"red\" 1\n            \"blue\" 1}\n           (word-count/word-count \"one fish two fish red fish blue fish\")))))\n\n(deftest word-count_test_4\n  (testing \"handles cramped lists\"\n    (is (= {\"one\" 1\n            \"two\" 1\n            \"three\" 1}\n           (word-count/word-count \"one,two,three\")))))\n\n(deftest word-count_test_5\n  (testing \"handles expanded lists\"\n    (is (= {\"one\" 1\n            \"two\" 1\n            \"three\" 1}\n           (word-count/word-count \"one,\\ntwo,\\nthree\")))))\n\n(deftest word-count_test_6\n  (testing \"ignore punctuation\"\n    (is (= {\"car\" 1\n            \"carpet\" 1\n            \"as\" 1\n            \"java\" 1\n            \"javascript\" 1}\n           (word-count/word-count \"car: carpet as java: javascript!!&@$%^&\")))))\n\n(deftest word-count_test_7\n  (testing \"include numbers\"\n    (is (= {\"testing\" 2\n            \"1\" 1\n            \"2\" 1}\n           (word-count/word-count \"testing, 1, 2 testing\")))))\n\n(deftest word-count_test_8\n  (testing \"normalize case\"\n    (is (= {\"go\" 3\n            \"stop\" 2}\n           (word-count/word-count \"go Go GO Stop stop\")))))\n\n(deftest word-count_test_9\n  (testing \"with apostrophes\"\n    (is (= {\"first\" 1\n            \"don't\" 2\n            \"laugh\" 1\n            \"then\" 1\n            \"cry\" 1\n            \"you're\" 1\n            \"getting\" 1\n            \"it\" 1}\n           (word-count/word-count \"'First: don't laugh. Then: don't cry. You're getting it.'\")))))\n\n(deftest word-count_test_10\n  (testing \"with quotations\"\n    (is (= {\"joe\" 1\n            \"can't\" 1\n            \"tell\" 1\n            \"between\" 1\n            \"large\" 2\n            \"and\" 1}\n           (word-count/word-count \"Joe can't tell between 'large' and large.\")))))\n\n(deftest word-count_test_11\n  (testing \"substrings from the beginning\"\n    (is (= {\"joe\" 1\n            \"can't\" 1\n            \"tell\" 1\n            \"between\" 1\n            \"app\" 1\n            \"apple\" 1\n            \"and\" 1\n            \"a\" 1}\n           (word-count/word-count \"Joe can't tell between app, apple and a.\")))))\n\n(deftest word-count_test_12\n  (testing \"multiple spaces not detected as a word\"\n    (is (= {\"multiple\" 1\n            \"whitespaces\" 1}\n           (word-count/word-count \" multiple   whitespaces\")))))\n\n(deftest word-count_test_13\n  (testing \"alternating word separators not detected as a word\"\n    (is (= {\"one\" 1\n            \"two\" 1\n            \"three\" 1}\n           (word-count/word-count \",\\n,one,\\n ,two \\n 'three'\")))))\n\n(deftest word-count_test_14\n  (testing \"quotation for word with apostrophe\"\n    (is (= {\"can\" 1\n            \"can't\" 2}\n           (word-count/word-count \"can, can't, 'can't'\")))))\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "achengs",
+    "AndreaCrotti",
+    "canweriotnow",
+    "dkinzer",
+    "haus",
+    "jgwhite",
+    "kytrinyx",
+    "mathias",
+    "seeflanigan",
+    "sjwarner-bp",
+    "tejasbubane",
+    "walkermatt",
+    "yurrriq",
+    "tasxatzial"
+  ]
+}

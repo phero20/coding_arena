@@ -1,0 +1,46 @@
+{
+  "id": "java:matrix",
+  "trackSlug": "java",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "c1d4e0b4-6a0f-4be9-8222-345966621f53",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "constructors",
+    "arrays"
+  ],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\nclass Matrix {\n\n    Matrix(String matrixAsString) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    int[] getRow(int rowNumber) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    int[] getColumn(int columnNumber) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n}\n",
+  "example_solution": "import java.util.regex.Pattern;\n\nclass Matrix {\n    private int[][] matrix;\n    private static Pattern spacePattern = Pattern.compile(\" \");\n    private static Pattern newlinePattern = Pattern.compile(\"\\\\n\");\n\n    Matrix(String matrixAsString) {\n        String[] rows = newlinePattern.split(matrixAsString);\n        matrix = new int[rows.length][];\n        for (int i = 0; i < rows.length; i++) {\n            String[] columnValues = spacePattern.split(rows[i]);\n            matrix[i] = new int[columnValues.length];\n            for (int j = 0; j < columnValues.length; j++) {\n                matrix[i][j] = Integer.parseInt(columnValues[j]);\n            }\n        }\n    }\n\n    int[] getRow(int rowNumber) {\n        int indexRowNumber = rowNumber - 1;\n        return matrix[indexRowNumber];\n    }\n\n    int[] getColumn(int columnNumber) {\n        int indexColumnNumber = columnNumber - 1;\n        int[] column = new int[matrix.length];\n        for (int i = 0; i < matrix.length; i++) {\n            column[i] = matrix[i][indexColumnNumber];\n        }\n        return column;\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class MatrixTest {\n\n    @Test\n    @DisplayName(\"extract row from one number matrix\")\n    public void extractRowFromOneNumberMatrixTest() {\n        String matrixAsString = \"1\";\n        int rowIndex = 1;\n        int[] expectedRow = {1};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getRow(rowIndex)).isEqualTo(expectedRow);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"can extract row\")\n    public void extractRowFromMatrixTest() {\n        String matrixAsString = \"1 2\\n3 4\";\n        int rowIndex = 2;\n        int[] expectedRow = {3, 4};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getRow(rowIndex)).isEqualTo(expectedRow);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"extract row where numbers have different widths\")\n    public void extractRowFromDiffWidthsMatrixTest() {\n        String matrixAsString = \"1 2\\n10 20\";\n        int rowIndex = 2;\n        int[] expectedRow = {10, 20};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getRow(rowIndex)).isEqualTo(expectedRow);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"can extract row from non-square matrix with no corresponding column\")\n    public void extractRowFromNonSquareMatrixTest() {\n        String matrixAsString = \"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\";\n        int rowIndex = 4;\n        int[] expectedRow = {8, 7, 6};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getRow(rowIndex)).isEqualTo(expectedRow);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"extract column from one number matrix\")\n    public void extractColumnFromOneNumberMatrixTest() {\n        String matrixAsString = \"1\";\n        int columnIndex = 1;\n        int[] expectedColumn = {1};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getColumn(columnIndex)).isEqualTo(expectedColumn);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"can extract column\")\n    public void extractColumnMatrixTest() {\n        String matrixAsString = \"1 2 3\\n4 5 6\\n7 8 9\";\n        int columnIndex = 3;\n        int[] expectedColumn = {3, 6, 9};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getColumn(columnIndex)).isEqualTo(expectedColumn);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"can extract column from non-square matrix with no corresponding row\")\n    public void extractColumnFromNonSquareMatrixTest() {\n        String matrixAsString = \"1 2 3 4\\n5 6 7 8\\n9 8 7 6\";\n        int columnIndex = 4;\n        int[] expectedColumn = {4, 8, 6};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getColumn(columnIndex)).isEqualTo(expectedColumn);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"extract column where numbers have different widths\")\n    public void extractColumnFromDiffWidthsMatrixTest() {\n        String matrixAsString = \"89 1903 3\\n18 3 1\\n9 4 800\";\n        int columnIndex = 2;\n        int[] expectedColumn = {1903, 3, 4};\n\n        Matrix matrix = new Matrix(matrixAsString);\n\n        assertThat(matrix.getColumn(columnIndex)).isEqualTo(expectedColumn);\n    }\n}\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "FridaTveit"
+  ],
+  "contributors": [
+    "hugueschabot",
+    "jmrunkle",
+    "jssander",
+    "kytrinyx",
+    "lemoncurry",
+    "mirkoperillo",
+    "morrme",
+    "msomji",
+    "muzimuzhi",
+    "pratikpalashikar",
+    "SleeplessByte",
+    "Smarticles101",
+    "sonapraneeth-a",
+    "sshine",
+    "stkent",
+    "Zaldrick"
+  ]
+}

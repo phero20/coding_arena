@@ -1,0 +1,28 @@
+{
+  "id": "lua:pangram",
+  "trackSlug": "lua",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "e5a5d3ca-af5c-43c9-8f99-f5eb522169af",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "return function(s)\nend\n",
+  "example_solution": "return function(s)\n  local letters = {}\n  for c in s:lower():gmatch('%a') do\n    letters[c:byte()] = true\n  end\n  for i = ('a'):byte(), ('z'):byte() do\n    if not letters[i] then\n      return false\n    end\n  end\n  return true\nend\n",
+  "test_code": "local is_pangram = require('pangram')\n\ndescribe('pangram', function()\n  it('should not consider the empty string to be a pangram', function()\n    assert.is_false(is_pangram(''))\n  end)\n\n  it('should not consider a sentence with 26 of the same letter to be a pangram', function()\n    assert.is_false(is_pangram(string.rep('a', 26)))\n  end)\n\n  it('should consider the alphabet to be a pangram', function()\n    assert.is_true(is_pangram('abcdefghijklmnopqrstuvwxyz'))\n  end)\n\n  it('should consider a sentence with one of each letter to be a pangram', function()\n    assert.is_true(is_pangram('the quick brown fox jumps over the lazy dog'))\n  end)\n\n  it('should allow mixed case in pangrams', function()\n    assert.is_true(is_pangram('The Quick Brown Fox Jumps Over The Lazy Dog'))\n  end)\n\n  it('should allow punctuation in pangrams', function()\n    assert.is_true(is_pangram('the.quick.brown.fox.jumps.over.the.lazy.dog'))\n  end)\n\n  it('should allow underscores in pangrams', function()\n    assert.is_true(is_pangram('the_quick_brown_fox_jumps_over_the_lazy.dog'))\n  end)\n\n  it('should allow numbers in pangrams', function()\n    assert.is_true(is_pangram('the 1 quick brown fox jumps over the 2 lazy dogs'))\n  end)\n\n  it('should not allow letters in pangrams to be replaced by numbers', function()\n    assert.is_false(is_pangram('7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog'))\n  end)\n\n  it('should not consider a sentence with only 25 unique letters to be a pangram', function()\n    assert.is_false(is_pangram('a quick movement of the enemy will jeopardize five gunboats'))\n    assert.is_false(is_pangram('the quick brown fish jumps over the lazy dog'))\n  end)\n\n  it('should allow non-ASCII characters in pangrams', function()\n    assert.is_true(is_pangram('Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich.'))\n  end)\n\n  it('should not consider non-ASCII characters to be letters', function()\n    assert.is_false(is_pangram('äbcdefghijklmnopqrstuvwxyz'))\n  end)\n\n  it('should not consider a-m and A-M to be a pangram', function()\n    assert.is_false(is_pangram('abcdefghijklm ABCDEFGHIJKLM'))\n  end)\nend)\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

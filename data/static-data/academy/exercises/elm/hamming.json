@@ -1,0 +1,38 @@
+{
+  "id": "elm:hamming",
+  "trackSlug": "elm",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "472c2e13-6608-4862-b884-a7e458e0bcdd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "result"
+  ],
+  "prerequisites": [
+    "strings",
+    "result",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "module Hamming exposing (distance)\n\n\ndistance : String -> String -> Result String Int\ndistance left right =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module Hamming exposing (distance)\n\nimport String exposing (length, toList)\n\n\ndistance : String -> String -> Result String Int\ndistance left right =\n    if length left /= length right then\n        Err \"strands must be of equal length\"\n\n    else\n        List.map2 (\\l r -> l /= r) (toList left) (toList right)\n            |> List.filter identity\n            |> List.length\n            |> Ok\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport Hamming exposing (distance)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"Hamming\"\n        [ test \"identical strands\" <|\n            \\() -> Expect.equal (Ok 0) (distance \"A\" \"A\")\n        , skip <|\n            test \"long identical strands\" <|\n                \\() -> Expect.equal (Ok 0) (distance \"GGACTGA\" \"GGACTGA\")\n        , skip <|\n            test \"complete distance in single nucleotide strands\" <|\n                \\() -> Expect.equal (Ok 1) (distance \"A\" \"G\")\n        , skip <|\n            test \"complete distance in small strands\" <|\n                \\() -> Expect.equal (Ok 2) (distance \"AG\" \"CT\")\n        , skip <|\n            test \"small distance in small strands\" <|\n                \\() -> Expect.equal (Ok 1) (distance \"AT\" \"CT\")\n        , skip <|\n            test \"small distance\" <|\n                \\() -> Expect.equal (Ok 1) (distance \"GGACG\" \"GGTCG\")\n        , skip <|\n            test \"small distance in long strands\" <|\n                \\() -> Expect.equal (Ok 2) (distance \"ACCAGGG\" \"ACTATGG\")\n        , skip <|\n            test \"non-unique character in first strand\" <|\n                \\() -> Expect.equal (Ok 1) (distance \"AGA\" \"AGG\")\n        , skip <|\n            test \"non-unique character in second strand\" <|\n                \\() -> Expect.equal (Ok 1) (distance \"AGG\" \"AGA\")\n        , skip <|\n            test \"large distance\" <|\n                \\() -> Expect.equal (Ok 4) (distance \"GATACA\" \"GCATAA\")\n        , skip <|\n            test \"large distance in off-by-one strand\" <|\n                \\() -> Expect.equal (Ok 9) (distance \"GGACGGATTCTG\" \"AGGACGGATTCT\")\n        , skip <|\n            test \"empty strands\" <|\n                \\() -> Expect.equal (Ok 0) (distance \"\" \"\")\n        , skip <|\n            test \"disallow first strand longer\" <|\n                \\() -> Expect.equal (Err \"strands must be of equal length\") (distance \"AATG\" \"AAA\")\n        , skip <|\n            test \"disallow second strand longer\" <|\n                \\() -> Expect.equal (Err \"strands must be of equal length\") (distance \"ATA\" \"AGTG\")\n        , skip <|\n            test \"disallow left empty strand\" <|\n                \\() -> Expect.equal (Err \"strands must be of equal length\") (distance \"\" \"G\")\n        , skip <|\n            test \"disallow right empty strand\" <|\n                \\() -> Expect.equal (Err \"strands must be of equal length\") (distance \"G\" \"\")\n        ]\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "jiegillet",
+    "nathanielknight",
+    "parkerl",
+    "petemcfarlane",
+    "tuxagon"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "futhark:largest-series-product",
+  "trackSlug": "futhark",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "f857f948-e1ee-4614-bd55-575218635ed8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "let largest_product (digits: []u8) (span: i32) : i32 = ???\n",
+  "example_solution": "let to_digit (digit: u8): u8 = assert (digit >= '0' && digit <= '9') (digit - '0')\n\nlet largest_product [n] (digits: [n]u8) (span: i32) : i32 = \n  let span = i64.i32 span in assert (span >= 0 && span <= n)\n  (\n    let digits = digits |> map to_digit |> map i32.u8\n    in\n      (0...n-span)\n      |> map (\\i -> i32.product digits[i:i+span])\n      |> i32.maximum\n  )\n",
+  "test_code": "import \"largest_series_product\"\n\n-- finds the largest product if span equals length\n-- ==\n-- input { \"29\" 2 }\n-- output { 18 }\n\n-- can find the largest product of 2 with numbers in order\n-- ==\n-- input { \"0123456789\" 2 }\n-- output { 72 }\n\n-- can find the largest product of 2\n-- ==\n-- input { \"576802143\" 2 }\n-- output { 48 }\n\n-- can find the largest product of 3 with numbers in order\n-- ==\n-- input { \"0123456789\" 3 }\n-- output { 504 }\n\n-- can find the largest product of 3\n-- ==\n-- input { \"1027839564\" 3 }\n-- output { 270 }\n\n-- can find the largest product of 5 with numbers in order\n-- ==\n-- input { \"0123456789\" 5 }\n-- output { 15120 }\n\n-- can get the largest product of a big number\n-- ==\n-- input { \"73167176531330624919225119674426574742355349194934\" 6 }\n-- output { 23520 }\n\n-- reports zero if the only digits are zero\n-- ==\n-- input { \"0000\" 2 }\n-- output { 0 }\n\n-- reports zero if all spans include zero\n-- ==\n-- input { \"99099\" 3 }\n-- output { 0 }\n\n-- rejects span longer than string length\n-- ==\n-- input { \"123\" 4 }\n-- error: Error*\n\n-- reports 1 for empty string and empty product (0 span)\n-- ==\n-- input { \"\" 0 }\n-- output { 1 }\n\n-- reports 1 for nonempty string and empty product (0 span)\n-- ==\n-- input { \"123\" 0 }\n-- output { 1 }\n\n-- rejects empty string and nonzero span\n-- ==\n-- input { \"\" 1 }\n-- error: Error*\n\n-- rejects invalid character in digits\n-- ==\n-- input { \"1234a5\" 2 }\n-- error: Error*\n\n-- rejects negative span\n-- ==\n-- input { \"12345\" -1 }\n-- error: Error*\n\nlet main (digits: []u8) (span: i32) : i32 =\n  largest_product digits span\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,42 @@
+{
+  "id": "csharp:simple-linked-list",
+  "trackSlug": "csharp",
+  "slug": "simple-linked-list",
+  "name": "Simple Linked List",
+  "uuid": "2d68e971-d717-4196-a348-d4675a47283a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a simple linked list implementation that uses Elements and a List.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "interfaces",
+    "generic-types",
+    "properties",
+    "enumerables"
+  ],
+  "prerequisites": [
+    "interfaces",
+    "generic-types",
+    "properties",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nWrite a prototype of the music player application.\n\nFor the prototype, each song will simply be represented by a number.\nGiven a range of numbers (the song IDs), create a singly linked list.\n\nGiven a singly linked list, you should be able to reverse the list to play the songs in the opposite order.\n\n~~~~exercism/note\nThe linked list is a fundamental data structure in computer science, often used in the implementation of other data structures.\n\nThe simplest kind of linked list is a **singly** linked list.\nThat means that each element (or \"node\") contains data, along with something that points to the next node in the list.\n\nIf you want to dig deeper into linked lists, check out [this article][intro-linked-list] that explains it using nice drawings.\n\n[intro-linked-list]: https://medium.com/basecs/whats-a-linked-list-anyway-part-1-d8b7e6508b9d\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a music streaming company.\n\nYou've been tasked with creating a playlist feature for your music player application.\n",
+  "hints": null,
+  "starter_code": "public class SimpleLinkedList<T>\n{\n    public int Count => throw new NotImplementedException(\"You need to implement this method.\");\n    \n    public void Push(T value)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public T Pop()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "using System.Collections;\n\npublic class SimpleLinkedList<T> : IEnumerable<T>\n{\n    private class Node { \n        public required T Value { get; set; }\n        public Node? Next { get; set; }\n    }\n    \n    private Node? _head;\n\n    public SimpleLinkedList() { }\n\n    public SimpleLinkedList(params T[] values)\n    {\n        foreach(var value in values) { \n            Push(value);\n        }\n    }\n\n    public int Count { get; private set; } = 0;\n    \n    public void Push(T value)\n    {\n        var node = new Node { Value = value, Next = this._head };\n        this._head = node;\n        this.Count++;\n    }\n\n    public T Pop()\n    {\n        if (this._head == null) { \n            throw new InvalidOperationException(\"List is empty!\");\n        }\n        var value = _head.Value;\n        _head = _head.Next;\n        this.Count--;\n        return value;\n    }\n\n    public IEnumerator<T> GetEnumerator()\n    {\n        var current = this._head;\n        while(current != null) { \n            yield return current.Value;\n            current = current.Next;\n        }\n    }\n\n    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();\n}\n",
+  "test_code": "public class SimpleLinkedListTests\n{\n    [Fact] \n    public void Empty_list_has_no_elements()\n    {\n        var list = new SimpleLinkedList<int>();\n        Assert.Equal(0, list.Count);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Count_cannot_be_changed_from_the_outside()\n    {\n        var count = typeof(SimpleLinkedList<>).GetProperty(\"Count\");\n        Assert.NotNull(count);\n        Assert.True(count.GetGetMethod() is { IsPublic: true });\n        Assert.False(count.GetSetMethod(true) is { IsPublic: true });\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Pushing_elements_to_the_list_increases_the_count()\n    {\n        var list = new SimpleLinkedList<int>();\n        list.Push(0);\n        Assert.Equal(1, list.Count);\n        list.Push(0);\n        Assert.Equal(2, list.Count);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Popping_elements_from_the_list_decreases_the_count()\n    {\n        var list = new SimpleLinkedList<int>();\n        list.Push(0);\n        list.Push(0);\n        Assert.Equal(2, list.Count);\n        list.Pop();\n        Assert.Equal(1, list.Count);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Elements_pop_back_in_lifo_order()\n    {\n        var list = new SimpleLinkedList<int>();\n        list.Push(3);\n        list.Push(5);\n        Assert.Equal(5, list.Pop());\n        list.Push(7);        \n        Assert.Equal(7, list.Pop());\n        Assert.Equal(3, list.Pop());\n    }\n\n    private static SimpleLinkedList<int> CreateSimpleLinkedList(int value)\n    {\n        var type = typeof(SimpleLinkedList<>).MakeGenericType(typeof(int));\n\t\tvar constructor = type.GetConstructor([typeof(int)]);\n        return (SimpleLinkedList<int>?)constructor?.Invoke([value])\n\t\t\t?? CreateSimpleLinkedList([value]);\n    }\n\t\n    private static SimpleLinkedList<int> CreateSimpleLinkedList(params int[] values)\n    {\n        var type = typeof(SimpleLinkedList<>).MakeGenericType(typeof(int));\n\t\tvar constructor = type.GetConstructor([typeof(int[])]);\t\n        Assert.NotNull(constructor);\n\t\treturn (SimpleLinkedList<int>)constructor.Invoke([values]);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Single_value_initialisation()\n    {\n        var list = CreateSimpleLinkedList(7);\n        Assert.Equal(1, list.Count);\n        Assert.Equal(7, list.Pop());\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Multi_value_initialisation()\n    {\n        var list = CreateSimpleLinkedList(2, 1, 3);\n        Assert.Equal(3, list.Pop());\n        Assert.Equal(1, list.Pop());\n        Assert.Equal(2, list.Pop());\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void From_enumerable()\n    {\n        var list = CreateSimpleLinkedList(new[] { 11, 7, 5, 3, 2 });\n        Assert.Equal(2, list.Pop());\n        Assert.Equal(3, list.Pop());\n        Assert.Equal(5, list.Pop());\n        Assert.Equal(7, list.Pop());\n        Assert.Equal(11, list.Pop());\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Reverse_enumerable()\n    {\n        var values = Enumerable.Range(1, 5).ToArray();\n        var list = CreateSimpleLinkedList(values);\n        var enumerable = Assert.IsAssignableFrom<IEnumerable<int>>(list);    \n        var reversed = enumerable.Reverse();\n        Assert.Equal(values, reversed);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Roundtrip()\n    {\n        var values = Enumerable.Range(1, 7);\n        var list = CreateSimpleLinkedList(values.ToArray());\n        var enumerable = Assert.IsAssignableFrom<IEnumerable<int>>(list);    \n        Assert.Equal(values.Reverse(), enumerable);\n    }\n}\n",
+  "source": "Inspired by 'Data Structures and Algorithms with Object-Oriented Design Patterns in Ruby', singly linked-lists.",
+  "source_url": "https://web.archive.org/web/20160731005714/http://brpreiss.com/books/opus8/html/page96.html",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "bressain",
+    "j2jensen",
+    "robkeim",
+    "wolf99",
+    "michalporeba"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "futhark:reverse-string",
+  "trackSlug": "futhark",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "9b97b6c3-ef2b-4f90-a485-8dd98375076f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "def reversal [n] (str: [n]u8): [n]u8 = ???\n  ",
+  "example_solution": "def reversal [n] (str: [n]u8): [n]u8 =\n  map (\\i -> str[n -i - 1]) (0..<n)\n",
+  "test_code": "import \"reverse_string\"\n\n-- an empty string\n-- ==\n-- input { \"\" }\n-- output { \"\" }\n\n-- a word\n-- ==\n-- input { \"robot\" }\n-- output { \"tobor\" }\n\n-- a capitalized word\n-- ==\n-- input { \"Ramen\" }\n-- output { \"nemaR\" }\n\n-- a sentence with punctuation\n-- ==\n-- input { \"I'm hungry!\" }\n-- output { \"!yrgnuh m'I\" }\n\n-- a palindrome\n-- ==\n-- input { \"racecar\" }\n-- output { \"racecar\" }\n\n-- an even-sized word\n-- ==\n-- input { \"drawer\" }\n-- output { \"reward\" }\n\nlet main (str: []u8): []u8 =\n  reversal str\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

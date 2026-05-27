@@ -1,0 +1,26 @@
+{
+  "id": "sml:acronym",
+  "trackSlug": "sml",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "937616ce-696b-4845-b06c-365a58ca46d2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "fun abbreviate (phrase: string): string =\n  raise Fail \"'abbreviate' is not implemented\"",
+  "example_solution": "fun abbreviate (phrase: string): string =\n  let\n    fun is_delim c = Char.contains \" -_,\" c\n    val tokens = String.tokens is_delim phrase\n    fun first_char_up word = Char.toUpper (String.sub (word, 0))\n  in\n    String.implode (List.map first_char_up tokens)\n  end;\n",
+  "test_code": "use \"testlib.sml\";\nuse \"acronym.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"acronym\" [\n    test \"basic\"\n      (fn _ => abbreviate \"Portable Network Graphics\" |> Expect.equalTo \"PNG\"),\n\n    test \"lowercase words\"\n      (fn _ => abbreviate \"Ruby on Rails\" |> Expect.equalTo \"ROR\"),\n\n    test \"punctuation\"\n      (fn _ => abbreviate \"First In, First Out\" |> Expect.equalTo \"FIFO\"),\n\n    test \"all caps word\"\n      (fn _ => abbreviate \"GNU Image Manipulation Program\" |> Expect.equalTo \"GIMP\"),\n\n    test \"punctuation without whitespace\"\n      (fn _ => abbreviate \"Complementary metal-oxide semiconductor\" |> Expect.equalTo \"CMOS\"),\n\n    test \"very long abbreviation\"\n      (fn _ => abbreviate \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\" |> Expect.equalTo \"ROTFLSHTMDCOALM\"),\n\n    test \"consecutive delimiters\"\n      (fn _ => abbreviate \"Something - I made up from thin air\" |> Expect.equalTo \"SIMUFTA\"),\n\n    test \"apostrophes\"\n      (fn _ => abbreviate \"Halley's Comet\" |> Expect.equalTo \"HC\"),\n\n    test \"underscore emphasis\"\n      (fn _ => abbreviate \"The Road _Not_ Taken\" |> Expect.equalTo \"TRNT\")\n  ]\n\nval _ = Test.run testsuite",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "rainij"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "awk:hello-world",
+  "trackSlug": "awk",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "11f04035-08f4-4f57-812f-65b9c8236ebf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "BEGIN {print \"Goodbye, Mars!\"}\n",
+  "example_solution": "BEGIN {print \"Hello, World!\"}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n@test \"Say Hi!\" {\n  run gawk -f hello-world.awk\n\n  # the program's exit status should be success (0)\n  assert_success\n\n  # program's output should be the expected text\n  assert_output \"Hello, World!\"\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

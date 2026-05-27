@@ -1,0 +1,43 @@
+{
+  "id": "go:raindrops",
+  "trackSlug": "go",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "2f51e32a-9b1f-4100-9eec-517115c858e9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "basics",
+    "booleans"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "package raindrops\n\nfunc Convert(number int) string {\n\tpanic(\"Please implement the Convert function\")\n}\n",
+  "example_solution": "package raindrops\n\nimport \"strconv\"\n\nfunc Convert(number int) string {\n\ts := \"\"\n\tif number%3 == 0 {\n\t\ts += \"Pling\"\n\t}\n\tif number%5 == 0 {\n\t\ts += \"Plang\"\n\t}\n\tif number%7 == 0 {\n\t\ts += \"Plong\"\n\t}\n\tif s == \"\" {\n\t\ts = strconv.Itoa(number)\n\t}\n\treturn s\n}\n",
+  "test_code": "package raindrops\n\nimport \"testing\"\n\nfunc TestConvert(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Convert(tc.input); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Convert(%d) = %q, want: %q\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkConvert(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range testCases {\n\t\t\tConvert(test.input)\n\t\t}\n\t}\n}\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "nathany"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "soniakeys",
+    "tleen",
+    "eklatzer"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "futhark:leap",
+  "trackSlug": "futhark",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "f47fb89b-1226-4318-bb36-1c5c02b8d38a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "def is_leap (year: i32): bool = ???\n",
+  "example_solution": "def is_leap (year: i32): bool =\n  year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)\n",
+  "test_code": "import \"leap\"\n\n-- year not divisible by 4 in common year\n-- ==\n-- input { 2015 }\n-- output { false }\n\n-- year divisible by 2, not divisible by 4 in common year\n-- ==\n-- input { 1970 }\n-- output { false }\n\n-- year divisible by 4, not divisible by 100 in leap year\n-- ==\n-- input { 1996 }\n-- output { true }\n\n-- year divisible by 4 and 5 is still a leap year\n-- ==\n-- input { 1960 }\n-- output { true }\n\n-- year divisible by 100, not divisible by 400 in common year\n-- ==\n-- input { 2100 }\n-- output { false }\n\n-- year divisible by 100 but not by 3 is still not a leap year\n-- ==\n-- input { 1900 }\n-- output { false }\n\n-- year divisible by 400 is leap year\n-- ==\n-- input { 2000 }\n-- output { true }\n\n-- year divisible by 400 but not by 125 is still a leap year\n-- ==\n-- input { 2400 }\n-- output { true }\n\n-- year divisible by 200, not divisible by 400 in common year\n-- ==\n-- input { 1800 }\n-- output { false }\n\nlet main (year: i32): bool =\n  is_leap year\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

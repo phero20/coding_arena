@@ -1,0 +1,29 @@
+{
+  "id": "crystal:change",
+  "trackSlug": "crystal",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "0adf6b3f-c518-4660-ba6b-be991828a658",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "array",
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "module Change\n  def self.find_fewest_coins(target : Int32, coins : Array(Int32)) : Array(Int32)\n    # Write your code for the 'Change' exercise in this file.\n  end\nend\n",
+  "example_solution": "module Change\n  def self.find_fewest_coins(target : Int32, coins : Array(Int32)) : Array(Int32)\n    fewest_coins = recur(target, Int32::MAX, coins, [] of Int32)\n    raise ArgumentError.new if fewest_coins.nil?\n    fewest_coins\n  end\n\n  private def self.recur(target : Int32, coin_limit : Int32, coins : Array(Int32), current : Array(Int32)) : Array(Int32)?\n    return current if target == 0\n    return if coins.empty?\n    return if current.size + target / coins[-1] > coin_limit\n\n    change = nil\n\n    coins.select(&.<= target).reverse.each do |value|\n      ((target / value).to_i..1).step(-1).each do |number_taken|\n        candidate = recur(\n          target - value * number_taken,\n          coin_limit,\n          coins.reject(&.>= value),\n          ([value] * number_taken) + current\n        )\n\n        if candidate && candidate.size <= coin_limit\n          change = candidate\n          coin_limit = change.size\n        end\n      end\n    end\n\n    change\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Change\" do\n  it \"change for 1 cent\" do\n    Change.find_fewest_coins(target: 1, coins: [1, 5, 10, 25])\n      .should eq [1]\n  end\n\n  pending \"single coin change\" do\n    Change.find_fewest_coins(target: 25, coins: [1, 5, 10, 25, 100])\n      .should eq [25]\n  end\n\n  pending \"multiple coin change\" do\n    Change.find_fewest_coins(target: 15, coins: [1, 5, 10, 25, 100])\n      .should eq [5, 10]\n  end\n\n  pending \"change with Lilliputian Coins\" do\n    Change.find_fewest_coins(target: 23, coins: [1, 4, 15, 20, 50])\n      .should eq [4, 4, 15]\n  end\n\n  pending \"change with Lower Elbonia Coins\" do\n    Change.find_fewest_coins(target: 63, coins: [1, 5, 10, 21, 25])\n      .should eq [21, 21, 21]\n  end\n\n  pending \"large target values\" do\n    Change.find_fewest_coins(target: 999, coins: [1, 2, 5, 10, 20, 50, 100])\n      .should eq [2, 2, 5, 20, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100]\n  end\n\n  pending \"possible change without unit coins available\" do\n    Change.find_fewest_coins(target: 21, coins: [2, 5, 10, 20, 50])\n      .should eq [2, 2, 2, 5, 10]\n  end\n\n  pending \"another possible change without unit coins available\" do\n    Change.find_fewest_coins(target: 27, coins: [4, 5])\n      .should eq [4, 4, 4, 5, 5, 5]\n  end\n\n  pending \"a greedy approach is not optimal\" do\n    Change.find_fewest_coins(target: 20, coins: [1, 10, 11])\n      .should eq [10, 10]\n  end\n\n  pending \"no coins make 0 change\" do\n    Change.find_fewest_coins(target: 0, coins: [1, 5, 10, 21, 25])\n      .should eq [] of Int32\n  end\n\n  pending \"error testing for change smaller than the smallest of coins\" do\n    expect_raises(ArgumentError) do\n      Change.find_fewest_coins(target: 3, coins: [5, 10])\n    end\n  end\n\n  pending \"error if no combination can add up to target\" do\n    expect_raises(ArgumentError) do\n      Change.find_fewest_coins(target: 94, coins: [5, 10])\n    end\n  end\n\n  pending \"cannot find negative change values\" do\n    expect_raises(ArgumentError) do\n      Change.find_fewest_coins(target: -5, coins: [1, 2, 5])\n    end\n  end\nend\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": null
+}

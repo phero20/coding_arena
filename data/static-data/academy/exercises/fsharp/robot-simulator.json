@@ -1,0 +1,42 @@
+{
+  "id": "fsharp:robot-simulator",
+  "trackSlug": "fsharp",
+  "slug": "robot-simulator",
+  "name": "Robot Simulator",
+  "uuid": "ecae4faa-c516-4a71-8d55-9c53403d8826",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a robot simulator.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "discriminated-unions",
+    "strings"
+  ],
+  "prerequisites": [
+    "chars",
+    "discriminated-unions",
+    "records",
+    "strings",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nWrite a robot simulator.\n\nA robot factory's test facility needs a program to verify robot movements.\n\nThe robots have three possible movements:\n\n- turn right\n- turn left\n- advance\n\nRobots are placed on a hypothetical infinite grid, facing a particular direction (north, east, south, or west) at a set of {x,y} coordinates,\ne.g., {3,8}, with coordinates increasing to the north and east.\n\nThe robot then receives a number of instructions, at which point the testing facility verifies the robot's new position, and in which direction it is pointing.\n\n- The letter-string \"RAALAL\" means:\n  - Turn right\n  - Advance twice\n  - Turn left\n  - Advance once\n  - Turn left yet again\n- Say a robot starts at {7, 3} facing north.\n  Then running this stream of instructions should leave it at {9, 4} facing west.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module RobotSimulator\n\ntype Direction = North | East | South | West\ntype Position = int * int\n\nlet create direction position = failwith \"You need to implement this function.\"\n\nlet move instructions robot = failwith \"You need to implement this function.\"\n",
+  "example_solution": "module RobotSimulator\n\ntype Direction = North | East | South | West\ntype Position = int * int\ntype Robot = { direction: Direction; position: Position }\n\nlet create bearing position = { direction = bearing; position = position }\n\nlet private turnLeft robot = \n    match robot.direction with\n    | North -> { robot with direction = West  }\n    | East  -> { robot with direction = North }\n    | South -> { robot with direction = East  }\n    | West  -> { robot with direction = South }\n\nlet private turnRight robot = \n    match robot.direction with\n    | North -> { robot with direction = East  }\n    | East  -> { robot with direction = South }\n    | South -> { robot with direction = West  }\n    | West  -> { robot with direction = North }\n\nlet private advance robot = \n    let (x, y) = robot.position\n\n    match robot.direction with\n    | North -> { robot with position = (x    , y + 1) }\n    | East  -> { robot with position = (x + 1, y    ) }\n    | South -> { robot with position = (x    , y - 1) }\n    | West  -> { robot with position = (x - 1, y    ) }\n    \nlet private applyInstruction robot instruction =\n    match instruction with\n    | 'L' -> turnLeft robot\n    | 'R' -> turnRight robot\n    | 'A' -> advance robot\n    | _   -> failwith \"Invalid instruction\"\n\nlet move instructions robot = Seq.fold applyInstruction robot instructions",
+  "test_code": "module RobotSimulatorTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen RobotSimulator\n\n[<Fact>]\nlet ``At origin facing north`` () =\n    let expected = create Direction.North (0, 0)\n    create Direction.North (0, 0) |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``At negative position facing south`` () =\n    let expected = create Direction.South (-1, -1)\n    create Direction.South (-1, -1) |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes north to east`` () =\n    let robot = create Direction.North (0, 0)\n    let expected = create Direction.East (0, 0)\n    move \"R\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes east to south`` () =\n    let robot = create Direction.East (0, 0)\n    let expected = create Direction.South (0, 0)\n    move \"R\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes south to west`` () =\n    let robot = create Direction.South (0, 0)\n    let expected = create Direction.West (0, 0)\n    move \"R\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes west to north`` () =\n    let robot = create Direction.West (0, 0)\n    let expected = create Direction.North (0, 0)\n    move \"R\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes north to west`` () =\n    let robot = create Direction.North (0, 0)\n    let expected = create Direction.West (0, 0)\n    move \"L\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes west to south`` () =\n    let robot = create Direction.West (0, 0)\n    let expected = create Direction.South (0, 0)\n    move \"L\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes south to east`` () =\n    let robot = create Direction.South (0, 0)\n    let expected = create Direction.East (0, 0)\n    move \"L\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Changes east to north`` () =\n    let robot = create Direction.East (0, 0)\n    let expected = create Direction.North (0, 0)\n    move \"L\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Facing north increments Y`` () =\n    let robot = create Direction.North (0, 0)\n    let expected = create Direction.North (0, 1)\n    move \"A\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Facing south decrements Y`` () =\n    let robot = create Direction.South (0, 0)\n    let expected = create Direction.South (0, -1)\n    move \"A\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Facing east increments X`` () =\n    let robot = create Direction.East (0, 0)\n    let expected = create Direction.East (1, 0)\n    move \"A\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Facing west decrements X`` () =\n    let robot = create Direction.West (0, 0)\n    let expected = create Direction.West (-1, 0)\n    move \"A\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Moving east and north from README`` () =\n    let robot = create Direction.North (7, 3)\n    let expected = create Direction.West (9, 4)\n    move \"RAALAL\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Moving west and north`` () =\n    let robot = create Direction.North (0, 0)\n    let expected = create Direction.West (-4, 1)\n    move \"LAAARALA\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Moving west and south`` () =\n    let robot = create Direction.East (2, -7)\n    let expected = create Direction.South (-3, -8)\n    move \"RRAAAAALA\" robot |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Moving east and north`` () =\n    let robot = create Direction.South (8, 4)\n    let expected = create Direction.North (11, 5)\n    move \"LAAARRRALLLL\" robot |> should equal expected\n\n",
+  "source": "Inspired by an interview question at a famous company.",
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "roman-shuhov",
+    "valentin-p",
+    "wolf99"
+  ]
+}

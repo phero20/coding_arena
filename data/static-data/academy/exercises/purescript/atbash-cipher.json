@@ -1,0 +1,31 @@
+{
+  "id": "purescript:atbash-cipher",
+  "trackSlug": "purescript",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "d077a175-2219-439c-9bfa-3098239e4cd6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module AtbashCipher\n  ( decode\n  , encode\n  ) where\n\nimport Data.Maybe (Maybe)\nimport Effect.Exception.Unsafe (unsafeThrow)\n\ndecode :: String -> Maybe String\ndecode = unsafeThrow \"You need to implement `decode`.\"\n\nencode :: String -> Maybe String\nencode = unsafeThrow \"You need to implement `encode`.\"\n",
+  "example_solution": "module AtbashCipher\n  ( decode\n  , encode\n  ) where\n\nimport Prelude\n\nimport Data.Array (drop, filter, take, zip, (:))\nimport Data.CodePoint.Unicode (isPunctuation, isSpace)\nimport Data.Map (Map, fromFoldable, lookup)\nimport Data.Maybe (Maybe)\nimport Data.String (codePointFromChar, joinWith)\nimport Data.String.CodeUnits (fromCharArray, toCharArray)\nimport Data.String.Common (toLower)\nimport Data.Traversable (traverse)\n\nplain :: Array Char\nplain = toCharArray \"abcdefghijklmnopqrstuvwxyz0123456789\"\n\ncipher :: Array Char\ncipher = toCharArray \"zyxwvutsrqponmlkjihgfedcba0123456789\"\n\ndecMap :: Map Char Char\ndecMap = fromFoldable (zip cipher plain)\n\nencMap :: Map Char Char\nencMap = fromFoldable (zip plain cipher)\n\ndecode :: String -> Maybe String\ndecode s = fromCharArray <$> dec (toCharArray s)\n  where dec = filter ((/=) ' ')\n              >>> traverse (_ `lookup` decMap)\n\nchunks :: forall a. Int -> Array a -> Array (Array a)\nchunks _ [] = []\nchunks n a = take n a : chunks n (drop n a)\n\nencode :: String -> Maybe String\nencode s = group <$> enc (toLower s # toCharArray)\n  where enc = filter (not (isPunctuation || isSpace) <<< codePointFromChar)\n              >>> traverse (_ `lookup` encMap)\n        group = chunks 5\n                >>> map fromCharArray\n                >>> joinWith \" \"\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport Effect (Effect)\nimport Data.Maybe (Maybe(..))\nimport Test.Unit.Assert as Assert\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Main (runTest)\nimport AtbashCipher (decode, encode)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"AtbashCipher.encode\" do\n\n    test \"encode yes\" $\n      Assert.equal (Just \"bvh\")\n                   (encode \"yes\")\n\n    test \"encode no\" $\n      Assert.equal (Just \"ml\")\n                   (encode \"no\")\n\n    test \"encode OMG\" $\n      Assert.equal (Just \"lnt\")\n                   (encode \"OMG\")\n\n    test \"encode spaces\" $\n      Assert.equal (Just \"lnt\")\n                   (encode \"O M G\")\n\n    test \"encode mindblowingly\" $\n      Assert.equal (Just \"nrmwy oldrm tob\")\n                   (encode \"mindblowingly\")\n\n    test \"encode numbers\" $\n      Assert.equal (Just \"gvhgr mt123 gvhgr mt\")\n                   (encode \"Testing,1 2 3, testing.\")\n\n    test \"encode deep thought\" $\n      Assert.equal (Just \"gifgs rhurx grlm\")\n                   (encode \"Truth is fiction.\")\n\n    test \"encode all the letters\" $\n      Assert.equal (Just \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n                   (encode \"The quick brown fox jumps over the lazy dog.\")\n\n  suite \"AtbashCipher.decode\" do\n\n    test \"decode exercism\" $\n      Assert.equal (Just \"exercism\")\n                   (decode \"vcvix rhn\")\n\n    test \"decode a sentence\" $\n      Assert.equal (Just \"anobstacleisoftenasteppingstone\")\n                   (decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\")\n\n    test \"decode numbers\" $\n      Assert.equal (Just \"testing123testing\")\n                   (decode \"gvhgr mt123 gvhgr mt\")\n\n    test \"decode all the letters\" $\n      Assert.equal (Just \"thequickbrownfoxjumpsoverthelazydog\")\n                   (decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "icyrockcom"
+  ],
+  "contributors": [
+    "colinwahl",
+    "lpil",
+    "paf31",
+    "spicydonuts"
+  ]
+}

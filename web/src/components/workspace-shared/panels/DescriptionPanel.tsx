@@ -4,6 +4,9 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { workspaceMarkdownComponents } from "@/components/academy/editor/practice-markdown";
 import { Problem } from "@/types/api";
 import { cn } from "@/lib/utils";
 import {
@@ -17,6 +20,7 @@ import {
   X,
   Edit,
   Edit2,
+  ExternalLink,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import {
@@ -48,7 +52,7 @@ const difficultyColor: Record<Problem["difficulty"], string> = {
 };
 
 export const DescriptionPanel = React.memo(
-  ({ problem, mode = "practice", room, roomId }: DescriptionPanelProps) => {
+  ({ problem, mode = "practice", room, roomId, trackSlug }: DescriptionPanelProps) => {
     // 1. Sync Tabs with URL and Zustand
     useWorkspaceSync();
     const {
@@ -71,7 +75,7 @@ export const DescriptionPanel = React.memo(
     React.useEffect(() => {
       const params = new URLSearchParams(window.location.search);
       const hasDeepLink = params.has("tab");
-      
+
       if (!hasDeepLink) {
         reset();
       }
@@ -79,20 +83,23 @@ export const DescriptionPanel = React.memo(
 
     const cleanedDescription = React.useMemo(() => {
       if (!problem.description) return "";
+      // Exercise mode: raw Markdown — don't strip HTML tags, pass as-is
+      if (mode === "exercise") return problem.description;
+      // Practice/Arena mode: HTML content — strip example/constraints sections
       return problem.description
         .replace(/(?:<p>)?<strong>Example\s*\d+:?[\s\S]*$/i, "")
         .replace(/(?:<p>)?Example\s*\d+:?[\s\S]*$/i, "")
         .replace(/(?:<p>)?<strong>Constraints:?[\s\S]*$/i, "")
         .replace(/(?:<p>)?Constraints:?[\s\S]*$/i, "")
         .trim();
-    }, [problem.description]);
+    }, [problem.description, mode]);
 
     const {
       data: submissions,
       isLoading: isSubmissionsLoading,
       error: submissionsError,
       refetch: refetchSubmissions,
-    } = useUserSubmissionsQuery(problem.problem_id);
+    } = useUserSubmissionsQuery(problem.problem_id, mode !== "exercise");
 
     const tabs = useWorkspaceTabs(mode);
 
@@ -147,7 +154,7 @@ export const DescriptionPanel = React.memo(
                       setShowEditor(false);
                       setLocalTab("solutions");
                     }}
-                    variant="destructive" 
+                    variant="destructive"
                     className="p-1 bg-transparent"
                   >
                     <X className="size-4" />
@@ -158,18 +165,38 @@ export const DescriptionPanel = React.memo(
           </div>
 
           <div className="flex-1 min-h-0 relative">
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full w-full overflow-x-hidden">
               <TabsContent
                 value="description"
                 className="m-0 border-none outline-none"
               >
-                <div className="p-4 md:p-6 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="p-4 md:p-6 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 w-full overflow-hidden">
                   <header className="py-4 border-b border-border/40">
                     <div className="flex items-center justify-between mb-2">
-                      <h1 className="text-xl font-bold tracking-tight text-foreground/90">
-                        {problem.problem_id}. {problem.title}
+                      <h1 className="text-xl font-bold tracking-tight text-foreground/90 flex items-center gap-2">
+                        {mode === "exercise" ? (
+                          <img 
+                            src={`/assets/practice-icon/${trackSlug}/${problem.problem_slug}.svg`} 
+                            alt={`${problem.title} icon`}
+                            className="w-14 object-contain"
+                          />
+                        ) : (
+                          `${problem.problem_id}. `
+                        )}
+                        {problem.title}
                       </h1>
-                      <Badge
+                      {
+                        mode=="exercise" && problem.difficulty ? (
+                          <Badge
+                        variant="outline"
+                        className={cn(
+                          "border-none text-[10px] font-black uppercase tracking-widest",
+                          difficultyColor["Medium"],
+                        )}
+                      >
+                        Level {problem.difficulty}
+                      </Badge>
+                        ) : ( <Badge
                         variant="outline"
                         className={cn(
                           "border-none text-[10px] font-black uppercase tracking-widest",
@@ -178,6 +205,8 @@ export const DescriptionPanel = React.memo(
                       >
                         {problem.difficulty}
                       </Badge>
+                        )
+                      }
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {problem.topics.map((topic) => (
@@ -187,10 +216,48 @@ export const DescriptionPanel = React.memo(
                       ))}
                     </div>
                   </header>
-                  <div
-                    className="text-sm leading-relaxed text-foreground/80 prose prose-invert max-w-full wrap-break-word pb-4"
-                    dangerouslySetInnerHTML={{ __html: cleanedDescription }}
-                  />
+                  {mode === "exercise" ? (
+                    <>
+                      <div className="text-sm leading-relaxed text-foreground/80  max-w-none w-full min-w-0 overflow-hidden pb-2">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={workspaceMarkdownComponents}
+                        >
+                          {cleanedDescription}
+                        </ReactMarkdown>
+                      </div>
+                      
+                      {problem.source && (
+                        <div className="py-4 border-t border-border/60">
+                          <h3 className="text-sm font-bold text-foreground mb-3">
+                            Source
+                          </h3>
+                          <p className="text-sm">
+                            {problem.source_url ? (
+                              <a  
+                                href={problem.source_url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-primary hover:underline font-medium inline-flex items-center gap-1.5"
+                              >
+                                {problem.source?.replace(/exercism's/gi, "SlaveCode's").replace(/exercism/gi, "SlaveCode")}
+                                <ExternalLink className="size-3.5 opacity-70" />
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {problem.source?.replace(/exercism's/gi, "SlaveCode's").replace(/exercism/gi, "SlaveCode")}
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div
+                      className="text-sm leading-relaxed text-foreground/80 prose prose-invert max-w-full wrap-break-word pb-4"
+                      dangerouslySetInnerHTML={{ __html: cleanedDescription }}
+                    />
+                  )}
 
                   {/* Examples */}
                   {problem.examples && problem.examples.length > 0 && (
@@ -252,6 +319,8 @@ export const DescriptionPanel = React.memo(
                       </ul>
                     </div>
                   )}
+                  {/* Source Attribution */}
+                  
                 </div>
               </TabsContent>
 
@@ -264,26 +333,45 @@ export const DescriptionPanel = React.memo(
                     <Lightbulb className="size-4 text-primary" />
                     Problem Hints
                   </h3>
-                  <Accordion
-                    type="single"
-                    collapsible
-                    className="w-full space-y-3"
+                  <QueryGuard
+                    loading={false}
+                    error={null}
+                    data={problem.hints}
+                    emptyTitle="No Hints Available"
+                    emptyMessage="There are no hints provided for this problem. You've got this!"
                   >
-                    {problem.hints?.map((hint, idx) => (
-                      <AccordionItem
-                        key={idx}
-                        value={`hint-${idx}`}
-                        className="border border-border/40 bg-muted/20 rounded-lg px-4 transition-all data-[state=open]:bg-muted/30"
-                      >
-                        <AccordionTrigger className="text-xs font-bold hover:no-underline py-4">
-                          Hint {idx + 1}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-xs text-muted-foreground leading-relaxed pb-4 border-t border-border/10 pt-4">
-                          {hint}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
+                    <Accordion
+                      type="single"
+                      collapsible
+                      className="w-full space-y-3"
+                    >
+                      {problem.hints?.map((hint, idx) => (
+                        <AccordionItem
+                          key={idx}
+                          value={`hint-${idx}`}
+                          className="border border-border/40 bg-muted/20 rounded-lg px-4 transition-all data-[state=open]:bg-muted/30"
+                        >
+                          <AccordionTrigger className="text-xs font-bold hover:no-underline py-4">
+                            Hint {idx + 1}
+                          </AccordionTrigger>
+                          <AccordionContent className="text-xs text-muted-foreground leading-relaxed pb-4 border-t border-border/60 pt-4">
+                            {mode === "exercise" ? (
+                              <div className="prose prose-sm dark:prose-invert max-w-none w-full">
+                                <ReactMarkdown
+                                  remarkPlugins={[remarkGfm]}
+                                  components={workspaceMarkdownComponents}
+                                >
+                                  {hint?.replace(/exercism's/gi, "SlaveCode's").replace(/exercism/gi, "SlaveCode")}
+                                </ReactMarkdown>
+                              </div>
+                            ) : (
+                              hint
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </QueryGuard>
                 </div>
               </TabsContent>
 
@@ -303,6 +391,8 @@ export const DescriptionPanel = React.memo(
                   problemTitle={problem.title}
                   problemSlug={problem.problem_slug}
                   officialSolution={problem.solutions}
+                  mode={mode}
+                  trackSlug={trackSlug}
                   onAddSolution={() => {
                     setShowEditor(true);
                     setLocalTab("new-solution");

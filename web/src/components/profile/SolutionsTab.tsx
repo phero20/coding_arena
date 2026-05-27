@@ -122,7 +122,17 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
                     </TableCell>
                     <TableCell className="py-4 pl-0 border-b border-border/40">
                       <Link
-                        href={`/problems/${sol.problemSlug || sol.problemId}?tab=solutions&solTab=my-solutions&solId=${sol.id}`}
+                        href={(() => {
+                          const pid = sol.problemId;
+                          const solTab = isOwner ? "my-solutions" : "community";
+                          
+                          if (!/^\d+$/.test(pid) && pid.includes(":")) {
+                            const [track, ex] = pid.split(":");
+                            return `/academy/tracks/${track}/exercises/${ex}?tab=solutions&solTab=${solTab}&solId=${sol.id}`;
+                          }
+                          
+                          return `/problems/${sol.problemSlug || pid}?tab=solutions&solTab=${solTab}&solId=${sol.id}`;
+                        })()}
                         className="flex flex-col min-w-0"
                       >
                         <span className="font-bold text-xs tracking-tight truncate text-foreground/90 uppercase group-hover:text-primary transition-colors">

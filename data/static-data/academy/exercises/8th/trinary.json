@@ -1,0 +1,26 @@
+{
+  "id": "8th:trinary",
+  "trackSlug": "8th",
+  "slug": "trinary",
+  "name": "Trinary (Base-3) Numbers",
+  "uuid": "6cf0dbc3-e90e-4a7f-a95b-507ef389d316",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": trinary> \\ s -- n\n\n;\n",
+  "example_solution": ": trinary> \\ s -- n   \n0 >r dup\nfalse >r\n( >n '0 '2 n:between !if rdrop true >r G:break ;then ) s:each!   \nr> !if    \ns:rev (  G:>n '0 n:- swap 3 swap n:^ n:* r> n:+ >r ) s:each    \nelse drop    \nthen   \nr> ;\n",
+  "test_code": "\"trinary.8th\" f:include\nneeds exercism/test\nwith: test\n10 tests\n\n\"1 is decimal 1\"\n    ( \"1\" trinary> )\n    1\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"2 is decimal 2\"\n    ( \"2\" trinary> )\n    2\n    equal?\n\n\"10 is decimal 3\"\n    ( \"10\" trinary> )\n    3\n    equal?\n\n\"11 is decimal 4\"\n    ( \"11\" trinary> )\n    4\n    equal?\n\n\"100 is decimal 9\"\n    ( \"100\" trinary> )\n    9\n    equal?\n\n\"112 is decimal 14\"\n    ( \"112\" trinary> )\n    14\n    equal?\n\n\"222 is decimal 26\"\n    ( \"222\" trinary> )\n    26\n    equal?\n\n\"1122000120 is decimal 32091\"\n    ( \"1122000120\" trinary> )\n    32091\n    equal?\n\n\"invalid trinary is decimal 0\"\n    ( \"carrot\" trinary> )\n    0\n    equal?\n\n\"digits from 3 to 9 are invalid\"\n    ( \"123\" trinary> )\n    0\n    equal?\n\nend-of-tests\n;with\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "Caraciola"
+  ],
+  "contributors": null
+}

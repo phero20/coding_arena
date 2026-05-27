@@ -1,0 +1,38 @@
+{
+  "id": "elixir:accumulate",
+  "trackSlug": "elixir",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "e7c6a0d2-6aaf-4d55-99e2-8ffa65a5e8f0",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an\noperation to perform on each element of the collection, returns a new\ncollection containing the result of applying that operation to each element of\nthe input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality\nprovided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Accumulate do\n  @doc \"\"\"\n    Given a list and a function, apply the function to each list item and\n    replace it with the function's return value.\n\n    Returns a list.\n\n    ## Examples\n\n      iex> Accumulate.accumulate([], fn x -> x * 2 end)\n      []\n\n      iex> Accumulate.accumulate([1, 2, 3], fn x -> x * 2 end)\n      [2, 4, 6]\n\n  \"\"\"\n\n  @spec accumulate(list, (any -> any)) :: list\n  def accumulate(list, fun) do\n  end\nend\n",
+  "example_solution": "defmodule Accumulate do\n  @doc \"\"\"\n    Given a list and a function, apply the function to each list item and\n    replace it with the function's return value.\n\n    Returns a list.\n\n    ## Examples\n\n      iex> Accumulate.accumulate([], fn x -> x * 2 end)\n      []\n\n      iex> Accumulate.accumulate([1, 2, 3], fn x -> x * 2 end)\n      [2, 4, 6]\n\n  \"\"\"\n\n  @spec accumulate(list, (any -> any)) :: list\n  def accumulate([], _fun) do\n    []\n  end\n\n  def accumulate([head | tail], fun) do\n    [fun.(head) | accumulate(tail, fun)]\n  end\nend\n",
+  "test_code": "defmodule AccumulateTest do\n  use ExUnit.Case\n\n  test \"accumulate empty list\" do\n    assert Accumulate.accumulate([], fn n -> n * n end) == []\n  end\n\n  @tag :pending\n  test \"accumulate square numbers\" do\n    assert Accumulate.accumulate([1, 2, 3], fn n -> n * n end) == [1, 4, 9]\n  end\n\n  @tag :pending\n  test \"accumulate upcased strings\" do\n    fun = fn w -> String.upcase(w) end\n    assert Accumulate.accumulate([\"hello\", \"world\"], fun) == [\"HELLO\", \"WORLD\"]\n  end\n\n  @tag :pending\n  test \"accumulate reversed strings\" do\n    fun = fn w -> String.reverse(w) end\n    words = ~w(the quick brown fox etc)\n    expected = [\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"]\n    assert Accumulate.accumulate(words, fun) == expected\n  end\n\n  @tag :pending\n  test \"nested accumulate\" do\n    chars = ~w(a b c)\n    nums = ~w(1 2 3)\n    fun = fn c -> Accumulate.accumulate(nums, &(c <> &1)) end\n    expected = [[\"a1\", \"a2\", \"a3\"], [\"b1\", \"b2\", \"b3\"], [\"c1\", \"c2\", \"c3\"]]\n    assert Accumulate.accumulate(chars, fun) == expected\n  end\nend\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "petehuang"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "bernardoamc",
+    "Cohen-Carlisle",
+    "devonestes",
+    "kytrinyx",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "tejasbubane",
+    "waiting-for-dev"
+  ]
+}

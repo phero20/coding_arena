@@ -1,0 +1,29 @@
+{
+  "id": "julia:trinary",
+  "trackSlug": "julia",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "c09ed7ec-fa7c-4f6a-994f-3d3eb7f22df4",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "function trinary_to_decimal(str)\n\nend\n",
+  "example_solution": "function trinary_to_decimal(str::AbstractString)\n    typeof(match(r\"^[0-2]+$\", str)) == Nothing && return 0\n    mapreduce(i->(i[2]-'0')*3^i[1], +, zip(0:length(str), reverse(str)))\nend\n",
+  "test_code": "using Test\n\ninclude(\"trinary.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"trinary 1 is decimal 1\" begin\n        @test trinary_to_decimal(\"1\") == 1\n    end\n\n    @testset \"trinary 2 is decimal 2\" begin\n        @test trinary_to_decimal(\"2\") == 2\n    end\n\n    @testset \"trinary 10 is decimal 3\" begin\n        @test trinary_to_decimal(\"10\") == 3\n    end\n\n    @testset \"trinary 11 is decimal 4\" begin\n        @test trinary_to_decimal(\"11\") == 4\n    end\n\n    @testset \"trinary 100 is decimal 9\" begin\n        @test trinary_to_decimal(\"100\") == 9\n    end\n\n    @testset \"trinary 112 is decimal 14\" begin\n        @test trinary_to_decimal(\"112\") == 14\n    end\n\n    @testset \"trinary 222 is decimal 26\" begin\n        @test trinary_to_decimal(\"222\") == 26\n    end\n\n    @testset \"trinary 1122000120 is decimal 32091\" begin\n        @test trinary_to_decimal(\"1122000120\") == 32091\n    end\n\n    @testset \"invalid trinary digits returns 0\" begin\n        @test trinary_to_decimal(\"1234\") == 0\n    end\n\n    @testset \"invalid word as input returns 0\" begin\n        @test trinary_to_decimal(\"carrot\") == 0\n    end\n\n    @testset \"invalid numbers with letters as input returns 0\" begin\n        @test trinary_to_decimal(\"0a1b2c\") == 0\n    end\nend\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "andrej-makarov-skrt"
+  ],
+  "contributors": [
+    "cmcaine",
+    "SaschaMann"
+  ]
+}

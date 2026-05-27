@@ -1,0 +1,26 @@
+{
+  "id": "awk:collatz-conjecture",
+  "trackSlug": "awk",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "c426d0d0-d783-445f-a6fb-1b48840dea13",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "BEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "$1 < 1 {\n    print \"Error: Only positive numbers are allowed\" > \"/dev/stderr\"\n    exit 1\n}\n\n{ \n    n = $1\n    steps = 0\n    while (n > 1) {\n        steps++\n        n = (n % 2 == 0) ? n / 2 : 3 * n + 1\n    }\n    print steps\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.2.1.0\n\n@test \"zero steps for one\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f collatz-conjecture.awk <<< \"1\"\n  assert_success\n  assert_output \"0\"\n}\n\n@test \"divide if even\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f collatz-conjecture.awk <<< \"16\"\n  assert_success\n  assert_output \"4\"\n}\n\n@test \"even and odd steps\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f collatz-conjecture.awk <<< \"12\"\n  assert_success\n  assert_output \"9\"\n}\n\n@test \"large number of even and odd steps\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f collatz-conjecture.awk <<< \"1000000\"\n  assert_success\n  assert_output \"152\"\n}\n\n@test \"zero is an error\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f collatz-conjecture.awk <<< \"0\"\n  assert_failure\n  assert_output \"Error: Only positive numbers are allowed\"\n}\n\n@test \"negative value is an error\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f collatz-conjecture.awk <<< \"-15\"\n  assert_failure\n  assert_output \"Error: Only positive numbers are allowed\"\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

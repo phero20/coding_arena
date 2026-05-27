@@ -1,0 +1,28 @@
+{
+  "id": "sqlite:resistor-color-duo",
+  "trackSlug": "sqlite",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "1d80ed96-17aa-44e2-a02f-3cdbdfd05990",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-- Schema: CREATE TABLE \"color_code\" (\"color1\" TEXT, \"color2\" TEXT, \"result\" INT);\n-- Task: update the color_code table and set the result based on the two colors.\n",
+  "example_solution": "-- CREATE TABLE \"color_code\" (\"color1\" TEXT, \"color2\" TEXT, \"result\" INT);\nDROP TABLE IF EXISTS \"colors\";\n\nCREATE TABLE \"colors\" (\"index\" INT, \"color\" TEXT);\n\nINSERT INTO\n  \"colors\" (\"index\", \"color\")\nVALUES\n  (0, 'black'),\n  (1, 'brown'),\n  (2, 'red'),\n  (3, 'orange'),\n  (4, 'yellow'),\n  (5, 'green'),\n  (6, 'blue'),\n  (7, 'violet'),\n  (8, 'grey'),\n  (9, 'white');\n\nUPDATE color_code\nSET\n  result = (\n    SELECT\n      (c1.\"index\" * 10) + c2.\"index\"\n    FROM\n      colors AS c1,\n      colors AS c2\n    WHERE\n      c1.color = color_code.color1\n      AND c2.color = color_code.color2\n  );\n\nDROP TABLE IF EXISTS \"colors\";\n",
+  "test_code": "-- Setup test table and read in student solution:\n.read ./test_setup.sql\n-- Test cases:\nINSERT INTO\n  tests (name, uuid, color1, color2, expected)\nVALUES\n  (\n    'Brown and black',\n    'ce11995a-5b93-4950-a5e9-93423693b2fc',\n    'brown',\n    'black',\n    10\n  ),\n  (\n    'Blue and grey',\n    '7bf82f7a-af23-48ba-a97d-38d59406a920',\n    'blue',\n    'grey',\n    68\n  ),\n  (\n    'Yellow and violet',\n    'f1886361-fdfd-4693-acf8-46726fe24e0c',\n    'yellow',\n    'violet',\n    47\n  ),\n  (\n    'White and red',\n    'b7a6cbd2-ae3c-470a-93eb-56670b305640',\n    'white',\n    'red',\n    92\n  ),\n  (\n    'Orange and orange',\n    '77a8293d-2a83-4016-b1af-991acc12b9fe',\n    'orange',\n    'orange',\n    33\n  ),\n  (\n    'Black and brown, one-digit',\n    '4a8ceec5-0ab4-4904-88a4-daf953a5e818',\n    'black',\n    'brown',\n    1\n  );\n\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      color1,\n      color2,\n      result\n    FROM\n      \"color_code\"\n  ) AS actual\nWHERE\n  (actual.color1, actual.color2, actual.result) = (tests.color1, tests.color2, tests.expected);\n\n-- Write results and debug info:\n.read ./test_reporter.sql\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": [
+    "IsaacG"
+  ]
+}

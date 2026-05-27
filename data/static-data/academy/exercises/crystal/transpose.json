@@ -1,0 +1,28 @@
+{
+  "id": "crystal:transpose",
+  "trackSlug": "crystal",
+  "slug": "transpose",
+  "name": "Transpose",
+  "uuid": "0c4fd479-201f-4586-b1c9-3a05af73eda9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take input text and output it transposed.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "array-methods"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an input text output it transposed.\n\nRoughly explained, the transpose of a matrix:\n\n```text\nABC\nDEF\n```\n\nis given by:\n\n```text\nAD\nBE\nCF\n```\n\nRows become columns and columns become rows.\nSee [transpose][].\n\nIf the input has rows of different lengths, this is to be solved as follows:\n\n- Pad to the left with spaces.\n- Don't pad to the right.\n\nTherefore, transposing this matrix:\n\n```text\nABC\nDE\n```\n\nresults in:\n\n```text\nAD\nBE\nC\n```\n\nAnd transposing:\n\n```text\nAB\nDEF\n```\n\nresults in:\n\n```text\nAD\nBE\n F\n```\n\nIn general, all characters from the input should also be present in the transposed output.\nThat means that if a column in the input text contains only spaces on its bottom-most row(s), the corresponding output row should contain the spaces in its right-most column(s).\n\n[transpose]: https://en.wikipedia.org/wiki/Transpose\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Transpose\n  # Write your code for the 'Transpose' exercise in this file.\nend\n",
+  "example_solution": "module Transpose\n  def self.transpose(input)\n    lines = input.split(\"\\n\")\n    max_width = lines.map(&.size).max\n\n    lines\n      .map(&.ljust(max_width, '\\0'))\n      .map(&.chars)\n      .transpose\n      .map(&.join)\n      .map(&.gsub(/\\0+$/, \"\"))\n      .map(&.gsub(/\\0/, ' '))\n      .join('\\n')\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Transpose\" do\n  it \"empty string\" do\n    input = \"\"\n    expected = \"\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"two characters in a row\" do\n    input = \"A1\"\n    expected = \"A\\n1\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"two characters in a column\" do\n    input = \"A\\n1\"\n    expected = \"A1\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"simple\" do\n    input = \"ABC\\n123\"\n    expected = \"A1\\nB2\\nC3\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"single line\" do\n    input = \"Single line.\"\n    expected = \"S\\ni\\nn\\ng\\nl\\ne\\n \\nl\\ni\\nn\\ne\\n.\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"first line longer than second line\" do\n    input = \"The fourth line.\\nThe fifth line.\"\n    expected = \"TT\\nhh\\nee\\n  \\nff\\noi\\nuf\\nrt\\nth\\nh \\n l\\nli\\nin\\nne\\ne.\\n.\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"second line longer than first line\" do\n    input = \"The first line.\\nThe second line.\"\n    expected = \"TT\\nhh\\nee\\n  \\nfs\\nie\\nrc\\nso\\ntn\\n d\\nl \\nil\\nni\\nen\\n.e\\n .\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"mixed line length\" do\n    input = \"The longest line.\\nA long line.\\nA longer line.\\nA line.\"\n    expected = \"TAAA\\nh   \\nelll\\n ooi\\nlnnn\\nogge\\nn e.\\nglr\\nei \\nsnl\\ntei\\n .n\\nl e\\ni .\\nn\\ne\\n.\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"square\" do\n    input = \"HEART\\nEMBER\\nABUSE\\nRESIN\\nTREND\"\n    expected = \"HEART\\nEMBER\\nABUSE\\nRESIN\\nTREND\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"rectangle\" do\n    input = \"FRACTURE\\nOUTLINED\\nBLOOMING\\nSEPTETTE\"\n    expected = \"FOBS\\nRULE\\nATOP\\nCLOT\\nTIME\\nUNIT\\nRENT\\nEDGE\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"triangle\" do\n    input = \"T\\nEE\\nAAA\\nSSSS\\nEEEEE\\nRRRRRR\"\n    expected = \"TEASER\\n EASER\\n  ASER\\n   SER\\n    ER\\n     R\"\n    Transpose.transpose(input).should eq(expected)\n  end\n\n  pending \"jagged triangle\" do\n    input = \"11\\n2\\n3333\\n444\\n555555\\n66666\"\n    expected = \"123456\\n1 3456\\n  3456\\n  3 56\\n    56\\n    5\"\n    Transpose.transpose(input).should eq(expected)\n  end\nend\n",
+  "source": "Reddit r/dailyprogrammer challenge #270 [Easy].",
+  "source_url": "https://web.archive.org/web/20230630051421/https://old.reddit.com/r/dailyprogrammer/comments/4msu2x/challenge_270_easy_transpose_the_input_text/",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": null
+}

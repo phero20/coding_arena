@@ -1,0 +1,42 @@
+{
+  "id": "rust:largest-series-product",
+  "trackSlug": "rust",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "8679c221-d150-4230-b1cd-5ea78ae69db7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "char"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": "## General\n\nThese iterators may be useful, depending on your approach\n\n- [Windows](https://doc.rust-lang.org/std/primitive.slice.html#method.windows)\n- [Product](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.product)\n",
+  "starter_code": "#[derive(Debug, PartialEq, Eq)]\npub enum Error {\n    SpanTooLong,\n    InvalidDigit(char),\n}\n\npub fn lsp(string_digits: &str, span: usize) -> Result<u64, Error> {\n    todo!(\"largest series product of a span of {span} digits in {string_digits}\");\n}\n",
+  "example_solution": "#[derive(Debug, PartialEq)]\npub enum Error {\n    SpanTooLong,\n    InvalidDigit(char),\n}\n\npub fn lsp(string_digits: &str, span: usize) -> Result<u64, Error> {\n    if span == 0 {\n        return Ok(1);\n    }\n\n    if let Some(invalid) = string_digits.chars().find(|c| !c.is_ascii_digit()) {\n        return Err(Error::InvalidDigit(invalid));\n    }\n\n    let products: Vec<u64> = string_digits\n        .chars()\n        .map(|c| u64::from(c.to_digit(10).unwrap()))\n        .collect::<Vec<u64>>()\n        .windows(span)\n        .map(|w| w.iter().product())\n        .collect();\n\n    if let Some(&x) = products.iter().max() {\n        Ok(x)\n    } else {\n        Err(Error::SpanTooLong)\n    }\n}\n",
+  "test_code": "use largest_series_product::*;\n\n#[test]\nfn return_is_a_result() {\n    assert!(lsp(\"29\", 2).is_ok());\n}\n\n#[test]\n#[ignore]\nfn finds_the_largest_product_if_span_equals_length() {\n    assert_eq!(Ok(18), lsp(\"29\", 2));\n}\n\n#[test]\n#[ignore]\nfn can_find_the_largest_product_of_2_with_numbers_in_order() {\n    assert_eq!(Ok(72), lsp(\"0123456789\", 2));\n}\n\n#[test]\n#[ignore]\nfn can_find_the_largest_product_of_2() {\n    assert_eq!(Ok(48), lsp(\"576802143\", 2));\n}\n\n#[test]\n#[ignore]\nfn can_find_the_largest_product_of_3_with_numbers_in_order() {\n    assert_eq!(Ok(504), lsp(\"0123456789\", 3));\n}\n\n#[test]\n#[ignore]\nfn can_find_the_largest_product_of_3() {\n    assert_eq!(Ok(270), lsp(\"1027839564\", 3));\n}\n\n#[test]\n#[ignore]\nfn can_find_the_largest_product_of_5_with_numbers_in_order() {\n    assert_eq!(Ok(15_120), lsp(\"0123456789\", 5));\n}\n\n#[test]\n#[ignore]\nfn can_get_the_largest_product_of_a_big_number() {\n    assert_eq!(\n        Ok(23_520),\n        lsp(\"73167176531330624919225119674426574742355349194934\", 6)\n    );\n}\n\n#[test]\n#[ignore]\nfn reports_zero_if_the_only_digits_are_zero() {\n    assert_eq!(Ok(0), lsp(\"0000\", 2));\n}\n\n#[test]\n#[ignore]\nfn reports_zero_if_all_spans_include_zero() {\n    assert_eq!(Ok(0), lsp(\"99099\", 3));\n}\n\n#[test]\n#[ignore]\nfn rejects_span_longer_than_string_length() {\n    assert_eq!(Err(Error::SpanTooLong), lsp(\"123\", 4));\n}\n\n#[test]\n#[ignore]\nfn reports_1_for_empty_string_and_empty_product_0_span() {\n    assert_eq!(Ok(1), lsp(\"\", 0));\n}\n\n#[test]\n#[ignore]\nfn reports_1_for_nonempty_string_and_empty_product_0_span() {\n    assert_eq!(Ok(1), lsp(\"123\", 0));\n}\n\n#[test]\n#[ignore]\nfn rejects_empty_string_and_nonzero_span() {\n    assert_eq!(Err(Error::SpanTooLong), lsp(\"\", 1));\n}\n\n#[test]\n#[ignore]\nfn rejects_invalid_character_in_digits() {\n    assert_eq!(Err(Error::InvalidDigit('a')), lsp(\"1234a5\", 2));\n}\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "IanWhitney"
+  ],
+  "contributors": [
+    "coriolinus",
+    "cwhakes",
+    "eddyp",
+    "efx",
+    "ErikSchierboom",
+    "lutostag",
+    "mkantor",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

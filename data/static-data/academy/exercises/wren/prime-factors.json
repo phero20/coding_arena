@@ -1,0 +1,26 @@
+{
+  "id": "wren:prime-factors",
+  "trackSlug": "wren",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "1ec2519a-9c0d-4c02-b80f-b22b0ad2725d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class PrimeFactors {\n  static factors(value) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class PrimeFactors {\n  static factors(value) {\n    var result = []\n    var factor = 2\n    while (value > 1) {\n      if (value % factor == 0) {\n        result.add(factor)\n        value = value / factor\n      } else {\n        factor = factor + 1\n      }\n    }\n    return result\n  }\n}\n",
+  "test_code": "import \"./prime-factors\" for PrimeFactors\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"PrimeFactors\") { |do, skip|\n  do.test(\"no factors\") {\n    Expect.value(PrimeFactors.factors(1)).toEqual([])\n  }\n\n  skip.test(\"prime number\") {\n    Expect.value(PrimeFactors.factors(2)).toEqual([2])\n  }\n\n  skip.test(\"another prime number\") {\n    Expect.value(PrimeFactors.factors(3)).toEqual([3])\n  }\n\n  skip.test(\"square of a prime\") {\n    Expect.value(PrimeFactors.factors(9)).toEqual([3, 3])\n  }\n\n  skip.test(\"product of first prime\") {\n    Expect.value(PrimeFactors.factors(4)).toEqual([2, 2])\n  }\n\n  skip.test(\"cube of a prime\") {\n    Expect.value(PrimeFactors.factors(8)).toEqual([2, 2, 2])\n  }\n\n  skip.test(\"product of second prime\") {\n    Expect.value(PrimeFactors.factors(27)).toEqual([3, 3, 3])\n  }\n\n  skip.test(\"product of third prime\") {\n    Expect.value(PrimeFactors.factors(625)).toEqual([5, 5, 5, 5])\n  }\n\n  skip.test(\"product of first and second prime\") {\n    Expect.value(PrimeFactors.factors(6)).toEqual([2, 3])\n  }\n\n  skip.test(\"product of primes and non-primes\") {\n    Expect.value(PrimeFactors.factors(12)).toEqual([2, 2, 3])\n  }\n\n  skip.test(\"product of primes\") {\n    Expect.value(PrimeFactors.factors(901255)).toEqual([5, 17, 23, 461])\n  }\n\n  skip.test(\"factors include a large prime\") {\n    Expect.value(PrimeFactors.factors(93819012551)).toEqual([11, 9539, 894119])\n  }\n}\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

@@ -43,6 +43,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
   hasSubmitted,
   confirmSubmit,
   hideSubmit,
+  hideRun,
   onToggleScratchpad,
   isScratchpadOpen,
   isArena: isArenaProp,
@@ -69,21 +70,23 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         <Pencil className="size-3.5 md:mr-1" />
         <span className="hidden md:inline">Scratchpad</span>
       </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        type="button"
-        onClick={onRun}
-        disabled={isInteractionDisabled}
-        className="px-2.5 md:px-3 h-8 md:h-9"
-      >
-        {isLoading ? (
-          <RefreshCw className="size-3.5 md:mr-1 animate-spin" />
-        ) : (
-          <Play className="size-3.5 md:mr-1" />
-        )}
-        <span className="hidden md:inline">Run</span>
-      </Button>
+      {!hideRun && (
+        <Button
+          variant="outline"
+          size="sm"
+          type="button"
+          onClick={onRun}
+          disabled={isInteractionDisabled}
+          className="px-2.5 md:px-3 h-8 md:h-9"
+        >
+          {isLoading ? (
+            <RefreshCw className="size-3.5 md:mr-1 animate-spin" />
+          ) : (
+            <Play className="size-3.5 md:mr-1" />
+          )}
+          <span className="hidden md:inline">Run</span>
+        </Button>
+      )}
       
       {!hideSubmit && renderSubmitButton()}
     </ButtonGroup>

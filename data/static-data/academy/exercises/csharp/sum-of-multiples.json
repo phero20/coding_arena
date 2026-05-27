@@ -1,0 +1,44 @@
+{
+  "id": "csharp:sum-of-multiples",
+  "trackSlug": "csharp",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "d985d4a9-1a2b-4bb1-ad08-961b8d36ee2e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "enumerables",
+    "foreach-loops",
+    "numbers"
+  ],
+  "prerequisites": [
+    "enumerables",
+    "numbers",
+    "foreach-loops",
+    "if-statements"
+  ],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "public static class SumOfMultiples\n{\n    public static int Sum(IEnumerable<int> multiples, int max)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class SumOfMultiples\n{\n    public static int Sum(IEnumerable<int> multiples, int max)\n    {\n        return Enumerable.Range(1, max - 1)\n            .Where(i => multiples.Any(m => m != 0 && i % m == 0))\n            .Sum();\n    }\n}",
+  "test_code": "public class SumOfMultiplesTests\n{\n    [Fact]\n    public void No_multiples_within_limit()\n    {\n        Assert.Equal(0, SumOfMultiples.Sum([3, 5], 1));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void One_factor_has_multiples_within_limit()\n    {\n        Assert.Equal(3, SumOfMultiples.Sum([3, 5], 4));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void More_than_one_multiple_within_limit()\n    {\n        Assert.Equal(9, SumOfMultiples.Sum([3], 7));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void More_than_one_factor_with_multiples_within_limit()\n    {\n        Assert.Equal(23, SumOfMultiples.Sum([3, 5], 10));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Each_multiple_is_only_counted_once()\n    {\n        Assert.Equal(2318, SumOfMultiples.Sum([3, 5], 100));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_much_larger_limit()\n    {\n        Assert.Equal(233168, SumOfMultiples.Sum([3, 5], 1000));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Three_factors()\n    {\n        Assert.Equal(51, SumOfMultiples.Sum([7, 13, 17], 20));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Factors_not_relatively_prime()\n    {\n        Assert.Equal(30, SumOfMultiples.Sum([4, 6], 15));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Some_pairs_of_factors_relatively_prime_and_some_not()\n    {\n        Assert.Equal(4419, SumOfMultiples.Sum([5, 6, 8], 150));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void One_factor_is_a_multiple_of_another()\n    {\n        Assert.Equal(275, SumOfMultiples.Sum([5, 25], 51));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Much_larger_factors()\n    {\n        Assert.Equal(2203160, SumOfMultiples.Sum([43, 47], 10000));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void All_numbers_are_multiples_of_1()\n    {\n        Assert.Equal(4950, SumOfMultiples.Sum([1], 100));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void No_factors_means_an_empty_sum()\n    {\n        Assert.Equal(0, SumOfMultiples.Sum([], 10000));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void The_only_multiple_of_0_is_0()\n    {\n        Assert.Equal(0, SumOfMultiples.Sum([0], 1));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void The_factor_0_does_not_affect_the_sum_of_multiples_of_other_factors()\n    {\n        Assert.Equal(3, SumOfMultiples.Sum([3, 0], 4));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Solutions_using_include_exclude_must_extend_to_cardinality_greater_than_3()\n    {\n        Assert.Equal(39614537, SumOfMultiples.Sum([2, 3, 5, 7, 11], 10000));\n    }\n}\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "jwood803"
+  ],
+  "contributors": [
+    "bressain",
+    "duffn",
+    "ErikSchierboom",
+    "FridaTveit",
+    "j2jensen",
+    "kytrinyx",
+    "robkeim",
+    "wolf99"
+  ]
+}

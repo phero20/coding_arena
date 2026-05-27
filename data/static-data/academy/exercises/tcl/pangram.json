@@ -1,0 +1,28 @@
+{
+  "id": "tcl:pangram",
+  "trackSlug": "tcl",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "b3ca1538-29a7-41e2-8791-e5918ec2d709",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env tclsh\n\nproc isPangram {text} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "#!/usr/bin/env tclsh\n\nset alphabet [split \"abcdefghijklmnopqrstuvwxyz\" \"\"]\n\nproc isPangram {text} {\n    set text [string tolower $text]\n    foreach {letter} $::alphabet {\n        if {[string first $letter $text] < 0} {\n            return 0\n        }\n    }\n    return 1\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"pangram.tcl\"\n\ntest pangram-1 \"empty sentence\" -body {\n    isPangram \"\"\n} -returnCodes ok -match boolean -result false\n\nskip pangram-2\ntest pangram-2 \"perfect lower case\" -body {\n    isPangram \"abcdefghijklmnopqrstuvwxyz\"\n} -returnCodes ok -match boolean -result true\n\nskip pangram-3\ntest pangram-3 \"only lower case\" -body {\n    isPangram \"the quick brown fox jumps over the lazy dog\"\n} -returnCodes ok -match boolean -result true\n\nskip pangram-4\ntest pangram-4 \"missing the letter 'x'\" -body {\n    isPangram \"a quick movement of the enemy will jeopardize five gunboats\"\n} -returnCodes ok -match boolean -result false\n\nskip pangram-5\ntest pangram-5 \"missing the letter 'h'\" -body {\n    isPangram \"five boxing wizards jump quickly at it\"\n} -returnCodes ok -match boolean -result false\n\nskip pangram-6\ntest pangram-6 \"with underscores\" -body {\n    isPangram \"the_quick_brown_fox_jumps_over_the_lazy_dog\"\n} -returnCodes ok -match boolean -result true\n\nskip pangram-7\ntest pangram-7 \"with numbers\" -body {\n    isPangram \"the 1 quick brown fox jumps over the 2 lazy dogs\"\n} -returnCodes ok -match boolean -result true\n\nskip pangram-8\ntest pangram-8 \"missing letters replaced by numbers\" -body {\n    isPangram \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"\n} -returnCodes ok -match boolean -result false\n\nskip pangram-9\ntest pangram-9 \"mixed case and punctuation\" -body {\n    isPangram \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"\n} -returnCodes ok -match boolean -result true\n\nskip pangram-10\ntest pangram-10 \"a-m and A-M are 26 different characters but not a pangram\" -body {\n    isPangram \"abcdefghijklm ABCDEFGHIJKLM\"\n} -returnCodes ok -match boolean -result false\n\n\ncleanupTests\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "sshine"
+  ],
+  "contributors": [
+    "glennj"
+  ]
+}

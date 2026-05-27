@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:saddle-points",
+  "trackSlug": "fsharp",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "526fc5b4-e96b-419a-8987-9b78e9bddc19",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "multi-dimensional-arrays"
+  ],
+  "prerequisites": [
+    "generic-methods",
+    "lists",
+    "multi-dimensional-arrays",
+    "numbers",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n      ↓\n      1  2  3  4\n    |-----------\n  1 | 9  8  7  8\n→ 2 |[5] 3  2  4\n  3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "module SaddlePoints\n\nlet saddlePoints matrix = failwith \"You need to implement this function.\"",
+  "example_solution": "module SaddlePoints\n\nlet saddlePoints (matrix: int list list) = \n    match matrix with\n    | []   -> []\n    | [[]] -> []\n    | _ ->\n        let rec transpose = function\n            | (_::_)::_ as m -> List.map List.head m :: transpose (List.map List.tail m)\n            | _ -> []\n\n        let rows = matrix |> List.length\n        let cols = matrix |> List.head |> List.length\n\n        let rowsMax = matrix |> List.map List.max\n        let colsMin = matrix |> transpose |> List.map List.min\n\n        let rowMax x = rowsMax |> List.item x\n        let colMin y = colsMin |> List.item y\n\n        let element x y = matrix |> List.item x |> List.item y\n        let isSaddlePoint x y = element x y = rowMax x && element x y = colMin y\n\n        [for x in 0 .. (rows - 1) do\n            for y in 0 .. (cols - 1) do\n                if isSaddlePoint x y then\n                    yield (x + 1, y + 1)]",
+  "test_code": "module SaddlePointsTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen SaddlePoints\n\n[<Fact>]\nlet ``Can identify single saddle point`` () =\n    let matrix = \n        [ [9; 8; 7];\n          [5; 3; 2];\n          [6; 6; 7] ]\n    saddlePoints matrix |> should equal [(2, 1)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify that empty matrix has no saddle points`` () =\n    let matrix = [[]]\n    saddlePoints matrix |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify lack of saddle points when there are none`` () =\n    let matrix = \n        [ [1; 2; 3];\n          [3; 1; 2];\n          [2; 3; 1] ]\n    saddlePoints matrix |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify multiple saddle points in a column`` () =\n    let matrix = \n        [ [4; 5; 4];\n          [3; 5; 5];\n          [1; 5; 4] ]\n    saddlePoints matrix |> should equal [(1, 2); (2, 2); (3, 2)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify multiple saddle points in a row`` () =\n    let matrix = \n        [ [6; 7; 8];\n          [5; 5; 5];\n          [7; 5; 6] ]\n    saddlePoints matrix |> should equal [(2, 1); (2, 2); (2, 3)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify saddle point in bottom right corner`` () =\n    let matrix = \n        [ [8; 7; 9];\n          [6; 7; 6];\n          [3; 2; 5] ]\n    saddlePoints matrix |> should equal [(3, 3)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify saddle points in a non square matrix`` () =\n    let matrix = \n        [ [3; 1; 3];\n          [3; 2; 4] ]\n    saddlePoints matrix |> should equal [(1, 1); (1, 3)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify that saddle points in a single column matrix are those with the minimum value`` () =\n    let matrix = \n        [ [2];\n          [1];\n          [4];\n          [1] ]\n    saddlePoints matrix |> should equal [(2, 1); (4, 1)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can identify that saddle points in a single row matrix are those with the maximum value`` () =\n    let matrix = [[2; 5; 3; 5]]\n    saddlePoints matrix |> should equal [(1, 2); (1, 4)]\n\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

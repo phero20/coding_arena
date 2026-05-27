@@ -1,0 +1,28 @@
+{
+  "id": "tcl:nucleotide-count",
+  "trackSlug": "tcl",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "fc650773-a831-4e34-96cb-c880a911e582",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc nucleotideCounts {strand} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc nucleotideCounts {strand} {\n    set counts {A 0 C 0 G 0 T 0}\n    foreach char [split $strand \"\"] {\n        if {![dict exists $counts $char]} {\n            error \"Invalid nucleotide in strand\"\n        }\n        dict incr counts $char\n    }\n    return $counts\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"nucleotide-count.tcl\"\n\ntest nuc-count-1 \"empty strand\" -body {\n    nucleotideCounts \"\"\n} -returnCodes ok -match dictionary -result { A 0 C 0 G 0 T 0 }\n\nskip nuc-count-2\ntest nuc-count-2 \"can count one nucleotide in single-character input\" -body {\n    nucleotideCounts \"G\"\n} -returnCodes ok -match dictionary -result { A 0 C 0 G 1 T 0 }\n\nskip nuc-count-3\ntest nuc-count-3 \"strand with repeated nucleotide\" -body {\n    nucleotideCounts \"GGGGGGG\"\n} -returnCodes ok -match dictionary -result { A 0 C 0 G 7 T 0 }\n\nskip nuc-count-4\ntest nuc-count-4 \"strand with multiple nucleotides\" -body {\n    nucleotideCounts \"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"\n} -returnCodes ok -match dictionary -result { A 20 C 12 G 17 T 21 }\n\n\nskip nuc-count-5\ntest nuc-count-5 \"strand with invalid nucleotides\" -body {\n    nucleotideCounts \"AGXXACT\"\n} -returnCodes error -result \"Invalid nucleotide in strand\"\n\ncleanupTests\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

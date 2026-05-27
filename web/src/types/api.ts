@@ -61,6 +61,8 @@ export interface Problem {
   code_snippets: ProblemCodeSnippets;
   function_signature: FunctionSignature;
   solutions?: string;
+  source?: string;
+  source_url?: string;
   createdAt: string;
   updatedAt: string;
 }

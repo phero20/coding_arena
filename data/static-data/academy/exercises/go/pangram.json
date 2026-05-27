@@ -1,0 +1,41 @@
+{
+  "id": "go:pangram",
+  "trackSlug": "go",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "d14c6283-e57c-472c-8181-87f82d9088dd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "package pangram\n\nfunc IsPangram(input string) bool {\n\tpanic(\"Please implement the IsPangram function\")\n}\n",
+  "example_solution": "package pangram\n\nimport \"strings\"\n\n// IsPangram checks if given string is a pangram\nfunc IsPangram(s string) bool {\n\tvar check [26]bool\n\tvar count int\n\tfor _, c := range strings.ToLower(s) {\n\t\tif c >= 'a' {\n\t\t\tif c > 'z' {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tc -= 97\n\t\t} else {\n\t\t\tcontinue\n\t\t}\n\n\t\tif !check[c] {\n\t\t\tif count == 25 {\n\t\t\t\treturn true\n\t\t\t}\n\t\t\tcheck[c] = true\n\t\t\tcount++\n\t\t}\n\t}\n\treturn false\n}\n",
+  "test_code": "package pangram\n\nimport (\n\t\"testing\"\n)\n\nfunc TestPangram(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := IsPangram(tc.input); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"IsPangram(%q) = %t, want: %t\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkPangram(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range testCases {\n\t\t\tIsPangram(test.input)\n\t\t}\n\t}\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "Akasurde"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "da-edra",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "leenipper",
+    "navossoc",
+    "robphoenix",
+    "sebito91",
+    "tleen",
+    "usmanismail",
+    "eklatzer"
+  ]
+}

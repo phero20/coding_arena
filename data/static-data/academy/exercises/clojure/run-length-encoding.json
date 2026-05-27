@@ -1,0 +1,34 @@
+{
+  "id": "clojure:run-length-encoding",
+  "trackSlug": "clojure",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "fa1be98f-59b2-487e-948d-46e744d50dc4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns run-length-encoding)\n\n(defn run-length-encode\n  \"Encodes a string with run-length encoding.\"\n  [plaintext]\n  ;; function body\n  )\n\n(defn run-length-decode\n  \"Decodes a run-length-encoded string.\"\n  [ciphertext]\n  ;; function body\n  )\n",
+  "example_solution": "(ns run-length-encoding)\n\n(defn encode-group\n  [group]\n  (let [n (count group)]\n    (if (> n 1)\n      (str n (first group))\n      (str (first group)))))\n\n(defn run-length-encode\n  [s]\n  (->> s\n       (into [] (comp (partition-by identity) (map encode-group)))\n       (apply str)))\n\n(defn decode-rule\n  [[_ n ch]]\n  (let [len (Integer/parseInt (or (not-empty n) \"1\"))]\n    (apply str (repeat len ch))))\n\n(defn run-length-decode\n  [s]\n  (->> s\n       (re-seq #\"(\\d*)(\\D)\")\n       (map decode-rule)\n       (apply str)))\n",
+  "test_code": "(ns run-length-encoding-test\n  (:require [clojure.test :refer [deftest testing is]]\n            run-length-encoding))\n\n(deftest ^:run-length-encode run-length-encode_test_1\n  (testing \"run-length encode a string ▶ empty string\"\n    (is (= \"\"\n           (run-length-encoding/run-length-encode \"\")))))\n\n(deftest ^:run-length-encode run-length-encode_test_2\n  (testing \"run-length encode a string ▶ single characters only are encoded without count\"\n    (is (= \"XYZ\"\n           (run-length-encoding/run-length-encode \"XYZ\")))))\n\n(deftest ^:run-length-encode run-length-encode_test_3\n  (testing \"run-length encode a string ▶ string with no single characters\"\n    (is (= \"2A3B4C\"\n           (run-length-encoding/run-length-encode \"AABBBCCCC\")))))\n\n(deftest ^:run-length-encode run-length-encode_test_4\n  (testing \"run-length encode a string ▶ single characters mixed with repeated characters\"\n    (is (= \"12WB12W3B24WB\"\n           (run-length-encoding/run-length-encode \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")))))\n\n(deftest ^:run-length-encode run-length-encode_test_5\n  (testing \"run-length encode a string ▶ multiple whitespace mixed in string\"\n    (is (= \"2 hs2q q2w2 \"\n           (run-length-encoding/run-length-encode \"  hsqq qww  \")))))\n\n(deftest ^:run-length-encode run-length-encode_test_6\n  (testing \"run-length encode a string ▶ lowercase characters\"\n    (is (= \"2a3b4c\"\n           (run-length-encoding/run-length-encode \"aabbbcccc\")))))\n\n(deftest ^:run-length-decode run-length-decode_test_1\n  (testing \"run-length decode a string ▶ empty string\"\n    (is (= \"\"\n           (run-length-encoding/run-length-decode \"\")))))\n\n(deftest ^:run-length-decode run-length-decode_test_2\n  (testing \"run-length decode a string ▶ single characters only\"\n    (is (= \"XYZ\"\n           (run-length-encoding/run-length-decode \"XYZ\")))))\n\n(deftest ^:run-length-decode run-length-decode_test_3\n  (testing \"run-length decode a string ▶ string with no single characters\"\n    (is (= \"AABBBCCCC\"\n           (run-length-encoding/run-length-decode \"2A3B4C\")))))\n\n(deftest ^:run-length-decode run-length-decode_test_4\n  (testing \"run-length decode a string ▶ single characters with repeated characters\"\n    (is (= \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"\n           (run-length-encoding/run-length-decode \"12WB12W3B24WB\")))))\n\n(deftest ^:run-length-decode run-length-decode_test_5\n  (testing \"run-length decode a string ▶ multiple whitespace mixed in string\"\n    (is (= \"  hsqq qww  \"\n           (run-length-encoding/run-length-decode \"2 hs2q q2w2 \")))))\n\n(deftest ^:run-length-decode run-length-decode_test_6\n  (testing \"run-length decode a string ▶ lowercase string\"\n    (is (= \"aabbbcccc\"\n           (run-length-encoding/run-length-decode \"2a3b4c\")))))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "themistoklik"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "haus",
+    "sjwarner-bp",
+    "tasxatzial"
+  ]
+}

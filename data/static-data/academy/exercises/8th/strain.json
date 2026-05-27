@@ -1,0 +1,26 @@
+{
+  "id": "8th:strain",
+  "trackSlug": "8th",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "9bc75279-afa8-4190-b71a-c4d26ce74477",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `keep` and `discard` operation on collections.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": keep \\ a w -- a\n  \n;\n\n: discard \\ a w -- a\n  \n;\n",
+  "example_solution": ": keep \\ a w -- a\n  >r ( dup r@ w:exec if a:push else drop then ) a:new a:reduce\n;\n\n: discard \\ a w -- a\n  >r ( dup r@ w:exec if drop else a:push then ) a:new a:reduce\n;\n",
+  "test_code": "\"strain.8th\" f:include\nneeds exercism/test\nwith: test\n14 tests\n\n\"keep on empty list returns empty list\"\n    ( [] ( drop true ) keep )\n    []\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"keeps everything\"\n    ( [1, 3, 5] ( drop true ) keep )\n    [1, 3, 5]\n    equal?\n\n\"keeps nothing\"\n    ( [1, 3, 5] ( drop false ) keep )\n    []\n    equal?\n\n\"keeps first and last\"\n    ( [1, 2, 3] ( 2 n:mod 1 n:= ) keep )\n    [1, 3]\n    equal?\n\n\"keeps neither first nor last\"\n    ( [1, 2, 3] ( 2 n:mod 0 n:= ) keep )\n    [2]\n    equal?\n\n\"keeps strings\"\n    ( [\"apple\", \"zebra\", \"banana\", \"zombies\", \"cherimoya\", \"zealot\"] ( 0 s:@ nip 'z n:= ) keep )\n    [\"zebra\", \"zombies\", \"zealot\"]\n    equal?\n\n\"keeps lists\"\n    ( [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]] ( 5 ' n:= a:indexof nip number? nip ) keep )\n    [[5, 5, 5], [5, 1, 2], [1, 5, 2], [1, 2, 5]]\n    equal?\n\n\"discard on empty list returns empty list\"\n    ( [] ( drop true ) discard )\n    []\n    equal?\n\n\"discards everything\"\n    ( [1, 3, 5] ( drop true ) discard )\n    []\n    equal?\n\n\"discards nothing\"\n    ( [1, 3, 5] ( drop false ) discard )\n    [1, 3, 5]\n    equal?\n\n\"discards first and last\"\n    ( [1, 2, 3] ( 2 n:mod 1 n:= ) discard )\n    [2]\n    equal?\n\n\"discards neither first nor last\"\n    ( [1, 2, 3] ( 2 n:mod 0 n:= ) discard )\n    [1, 3]\n    equal?\n\n\"discards strings\"\n    ( [\"apple\", \"zebra\", \"banana\", \"zombies\", \"cherimoya\", \"zealot\"] ( 0 s:@ nip 'z n:= ) discard )\n    [\"apple\", \"banana\", \"cherimoya\"]\n    equal?\n\n\"discards lists\"\n    ( [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]] ( 5 ' n:= a:indexof nip number? nip ) discard )\n    [[1, 2, 3], [2, 1, 2], [2, 2, 1]]\n    equal?\n\nend-of-tests\n;with\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

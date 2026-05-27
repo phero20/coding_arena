@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:nucleotide-count",
+  "trackSlug": "euphoria",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "1ba6a523-9e84-4150-b512-0dc77da874d0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public function counts(sequence nucleotides)\n\nend function\n",
+  "example_solution": "include std/map.e\n\npublic function counts(sequence nucleotides)\n  map values = new(4)\n  put(values, 'A', 0)\n  put(values, 'C', 0)\n  put(values, 'G', 0)\n  put(values, 'T', 0)\n\n  for i = 1 to length(nucleotides) do\n    atom nucleotide = nucleotides[i]\n    if not has(values, nucleotide) then\n      return 0\n    end if\n\n    put(values, nucleotide, 1, ADD)\n  end for\n\n  return values\nend function\n",
+  "test_code": "include std/unittest.e\ninclude std/map.e\n\ninclude nucleotide-count.ex\n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"Empty strand\",\n            {{'A', 0},{'C', 0},{'G', 0},{'T', 0}},\n            pairs(counts(\"\"), 1))\ntest_equal(\"Can count one nucleotide in single-character input strand\",\n            {{'A', 0},{'C', 0},{'G', 1},{'T', 0}},\n            pairs(counts(\"G\"), 1))\ntest_equal(\"Strand with repeated nucleotide\",\n            {{'A', 0},{'C', 0},{'G', 7},{'T', 0}},\n            pairs(counts(\"GGGGGGG\"), 1))\ntest_equal(\"Strand with multiple nucleotides\",\n            {{'A', 20},{'C', 12},{'G', 17},{'T', 21}},\n            pairs(counts(\"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"), 1))\ntest_false(\"Strand with invalid nucleotides\",\n            counts(\"AGXXACT\"))\n\ntest_report()",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

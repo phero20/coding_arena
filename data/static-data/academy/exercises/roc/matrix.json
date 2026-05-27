@@ -1,0 +1,26 @@
+{
+  "id": "roc:matrix",
+  "trackSlug": "roc",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "c82cc59d-9428-48c8-8c17-908f1dc0ffb3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [row, column]\n\ncolumn : Str, U64 -> Result (List I64) _\ncolumn = |matrix_str, index|\n    crash(\"Please implement the 'column' function\")\n\nrow : Str, U64 -> Result (List I64) _\nrow = |matrix_str, index|\n    crash(\"Please implement the 'row' function\")\n",
+  "example_solution": "module [row, column]\n\nparse_row : Str -> Result (List I64) [InvalidNumStr]\nparse_row = |row_str|\n    row_str\n    |> Str.trim\n    |> Str.split_on(\" \")\n    |> List.map(Str.trim)\n    |> List.drop_if(Str.is_empty)\n    |> List.map_try(Str.to_i64)\n\nparse_matrix : Str -> Result (List (List I64)) [InvalidNumStr]\nparse_matrix = |matrix_str|\n    matrix_str\n    |> Str.split_on(\"\\n\")\n    |> List.map_try(parse_row)\n\ncolumn : Str, U64 -> Result (List I64) [InvalidNumStr, OutOfBounds]\ncolumn = |matrix_str, index|\n    if index == 0 then\n        Err(OutOfBounds)\n    else\n        matrix = parse_matrix(matrix_str)?\n        matrix |> List.map_try(|r| r |> List.get((index - 1)))\n\nrow : Str, U64 -> Result (List I64) [InvalidNumStr, OutOfBounds]\nrow = |matrix_str, index|\n    if index == 0 then\n        Err(OutOfBounds)\n    else\n        matrix = parse_matrix(matrix_str)?\n        result = matrix |> List.get(index - 1)?\n        Ok(result)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/matrix/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport Matrix exposing [row, column]\n\n# extract row from one number matrix\nexpect\n    matrix_str = \"1\"\n    result = matrix_str |> row(1)\n    result == Ok([1])\n\n# can extract row\nexpect\n    matrix_str =\n        \"\"\"\n        1 2\n        3 4\n        \"\"\"\n    result = matrix_str |> row(2)\n    result == Ok([3, 4])\n\n# extract row where numbers have different widths\nexpect\n    matrix_str =\n        \"\"\"\n        1 2\n        10 20\n        \"\"\"\n    result = matrix_str |> row(2)\n    result == Ok([10, 20])\n\n# can extract row from non-square matrix with no corresponding column\nexpect\n    matrix_str =\n        \"\"\"\n        1 2 3\n        4 5 6\n        7 8 9\n        8 7 6\n        \"\"\"\n    result = matrix_str |> row(4)\n    result == Ok([8, 7, 6])\n\n# extract column from one number matrix\nexpect\n    matrix_str = \"1\"\n    result = matrix_str |> column(1)\n    result == Ok([1])\n\n# can extract column\nexpect\n    matrix_str =\n        \"\"\"\n        1 2 3\n        4 5 6\n        7 8 9\n        \"\"\"\n    result = matrix_str |> column(3)\n    result == Ok([3, 6, 9])\n\n# can extract column from non-square matrix with no corresponding row\nexpect\n    matrix_str =\n        \"\"\"\n        1 2 3 4\n        5 6 7 8\n        9 8 7 6\n        \"\"\"\n    result = matrix_str |> column(4)\n    result == Ok([4, 8, 6])\n\n# extract column where numbers have different widths\nexpect\n    matrix_str =\n        \"\"\"\n        89 1903 3\n        18 3 1\n        9 4 800\n        \"\"\"\n    result = matrix_str |> column(2)\n    result == Ok([1903, 3, 4])\n\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

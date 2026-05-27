@@ -10,6 +10,7 @@ import { NavLinks, navItems } from "./NavLinks";
 import { NavbarActions } from "./NavbarActions";
 import { MobileMenu } from "./MobileMenu";
 import { UserSearch } from "./UserSearch";
+import { shouldHide } from "./shouldHide";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -21,13 +22,9 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const shouldHideNavbar =
-    pathname.startsWith("/problems/") ||
-    pathname.startsWith("/arena/match") ||
-    pathname.startsWith("/compilers") ||
-    /^\/systemdesign-workspace\/[^/]+\/diagram\//.test(pathname);
 
-  if (shouldHideNavbar) return null;
+
+  if (shouldHide(pathname)) return null;
 
   return (
     <>

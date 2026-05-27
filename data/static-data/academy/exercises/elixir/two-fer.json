@@ -1,0 +1,38 @@
+{
+  "id": "elixir:two-fer",
+  "trackSlug": "elixir",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "6a130540-1b84-4147-8e6f-776dbf750489",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "guards",
+    "default-arguments"
+  ],
+  "prerequisites": [
+    "strings",
+    "guards",
+    "default-arguments"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "defmodule TwoFer do\n  @doc \"\"\"\n  Two-fer or 2-fer is short for two for one. One for you and one for me.\n  \"\"\"\n  @spec two_fer(String.t()) :: String.t()\n  def two_fer(name) do\n  end\nend\n",
+  "example_solution": "defmodule TwoFer do\n  @doc \"\"\"\n  Two-fer or 2-fer is short for two for one. One for you and one for me.\n  \"\"\"\n  @spec two_fer(String.t()) :: String.t()\n  def two_fer(name \\\\ \"you\") when is_binary(name), do: \"One for #{name}, one for me.\"\nend\n",
+  "test_code": "defmodule TwoFerTest do\n  use ExUnit.Case\n\n  test \"no name given\" do\n    assert TwoFer.two_fer() == \"One for you, one for me.\"\n  end\n\n  @tag :pending\n  test \"a name given\" do\n    assert TwoFer.two_fer(\"Alice\") == \"One for Alice, one for me.\"\n  end\n\n  @tag :pending\n  test \"another name given\" do\n    assert TwoFer.two_fer(\"Bob\") == \"One for Bob, one for me.\"\n  end\n\n  @tag :pending\n  test \"when the argument is a number\" do\n    assert_raise FunctionClauseError, fn ->\n      TwoFer.two_fer(10)\n    end\n  end\n\n  @tag :pending\n  test \"when the argument is an atom\" do\n    assert_raise FunctionClauseError, fn ->\n      TwoFer.two_fer(:bob)\n    end\n  end\n\n  @tag :pending\n  test \"when the argument is a charlist\" do\n    assert_raise FunctionClauseError, fn ->\n      refute TwoFer.two_fer(~c\"Jon Snow\")\n    end\n  end\nend\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "Bscruz19"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "neenjaw"
+  ]
+}

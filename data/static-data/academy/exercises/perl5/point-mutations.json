@@ -1,0 +1,30 @@
+{
+  "id": "perl5:point-mutations",
+  "trackSlug": "perl5",
+  "slug": "point-mutations",
+  "name": "Point Mutations",
+  "uuid": "a6f46028-7334-4504-877e-eda8ebdd9ea9",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Calculate the Hamming difference between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming difference between two DNA strands.\n\nA mutation is simply a mistake that occurs during the creation or\ncopying of a nucleic acid, in particular DNA. Because nucleic acids are\nvital to cellular functions, mutations tend to cause a ripple effect\nthroughout the cell. Although mutations are technically mistakes, a very\nrare mutation may equip the cell with a beneficial attribute. In fact,\nthe macro effects of evolution are attributable by the accumulated\nresult of beneficial microscopic mutations over many generations.\n\nThe simplest and most common type of nucleic acid mutation is a point\nmutation, which replaces one base with another at a single nucleotide.\n\nBy counting the number of differences between two homologous DNA strands\ntaken from different genomes with a common ancestor, we get a measure of\nthe minimum number of point mutations that could have occurred on the\nevolutionary path between the two strands.\n\nThis is called the 'Hamming distance'\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThe Hamming distance between these two DNA strands is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length. Hence you\nmay assume that only sequences of equal length will be passed to your hamming\ndistance function.\n\n**Note: This problem is deprecated, replaced by the one called `hamming`.**\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package DNA;\n\nuse strict;\nuse warnings;\n\nsub new {\n    my ( $class, $strand ) = @_;\n\n    return undef;\n}\n\nsub hamming_distance {\n    my ( $self, $strand ) = @_;\n\n    return undef;\n}\n\n__PACKAGE__;\n",
+  "example_solution": "package DNA;\n\nuse strict;\nuse warnings;\n\nsub new {\n    my ( $class, $strand ) = @_;\n    my $self = bless {} => $class;\n    $self->{strand} = $strand;\n    $self->{len}    = length $strand;\n    return $self;\n}\n\nsub hamming_distance {\n    my ( $self, $strand ) = @_;\n    my $distance;\n\n    my $len = length $strand;\n    $len = $self->{len} if $len > $self->{len};\n\n    my @orig = split // => $self->{strand};\n    my @inp  = split // => $strand;\n\n    foreach my $index ( 0 .. $len - 1 ) {\n        $distance++ if $orig[$index] ne $inp[$index];\n    }\n\n    return $distance || 0;\n}\n\n__PACKAGE__;\n",
+  "test_code": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\n\nuse Test2::Bundle::More;\nuse JSON::PP qw(decode_json);\nuse FindBin  qw($Bin);\nuse lib $Bin, \"$Bin/local/lib/perl5\";\n\nmy $module = 'DNA';\n\nmy $cases;\n{\n    local $/ = undef;\n    $cases = decode_json scalar <DATA>;\n}\n\nplan 4 + @$cases;\n\nok -e \"$Bin/$module.pm\", \"missing $module.pm\"\n    or BAIL_OUT(\n    \"You need to create a class called $module.pm with a constructor called new.\"\n    );\n\neval \"use $module\";\nok !$@, \"Cannot load $module.pm\"\n    or BAIL_OUT(\"Does $module.pm compile?  Does it end with 1; ? ($@)\");\n\ncan_ok( $module, 'new' )\n    or BAIL_OUT(\"Missing package $module; or missing sub new()\");\ncan_ok( $module, 'hamming_distance' )\n    or BAIL_OUT(\n    \"Missing package $module; or\n\nmissing sub hamming_distance()\"\n    );\n\nforeach my $c (@$cases) {\n    is $module->new( $c->{strand} )->hamming_distance( $c->{input} ),\n        $c->{expected}, $c->{name};\n}\n\n__DATA__\n[\n    {\n        \"strand\"   : \"\",\n        \"input\"    : \"\",\n        \"expected\" : 0,\n        \"name\"     : \"empty strands\"\n    },\n    {\n        \"strand\"   : \"GGACGTA\",\n        \"input\"    : \"GGACGTA\",\n        \"expected\" : 0,\n        \"name\"     : \"identical strands\"\n    },\n    {\n        \"strand\"   : \"ACT\",\n        \"input\"    : \"GGA\",\n        \"expected\" : 3,\n        \"name\"     : \"small strands\"\n    },\n    {\n        \"strand\"   : \"GGACGGATTCTGACCTGGACTAATTTTGGGG\",\n        \"input\"    : \"AGGACGGATTCTGACCTGGACTAATTTTGGGG\",\n        \"expected\" : 19,\n        \"name\"     : \"input strand is longer by one\"\n    },\n    {\n        \"strand\"   : \"GGACG\",\n        \"input\"    : \"GGTCG\",\n        \"expected\" : 1,\n        \"name\"     : \"distance in the middle\"\n    },\n    {\n        \"strand\"   : \"ACCAGGG\",\n        \"input\"    : \"ACTATGG\",\n        \"expected\" : 2,\n        \"name\"     : \"longer strands of same length\"\n\n    },\n    {\n        \"strand\"   : \"AAACTAGGGG\",\n        \"input\"    : \"AGGCTAGCGGTAGGAC\",\n        \"expected\" : 3,\n        \"name\"     : \"input strand is longer\"\n    },\n    {\n        \"strand\"   : \"GACTACGGACAGGGTAGGGAAT\",\n        \"input\"    : \"GACATCGCACACC\",\n        \"expected\" : 5,\n        \"name\"     : \"original strand is longer\"\n    },\n    {\n        \"strand\"   : \"AGACAACAGCCAGCCGCCGGATT\",\n        \"input\"    : \"AGGCAA\",\n        \"expected\" : 1,\n        \"name\"     : \"does not shorten original strand test 1\"\n    },\n    {\n        \"strand\"   : \"AGACAACAGCCAGCCGCCGGATT\",\n        \"input\"    : \"AGACATCTTTCAGCCGCCGGATTAGGCAA\",\n        \"expected\" : 4,\n        \"name\"     : \"does not shorten original strand test 2\"\n    },\n    {\n        \"strand\"   : \"AGACAACAGCCAGCCGCCGGATT\",\n        \"input\"    : \"AGG\",\n        \"expected\" : 1,\n        \"name\"     : \"does not shorten original strand test 3\"\n    }\n]\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "http://rosalind.info/problems/hamm/",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

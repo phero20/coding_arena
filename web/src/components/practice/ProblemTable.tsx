@@ -15,6 +15,8 @@ import { ProblemRowSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay } from "@/components/shared/StatusState";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import type { ProblemTableProps } from "@/types/component.types";
+import { useAuth } from "@clerk/nextjs";
+import { useUserSolvedProblemsQuery } from "@/hooks/queries/use-problem.queries";
 
 export const ProblemTable: React.FC<ProblemTableProps> = ({
   problems,
@@ -30,6 +32,11 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
   isFetchingNextPage,
   hasNextPage,
 }) => {
+  const { userId } = useAuth();
+  const { data: solvedProblems } = useUserSolvedProblemsQuery(userId as string, !!userId);
+  const solvedIds = React.useMemo(() => new Set(solvedProblems || []), [solvedProblems]);
+
+
   return (
     <Card className="border rounded-lg border-border/60 bg-card/70 backdrop-blur-sm overflow-hidden">
       <CardContent className="p-0">
@@ -100,6 +107,7 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
                     isHosting={
                       (isHosting || isUpdating) && selectingId === problem.problem_id
                     }
+                    isSolved={solvedIds.has(problem.problem_id)}
                   />
                 ))}
                 {isFetchingNextPage && (

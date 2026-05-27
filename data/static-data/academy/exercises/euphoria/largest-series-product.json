@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:largest-series-product",
+  "trackSlug": "euphoria",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "ac53ce09-e0d9-4831-bf11-f629e31b9809",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "public function largestProduct(sequence digits, integer span)\n\nend function\n",
+  "example_solution": "include std/convert.e\ninclude std/regex.e as re   \ninclude std/sequence.e\n\npublic function largestProduct(sequence digits, integer span)\n  if span < 0 then\n    return -1\n  end if\n\n  if span > length(digits) then\n    return -1\n  end if\n\n  if re:has_match(re:new(\"[^0-9]\"), digits) then\n    return -1\n  end if\n\n  integer max = 0\n  for i = 1 to length(digits) - span + 1 do\n    integer product = 1\n    for j = 0 to span - 1 do\n      product *= to_integer(digits[i+j]) - '0'\n    end for\n\n    if product > max then\n      max = product\n    end if\n  end for\n\n  return max\nend function\n",
+  "test_code": "include std/unittest.e\n\ninclude largest-series-product.ex\n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"finds the largest product if span equals length\",\n           18,\n           largestProduct(\"29\", 2))\ntest_equal(\"can find the largest product of 2 with numbers in order\",\n           72,\n           largestProduct(\"0123456789\", 2))\ntest_equal(\"can find the largest product of 2\",\n           48,\n           largestProduct(\"576802143\", 2))\ntest_equal(\"can find the largest product of 3 with numbers in order\",\n           504,\n           largestProduct(\"0123456789\", 3))\ntest_equal(\"can find the largest product of 3\",\n           270,\n           largestProduct(\"1027839564\", 3))\ntest_equal(\"can find the largest product of 5 with numbers in order\",\n           15120,\n           largestProduct(\"0123456789\", 5))\ntest_equal(\"can get the largest product of a big number\",\n           23520,\n           largestProduct(\"73167176531330624919225119674426574742355349194934\", 6))\ntest_equal(\"reports zero if the only digits are zero\",\n           0,\n           largestProduct(\"0000\", 2))\ntest_equal(\"reports zero if all spans include zero\",\n           0,\n           largestProduct(\"99099\", 3))\ntest_equal(\"rejects span longer than string length\",\n           -1,\n           largestProduct(\"123\", 4))\ntest_equal(\"reports 1 for empty string and empty product (0 span)\",\n           1,\n           largestProduct(\"\", 0))\ntest_equal(\"reports 1 for nonempty string and empty product (0 span)\",\n           1,\n           largestProduct(\"123\", 0))\ntest_equal(\"rejects empty string and nonzero span\",\n           -1,\n           largestProduct(\"\", 1))\ntest_equal(\"rejects invalid character in digits\",\n           -1,\n           largestProduct(\"1234a5\", 2))\ntest_equal(\"rejects negative span\",\n           -1,\n           largestProduct(\"12345\", -1))\n\ntest_report()\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

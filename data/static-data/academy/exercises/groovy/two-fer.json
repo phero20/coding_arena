@@ -1,0 +1,30 @@
+{
+  "id": "groovy:two-fer",
+  "trackSlug": "groovy",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "ca96b661-73b5-4a8c-92d6-ef98998c8b1a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "class TwoFer {\n\n    static String twoFer(String name) {\n        throw new UnsupportedOperationException('Method is not implemented')\n    }\n}\n",
+  "example_solution": "class TwoFer {\n\n    static String twoFer(String name) {\n        return name == null || name.isEmpty() ? \"One for you, one for me.\" : \"One for ${name}, one for me.\"\n    }\n}",
+  "test_code": "import spock.lang.*\n\nclass TwoFerSpec extends Specification {\n\n    def \"No name given\"() {\n        expect:\n        TwoFer.twoFer() == 'One for you, one for me.'\n    }\n\n    @Ignore\n    def \"Empty name given\"() {\n        expect:\n        TwoFer.twoFer(name) == expected\n\n        where:\n        name || expected\n        ''   || 'One for you, one for me.'\n    }\n\n    @Ignore\n    def \"A name given\"() {\n        expect:\n        TwoFer.twoFer(name) == expected\n\n        where:\n        name    || expected\n        'Alice' || 'One for Alice, one for me.'\n    }\n\n    @Ignore\n    def \"Another name given\"() {\n        expect:\n        TwoFer.twoFer(name) == expected\n\n        where:\n        name  || expected\n        'Bob' || 'One for Bob, one for me.'\n    }\n}",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "ikhadykin"
+  ],
+  "contributors": [
+    "amscotti",
+    "mattmoss",
+    "sjwarner-bp"
+  ]
+}

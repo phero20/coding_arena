@@ -1,0 +1,34 @@
+{
+  "id": "racket:all-your-base",
+  "trackSlug": "racket",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "f6617861-da32-4735-8c7f-5ae57a8cf44a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "integers",
+    "map",
+    "math",
+    "transforming"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide rebase)\n\n(define (rebase list-digits in-base out-base)\n  (error \"Please implement rebase\"))\n",
+  "example_solution": "#lang racket\n\n(provide rebase)\n\n\n(define (rebase list-digits in-base out-base)\n  (and (< 1 in-base)\n       (< 1 out-base)\n       (andmap (λ (x)\n                 (< -1 x in-base))\n               list-digits)\n       (if (null? list-digits)\n           '( 0 )\n           (num->list (list->num list-digits in-base)\n                      out-base))))\n\n(define (list->num lst base)\n  (reduce\n    (λ (c sum)\n      (+ (* sum base) c))\n    lst))\n\n(define (num->list num base)\n  (define (listerator lst rem mult)\n            (if (> rem 0)\n                (letrec ([m (* mult base)]\n                         [v (remainder rem m)]\n                         [d (/ v mult)])\n                  (listerator\n                    (cons d lst)\n                    (- rem v)\n                    m))\n                lst))\n    (let ([res (listerator '() num 1)])\n      (if (null? res)\n          '(0)\n          res)))\n\n(define (reduce fn lst)\n  (if (null? (cdr lst))\n      (car lst)\n      (foldl fn (car lst) (cdr lst))))\n",
+  "test_code": "#lang racket\n\n(require \"all-your-base.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (define suite\n    (test-suite\n     \"all-your-base tests\"\n\n      (test-equal? \"single-bit-one-to-decimal\"\n                   (rebase '( 1 ) 2 10)\n                   '( 1 ))\n\n      (test-equal? \"binary-to-single-decimal\"\n                   (rebase '( 1 0 1 ) 2 10)\n                   '( 5 ))\n\n      (test-equal? \"single-decimal-to-binary\"\n                   (rebase '( 5 ) 10 2)\n                   '( 1 0 1 ))\n\n      (test-equal? \"binary-to-multiple-decimal\"\n                   (rebase '( 1 0 1 0 1 0 ) 2 10)\n                   '( 4 2 ))\n\n      (test-equal? \"decimal-to-binary\"\n                   (rebase '( 4 2 ) 10 2)\n                   '( 1 0 1 0 1 0 ))\n\n      (test-equal? \"trinary-to-hexadecimal\"\n                   (rebase '( 1 1 2 0 ) 3 16)\n                   '( 2 10 ))\n\n      (test-equal? \"hexadecimal-to-trinary\"\n                   (rebase '( 2 10 ) 16 3)\n                   '( 1 1 2 0 ))\n\n      (test-equal? \"number-15-bit-integer\"\n                   (rebase '( 3 46 60 ) 97 73)\n                   '( 6 10 45 ))\n\n      (test-equal? \"empty-list\"\n                   (rebase '() 2 10)\n                   '( 0 ))\n\n      (test-equal? \"single-zero\"\n                   (rebase '( 0 ) 10 2)\n                   '( 0 ))\n\n      (test-equal? \"multiple-zeros\"\n                   (rebase '( 0 0 0 ) 10 2)\n                   '( 0 ))\n\n      (test-equal? \"leading-zeros\"\n                   (rebase '( 0 6 0 ) 7 10)\n                   '( 4 2 ))\n\n      (test-false \"input-base-is-one\"\n                   (rebase '( 0 ) 1 10))\n\n      (test-false \"input-base-is-zero\"\n                   (rebase '() 0 10))\n\n      (test-false \"input-base-is-negative\"\n                   (rebase '( 1 ) -2 10))\n\n      (test-false \"negative-digit\"\n                   (rebase '( 1 -1 1 0 1 0 ) 2 10))\n\n      (test-false \"invalid-positive-digit\"\n                   (rebase '( 1 2 1 0 1 0 ) 2 10))\n\n      (test-false \"output-base-is-one\"\n                   (rebase '( 1 0 1 0 1 0 ) 2 1))\n\n      (test-false \"output-base-is-zero\"\n                   (rebase '( 7 ) 10 0))\n\n      (test-false \"output-base-is-negative\"\n                   (rebase '( 1 ) 2 -7))\n\n      (test-false \"both-bases-are-negative\"\n                   (rebase '( 1 ) -2 -7))))\n\n    (run-tests suite))\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "serialhex"
+  ],
+  "contributors": [
+    "robertpostill",
+    "timotheosh"
+  ]
+}

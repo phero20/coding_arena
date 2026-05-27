@@ -1,0 +1,34 @@
+{
+  "id": "vbnet:raindrops",
+  "trackSlug": "vbnet",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "36d91bd3-0cdc-4e53-94bf-4b9a797b596e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "if-statements",
+    "casting"
+  ],
+  "prerequisites": [
+    "strings",
+    "if-statements",
+    "numbers",
+    "casting"
+  ],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module Raindrops\n    Public Function Convert(ByVal number As Integer) As String\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Public Module Raindrops\n    Public Function Convert(ByVal number As Integer) As String\n        Dim result = \"\"\n        If number Mod 3 = 0 Then result += \"Pling\"\n        If number Mod 5 = 0 Then result += \"Plang\"\n        If number Mod 7 = 0 Then result += \"Plong\"\n        If String.IsNullOrEmpty(result) Then result = number.ToString()\n        Return result\n    End Function\nEnd Module\n",
+  "test_code": "Imports Xunit\n\nPublic Class RaindropsTests\n    <Fact>\n    Public Sub The_sound_for_1_is_1()\n        Assert.Equal(\"1\", Convert(1))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_3_is_pling()\n        Assert.Equal(\"Pling\", Convert(3))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_5_is_plang()\n        Assert.Equal(\"Plang\", Convert(5))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_7_is_plong()\n        Assert.Equal(\"Plong\", Convert(7))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_6_is_pling_as_it_has_a_factor_3()\n        Assert.Equal(\"Pling\", Convert(6))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Number_2_to_the_power_3_does_not_make_a_raindrop_sound_as_3_is_the_exponent_not_the_base()\n        Assert.Equal(\"8\", Convert(8))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_9_is_pling_as_it_has_a_factor_3()\n        Assert.Equal(\"Pling\", Convert(9))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_10_is_plang_as_it_has_a_factor_5()\n        Assert.Equal(\"Plang\", Convert(10))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_14_is_plong_as_it_has_a_factor_of_7()\n        Assert.Equal(\"Plong\", Convert(14))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_15_is_plingplang_as_it_has_factors_3_and_5()\n        Assert.Equal(\"PlingPlang\", Convert(15))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_21_is_plingplong_as_it_has_factors_3_and_7()\n        Assert.Equal(\"PlingPlong\", Convert(21))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_25_is_plang_as_it_has_a_factor_5()\n        Assert.Equal(\"Plang\", Convert(25))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_27_is_pling_as_it_has_a_factor_3()\n        Assert.Equal(\"Pling\", Convert(27))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_35_is_plangplong_as_it_has_factors_5_and_7()\n        Assert.Equal(\"PlangPlong\", Convert(35))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_49_is_plong_as_it_has_a_factor_7()\n        Assert.Equal(\"Plong\", Convert(49))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_52_is_52()\n        Assert.Equal(\"52\", Convert(52))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_105_is_plingplangplong_as_it_has_factors_3_5_and_7()\n        Assert.Equal(\"PlingPlangPlong\", Convert(105))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_sound_for_3125_is_plang_as_it_has_a_factor_5()\n        Assert.Equal(\"Plang\", Convert(3125))\n    End Sub\nEnd Class\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

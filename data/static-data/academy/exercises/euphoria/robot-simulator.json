@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:robot-simulator",
+  "trackSlug": "euphoria",
+  "slug": "robot-simulator",
+  "name": "Robot Simulator",
+  "uuid": "ded09be2-0a3e-42c5-8397-06c84b5f1c39",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a robot simulator.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nWrite a robot simulator.\n\nA robot factory's test facility needs a program to verify robot movements.\n\nThe robots have three possible movements:\n\n- turn right\n- turn left\n- advance\n\nRobots are placed on a hypothetical infinite grid, facing a particular direction (north, east, south, or west) at a set of {x,y} coordinates,\ne.g., {3,8}, with coordinates increasing to the north and east.\n\nThe robot then receives a number of instructions, at which point the testing facility verifies the robot's new position, and in which direction it is pointing.\n\n- The letter-string \"RAALAL\" means:\n  - Turn right\n  - Advance twice\n  - Turn left\n  - Advance once\n  - Turn left yet again\n- Say a robot starts at {7, 3} facing north.\n  Then running this stream of instructions should leave it at {9, 4} facing west.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public function move(sequence robot, sequence commands)\n\nend function\n",
+  "example_solution": "include std/map.e\ninclude std/sequence.e\n\npublic function move(sequence robot, sequence commands)\n    for i = 1 to length( commands ) do \n        atom command = commands[i]\n        if command = 'L' then\n            robot = store(robot, {3}, nested_get(axes, {robot[3], \"left\"}))\n        elsif command = 'R' then\n            robot = store(robot, {3}, nested_get(axes, {robot[3], \"right\"}))\n        elsif command = 'A' then\n            if equal(robot[3], \"north\") then\n                robot = store(robot, {2}, robot[2] + 1)\n            elsif equal(robot[3], \"south\") then\n                robot = store(robot, {2}, robot[2] - 1)\n            elsif equal(robot[3], \"east\") then\n                robot = store(robot, {1}, robot[1] + 1)\n            elsif equal(robot[3], \"west\") then\n                robot = store(robot, {1}, robot[1] - 1)\n            end if\n        end if \n    end for\n    return robot\nend function\n\nmap axes = new()\nnested_put(axes, {\"north\", \"left\"}, \"west\")\nnested_put(axes, {\"north\", \"right\"}, \"east\")\nnested_put(axes, {\"east\", \"left\"}, \"north\")\nnested_put(axes, {\"east\", \"right\"}, \"south\")\nnested_put(axes, {\"south\", \"left\"}, \"east\")\nnested_put(axes, {\"south\", \"right\"}, \"west\")\nnested_put(axes, {\"west\", \"left\"}, \"south\")\nnested_put(axes, {\"west\", \"right\"}, \"north\")\n",
+  "test_code": "include std/unittest.e \n\ninclude robot-simulator.ex \n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"Rotating clockwise changes north to east\",\n            {0, 0, \"east\"},\n            move({0, 0, \"north\"}, \"R\"))\ntest_equal(\"Rotating clockwise changes east to south\",\n            {0, 0, \"south\"},\n            move({0, 0, \"east\"}, \"R\"))\ntest_equal(\"Rotating clockwise changes south to west\",\n            {0, 0, \"west\"},\n            move({0, 0, \"south\"}, \"R\"))\ntest_equal(\"Rotating clockwise changes west to north\",\n            {0, 0, \"north\"},\n            move({0, 0, \"west\"}, \"R\"))\ntest_equal(\"Rotating counter-clockwise changes north to west\",\n            {0, 0, \"west\"},\n            move({0, 0, \"north\"}, \"L\"))\ntest_equal(\"Rotating counter-clockwise changes west to south\",\n            {0, 0, \"south\"},\n            move({0, 0, \"west\"}, \"L\"))\ntest_equal(\"Rotating counter-clockwise changes south to east\",\n            {0, 0, \"east\"},\n            move({0, 0, \"south\"}, \"L\"))\ntest_equal(\"Rotating counter-clockwise changes east to north\",\n            {0, 0, \"north\"},\n            move({0, 0, \"east\"}, \"L\"))\ntest_equal(\"Moving forward one facing north increments Y\",\n            {0, 1, \"north\"},\n            move({0, 0, \"north\"}, \"A\"))\ntest_equal(\"Moving forward one facing south decrements Y\",\n            {0, -1, \"south\"},\n            move({0, 0, \"south\"}, \"A\"))\ntest_equal(\"Moving forward one facing east increments X\",\n            {1, 0, \"east\"},\n            move({0, 0, \"east\"}, \"A\"))\ntest_equal(\"Moving forward one facing west decrements X\",\n            {-1, 0, \"west\"},\n            move({0, 0, \"west\"}, \"A\"))\ntest_equal(\"Follow series of instructions moving east and north from README\",\n            {9, 4, \"west\"},\n            move({7, 3, \"north\"}, \"RAALAL\"))\ntest_equal(\"Follow series of instructions moving west and north\",\n            {-4, 1, \"west\"},\n            move({0, 0, \"north\"}, \"LAAARALA\"))\ntest_equal(\"Follow series of instructions moving west and south\",\n            {-3, -8, \"south\"},\n            move({2, -7, \"east\"}, \"RRAAAAALA\"))\ntest_equal(\"Follow series of instructions moving east and north\",\n            {11, 5, \"north\"},\n            move({8, 4, \"south\"}, \"LAAARRRALLLL\"))\n\ntest_report()",
+  "source": "Inspired by an interview question at a famous company.",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

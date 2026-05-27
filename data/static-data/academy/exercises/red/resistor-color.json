@@ -1,0 +1,32 @@
+{
+  "id": "red:resistor-color",
+  "trackSlug": "red",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "52170c0e-12d3-4ede-a417-70801c76985b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "blocks",
+    "conditionals",
+    "evaluation"
+  ],
+  "prerequisites": [
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Resistor Color\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\ncolor-code: function [\n\tcolor\n] [\n\tcause-error 'user 'message [\"You need to implement this function.\"]\n]\n\ncolors: function [] [\n\tcause-error 'user 'message [\"You need to implement this function.\"]\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Resistor Color\" exercise solution for exercism platform}\n\tauthor: \"loziniak\"\n]\n\ncolor-code: function [\n\tcolor [string!]\n\treturn: [integer!]\n] [\n\tunless none? c: find colors color [\n\t\t(index? c) - 1\n\t]\n]\n\ncolors: function [] [\n\t[\"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\"]\n]\n",
+  "test_code": "Red [\n\tdescription: {Tests for Resistor Color Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %resistor-color.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"Black\"\n    input: #[\n        color: \"black\"\n    ]\n    expected: 0\n    function: \"color-code\"\n    uuid: \"49eb31c5-10a8-4180-9f7f-fea632ab87ef\"\n] #[\n    description: \"White\"\n    input: #[\n        color: \"white\"\n    ]\n    expected: 9\n    function: \"color-code\"\n    uuid: \"0a4df94b-92da-4579-a907-65040ce0b3fc\"\n] #[\n    description: \"Orange\"\n    input: #[\n        color: \"orange\"\n    ]\n    expected: 3\n    function: \"color-code\"\n    uuid: \"5f81608d-f36f-4190-8084-f45116b6f380\"\n] #[\n    description: \"Colors\"\n    input: #[]\n    expected: [\"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\"]\n    function: \"colors\"\n    uuid: \"581d68fa-f968-4be2-9f9d-880f2fb73cf7\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "loziniak"
+  ],
+  "contributors": null
+}

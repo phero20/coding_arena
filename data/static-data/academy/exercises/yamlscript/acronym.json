@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:acronym",
+  "trackSlug": "yamlscript",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "69afd018-4769-431e-b1d3-84a678103736",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn abbreviate(phrase):\n  # Implement the 'abbreviate' function.\n",
+  "example_solution": "!YS-v0\n\ndefn abbreviate(phrase):\n  phrase:str/upper-case\n    .re-seq(/[A-Z']+/)\n    .map(first):join\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'acronym.ys'\n\ntest::\n- name: Basic\n  code: abbreviate('Portable Network Graphics')\n  want: PNG\n\n- name: Lowercase words\n  code: abbreviate('Ruby on Rails')\n  want: ROR\n\n- name: Punctuation\n  code: abbreviate('First In, First Out')\n  want: FIFO\n\n- name: All caps word\n  code: abbreviate('GNU Image Manipulation Program')\n  want: GIMP\n\n- name: Punctuation without whitespace\n  code: abbreviate('Complementary metal-oxide semiconductor')\n  want: CMOS\n\n- name: Very long abbreviation\n  code: abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me')\n  want: ROTFLSHTMDCOALM\n\n- name: Consecutive delimiters\n  code: abbreviate('Something - I made up from thin air')\n  want: SIMUFTA\n\n- name: Apostrophes\n  code: abbreviate(\"Halley's Comet\")\n  want: HC\n\ndone: 8\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

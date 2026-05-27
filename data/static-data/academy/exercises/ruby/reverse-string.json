@@ -1,0 +1,27 @@
+{
+  "id": "ruby:reverse-string",
+  "trackSlug": "ruby",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "3cd81b0b-8172-44ed-9e7a-140713a918db",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Reverse String' exercise in this file. Make the tests in\n`reverse_string_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/reverse-string` directory.\n=end\n",
+  "example_solution": "module Reverser\n  def self.reverse(input)\n    input.reverse\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'reverser'\n\nclass ReverserTest < Minitest::Test\n  def test_an_empty_string\n    # skip\n    actual = Reverser.reverse(\"\")\n    expected = \"\"\n    assert_equal expected, actual\n  end\n\n  def test_a_word\n    skip\n    actual = Reverser.reverse(\"robot\")\n    expected = \"tobor\"\n    assert_equal expected, actual\n  end\n\n  def test_a_capitalized_word\n    skip\n    actual = Reverser.reverse(\"Ramen\")\n    expected = \"nemaR\"\n    assert_equal expected, actual\n  end\n\n  def test_a_sentence_with_punctuation\n    skip\n    actual = Reverser.reverse(\"I'm hungry!\")\n    expected = \"!yrgnuh m'I\"\n    assert_equal expected, actual\n  end\n\n  def test_a_palindrome\n    skip\n    actual = Reverser.reverse(\"racecar\")\n    expected = \"racecar\"\n    assert_equal expected, actual\n  end\n\n  def test_an_even_sized_word\n    skip\n    actual = Reverser.reverse(\"drawer\")\n    expected = \"reward\"\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "iHiD",
+    "erikSchierboom"
+  ],
+  "contributors": null
+}

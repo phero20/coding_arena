@@ -1,0 +1,37 @@
+{
+  "id": "haskell:lens-person",
+  "trackSlug": "haskell",
+  "slug": "lens-person",
+  "name": "Lens Person",
+  "uuid": "056d6e6c-4d07-4bc0-b0d0-fb76a9ec8672",
+  "type": "practice",
+  "status": null,
+  "blurb": "Use lenses to update nested records (specific to languages with immutable data).",
+  "difficulty": 9,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nUse lenses to update nested records (specific to languages with immutable data).\n\nUpdating fields of nested, immutable records is kind of annoying.\nThe code for such cases is as cumbersome as the structure is deep.\nIf you have, say, a Person, that contains an Address, which has a Street, that has a Number, updating the Number requires creating a new Street with the new Number, then a new Address with the new Street and, finally, a new Person with the new Address.\nConfused already?\n\nOne solution to this problem is to use [lenses][lenses].\n\nImplement several record accessing functions using lenses.\nThe test suite also allows you to avoid lenses altogether so you can experiment with different approaches.\n\n[lenses]: https://en.wikibooks.org/wiki/Haskell/Lenses_and_functional_references\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Person\n  ( Address (..)\n  , Born    (..)\n  , Name    (..)\n  , Person  (..)\n  , bornStreet\n  , renameStreets\n  , setBirthMonth\n  , setCurrentStreet\n  ) where\n\nimport Data.Time.Calendar (Day)\n\ndata Person = Person { _name    :: Name\n                     , _born    :: Born\n                     , _address :: Address\n                     }\n\ndata Name = Name { _foreNames :: String\n                 , _surName   :: String\n                 }\n\ndata Born = Born { _bornAt :: Address\n                 , _bornOn :: Day\n                 }\n\ndata Address = Address { _street      :: String\n                       , _houseNumber :: Int\n                       , _place       :: String\n                       , _country     :: String\n                       }\n\nbornStreet :: Born -> String\nbornStreet born = error \"You need to implement this function.\"\n\nsetCurrentStreet :: String -> Person -> Person\nsetCurrentStreet street person = error \"You need to implement this function.\"\n\nsetBirthMonth :: Int -> Person -> Person\nsetBirthMonth month person = error \"You need to implement this function.\"\n\nrenameStreets :: (String -> String) -> Person -> Person\nrenameStreets f person = error \"You need to implement this function.\"\n",
+  "example_solution": "{-# LANGUAGE Rank2Types #-}\n\nmodule Person where\n\nimport Control.Applicative (Const(..), getConst)\nimport Data.Functor.Identity (Identity(..), runIdentity)\nimport Data.Time.Calendar (Day, toGregorian, fromGregorian)\n\ndata Person = Person {\n      _name    :: Name,\n      _born    :: Born,\n      _address :: Address\n    }\n\ndata Name = Name {\n      _foreNames :: String, -- Space separated\n      _surName   :: String\n    }\n\ndata Born = Born {\n      _bornAt :: Address,\n      _bornOn :: Day\n    }\n\ndata Address = Address {\n      _street      :: String,\n      _houseNumber :: Int,\n      _place       :: String, -- Village / city\n      _country     :: String\n    }\n\n-- Valid values of Gregorian are those for which 'Data.Time.Calendar.fromGregorianValid'\n-- returns Just.\ndata Gregorian = Gregorian {\n      _year  :: Integer,\n      _month :: Int,\n      _day   :: Int\n    }\n\ntype Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t\ntype Lens' s a = Lens s s a a\ntype Getting s a = (a -> Const a a) -> s -> Const a s\ntype Setting s t a b = (a -> Identity b) -> s -> Identity t\n\nlens :: (s -> a) -> (s -> b -> t) -> Lens s t a b\nlens sa sbt afb s = fmap (sbt s) (afb (sa s))\n\nview :: Getting s a -> s -> a\nview l = getConst . l Const\n\nover :: Setting s t a b -> (a -> b) -> s -> t\nover l f = runIdentity . l (Identity . f)\n\nset :: Setting s t a b -> b -> s -> t\nset l v = over l (const v)\n\n-- boilerplate lenses:\n\nborn :: Lens' Person Born\nborn = lens _born (\\p b -> p { _born = b })\n\naddress :: Lens' Person Address\naddress = lens _address (\\p a -> p { _address = a })\n\nbornAt :: Lens' Born Address\nbornAt = lens _bornAt (\\b a -> b { _bornAt = a })\n\nbornOn :: Lens' Born Day\nbornOn = lens _bornOn (\\b d -> b { _bornOn = d })\n\nstreet :: Lens' Address String\nstreet = lens _street (\\a s -> a { _street = s })\n\nmonth :: Lens' Day Int\nmonth = lens getMonth setMonth\n  where getMonth day   = let (_, m, _) = toGregorian day in m\n        setMonth day m = let (y, _, d) = toGregorian day in fromGregorian y m d\n\nbornStreet :: Born -> String\nbornStreet = view (bornAt . street)\n\nsetCurrentStreet :: String -> Person -> Person\nsetCurrentStreet = set (address . street)\n\nsetBirthMonth :: Int -> Person -> Person\nsetBirthMonth = set (born . bornOn . month)\n\nrenameStreets :: (String -> String) -> Person -> Person\nrenameStreets f = over birthStreet f . over currentStreet f\n  where\n    birthStreet = born . bornAt . street\n    currentStreet = address . street\n",
+  "test_code": "import Data.Char          (toUpper)\nimport Data.Time.Calendar (fromGregorian)\nimport Test.Hspec         (Spec, it, shouldBe)\nimport Test.Hspec.Runner  (configFailFast, defaultConfig, hspecWith)\n\nimport Person\n  ( Address (..)\n  , Born    (..)\n  , Name    (..)\n  , Person  (..)\n  , bornStreet\n  , renameStreets\n  , setBirthMonth\n  , setCurrentStreet\n  )\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = do\n\n    it \"bornStreet\" $\n      (bornStreet . _born) testPerson\n      `shouldBe` \"Longway\"\n\n    it \"setCurrentStreet\" $\n      (_street . _address . setCurrentStreet \"Middleroad\") testPerson\n      `shouldBe` \"Middleroad\"\n\n    it \"setBirthMonth\" $\n      (_bornOn . _born . setBirthMonth 9) testPerson\n      `shouldBe` fromGregorian 1984 9 12\n\n    it \"renameStreets birth\" $\n      (_street . _bornAt . _born . renameStreets (map toUpper)) testPerson\n      `shouldBe` \"LONGWAY\"\n\n    it \"renameStreets current\" $\n      (_street . _address . renameStreets (map toUpper)) testPerson\n      `shouldBe` \"SHORTLANE\"\n\ntestPerson :: Person\ntestPerson = Person {\n               _name = Name {\n                         _foreNames = \"Jane Joanna\",\n                         _surName   = \"Doe\"\n                       },\n               _born = Born {\n                         _bornAt = Address {\n                                     _street      = \"Longway\"      ,\n                                     _houseNumber = 1024           ,\n                                     _place       = \"Springfield\"  ,\n                                     _country     = \"United States\"\n                                   },\n                         _bornOn = fromGregorian 1984 4 12\n                       },\n               _address = Address {\n                            _street      = \"Shortlane\" ,\n                            _houseNumber = 2           ,\n                            _place       = \"Fallmeadow\",\n                            _country     = \"Canada\"\n                          }\n             }\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "pminten"
+  ],
+  "contributors": [
+    "etrepum",
+    "iHiD",
+    "jgilray",
+    "kytrinyx",
+    "lpalma",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "julia:pythagorean-triplet",
+  "trackSlug": "julia",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "a534b8ed-da88-4945-bb25-f6633977740b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "# Define the pythagorean_triplets(N) function\n",
+  "example_solution": "\"\"\"\n    pythagorean_triplets(n)\n\nFind all positive integer triplets `(a, b, c)` s.t. `a + b + c = n` and `a < b < c` and `a^2 + b^2 == c^2`.\n\"\"\"\n# cmcaine's answer, with thanks to akshu3398.\nfunction pythagorean_triplets(n)\n    triplets = NTuple{3, Int}[]\n    # Lower bound because the smallest triple is 3, 4, 5.\n    # Upper bound implied by a < b < c && a + b + c == n.\n    for a in 3:cld(n, 3) - 1\n        # Derived by eliminating c from these simultaneous\n        # equations and solving for b:\n        #     a^2 + b^2 = c^2\n        #     a + b + c = n\n        b = (n^2 - 2n * a) / (2 * (n - a))\n        if a < b && isinteger(b)\n            c = n - a - b\n            # Proof that b < c:\n            # Let b = c. Then a^2 + b^2 = c^2 ≡ a^2 = 0 but we know that a ≠ 0.\n            # Let b > c. a^2 + b^2 = c^2 ≡ a^2 = c^2 - b^2.\n            #    If b > c, a^2 < 0, but that is impossible for real numbers.\n            push!(triplets, (a, b, c))\n        end\n    end\n    return sort!(triplets)\nend\n",
+  "test_code": "using Test\ninclude(\"pythagorean-triplet.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"triplets whose sum is 12\" begin\n        @test pythagorean_triplets(12) == [(3, 4, 5)]\n    end\n\n    @testset \"triplets whose sum is 108\" begin\n        @test pythagorean_triplets(108) == [(27, 36, 45)]\n    end\n\n    @testset \"triplets whose sum is 1000\" begin\n        @test pythagorean_triplets(1000) == [(200, 375, 425)]\n    end\n\n    @testset \"triplets whose sum is 1001\" begin\n        @test pythagorean_triplets(1001) == []\n    end\n\n    @testset \"returns all matching triplets\" begin\n        @test pythagorean_triplets(90) == [(9, 40, 41), (15, 36, 39)]\n    end\n\n    @testset \"several matching triplets\" begin\n        @test pythagorean_triplets(840) == [\n            (40, 399, 401),\n            (56, 390, 394),\n            (105, 360, 375),\n            (120, 350, 370),\n            (140, 336, 364),\n            (168, 315, 357),\n            (210, 280, 350),\n            (240, 252, 348),\n        ]\n    end\n\n    @testset \"triplets for large number\" begin\n        @test pythagorean_triplets(30000) == [\n            (1200, 14375, 14425),\n            (1875, 14000, 14125),\n            (5000, 12000, 13000),\n            (6000, 11250, 12750),\n            (7500, 10000, 12500),\n        ]\n    end\nend\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "TheComputerM"
+  ],
+  "contributors": [
+    "cmcaine",
+    "SaschaMann"
+  ]
+}

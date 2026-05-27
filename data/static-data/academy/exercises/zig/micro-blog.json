@@ -1,0 +1,26 @@
+{
+  "id": "zig:micro-blog",
+  "trackSlug": "zig",
+  "slug": "micro-blog",
+  "name": "Micro Blog",
+  "uuid": "0441593f-23d3-42b8-aa21-b47166c7c86d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an input string, truncate it to 5 characters.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYou have identified a gap in the social media market for very very short posts.\nNow that Twitter allows 280 character posts, people wanting quick social media updates aren't being served.\nYou decide to create your own social media network.\n\nTo make your product noteworthy, you make it extreme and only allow posts of 5 or less characters.\nAny posts of more than 5 characters should be truncated to 5.\n\nTo allow your users to express themselves fully, you allow Emoji and other Unicode.\n\nThe task is to truncate input strings to 5 characters.\n\n## Text Encodings\n\nText stored digitally has to be converted to a series of bytes.\nThere are 3 ways to map characters to bytes in common use.\n\n- **ASCII** can encode English language characters.\n  All characters are precisely 1 byte long.\n- **UTF-8** is a Unicode text encoding.\n  Characters take between 1 and 4 bytes.\n- **UTF-16** is a Unicode text encoding.\n  Characters are either 2 or 4 bytes long.\n\nUTF-8 and UTF-16 are both Unicode encodings which means they're capable of representing a massive range of characters including:\n\n- Text in most of the world's languages and scripts\n- Historic text\n- Emoji\n\nUTF-8 and UTF-16 are both variable length encodings, which means that different characters take up different amounts of space.\n\nConsider the letter 'a' and the emoji '😛'.\nIn UTF-16 the letter takes 2 bytes but the emoji takes 4 bytes.\n\nThe trick to this exercise is to use APIs designed around Unicode characters (codepoints) instead of Unicode codeunits.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn truncate(phrase: []const u8) []const u8 {\n    _ = phrase;\n    @compileError(\"please implement the truncate function\");\n}\n",
+  "example_solution": "pub fn truncate(phrase: []const u8) []const u8 {\n    var index: usize = 0;\n    var remaining: usize = 6;\n    while (index < phrase.len) {\n        if (phrase[index] & 0xc0 != 0x80) {\n            remaining -= 1;\n            if (remaining == 0) {\n                // start of 6th character\n                break;\n            }\n        }\n        index += 1;\n    }\n\n    return phrase[0..index];\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst micro_blog = @import(\"micro_blog.zig\");\n\ntest \"English language short\" {\n    const expected: []const u8 = \"Hi\";\n    const actual = micro_blog.truncate(\"Hi\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"English language long\" {\n    const expected: []const u8 = \"Hello\";\n    const actual = micro_blog.truncate(\"Hello there\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"German language short (broth)\" {\n    const expected: []const u8 = \"brühe\";\n    const actual = micro_blog.truncate(\"brühe\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"German language long (bear carpet → beards)\" {\n    const expected: []const u8 = \"Bärte\";\n    const actual = micro_blog.truncate(\"Bärteppich\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Bulgarian language short (good)\" {\n    const expected: []const u8 = \"Добър\";\n    const actual = micro_blog.truncate(\"Добър\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Greek language short (health)\" {\n    const expected: []const u8 = \"υγειά\";\n    const actual = micro_blog.truncate(\"υγειά\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Maths short\" {\n    const expected: []const u8 = \"a=πr²\";\n    const actual = micro_blog.truncate(\"a=πr²\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Maths long\" {\n    const expected: []const u8 = \"∅⊊ℕ⊊ℤ\";\n    const actual = micro_blog.truncate(\"∅⊊ℕ⊊ℤ⊊ℚ⊊ℝ⊊ℂ\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"English and emoji short\" {\n    const expected: []const u8 = \"Fly 🛫\";\n    const actual = micro_blog.truncate(\"Fly 🛫\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Emoji short\" {\n    const expected: []const u8 = \"💇\";\n    const actual = micro_blog.truncate(\"💇\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Emoji long\" {\n    const expected: []const u8 = \"❄🌡🤧🤒🏥\";\n    const actual = micro_blog.truncate(\"❄🌡🤧🤒🏥🕰😀\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"Royal Flush?\" {\n    const expected: []const u8 = \"🃎🂸🃅🃋🃍\";\n    const actual = micro_blog.truncate(\"🃎🂸🃅🃋🃍🃁🃊\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"ideograms\" {\n    const expected: []const u8 = \"二兎を追う\";\n    const actual = micro_blog.truncate(\"二兎を追う者は一兎をも得ず\");\n    try testing.expectEqualStrings(expected, actual);\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "nim:robot-name",
+  "trackSlug": "nim",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "5d2fa542-245a-4c5b-bfe1-bd667091c556",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "type\n  Name* = array[5, char]\n  Robot* = object\n    name*: Name\n\nproc makeRobot*: Robot =\n  discard\n\nproc reset*(r: var Robot) =\n  discard\n",
+  "example_solution": "import std/random\n\ntype\n  Name = array[5, char]\n  Robot = object\n    name*: Name\n\nconst numNames = 26 * 26 * 10 * 10 * 10\nrandomize()\n\nproc shuffledNames: seq[Name] =\n  result = newSeq[Name](numNames)\n  var name: Name\n  var i = 0\n\n  for a in 'A'..'Z':\n    name[0] = a\n    for b in 'A'..'Z':\n      name[1] = b\n      for c in '0'..'9':\n        name[2] = c\n        for d in '0'..'9':\n          name[3] = d\n          for e in '0'..'9':\n            name[4] = e\n            result[i] = name\n            inc(i)\n\n  shuffle(result)\n\nlet names = shuffledNames()\nvar i = 0\n\nproc getUnusedName: Name {.inline.} =\n  # The tests do not currently specify the expected behavior on name exhaustion.\n  # The below checks that a \"wraparound\" implementation is supported.\n  result = names[i]\n  i = if i > names.high: 0 else: i + 1\n\nproc makeRobot*: Robot {.inline.} =\n  result.name = getUnusedName()\n\nproc reset*(r: var Robot) {.inline.} =\n  r.name = getUnusedName()\n",
+  "test_code": "import unittest\nimport robot_name\n\n# You can implement the robot name as a `string` or an `array[5, char]`.\ntype\n  RobotName = string | array[5, char]\n\nfunc isValidRobotName(name: RobotName): bool =\n  ## Returns true if `name` is two uppercase letters followed by three digits.\n  when name is string:\n    if name.len != 5:\n      return false\n  result =\n    name[0] in {'A'..'Z'} and\n    name[1] in {'A'..'Z'} and\n    name[2] in {'0'..'9'} and\n    name[3] in {'0'..'9'} and\n    name[4] in {'0'..'9'}\n\nsuite \"Robot Name\":\n  test \"robot has a valid name\":\n    var robot = makeRobot()\n    check isValidRobotName(robot.name)\n\n  test \"name is persistent\":\n    var robot = makeRobot()\n    let name1 = robot.name\n    let name2 = robot.name\n    check name1 == name2\n\n  test \"different robots have different names\":\n    let name1 = makeRobot().name\n    let name2 = makeRobot().name\n    check name1 != name2\n\n  test \"reset changes name\":\n    var robot = makeRobot()\n    let nameBefore = robot.name\n    robot.reset()\n    let nameAfter = robot.name\n    check:\n      nameBefore != nameAfter\n      isValidRobotName(nameAfter)\n\n  # The below test is optional. Change `runBonusTest` to `true` to run it.\n  const runBonusTest = false\n\n  when runBonusTest:\n    func toInt(name: RobotName): int =\n      ## Returns a unique integer for each valid robot name.\n      (name[0].ord - 'A'.ord) * 26000 +\n      (name[1].ord - 'A'.ord) * 1000 +\n      (name[2].ord - '0'.ord) * 100 +\n      (name[3].ord - '0'.ord) * 10 +\n      (name[4].ord - '0'.ord)\n\n    test \"all remaining robot names are valid and distinct\":\n      const totalNames = 26 * 26 * 1000\n      var nums = newSeq[bool](totalNames)\n      const n = totalNames - 6 # The number of names not generated above.\n      var countDuplicate = 0\n      var countInvalid = 0\n\n      for _ in 1 .. n:\n        let name = makeRobot().name\n        if isValidRobotName(name):\n          let i = toInt(name)\n          if nums[i]:\n            inc(countDuplicate)\n          else:\n            nums[i] = true\n        else:\n          inc(countInvalid)\n      check:\n        countDuplicate == 0\n        countInvalid == 0\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

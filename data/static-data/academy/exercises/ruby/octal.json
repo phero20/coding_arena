@@ -1,0 +1,34 @@
+{
+  "id": "ruby:octal",
+  "trackSlug": "ruby",
+  "slug": "octal",
+  "name": "Octal",
+  "uuid": "cae4e000-3aac-41f7-b727-f9cce12d058d",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert an octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nImplement octal to decimal conversion.\nGiven an octal input string, your program should produce a decimal output.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n- Treat invalid input as octal 0.\n\n## About Octal (Base-8)\n\nDecimal is a base-10 system.\n\nA number 233 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The *n*th number gets multiplied by 10^*(n-1)*.\n- All these values are summed.\n\nSo:\n\n```text\n   233 # decimal\n = 2*10^2 + 3*10^1 + 3*10^0\n = 2*100  + 3*10   + 3*1\n```\n\nOctal is similar, but uses powers of 8 rather than powers of 10.\n\nSo:\n\n```text\n   233 # octal\n = 2*8^2 + 3*8^1 + 3*8^0\n = 2*64  + 3*8   + 3*1\n = 128   + 24    + 3\n = 155\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Octal' exercise in this file. Make the tests in\n`octal_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/octal` directory.\n=end\n",
+  "example_solution": "class Octal\n  BASE = 8\n\n  attr_reader :digits\n  def initialize(decimal)\n    @digits = decimal.reverse.chars\n  end\n\n  def to_decimal\n    decimal = 0\n    digits.each_with_index do |digit, index|\n      return 0 unless valid_chars.include? digit\n      decimal += digit.to_i * BASE**index\n    end\n    decimal\n  end\n\n  def valid_chars\n    [*('0'..(BASE - 1).to_s)]\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'octal'\n\nclass OctalTest < Minitest::Test\n  def test_octal_1_is_decimal_1\n    assert_equal 1, Octal.new('1').to_decimal\n  end\n\n  def test_octal_10_is_decimal_8\n    skip\n    assert_equal 8, Octal.new('10').to_decimal\n  end\n\n  def test_octal_17_is_decimal_15\n    skip\n    assert_equal 15, Octal.new('17').to_decimal\n  end\n\n  def test_octal_11_is_decimal_9\n    skip\n    assert_equal 9, Octal.new('11').to_decimal\n  end\n\n  def test_octal_130_is_decimal_88\n    skip\n    assert_equal 88, Octal.new('130').to_decimal\n  end\n\n  def test_octal_2047_is_decimal_1063\n    skip\n    assert_equal 1063, Octal.new('2047').to_decimal\n  end\n\n  def test_octal_7777_is_decimal_4095\n    skip\n    assert_equal 4095, Octal.new('7777').to_decimal\n  end\n\n  def test_octal_1234567_is_decimal_342391\n    skip\n    assert_equal 342_391, Octal.new('1234567').to_decimal\n  end\n\n  def test_invalid_octal_is_decimal_0\n    skip\n    assert_equal 0, Octal.new('carrot').to_decimal\n  end\n\n  def test_8_is_seen_as_invalid_and_returns_0\n    skip\n    assert_equal 0, Octal.new('8').to_decimal\n  end\n\n  def test_9_is_seen_as_invalid_and_returns_0\n    skip\n    assert_equal 0, Octal.new('9').to_decimal\n  end\n\n  def test_6789_is_seen_as_invalid_and_returns_0\n    skip\n    assert_equal 0, Octal.new('6789').to_decimal\n  end\n\n  def test_abc1z_is_seen_as_invalid_and_returns_0\n    skip\n    assert_equal 0, Octal.new('abc1z').to_decimal\n  end\n\n  def test_valid_octal_formatted_string_011_is_decimal_9\n    skip\n    assert_equal 9, Octal.new('011').to_decimal\n  end\nend\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=base+8",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "dpneumo",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "tryantwit"
+  ]
+}

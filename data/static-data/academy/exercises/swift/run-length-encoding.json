@@ -1,0 +1,33 @@
+{
+  "id": "swift:run-length-encoding",
+  "trackSlug": "swift",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "0718397c-b823-4b38-9892-69b667cf895f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RunLengthEncoding {\n    // Write your code for the 'RunLengthEncoding' exercise in this file.\n    static func encode(_ phrase : String) -> String{\n    }\n\n    static func decode(_ phrase : String) -> String{\n    }\n}\n",
+  "example_solution": "class RunLengthEncoding {\n  static func encode(_ phrase: String) -> String {\n    var encodedString = \"\"\n    var count = 1\n    var previousChar = \"\"\n    for char in phrase {\n      if previousChar == \"\" {\n        previousChar = String(char)\n      } else if previousChar == String(char) {\n        count += 1\n      } else {\n        if count > 1 {\n          encodedString += String(count)\n        }\n        encodedString += previousChar\n        count = 1\n        previousChar = String(char)\n      }\n    }\n    if count > 1 {\n      encodedString += String(count)\n    }\n    encodedString += previousChar\n    return encodedString\n  }\n\n  static func decode(_ phrase: String) -> String {\n    var decodedString = \"\"\n    var count = \"\"\n    for char in phrase {\n      if char.isNumber {\n        count += String(char)\n      } else {\n        if count == \"\" {\n          decodedString += String(char)\n        } else {\n          decodedString += String(repeating: String(char), count: Int(count)!)\n          count = \"\"\n        }\n      }\n    }\n    return decodedString\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import RunLengthEncoding\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct RunLengthEncodingTests {\n\n  @Test(\"empty string\")\n  func testEncodeEmptyString() {\n    #expect(RunLengthEncoding.encode(\"\") == \"\")\n  }\n\n  @Test(\"single characters only are encoded without count\", .enabled(if: RUNALL))\n  func testEncodeSingleCharactersOnlyAreEncodedWithoutCount() {\n    #expect(RunLengthEncoding.encode(\"XYZ\") == \"XYZ\")\n  }\n\n  @Test(\"string with no single characters\", .enabled(if: RUNALL))\n  func testEncodeStringWithNoSingleCharacters() {\n    #expect(RunLengthEncoding.encode(\"AABBBCCCC\") == \"2A3B4C\")\n  }\n\n  @Test(\"single characters mixed with repeated characters\", .enabled(if: RUNALL))\n  func testEncodeSingleCharactersMixedWithRepeatedCharacters() {\n    #expect(\n      RunLengthEncoding.encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")\n        == \"12WB12W3B24WB\")\n  }\n\n  @Test(\"multiple whitespace mixed in string\", .enabled(if: RUNALL))\n  func testEncodeMultipleWhitespaceMixedInString() {\n    #expect(RunLengthEncoding.encode(\"  hsqq qww  \") == \"2 hs2q q2w2 \")\n  }\n\n  @Test(\"lowercase characters\", .enabled(if: RUNALL))\n  func testEncodeLowercaseCharacters() {\n    #expect(RunLengthEncoding.encode(\"aabbbcccc\") == \"2a3b4c\")\n  }\n\n  @Test(\"empty string\", .enabled(if: RUNALL))\n  func testDecodeEmptyString() {\n    #expect(RunLengthEncoding.decode(\"\") == \"\")\n  }\n\n  @Test(\"single characters only\", .enabled(if: RUNALL))\n  func testDecodeSingleCharactersOnly() {\n    #expect(RunLengthEncoding.decode(\"XYZ\") == \"XYZ\")\n  }\n\n  @Test(\"string with no single characters\", .enabled(if: RUNALL))\n  func testDecodeStringWithNoSingleCharacters() {\n    #expect(RunLengthEncoding.decode(\"2A3B4C\") == \"AABBBCCCC\")\n  }\n\n  @Test(\"single characters with repeated characters\", .enabled(if: RUNALL))\n  func testDecodeSingleCharactersWithRepeatedCharacters() {\n    #expect(\n      RunLengthEncoding.decode(\"12WB12W3B24WB\")\n        == \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")\n  }\n\n  @Test(\"multiple whitespace mixed in string\", .enabled(if: RUNALL))\n  func testDecodeMultipleWhitespaceMixedInString() {\n    #expect(RunLengthEncoding.decode(\"2 hs2q q2w2 \") == \"  hsqq qww  \")\n  }\n\n  @Test(\"lowercase string\", .enabled(if: RUNALL))\n  func testDecodeLowercaseString() {\n    #expect(RunLengthEncoding.decode(\"2a3b4c\") == \"aabbbcccc\")\n  }\n\n  @Test(\"encode followed by decode gives original string\", .enabled(if: RUNALL))\n  func testConsistencyEncodeFollowedByDecodeGivesOriginalString() {\n    let encoded = RunLengthEncoding.encode(\"zzz ZZ  zZ\")\n    let decoded = RunLengthEncoding.decode(encoded)\n    #expect(decoded == \"zzz ZZ  zZ\")\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "robtimp"
+  ],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "masters3d",
+    "ThomasHaz"
+  ]
+}

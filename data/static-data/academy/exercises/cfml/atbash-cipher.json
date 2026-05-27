@@ -1,0 +1,28 @@
+{
+  "id": "cfml:atbash-cipher",
+  "trackSlug": "cfml",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "a789b9ee-236b-4e5f-a93c-6e819155ef9e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the AtbashCipher exercise\n*/\ncomponent {\n\t\n\tfunction encode( phrase ) {\n\t\t// Implement me here\n\t}\n\t\n\tfunction decode( phrase ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the AtbashCipher exercise\n*/\ncomponent {\n\t\n\tfunction encode( phrase ) {\n\t\tvar result = '';\n\t\tvar breakCounter = 0;\n\t\t\n\t\tphrase\n\t\t\t.lcase()\n\t\t\t// Clean anything not alphanumeric\n\t\t\t.reReplace( '[^0-9a-z]', '', 'all' )\n\t\t\t.listToArray( '' )\n\t\t\t// Loop over each char\n\t\t\t.each( function( char ) {\n\t\t\t\tbreakCounter++;\n\t\t\t\tresult &= invertChar( char );\t\t\t\t\n\t\t\t\t// Every 5th char gets a space\n\t\t\t\tif( breakCounter % 5 == 0 ) {\n\t\t\t\t\tresult &= ' ';\n\t\t\t\t}\n\t\t\t} );\n\t\t\t\n\t\t// Nuke trailing spaces\n\t\treturn result.trim();\n\t}\n\t\n\tfunction decode( phrase ) {\n\t\tvar result = '';\n\t\t\n\t\tphrase\n\t\t\t.lcase()\n\t\t\t// Clean anything not alphanumeric\n\t\t\t.reReplace( '[^0-9a-z]', '', 'all' )\n\t\t\t.listToArray( '' )\n\t\t\t// Loop over each char\n\t\t\t.each( function( char ) {\n\t\t\t\tresult &= invertChar( char );\n\t\t\t} );\n\t\t\t\n\t\treturn result;\n\t}\n\t\n\tprivate function invertChar( char ) {\t\t\n\t\t// Pass numbers straight through\n\t\tif( asc( char ) >= 49 && asc( char ) <= 57 ) {\n\t\t\treturn char;\n\t\t} else {\n\t\t\t// For letters, find the offset from \"a\" and reverse it from \"z\"\n\t\t\t// Using the ascii codes as a handy reference intead of creating an array of chars\n\t\t\treturn chr( 122 - ( asc( char ) - 97 )  );\n\t\t}\n\t}\n\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'AtbashCipher' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My AtbashCipher class\", function(){\t\t\t\n\n\t\t\tdescribe( 'encode', function(){\n\n\t\t\t\tit( 'encode yes', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='yes' ) ).toBe( 'bvh' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode no', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='no' ) ).toBe( 'ml' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode OMG', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='OMG' ) ).toBe( 'lnt' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode spaces', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='O M G' ) ).toBe( 'lnt' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode mindblowingly', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='mindblowingly' ) ).toBe( 'nrmwy oldrm tob' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode numbers', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='Testing, 1 2 3,  testing.' ) ).toBe( 'gvhgr mt123 gvhgr mt' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode deep thought', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='Truth is fiction.' ) ).toBe( 'gifgs rhurx grlm' );\n\t\t\t\t});\n\n\t\t\t\tit( 'encode all the letters', function(){\n\t\t\t\t\texpect( SUT.encode( phrase='The quick brown fox jumps over the lazy dog.' ) ).toBe( 'gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt' );\n\t\t\t\t});\n\n\t\t\t});\n\n\t\t\tdescribe( 'decode', function(){\n\n\t\t\t\tit( 'decode exercism', function(){\n\t\t\t\t\texpect( SUT.decode( phrase='vcvix rhn' ) ).toBe( 'exercism' );\n\t\t\t\t});\n\n\t\t\t\tit( 'decode a sentence', function(){\n\t\t\t\t\texpect( SUT.decode( phrase='zmlyh gzxov rhlug vmzhg vkkrm thglm v' ) ).toBe( 'anobstacleisoftenasteppingstone' );\n\t\t\t\t});\n\n\t\t\t\tit( 'decode numbers', function(){\n\t\t\t\t\texpect( SUT.decode( phrase='gvhgr mt123 gvhgr mt' ) ).toBe( 'testing123testing' );\n\t\t\t\t});\n\n\t\t\t\tit( 'decode all the letters', function(){\n\t\t\t\t\texpect( SUT.decode( phrase='gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt' ) ).toBe( 'thequickbrownfoxjumpsoverthelazydog' );\n\t\t\t\t});\n\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

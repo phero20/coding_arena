@@ -1,0 +1,45 @@
+{
+  "id": "ruby:triangle",
+  "trackSlug": "ruby",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "5c797eb2-155d-47ca-8f85-2ba5803f9713",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "floating-point-numbers"
+  ],
+  "prerequisites": [
+    "floating-point-numbers",
+    "conditionals",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\n~~~~exercism/note\n_Degenerate triangles_ are triangles where the sum of the length of two sides is **equal** to the length of the third side, e.g. `1, 1, 2`.\nWe opted to not include tests for degenerate triangles in this exercise.\nYou may handle those situations if you wish to do so, or safely ignore them.\n~~~~\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Triangle' exercise in this file. Make the tests in\n`triangle_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/triangle` directory.\n=end\n",
+  "example_solution": "class Triangle\n  attr_reader :sides\n\n  def initialize(sides)\n    @sides = sides\n    if illegal?\n      @sides = []\n    end\n  end\n\n  def equilateral?\n    sides.uniq.size == 1\n  end\n\n  def isosceles?\n    sides.uniq.size.between?(1, 2)\n  end\n\n  def scalene?\n    sides.uniq.size == 3\n  end\n\n  private\n\n  def illegal?\n    impossible_length_side? || violates_inequality?\n  end\n\n  def violates_inequality?\n    a, b, c = sides\n    a + b <= c || a + c <= b || b + c <= a\n  end\n\n  def impossible_length_side?\n    sides.any? { |side| side <= 0 }\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'triangle'\n\nclass TriangleTest < Minitest::Test\n  def test_all_sides_are_equal_on_equilateral_triangle\n    # skip\n    actual = Triangle.new([2, 2, 2]).equilateral?\n    assert actual, \"Expected 'true', triangle [2, 2, 2] is equilateral.\"\n  end\n\n  def test_any_side_is_unequal_on_equilateral_triangle\n    skip\n    actual = Triangle.new([2, 3, 2]).equilateral?\n    refute actual, \"Expected 'false', triangle [2, 3, 2] is not equilateral.\"\n  end\n\n  def test_no_sides_are_equal_on_equilateral_triangle\n    skip\n    actual = Triangle.new([5, 4, 6]).equilateral?\n    refute actual, \"Expected 'false', triangle [5, 4, 6] is not equilateral.\"\n  end\n\n  def test_all_zero_sides_is_not_a_triangle_on_equilateral_triangle\n    skip\n    actual = Triangle.new([0, 0, 0]).equilateral?\n    refute actual, \"Expected 'false', triangle [0, 0, 0] is not equilateral.\"\n  end\n\n  def test_sides_may_be_floats_on_equilateral_triangle\n    skip\n    actual = Triangle.new([0.5, 0.5, 0.5]).equilateral?\n    assert actual, \"Expected 'true', triangle [0.5, 0.5, 0.5] is equilateral.\"\n  end\n\n  def test_last_two_sides_are_equal_on_isosceles_triangle\n    skip\n    actual = Triangle.new([3, 4, 4]).isosceles?\n    assert actual, \"Expected 'true', triangle [3, 4, 4] is isosceles.\"\n  end\n\n  def test_first_two_sides_are_equal_on_isosceles_triangle\n    skip\n    actual = Triangle.new([4, 4, 3]).isosceles?\n    assert actual, \"Expected 'true', triangle [4, 4, 3] is isosceles.\"\n  end\n\n  def test_first_and_last_sides_are_equal_on_isosceles_triangle\n    skip\n    actual = Triangle.new([4, 3, 4]).isosceles?\n    assert actual, \"Expected 'true', triangle [4, 3, 4] is isosceles.\"\n  end\n\n  def test_equilateral_triangles_are_also_isosceles_on_isosceles_triangle\n    skip\n    actual = Triangle.new([4, 4, 4]).isosceles?\n    assert actual, \"Expected 'true', triangle [4, 4, 4] is isosceles.\"\n  end\n\n  def test_no_sides_are_equal_on_isosceles_triangle\n    skip\n    actual = Triangle.new([2, 3, 4]).isosceles?\n    refute actual, \"Expected 'false', triangle [2, 3, 4] is not isosceles.\"\n  end\n\n  def test_first_triangle_inequality_violation_on_isosceles_triangle\n    skip\n    actual = Triangle.new([1, 1, 3]).isosceles?\n    refute actual, \"Expected 'false', triangle [1, 1, 3] is not isosceles.\"\n  end\n\n  def test_second_triangle_inequality_violation_on_isosceles_triangle\n    skip\n    actual = Triangle.new([1, 3, 1]).isosceles?\n    refute actual, \"Expected 'false', triangle [1, 3, 1] is not isosceles.\"\n  end\n\n  def test_third_triangle_inequality_violation_on_isosceles_triangle\n    skip\n    actual = Triangle.new([3, 1, 1]).isosceles?\n    refute actual, \"Expected 'false', triangle [3, 1, 1] is not isosceles.\"\n  end\n\n  def test_sides_may_be_floats_on_isosceles_triangle\n    skip\n    actual = Triangle.new([0.5, 0.4, 0.5]).isosceles?\n    assert actual, \"Expected 'true', triangle [0.5, 0.4, 0.5] is isosceles.\"\n  end\n\n  def test_no_sides_are_equal_on_scalene_triangle\n    skip\n    actual = Triangle.new([5, 4, 6]).scalene?\n    assert actual, \"Expected 'true', triangle [5, 4, 6] is scalene.\"\n  end\n\n  def test_all_sides_are_equal_on_scalene_triangle\n    skip\n    actual = Triangle.new([4, 4, 4]).scalene?\n    refute actual, \"Expected 'false', triangle [4, 4, 4] is not scalene.\"\n  end\n\n  def test_first_and_second_sides_are_equal_on_scalene_triangle\n    skip\n    actual = Triangle.new([4, 4, 3]).scalene?\n    refute actual, \"Expected 'false', triangle [4, 4, 3] is not scalene.\"\n  end\n\n  def test_first_and_third_sides_are_equal_on_scalene_triangle\n    skip\n    actual = Triangle.new([3, 4, 3]).scalene?\n    refute actual, \"Expected 'false', triangle [3, 4, 3] is not scalene.\"\n  end\n\n  def test_second_and_third_sides_are_equal_on_scalene_triangle\n    skip\n    actual = Triangle.new([4, 3, 3]).scalene?\n    refute actual, \"Expected 'false', triangle [4, 3, 3] is not scalene.\"\n  end\n\n  def test_may_not_violate_triangle_inequality_on_scalene_triangle\n    skip\n    actual = Triangle.new([7, 3, 2]).scalene?\n    refute actual, \"Expected 'false', triangle [7, 3, 2] is not scalene.\"\n  end\n\n  def test_sides_may_be_floats_on_scalene_triangle\n    skip\n    actual = Triangle.new([0.5, 0.4, 0.6]).scalene?\n    assert actual, \"Expected 'true', triangle [0.5, 0.4, 0.6] is scalene.\"\n  end\nend\n",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://www.rubykoans.com/",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "durrellchamorro",
+    "favrik",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "Pavling",
+    "securitylater",
+    "tryantwit"
+  ]
+}

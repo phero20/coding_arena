@@ -1,0 +1,49 @@
+{
+  "id": "elixir:change",
+  "trackSlug": "elixir",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "14bddd31-a68f-4a16-830f-6e8ecf8199f2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "integers"
+  ],
+  "prerequisites": [
+    "integers",
+    "atoms",
+    "tuples",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "guards",
+    "recursion",
+    "enum",
+    "maps"
+  ],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "defmodule Change do\n  @doc \"\"\"\n    Determine the least number of coins to be given to the user such\n    that the sum of the coins' value would equal the correct amount of change.\n    It returns {:error, \"cannot change\"} if it is not possible to compute the\n    right amount of coins. Otherwise returns the tuple {:ok, list_of_coins}\n\n    ## Examples\n\n      iex> Change.generate([5, 10, 15], 3)\n      {:error, \"cannot change\"}\n\n      iex> Change.generate([1, 5, 10], 18)\n      {:ok, [1, 1, 1, 5, 10]}\n\n  \"\"\"\n\n  @spec generate(list, integer) :: {:ok, list} | {:error, String.t()}\n  def generate(coins, target) do\n  end\nend\n",
+  "example_solution": "defmodule Change do\n  @doc \"\"\"\n    Determine the least number of coins to be given to the user such\n    that the sum of the coins' value would equal the correct amount of change.\n    It returns {:error, \"cannot change\"} if it is not possible to compute the\n    right amount of coins. Otherwise returns the tuple {:ok, list_of_coins}\n\n    ## Examples\n\n      iex> Change.generate([5, 10, 15], 3)\n      {:error, \"cannot change\"}\n\n      iex> Change.generate([1, 5, 10], 18)\n      {:ok, [1, 1, 1, 5, 10]}\n\n  \"\"\"\n\n  @spec generate(list, integer) :: {:ok, list} | {:error, String.t()}\n  def generate(coins, target) do\n    coins |> Enum.sort(&>/2) |> generate(target, [], {:error, \"cannot change\"})\n  end\n\n  defp generate(_, _, current, {:ok, best}) when length(current) >= length(best) do\n    {:ok, best}\n  end\n\n  defp generate(_, 0, current, _) do\n    {:ok, current}\n  end\n\n  defp generate([], _, _, best) do\n    best\n  end\n\n  defp generate([coin | coins], target, current, best) when coin > target do\n    generate(coins, target, current, best)\n  end\n\n  defp generate([coin | coins], target, current, best) do\n    first_try = generate([coin | coins], target - coin, [coin | current], best)\n    generate(coins, target, current, first_try)\n  end\nend\n",
+  "test_code": "defmodule ChangeTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"change for 1 cent\" do\n    coins = [1, 5, 10, 25]\n    expected = [1]\n    assert Change.generate(coins, 1) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"single coin change\" do\n    coins = [1, 5, 10, 25, 100]\n    expected = [25]\n    assert Change.generate(coins, 25) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"multiple coin change\" do\n    coins = [1, 5, 10, 25, 100]\n    expected = [5, 10]\n    assert Change.generate(coins, 15) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"change with Lilliputian Coins\" do\n    coins = [1, 4, 15, 20, 50]\n    expected = [4, 4, 15]\n    assert Change.generate(coins, 23) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"change with Lower Elbonia Coins\" do\n    coins = [1, 5, 10, 21, 25]\n    expected = [21, 21, 21]\n    assert Change.generate(coins, 63) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"large target values\" do\n    coins = [1, 2, 5, 10, 20, 50, 100]\n    expected = [2, 2, 5, 20, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100]\n    assert Change.generate(coins, 999) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"possible change without unit coins available\" do\n    coins = [2, 5, 10, 20, 50]\n    expected = [2, 2, 2, 5, 10]\n    assert Change.generate(coins, 21) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"another possible change without unit coins available\" do\n    coins = [4, 5]\n    expected = [4, 4, 4, 5, 5, 5]\n    assert Change.generate(coins, 27) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"a greedy approach is not optimal\" do\n    coins = [1, 10, 11]\n    expected = [10, 10]\n    assert Change.generate(coins, 20) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"no coins make 0 change\" do\n    coins = [1, 5, 10, 21, 25]\n    expected = []\n    assert Change.generate(coins, 0) == {:ok, expected}\n  end\n\n  @tag :pending\n  test \"error testing for change smaller than the smallest of coins\" do\n    coins = [5, 10]\n    assert Change.generate(coins, 3) == {:error, \"cannot change\"}\n  end\n\n  @tag :pending\n  test \"error if no combination can add up to target\" do\n    coins = [5, 10]\n    assert Change.generate(coins, 94) == {:error, \"cannot change\"}\n  end\n\n  @tag :pending\n  test \"cannot find negative change values\" do\n    coins = [1, 2, 5]\n    assert Change.generate(coins, -5) == {:error, \"cannot change\"}\n  end\nend\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "bernardoamc"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "veelenga",
+    "waiting-for-dev",
+    "weapp"
+  ]
+}

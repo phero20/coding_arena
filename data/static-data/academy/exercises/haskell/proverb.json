@@ -1,0 +1,31 @@
+{
+  "id": "haskell:proverb",
+  "trackSlug": "haskell",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "17ba80b8-1ca6-426b-880a-15de1d413032",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Proverb(recite) where\n\nrecite :: [String] -> String\nrecite = error \"You need to implement this function!\"\n",
+  "example_solution": "module Proverb(recite) where\n\nimport Data.List (intercalate)\n\ntype Input = String\ntype Recital = String\n\nphrase :: Input -> Input -> String\nphrase x y = \"For want of a \" ++ x ++ \" the \" ++ y ++ \" was lost.\"\n\nending :: Input -> String\nending w = \"And all for the want of a \" ++ w ++ \".\"\n\njoinLines :: [String] -> Recital\njoinLines = intercalate \"\\n\"\n\nrecite :: [Input] -> Recital\nrecite [] = \"\"\nrecite inputs@(x:xs) =\n  let parts = zipWith phrase inputs xs\n  in joinLines $ parts ++ [ending x]\n",
+  "test_code": "{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\nimport Data.List (intercalate)\n\nimport Proverb (recite)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"recite\" $ for_ cases test\n  where\n\n    test Case{..} = it description assertion\n      where\n        assertion = recite input `shouldBe` expected\n\n\ndata Case = Case { description :: String\n                 , input       :: [String]\n                 , expected    :: String\n                 }\n\njoinLines :: [String] -> String\njoinLines = intercalate \"\\n\"\n\ncases :: [Case]\ncases = [ Case { description = \"zero pieces\"\n               , input       = []\n               , expected    = \"\"\n               }\n        , Case { description = \"one piece\"\n               , input       = [\"nail\"]\n               , expected    = \"And all for the want of a nail.\"\n               }\n        , Case { description = \"two pieces\"\n               , input       = [\"nail\", \"shoe\"]\n               , expected    =\n                   joinLines [ \"For want of a nail the shoe was lost.\"\n                             , \"And all for the want of a nail.\"\n                             ]\n               }\n        , Case { description = \"three pieces\"\n               , input       = [\"nail\", \"shoe\", \"horse\"]\n               , expected    =\n                   joinLines [ \"For want of a nail the shoe was lost.\"\n                             , \"For want of a shoe the horse was lost.\"\n                             , \"And all for the want of a nail.\"\n                             ]\n               }\n        , Case { description = \"full proverb\"\n               , input       = [ \"nail\"\n                               , \"shoe\"\n                               , \"horse\"\n                               , \"rider\"\n                               , \"message\"\n                               , \"battle\"\n                               , \"kingdom\"\n                               ]\n               , expected    =\n                 joinLines [ \"For want of a nail the shoe was lost.\"\n                           , \"For want of a shoe the horse was lost.\"\n                           , \"For want of a horse the rider was lost.\"\n                           , \"For want of a rider the message was lost.\"\n                           , \"For want of a message the battle was lost.\"\n                           , \"For want of a battle the kingdom was lost.\"\n                           , \"And all for the want of a nail.\"\n                           ]\n               }\n        , Case { description = \"four pieces modernized\"\n               , input       = [\"pin\", \"gun\", \"soldier\", \"battle\"]\n               , expected    =\n                 joinLines [ \"For want of a pin the gun was lost.\"\n                           , \"For want of a gun the soldier was lost.\"\n                           , \"For want of a soldier the battle was lost.\"\n                           , \"And all for the want of a pin.\"\n                           ]\n               }\n        ]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "tejasbubane"
+  ],
+  "contributors": [
+    "iHiD",
+    "petertseng",
+    "ppartarr",
+    "sshine"
+  ]
+}

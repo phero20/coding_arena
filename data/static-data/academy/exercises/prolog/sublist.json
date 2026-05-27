@@ -1,0 +1,26 @@
+{
+  "id": "prolog:sublist",
+  "trackSlug": "prolog",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "528b1a6a-c890-4b4a-ab0e-4a9508d5caeb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "sublist(Xs, Xs, Qualification).\n",
+  "example_solution": "sublist(Xs, Xs, equal) :- !.\nsublist(Xs, Ys, sublist) :- append(_, Rest, Ys), append(Xs, _, Rest), !.\nsublist(Xs, Ys, superlist) :- sublist(Ys, Xs, sublist), !.\nsublist(_, _, unequal).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(sublist).\n\n    test(empty_lists, condition(true)) :-\n        sublist([], [], Qualification),\n        Qualification == equal.\n\n    test(empty_list_within_non_empty_list, condition(pending)) :-\n        sublist([], [1, 2, 3], Qualification),\n        Qualification == sublist.\n\n    test(non_empty_list_contains_empty_list, condition(pending)) :-\n        sublist([1, 2, 3], [], Qualification),\n        Qualification == superlist.\n\n    test(list_equals_itself, condition(pending)) :-\n        sublist([1, 2, 3], [1, 2, 3], Qualification),\n        Qualification == equal.\n\n    test(different_lists, condition(pending)) :-\n        sublist([1, 2, 3], [2, 3, 4], Qualification),\n        Qualification == unequal.\n\n    test(false_start, condition(pending)) :-\n        sublist([1, 2, 5], [0, 1, 2, 3, 1, 2, 5, 6], Qualification),\n        Qualification == sublist.\n\n    test(consecutive, condition(pending)) :-\n        sublist([1, 1, 2], [0, 1, 1, 1, 2, 1, 2], Qualification),\n        Qualification == sublist.\n\n    test(sublist_at_start, condition(pending)) :-\n        sublist([0, 1, 2], [0, 1, 2, 3, 4, 5], Qualification),\n        Qualification == sublist.\n\n    test(sublist_in_middle, condition(pending)) :-\n        sublist([2, 3, 4], [0, 1, 2, 3, 4, 5], Qualification),\n        Qualification == sublist.\n\n    test(sublist_at_end, condition(pending)) :-\n        sublist([3, 4, 5], [0, 1, 2, 3, 4, 5], Qualification),\n        Qualification == sublist.\n\n    test(at_start_of_superlist, condition(pending)) :-\n        sublist([0, 1, 2, 3, 4, 5], [0, 1, 2], Qualification),\n        Qualification == superlist.\n\n    test(in_middle_of_superlist, condition(pending)) :-\n        sublist([0, 1, 2, 3, 4, 5], [2, 3], Qualification),\n        Qualification == superlist.\n\n    test(at_end_of_superlist, condition(pending)) :-\n        sublist([0, 1, 2, 3, 4, 5], [3, 4, 5], Qualification),\n        Qualification == superlist.\n\n    test(first_list_missing_element_from_second_list, condition(pending)) :-\n        sublist([1, 3], [1, 2, 3], Qualification),\n        Qualification == unequal.\n\n    test(second_list_missing_element_from_first_list, condition(pending)) :-\n        sublist([1, 2, 3], [1, 3], Qualification),\n        Qualification == unequal.\n\n    test(first_list_missing_additional_digits_from_second_list, condition(pending)) :-\n        sublist([1, 2], [1, 22], Qualification),\n        Qualification == unequal.\n\n    test(order_matters_to_a_list, condition(pending)) :-\n        sublist([1, 2, 3], [3, 2, 1], Qualification),\n        Qualification == unequal.\n\n    test(same_digits_but_different_numbers, condition(pending)) :-\n        sublist([1, 0, 1], [10, 1], Qualification),\n        Qualification == unequal.\n\n:- end_tests(sublist).\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

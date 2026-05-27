@@ -1,0 +1,31 @@
+{
+  "id": "jq:rna-transcription",
+  "trackSlug": "jq",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "0981a331-259d-4619-afb4-350a7e4cf538",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "functions",
+    "objects"
+  ],
+  "prerequisites": [
+    "functions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "def toRna:\n  \"Implement this function\" | halt_error;\n",
+  "example_solution": "def toRna:  split(\"\") |\n            map({\"G\":\"C\", \"C\":\"G\", \"A\":\"U\", \"T\":\"A\"}[.]) |\n            join(\"\");\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2022-11-02T20:59:43Z\nload bats-extra\nload bats-jq\n\n@test 'Empty RNA sequence' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r 'include \"./rna-transcription\"; .dna | toRna' << 'END_INPUT'\n        {\n          \"dna\": \"\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=''\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'RNA complement of cytosine is guanine' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r 'include \"./rna-transcription\"; .dna | toRna' << 'END_INPUT'\n        {\n          \"dna\": \"C\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='G'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'RNA complement of guanine is cytosine' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r 'include \"./rna-transcription\"; .dna | toRna' << 'END_INPUT'\n        {\n          \"dna\": \"G\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='C'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'RNA complement of thymine is adenine' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r 'include \"./rna-transcription\"; .dna | toRna' << 'END_INPUT'\n        {\n          \"dna\": \"T\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='A'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'RNA complement of adenine is uracil' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r 'include \"./rna-transcription\"; .dna | toRna' << 'END_INPUT'\n        {\n          \"dna\": \"A\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='U'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'RNA complement' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r 'include \"./rna-transcription\"; .dna | toRna' << 'END_INPUT'\n        {\n          \"dna\": \"ACGTGGTCTTAA\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='UGCACCAGAAUU'\n    assert_equal \"$output\" \"$expected\"\n}\n\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

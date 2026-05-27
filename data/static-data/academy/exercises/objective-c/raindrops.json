@@ -1,0 +1,26 @@
+{
+  "id": "objective-c:raindrops",
+  "trackSlug": "objective-c",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "4e16fc56-b8a8-4d48-8635-55e13795eb4d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "#import \"Raindrops.h\"\n\n@implementation Raindrops\n\n// TODO: add your solution here\n\n@end\n",
+  "example_solution": "#import \"RaindropsExample.h\"\n\n@implementation Raindrops {\n    int _number;\n}\n\n- (instancetype)initWithNumber:(int)number {\n    if (self = [super init]) {\n        _number = number;\n    }\n    \n    return self;\n}\n\n- (NSString *)sounds {\n    NSMutableString *result = [[NSMutableString alloc] init];\n    \n    if (_number % 3 == 0) {\n        [result appendString:@\"Pling\"];\n    }\n    \n    if (_number % 5 == 0) {\n        [result appendString:@\"Plang\"];\n    }\n    \n    if (_number % 7 == 0) {\n        [result appendString:@\"Plong\"];\n    }\n    \n    if (result.length == 0) {\n        [result appendFormat:@\"%d\", _number];\n    }\n    \n    return result;\n}\n\n@end\n",
+  "test_code": "#import <XCTest/XCTest.h>\n\n#if __has_include(\"RaindropsExample.h\")\n# import \"RaindropsExample.h\"\n# else\n# import \"Raindrops.h\"\n#endif\n\n@interface RaindropsTest : XCTestCase\n\n@end\n\n@implementation RaindropsTest\n\n- (void)test1 {\n    XCTAssertEqualObjects(@\"1\", [[[Raindrops alloc] initWithNumber:1] sounds]);\n}\n\n- (void)test3 {\n    XCTAssertEqualObjects(@\"Pling\", [[[Raindrops alloc] initWithNumber:3] sounds]);\n}\n\n- (void)test5 {\n    XCTAssertEqualObjects(@\"Plang\", [[[Raindrops alloc] initWithNumber:5] sounds]);\n}\n\n- (void)test7 {\n    XCTAssertEqualObjects(@\"Plong\", [[[Raindrops alloc] initWithNumber:7] sounds]);\n}\n\n- (void)test6 {\n    XCTAssertEqualObjects(@\"Pling\", [[[Raindrops alloc] initWithNumber:6] sounds]);\n}\n\n- (void)test9 {\n    XCTAssertEqualObjects(@\"Pling\", [[[Raindrops alloc] initWithNumber:9] sounds]);\n}\n\n- (void)test10 {\n    XCTAssertEqualObjects(@\"Plang\", [[[Raindrops alloc] initWithNumber:10] sounds]);\n}\n\n- (void)test14 {\n    XCTAssertEqualObjects(@\"Plong\", [[[Raindrops alloc] initWithNumber:14] sounds]);\n}\n\n- (void)test15 {\n    XCTAssertEqualObjects(@\"PlingPlang\", [[[Raindrops alloc] initWithNumber:15] sounds]);\n}\n\n- (void)test21 {\n    XCTAssertEqualObjects(@\"PlingPlong\", [[[Raindrops alloc] initWithNumber:21] sounds]);\n}\n\n- (void)test25 {\n    XCTAssertEqualObjects(@\"Plang\", [[[Raindrops alloc] initWithNumber:25] sounds]);\n}\n\n- (void)test35 {\n    XCTAssertEqualObjects(@\"PlangPlong\", [[[Raindrops alloc] initWithNumber:35] sounds]);\n}\n\n- (void)test49 {\n    XCTAssertEqualObjects(@\"Plong\", [[[Raindrops alloc] initWithNumber:49] sounds]);\n}\n\n- (void)test52 {\n    XCTAssertEqualObjects(@\"52\", [[[Raindrops alloc] initWithNumber:52] sounds]);\n}\n\n- (void)test105 {\n    XCTAssertEqualObjects(@\"PlingPlangPlong\", [[[Raindrops alloc] initWithNumber:105] sounds]);\n}\n\n- (void)test12121 {\n    XCTAssertEqualObjects(@\"12121\", [[[Raindrops alloc] initWithNumber:12121] sounds]);\n}\n\n@end\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [],
+  "contributors": [
+    "masters3d"
+  ]
+}

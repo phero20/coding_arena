@@ -1,0 +1,39 @@
+{
+  "id": "ruby:rotational-cipher",
+  "trackSlug": "ruby",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "af5ccf14-eff2-4dc6-b1db-e209cddca62a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Rotational Cipher' exercise in this file. Make the tests in\n`rotational_cipher_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/rotational-cipher` directory.\n=end\n",
+  "example_solution": "class RotationalCipher\n  SMALL_LETTERS_RANGE = (97..122)\n  BIG_LETTERS_RANGE   = (65..90)\n  ROTATION_MODIFIER   = 1\n\n  attr_reader :text\n\n  def initialize(text, key)\n    @text      = text\n    @shift_key = key\n  end\n\n  def self.rotate(text, key)\n    new(text, key).rotate\n  end\n\n  def rotate\n    text.split('').map { |char| shift_char(char) }.join\n  end\n\n  private\n\n  def shift_char(char)\n    shift_ascii(char.ord).chr\n  end\n\n  def shift_key\n    @shift_key % 26\n  end\n\n  def shift_ascii(char_ascii)\n    case char_ascii\n    when SMALL_LETTERS_RANGE\n      shift_within(char_ascii, SMALL_LETTERS_RANGE.min, SMALL_LETTERS_RANGE.max)\n    when BIG_LETTERS_RANGE\n      shift_within(char_ascii, BIG_LETTERS_RANGE.min, BIG_LETTERS_RANGE.max)\n    else\n      char_ascii\n    end\n  end\n\n  def shift_within(char_ascii, lower_limit, upper_limit)\n    shifted_ascii = char_ascii + shift_key\n\n    return shifted_ascii if shifted_ascii <= upper_limit\n\n    lower_limit + (shifted_ascii - upper_limit - ROTATION_MODIFIER)\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'rotational_cipher'\n\nclass RotationalCipherTest < Minitest::Test\n  def test_rotate_a_by_0_same_output_as_input\n    # skip\n    actual = RotationalCipher.rotate(\"a\", 0)\n    expected = \"a\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_a_by_1\n    skip\n    actual = RotationalCipher.rotate(\"a\", 1)\n    expected = \"b\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_a_by_26_same_output_as_input\n    skip\n    actual = RotationalCipher.rotate(\"a\", 26)\n    expected = \"a\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_m_by_13\n    skip\n    actual = RotationalCipher.rotate(\"m\", 13)\n    expected = \"z\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_n_by_13_with_wrap_around_alphabet\n    skip\n    actual = RotationalCipher.rotate(\"n\", 13)\n    expected = \"a\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_capital_letters\n    skip\n    actual = RotationalCipher.rotate(\"OMG\", 5)\n    expected = \"TRL\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_spaces\n    skip\n    actual = RotationalCipher.rotate(\"O M G\", 5)\n    expected = \"T R L\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_numbers\n    skip\n    actual = RotationalCipher.rotate(\"Testing 1 2 3 testing\", 4)\n    expected = \"Xiwxmrk 1 2 3 xiwxmrk\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_punctuation\n    skip\n    actual = RotationalCipher.rotate(\"Let's eat, Grandma!\", 21)\n    expected = \"Gzo'n zvo, Bmviyhv!\"\n    assert_equal expected, actual\n  end\n\n  def test_rotate_all_letters\n    skip\n    actual = RotationalCipher.rotate(\"The quick brown fox jumps over the lazy dog.\", 13)\n    expected = \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "adimasuhid"
+  ],
+  "contributors": [
+    "cadwallion",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "njbbaer",
+    "tryantwit"
+  ]
+}

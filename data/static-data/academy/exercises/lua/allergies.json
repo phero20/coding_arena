@@ -1,0 +1,29 @@
+{
+  "id": "lua:allergies",
+  "trackSlug": "lua",
+  "slug": "allergies",
+  "name": "Allergies",
+  "uuid": "e3d0e005-6397-4006-92ec-78f86178c684",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.\n\nAn allergy test produces a single numeric score which contains the information about all the allergies the person has (that they were tested for).\n\nThe list of items (and their value) that were tested are:\n\n- eggs (1)\n- peanuts (2)\n- shellfish (4)\n- strawberries (8)\n- tomatoes (16)\n- chocolate (32)\n- pollen (64)\n- cats (128)\n\nSo if Tom is allergic to peanuts and chocolate, he gets a score of 34.\n\nNow, given just that score of 34, your program should be able to say:\n\n- Whether Tom is allergic to any one of those allergens listed above.\n- All the allergens Tom is allergic to.\n\nNote: a given score may include allergens **not** listed above (i.e. allergens that score 256, 512, 1024, etc.).\nYour program should ignore those components of the score.\nFor example, if the allergy score is 257, your program should only report the eggs (1) allergy.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "local function list(score)\nend\n\nlocal function allergic_to(score, which)\nend\n\nreturn { list = list, allergic_to = allergic_to }\n",
+  "example_solution": "local allergens = { 'eggs', 'peanuts', 'shellfish', 'strawberries', 'tomatoes', 'chocolate', 'pollen', 'cats' }\n\nlocal function list(score)\n  local results = {}\n  for i, allergen in ipairs(allergens) do\n    if score & 1 << (i - 1) > 0 then\n      table.insert(results, allergen)\n    end\n  end\n  return results\nend\n\nlocal function allergic_to(score, which)\n  for _, allergen in ipairs(list(score)) do\n    if allergen == which then\n      return true\n    end\n  end\n  return false\nend\n\nreturn { list = list, allergic_to = allergic_to }\n",
+  "test_code": "local allergies = require('allergies')\n\ndescribe('allergies', function()\n  it('should return an empty list of allergies for a score of 0', function()\n    assert.same({}, allergies.list(0))\n  end)\n\n  it('should list only eggs for a score of 1', function()\n    assert.same({ 'eggs' }, allergies.list(1))\n  end)\n\n  it('should list only peanuts for a score of 2', function()\n    assert.same({ 'peanuts' }, allergies.list(2))\n  end)\n\n  it('should list only shellfish for a score of 4', function()\n    assert.same({ 'shellfish' }, allergies.list(4))\n  end)\n\n  it('should list only strawberries for a score of 8', function()\n    assert.same({ 'strawberries' }, allergies.list(8))\n  end)\n\n  it('should list only tomatoes for a score of 16', function()\n    assert.same({ 'tomatoes' }, allergies.list(16))\n  end)\n\n  it('should list only chocolate for a score of 32', function()\n    assert.same({ 'chocolate' }, allergies.list(32))\n  end)\n\n  it('should list only pollen for a score of 64', function()\n    assert.same({ 'pollen' }, allergies.list(64))\n  end)\n\n  it('should list only cats for a score of 128', function()\n    assert.same({ 'cats' }, allergies.list(128))\n  end)\n\n  it('should be able to list more than one allergy', function()\n    assert.same({ 'eggs', 'peanuts' }, allergies.list(3))\n  end)\n\n  it('should be able to list many allergies', function()\n    assert.same({ 'strawberries', 'tomatoes', 'pollen', 'cats' }, allergies.list(216))\n  end)\n\n  it('should ignore components of the score that do not correspond to an allergy', function()\n    assert.same({ 'eggs' }, allergies.list(257))\n    assert.same({ 'eggs', 'peanuts' }, allergies.list(259))\n  end)\n\n  it('should be able to list all allergies', function()\n    assert.same({ 'eggs', 'peanuts', 'shellfish', 'strawberries', 'tomatoes', 'chocolate', 'pollen', 'cats' },\n                allergies.list(255))\n  end)\n\n  it('should indicate that someone with a score of 0 is allergic to nothing', function()\n    assert.is_false(allergies.allergic_to(0, 'eggs'))\n    assert.is_false(allergies.allergic_to(0, 'peanuts'))\n    assert.is_false(allergies.allergic_to(0, 'shellfish'))\n    assert.is_false(allergies.allergic_to(0, 'strawberries'))\n    assert.is_false(allergies.allergic_to(0, 'tomatoes'))\n    assert.is_false(allergies.allergic_to(0, 'chocolate'))\n    assert.is_false(allergies.allergic_to(0, 'pollen'))\n    assert.is_false(allergies.allergic_to(0, 'cats'))\n  end)\n\n  it('should be able to determine whether a score with one allergy contains an allergy', function()\n    assert.is_true(allergies.allergic_to(1, 'eggs'))\n    assert.is_false(allergies.allergic_to(1, 'peanuts'))\n  end)\n\n  it('should be able to determine whether a score with multiple allergies contains an allergy', function()\n    assert.is_true(allergies.allergic_to(5, 'eggs'))\n    assert.is_true(allergies.allergic_to(5, 'shellfish'))\n    assert.is_false(allergies.allergic_to(5, 'peanuts'))\n  end)\nend)\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti",
+    "imolein"
+  ]
+}

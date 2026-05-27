@@ -1,0 +1,35 @@
+{
+  "id": "haskell:nth-prime",
+  "trackSlug": "haskell",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "ddfc0435-5378-4865-bbcb-a07754014db4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Prime (nth) where\n\nnth :: Int -> Maybe Integer\nnth n = error \"You need to implement this function.\"\n",
+  "example_solution": "module Prime (nth) where\n\nnth :: Int -> Maybe Integer\nnth x\n    | x <= 0    = Nothing\n    | otherwise = Just $ nth' x\n\nnth' :: Int -> Integer\nnth' = (primes !!) . pred\n\n-- all primes > 5 are in the form of 6n+1 or 6n+5 (for n >= 1)\nprimes :: [Integer]\nprimes = 2 : 3 : 5 : filter (go $ drop 2 primes) candidates\n  where\n    candidates = [x | n6 <- [6, 12 ..], x <- [n6 + 1, n6 + 5]]\n    go (p:ps) n = case n `quotRem` p of\n      (_, 0) -> False\n      (q, _) -> q < p || go ps n\n    go _ _ = undefined\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Prime (nth)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"nth\" $ for_ cases test\n  where\n\n    test Case{..} = it description assertion\n      where\n        assertion = nth (fromIntegral input) `shouldBe` expected\n\ndata Case = Case { description :: String\n                 , input       :: Integer\n                 , expected    :: Maybe Integer\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"first prime\"\n               , input       = 1\n               , expected    = Just 2\n               }\n        , Case { description = \"second prime\"\n               , input       = 2\n               , expected    = Just 3\n               }\n        , Case { description = \"sixth prime\"\n               , input       = 6\n               , expected    = Just 13\n               }\n        , Case { description = \"big prime\"\n               , input       = 10001\n               , expected    = Just 104743\n               }\n        , Case { description = \"there is no zeroth prime\"\n               , input       = 0\n               , expected    = Nothing\n               }\n        ]\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "kytrinyx",
+    "lpalma",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

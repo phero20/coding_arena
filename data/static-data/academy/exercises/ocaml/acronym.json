@@ -1,0 +1,34 @@
+{
+  "id": "ocaml:acronym",
+  "trackSlug": "ocaml",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "c4550644-e67a-4bf4-98dc-78fe45b90c53",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let acronym _ = failwith \"'acronym' is missing\"",
+  "example_solution": "open Base\n\nlet delimiters = [' '; '-'; '_']\nlet is_relevant c = Char.is_alpha c || List.exists delimiters ~f:(Char.equal c)\n\nlet acronym input =\n  input\n  |> String.filter ~f:is_relevant\n  |> String.split_on_chars ~on:delimiters\n  |> List.filter ~f:(fun word -> String.length word > 0)\n  |> List.map ~f:(fun word -> String.get word 0 |> Char.uppercase) \n  |> String.of_char_list",
+  "test_code": "open OUnit2\nopen Acronym\n\nlet ae exp got _test_ctxt =\n  assert_equal exp got ~printer:(fun x -> x )\n\nlet tests = [\n  \"basic\" >::\n  ae \"PNG\" (acronym \"Portable Network Graphics\");\n  \"lowercase words\" >::\n  ae \"ROR\" (acronym \"Ruby on Rails\");\n  \"punctuation\" >::\n  ae \"FIFO\" (acronym \"First In, First Out\");\n  \"all caps word\" >::\n  ae \"GIMP\" (acronym \"GNU Image Manipulation Program\");\n  \"punctuation without whitespace\" >::\n  ae \"CMOS\" (acronym \"Complementary metal-oxide semiconductor\");\n  \"very long abbreviation\" >::\n  ae \"ROTFLSHTMDCOALM\" (acronym \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\");\n  \"consecutive delimiters\" >::\n  ae \"SIMUFTA\" (acronym \"Something - I made up from thin air\");\n  \"apostrophes\" >::\n  ae \"HC\" (acronym \"Halley's Comet\");\n  \"underscore emphasis\" >::\n  ae \"TRNT\" (acronym \"The Road _Not_ Taken\");\n]\n\nlet () =\n  run_test_tt_main (\"acronym tests\" >::: tests)\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "daveyarwood",
+    "iHiD",
+    "kytrinyx",
+    "marionebl",
+    "Peaupote",
+    "sbl",
+    "sshine"
+  ]
+}

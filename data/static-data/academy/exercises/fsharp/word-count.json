@@ -1,0 +1,41 @@
+{
+  "id": "fsharp:word-count",
+  "trackSlug": "fsharp",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "0c7a2f06-1e53-4043-9e1a-386e90e945b4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "regular-expressions"
+  ],
+  "prerequisites": [
+    "lists",
+    "maps",
+    "numbers",
+    "strings",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "module WordCount\n\nlet countWords phrase = failwith \"You need to implement this function.\"",
+  "example_solution": "module WordCount\n\nopen System.Text.RegularExpressions\n\nlet countWords (phrase: string) = \n    Regex.Matches(phrase.ToLowerInvariant(), @\"\\w+('\\w+)*\") \n    |> Seq.cast<Match> \n    |> Seq.countBy (fun m -> m.Value)\n    |> Map.ofSeq",
+  "test_code": "module WordCountTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen WordCount\n\n[<Fact>]\nlet ``Count one word`` () =\n    let expected = [(\"word\", 1)] |> Map.ofList\n    countWords \"word\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Count one of each word`` () =\n    let expected = \n        [ (\"one\", 1);\n          (\"of\", 1);\n          (\"each\", 1) ]\n        |> Map.ofList\n    countWords \"one of each\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple occurrences of a word`` () =\n    let expected = \n        [ (\"one\", 1);\n          (\"fish\", 4);\n          (\"two\", 1);\n          (\"red\", 1);\n          (\"blue\", 1) ]\n        |> Map.ofList\n    countWords \"one fish two fish red fish blue fish\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Handles cramped lists`` () =\n    let expected = \n        [ (\"one\", 1);\n          (\"two\", 1);\n          (\"three\", 1) ]\n        |> Map.ofList\n    countWords \"one,two,three\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Handles expanded lists`` () =\n    let expected = \n        [ (\"one\", 1);\n          (\"two\", 1);\n          (\"three\", 1) ]\n        |> Map.ofList\n    countWords \"one,\\ntwo,\\nthree\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Ignore punctuation`` () =\n    let expected = \n        [ (\"car\", 1);\n          (\"carpet\", 1);\n          (\"as\", 1);\n          (\"java\", 1);\n          (\"javascript\", 1) ]\n        |> Map.ofList\n    countWords \"car: carpet as java: javascript!!&@$%^&\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Include numbers`` () =\n    let expected = \n        [ (\"testing\", 2);\n          (\"1\", 1);\n          (\"2\", 1) ]\n        |> Map.ofList\n    countWords \"testing, 1, 2 testing\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Normalize case`` () =\n    let expected = \n        [ (\"go\", 3);\n          (\"stop\", 2) ]\n        |> Map.ofList\n    countWords \"go Go GO Stop stop\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``With apostrophes`` () =\n    let expected = \n        [ (\"first\", 1);\n          (\"don't\", 2);\n          (\"laugh\", 1);\n          (\"then\", 1);\n          (\"cry\", 1);\n          (\"you're\", 1);\n          (\"getting\", 1);\n          (\"it\", 1) ]\n        |> Map.ofList\n    countWords \"'First: don't laugh. Then: don't cry. You're getting it.'\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``With quotations`` () =\n    let expected = \n        [ (\"joe\", 1);\n          (\"can't\", 1);\n          (\"tell\", 1);\n          (\"between\", 1);\n          (\"large\", 2);\n          (\"and\", 1) ]\n        |> Map.ofList\n    countWords \"Joe can't tell between 'large' and large.\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Substrings from the beginning`` () =\n    let expected = \n        [ (\"joe\", 1);\n          (\"can't\", 1);\n          (\"tell\", 1);\n          (\"between\", 1);\n          (\"app\", 1);\n          (\"apple\", 1);\n          (\"and\", 1);\n          (\"a\", 1) ]\n        |> Map.ofList\n    countWords \"Joe can't tell between app, apple and a.\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple spaces not detected as a word`` () =\n    let expected = \n        [ (\"multiple\", 1);\n          (\"whitespaces\", 1) ]\n        |> Map.ofList\n    countWords \" multiple   whitespaces\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Alternating word separators not detected as a word`` () =\n    let expected = \n        [ (\"one\", 1);\n          (\"two\", 1);\n          (\"three\", 1) ]\n        |> Map.ofList\n    countWords \",\\n,one,\\n ,two \\n 'three'\" |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Quotation for word with apostrophe`` () =\n    let expected = \n        [ (\"can\", 1);\n          (\"can't\", 2) ]\n        |> Map.ofList\n    countWords \"can, can't, 'can't'\" |> should equal expected\n\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

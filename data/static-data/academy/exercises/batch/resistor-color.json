@@ -1,0 +1,31 @@
+{
+  "id": "batch:resistor-color",
+  "trackSlug": "batch",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "4c5320a5-1d45-4895-bb8d-4fe735f5d6a2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "basics",
+    "conditionals",
+    "loops",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "@echo off\nsetlocal enabledelayedexpansion\n\nset colorCode=%~1\nset \"result=\"\n\nREM Your code goes here\n\n\necho %result%\n",
+  "example_solution": "@echo off\nsetlocal enabledelayedexpansion\n\nset colorCode=%~1\n\nif not defined colorCode (\n    for %%a IN (black brown red orange yellow green blue violet gray white) DO (\n      echo %%~a\n    )\n    exit /b 1\n)\n\nset \"colors[black]=0\"\nset \"colors[brown]=1\"\nset \"colors[red]=2\"\nset \"colors[orange]=3\"\nset \"colors[yellow]=4\"\nset \"colors[green]=5\"\nset \"colors[blue]=6\"\nset \"colors[violet]=7\"\nset \"colors[gray]=8\"\nset \"colors[white]=9\"\n\nif not defined colors[%colorCode%] (\n    echo invalid color\n    exit /b 1\n)\n\nset \"result=!colors[%colorCode%]!\"\n\necho %result%\n",
+  "test_code": "@echo off\nsetlocal enabledelayedexpansion\nREM ---------------------------------------------------\nREM ResistorColor Unit Testing\nREM \nREM sUnit Testing Framework version: 0.3\nREM ---------------------------------------------------\n\nset isTestRunner=false\nif \"%1\" == \"test-runner\" (\n    set isTestRunner=true\n)\n\nset \"successCount=0\"\nset \"failCount=0\"\n\n:Main\n    REM Initalize result variable\n    set \"slug=ResistorColor\"\n\n    REM --------------------\n    REM Test Case Start \\/\\/\n    REM Resource: https://github.com/exercism/problem-specifications/blob/main/exercises/resistor-color/canonical-data.json\n    REM --------------------\n    set \"expected=0\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: Black\"\n    CALL :Assert \"black\"\n\n    set \"expected=9\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: White\"\n    CALL :Assert \"white\"\n\n    set \"expected=3\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: Orange\"\n    CALL :Assert \"orange\"\n\n    set \"expected=black\\nbrown\\nred\\norange\\nyellow\\ngreen\\nblue\\nviolet\\ngray\\nwhite\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: All colors\"\n    CALL :Assert \"\"\n    \n    REM --------------------\n    REM Test Case End /\\/\\/\\\n    REM --------------------\n\n    CALL :ResolveStatus\n    exit /b %errorlevel%\nREM End of Main\n\nREM ---------------------------------------------------\nREM Assert [..Parameters(up to 9)]\nREM ---------------------------------------------------\nGOTO :End REM Prevents the code below from being executed\n:Assert\nset \"stdout=\"\n\nREM Run the program and capture the output then delete the file\nset filePath=%slug%.bat\nif \"%isTestRunner%\"==\"true\" (\n    set filePath=.meta\\Example.bat\n)\nset batPath=%~dp0\nCALL %batPath%%filePath% %~1 %~2 %~3 %~4 %~5 %~6 %~7 %~8 %~9 > stdout.bin 2>&1\nfor /f \"delims=\" %%A in (stdout.bin) do (\n    set \"line=%%A\"\n    if defined stdout (\n        set \"stdout=!stdout!\\n!line!\"\n    ) else (\n        set \"stdout=!line!\"\n    )\n)\ndel stdout.bin\n\nREM Check if the result is correct\nif \"%stdout%\" == \"%expected%\" (\n    if defined if_success (\n        echo %if_success%\n\n        REM Reset the variable to avoid duplicating the message.\n        set \"if_success=\"\n        set \"if_failed=\"\n    )\n\n    REM If the result is correct, exit with code 0\n    set /a successCount+=1\n    exit /b 0\n) else (\n    if defined if_failed (\n        echo %if_failed%\n\n        REM Reset the variable to avoid duplicating the message.\n        set \"if_success=\"\n        set \"if_failed=\"\n    )\n\n    REM If the result is incorrect, exit with code 1\n    set /a failCount+=1\n    exit /b 1\n)\nGOTO :EOF REM Go back to the line after the call to :Assert\n\n:ResolveStatus\nset \"status=\"\nif %failCount% gtr 0 (\n    REM status: Fail\n    REM message: The test failed.\n    exit /b 1\n\n) else (\n    REM status: Pass\n    exit /b 0\n    \n)\nGOTO :EOF REM Go back to the line after the call to :ExportResultAsJson\n\n:End\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "GroophyLifefor"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "gleam:prime-factors",
+  "trackSlug": "gleam",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "00d1a428-99c4-4175-bee2-e05fc034528f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "ints",
+    "lists",
+    "bools",
+    "case-expressions"
+  ],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn factors(value: Int) -> List(Int) {\n  todo\n}\n",
+  "example_solution": "import gleam/int\nimport gleam/list\n\npub fn factors(value: Int) -> List(Int) {\n  find_factors(value, 2, [], [])\n}\n\nfn find_factors(\n  value: Int,\n  guess: Int,\n  primes: List(Int),\n  factors: List(Int),\n) -> List(Int) {\n  case guess * guess > value {\n    True if value == 1 -> list.sort(factors, int.compare)\n    True -> list.sort([value, ..factors], int.compare)\n    False -> {\n      let next_guess = case guess % 6 {\n        1 -> guess + 4\n        2 -> 3\n        3 -> 5\n        _ -> guess + 2\n      }\n\n      case list.all(primes, fn(prime) { guess % prime != 0 }) {\n        False -> find_factors(value, next_guess, primes, factors)\n        True -> {\n          let #(value, factors) = reduce(value, guess, factors)\n          let primes = [guess, ..primes]\n          find_factors(value, next_guess, primes, factors)\n        }\n      }\n    }\n  }\n}\n\nfn reduce(value: Int, prime: Int, factors: List(Int)) -> #(Int, List(Int)) {\n  case value % prime {\n    0 -> reduce(value / prime, prime, [prime, ..factors])\n    _ -> #(value, factors)\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport prime_factors\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn no_factors_test() {\n  prime_factors.factors(1)\n  |> should.equal([])\n}\n\npub fn prime_number_test() {\n  prime_factors.factors(2)\n  |> should.equal([2])\n}\n\npub fn another_prime_number_test() {\n  prime_factors.factors(3)\n  |> should.equal([3])\n}\n\npub fn square_of_a_prime_test() {\n  prime_factors.factors(9)\n  |> should.equal([3, 3])\n}\n\npub fn product_of_first_prime_test() {\n  prime_factors.factors(4)\n  |> should.equal([2, 2])\n}\n\npub fn cube_of_a_prime_test() {\n  prime_factors.factors(8)\n  |> should.equal([2, 2, 2])\n}\n\npub fn product_of_second_prime_test() {\n  prime_factors.factors(27)\n  |> should.equal([3, 3, 3])\n}\n\npub fn product_of_third_prime_test() {\n  prime_factors.factors(625)\n  |> should.equal([5, 5, 5, 5])\n}\n\npub fn product_of_first_and_second_prime_test() {\n  prime_factors.factors(6)\n  |> should.equal([2, 3])\n}\n\npub fn product_of_primes_and_non_primes_test() {\n  prime_factors.factors(12)\n  |> should.equal([2, 2, 3])\n}\n\npub fn product_of_primes_test() {\n  prime_factors.factors(901_255)\n  |> should.equal([5, 17, 23, 461])\n}\n\npub fn factors_include_a_large_prime_test() {\n  prime_factors.factors(93_819_012_551)\n  |> should.equal([11, 9539, 894_119])\n}\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": null
+}

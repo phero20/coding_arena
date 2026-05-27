@@ -1,0 +1,43 @@
+{
+  "id": "go:allergies",
+  "trackSlug": "go",
+  "slug": "allergies",
+  "name": "Allergies",
+  "uuid": "cbfd4cfb-abe7-45f9-80e4-3de3b2639fc8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.\n\nAn allergy test produces a single numeric score which contains the information about all the allergies the person has (that they were tested for).\n\nThe list of items (and their value) that were tested are:\n\n- eggs (1)\n- peanuts (2)\n- shellfish (4)\n- strawberries (8)\n- tomatoes (16)\n- chocolate (32)\n- pollen (64)\n- cats (128)\n\nSo if Tom is allergic to peanuts and chocolate, he gets a score of 34.\n\nNow, given just that score of 34, your program should be able to say:\n\n- Whether Tom is allergic to any one of those allergens listed above.\n- All the allergens Tom is allergic to.\n\nNote: a given score may include allergens **not** listed above (i.e. allergens that score 256, 512, 1024, etc.).\nYour program should ignore those components of the score.\nFor example, if the allergy score is 257, your program should only report the eggs (1) allergy.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package allergies\n\nfunc Allergies(allergies uint) []string {\n\tpanic(\"Please implement the Allergies function\")\n}\n\nfunc AllergicTo(allergies uint, allergen string) bool {\n\tpanic(\"Please implement the AllergicTo function\")\n}\n",
+  "example_solution": "package allergies\n\nimport \"math\"\n\nvar allergens = []string{\"eggs\", \"peanuts\", \"shellfish\", \"strawberries\", \"tomatoes\", \"chocolate\", \"pollen\", \"cats\"}\n\nfunc Allergies(i uint) []string {\n\tvar result []string\n\tfor _, v := range allergens {\n\t\tif AllergicTo(i, v) {\n\t\t\tresult = append(result, v)\n\t\t}\n\t}\n\treturn result\n}\n\nfunc AllergicTo(i uint, allergen string) bool {\n\tindex := indexOf(allergens, allergen)\n\tx := uint(math.Pow(2.0, float64(index)))\n\treturn (i & x) > 0\n}\n\nfunc indexOf(slice []string, s string) int {\n\tfor p, v := range slice {\n\t\tif v == s {\n\t\t\treturn p\n\t\t}\n\t}\n\treturn -1\n}\n",
+  "test_code": "package allergies\n\nimport (\n\t\"reflect\"\n\t\"testing\"\n)\n\nfunc TestAllergies(t *testing.T) {\n\tfor _, test := range listTests {\n\t\tt.Run(test.description, func(t *testing.T) {\n\t\t\tif actual := Allergies(test.score); !sameSliceElements(actual, test.expected) {\n\t\t\t\tt.Fatalf(\"Allergies(%d) = %#v, want: %#v\", test.score, actual, test.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkAllergies(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range allergicToTests {\n\t\t\tAllergies(test.input.score)\n\t\t}\n\t}\n}\n\nfunc TestAllergicTo(t *testing.T) {\n\tfor _, test := range allergicToTests {\n\t\tt.Run(test.description, func(t *testing.T) {\n\t\t\tactual := AllergicTo(test.input.score, test.input.allergen)\n\t\t\tif actual != test.expected {\n\t\t\t\tt.Fatalf(\"AllergicTo(%d, %q) = %t, want: %t\", test.input.score, test.input.allergen, actual, test.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkAllergicTo(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range allergicToTests {\n\t\t\tAllergicTo(test.input.score, test.input.allergen)\n\t\t}\n\t}\n}\n\n// stringSet is a set of strings\ntype stringSet map[string]bool\n\n// sameSliceElements checks if the slices have the same number of elements\n// regardless of their order\nfunc sameSliceElements(a, b []string) bool {\n\tif len(a) != len(b) {\n\t\treturn false\n\t}\n\n\treturn reflect.DeepEqual(sliceSet(a), sliceSet(b))\n}\n\n// sliceSet creates a new stringSet from a slice of strings\nfunc sliceSet(list []string) stringSet {\n\tset := make(stringSet)\n\n\tfor _, elem := range list {\n\t\tset[elem] = true\n\t}\n\n\treturn set\n}\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "zilkey"
+  ],
+  "contributors": [
+    "aarti",
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "mkoppmann",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "strangeman",
+    "tleen",
+    "tompao",
+    "eklatzer"
+  ]
+}

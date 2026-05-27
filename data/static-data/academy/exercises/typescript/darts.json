@@ -1,0 +1,28 @@
+{
+  "id": "typescript:darts",
+  "trackSlug": "typescript",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "5697c090-4ab3-4f76-b9d2-a82330a27a91",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "export function score(x: unknown, y: unknown): unknown {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function score(x: number, y: number): number {\n  // Use euclidean distance\n  const distanceToDart = Math.sqrt(x * x + y * y)\n\n  // Define points for each section of the target\n  if (distanceToDart > 10) {\n    return 0\n  }\n\n  if (distanceToDart > 5) {\n    return 1\n  }\n\n  if (distanceToDart > 1) {\n    return 5\n  }\n  return 10\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { score } from './darts.ts'\n\ndescribe('Darts', () => {\n  it('Missed target', () => {\n    expect(score(-9, 9)).toEqual(0)\n  })\n\n  xit('On the outer circle', () => {\n    expect(score(0, 10)).toEqual(1)\n  })\n\n  xit('On the middle circle', () => {\n    expect(score(-5, 0)).toEqual(5)\n  })\n\n  xit('On the inner circle', () => {\n    expect(score(0, -1)).toEqual(10)\n  })\n\n  xit('Exactly on centre', () => {\n    expect(score(0, 0)).toEqual(10)\n  })\n\n  xit('Near the centre', () => {\n    expect(score(-0.1, -0.1)).toEqual(10)\n  })\n\n  xit('Just within the inner circle', () => {\n    expect(score(0.7, 0.7)).toEqual(10)\n  })\n\n  xit('Just outside the inner circle', () => {\n    expect(score(0.8, -0.8)).toEqual(5)\n  })\n\n  xit('Just within the middle circle', () => {\n    expect(score(-3.5, 3.5)).toEqual(5)\n  })\n\n  xit('Just outside the middle circle', () => {\n    expect(score(-3.6, -3.6)).toEqual(1)\n  })\n\n  xit('Just within the outer circle', () => {\n    expect(score(-7.0, 7.0)).toEqual(1)\n  })\n\n  xit('Just outside the outer circle', () => {\n    expect(score(7.1, -7.1)).toEqual(0)\n  })\n\n  xit('Asymmetric position between the inner and middle circles', () => {\n    expect(score(0.5, -4)).toEqual(5)\n  })\n})\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "angelikatyborska"
+  ],
+  "contributors": [
+    "SleeplessByte"
+  ]
+}

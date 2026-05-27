@@ -1,0 +1,36 @@
+{
+  "id": "ruby:resistor-color-duo",
+  "trackSlug": "ruby",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "57b0c57e-26a5-4ccf-aaf2-2fefddd918c1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "arrays"
+  ],
+  "prerequisites": [
+    "arrays",
+    "strings",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Resistor Color Duo' exercise in this file. Make the tests in\n`resistor_color_duo_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/resistor-color-duo` directory.\n=end\n",
+  "example_solution": "module ResistorColorDuo\n  COLORS = %w(\n    black\n    brown\n    red\n    orange\n    yellow\n    green\n    blue\n    violet\n    grey\n    white\n  ).freeze\n\n  def self.value(color_bands)\n    color_bands\n      .first(2)\n      .map { |color| COLORS.index(color) }\n      .join\n      .to_i\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'resistor_color_duo'\n\nclass ResistorColorDuoTest < Minitest::Test\n  def test_brown_and_black\n    # skip\n    actual = ResistorColorDuo.value(%w[brown black])\n    expected = 10\n    assert_equal expected, actual\n  end\n\n  def test_blue_and_grey\n    skip\n    actual = ResistorColorDuo.value(%w[blue grey])\n    expected = 68\n    assert_equal expected, actual\n  end\n\n  def test_yellow_and_violet\n    skip\n    actual = ResistorColorDuo.value(%w[yellow violet])\n    expected = 47\n    assert_equal expected, actual\n  end\n\n  def test_white_and_red\n    skip\n    actual = ResistorColorDuo.value(%w[white red])\n    expected = 92\n    assert_equal expected, actual\n  end\n\n  def test_orange_and_orange\n    skip\n    actual = ResistorColorDuo.value(%w[orange orange])\n    expected = 33\n    assert_equal expected, actual\n  end\n\n  def test_ignore_additional_colors\n    skip\n    actual = ResistorColorDuo.value(%w[green brown orange])\n    expected = 51\n    assert_equal expected, actual\n  end\n\n  def test_black_and_brown_one_digit\n    skip\n    actual = ResistorColorDuo.value(%w[black brown])\n    expected = 1\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "pgaspar"
+  ],
+  "contributors": [
+    "iHiD",
+    "kotp",
+    "kytrinyx"
+  ]
+}

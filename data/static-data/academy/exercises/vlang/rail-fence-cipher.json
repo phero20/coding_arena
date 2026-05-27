@@ -1,0 +1,26 @@
+{
+  "id": "vlang:rail-fence-cipher",
+  "trackSlug": "vlang",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "7fbfaabf-a231-4e5c-a005-b4ea5299be63",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn encode(msg string, rails int) string {\n}\n\nfn decode(msg string, rails int) string {\n}\n",
+  "example_solution": "module main\n\nstruct RailIterator {\n\trails int\nmut:\n\tcount int\n\trail  int\n\tdelta int = 1\n}\n\nfn (mut iter RailIterator) next() ?int {\n\tif iter.count == 0 {\n\t\treturn none\n\t}\n\titer.count--\n\n\tdefer {\n\t\titer.rail += iter.delta\n\t\tif iter.rail == 0 || iter.rail == iter.rails - 1 {\n\t\t\titer.delta = -iter.delta\n\t\t}\n\t}\n\treturn iter.rail\n}\n\nfn row_offsets(msg_length int, rails int) []int {\n\tassert rails > 1\n\n\tperiod := 2 * (rails - 1)\n\tcycles := msg_length / period\n\tmut row_lengths := []int{len: rails, init: 2 * cycles}\n\trow_lengths[0] = cycles\n\trow_lengths[rails - 1] = cycles\n\n\titer := RailIterator{\n\t\trails: rails\n\t\tcount: msg_length % period\n\t}\n\tfor rail in iter {\n\t\trow_lengths[rail]++\n\t}\n\n\tmut offsets := []int{len: rails}\n\tmut acc := 0\n\tfor rail in 0 .. rails {\n\t\toffsets[rail] = acc\n\t\tacc += row_lengths[rail]\n\t}\n\tassert acc == msg_length\n\treturn offsets\n}\n\nfn encode(msg string, rails int) string {\n\tmut offsets := row_offsets(msg.len, rails)\n\tmut result := []u8{len: msg.len}\n\n\titer := RailIterator{\n\t\trails: rails\n\t\tcount: msg.len\n\t}\n\tmut index := 0\n\tfor rail in iter {\n\t\tresult[offsets[rail]] = msg[index]\n\t\toffsets[rail]++\n\t\tindex++\n\t}\n\treturn result.bytestr()\n}\n\nfn decode(msg string, rails int) string {\n\tmut offsets := row_offsets(msg.len, rails)\n\tmut result := []u8{len: msg.len}\n\n\titer := RailIterator{\n\t\trails: rails\n\t\tcount: msg.len\n\t}\n\tmut index := 0\n\tfor rail in iter {\n\t\tresult[index] = msg[offsets[rail]]\n\t\toffsets[rail]++\n\t\tindex++\n\t}\n\treturn result.bytestr()\n}\n",
+  "test_code": "module main\n\nfn test_encode_with_two_rails() {\n\tmessage := 'XOXOXOXOXOXOXOXOXO'\n\tencoded := 'XXXXXXXXXOOOOOOOOO'\n\tassert encode(message, 2) == encoded\n}\n\nfn test_encode_with_three_rails() {\n\tmessage := 'WEAREDISCOVEREDFLEEATONCE'\n\tencoded := 'WECRLTEERDSOEEFEAOCAIVDEN'\n\tassert encode(message, 3) == encoded\n}\n\nfn test_encode_with_ending_in_the_middle() {\n\tmessage := 'EXERCISES'\n\tencoded := 'ESXIEECSR'\n\tassert encode(message, 4) == encoded\n}\n\nfn test_decode_with_three_rails() {\n\tmessage := 'TEITELHDVLSNHDTISEIIEA'\n\tdecoded := 'THEDEVILISINTHEDETAILS'\n\tassert decode(message, 3) == decoded\n}\n\nfn test_decode_with_five_rails() {\n\tmessage := 'EIEXMSMESAORIWSCE'\n\tdecoded := 'EXERCISMISAWESOME'\n\tassert decode(message, 5) == decoded\n}\n\nfn test_decode_with_six_rails() {\n\tmessage := '133714114238148966225439541018335470986172518171757571896261'\n\tdecoded := '112358132134558914423337761098715972584418167651094617711286'\n\tassert decode(message, 6) == decoded\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

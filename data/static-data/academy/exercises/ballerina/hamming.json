@@ -1,0 +1,26 @@
+{
+  "id": "ballerina:hamming",
+  "trackSlug": "ballerina",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "c39b8328-41da-4408-b0eb-7a020a67aa17",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "public function distance(string strand1, string strand2) returns int|error {\n    // TODO: implement this function\n}\n",
+  "example_solution": "public function distance(string strand1, string strand2) returns int|error {\n    if strand1.length() != strand2.length() {\n        return error(\"Unequal strand lengths\");\n    }\n\n    int dist = 0;\n\n    foreach int i in 0 ..< strand1.length() {\n        if strand1[i] != strand2[i] {\n            dist += 1;\n        }\n    }\n\n    return dist;\n}\n",
+  "test_code": "import ballerina/test;\n\n@test:Config\nfunction emptyStrands() {\n    test:assertEquals(distance(\"\", \"\"), 0);\n}\n\n@test:Config {\n    enable: false\n}\nfunction singleLetterIdenticalStrands() {\n    test:assertEquals(distance(\"A\", \"A\"), 0);\n}\n\n@test:Config {\n    enable: false\n}\nfunction singleLetterDifferentStrands() {\n    test:assertEquals(distance(\"G\", \"T\"), 1);\n}\n\n@test:Config {\n    enable: false\n}\nfunction longIdenticalStrands() {\n    test:assertEquals(distance(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\"), 0);\n}\n\n@test:Config {\n    enable: false\n}\nfunction longDifferentStrands() {\n    test:assertEquals(distance(\"GGACGGATTCTG\", \"AGGACGGATTCT\"), 9);\n}\n\n@test:Config {\n    enable: false\n}\nfunction disallowFirstStrandLonger() {\n    int|error result = distance(\"AATG\", \"AAA\");\n    if result is error {\n        test:assertEquals(result.message(), \"Unequal strand lengths\");\n    } else {\n        test:assertFail(\"Expected an error\");\n    }\n}\n\n@test:Config {\n    enable: false\n}\nfunction disallowSecondStrandLonger() {\n    int|error result = distance(\"ATA\", \"AGTG\");\n    if result is error {\n        test:assertEquals(result.message(), \"Unequal strand lengths\");\n    } else {\n        test:assertFail(\"Expected an error\");\n    }\n}\n\n@test:Config {\n    enable: false\n}\nfunction disallowEmptyFirstStrand() {\n    int|error result = distance(\"\", \"G\");\n    if result is error {\n        test:assertEquals(result.message(), \"Unequal strand lengths\");\n    } else {\n        test:assertFail(\"Expected an error\");\n    }\n}\n\n@test:Config {\n    enable: false\n}\nfunction disallowEmptySecondStrand() {\n    int|error result = distance(\"G\", \"\");\n    if result is error {\n        test:assertEquals(result.message(), \"Unequal strand lengths\");\n    } else {\n        test:assertFail(\"Expected an error\");\n    }\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

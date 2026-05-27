@@ -1,0 +1,28 @@
+{
+  "id": "tcl:atbash-cipher",
+  "trackSlug": "tcl",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "7ff7cbfb-3191-4fe6-abfd-a774e9a1a108",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "namespace eval atbash {\n    namespace export encode decode\n    namespace ensemble create\n\n    proc encode {} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n\n    proc decode {} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n}\n",
+  "example_solution": "namespace eval atbash {\n    namespace export encode decode\n    namespace ensemble create\n\n    variable map {\n        a z   b y   c x   d w   e v   f u   g t   h s   i r   \n        j q   k p   l o   m n   n m   o l   p k   q j   r i\n        s h   t g   u f   v e   w d   x c   y b   z a\n    }\n\n    proc encode {phrase} {\n        set encoded [transliterate $phrase]\n        return [grouped $encoded]\n    }\n\n    proc decode {phrase} {\n        return [transliterate $phrase]\n    }\n\n    proc transliterate {phrase} {\n        variable map\n        # prepare the input\n        set input [regsub -all {[^[:alnum:]]} $phrase {}]\n        set input [string tolower $input]\n        # and perform the translation\n        return [string map $map $input]\n    }\n    \n    proc grouped {str {size 5}} {\n        return [join [regexp -inline -all \".{1,$size}\" $str] \" \"]\n    }\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"atbash-cipher.tcl\"\n\n# encode\n\ntest atbash-1.1 \"encode yes\" -body {\n    atbash encode \"yes\"\n} -returnCodes ok -result \"bvh\"\n\nskip atbash-1.2\ntest atbash-1.2 \"encode no\" -body {\n    atbash encode \"no\"\n} -returnCodes ok -result \"ml\"\n\nskip atbash-1.3\ntest atbash-1.3 \"encode OMG\" -body {\n    atbash encode \"OMG\"\n} -returnCodes ok -result \"lnt\"\n\nskip atbash-1.4\ntest atbash-1.4 \"encode spaces\" -body {\n    atbash encode \"O M G\"\n} -returnCodes ok -result \"lnt\"\n\nskip atbash-1.5\ntest atbash-1.5 \"encode mindblowingly\" -body {\n    atbash encode \"mindblowingly\"\n} -returnCodes ok -result \"nrmwy oldrm tob\"\n\nskip atbash-1.6\ntest atbash-1.6 \"encode numbers\" -body {\n    atbash encode \"Testing,1 2 3, testing.\"\n} -returnCodes ok -result \"gvhgr mt123 gvhgr mt\"\n\nskip atbash-1.7\ntest atbash-1.7 \"encode deep thought\" -body {\n    atbash encode \"Truth is fiction.\"\n} -returnCodes ok -result \"gifgs rhurx grlm\"\n\nskip atbash-1.8\ntest atbash-1.8 \"encode all the letters\" -body {\n    atbash encode \"The quick brown fox jumps over the lazy dog.\"\n} -returnCodes ok -result \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n\n# decode\n\nskip atbash-2.1\ntest atbash-2.1 \"decode exercism\" -body {\n    atbash decode \"vcvix rhn\"\n} -returnCodes ok -result \"exercism\"\n\nskip atbash-2.2\ntest atbash-2.2 \"decode a sentence\" -body {\n    atbash decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"\n} -returnCodes ok -result \"anobstacleisoftenasteppingstone\"\n\nskip atbash-2.3\ntest atbash-2.3 \"decode numbers\" -body {\n    atbash decode \"gvhgr mt123 gvhgr mt\"\n} -returnCodes ok -result \"testing123testing\"\n\nskip atbash-2.4\ntest atbash-2.4 \"decode all the letters\" -body {\n    atbash decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n} -returnCodes ok -result \"thequickbrownfoxjumpsoverthelazydog\"\n\nskip atbash-2.5\ntest atbash-2.5 \"decode with too many spaces\" -body {\n    atbash decode \"vc vix    r hn\"\n} -returnCodes ok -result \"exercism\"\n\nskip atbash-2.6\ntest atbash-2.6 \"decode with no spaces\" -body {\n    atbash decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"\n} -returnCodes ok -result \"anobstacleisoftenasteppingstone\"\n\ncleanupTests\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

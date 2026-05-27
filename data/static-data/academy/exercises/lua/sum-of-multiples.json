@@ -1,0 +1,28 @@
+{
+  "id": "lua:sum-of-multiples",
+  "trackSlug": "lua",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "da6a0c52-5943-412e-8649-8965ae9da5cf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "return function(numbers)\nend\n",
+  "example_solution": "return function(numbers)\n  return {\n    to = function(limit)\n      local multiples = {}\n      local sum = 0\n\n      for candidate = 1, limit - 1 do\n        for _, number in ipairs(numbers) do\n          if number ~= 0 and candidate % number == 0 then\n            multiples[candidate] = true\n          end\n        end\n      end\n\n      for multiple in pairs(multiples) do\n        sum = sum + multiple\n      end\n\n      return sum\n    end\n  }\nend\n",
+  "test_code": "local sum_of_multiples = require('sum-of-multiples')\n\ndescribe('sum-of-multiples', function()\n  it('no multiples within limit', function()\n    assert.equal(0, sum_of_multiples({ 3, 5 }).to(1))\n  end)\n\n  it('one factor has multiples within limit', function()\n    assert.equal(3, sum_of_multiples({ 3, 5 }).to(4))\n  end)\n\n  it('more than one multiple within limit', function()\n    assert.equal(9, sum_of_multiples({ 3 }).to(7))\n  end)\n\n  it('more than one factor with multiples within limit', function()\n    assert.equal(23, sum_of_multiples({ 3, 5 }).to(10))\n  end)\n\n  it('each multiple is only counted once', function()\n    assert.equal(2318, sum_of_multiples({ 3, 5 }).to(100))\n  end)\n\n  it('a much larger limit', function()\n    assert.equal(233168, sum_of_multiples({ 3, 5 }).to(1000))\n  end)\n\n  it('three factors', function()\n    assert.equal(51, sum_of_multiples({ 7, 13, 17 }).to(20))\n  end)\n\n  it('factors not relatively prime', function()\n    assert.equal(30, sum_of_multiples({ 4, 6 }).to(15))\n  end)\n\n  it('some pairs of factors relatively prime and some not', function()\n    assert.equal(4419, sum_of_multiples({ 5, 6, 8 }).to(150))\n  end)\n\n  it('one factor is a multiple of another', function()\n    assert.equal(275, sum_of_multiples({ 5, 25 }).to(51))\n  end)\n\n  it('much larger factors', function()\n    assert.equal(2203160, sum_of_multiples({ 43, 47 }).to(10000))\n  end)\n\n  it('all numbers are multiples of 1', function()\n    assert.equal(4950, sum_of_multiples({ 1 }).to(100))\n  end)\n\n  it('no factors means an empty sum', function()\n    assert.equal(0, sum_of_multiples({}).to(10000))\n  end)\n\n  it('the only multiple of 0 is 0', function()\n    assert.equal(0, sum_of_multiples({ 0 }).to(1))\n  end)\n\n  it('the factor 0 does not affect the sum of multiples of other factors', function()\n    assert.equal(3, sum_of_multiples({ 3, 0 }).to(4))\n  end)\n\n  it('solutions using include-exclude must extend to cardinality greater than 3', function()\n    assert.equal(39614537, sum_of_multiples({ 2, 3, 5, 7, 11 }).to(10000))\n  end)\nend)\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

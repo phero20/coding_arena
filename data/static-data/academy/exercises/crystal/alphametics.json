@@ -1,0 +1,30 @@
+{
+  "id": "crystal:alphametics",
+  "trackSlug": "crystal",
+  "slug": "alphametics",
+  "name": "Alphametics",
+  "uuid": "d8a1b1c8-41ba-43a9-a4d6-b8325e438dc6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an alphametics puzzle, find the correct solution.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "conditionals",
+    "hash",
+    "char"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an alphametics puzzle, find the correct solution.\n\n[Alphametics][alphametics] is a puzzle where letters in words are replaced with numbers.\n\nFor example `SEND + MORE = MONEY`:\n\n```text\n  S E N D\n  M O R E +\n-----------\nM O N E Y\n```\n\nReplacing these with valid numbers gives:\n\n```text\n  9 5 6 7\n  1 0 8 5 +\n-----------\n1 0 6 5 2\n```\n\nThis is correct because every letter is replaced by a different number and the words, translated into numbers, then make a valid sum.\n\nEach letter must represent a different digit, and the leading digit of a multi-digit number must not be zero.\n\n[alphametics]: https://en.wikipedia.org/wiki/Alphametics\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Alphametics\n  def self.solve(puzzle : String) : Hash(Char, Int32)\n    # Write your code for the 'Alphametics' exercise in this file.\n  end\nend\n",
+  "example_solution": "module Alphametics\n  def self.solve(puzzle : String) : Hash(Char, Int32)\n    recur(equations(puzzle), leading_chars(puzzle), Hash(Char, Int32).new, (0..9).to_a, 0) || Hash(Char, Int32).new\n  end\n\n  record Equation, letters : Array(Char), addends : Hash(Char, Int32), result : Char\n\n  def self.recur(eqs, leading_chars, current_map, available, carry)\n    return current_map if eqs.empty? && carry.zero?\n\n    remaining_letters = eqs[0].letters - current_map.keys\n\n    available.permutations(remaining_letters.size).each do |coefficients|\n      map = remaining_letters.zip(coefficients).to_h\n\n      next if leading_chars.any? { |c| map[c]? && map[c] == 0 }\n\n      map.merge!(current_map)\n      value = eqs[0].addends.map { |addend, count| map[addend] * count }.sum + carry\n\n      if value % 10 == map[eqs[0].result]\n        if result = recur(eqs[1..-1], leading_chars, map, available - map.values, value // 10)\n          return result\n        end\n      end\n    end\n\n    nil\n  end\n\n  def self.leading_chars(puzzle)\n    (\" \" + puzzle).scan(/ ([A-Z])/).map { |s| s[1][0] }.uniq\n  end\n\n  def self.equations(puzzle)\n    addends, result = puzzle.split(\"==\")\n    addends = addends.split(\"+\").map { |a| a.strip.chars.reverse }\n    result = result.strip.chars.reverse\n\n    (0...result.size).map do |i|\n      column_addends = addends.compact_map(&.[i]?).tally\n      Equation.new((column_addends.keys + [result[i]]).uniq, column_addends, result[i])\n    end\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Alphametics\" do\n  it \"puzzle with three letters\" do\n    puzzle = \"I + BB == ILL\"\n    solution = {'I' => 1, 'B' => 9, 'L' => 0}\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"solution must have unique value for each letter\" do\n    puzzle = \"A == B\"\n    solution = Hash(Char, Int32).new\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"leading zero solution is invalid\" do\n    puzzle = \"ACA + DD == BD\"\n    solution = Hash(Char, Int32).new\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"puzzle with two digits final carry\" do\n    puzzle = \"A + A + A + A + A + A + A + A + A + A + A + B == BCC\"\n    solution = {'A' => 9, 'B' => 1, 'C' => 0}\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"puzzle with four letters\" do\n    puzzle = \"AS + A == MOM\"\n    solution = {'A' => 9, 'S' => 2, 'M' => 1, 'O' => 0}\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"puzzle with six letters\" do\n    puzzle = \"NO + NO + TOO == LATE\"\n    solution = {'N' => 7, 'O' => 4, 'T' => 9, 'L' => 1, 'A' => 0, 'E' => 2}\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"puzzle with seven letters\" do\n    puzzle = \"HE + SEES + THE == LIGHT\"\n    solution = {'E' => 4, 'G' => 2, 'H' => 5, 'I' => 0, 'L' => 1, 'S' => 9, 'T' => 7}\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"puzzle with eight letters\" do\n    puzzle = \"SEND + MORE == MONEY\"\n    solution = {'S' => 9, 'E' => 5, 'N' => 6, 'D' => 7, 'M' => 1, 'O' => 0, 'R' => 8, 'Y' => 2}\n    Alphametics.solve(puzzle).should eq(solution)\n  end\n\n  pending \"puzzle with ten letters\" do\n    puzzle = \"AND + A + STRONG + OFFENSE + AS + A + GOOD == DEFENSE\"\n    solution = {\n      'A' => 5, 'D' => 3, 'E' => 4, 'F' => 7, 'G' => 8, 'N' => 0, 'O' => 2, 'R' => 1, 'S' => 6, 'T' => 9,\n    }\n    Alphametics.solve(puzzle).should eq(solution)\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": null
+}

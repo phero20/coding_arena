@@ -1,0 +1,26 @@
+{
+  "id": "uiua:matching-brackets",
+  "trackSlug": "uiua",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "e8f93b1b-ab63-468e-9e9f-83584152dd7a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "# Determine if a string has matching (balanced) brackets.\n# Result | String\nIsPaired ← |1 ⊙(⍤ \"Please implement IsPaired\" 0)\n",
+  "example_solution": "Sanitize ← ▽∈\"[](){}\".\nUnpair   ← ⍥(▽⊸(¬/↥±⊂⊟⊃(⦷\"[]\"|⦷\"()\"|⦷\"{}\"))) ∞\nIsPaired ← =0⧻ Unpair Sanitize\n",
+  "test_code": "~ \"matching-brackets.ua\" ~ IsPaired\n\n# paired square brackets\n⍤⤙≍ 1 IsPaired \"[]\"\n\n# empty string\n⍤⤙≍ 1 IsPaired \"\"\n\n# unpaired brackets\n⍤⤙≍ 0 IsPaired \"[[\"\n\n# wrong ordered brackets\n⍤⤙≍ 0 IsPaired \"}{\"\n\n# wrong closing bracket\n⍤⤙≍ 0 IsPaired \"{]\"\n\n# paired with whitespace\n⍤⤙≍ 1 IsPaired \"{ }\"\n\n# partially paired brackets\n⍤⤙≍ 0 IsPaired \"{[])\"\n\n# simple nested brackets\n⍤⤙≍ 1 IsPaired \"{[]}\"\n\n# several paired brackets\n⍤⤙≍ 1 IsPaired \"{}[]\"\n\n# paired and nested brackets\n⍤⤙≍ 1 IsPaired \"([{}({}[])])\"\n\n# unopened closing brackets\n⍤⤙≍ 0 IsPaired \"{[)][]}\"\n\n# unpaired and nested brackets\n⍤⤙≍ 0 IsPaired \"([{])\"\n\n# paired and wrong nested brackets\n⍤⤙≍ 0 IsPaired \"[({]})\"\n\n# paired and wrong nested brackets but innermost are correct\n⍤⤙≍ 0 IsPaired \"[({}])\"\n\n# paired and incomplete brackets\n⍤⤙≍ 0 IsPaired \"{}[\"\n\n# too many closing brackets\n⍤⤙≍ 0 IsPaired \"[]]\"\n\n# early unexpected brackets\n⍤⤙≍ 0 IsPaired \")()\"\n\n# early mismatched brackets\n⍤⤙≍ 0 IsPaired \"{)()\"\n\n# math expression\n⍤⤙≍ 1 IsPaired \"(((185 + 223.85) * 15) - 543)/2\"\n\n# complex latex expression\n⍤⤙≍ 1 IsPaired \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\"\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

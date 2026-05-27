@@ -1,0 +1,26 @@
+{
+  "id": "tcl:eliuds-eggs",
+  "trackSlug": "tcl",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "363f80a2-0fdb-4e8d-a3cf-048d5b8e9a3d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "proc eggCount {number} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc eggCount {number} {\n    # as a one-liner: num -> string -> list -> num\n    # tcl::mathop::+ {*}[split [format %b $number] \"\"]\n\n    # arithmetically\n    set count 0\n    while {$number > 0} {\n        incr count [expr {$number & 1}]\n        set number [expr {$number >> 1}]\n    }\n    return $count\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"eliuds-eggs.tcl\"\n\ntest eliuds-eggs-1 \"0 eggs\" -body {\n    eggCount 0\n} -returnCodes ok -result 0\n\nskip eliuds-eggs-2\ntest eliuds-eggs-2 \"1 egg\" -body {\n    eggCount 16\n} -returnCodes ok -result 1\n\nskip eliuds-eggs-3\ntest eliuds-eggs-3 \"4 eggs\" -body {\n    eggCount 89\n} -returnCodes ok -result 4\n\nskip eliuds-eggs-4\ntest eliuds-eggs-4 \"13 eggs\" -body {\n    eggCount 2000000000\n} -returnCodes ok -result 13\n\ncleanupTests\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

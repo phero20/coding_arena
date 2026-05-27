@@ -1,0 +1,35 @@
+{
+  "id": "swift:trinary",
+  "trackSlug": "swift",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "8b376ef9-ad94-4623-8d0f-e2d7bb6c364a",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its\ndecimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the\nvalue 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place. The second to last\nis the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the\nconversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//Solution goes in Sources\n",
+  "example_solution": "import Foundation\n\nextension Int {\n    init(_ value: Trinary) {\n        self  = value.toDecimal\n    }\n}\nstruct Trinary {\n    private var stringValue = \"\"\n    fileprivate var toDecimal: Int = 0\n    private func isValidTrinary() -> Bool {\n        return (Int(stringValue) ?? -1) > -1 ? true : false\n    }\n\n    private func tri2int(_ input: String) -> Int {\n        let orderedInput = Array(input.reversed())\n        let enumarated = orderedInput.enumerated()\n\n        var tempInt: Int = 0\n        for (inx, each) in enumarated {\n            let tempCharInt = Int(\"\\(each)\") ?? 0\n            let tempTriPower = Int(pow(Double(3), Double(inx)))\n            tempInt += tempTriPower * tempCharInt\n        }\n        return tempInt\n    }\n    init( _ sv: String) {\n        self.stringValue = sv\n\n        if isValidTrinary() {\n            self.toDecimal = tri2int(sv)\n        }\n\n    }\n\n}\n",
+  "test_code": "import XCTest\n@testable import Trinary\n\nclass TrinaryTests: XCTestCase {\n    func testTrinary1IsDecimal1() {\n        XCTAssertEqual(1, Int(Trinary(\"1\")))\n    }\n\n    func testTrinary2IsDecimal2() {\n        XCTAssertEqual(2, Int(Trinary(\"2\")))\n    }\n\n    func testTrinary10IsDecimal3() {\n        XCTAssertEqual(3, Int(Trinary(\"10\")))\n    }\n\n    func testTrinary11IsDecimal4() {\n        XCTAssertEqual(4, Int(Trinary(\"11\")))\n    }\n\n    func testTrinary100IsDecimal9() {\n        XCTAssertEqual(9, Int(Trinary(\"100\")))\n    }\n\n    func testTrinary112IsDecimal14() {\n        XCTAssertEqual(14, Int(Trinary(\"112\")))\n    }\n\n    func testTrinary222Is26() {\n        XCTAssertEqual(26, Int(Trinary(\"222\")))\n    }\n\n    func testTrinary1122000120Is32091() {\n        XCTAssertEqual(32091, Int(Trinary(\"1122000120\")))\n    }\n\n    func testInvalidTrinaryIsDecimal0() {\n        XCTAssertEqual(0, Int(Trinary(\"carrot\")))\n    }\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "bhargavg",
+    "hankturowski",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "nickkjordan",
+    "robtimp",
+    "ThomasHaz"
+  ]
+}

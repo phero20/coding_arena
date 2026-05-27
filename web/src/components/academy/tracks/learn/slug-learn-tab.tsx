@@ -9,11 +9,40 @@ import { useCurriculumLayout } from "./use-curriculum-layout";
 import { TimelineView } from "./timeline-view";
 import { GraphView } from "./graph-view";
 import { ConceptView } from "./concept-view";
+import { Badge } from "@/components/ui/badge";
 
-export function SlugLearnTab({ config }: { config: TrackConfigResponse }) {
+export function SlugLearnTab({ config, solvedExercises = [] }: { config: TrackConfigResponse, solvedExercises?: string[] }) {
   const { levels, edges, showGraph } = useCurriculumLayout(config);
   const [activeTab, setActiveTab] = useState<string>("timeline");
   const [activeConcepts, setActiveConcepts] = useState<{ slug: string; name: string }[]>([]);
+
+  const conceptProgressMap = React.useMemo(() => {
+    const map: Record<string, { status: "COMPLETED" | "IN_PROGRESS" | "LOCKED", progress: number, total: number }> = {};
+    if (!config.concepts) return map;
+
+    config.concepts.forEach(concept => {
+      const requiredExercises = config.exercises?.concept?.filter(ex => ex.concepts?.includes(concept.slug)) || [];
+      const total = requiredExercises.length;
+      let solvedCount = 0;
+      
+      requiredExercises.forEach(ex => {
+        if (solvedExercises.includes(ex.slug)) {
+          solvedCount++;
+        }
+      });
+
+      let status: "COMPLETED" | "IN_PROGRESS" | "LOCKED" = "LOCKED";
+      if (total > 0 && solvedCount === total) {
+        status = "COMPLETED";
+      } else if (solvedCount > 0) {
+        status = "IN_PROGRESS";
+      }
+
+      map[concept.slug] = { status, progress: solvedCount, total };
+    });
+
+    return map;
+  }, [config.concepts, config.exercises?.concept, solvedExercises]);
 
   const handleConceptClick = (slug: string, name: string) => {
     setActiveConcepts((prev) => {
@@ -82,12 +111,13 @@ export function SlugLearnTab({ config }: { config: TrackConfigResponse }) {
               >
                 <BookOpen className="w-4 h-4" /> 
                 <span className="capitalize">{concept.name}</span>
-                <div 
-                  className="ml-1 p-0.5 rounded-sm hover:bg-muted-foreground/20 text-muted-foreground transition-colors"
+                <Badge 
+                variant="outline"
+                  className="ml-1 p-0.5 rounded-sm hover:bg-destructive text-muted-foreground transition-colors"
                   onClick={(e) => handleCloseConcept(e, concept.slug)}
                 >
                   <X className="w-3.5 h-3.5" />
-                </div>
+                </Badge>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -95,19 +125,23 @@ export function SlugLearnTab({ config }: { config: TrackConfigResponse }) {
 
         {/* Content Panes */}
         <TabsContent value="timeline" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-          <TimelineView levels={levels} onConceptClick={handleConceptClick} />
+          <TimelineView levels={levels} onConceptClick={handleConceptClick} conceptProgressMap={conceptProgressMap} />
         </TabsContent>
         
         {showGraph && (
           <TabsContent value="graph" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <GraphView levels={levels} edges={edges} onConceptClick={handleConceptClick} />
+            <GraphView levels={levels} edges={edges} onConceptClick={handleConceptClick} conceptProgressMap={conceptProgressMap} />
           </TabsContent>
         )}
 
         {/* Dynamic Concept Content Panes */}
         {activeConcepts.map((concept) => (
           <TabsContent key={`content-${concept.slug}`} value={concept.slug} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-            <ConceptView trackSlug={config.slug} conceptSlug={concept.slug} />
+            <ConceptView
+              trackSlug={config.slug}
+              conceptSlug={concept.slug}
+              exercises={config.exercises?.concept}
+            />
           </TabsContent>
         ))}
         </Tabs>

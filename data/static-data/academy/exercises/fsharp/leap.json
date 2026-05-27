@@ -1,0 +1,39 @@
+{
+  "id": "fsharp:leap",
+  "trackSlug": "fsharp",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "66d974b5-18fc-4993-b5f2-7beda4f4afa3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "numbers"
+  ],
+  "prerequisites": [
+    "if-then-else-expressions",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "module Leap\n\nlet leapYear (year: int): bool = failwith \"You need to implement this function.\"",
+  "example_solution": "module Leap\n\nlet leapYear (year: int) = year % 4 = 0 && (year % 400 = 0 || year % 100 <> 0)",
+  "test_code": "module LeapTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Leap\n\n[<Fact>]\nlet ``Year not divisible by 4 in common year`` () =\n    leapYear 2015 |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 2, not divisible by 4 in common year`` () =\n    leapYear 1970 |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 4, not divisible by 100 in leap year`` () =\n    leapYear 1996 |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 4 and 5 is still a leap year`` () =\n    leapYear 1960 |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 100, not divisible by 400 in common year`` () =\n    leapYear 2100 |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 100 but not by 3 is still not a leap year`` () =\n    leapYear 1900 |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 400 is leap year`` () =\n    leapYear 2000 |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 400 but not by 125 is still a leap year`` () =\n    leapYear 2400 |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Year divisible by 200, not divisible by 400 in common year`` () =\n    leapYear 1800 |> should equal false\n\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "jwood803"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

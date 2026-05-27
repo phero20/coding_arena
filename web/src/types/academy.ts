@@ -45,3 +45,90 @@ export interface TrackConceptResponse {
   introduction: string;
   about: string;
 }
+
+export interface TrackExerciseResponse {
+  slug: string;
+  name: string;
+  uuid: string;
+  type: string;
+  status: string | null;
+  blurb?: string;
+  difficulty?: number;
+  concepts?: string[] | null;
+  practices?: string[];
+  prerequisites?: string[];
+  instructions?: string;
+  introduction?: string | null;
+  hints?: string | null;
+  starter_code?: string;
+  example_solution?: string;
+  test_code?: string;
+  source?: string;
+  source_url?: string;
+  authors?: string[];
+  contributors?: string[] | null;
+  [key: string]: any;
+}
+
+
+export interface PracticeExercise {
+  slug: string;
+  name: string;
+  blurb?: string;
+  difficulty?: number;
+  practices?: string[];
+  prerequisites?: string[];
+  completed?: boolean;
+  iconSrc?: string;
+  status?: string;
+}
+
+export interface PracticeProblemCardRenderProps {
+  langSlug: string;
+  slug: string;
+  name: string;
+  blurb?: string;
+  iconSrc?: string;
+  difficulty?: number;
+  practices?: string[];
+  prerequisites?: string[];
+  completed?: boolean;
+}
+
+export interface PracticeProblemCardProps {
+  exercise: PracticeExercise;
+  className?: string;
+}
+
+export interface TrackExercises {
+  concept?: any[];
+  practice?: PracticeExercise[];
+}
+
+export interface PracticeProblemsSectionProps {
+  exercises?: TrackExercises | PracticeExercise[];
+  solvedExercises?: string[];
+  className?: string;
+}
+
+export interface RunAcademyExerciseDto {
+  userCode: string;
+  testCode: string;
+}
+
+export interface TestFailure {
+  name: string;
+  message: string;
+  output?: string;
+}
+
+export interface ExerciseRunResult {
+  passed: boolean;
+  totalTests: number;
+  passedTests: number;
+  failedTests: number;
+  compileError: string | null;
+  failures: TestFailure[];
+  rawOutput: string;
+  isRawExecution?: boolean;
+}

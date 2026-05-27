@@ -1,0 +1,41 @@
+{
+  "id": "ruby:proverb",
+  "trackSlug": "ruby",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "3c5193ab-6471-4be2-9d24-1d2b51ad822a",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "arrays",
+    "loops"
+  ],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Proverb' exercise in this file. Make the tests in\n`proverb_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/proverb` directory.\n=end\n",
+  "example_solution": "class Proverb\n  attr_reader :chain, :options\n\n  def initialize(*chain)\n    @options = if chain.last.is_a? Hash\n                 chain.pop\n               else\n                 {}\n               end\n    @chain = chain\n  end\n\n  def to_s\n    return \"\" if chain.empty?\n    return conclusion[1..] if chain.size <= 1\n\n    chain_of_events + conclusion\n  end\n\n  def chain_of_events\n    causes_and_effects.map do |cause, effect|\n      consequence(cause, effect)\n    end.join(\"\\n\")\n  end\n\n  def causes_and_effects\n    chain.each_cons(2)\n  end\n\n  def consequence(cause, effect)\n    format('For want of a %s the %s was lost.', cause, effect)\n  end\n\n  def qualifier\n    options[:qualifier] ? '%s ' % options[:qualifier] : ''\n  end\n\n  def conclusion\n    format(\"\\nAnd all for the want of a %s%s.\", qualifier, chain.first)\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'proverb'\n\nclass ProverbTest < Minitest::Test\n  def test_zero_pieces\n    ## skip\n    chain = %w[]\n    proverb = Proverb.new(*chain)\n    actual = proverb.to_s\n    expected = \"\"\n    assert_equal expected, actual\n  end\n\n  def test_one_piece\n    # skip\n    chain = %w[nail]\n    proverb = Proverb.new(*chain)\n    actual = proverb.to_s\n    expected = \"And all for the want of a nail.\"\n    assert_equal expected, actual\n  end\n\n  def test_two_pieces\n    # skip\n    chain = %w[nail shoe]\n    proverb = Proverb.new(*chain)\n    actual = proverb.to_s\n    expected = \"For want of a nail the shoe was lost.\\n\" \\\n      \"And all for the want of a nail.\"\n    assert_equal expected, actual\n  end\n\n  def test_three_pieces\n    # skip\n    chain = %w[nail shoe horse]\n    proverb = Proverb.new(*chain)\n    actual = proverb.to_s\n    expected = \"For want of a nail the shoe was lost.\\n\" \\\n      \"For want of a shoe the horse was lost.\\n\" \\\n      \"And all for the want of a nail.\"\n    assert_equal expected, actual\n  end\n\n  def test_full_proverb\n    # skip\n    chain = %w[nail shoe horse rider message battle kingdom]\n    proverb = Proverb.new(*chain)\n    actual = proverb.to_s\n    expected = \"For want of a nail the shoe was lost.\\n\" \\\n      \"For want of a shoe the horse was lost.\\n\" \\\n      \"For want of a horse the rider was lost.\\n\" \\\n      \"For want of a rider the message was lost.\\n\" \\\n      \"For want of a message the battle was lost.\\n\" \\\n      \"For want of a battle the kingdom was lost.\\n\" \\\n      \"And all for the want of a nail.\"\n    assert_equal expected, actual\n  end\n\n  def test_four_pieces_modernized\n    # skip\n    chain = %w[pin gun soldier battle]\n    proverb = Proverb.new(*chain)\n    actual = proverb.to_s\n    expected = \"For want of a pin the gun was lost.\\n\" \\\n      \"For want of a gun the soldier was lost.\\n\" \\\n      \"For want of a soldier the battle was lost.\\n\" \\\n      \"And all for the want of a pin.\"\n    assert_equal expected, actual\n  end\n\n  def test_an_optional_qualifier_in_the_final_consequence\n    # skip\n    chain = %w[nail shoe horse rider message battle kingdom]\n    proverb = Proverb.new(*chain, qualifier: 'horseshoe')\n    actual = proverb.to_s\n    expected = \"For want of a nail the shoe was lost.\\n\" \\\n      \"For want of a shoe the horse was lost.\\n\" \\\n      \"For want of a horse the rider was lost.\\n\" \\\n      \"For want of a rider the message was lost.\\n\" \\\n      \"For want of a message the battle was lost.\\n\" \\\n      \"For want of a battle the kingdom was lost.\\n\" \\\n      \"And all for the want of a horseshoe nail.\"\n    assert_equal expected, actual\n  end\n\n  def test_proverb_is_same_each_time\n    # skip\n    chain = %w[nail shoe]\n    proverb = Proverb.new(*chain, qualifier: 'horseshoe')\n\n    actual = proverb.to_s\n    expected = proverb.to_s\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "notapatch",
+    "pendletons",
+    "tryantwit"
+  ]
+}

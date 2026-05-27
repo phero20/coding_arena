@@ -1,0 +1,32 @@
+{
+  "id": "coffeescript:nth-prime",
+  "trackSlug": "coffeescript",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "df9e580c-3a05-4d6c-b0d0-375df3af4d6c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class NthPrime\n  @nth: (nthPrime) ->\n\nmodule.exports = NthPrime\n",
+  "example_solution": "module.exports = class Prime\n  @nth: (nthPrime) ->\n    throw \"Prime is not possible\" if nthPrime == 0\n    @generatePrimes(200000)\n    @realPrimes[nthPrime - 1]\n\n  @generatePrimes: (uptoNumber) ->\n    return @realPrimes if @realPrimes\n\n    possiblePrimes = []\n\n    for numberValue in [2..uptoNumber]\n      possiblePrimes.push({ number: numberValue, prime: true })\n\n    for number in [2..Math.sqrt(possiblePrimes.length)]\n      for currentPrime in possiblePrimes\n        if currentPrime.number != number && currentPrime.number % number == 0\n          currentPrime.prime = false\n\n    primeCount = 0\n\n    @realPrimes = possiblePrimes.filter (possiblePrime) -> possiblePrime.prime\n    @realPrimes = @realPrimes.map (prime) -> prime.number\n",
+  "test_code": "Prime = require './nth-prime'\n\ndescribe 'Prime', ->\n\n  it 'first prime', ->\n    prime = Prime.nth(1)\n    expect(prime).toEqual(2)\n\n  xit 'second prime', ->\n    prime = Prime.nth(2)\n    expect(prime).toEqual(3)\n\n  xit 'sixth prime', ->\n    prime = Prime.nth(6)\n    expect(prime).toEqual(13)\n\n  xit 'big prime', ->\n    prime = Prime.nth(10001)\n    expect(prime).toEqual(104743)\n\n  xit 'there is no zeroth prime', ->\n    expect(-> Prime.nth(0)).toThrow('Prime is not possible')\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "aimorris",
+    "alxndr",
+    "marocchino",
+    "rootulp",
+    "zvkemp"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "python:hamming",
+  "trackSlug": "python",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "8648fa0c-d85f-471b-a3ae-0f8c05222c89",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "generator-expressions",
+    "raising-and-handling-errors",
+    "sequences"
+  ],
+  "prerequisites": [
+    "basics",
+    "lists",
+    "loops",
+    "conditionals",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "def distance(strand_a, strand_b):\n    pass\n",
+  "example_solution": "def distance(strand_a, strand_b):\n    if len(strand_a) != len(strand_b):\n        raise ValueError('Strands must be of equal length.')\n\n    return sum(a_part != b_part for a_part, b_part in zip(strand_a, strand_b))\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/hamming/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom hamming import (\n    distance,\n)\n\n\nclass HammingTest(unittest.TestCase):\n    def test_empty_strands(self):\n        self.assertEqual(distance(\"\", \"\"), 0)\n\n    def test_single_letter_identical_strands(self):\n        self.assertEqual(distance(\"A\", \"A\"), 0)\n\n    def test_single_letter_different_strands(self):\n        self.assertEqual(distance(\"G\", \"T\"), 1)\n\n    def test_long_identical_strands(self):\n        self.assertEqual(distance(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\"), 0)\n\n    def test_long_different_strands(self):\n        self.assertEqual(distance(\"GGACGGATTCTG\", \"AGGACGGATTCT\"), 9)\n\n    def test_disallow_first_strand_longer(self):\n        with self.assertRaises(ValueError) as err:\n            distance(\"AATG\", \"AAA\")\n\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"Strands must be of equal length.\")\n\n    def test_disallow_second_strand_longer(self):\n        with self.assertRaises(ValueError) as err:\n            distance(\"ATA\", \"AGTG\")\n\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"Strands must be of equal length.\")\n\n    def test_disallow_empty_first_strand(self):\n        with self.assertRaises(ValueError) as err:\n            distance(\"\", \"G\")\n\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"Strands must be of equal length.\")\n\n    def test_disallow_empty_second_strand(self):\n        with self.assertRaises(ValueError) as err:\n            distance(\"G\", \"\")\n\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"Strands must be of equal length.\")\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "behrtam",
+    "cmccandless",
+    "Dog",
+    "gabriel376",
+    "GascaK",
+    "guaneec",
+    "iandexter",
+    "ikhadykin",
+    "kytrinyx",
+    "N-Parsons",
+    "parthsharma2",
+    "pheanex",
+    "pywkm",
+    "sjakobi",
+    "tqa236",
+    "yawpitch"
+  ]
+}

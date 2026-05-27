@@ -5,6 +5,9 @@ import type {
   CreateOrUpdateProblemInput,
 } from "../../types/problems/problem.types";
 import type { ProblemDocument } from "../../mongo/models/problem.model";
+import { db } from "../../db";
+import * as schema from "../../db/schema";
+import { eq } from "drizzle-orm";
 
 // Re-export for external consumers to avoid importing from model
 export type { CreateOrUpdateProblemInput } from "../../types/problems/problem.types";
@@ -20,6 +23,7 @@ export interface IProblemRepository {
     limit: number,
   ): Promise<{ problems: Problem[]; total: number }>;
   createOrUpdate(data: CreateOrUpdateProblemInput): Promise<Problem>;
+  getUserSolvedProblems(userId: string): Promise<string[]>;
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -122,5 +126,20 @@ export class ProblemRepository
       throw new Error("Failed to create or update problem");
     }
     return problem;
+  }
+
+  async getUserSolvedProblems(userId: string): Promise<string[]> {
+    // 1. Fetch solved problem IDs from Postgres by joining with users table
+    // to map the clerkId to the internal UUID
+    const solvedRecords = await db
+      .select({ problemId: schema.userSolvedProblems.problemId })
+      .from(schema.userSolvedProblems)
+      .innerJoin(
+        schema.users,
+        eq(schema.userSolvedProblems.userId, schema.users.id)
+      )
+      .where(eq(schema.users.clerkId, userId));
+
+    return solvedRecords.map((r) => r.problemId);
   }
 }

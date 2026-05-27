@@ -1,0 +1,33 @@
+{
+  "id": "vbnet:prime-factors",
+  "trackSlug": "vbnet",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "551510bc-817d-4145-b974-f9149f7e1c5e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "integral-numbers",
+    "while-loops"
+  ],
+  "prerequisites": [
+    "integral-numbers",
+    "arrays",
+    "while-loops"
+  ],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module PrimeFactors\n    Public Function Factors(ByVal number As Long) As Long()\n        Throw New NotImplementedException()\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System.Collections.Generic\n\nPublic Class PrimeFactors\n    Public Shared Function Factors(ByVal number As Long) As Long()\n        Dim primes = New List(Of Long)()\n        Dim divisor = 2\n        While number > 1\n            While number Mod divisor = 0\n                primes.Add(divisor)\n                number /= divisor\n            End While\n            divisor += 1\n        End While\n        Return primes.ToArray()\n    End Function\nEnd Class\n",
+  "test_code": "Imports Xunit\n\nPublic Class PrimeFactorsTests\n    <Fact>\n    Public Sub No_factors()\n        dim number = 1L\n        dim expected = Array.Empty(Of Long)()\n        dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Prime_number()\n        dim number = 2L\n        dim expected = {2L}\n        dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Another_prime_number()\n        dim number = 3L\n        dim expected = {3L}\n        dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Square_of_a_prime()\n        Dim number = 9L\n        Dim expected = {3L, 3L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Product_of_first_prime()\n        Dim number = 4L\n        Dim expected = {2L, 2L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Cube_of_a_prime()\n        Dim number = 8L\n        Dim expected = {2L, 2L, 2L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Product_of_second_prime()\n        Dim number = 27L\n        Dim expected = {3L, 3L, 3L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Product_of_third_prime()\n        Dim number = 625L\n        Dim expected = {5L, 5L, 5L, 5L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Product_of_first_and_second_prime()\n        Dim number = 6L\n        Dim expected = {2L, 3L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Product_of_primes_and_non_primes()\n        Dim number = 12L\n        Dim expected = {2L, 2L, 3L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Product_of_primes()\n        Dim number = 901255L\n        Dim expected = {5L, 17L, 23L, 461L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Factors_include_a_large_prime()\n        Dim number = 93819012551L\n        Dim expected = {11L, 9539L, 894119L}\n        Dim result as IEnumerable(of Long) = PrimeFactors.Factors(number)\n        Assert.Equal(expected, result)\n    End Sub\nEnd Class\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

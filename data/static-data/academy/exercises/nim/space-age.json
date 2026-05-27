@@ -1,0 +1,28 @@
+{
+  "id": "nim:space-age",
+  "trackSlug": "nim",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "64f70cfe-e34c-43ee-9b9a-72fe54884599",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "type\n  Planet* = enum\n    Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune\n\nproc age*(planet: Planet, seconds: int64): float =\n  discard\n",
+  "example_solution": "type\n  Planet* = enum\n    Mercury\n    Venus\n    Earth\n    Mars\n    Jupiter\n    Saturn\n    Uranus\n    Neptune\n\nconst times = [\n  Mercury: 7600530.24,\n  Venus: 19413907.2,\n  Earth: 31558149.76,\n  Mars: 59354294.4,\n  Jupiter: 374335776.0,\n  Saturn: 929596608.0,\n  Uranus: 2661041808.0,\n  Neptune: 5200418592.0\n]\n\nfunc age*(planet: Planet, seconds: int64): float =\n  seconds.float / times[planet]\n",
+  "test_code": "import unittest\nimport space_age\n\nsuite \"Space Age\":\n  # Helper operator: return true when two floats are approximately equal\n  func `~=`(x, y: float): bool =\n    abs(x - y) < 0.01\n\n  test \"age on Earth\":\n    check age(Earth, 1_000_000_000) ~= 31.69\n\n  test \"age on Mercury\":\n    check age(Mercury, 2_134_835_688) ~= 280.88\n\n  test \"age on Venus\":\n    check age(Venus, 189_839_836) ~= 9.78\n\n  test \"age on Mars\":\n    check age(Mars, 2_129_871_239) ~= 35.88\n\n  test \"age on Jupiter\":\n    check age(Jupiter, 901_876_382) ~= 2.41\n\n  test \"age on Saturn\":\n    check age(Saturn, 2_000_000_000) ~= 2.15\n\n  test \"age on Uranus\":\n    check age(Uranus, 1_210_123_456) ~= 0.46\n\n  test \"age on Neptune\":\n    check age(Neptune, 1_821_023_456) ~= 0.35\n\n  # Bonus\n  test \"age that requires int64\":\n    check age(Saturn, 3_000_000_000) ~= 3.23\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=01",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

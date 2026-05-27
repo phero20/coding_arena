@@ -1,0 +1,30 @@
+{
+  "id": "powershell:leap",
+  "trackSlug": "powershell",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "e62edbd6-861b-4cd6-bb03-6c9bcaa742a4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "function Test-LeapYear {\n    <#\n    .SYNOPSIS\n    Given a year, report if it is a leap year.\n    \n    .DESCRIPTION\n    Calculate whether the supplied year is a leap year. A leap year is determined from the following\n    calculation:\n\n    on every year that is evenly divisible by 4\n    except every year that is evenly divisible by 100\n    unless the year is also evenly divisible by 400\n    \n    .PARAMETER year\n    The year to test\n    \n    .EXAMPLE\n    Test-LeapYear -year 2018\n\n    Returns false\n\n    .EXAMPLE\n    Test-LeapYear -year 2020\n\n    Returns True\n    #>\n    param( [int]$year )\n\n    Throw \"Please implement this function\"\n}\n",
+  "example_solution": "function Test-LeapYear {\n    <#\n    .SYNOPSIS\n    Given a year, report if it is a leap year.\n    \n    .DESCRIPTION\n    Calculate whether the supplied year is a leap year. A leap year is determined from the following\n    calculation:\n\n    on every year that is evenly divisible by 4\n    except every year that is evenly divisible by 100\n    unless the year is also evenly divisible by 400\n    \n    .PARAMETER year\n    The year to test\n    \n    .EXAMPLE\n    Test-LeapYear -year 2018\n\n    Returns false\n\n    .EXAMPLE\n    Test-LeapYear -year 2020\n\n    Returns True\n    #>\n\n    param( [int]$year )\n    \n    # This could be solved using the native system.datetime object\n    # but that isn't in the spirit of exercism. \n    #[system.datetime]::isleapyear($year)\n    \n    # Instead solve using math\n    if ( $year % 4 -eq 0 -and $year % 100 -ne 0 -or $year % 400 -eq 0) {\n        return $True\n    }\n    else {\n        return $False\n    }\n}\n",
+  "test_code": "BeforeAll {\n    . \".\\LeapYear.ps1\"\n}\n\nDescribe \"LeapYear Tests\" {\n    It \"year not divisible by 4 in common year\" {\n        Test-LeapYear(2015) | Should -Be $false\n    }\n\n    It \"year divisible by 2, not divisible by 4 in common year\" {\n        Test-LeapYear(1970) | Should -Be $false\n    }\n\n    It \"year divisible by 4, not divisible by 100 in leap year\" {\n        Test-LeapYear(1996) | Should -Be $true\n    }\n\n    It \"year divisible by 4 and 5 is still a leap year\" {\n        Test-LeapYear(1960) | Should -Be $true\n    }\n\n    It \"year divisible by 100, not divisible by 400 in common year\" {\n        Test-LeapYear(2100) | Should -Be $false\n    }\n\n    It \"year divisible by 100 but not by 3 is still not a leap year\" {\n        Test-LeapYear(1900) | Should -Be $false\n    }\n\n    It \"year divisible by 400 in leap year\" {\n        Test-LeapYear(2000) | Should -Be $true\n    }\n\n    It \"year divisible by 400 but not by 125 is still a leap year\" {\n        Test-LeapYear(2400) | Should -Be $true\n    }\n\n    It \"year divisible by 200, not divisible by 400 in common year\" {\n        Test-LeapYear(1800) | Should -Be $false\n    }\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "spuder"
+  ],
+  "contributors": [
+    "gyssels",
+    "kchenery",
+    "meatball133"
+  ]
+}

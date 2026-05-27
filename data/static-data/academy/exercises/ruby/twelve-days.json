@@ -1,0 +1,45 @@
+{
+  "id": "ruby:twelve-days",
+  "trackSlug": "ruby",
+  "slug": "twelve-days",
+  "name": "Twelve Days",
+  "uuid": "eeb64dda-b79f-4920-8fa3-04810e8d37ab",
+  "type": "practice",
+  "status": null,
+  "blurb": "Output the lyrics to 'The Twelve Days of Christmas'.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "numbers",
+    "loops",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task in this exercise is to write code that returns the lyrics of the song: \"The Twelve Days of Christmas.\"\n\n\"The Twelve Days of Christmas\" is a common English Christmas carol.\nEach subsequent verse of the song builds on the previous verse.\n\nThe lyrics your code returns should _exactly_ match the full song text shown below.\n\n## Lyrics\n\n```text\nOn the first day of Christmas my true love gave to me: a Partridge in a Pear Tree.\n\nOn the second day of Christmas my true love gave to me: two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the third day of Christmas my true love gave to me: three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the fourth day of Christmas my true love gave to me: four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the fifth day of Christmas my true love gave to me: five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the sixth day of Christmas my true love gave to me: six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the seventh day of Christmas my true love gave to me: seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the eighth day of Christmas my true love gave to me: eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the ninth day of Christmas my true love gave to me: nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the tenth day of Christmas my true love gave to me: ten Lords-a-Leaping, nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the eleventh day of Christmas my true love gave to me: eleven Pipers Piping, ten Lords-a-Leaping, nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n\nOn the twelfth day of Christmas my true love gave to me: twelve Drummers Drumming, eleven Pipers Piping, ten Lords-a-Leaping, nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Twelve Days' exercise in this file. Make the tests in\n`twelve_days_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/twelve-days` directory.\n=end\n",
+  "example_solution": "module TwelveDays\n  def self.song\n    verses(1, 12)\n  end\n\n  def self.verses(first, last)\n    first.upto(last).map do |number|\n      verse(number)\n    end.join(\"\\n\")\n  end\n\n  def self.verse(number)\n    case number\n    when 1\n      \"On the first day of Christmas my true love gave to me: a Partridge in a Pear Tree.\\n\"\n    when 2\n      \"On the second day of Christmas my true love gave to me: two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 3\n      \"On the third day of Christmas my true love gave to me: three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 4\n      \"On the fourth day of Christmas my true love gave to me: four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 5\n      \"On the fifth day of Christmas my true love gave to me: five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 6\n      \"On the sixth day of Christmas my true love gave to me: six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 7\n      \"On the seventh day of Christmas my true love gave to me: seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 8\n      \"On the eighth day of Christmas my true love gave to me: eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 9\n      \"On the ninth day of Christmas my true love gave to me: nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 10\n      \"On the tenth day of Christmas my true love gave to me: ten Lords-a-Leaping, nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 11\n      \"On the eleventh day of Christmas my true love gave to me: eleven Pipers Piping, ten Lords-a-Leaping, nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    when 12\n      \"On the twelfth day of Christmas my true love gave to me: twelve Drummers Drumming, eleven Pipers Piping, ten Lords-a-Leaping, nine Ladies Dancing, eight Maids-a-Milking, seven Swans-a-Swimming, six Geese-a-Laying, five Gold Rings, four Calling Birds, three French Hens, two Turtle Doves, and a Partridge in a Pear Tree.\\n\"\n    end\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'twelve_days'\n\nclass TwelveDaysTest < Minitest::Test\n  def test_the_whole_song\n    song_file = File.expand_path('song.txt', __dir__)\n    expected = IO.read(song_file)\n    assert_equal expected, TwelveDays.song\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/The_Twelve_Days_of_Christmas_(song)",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "alexpchin",
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kenliu",
+    "kickinbahk",
+    "kotp",
+    "PatrickMcSweeny",
+    "tryantwit"
+  ]
+}

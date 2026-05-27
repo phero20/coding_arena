@@ -1,0 +1,26 @@
+{
+  "id": "uiua:resistor-color-trio",
+  "trackSlug": "uiua",
+  "slug": "resistor-color-trio",
+  "name": "Resistor Color Trio",
+  "uuid": "b5fd608b-fe6a-47b2-8c47-7788e27cdf34",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a human-readable label.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know only three things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n  To get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\n- Each band acts as a digit of a number.\n  For example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n  In this exercise, you are going to create a helpful program so that you don't have to remember the values of the bands.\n  The program will take 3 colors as input, and outputs the correct value, in ohms.\n  The color bands are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nIn Resistor Color Duo you decoded the first two colors.\nFor instance: orange-orange got the main value `33`.\nThe third color stands for how many zeros need to be added to the main value.\nThe main value plus the zeros gives us a value in ohms.\nFor the exercise it doesn't matter what ohms really are.\nFor example:\n\n- orange-orange-black would be 33 and no zeros, which becomes 33 ohms.\n- orange-orange-red would be 33 and 2 zeros, which becomes 3300 ohms.\n- orange-orange-orange would be 33 and 3 zeros, which becomes 33000 ohms.\n\n(If Math is your thing, you may want to think of the zeros as exponents of 10.\nIf Math is not your thing, go with the zeros.\nIt really is the same thing, just in plain English instead of Math lingo.)\n\nThis exercise is about translating the colors into a label:\n\n> \"... ohms\"\n\nSo an input of `\"orange\", \"orange\", \"black\"` should return:\n\n> \"33 ohms\"\n\nWhen we get to larger resistors, a [metric prefix][metric-prefix] is used to indicate a larger magnitude of ohms, such as \"kiloohms\".\nThat is similar to saying \"2 kilometers\" instead of \"2000 meters\", or \"2 kilograms\" for \"2000 grams\".\n\nFor example, an input of `\"orange\", \"orange\", \"orange\"` should return:\n\n> \"33 kiloohms\"\n\n[metric-prefix]: https://en.wikipedia.org/wiki/Metric_prefix\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Get the label of the resistors based on their colors\n# Label ? Colors\nLabel ← |1 ⊙(⍤ \"Please implement Label\" 0)\n",
+  "example_solution": "OhmStrings ← {\"gigaohms\" \"megaohms\" \"kiloohms\" \"ohms\"}\nColors     ← {\"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\"}\nMagnitutes ← [1000000000 1000000 1000 0]\nMultiplier ← ⊂ ↯[3]Magnitutes [1]\n\nColorCode    ← |1 ⊗0 ⊗Colors\nResistorDuo  ← |1 /+ × [10 1] ≡ColorCode ↯ [2]\nTotalValue   ← |1 × (ⁿ:10 ColorCode ⊡2↯[3]) ⟜ResistorDuo\nOhmValue     ← |1 ⊡ : OhmStrings ⊗1 ≥ Magnitutes TotalValue\nNumericValue ← |1 ÷ ⊡ : Multiplier⊗1 ≥ Magnitutes .TotalValue\n\n# Get the label of the resistors based on their colors\n# Label ? Colors\nLabel ← $\"_ _\" NumericValue ⟜OhmValue\n",
+  "test_code": "~ \"resistor-color-trio.ua\" ~ Label\n\n# Orange and orange and black\n⍤⤙≍ \"33 ohms\"       Label {\"orange\" \"orange\" \"black\"}\n\n# Blue and grey and brown\n⍤⤙≍ \"680 ohms\"      Label {\"blue\" \"grey\" \"brown\"}\n\n# Red and black and red\n⍤⤙≍ \"2 kiloohms\"    Label {\"red\" \"black\" \"red\"}\n\n# Green and brown and orange\n⍤⤙≍ \"51 kiloohms\"   Label {\"green\" \"brown\" \"orange\"}\n\n# Yellow and violet and yellow\n⍤⤙≍ \"470 kiloohms\"  Label {\"yellow\" \"violet\" \"yellow\"}\n\n# Blue and violet and blue\n⍤⤙≍ \"67 megaohms\"   Label {\"blue\" \"violet\" \"blue\"}\n\n# Minimum possible value\n⍤⤙≍ \"0 ohms\"        Label {\"black\" \"black\" \"black\"}\n\n# Maximum possible value\n⍤⤙≍ \"99 gigaohms\"   Label {\"white\" \"white\" \"white\"}\n\n# First two colors make an invalid octal number\n⍤⤙≍ \"8 ohms\"        Label {\"black\" \"grey\" \"black\"}\n\n# Ignore extra colors\n⍤⤙≍ \"650 kiloohms\"  Label {\"blue\" \"green\" \"yellow\" \"orange\"}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1549",
+  "authors": [
+    "glaxxie"
+  ],
+  "contributors": null
+}

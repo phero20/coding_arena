@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:flatten-array",
+  "trackSlug": "sqlite",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "a658e1ed-26f4-4f36-9d6c-41d6f23568f9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "-- Schema:\n-- CREATE TABLE \"flatten-array\" (\n--   array  TEXT NOT NULL,    -- json array\n--   result TEXT              -- json array\n-- );\n",
+  "example_solution": "UPDATE \"flatten-array\"\nSET\n  result = (\n    SELECT\n      JSON_GROUP_ARRAY(j.value)\n    FROM\n      JSON_TREE(JSON(array)) j\n    WHERE\n      j.type <> 'array'\n      AND j.value NOTNULL\n  );\n",
+  "test_code": "-- Create database:\n.read ./create_fixture.sql\n-- Read user student solution and save any output as markdown in user_output.md:\n.mode markdown\n.output user_output.md\n.read ./flatten-array.sql\n.output\n-- Create a clean testing environment:\n.read ./create_test_table.sql\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      array,\n      result\n    FROM\n      \"flatten-array\"\n  ) AS actual\nWHERE\n  (actual.array, JSON(actual.result)) = (tests.array, JSON(tests.expected));\n\n-- Update message for failed tests to give helpful information:\nUPDATE tests\nSET\n  message = (\n    'Result for \"' || tests.array || '\"' || ' is <' || COALESCE(actual.result, 'NULL') || '> but should be <' || tests.expected || '>'\n  )\nFROM\n  (\n    SELECT\n      array,\n      result\n    FROM\n      \"flatten-array\"\n  ) AS actual\nWHERE\n  actual.array = tests.array\n  AND tests.status = 'fail';\n\n-- Save results to ./output.json (needed by the online test-runner)\n.mode json\n.once './output.json'\nSELECT\n  description,\n  status,\n  message,\n  output,\n  test_code,\n  task_id\nFROM\n  tests;\n\n-- Display test results in readable form for the student:\n.mode table\nSELECT\n  description,\n  status,\n  message\nFROM\n  tests;\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

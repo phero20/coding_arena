@@ -1,0 +1,28 @@
+{
+  "id": "cfml:luhn",
+  "trackSlug": "cfml",
+  "slug": "luhn",
+  "name": "Luhn",
+  "uuid": "528a0cc4-60e6-4521-82ff-237bb13e1b96",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number determine whether or not it is valid per the Luhn formula.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number determine whether or not it is valid per the Luhn formula.\n\nThe [Luhn algorithm][luhn] is a simple checksum formula used to validate a variety of identification numbers, such as credit card numbers and Canadian Social Insurance Numbers.\n\nThe task is to check if a given string is valid.\n\n## Validating a Number\n\nStrings of length 1 or less are not valid.\nSpaces are allowed in the input, but they should be stripped before checking.\nAll other non-digit characters are disallowed.\n\n### Example 1: valid credit card number\n\n```text\n4539 3195 0343 6467\n```\n\nThe first step of the Luhn algorithm is to double every second digit, starting from the right.\nWe will be doubling\n\n```text\n4539 3195 0343 6467\n↑ ↑  ↑ ↑  ↑ ↑  ↑ ↑  (double these)\n```\n\nIf doubling the number results in a number greater than 9 then subtract 9 from the product.\nThe results of our doubling:\n\n```text\n8569 6195 0383 3437\n```\n\nThen sum all of the digits:\n\n```text\n8+5+6+9+6+1+9+5+0+3+8+3+3+4+3+7 = 80\n```\n\nIf the sum is evenly divisible by 10, then the number is valid.\nThis number is valid!\n\n### Example 2: invalid credit card number\n\n```text\n8273 1232 7352 0569\n```\n\nDouble the second digits, starting from the right\n\n```text\n7253 2262 5312 0539\n```\n\nSum the digits\n\n```text\n7+2+5+3+2+2+6+2+5+3+1+2+0+5+3+9 = 57\n```\n\n57 is not evenly divisible by 10, so this number is not valid.\n\n[luhn]: https://en.wikipedia.org/wiki/Luhn_algorithm\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the Luhn exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\tfunction valid( value ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the Luhn exercise\n*/\ncomponent {\n\n\tfunction valid( value ) {\n\t\t// Remove whitespace\n\t\tvalue = value.reReplace( '\\s', '', 'all' );\n\t\t\n\t\t// Any non numeric chars means invalid\n\t\tif( value.reFindNoCase( '[^0-9]' ) ) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\t// A single 0 is invalid\n\t\tif( compare( value, '0' ) == 0 ) {\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tvar accumulator = [];\n\t\tvar oddEven = 0;\n\t\t// Loop backwards over the digits\n\t\tfor( var i=value.len(); i>0; i-- ) {\n\t\t\tvar digit = value[ i ];\n\t\t\t// Double every other one\n\t\t\tif( ++oddEven%2 == 0 ) {\n\t\t\t\tvar doubleDigit = digit*2;\n\t\t\t\taccumulator.prepend( ( doubleDigit > 9 ? doubleDigit-9 : doubleDigit ) );\n\t\t\t} else {\n\t\t\t\taccumulator.prepend( digit );\n\t\t\t}\n\t\t}\n\t\t\n\t\t// Is the sum of the digits divisible by 10?\n\t\treturn accumulator.sum() % 10 == 0;\n\t}\n\t\t\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'Luhn' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My Luhn class\", function(){\t\t\t\n\n\t\t\tit( 'single digit strings can not be valid', function(){\n\t\t\t\texpect( SUT.valid( value='1' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'a single zero is invalid', function(){\n\t\t\t\texpect( SUT.valid( value='0' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'a simple valid SIN that remains valid if reversed', function(){\n\t\t\t\texpect( SUT.valid( value='059' ) ).toBeTrue();\n\t\t\t});\n\n\t\t\tit( 'a simple valid SIN that becomes invalid if reversed', function(){\n\t\t\t\texpect( SUT.valid( value='59' ) ).toBeTrue();\n\t\t\t});\n\n\t\t\tit( 'a valid Canadian SIN', function(){\n\t\t\t\texpect( SUT.valid( value='055 444 285' ) ).toBeTrue();\n\t\t\t});\n\n\t\t\tit( 'invalid Canadian SIN', function(){\n\t\t\t\texpect( SUT.valid( value='055 444 286' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'invalid credit card', function(){\n\t\t\t\texpect( SUT.valid( value='8273 1232 7352 0569' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'valid strings with a non-digit included become invalid', function(){\n\t\t\t\texpect( SUT.valid( value='055a 444 285' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'valid strings with punctuation included become invalid', function(){\n\t\t\t\texpect( SUT.valid( value='055-444-285' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'valid strings with symbols included become invalid', function(){\n\t\t\t\texpect( SUT.valid( value='055£ 444$ 285' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'single zero with space is invalid', function(){\n\t\t\t\texpect( SUT.valid( value=' 0' ) ).toBeFalse();\n\t\t\t});\n\n\t\t\tit( 'more than a single zero is valid', function(){\n\t\t\t\texpect( SUT.valid( value='0000 0' ) ).toBeTrue();\n\t\t\t});\n\n\t\t\tit( 'input digit 9 is correctly converted to output digit 9', function(){\n\t\t\t\texpect( SUT.valid( value='091' ) ).toBeTrue();\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "The Luhn Algorithm on Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Luhn_algorithm",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "prolog:binary",
+  "trackSlug": "prolog",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "ee8e835f-1cbf-4ff4-a8f2-c641bc4045cc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion.\nGiven a binary input string, your program should produce a decimal output.\nThe program should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood as a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The nth number gets multiplied by 10^_(n-1)_.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "binary(Str, Dec).\n",
+  "example_solution": "binary(Str, Dec) :-\n    string_chars(Str, RevLst),\n    reverse(RevLst, Lst),\n    convert(Lst, Dec).\n\nconvert([], 0).\nconvert([Head|List], Dec) :-\n    atom_number(Head, Val),\n    (Val is 0, !; Val is 1),\n    convert(List, NextDec),\n    Dec is NextDec*2 + Val.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(binary).\n\n    test(binary_0_is_decimal_0, condition(true)) :-\n        binary(\"0\", Result), Result == 0.\n\n    test(binary_1_is_decimal_1, condition(pending)) :-\n        binary(\"1\", Result), Result == 1.\n\n    test(binary_10_is_decimal_2, condition(pending)) :-\n        binary(\"10\", Result), Result == 2.\n\n    test(binary_11_is_decimal_3, condition(pending)) :-\n        binary(\"11\", Result), Result == 3.\n\n    test(binary_100_is_decimal_4, condition(pending)) :-\n        binary(\"100\", Result), Result == 4.\n\n    test(binary_1001_is_decimal_9, condition(pending)) :-\n        binary(\"1001\", Result), Result == 9.\n\n    test(binary_11010_is_decimal_26, condition(pending)) :-\n        binary(\"11010\", Result), Result == 26.\n\n    test(binary_10001101000_is_decimal_1128, condition(pending)) :-\n        binary(\"10001101000\", Result), Result == 1128.\n\n    test(binary_ignores_leading_zeros, condition(pending)) :-\n        binary(\"000011111\", Result), Result == 31.\n\n    test(two_is_not_a_valid_binary_digit, [fail, condition(pending)]) :-\n        binary(\"2\", _).\n\n    test(nonbinary_digit_is_invalid, [fail, condition(pending)]) :-\n        binary(\"01201\", _).\n\n    test(trailing_nonbinary_characters_is_invalid, [fail, condition(pending)]) :-\n        binary(\"10nope\", _).\n\n    test(nonbinary_characters_is_invalid, [fail, condition(pending)]) :-\n        binary(\"nope10\", _).\n\n    test(internal_nonbinary_characters_is_invalid, [fail, condition(pending)]) :-\n        binary(\"10nope10\", _).\n\n    test(whitespace_separated_is_invalid, [fail, condition(pending)]) :-\n        binary(\"001 nope\", _).\n\n:- end_tests(binary).\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "qjd2413"
+  ],
+  "contributors": [
+    "parkerl"
+  ]
+}

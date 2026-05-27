@@ -1,0 +1,36 @@
+{
+  "id": "perl5:leap",
+  "trackSlug": "perl5",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "0b512415-2dcf-4dfb-a58f-2765f9a1427b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "booleans-and-conditionals",
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "# Declare package 'Leap'\npackage Leap;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<is_leap_year>;\n\nsub is_leap_year ($year) {\n    return undef; # Replace this with your own code to pass the tests.\n}\n\n1;\n",
+  "example_solution": "# Declare package 'Leap'\npackage Leap;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<is_leap_year>;\n\nsub is_leap_year ($year) {\n    return $year % 4 == 0 && $year % 100 != 0 || $year % 400 == 0;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\"; # Find modules in the same dir as this file.\n\nuse Leap qw<is_leap_year>;\n\nis( # begin: 6466b30d-519c-438e-935d-388224ab5223\n    is_leap_year(2015),\n    DF, # Defined but False\n    \"year not divisible by 4 in common year\",\n); # end: 6466b30d-519c-438e-935d-388224ab5223\n\nis( # begin: ac227e82-ee82-4a09-9eb6-4f84331ffdb0\n    is_leap_year(1970),\n    DF, # Defined but False\n    \"year divisible by 2, not divisible by 4 in common year\",\n); # end: ac227e82-ee82-4a09-9eb6-4f84331ffdb0\n\nis( # begin: 4fe9b84c-8e65-489e-970b-856d60b8b78e\n    is_leap_year(1996),\n    T, # True\n    \"year divisible by 4, not divisible by 100 in leap year\",\n); # end: 4fe9b84c-8e65-489e-970b-856d60b8b78e\n\nis( # begin: 7fc6aed7-e63c-48f5-ae05-5fe182f60a5d\n    is_leap_year(1960),\n    T, # True\n    \"year divisible by 4 and 5 is still a leap year\",\n); # end: 7fc6aed7-e63c-48f5-ae05-5fe182f60a5d\n\nis( # begin: 78a7848f-9667-4192-ae53-87b30c9a02dd\n    is_leap_year(2100),\n    DF, # Defined but False\n    \"year divisible by 100, not divisible by 400 in common year\",\n); # end: 78a7848f-9667-4192-ae53-87b30c9a02dd\n\nis( # begin: 9d70f938-537c-40a6-ba19-f50739ce8bac\n    is_leap_year(1900),\n    DF, # Defined but False\n    \"year divisible by 100 but not by 3 is still not a leap year\",\n); # end: 9d70f938-537c-40a6-ba19-f50739ce8bac\n\nis( # begin: 42ee56ad-d3e6-48f1-8e3f-c84078d916fc\n    is_leap_year(2000),\n    T, # True\n    \"year divisible by 400 is leap year\",\n); # end: 42ee56ad-d3e6-48f1-8e3f-c84078d916fc\n\nis( # begin: 57902c77-6fe9-40de-8302-587b5c27121e\n    is_leap_year(2400),\n    T, # True\n    \"year divisible by 400 but not by 125 is still a leap year\",\n); # end: 57902c77-6fe9-40de-8302-587b5c27121e\n\nis( # begin: c30331f6-f9f6-4881-ad38-8ca8c12520c1\n    is_leap_year(1800),\n    DF, # Defined but False\n    \"year divisible by 200, not divisible by 400 in common year\",\n); # end: c30331f6-f9f6-4881-ad38-8ca8c12520c1\n\ndone_testing;\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "dnmfarrell"
+  ],
+  "contributors": [
+    "bistik",
+    "darksuji",
+    "kotp",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "common-lisp:grains",
+  "trackSlug": "common-lisp",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "eb3a92bf-0748-4406-ba67-9e27e367ae45",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "arithmetic"
+  ],
+  "prerequisites": [
+    "arithmetic"
+  ],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "(defpackage :grains\n  (:use :cl)\n  (:export :square :total))\n(in-package :grains)\n\n(defun square (n) )\n\n(defun total () )\n",
+  "example_solution": "(defpackage :grains\n  (:use :cl)\n  (:export :square :total))\n\n(in-package :grains)\n\n(defun square (n) (expt 2 (1- n)))\n\n(defun total ()\n  (loop for n from 1 to 64 summing (square n)))\n",
+  "test_code": ";; Ensures that grains.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"grains\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from grains and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :grains-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :grains-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* grains-suite)\n\n(test square-1 (is (equal 1 (grains:square 1))))\n\n(test square-2 (is (equal 2 (grains:square 2))))\n\n(test square-3 (is (equal 4 (grains:square 3))))\n\n(test square-4 (is (equal 8 (grains:square 4))))\n\n(test square-16 (is (equal 32768 (grains:square 16))))\n\n(test square-32 (is (equal 2147483648 (grains:square 32))))\n\n(test square-64 (is (equal 9223372036854775808 (grains:square 64))))\n\n(test total-grains (is (equal 18446744073709551615 (grains:total))))\n\n(defun run-tests (&optional (test-or-suite 'grains-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": null
+}

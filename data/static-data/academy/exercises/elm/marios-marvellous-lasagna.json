@@ -1,0 +1,32 @@
+{
+  "id": "elm:marios-marvellous-lasagna",
+  "trackSlug": "elm",
+  "slug": "marios-marvellous-lasagna",
+  "name": "Mario's marvellous lasagna",
+  "uuid": "8b5b43a1-79ec-4f2f-a8ac-8aa2955a4674",
+  "type": "concept",
+  "status": "beta",
+  "blurb": "Learn the Elm `let` expression by cooking Mario's Marvellous Lasagna",
+  "difficulty": null,
+  "concepts": [
+    "let"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "basics-2"
+  ],
+  "instructions": "# Instructions\n\nYou have been given a new cookbook for your birthday, and you want to find out if the lasagna recipe in it is better than your current favourite cookbook. In this exercise you're going to write some code to help you cook the lasagna from the new cookbook.\n\nYour housemate is still busy at the office, and wants to know what time the lasagna will be ready, so that she can make sure she is back in time.\n\n## 1. Work out what time the lasagna will be ready\n\nCreate a function to work out what time the lasagna will be ready. To make the code simple and expressive you should use a `let` expression.\n\nDefine the `remainingTimeInMinutes` function that takes two parameters and has a let expression as its body. The first parameter is the number of layers in the lasagna, and the second parameter is the number of minutes since you starting cooking.\n\nDefine `expectedMinutesInOven` (in the `let` part of the `let` expression) to check how many minutes the lasagna should be in the oven. According to the cookbook, the expected oven time in minutes is 40:\n\n```elm\nexpectedMinutesInOven\n    --> 40\n```\n\nDefine `preparationTimeInMinutes` (in the `let` part of the `let` expression) that takes the number of layers in the lasagna as a parameter and returns how many minutes it takes to prepare the lasagna, assuming each layer takes 2 minutes to prepare.\n\n```elm\npreparationTimeInMinutes 3\n    --> 6\n```\n\nReturn how many minutes are left until the lasagna is finished (in the `in` part of the `let` expression), which is the sum of the `preparationTimeInMinutes` and the `expectedMinutesInOven` minus the number of minutes since you starting cooking.\n\n```elm\nremainingTimeInMinutes 3 10\n    --> 6 + 40 - 10 = 36\n```\n",
+  "introduction": "# Introduction\n\n## Let\n\nThe `let` expression is used to create a local scope, and is useful in a few situations:\n\n- For simplifying expressions\n- For naming the results of intermediate expressions\n- Splitting an expression in to smaller bits if it is getting large\n\nYou can do most things inside a `let` expression, including destructuring (more details on this in later exercises), but it isn't possible to define a new Custom Type or Type Alias.\n\n```elm\nlet\n  cube x = x * x * x\nin\n  cube a + cube b + cube c\n```\n\n```elm\nbeginWithPattern : Size -> Padding -> Pattern -> GameOfLife\nbeginWithPattern minimumSize padding pattern =\n    let\n        size = calculateSize minimumSize padding pattern\n\n        center = Size.center size\n\n        centeredPattern = Pattern.centerAt center pattern\n\n        dimensions = { width = size, height = size }\n\n        deadCells = Matrix.create dimensions Dead\n    in\n    GameOfLife (bringPatternToLife deadCells centeredPattern)\n```\n",
+  "hints": "# General\n\n- The `let` expressions are described in the [Elm lang documentation][let-elm-lang].\n- Whitespace is important\n- Multiple expressions can be defined in the `let` section, separate with new lines\n- There can only be one expression in the `in` section\n\n[let-elm-lang]: https://elm-lang.org/docs/syntax#let-expressions\n",
+  "starter_code": "module MariosMarvellousLasagna exposing (remainingTimeInMinutes)\n\n-- TODO: define the remainingTimeInMinutes function\n",
+  "example_solution": "module MariosMarvellousLasagna exposing (remainingTimeInMinutes)\n\n\nremainingTimeInMinutes : Int -> Int -> Int\nremainingTimeInMinutes layers minutesSinceStarting =\n    let\n        expectedMinutesInOven =\n            40\n\n        preparationTimeInMinutes =\n            2 * layers\n    in\n    preparationTimeInMinutes + expectedMinutesInOven - minutesSinceStarting\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport MariosMarvellousLasagna exposing (remainingTimeInMinutes)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"MariosMarvellousLasagna\"\n        [ describe \"1\"\n            [ test \"For a 3-layers lasagna started 10 minutes ago, there are 36 minutes remaining\" <|\n                \\_ ->\n                    remainingTimeInMinutes 3 10\n                        |> Expect.equal ((3 * 2) + 40 - 10)\n            , test \"For a 6-layers lasagna started 30 minutes ago, there are 22 minutes remaining\" <|\n                \\_ ->\n                    remainingTimeInMinutes 6 30\n                        |> Expect.equal ((6 * 2) + 40 - 30)\n            ]\n        ]\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ceddlyburge"
+  ],
+  "contributors": [
+    "mpizenberg"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "r:atbash-cipher",
+  "trackSlug": "r",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "81133e3d-4feb-4985-8852-3354e8f72847",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "encode <- function(plaintext) {\n\n}\n\ndecode <- function(ciphertext) {\n\n}\n",
+  "example_solution": "mapping <- setNames(c(letters, 0:9), c(rev(letters), 0:9))\n\nencode <- function(plaintext) {\n  chars <- plaintext |> tolower() |> strsplit(\"\") |> unlist()\n  mapped <- lapply(chars, \\(c) mapping[c]) |> unlist() |> na.omit()\n  grouped <- split(mapped, ceiling(seq_along(mapped) / 5))\n  paste0(sapply(grouped, paste0, collapse = \"\"), collapse = \" \")\n}\n\ndecode <- function(ciphertext) {\n  encode(ciphertext) |> gsub(pattern = \" \", replacement = \"\")\n}\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/atbash-cipher/canonical-data.json\n# File last updated on 2026-03-16\n\nsource(\"./atbash-cipher.R\")\nlibrary(testthat)\n\n\n# encode\n\ntest_that(\"encode yes\", {\n  plaintext <- \"yes\"\n  expected <- \"bvh\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode no\", {\n  plaintext <- \"no\"\n  expected <- \"ml\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode OMG\", {\n  plaintext <- \"OMG\"\n  expected <- \"lnt\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode spaces\", {\n  plaintext <- \"O M G\"\n  expected <- \"lnt\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode mindblowingly\", {\n  plaintext <- \"mindblowingly\"\n  expected <- \"nrmwy oldrm tob\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode numbers\", {\n  plaintext <- \"Testing,1 2 3, testing.\"\n  expected <- \"gvhgr mt123 gvhgr mt\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode deep thought\", {\n  plaintext <- \"Truth is fiction.\"\n  expected <- \"gifgs rhurx grlm\"\n  expect_equal(encode(plaintext), expected)\n})\n\ntest_that(\"encode all the letters\", {\n  plaintext <- \"The quick brown fox jumps over the lazy dog.\"\n  expected <- \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n  expect_equal(encode(plaintext), expected)\n})\n\n\n# decode\n\ntest_that(\"decode exercism\", {\n  ciphertext <- \"vcvix rhn\"\n  expected <- \"exercism\"\n  expect_equal(decode(ciphertext), expected)\n})\n\ntest_that(\"decode a sentence\", {\n  ciphertext <- \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"\n  expected <- \"anobstacleisoftenasteppingstone\"\n  expect_equal(decode(ciphertext), expected)\n})\n\ntest_that(\"decode numbers\", {\n  ciphertext <- \"gvhgr mt123 gvhgr mt\"\n  expected <- \"testing123testing\"\n  expect_equal(decode(ciphertext), expected)\n})\n\ntest_that(\"decode all the letters\", {\n  ciphertext <- \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n  expected <- \"thequickbrownfoxjumpsoverthelazydog\"\n  expect_equal(decode(ciphertext), expected)\n})\n\ntest_that(\"decode with too many spaces\", {\n  ciphertext <- \"vc vix    r hn\"\n  expected <- \"exercism\"\n  expect_equal(decode(ciphertext), expected)\n})\n\ntest_that(\"decode with no spaces\", {\n  ciphertext <- \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"\n  expected <- \"anobstacleisoftenasteppingstone\"\n  expect_equal(decode(ciphertext), expected)\n})\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,47 @@
+{
+  "id": "python:pangram",
+  "trackSlug": "python",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "bebf7ae6-1c35-48bc-926b-e053a975eb10",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "def is_pangram(sentence):\n    pass\n",
+  "example_solution": "from string import ascii_lowercase\n\n\ndef is_pangram(sentence):\n    return all(char in sentence.lower() for char in ascii_lowercase)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/pangram/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom pangram import (\n    is_pangram,\n)\n\n\nclass PangramTest(unittest.TestCase):\n    def test_empty_sentence(self):\n        self.assertIs(is_pangram(\"\"), False)\n\n    def test_perfect_lower_case(self):\n        self.assertIs(is_pangram(\"abcdefghijklmnopqrstuvwxyz\"), True)\n\n    def test_only_lower_case(self):\n        self.assertIs(is_pangram(\"the quick brown fox jumps over the lazy dog\"), True)\n\n    def test_missing_the_letter_x(self):\n        self.assertIs(\n            is_pangram(\"a quick movement of the enemy will jeopardize five gunboats\"),\n            False,\n        )\n\n    def test_missing_the_letter_h(self):\n        self.assertIs(is_pangram(\"five boxing wizards jump quickly at it\"), False)\n\n    def test_with_underscores(self):\n        self.assertIs(is_pangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\"), True)\n\n    def test_with_numbers(self):\n        self.assertIs(\n            is_pangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\"), True\n        )\n\n    def test_missing_letters_replaced_by_numbers(self):\n        self.assertIs(is_pangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"), False)\n\n    def test_mixed_case_and_punctuation(self):\n        self.assertIs(is_pangram('\"Five quacking Zephyrs jolt my wax bed.\"'), True)\n\n    def test_a_m_and_a_m_are_26_different_characters_but_not_a_pangram(self):\n        self.assertIs(is_pangram(\"abcdefghijklm ABCDEFGHIJKLM\"), False)\n\n    # Additional tests for this track\n\n    def test_sentence_without_lower_bound(self):\n        self.assertIs(is_pangram(\"bcdefghijklmnopqrstuvwxyz\"), False)\n\n    def test_sentence_without_upper_bound(self):\n        self.assertIs(is_pangram(\"abcdefghijklmnopqrstuvwxy\"), False)\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "behrtam"
+  ],
+  "contributors": [
+    "cmccandless",
+    "Dog",
+    "Grociu",
+    "helenst",
+    "ikhadykin",
+    "luoken",
+    "mtroiani",
+    "N-Parsons",
+    "olufotebig",
+    "patricksjackson",
+    "pheanex",
+    "thomasjpfan",
+    "tqa236"
+  ]
+}

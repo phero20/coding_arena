@@ -1,0 +1,44 @@
+{
+  "id": "fsharp:robot-name",
+  "trackSlug": "fsharp",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "3fbd466a-caf4-48ac-9a1e-796bc406ff1e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "classes",
+    "randomness"
+  ],
+  "prerequisites": [
+    "classes",
+    "randomness",
+    "records",
+    "strings",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module RobotName\n\nlet mkRobot() = failwith \"You need to implement this function.\"\n\nlet name robot = failwith \"You need to implement this function.\"\n\nlet reset robot = failwith \"You need to implement this function.\"",
+  "example_solution": "module RobotName\n\nlet random = System.Random()\n\ntype Robot = { name: string }\n\nlet letters = ['A'..'Z']\nlet digits = ['0'..'9']\n\nlet NumberOfLetters = 2;\nlet NumberOfDigits = 3  \n\nlet mutable usedNames = Set.empty<string>\n\nlet takeRandomElements xs length = List.init length (fun _ -> List.item (random.Next(List.length xs)) xs)\nlet generateRandomString chars length = new System.String(takeRandomElements chars length |> List.toArray)\nlet generateLetters() = generateRandomString letters NumberOfLetters\nlet generateDigits() = generateRandomString digits NumberOfDigits\nlet generateName() = generateLetters() + generateDigits()\nlet generateUniqueName() = \n    let nextName = \n        Seq.initInfinite (fun _ -> generateName())\n        |> Seq.filter (fun name -> not (usedNames.Contains name))\n        |> Seq.item 0\n    usedNames <- usedNames.Add(nextName)\n    nextName\n\nlet mkRobot() = { name = generateUniqueName() }\n\nlet name robot = robot.name\nlet reset _ = mkRobot()",
+  "test_code": "// This file was created manually and its version is 1.0.0.\n\nmodule RobotNameTest\n\nopen Xunit\nopen FsUnit.Xunit\nopen System.Text.RegularExpressions\nopen RobotName\n\n[<Fact>]\nlet ``Robot has a name`` () =     \n    let robot = mkRobot()\n    Regex.IsMatch(name robot, @\"^[A-Z]{2}\\d{3}$\") |> should equal true\n    \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Name is the same each time`` () =     \n    let robot = mkRobot()\n    name robot |> should equal (name robot)\n    \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``2 Different robots have different names`` () = \n    let robot = mkRobot()\n    let robot2 = mkRobot()\n    name robot |> should not' (equal (name robot2))\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>] \nlet ``2500 Different robots have different names``() =\n    let robotCount = 2500\n    seq { 1 .. robotCount }\n    |> Seq.map (fun _ -> mkRobot())\n    |> Seq.map (fun robot -> name robot)\n    |> Set\n    |> Set.count\n    |> should equal robotCount\n    \n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can reset the name`` () =  \n    let robot = mkRobot()\n    let originalName = name robot\n    let resetRobot = reset robot\n    originalName |> should not' (equal (name resetRobot))\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "jwood803"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "MagnusMikkelsen",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

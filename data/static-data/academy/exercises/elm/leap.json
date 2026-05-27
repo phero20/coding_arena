@@ -1,0 +1,35 @@
+{
+  "id": "elm:leap",
+  "trackSlug": "elm",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "e943e3bf-920e-4541-95c3-be7bf6024afe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "booleans"
+  ],
+  "prerequisites": [
+    "booleans",
+    "basics-2"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "module Leap exposing (isLeapYear)\n\n\nisLeapYear : Int -> Bool\nisLeapYear year =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module Leap exposing (isLeapYear)\n\n\nisLeapYear : Int -> Bool\nisLeapYear year =\n    modBy 4 year == 0 && (modBy 100 year /= 0 || modBy 400 year == 0)\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport Leap\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"Leap\"\n        [ test \"leap year\" <|\n            \\() -> Expect.equal True (Leap.isLeapYear 1996)\n        , skip <|\n            test \"non-leap year\" <|\n                \\() -> Expect.equal False (Leap.isLeapYear 1997)\n        , skip <|\n            test \"non-leap even year\" <|\n                \\() -> Expect.equal False (Leap.isLeapYear 1998)\n        , skip <|\n            test \"century\" <|\n                \\() -> Expect.equal False (Leap.isLeapYear 1900)\n        , skip <|\n            test \"second century\" <|\n                \\() -> Expect.equal False (Leap.isLeapYear 1800)\n        , skip <|\n            test \"fourth century\" <|\n                \\() -> Expect.equal True (Leap.isLeapYear 2400)\n        , skip <|\n            test \"y2k\" <|\n                \\() -> Expect.equal True (Leap.isLeapYear 2000)\n        ]\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "nathanielknight",
+    "parkerl",
+    "tuxagon"
+  ]
+}

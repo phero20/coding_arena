@@ -1,0 +1,28 @@
+{
+  "id": "lua:robot-simulator",
+  "trackSlug": "lua",
+  "slug": "robot-simulator",
+  "name": "Robot Simulator",
+  "uuid": "742a010e-85f2-4259-a444-86a7fb73b9bb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a robot simulator.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nWrite a robot simulator.\n\nA robot factory's test facility needs a program to verify robot movements.\n\nThe robots have three possible movements:\n\n- turn right\n- turn left\n- advance\n\nRobots are placed on a hypothetical infinite grid, facing a particular direction (north, east, south, or west) at a set of {x,y} coordinates,\ne.g., {3,8}, with coordinates increasing to the north and east.\n\nThe robot then receives a number of instructions, at which point the testing facility verifies the robot's new position, and in which direction it is pointing.\n\n- The letter-string \"RAALAL\" means:\n  - Turn right\n  - Advance twice\n  - Turn left\n  - Advance once\n  - Turn left yet again\n- Say a robot starts at {7, 3} facing north.\n  Then running this stream of instructions should leave it at {9, 4} facing west.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(config)\nend\n",
+  "example_solution": "local commands = {\n  R = {\n    north = function(self)\n      self.heading = 'east'\n    end,\n    east = function(self)\n      self.heading = 'south'\n    end,\n    south = function(self)\n      self.heading = 'west'\n    end,\n    west = function(self)\n      self.heading = 'north'\n    end\n  },\n  L = {\n    north = function(self)\n      self.heading = 'west'\n    end,\n    west = function(self)\n      self.heading = 'south'\n    end,\n    south = function(self)\n      self.heading = 'east'\n    end,\n    east = function(self)\n      self.heading = 'north'\n    end\n  },\n  A = {\n    north = function(self)\n      self.y = self.y + 1\n    end,\n    east = function(self)\n      self.x = self.x + 1\n    end,\n    south = function(self)\n      self.y = self.y - 1\n    end,\n    west = function(self)\n      self.x = self.x - 1\n    end\n  }\n}\n\nlocal function move(self, command_chain)\n  for command in command_chain:gmatch('.') do\n    commands[command][self.heading](self)\n  end\nend\n\nreturn function(config)\n  return { x = config.x, y = config.y, heading = config.heading, move = move }\nend\n",
+  "test_code": "local Robot = require('robot-simulator')\n\ndescribe('robot-simulator', function()\n  it('should make the current x, y, and heading available', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    assert.equal(5, robot.x)\n    assert.equal(10, robot.y)\n    assert.equal('north', robot.heading)\n  end)\n\n  it('should move forward when an A command is given', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    robot:move('A')\n    assert.equal(5, robot.x)\n    assert.equal(11, robot.y)\n    assert.equal('north', robot.heading)\n  end)\n\n  it('should change heading clockwise when an R command is given', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    robot:move('R')\n    assert.equal(5, robot.x)\n    assert.equal(10, robot.y)\n    assert.equal('east', robot.heading)\n  end)\n\n  it('should change heading counter-clockwise when an L command is given', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    robot:move('L')\n    assert.equal(5, robot.x)\n    assert.equal(10, robot.y)\n    assert.equal('west', robot.heading)\n  end)\n\n  it('should be able to chain commands', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    robot:move('LAR')\n    assert.equal(4, robot.x)\n    assert.equal(10, robot.y)\n    assert.equal('north', robot.heading)\n  end)\n\n  it('should be able to turn all the way around by turning clockwise', function()\n    local robot = Robot { x = 7, y = -10, heading = 'north' }\n    robot:move('RRRR')\n    assert.equal(7, robot.x)\n    assert.equal(-10, robot.y)\n    assert.equal('north', robot.heading)\n  end)\n\n  it('should be able to turn all the way around by turning counter-clockwise', function()\n    local robot = Robot { x = 5, y = 10, heading = 'south' }\n    robot:move('LLLL')\n    assert.equal(5, robot.x)\n    assert.equal(10, robot.y)\n    assert.equal('south', robot.heading)\n  end)\n\n  it('should be able to advance in all directions', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    robot:move('ARAARAARAR')\n    assert.equal(6, robot.x)\n    assert.equal(9, robot.y)\n    assert.equal('north', robot.heading)\n  end)\n\n  it('should raise an error when an invalid command is used', function()\n    local robot = Robot { x = 5, y = 10, heading = 'north' }\n    assert.has_errors(function()\n      robot:move('ARALZR')\n    end)\n  end)\nend)\n",
+  "source": "Inspired by an interview question at a famous company.",
+  "source_url": null,
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

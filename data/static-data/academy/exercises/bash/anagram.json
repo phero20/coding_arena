@@ -1,0 +1,36 @@
+{
+  "id": "bash:anagram",
+  "trackSlug": "bash",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "33d9eb48-5958-4e98-afc0-8cff89577c86",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\nif [ \"$#\" -ne 2 ]; then\n  echo \"Usage: $0 <string1> <string2>\" >&2\n  exit 1\nfi\n\ninput=\"$1\"\npossibles=\"$2\"\n\nout=\"\"\n\nin_counts=\"$(echo $input | tr '[:upper:]' '[:lower:]' | fold -w1 | sort | uniq -c)\"\nfor possible in $possibles\ndo\n    p_counts=\"$(echo $possible | tr '[:upper:]' '[:lower:]' | fold -w1 | sort | uniq -c)\"\n    if test \"$in_counts\" = \"$p_counts\" -a \"$(echo $input | tr '[:upper:]' '[:lower:]')\" != \"$(echo $possible | tr '[:upper:]' '[:lower:]')\"\n    then\n        out=\"${out} ${possible}\"\n    fi\ndone\n\necho ${out# } #strip leading spaces\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.5.0.0\n\n@test \"no matches\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"diaper\" \"hello world zombies pants\"\n  assert_success\n  refute_output     # no output\n}\n\n@test \"detects two anagrams\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"solemn\" \"lemons cherry melons\"\n  assert_success\n  assert_output \"lemons melons\"\n}\n\n@test \"does not detect anagram subsets\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"good\" \"dog goody\"\n  assert_success\n  refute_output\n}\n\n@test \"detects anagram\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"listen\" \"enlists google inlets banana\"\n  assert_success\n  assert_output \"inlets\"\n}\n\n@test \"detects three anagrams\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"allergy\" \"gallery ballerina regally clergy largely leading\"\n  assert_success\n  assert_output \"gallery regally largely\"\n}\n\n@test \"detects multiple anagrams with different case\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash anagram.sh \"nose\" \"Eons ONES\"\n    assert_success\n    assert_output \"Eons ONES\"\n}\n\n@test \"does not detect non-anagrams with identical checksum\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"mass\" \"last\"\n  assert_success\n  refute_output\n}\n\n@test \"detects anagrams case-insensitively\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"Orchestra\" \"cashregister Carthorse radishes\"\n  assert_success\n  assert_output \"Carthorse\"\n}\n\n@test \"detects anagrams using case-insensitive subject\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"Orchestra\" \"cashregister carthorse radishes\"\n  assert_success\n  assert_output \"carthorse\"\n}\n\n@test \"detects anagrams using case-insensitive possible matches\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"orchestra\" \"cashregister Carthorse radishes\"\n  assert_success\n  assert_output \"Carthorse\"\n}\n\n@test \"does not detect a anagram if the original word is repeated\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"go\" \"goGoGO\"\n  assert_success\n  refute_output\n}\n\n@test \"anagrams must use all letters exactly once\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"tapper\" \"patter\"\n  assert_success\n  refute_output\n}\n\n@test \"words are not anagrams of themselves\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"BANANA\" \"BANANA\"\n  assert_success\n  refute_output\n}\n\n@test \"words are not anagrams of themselves even if letter case is partially different\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"BANANA\" \"Banana\"\n  assert_success\n  refute_output\n}\n\n@test \"words are not anagrams of themselves even if letter case is completely different\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"BANANA\" \"banana\"\n  assert_success\n  refute_output\n}\n\n@test \"words other than themselves can be anagrams\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash anagram.sh \"LISTEN\" \"LISTEN Silent\"\n  assert_success\n  assert_output \"Silent\"\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "jaggededgedjustice"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "sjwarner-bp",
+    "Smarticles101",
+    "ZapAnton"
+  ]
+}

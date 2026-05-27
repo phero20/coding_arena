@@ -1,0 +1,46 @@
+{
+  "id": "elixir:alphametics",
+  "trackSlug": "elixir",
+  "slug": "alphametics",
+  "name": "Alphametics",
+  "uuid": "7ed99829-acd8-4724-b92f-85146f1709f9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an alphametics puzzle, find the correct solution.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "pattern-matching"
+  ],
+  "prerequisites": [
+    "strings",
+    "regular-expressions",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "guards",
+    "case",
+    "cond",
+    "if",
+    "enum",
+    "charlists",
+    "ranges"
+  ],
+  "instructions": "# Instructions\n\nGiven an alphametics puzzle, find the correct solution.\n\n[Alphametics][alphametics] is a puzzle where letters in words are replaced with numbers.\n\nFor example `SEND + MORE = MONEY`:\n\n```text\n  S E N D\n  M O R E +\n-----------\nM O N E Y\n```\n\nReplacing these with valid numbers gives:\n\n```text\n  9 5 6 7\n  1 0 8 5 +\n-----------\n1 0 6 5 2\n```\n\nThis is correct because every letter is replaced by a different number and the words, translated into numbers, then make a valid sum.\n\nEach letter must represent a different digit, and the leading digit of a multi-digit number must not be zero.\n\n[alphametics]: https://en.wikipedia.org/wiki/Alphametics\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Alphametics do\n  @type puzzle :: binary\n  @type solution :: %{required(?A..?Z) => 0..9}\n\n  @doc \"\"\"\n  Takes an alphametics puzzle and returns a solution where every letter\n  replaced by its number will make a valid equation. Returns `nil` when\n  there is no valid solution to the given puzzle.\n\n  ## Examples\n\n    iex> Alphametics.solve(\"I + BB == ILL\")\n    %{?I => 1, ?B => 9, ?L => 0}\n\n    iex> Alphametics.solve(\"A == B\")\n    nil\n  \"\"\"\n  @spec solve(puzzle) :: solution | nil\n  def solve(puzzle) do\n  end\nend\n",
+  "example_solution": "defmodule Alphametics do\n  @type puzzle :: binary\n  @type solution :: %{required(?A..?Z) => 0..9}\n\n  @doc \"\"\"\n  Takes an alphametics puzzle and returns a solution where every letter\n  replaced by its number will make a valid equation. Returns `nil` when\n  there is no valid solution to the given puzzle.\n\n  ## Examples\n\n    iex> Alphametics.solve(\"I + BB == ILL\")\n    %{?I => 1, ?B => 9, ?L => 0}\n\n    iex> Alphametics.solve(\"A == B\")\n    nil\n  \"\"\"\n  @spec solve(puzzle) :: solution | nil\n  def solve(puzzle) do\n    [sum | addends] = words = parse(puzzle)\n    letters = words |> List.flatten() |> Enum.uniq()\n    first_letters = words |> Enum.map(&hd/1) |> Enum.uniq()\n    problem = %{addends: addends, sum: sum, first_letters: first_letters}\n\n    solve(letters, Enum.to_list(0..9), %{}, problem)\n  end\n\n  defp solve([], _numbers, solution, %{addends: addends, sum: sum}) do\n    if sum(addends, solution) == to_number(sum, solution) do\n      solution\n    end\n  end\n\n  defp solve([letter | letters], numbers, solution, problem) do\n    Enum.find_value(numbers, fn number ->\n      leading_zero? = number == 0 && letter in problem.first_letters\n\n      if !leading_zero? do\n        numbers = List.delete(numbers, number)\n        solution = put_in(solution[letter], number)\n        solve(letters, numbers, solution, problem)\n      end\n    end)\n  end\n\n  defp sum(addends, solution) do\n    Enum.reduce(addends, 0, fn addend, sum ->\n      sum + to_number(addend, solution)\n    end)\n  end\n\n  defp to_number(letters, numbers) do\n    letters\n    |> Enum.map(&numbers[&1])\n    |> Integer.undigits()\n  end\n\n  defp parse(puzzle) do\n    [left, right] = String.split(puzzle, \" == \")\n\n    addends =\n      left\n      |> String.split(\" + \")\n      |> Enum.map(&String.to_charlist/1)\n\n    sum = String.to_charlist(right)\n\n    [sum | addends]\n  end\nend\n",
+  "test_code": "defmodule AlphameticsTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"puzzle with three letters\" do\n    puzzle = \"I + BB == ILL\"\n\n    solution = %{\n      ?I => 1,\n      ?B => 9,\n      ?L => 0\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  test \"solution must have unique value for each letter\" do\n    puzzle = \"A == B\"\n    assert Alphametics.solve(puzzle) == nil\n  end\n\n  @tag :pending\n  test \"leading zero solution is invalid\" do\n    puzzle = \"ACA + DD == BD\"\n    assert Alphametics.solve(puzzle) == nil\n  end\n\n  @tag :pending\n  test \"puzzle with two digits final carry\" do\n    puzzle = \"A + A + A + A + A + A + A + A + A + A + A + B == BCC\"\n\n    solution = %{\n      ?A => 9,\n      ?B => 1,\n      ?C => 0\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  test \"puzzle with four letters\" do\n    puzzle = \"AS + A == MOM\"\n\n    solution = %{\n      ?A => 9,\n      ?S => 2,\n      ?M => 1,\n      ?O => 0\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  test \"puzzle with six letters\" do\n    puzzle = \"NO + NO + TOO == LATE\"\n\n    solution = %{\n      ?N => 7,\n      ?O => 4,\n      ?T => 9,\n      ?L => 1,\n      ?A => 0,\n      ?E => 2\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  test \"puzzle with seven letters\" do\n    puzzle = \"HE + SEES + THE == LIGHT\"\n\n    solution = %{\n      ?E => 4,\n      ?G => 2,\n      ?H => 5,\n      ?I => 0,\n      ?L => 1,\n      ?S => 9,\n      ?T => 7\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  test \"puzzle with eight letters\" do\n    puzzle = \"SEND + MORE == MONEY\"\n\n    solution = %{\n      ?S => 9,\n      ?E => 5,\n      ?N => 6,\n      ?D => 7,\n      ?M => 1,\n      ?O => 0,\n      ?R => 8,\n      ?Y => 2\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  @tag :slow\n  test \"puzzle with ten letters\" do\n    puzzle = \"AND + A + STRONG + OFFENSE + AS + A + GOOD == DEFENSE\"\n\n    solution = %{\n      ?A => 5,\n      ?D => 3,\n      ?E => 4,\n      ?F => 7,\n      ?G => 8,\n      ?N => 0,\n      ?O => 2,\n      ?R => 1,\n      ?S => 6,\n      ?T => 9\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\n\n  @tag :pending\n  @tag :slow\n  test \"puzzle with ten letters and 199 addends\" do\n    puzzle =\n      \"THIS + A + FIRE + THEREFORE + FOR + ALL + HISTORIES + I + TELL + A + \" <>\n        \"TALE + THAT + FALSIFIES + ITS + TITLE + TIS + A + LIE + THE + TALE + \" <>\n        \"OF + THE + LAST + FIRE + HORSES + LATE + AFTER + THE + FIRST + \" <>\n        \"FATHERS + FORESEE + THE + HORRORS + THE + LAST + FREE + TROLL + \" <>\n        \"TERRIFIES + THE + HORSES + OF + FIRE + THE + TROLL + RESTS + AT + \" <>\n        \"THE + HOLE + OF + LOSSES + IT + IS + THERE + THAT + SHE + STORES + \" <>\n        \"ROLES + OF + LEATHERS + AFTER + SHE + SATISFIES + HER + HATE + OFF + \" <>\n        \"THOSE + FEARS + A + TASTE + RISES + AS + SHE + HEARS + THE + LEAST + \" <>\n        \"FAR + HORSE + THOSE + FAST + HORSES + THAT + FIRST + HEAR + THE + \" <>\n        \"TROLL + FLEE + OFF + TO + THE + FOREST + THE + HORSES + THAT + \" <>\n        \"ALERTS + RAISE + THE + STARES + OF + THE + OTHERS + AS + THE + \" <>\n        \"TROLL + ASSAILS + AT + THE + TOTAL + SHIFT + HER + TEETH + TEAR + \" <>\n        \"HOOF + OFF + TORSO + AS + THE + LAST + HORSE + FORFEITS + ITS + \" <>\n        \"LIFE + THE + FIRST + FATHERS + HEAR + OF + THE + HORRORS + THEIR + \" <>\n        \"FEARS + THAT + THE + FIRES + FOR + THEIR + FEASTS + ARREST + AS + \" <>\n        \"THE + FIRST + FATHERS + RESETTLE + THE + LAST + OF + THE + FIRE + \" <>\n        \"HORSES + THE + LAST + TROLL + HARASSES + THE + FOREST + HEART + \" <>\n        \"FREE + AT + LAST + OF + THE + LAST + TROLL + ALL + OFFER + THEIR + \" <>\n        \"FIRE + HEAT + TO + THE + ASSISTERS + FAR + OFF + THE + TROLL + \" <>\n        \"FASTS + ITS + LIFE + SHORTER + AS + STARS + RISE + THE + HORSES + \" <>\n        \"REST + SAFE + AFTER + ALL + SHARE + HOT + FISH + AS + THEIR + \" <>\n        \"AFFILIATES + TAILOR + A + ROOFS + FOR + THEIR + SAFE == FORTRESSES\"\n\n    solution = %{\n      ?A => 1,\n      ?E => 0,\n      ?F => 5,\n      ?H => 8,\n      ?I => 7,\n      ?L => 2,\n      ?O => 6,\n      ?R => 3,\n      ?S => 4,\n      ?T => 9\n    }\n\n    assert Alphametics.solve(puzzle) == solution\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "britto"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "neenjaw"
+  ]
+}

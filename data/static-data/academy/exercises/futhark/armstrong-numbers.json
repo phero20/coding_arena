@@ -1,0 +1,26 @@
+{
+  "id": "futhark:armstrong-numbers",
+  "trackSlug": "futhark",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "3849a1ff-d7b2-4633-9963-1c4ecc62a230",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def is_armstrong_number (number: i32): bool = ???\n",
+  "example_solution": "def to_digits (number: i32): []i32 =\n  let (_, digits) = loop (number, digits) = (number, []) while number > 0 do\n    (number // 10, [(number %% 10)] ++ digits)\n  in\n    digits\n\ndef is_armstrong_number (number: i32): bool =\n  let digits = to_digits number\n  in\n    digits \n    |> map (\\d -> d ** i32.i64(length digits))\n    |> i32.sum \n    |> (== number)\n",
+  "test_code": "import \"armstrong_numbers\"\n\n-- Zero is an Armstrong number\n-- ==\n-- input { 0 }\n-- output { true }\n\n-- Single-digit numbers are Armstrong numbers\n-- ==\n-- input { 5 }\n-- output { true }\n\n-- There are no two-digit Armstrong numbers\n-- ==\n-- input { 10 }\n-- output { false }\n\n-- Three-digit number that is an Armstrong number\n-- ==\n-- input { 153 }\n-- output { true }\n\n-- Three-digit number that is not an Armstrong number\n-- ==\n-- input { 100 }\n-- output { false }\n\n-- Four-digit number that is an Armstrong number\n-- ==\n-- input { 9474 }\n-- output { true }\n\n-- Four-digit number that is not an Armstrong number\n-- ==\n-- input { 9475 }\n-- output { false }\n\n-- Seven-digit number that is an Armstrong number\n-- ==\n-- input { 9926315 }\n-- output { true }\n\n-- Seven-digit number that is not an Armstrong number\n-- ==\n-- input { 9926314 }\n-- output { false }\n\nlet main (number: i32): bool =\n  is_armstrong_number number\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

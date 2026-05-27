@@ -1,0 +1,38 @@
+{
+  "id": "common-lisp:book-store",
+  "trackSlug": "common-lisp",
+  "slug": "book-store",
+  "name": "Book Store",
+  "uuid": "7f4cc4e6-3bcd-4b63-9115-36e63fba21ec",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "To try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts of multiple-book purchases.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "lists",
+    "mapping",
+    "functions"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "lists",
+    "mapping",
+    "arithmetic",
+    "functions"
+  ],
+  "instructions": "# Instructions\n\nTo try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts on multiple book purchases.\n\nOne copy of any of the five books costs $8.\n\nIf, however, you buy two different books, you get a 5% discount on those two books.\n\nIf you buy 3 different books, you get a 10% discount.\n\nIf you buy 4 different books, you get a 20% discount.\n\nIf you buy all 5, you get a 25% discount.\n\nNote that if you buy four books, of which 3 are different titles, you get a 10% discount on the 3 that form part of a set, but the fourth book still costs $8.\n\nYour mission is to write code to calculate the price of any conceivable shopping basket (containing only books of the same series), giving as big a discount as possible.\n\nFor example, how much does this basket of books cost?\n\n- 2 copies of the first book\n- 2 copies of the second book\n- 2 copies of the third book\n- 1 copy of the fourth book\n- 1 copy of the fifth book\n\nOne way of grouping these 8 books is:\n\n- 1 group of 5 (1st, 2nd,3rd, 4th, 5th)\n- 1 group of 3 (1st, 2nd, 3rd)\n\nThis would give a total of:\n\n- 5 books at a 25% discount\n- 3 books at a 10% discount\n\nResulting in:\n\n- 5 × (100% - 25%) × $8 = 5 × $6.00 = $30.00, plus\n- 3 × (100% - 10%) × $8 = 3 × $7.20 = $21.60\n\nWhich equals $51.60.\n\nHowever, a different way to group these 8 books is:\n\n- 1 group of 4 books (1st, 2nd, 3rd, 4th)\n- 1 group of 4 books (1st, 2nd, 3rd, 5th)\n\nThis would give a total of:\n\n- 4 books at a 20% discount\n- 4 books at a 20% discount\n\nResulting in:\n\n- 4 × (100% - 20%) × $8 = 4 × $6.40 = $25.60, plus\n- 4 × (100% - 20%) × $8 = 4 × $6.40 = $25.60\n\nWhich equals $51.20.\n\nAnd $51.20 is the price with the biggest discount.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :book-store\n  (:use :cl)\n  (:export :calculate-price))\n\n(in-package :book-store)\n\n(defun calculate-price (basket))\n",
+  "example_solution": "(defpackage :book-store\n  (:use :cl)\n  (:export :calculate-price))\n\n(in-package :book-store)\n\n(defparameter +discounts+ #(0.0 0.05 0.1 0.2 0.25))\n\n(defun calculate-price (basket)\n (if basket\n  (let ((groupings (improve-groupings (create-groups basket))))\n   (round (apply '+ (mapcar #'calculate-group-price groupings))))\n   0))\n\n(defun create-groups (basket)\n \"Function to recursively find the largest groups possible from the basket.\nReturns the length of each group of books.\"\n  (unless (zerop (list-length basket))\n    (let ((group (remove-duplicates basket)))\n      (loop for book in group\n        do (setf basket (remove book basket :count 1)))\n      (cons (list-length group) (create-groups basket)))))\n\n(defun improve-groupings (groupings)\n  \"Function to replace every pair of lengths 3 & 5 with pairs of length 4 & 4.\nThis is required to correctly calculate the price, as pairs of 4 & 4 are less\nexpensive than pairs of 5 & 3.\"\n (if (subsetp '(3 5) groupings)\n   (improve-groupings (append '(4 4) (remove 5 (remove 3 groupings :count 1) :count 1)))\n   groupings))\n\n(defun calculate-group-price (group)\n  (let ((one-minus-discount (- 1 (aref +discounts+ (1- group)))))\n    (* 800 group one-minus-discount)))\n",
+  "test_code": ";; Ensures that book-store.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"book-store\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from book-store and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :book-store-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :book-store-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* book-store-suite)\n\n(test only-a-single-book\n    (let ((basket '(1)))\n     (is (eql 800 (book-store:calculate-price basket)))))\n\n(test two-of-the-same-book\n    (let ((basket '(2 2)))\n     (is (eql 1600 (book-store:calculate-price basket)))))\n\n(test empty-basket\n    (let ((basket '()))\n     (is (eql 0 (book-store:calculate-price basket)))))\n\n(test two-different-books\n    (let ((basket '(1 2)))\n     (is (eql 1520 (book-store:calculate-price basket)))))\n\n(test three-different-books\n    (let ((basket '(1 2 3)))\n     (is (eql 2160 (book-store:calculate-price basket)))))\n\n(test four-different-books\n    (let ((basket '(1 2 3 4)))\n     (is (eql 2560 (book-store:calculate-price basket)))))\n\n(test five-different-books\n    (let ((basket '(1 2 3 4 5)))\n     (is (eql 3000 (book-store:calculate-price basket)))))\n\n(test two-groups-of-four-is-cheaper-than-group-of-five-plus-group-of-three\n    (let ((basket '(1 1 2 2 3 3 4 5)))\n     (is (eql 5120 (book-store:calculate-price basket)))))\n\n(test two-groups-of-four-is-cheaper-than-groups-of-five-and-three\n    (let ((basket '(1 1 2 3 4 4 5 5)))\n     (is (eql 5120 (book-store:calculate-price basket)))))\n\n(test group-of-four-plus-group-of-two-is-cheaper-than-two-groups-of-three\n    (let ((basket '(1 1 2 2 3 4)))\n     (is (eql 4080 (book-store:calculate-price basket)))))\n\n(test two-each-of-first-4-books-and-1-copy-each-of-rest\n    (let ((basket '(1 1 2 2 3 3 4 4 5)))\n     (is (eql 5560 (book-store:calculate-price basket)))))\n\n(test two-copies-of-each-book\n    (let ((basket '(1 1 2 2 3 3 4 4 5 5)))\n     (is (eql 6000 (book-store:calculate-price basket)))))\n\n(test three-copies-of-first-book-and-2-each-of-remaining\n    (let ((basket '(1 1 2 2 3 3 4 4 5 5 1)))\n     (is (eql 6800 (book-store:calculate-price basket)))))\n\n(test three-each-of-first-2-books-and-2-each-of-remaining-books\n    (let ((basket '(1 1 2 2 3 3 4 4 5 5 1 2)))\n     (is (eql 7520 (book-store:calculate-price basket)))))\n\n(test four-groups-of-four-are-cheaper-than-two-groups-each-of-five-and-three\n    (let ((basket '(1 1 2 2 3 3 4 5 1 1 2 2 3 3 4 5)))\n     (is (eql 10240 (book-store:calculate-price basket)))))\n\n(test check-that-groups-of-four-are-created-properly-even-when-there-are-more-groups-of-three-than-groups-of-five\n    (let ((basket '(1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3 4 4 5 5)))\n     (is (eql 14560 (book-store:calculate-price basket)))))\n\n(test one-group-of-one-and-four-is-cheaper-than-one-group-of-two-and-three\n    (let ((basket '(1 1 2 3 4)))\n     (is (eql 3360 (book-store:calculate-price basket)))))\n\n(test one-group-of-one-and-two-plus-three-groups-of-four-is-cheaper-than-one-group-of-each-size\n    (let ((basket '(1 2 2 3 3 3 4 4 4 4 5 5 5 5 5)))\n     (is (eql 10000 (book-store:calculate-price basket)))))\n\n(defun run-tests (&optional (test-or-suite 'book-store-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Inspired by the harry potter kata from Cyber-Dojo.",
+  "source_url": "https://cyber-dojo.org/creator/home",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": [
+    "verdammelt"
+  ]
+}

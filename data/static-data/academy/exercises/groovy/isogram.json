@@ -1,0 +1,26 @@
+{
+  "id": "groovy:isogram",
+  "trackSlug": "groovy",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "f1dc42da-b7a1-4c87-b586-5d3f967b27cb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Isogram {\n    static boolean isIsogram(String phrase) {\n        throw new UnsupportedOperationException('method not implemented.')\n    }\n}",
+  "example_solution": "class Isogram {\n    static boolean isIsogram(String phrase) {\n        def p = phrase\n                .toLowerCase()\n                .toCharArray()\n                .findAll { it.isLetter() }\n\n        p.size() == p.toSet().size()\n    }\n}",
+  "test_code": "import spock.lang.*\n\nclass IsogramSpec extends Specification {\n\n    def \"Empty string\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase || expected\n        ''     || true\n    }\n\n    @Ignore\n    def \"Isogram with only lower case characters\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase    || expected\n        'isogram' || true\n    }\n\n    @Ignore\n    def \"Word with one duplicated character\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase   || expected\n        'eleven' || false\n    }\n\n    @Ignore\n    def \"Word with one duplicated character from the end of the alphabet\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase  || expected\n        'zzyzx' || false\n    }\n\n    @Ignore\n    def \"Longest reported english isogram\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase              || expected\n        'subdermatoglyphic' || true\n    }\n\n    @Ignore\n    def \"Word with duplicated character in mixed case\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase     || expected\n        'Alphabet' || false\n    }\n\n    @Ignore\n    def \"Word with duplicated character in mixed case, lowercase first\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase     || expected\n        'alphAbet' || false\n    }\n\n    @Ignore\n    def \"Hypothetical isogrammic word with hyphen\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase                || expected\n        'thumbscrew-japingly' || true\n    }\n\n    @Ignore\n    def \"Hypothetical word with duplicated character following hyphen\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase                 || expected\n        'thumbscrew-jappingly' || false\n    }\n\n    @Ignore\n    def \"Isogram with duplicated hyphen\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase         || expected\n        'six-year-old' || true\n    }\n\n    @Ignore\n    def \"Made-up name that is an isogram\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase                    || expected\n        'Emily Jung Schwartzkopf' || true\n    }\n\n    @Ignore\n    def \"Duplicated character in the middle\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase     || expected\n        'accentor' || false\n    }\n\n    @Ignore\n    def \"Same first and last characters\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase   || expected\n        'angola' || false\n    }\n\n    @Ignore\n    def \"Word with duplicated character and with two hyphens\"() {\n        expect:\n        Isogram.isIsogram(phrase) == expected\n\n        where:\n        phrase       || expected\n        'up-to-date' || false\n    }\n\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": null
+}

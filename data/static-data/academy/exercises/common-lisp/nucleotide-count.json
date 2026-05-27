@@ -1,0 +1,34 @@
+{
+  "id": "common-lisp:nucleotide-count",
+  "trackSlug": "common-lisp",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "b2ad38c2-2962-4a47-9b14-20ca262ebff6",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "characters"
+  ],
+  "prerequisites": [
+    "strings",
+    "characters"
+  ],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :nucleotide-count\n  (:use :cl)\n  (:export :nucleotide-counts))\n\n(in-package :nucleotide-count)\n\n(defun nucleotide-counts (strand))\n",
+  "example_solution": "(defpackage :nucleotide-count\n  (:use :common-lisp)\n  (:export :dna-count :nucleotide-counts :invalid-nucleotide))\n\n(in-package :nucleotide-count)\n\n(defparameter +valid-nucleotides+ (list #\\A #\\C #\\G #\\T))\n\n(defun nucleotide-counts (strand)\n  (when (every #'(lambda (n) (member n +valid-nucleotides+ :test #'char=)) strand)\n    (mapcar #'(lambda (n) (cons n (count n strand :test #'char=))) +valid-nucleotides+)))\n",
+  "test_code": ";; Ensures that nucleotide-count.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"nucleotide-count\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from nucleotide-count and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :nucleotide-count-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :nucleotide-count-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* nucleotide-count-suite)\n\n(test empty-strand\n    (let ((strand \"\")\n          (result '((#\\A . 0) (#\\C . 0) (#\\G . 0) (#\\T . 0))))\n      (is (equal result (nucleotide-count:nucleotide-counts strand)))))\n\n(test can-count-one-nucleotide-in-single-character-input\n    (let ((strand \"G\")\n          (result '((#\\A . 0) (#\\C . 0) (#\\G . 1) (#\\T . 0))))\n      (is (equal result (nucleotide-count:nucleotide-counts strand)))))\n\n(test strand-with-repeated-nucleotide\n    (let ((strand \"GGGGGGG\")\n          (result '((#\\A . 0) (#\\C . 0) (#\\G . 7) (#\\T . 0))))\n      (is (equal result (nucleotide-count:nucleotide-counts strand)))))\n\n(test strand-with-multiple-nucleotides\n    (let ((strand \"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\")\n          (result '((#\\A . 20) (#\\C . 12) (#\\G . 17) (#\\T . 21))))\n      (is (equal result (nucleotide-count:nucleotide-counts strand)))))\n\n(test strand-with-invalid-nucleotides\n    (let ((strand \"AGXXACT\"))\n      (is (equal NIL (nucleotide-count:nucleotide-counts strand)))))\n\n(defun run-tests (&optional (test-or-suite 'nucleotide-count-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": [
+    "dnmfarrell",
+    "sjakobi"
+  ]
+}

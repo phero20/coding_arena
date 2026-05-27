@@ -1,0 +1,49 @@
+{
+  "id": "elixir:rail-fence-cipher",
+  "trackSlug": "elixir",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "3daeb229-0638-443f-9ae2-222ebb88c11a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "ranges"
+  ],
+  "prerequisites": [
+    "strings",
+    "cond",
+    "case",
+    "if",
+    "multiple-clause-functions",
+    "guards",
+    "pattern-matching",
+    "recursion",
+    "enum",
+    "ranges",
+    "streams"
+  ],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule RailFenceCipher do\n  @doc \"\"\"\n  Encode a given plaintext to the corresponding rail fence ciphertext\n  \"\"\"\n  @spec encode(String.t(), pos_integer) :: String.t()\n  def encode(str, rails) do\n  end\n\n  @doc \"\"\"\n  Decode a given rail fence ciphertext to the corresponding plaintext\n  \"\"\"\n  @spec decode(String.t(), pos_integer) :: String.t()\n  def decode(str, rails) do\n  end\nend\n",
+  "example_solution": "defmodule RailFenceCipher do\n  @doc \"\"\"\n  Encode a given plaintext to the corresponding rail fence ciphertext\n  \"\"\"\n  @spec encode(String.t(), pos_integer) :: String.t()\n  def encode(str, 1), do: str\n\n  def encode(str, rails) do\n    str\n    |> String.codepoints()\n    |> fill_fence(rails)\n    |> Enum.join()\n  end\n\n  @doc \"\"\"\n  Decode a given rail fence ciphertext to the corresponding plaintext\n  \"\"\"\n  @spec decode(String.t(), pos_integer) :: String.t()\n  def decode(str, 1), do: str\n\n  def decode(str, rails) do\n    0..(String.length(str) - 1)\n    |> Enum.to_list()\n    |> fill_fence(rails)\n    |> extract_original(str)\n  end\n\n  defp extract_original(fence, str) do\n    0..(String.length(str) - 1)\n    |> Enum.map(fn i ->\n      String.at(str, Enum.find_index(fence, &(&1 == i)))\n    end)\n    |> Enum.join()\n  end\n\n  defp fill_fence(list_chars, rails) do\n    rail_zigzag_indexes = Enum.concat(Enum.to_list(0..(rails - 1)), Enum.to_list((rails - 2)..1))\n\n    create_empty_fence(rails, length(list_chars))\n    |> set_chars_to_fence(list_chars, rail_zigzag_indexes)\n  end\n\n  defp create_empty_fence(rows, cols) do\n    0..(rows - 1)\n    |> Enum.map(fn _ ->\n      List.duplicate(nil, cols)\n    end)\n  end\n\n  defp set_chars_to_fence(fence, chars, pos_in_zigzag) do\n    chars\n    |> Enum.with_index()\n    |> Enum.reduce(fence, fn {char, index}, acc ->\n      rail_ind = Enum.at(pos_in_zigzag, rem(index, length(pos_in_zigzag)))\n      List.update_at(acc, rail_ind, &List.update_at(&1, index, fn _ -> char end))\n    end)\n    |> List.flatten()\n    |> Enum.filter(&(&1 != nil))\n  end\nend\n",
+  "test_code": "defmodule RailFenceCipherTest do\n  use ExUnit.Case\n\n  describe \"encode\" do\n    # @tag :pending\n    test \"encode with ending at the first rail\" do\n      assert RailFenceCipher.encode(\"XOXOXOXOXOXOXOXOXO\", 2) == \"XXXXXXXXXOOOOOOOOO\"\n    end\n\n    @tag :pending\n    test \"encode with three rails\" do\n      msg = \"WEAREDISCOVEREDFLEEATONCE\"\n      assert RailFenceCipher.encode(msg, 3) == \"WECRLTEERDSOEEFEAOCAIVDEN\"\n    end\n\n    @tag :pending\n    test \"encode with ending in the middle\" do\n      msg = \"EXERCISES\"\n      assert RailFenceCipher.encode(msg, 4) == \"ESXIEECSR\"\n    end\n\n    @tag :pending\n    test \"encode empty string\" do\n      assert RailFenceCipher.encode(\"\", 4) == \"\"\n    end\n\n    @tag :pending\n    test \"encode a more diverse text\" do\n      msg = \"The quick brown fox jumps over the lazy dog.\"\n      cipher = \"Tioxs aghucrwo p rtlzo.eqkbnfjmoeh yd   uve \"\n      assert RailFenceCipher.encode(msg, 4) == cipher\n    end\n\n    @tag :pending\n    test \"encode with one rail\" do\n      msg = \"One rail, only one rail\"\n      assert RailFenceCipher.encode(msg, 1) == msg\n    end\n\n    @tag :pending\n    test \"encode letters of less than rails\" do\n      msg = \"More rails than letters\"\n      assert RailFenceCipher.encode(msg, 24) == msg\n    end\n  end\n\n  describe \"decode\" do\n    @tag :pending\n    test \"decode with three rails\" do\n      cipher = \"TEITELHDVLSNHDTISEIIEA\"\n      assert RailFenceCipher.decode(cipher, 3) == \"THEDEVILISINTHEDETAILS\"\n    end\n\n    @tag :pending\n    test \"decode with five rails\" do\n      cipher = \"EIEXMSMESAORIWSCE\"\n      assert RailFenceCipher.decode(cipher, 5) == \"EXERCISMISAWESOME\"\n    end\n\n    @tag :pending\n    test \"decode with six rails\" do\n      cipher = \"133714114238148966225439541018335470986172518171757571896261\"\n\n      assert RailFenceCipher.decode(cipher, 6) ==\n               \"112358132134558914423337761098715972584418167651094617711286\"\n    end\n\n    @tag :pending\n    test \"decode empty string\" do\n      assert RailFenceCipher.decode(\"\", 4) == \"\"\n    end\n\n    @tag :pending\n    test \"decode with one rail\" do\n      assert RailFenceCipher.decode(\"ABCDEFGHIJKLMNOP\", 1) == \"ABCDEFGHIJKLMNOP\"\n    end\n\n    @tag :pending\n    test \"decode letters of less than rails\" do\n      assert RailFenceCipher.decode(\"More rails than letters\", 24) == \"More rails than letters\"\n    end\n\n    @tag :pending\n    test \"decode a more diverse text\" do\n      msg = \"The quick brown fox jumps over the lazy dog.\"\n      cipher = RailFenceCipher.encode(msg, 4)\n      assert RailFenceCipher.decode(cipher, 4) == msg\n    end\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "jimmbraddock"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "waiting-for-dev"
+  ]
+}

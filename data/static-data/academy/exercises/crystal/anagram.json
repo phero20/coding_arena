@@ -1,0 +1,31 @@
+{
+  "id": "crystal:anagram",
+  "trackSlug": "crystal",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "2df0796e-951d-4f10-8a2e-5c54f2443f10",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "module Anagram\n  def self.find(subject : String, candidates : Array(String)) : Array(String)\n    # Write your code for the 'Anagram' exercise in this file.\n  end\nend\n",
+  "example_solution": "module Anagram\n  extend self\n\n  def find(subject, candidates)\n    matches = Array(String).new\n    candidates.each do |candidate|\n      if !duplicates?(subject, candidate) && anagrams?(subject, candidate)\n        matches << candidate\n      end\n    end\n    matches\n  end\n\n  def anagrams?(subject, candidate)\n    subject.downcase.chars.sort == candidate.downcase.chars.sort\n  end\n\n  def duplicates?(subject, candidate)\n    subject.downcase == candidate.downcase\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Anagram\" do\n  it \"no matches\" do\n    Anagram.find(\"diaper\", [\"hello\", \"world\", \"zombies\", \"pants\"]).should eq([] of String)\n  end\n\n  pending \"detects two anagrams\" do\n    Anagram.find(\"solemn\", [\"lemons\", \"cherry\", \"melons\"]).should eq([\"lemons\", \"melons\"] of String)\n  end\n\n  pending \"does not detect anagram subsets\" do\n    Anagram.find(\"good\", [\"dog\", \"goody\"]).should eq([] of String)\n  end\n\n  pending \"detects anagram\" do\n    Anagram.find(\"listen\", [\"enlists\", \"google\", \"inlets\", \"banana\"]).should eq([\"inlets\"] of String)\n  end\n\n  pending \"detects three anagrams\" do\n    Anagram.find(\"allergy\", [\"gallery\", \"ballerina\", \"regally\", \"clergy\", \"largely\", \"leading\"]).should eq([\"gallery\", \"regally\", \"largely\"] of String)\n  end\n\n  pending \"detects multiple anagrams with different case\" do\n    Anagram.find(\"nose\", [\"Eons\", \"ONES\"]).should eq([\"Eons\", \"ONES\"] of String)\n  end\n\n  pending \"does not detect non-anagrams with identical checksum\" do\n    Anagram.find(\"mass\", [\"last\"]).should eq([] of String)\n  end\n\n  pending \"detects anagrams case-insensitively\" do\n    Anagram.find(\"Orchestra\", [\"cashregister\", \"Carthorse\", \"radishes\"]).should eq([\"Carthorse\"] of String)\n  end\n\n  pending \"detects anagrams using case-insensitive subject\" do\n    Anagram.find(\"Orchestra\", [\"cashregister\", \"carthorse\", \"radishes\"]).should eq([\"carthorse\"] of String)\n  end\n\n  pending \"detects anagrams using case-insensitive possible matches\" do\n    Anagram.find(\"orchestra\", [\"cashregister\", \"Carthorse\", \"radishes\"]).should eq([\"Carthorse\"] of String)\n  end\n\n  pending \"does not detect an anagram if the original word is repeated\" do\n    Anagram.find(\"go\", [\"goGoGO\"]).should eq([] of String)\n  end\n\n  pending \"anagrams must use all letters exactly once\" do\n    Anagram.find(\"tapper\", [\"patter\"]).should eq([] of String)\n  end\n\n  pending \"words are not anagrams of themselves\" do\n    Anagram.find(\"BANANA\", [\"BANANA\"]).should eq([] of String)\n  end\n\n  pending \"words are not anagrams of themselves even if letter case is partially different\" do\n    Anagram.find(\"BANANA\", [\"Banana\"]).should eq([] of String)\n  end\n\n  pending \"words are not anagrams of themselves even if letter case is completely different\" do\n    Anagram.find(\"BANANA\", [\"banana\"]).should eq([] of String)\n  end\n\n  pending \"words other than themselves can be anagrams\" do\n    Anagram.find(\"LISTEN\", [\"LISTEN\", \"Silent\"]).should eq([\"Silent\"] of String)\n  end\n\n  pending \"handles case of greek letters\", tags: \"optional\" do\n    Anagram.find(\"ΑΒΓ\", [\"ΒΓΑ\", \"ΒΓΔ\", \"γβα\", \"αβγ\"]).should eq([\"ΒΓΑ\", \"γβα\"] of String)\n  end\n\n  pending \"different characters may have the same bytes\", tags: \"optional\" do\n    Anagram.find(\"a⬂\", [\"€a\"]).should eq([] of String)\n  end\nend\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "mhelmetag"
+  ],
+  "contributors": [
+    "amscotti",
+    "issyl0"
+  ]
+}

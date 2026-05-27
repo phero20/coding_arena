@@ -1,0 +1,26 @@
+{
+  "id": "8th:isbn-verifier",
+  "trackSlug": "8th",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "fe9fdd40-04dc-4867-9ddd-8ca536b4fc20",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": isbn? \\ s -- T\n\n;\n",
+  "example_solution": ": sanitize \\ s -- s\n  \"-\" \"\" s:replace!\n;\n\n: valid? \\ s -- T\n  \"^\\\\d{9}[\\\\dX]$\" r:new r:match nip\n;\n\n: digit \\ ix n -- n\n  '0 n:- dup 9 n:> if 2drop 10 ;then swap n:1+ n:*\n;\n\n: checksum \\ s -- n\n  0 >r s:rev ( digit r> n:+ >r ) s:each r>\n;\n\n: valid-checksum? \\ n -- T\n  11 n:mod 0 n:=\n;\n\n: isbn? \\ s -- T\n  sanitize\n  dup valid?\n  !if drop false ;then\n  checksum\n  valid-checksum?\n;\n",
+  "test_code": "\"isbn-verifier.8th\" f:include\nneeds exercism/test\nwith: test\n19 tests\n\n\"Valid isbn\"\n    ( \"3-598-21508-8\" isbn? )\n    true?\n\nSKIP-REST-OF-TESTS\n\n\"Invalid isbn check digit\"\n    ( \"3-598-21508-9\" isbn? )\n    false?\n\n\"Valid isbn with a check digit of 10\"\n    ( \"3-598-21507-X\" isbn? )\n    true?\n\n\"Check digit is a character other than X\"\n    ( \"3-598-21507-A\" isbn? )\n    false?\n\n\"Invalid check digit in isbn is not treated as zero\"\n    ( \"4-598-21507-B\" isbn? )\n    false?\n\n\"Invalid character in isbn is not treated as zero\"\n    ( \"3-598-P1581-X\" isbn? )\n    false?\n\n\"X is only valid as a check digit\"\n    ( \"3-598-2X507-9\" isbn? )\n    false?\n\n\"Valid isbn without separating dashes\"\n    ( \"3598215088\" isbn? )\n    true?\n\n\"Isbn without separating dashes and X as check digit\"\n    ( \"359821507X\" isbn? )\n    true?\n\n\"Isbn without check digit and dashes\"\n    ( \"359821507\" isbn? )\n    false?\n\n\"Too long isbn and no dashes\"\n    ( \"3598215078X\" isbn? )\n    false?\n\n\"Too short isbn\"\n    ( \"00\" isbn? )\n    false?\n\n\"Isbn without check digit\"\n    ( \"3-598-21507\" isbn? )\n    false?\n\n\"Check digit of X should not be used for 0\"\n    ( \"3-598-21515-X\" isbn? )\n    false?\n\n\"Empty isbn\"\n    ( \"\" isbn? )\n    false?    \n\n\"Input is 9 characters\"\n    ( \"134456729\" isbn? )\n    false?\n\n\"Invalid characters are not ignored after checking length\"\n    ( \"3132P34035\" isbn? )\n    false?\n\n\"Invalid characters are not ignored before checking length\"\n    ( \"3598P215088\" isbn? )\n    false?\n\n\"Input is too long but contains a valid isbn\"\n    ( \"98245726788\" isbn? )\n    false?\n    \nend-of-tests\n;with\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

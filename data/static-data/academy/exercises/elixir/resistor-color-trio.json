@@ -1,0 +1,40 @@
+{
+  "id": "elixir:resistor-color-trio",
+  "trackSlug": "elixir",
+  "slug": "resistor-color-trio",
+  "name": "Resistor Color Trio",
+  "uuid": "f1bad952-302b-4754-a439-a8c60c1d22a4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a human-readable label.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "atoms",
+    "integers",
+    "maps"
+  ],
+  "prerequisites": [
+    "atoms",
+    "tuples",
+    "integers",
+    "lists",
+    "pattern-matching",
+    "cond",
+    "maps"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know only three things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n  To get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\n- Each band acts as a digit of a number.\n  For example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n  In this exercise, you are going to create a helpful program so that you don't have to remember the values of the bands.\n  The program will take 3 colors as input, and outputs the correct value, in ohms.\n  The color bands are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nIn Resistor Color Duo you decoded the first two colors.\nFor instance: orange-orange got the main value `33`.\nThe third color stands for how many zeros need to be added to the main value.\nThe main value plus the zeros gives us a value in ohms.\nFor the exercise it doesn't matter what ohms really are.\nFor example:\n\n- orange-orange-black would be 33 and no zeros, which becomes 33 ohms.\n- orange-orange-red would be 33 and 2 zeros, which becomes 3300 ohms.\n- orange-orange-orange would be 33 and 3 zeros, which becomes 33000 ohms.\n\n(If Math is your thing, you may want to think of the zeros as exponents of 10.\nIf Math is not your thing, go with the zeros.\nIt really is the same thing, just in plain English instead of Math lingo.)\n\nThis exercise is about translating the colors into a label:\n\n> \"... ohms\"\n\nSo an input of `\"orange\", \"orange\", \"black\"` should return:\n\n> \"33 ohms\"\n\nWhen we get to larger resistors, a [metric prefix][metric-prefix] is used to indicate a larger magnitude of ohms, such as \"kiloohms\".\nThat is similar to saying \"2 kilometers\" instead of \"2000 meters\", or \"2 kilograms\" for \"2000 grams\".\n\nFor example, an input of `\"orange\", \"orange\", \"orange\"` should return:\n\n> \"33 kiloohms\"\n\n[metric-prefix]: https://en.wikipedia.org/wiki/Metric_prefix\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule ResistorColorTrio do\n  @doc \"\"\"\n  Calculate the resistance value in ohms from resistor colors\n  \"\"\"\n  @spec label(colors :: [atom]) :: {number, :ohms | :kiloohms | :megaohms | :gigaohms}\n  def label(colors) do\n  end\nend\n",
+  "example_solution": "defmodule ResistorColorTrio do\n  @colors %{\n    black: 0,\n    brown: 1,\n    red: 2,\n    orange: 3,\n    yellow: 4,\n    green: 5,\n    blue: 6,\n    violet: 7,\n    grey: 8,\n    white: 9\n  }\n\n  @doc \"\"\"\n  Calculate the resistance value in ohms from resistor colors\n  \"\"\"\n  @spec label(colors :: [atom]) :: {number, :ohms | :kiloohms | :megaohms | :gigaohms}\n  def label([a, b, c | _rest]) do\n    value = (10 * @colors[a] + @colors[b]) * round(:math.pow(10, @colors[c]))\n\n    cond do\n      value >= 1_000_000_000 ->\n        {div(value, 1_000_000_000), :gigaohms}\n\n      value >= 1_000_000 ->\n        {div(value, 1_000_000), :megaohms}\n\n      value >= 1_000 ->\n        {div(value, 1_000), :kiloohms}\n\n      true ->\n        {value, :ohms}\n    end\n  end\nend\n",
+  "test_code": "defmodule ResistorColorTrioTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"Orange and orange and black\" do\n    colors = [:orange, :orange, :black]\n    output = ResistorColorTrio.label(colors)\n    expected = {33, :ohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Blue and grey and brown\" do\n    colors = [:blue, :grey, :brown]\n    output = ResistorColorTrio.label(colors)\n    expected = {680, :ohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Red and black and red\" do\n    colors = [:red, :black, :red]\n    output = ResistorColorTrio.label(colors)\n    expected = {2, :kiloohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Green and brown and orange\" do\n    colors = [:green, :brown, :orange]\n    output = ResistorColorTrio.label(colors)\n    expected = {51, :kiloohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Yellow and violet and yellow\" do\n    colors = [:yellow, :violet, :yellow]\n    output = ResistorColorTrio.label(colors)\n    expected = {470, :kiloohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Blue and violet and blue\" do\n    colors = [:blue, :violet, :blue]\n    output = ResistorColorTrio.label(colors)\n    expected = {67, :megaohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Minimum possible value\" do\n    colors = [:black, :black, :black]\n    output = ResistorColorTrio.label(colors)\n    expected = {0, :ohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Maximum possible value\" do\n    colors = [:white, :white, :white]\n    output = ResistorColorTrio.label(colors)\n    expected = {99, :gigaohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"First two colors make an invalid octal number\" do\n    colors = [:black, :grey, :black]\n    output = ResistorColorTrio.label(colors)\n    expected = {8, :ohms}\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"Ignore extra colors\" do\n    colors = [:blue, :green, :yellow, :orange]\n    output = ResistorColorTrio.label(colors)\n    expected = {650, :kiloohms}\n\n    assert output == expected\n  end\nend\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1549",
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": [
+    "angelikatyborska"
+  ]
+}

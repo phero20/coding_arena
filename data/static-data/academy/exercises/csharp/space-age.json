@@ -1,0 +1,42 @@
+{
+  "id": "csharp:space-age",
+  "trackSlug": "csharp",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "612f058b-c6d9-4c97-913a-eeeb59ef61e1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "floating-point-numbers",
+    "classes"
+  ],
+  "prerequisites": [
+    "floating-point-numbers",
+    "classes",
+    "constructors",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "public class SpaceAge\n{\n    public SpaceAge(int seconds)\n    {\n    }\n\n    public double OnEarth()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnMercury()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnVenus()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnMars()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnJupiter()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnSaturn()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnUranus()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public double OnNeptune()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public class SpaceAge\n{\n    private enum Planet\n    {\n        Earth, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune\n    }\n\n    private readonly int seconds;\n\n    private readonly Dictionary<Planet, double> earthYearToPlanetPeriod = new Dictionary<Planet, double>\n        {\n            { Planet.Earth, 1 },\n            { Planet.Mercury, 0.2408467 },\n            { Planet.Venus, 0.61519726 },\n            { Planet.Mars, 1.8808158 },\n            { Planet.Jupiter, 11.862615 },\n            { Planet.Saturn, 29.447498 },\n            { Planet.Uranus, 84.016846 },\n            { Planet.Neptune, 164.79132 },\n        };\n\n    public SpaceAge(int seconds)\n    {\n        this.seconds = seconds;\n    }\n\n    private double CalculateAge(double periodInEarthYears)\n    {\n        const double EARTH_ORBIT_IN_SECONDS = 31557600;\n        return Math.Round(seconds / (EARTH_ORBIT_IN_SECONDS * periodInEarthYears), 2);\n    }\n\n    public double OnEarth()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Earth]);\n    }\n\n    public double OnMercury()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Mercury]);\n    }\n\n    public double OnVenus()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Venus]);\n    }\n\n    public double OnMars()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Mars]);\n    }\n\n    public double OnJupiter()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Jupiter]);\n    }\n\n    public double OnSaturn()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Saturn]);\n    }\n\n    public double OnUranus()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Uranus]);\n    }\n\n    public double OnNeptune()\n    {\n        return CalculateAge(earthYearToPlanetPeriod[Planet.Neptune]);\n    }\n}",
+  "test_code": "public class SpaceAgeTests\n{\n    [Fact]\n    public void Age_on_earth()\n    {\n        var sut = new SpaceAge(1000000000);\n        Assert.Equal(31.69, sut.OnEarth(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_mercury()\n    {\n        var sut = new SpaceAge(2134835688);\n        Assert.Equal(280.88, sut.OnMercury(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_venus()\n    {\n        var sut = new SpaceAge(189839836);\n        Assert.Equal(9.78, sut.OnVenus(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_mars()\n    {\n        var sut = new SpaceAge(2129871239);\n        Assert.Equal(35.88, sut.OnMars(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_jupiter()\n    {\n        var sut = new SpaceAge(901876382);\n        Assert.Equal(2.41, sut.OnJupiter(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_saturn()\n    {\n        var sut = new SpaceAge(2000000000);\n        Assert.Equal(2.15, sut.OnSaturn(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_uranus()\n    {\n        var sut = new SpaceAge(1210123456);\n        Assert.Equal(0.46, sut.OnUranus(), precision: 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Age_on_neptune()\n    {\n        var sut = new SpaceAge(1821023456);\n        Assert.Equal(0.35, sut.OnNeptune(), precision: 2);\n    }\n}\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "bressain"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "j2jensen",
+    "jwood803",
+    "kytrinyx",
+    "mikecoop",
+    "robkeim",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "ballerina:error-handling",
+  "trackSlug": "ballerina",
+  "slug": "error-handling",
+  "name": "Service Error Handling",
+  "uuid": "cd34c28c-3ad9-4379-b4dd-8e4122ab9cbe",
+  "type": "practice",
+  "status": "active",
+  "blurb": "Implement various kinds of error handling and resource management.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement various kinds of error handling and resource management.\n\nAn important point of programming is how to handle errors and close resources even if errors occur.\n\nThis exercise requires you to handle various errors.\nBecause error handling is rather programming language specific you'll have to refer to the tests for your track to see what's exactly required.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import ballerina/http;\n\n// Use the following endpoints to send HTTP GET request to get quotes\n\n// This is an existing endpoint (which will be automatically spawned by the test framework)\nfinal http:Client brainyQuoteClient = check new (\"http://localhost:9095/brainyquote\");\n\n// This is a non-existing endpoint.\nfinal http:Client legacyClient = check new (\"http://localhost:6060/legacyquote\");\n\npublic function main() returns error? {\n\n    // Invoke the `brainyQuoteClient` using HTTP GET request on \"/\"\n    // Invocation returns a 'union type' which can either be an 'string' type or an 'error' type.\n    // Assign it to variable.\n\n    // Use type-guard to handle when the response is\n    // 1. string\n    // 2. error\n    // For case with string, you need to print it the console (io:println)\n    // For error case, print the error message to the console (io:println)\n\n    // Similarly implement the same logic for the invocation of the `legacyClient` endpoint\n\n    // Finally, use the `check` expression when retrieving the response from the `legacyClient` endpoint\n}\n",
+  "example_solution": "import ballerina/http;\nimport ballerina/io;\n\nfinal http:Client brainyQuoteClient = check new (\"http://localhost:9095/brainyquote\");\n\nfinal http:Client legacyClient = check new (\"http://localhost:6060/legacyquote\");\n\n// The `main` function should return `error?` in order to use the `check` expression\npublic function main() returns error? {\n    // Use the `brainyQuoteClient` to retrieve a quote\n    // You can use `-><resource path>` to call an endpoint. In this case, the resource path is just `/`\n    string|error response1 = brainyQuoteClient->/;\n    // Using type-guard to narrow the type of the `response1` variable\n    if response1 is string {\n        // Inside this block, the type of the `response1` is `string`\n        io:println(response1);\n    } else {\n        // Inside the else block, the type of the `response1` is `error`, so you can access the error message\n        io:println(response1.message());\n    }\n\n    // Using similar logic to retrieve a response from the `legacyClient`\n    string|error response2 = legacyClient->/;\n    if response2 is string {\n        io:println(response2);\n    } else {\n        io:println(response2.message());\n    }\n\n    // Now, using the `check` expression. When the `check` expression is used, if an error occurred, it will be returned\n    // wihout executing the function further. Since the `check` expression is used, the response type will be `string`\n    string response3 = check legacyClient->/;\n    io:println(response3);\n}\n",
+  "test_code": "import ballerina/test;\n\nstring[] outputs = [];\n\n@test:Mock {\n    moduleName: \"ballerina/io\",\n    functionName: \"println\"\n}\ntest:MockFunction printlnMockFn = new ();\n\npublic function mockPrint(any... val) {\n    outputs.push(val.reduce(function(string a, any b) returns string => a + b.toString(), \"\"));\n}\n\n@test:Config\nfunction testFunc() {\n    // Invoking the main function\n    test:when(printlnMockFn).call(\"mockPrint\");\n    error? result = main();\n    test:assertEquals(outputs.length(), 2);\n    string errorMessage = \"Something wrong with the connection\";\n    test:assertEquals(outputs[0], \"Many of life's failures are people who did not realize how close they were to success when they gave up. - Thomas A. Edison\\n\");\n    test:assertEquals(outputs[1], errorMessage);\n    test:assertTrue(result is error, \"The main function must return an error\");\n    test:assertEquals((<error>result).message(), errorMessage);\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [],
+  "contributors": [
+    "hemikak",
+    "kasun04",
+    "Manuri",
+    "vinok88",
+    "vordimous",
+    "ThisaruGuruge"
+  ]
+}

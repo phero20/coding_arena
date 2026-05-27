@@ -59,7 +59,7 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
   return (
     <Card
       className={cn(
-        "flex flex-row items-center justify-center gap-12 p-3 pr-0",
+        "flex flex-row items-center justify-center gap-12 p-3 py-4 pr-0",
         className,
       )}
     >

@@ -1,0 +1,26 @@
+{
+  "id": "lua:high-scores",
+  "trackSlug": "lua",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "7a7f05bd-16d1-4103-90c7-f3c8f7a08af0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "local HighScores = {}\n\nfunction HighScores:scores()\n\nend\n\nfunction HighScores:latest()\n\nend\n\nfunction HighScores:personal_best()\n\nend\n\nfunction HighScores:personal_top_three()\n\nend\n\nreturn function(scores)\n  local high_scores = {}\n  setmetatable(high_scores, { __index = HighScores })\n\n  -- TODO: store the scores in the high_scores object\n\n  return high_scores\nend\n",
+  "example_solution": "local function scores(self)\n  return self.values\nend\n\nlocal function latest(self)\n  return self.values[#self.values]\nend\n\nlocal function personal_best(self)\n  return math.max(table.unpack(self.values))\nend\n\nlocal function personal_top_three(self)\n  local values = { table.unpack(self.values) }\n  table.sort(values, function(a, b)\n    return a > b\n  end)\n  local stop = math.min(3, #values)\n  return { table.unpack(values, 1, stop) }\nend\n\nreturn function(values)\n  return {\n    values = values,\n    scores = scores,\n    latest = latest,\n    personal_best = personal_best,\n    personal_top_three = personal_top_three\n  }\nend\n",
+  "test_code": "local HighScores = require 'high-scores'\n\ndescribe('high-scores', function()\n  it('table of scores', function()\n    local values = { 30, 50, 20, 70 }\n    local scores = HighScores(values)\n    local expected = { 30, 50, 20, 70 }\n    assert.are.same(expected, scores:scores())\n  end)\n\n  it('latest score', function()\n    local values = { 100, 0, 90, 30 }\n    local scores = HighScores(values)\n    local expected = 30\n    assert.equal(expected, scores:latest())\n  end)\n\n  it('personal best', function()\n    local values = { 40, 100, 70 }\n    local scores = HighScores(values)\n    local expected = 100\n    assert.equal(expected, scores:personal_best())\n  end)\n\n  it('personal top three from a list of scores', function()\n    local values = { 10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70 }\n    local scores = HighScores(values)\n    local expected = { 100, 90, 70 }\n    assert.are.same(expected, scores:personal_top_three())\n  end)\n\n  it('personal top highest to lowest', function()\n    local values = { 20, 10, 30 }\n    local scores = HighScores(values)\n    local expected = { 30, 20, 10 }\n    assert.are.same(expected, scores:personal_top_three())\n  end)\n\n  it('personal top when there is a tie', function()\n    local values = { 40, 20, 40, 30 }\n    local scores = HighScores(values)\n    local expected = { 40, 40, 30 }\n    assert.are.same(expected, scores:personal_top_three())\n  end)\n\n  it('personal top when there are less than 3', function()\n    local values = { 30, 70 }\n    local scores = HighScores(values)\n    local expected = { 70, 30 }\n    assert.are.same(expected, scores:personal_top_three())\n  end)\n\n  it('personal top when there is only one', function()\n    local values = { 40 }\n    local scores = HighScores(values)\n    local expected = { 40 }\n    assert.are.same(expected, scores:personal_top_three())\n  end)\n\n  it('latest score after personal top scores', function()\n    local values = { 70, 50, 20, 30 }\n    local scores = HighScores(values)\n    local _ = scores:personal_top_three()\n    local expected = 30\n    assert.equal(expected, scores:latest())\n  end)\n\n  it('scores after personal top scores', function()\n    local values = { 30, 50, 20, 70 }\n    local scores = HighScores(values)\n    local _ = scores:personal_top_three()\n    local expected = { 30, 50, 20, 70 }\n    assert.are.same(expected, scores:scores())\n  end)\n\n  it('latest score after personal best', function()\n    local values = { 20, 70, 15, 25, 30 }\n    local scores = HighScores(values)\n    local _ = scores:personal_best()\n    local expected = 30\n    assert.equal(expected, scores:latest())\n  end)\n\n  it('scores after personal best', function()\n    local values = { 20, 70, 15, 25, 30 }\n    local scores = HighScores(values)\n    local _ = scores:personal_best()\n    local expected = { 20, 70, 15, 25, 30 }\n    assert.are.same(expected, scores:scores())\n  end)\nend)\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

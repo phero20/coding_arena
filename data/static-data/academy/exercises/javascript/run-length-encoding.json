@@ -1,0 +1,30 @@
+{
+  "id": "javascript:run-length-encoding",
+  "trackSlug": "javascript",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "6ac4ad5f-a64a-4646-91c5-169d53f289f9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Run Length Encoding' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const encode = () => {\n  throw new Error('Remove this line and implement the function');\n};\n\nexport const decode = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "export const encode = (plainText) => {\n  const consecutiveChars = /([\\w\\s])\\1*/g;\n  return plainText.replace(consecutiveChars, (match) =>\n    match.length > 1 ? match.length + match[0] : match[0],\n  );\n};\n\nexport const decode = (encodedText) => {\n  const countAndChar = /(\\d+)(\\w|\\s)/g;\n  return encodedText.replace(countAndChar, (match, repeats, char) =>\n    new Array(Number(repeats) + 1).join(char),\n  );\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { decode, encode } from './run-length-encoding';\n\ndescribe('run-length encode a string', () => {\n  test('encode empty string', () => {\n    expect(encode('')).toEqual('');\n  });\n\n  xtest('single characters only are encoded without count', () => {\n    expect(encode('XYZ')).toEqual('XYZ');\n  });\n\n  xtest('encode string with no single characters', () => {\n    expect(encode('AABBBCCCC')).toEqual('2A3B4C');\n  });\n\n  xtest('encode string with single characters mixed with repeated characters', () => {\n    expect(\n      encode('WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB'),\n    ).toEqual('12WB12W3B24WB');\n  });\n\n  xtest('encode string with multiple whitespaces', () => {\n    expect(encode('  hsqq qww  ')).toEqual('2 hs2q q2w2 ');\n  });\n\n  xtest('encode string with lowercase characters', () => {\n    expect(encode('aabbbcccc')).toEqual('2a3b4c');\n  });\n});\n\ndescribe('run-length decode a string', () => {\n  xtest('decode empty string', () => {\n    expect(decode('')).toEqual('');\n  });\n\n  xtest('decode string with single characters only', () => {\n    expect(decode('XYZ')).toEqual('XYZ');\n  });\n\n  xtest('decode string with no single characters', () => {\n    expect(decode('2A3B4C')).toEqual('AABBBCCCC');\n  });\n\n  xtest('decode string with single characters mixed with repeated characters', () => {\n    expect(decode('12WB12W3B24WB')).toEqual(\n      'WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB',\n    );\n  });\n\n  xtest('decode string with multiple whitespaces', () => {\n    expect(decode('2 hs2q q2w2 ')).toEqual('  hsqq qww  ');\n  });\n\n  xtest('decode string with lowercase characters', () => {\n    expect(decode('2a3b4c')).toEqual('aabbbcccc');\n  });\n});\n\ndescribe('run-length encode and then decode', () => {\n  xtest('encode followed by decode gives original string', () => {\n    expect(decode(encode('zzz ZZ  zZ'))).toEqual('zzz ZZ  zZ');\n  });\n});\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "skabbass1"
+  ],
+  "contributors": [
+    "ankorGH",
+    "serixscorpio",
+    "SleeplessByte"
+  ]
+}

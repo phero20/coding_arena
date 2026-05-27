@@ -1,0 +1,38 @@
+{
+  "id": "csharp:diffie-hellman",
+  "trackSlug": "csharp",
+  "slug": "diffie-hellman",
+  "name": "Diffie-Hellman",
+  "uuid": "3bea029d-ccc2-48be-90f3-84bf2d5b825b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Diffie-Hellman key exchange.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "randomness",
+    "big-integers",
+    "math-operators"
+  ],
+  "prerequisites": [
+    "randomness",
+    "big-integers",
+    "math-operators"
+  ],
+  "instructions": "# Instructions\n\nDiffie-Hellman key exchange.\n\nAlice and Bob use Diffie-Hellman key exchange to share secrets.\nThey start with prime numbers, pick private keys, generate and share public keys, and then generate a shared secret key.\n\n## Step 0\n\nThe test program supplies prime numbers p and g.\n\n## Step 1\n\nAlice picks a private key, a, greater than 1 and less than p.\nBob does the same to pick a private key b.\n\n## Step 2\n\nAlice calculates a public key A.\n\n    A = gᵃ mod p\n\nUsing the same p and g, Bob similarly calculates a public key B from his private key b.\n\n## Step 3\n\nAlice and Bob exchange public keys.\nAlice calculates secret key s.\n\n    s = Bᵃ mod p\n\nBob calculates\n\n    s = Aᵇ mod p\n\nThe calculations produce the same result!\nAlice and Bob now share secret s.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "using System.Numerics;\n\npublic static class DiffieHellman\n{\n    public static BigInteger PrivateKey(BigInteger primeP) \n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public static BigInteger PublicKey(BigInteger primeP, BigInteger primeG, BigInteger privateKey) \n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public static BigInteger Secret(BigInteger primeP, BigInteger publicKey, BigInteger privateKey) \n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "using System.Numerics;\n\npublic static class DiffieHellman\n{\n    private static readonly Random Random = new Random();\n\n    public static BigInteger PrivateKey(BigInteger primeP) => new BigInteger(Random.Next(1, (int) primeP - 1));\n\n    public static BigInteger PublicKey(BigInteger primeP, BigInteger primeG, BigInteger privateKey) => BigInteger.ModPow(primeG, privateKey, primeP);\n\n    public static BigInteger Secret(BigInteger primeP, BigInteger publicKey, BigInteger privateKey) => BigInteger.ModPow(publicKey, privateKey, primeP);\n}",
+  "test_code": "using System.Numerics;\n\npublic class DiffieHellmanTests\n{\n    [Fact]\n    public void Private_key_is_greater_than_1_and_less_than_p()\n    {\n        var p = new BigInteger(7919);\n        var privateKeys = Enumerable.Range(0, 1000).Select(_ => DiffieHellman.PrivateKey(p));\n        foreach (var privateKey in privateKeys)\n        {\n            Assert.InRange(privateKey, new BigInteger(1), p);\n        }\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Private_key_is_random()\n    {\n        var p = new BigInteger(7919);\n        var privateKeys = Enumerable.Range(0, 1000).Select(_ => DiffieHellman.PrivateKey(p)).ToArray();\n        Assert.InRange(privateKeys.Distinct().Count(), privateKeys.Length - 100, privateKeys.Length);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_calculate_public_key_using_private_key()\n    {\n        var p = new BigInteger(23);\n        var g = new BigInteger(5);\n        var privateKey = new BigInteger(6);\n        Assert.Equal(new BigInteger(8), DiffieHellman.PublicKey(p, g, privateKey));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_calculate_public_key_when_given_a_different_private_key()\n    {\n        var p = new BigInteger(23);\n        var g = new BigInteger(5);\n        var privateKey = new BigInteger(15);\n        Assert.Equal(new BigInteger(19), DiffieHellman.PublicKey(p, g, privateKey));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_calculate_secret_using_other_party_s_public_key()\n    {\n        var p = new BigInteger(23);\n        var theirPublicKey = new BigInteger(19);\n        var myPrivateKey = new BigInteger(6);\n        Assert.Equal(new BigInteger(2), DiffieHellman.Secret(p, theirPublicKey, myPrivateKey));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Key_exchange()\n    {\n        var p = new BigInteger(23);\n        var g = new BigInteger(5);\n        var alicePrivateKey = DiffieHellman.PrivateKey(p);\n        var bobPrivateKey = DiffieHellman.PrivateKey(p);\n        var alicePublicKey = DiffieHellman.PublicKey(p, g, alicePrivateKey);\n        var bobPublicKey = DiffieHellman.PublicKey(p, g, bobPrivateKey);\n        var secretA = DiffieHellman.Secret(p, bobPublicKey, alicePrivateKey);\n        var secretB = DiffieHellman.Secret(p, alicePublicKey, bobPrivateKey);\n        Assert.Equal(secretA, secretB);\n    }\n}\n",
+  "source": "Wikipedia, 1024 bit key from www.cryptopp.com/wiki.",
+  "source_url": "https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "j2jensen",
+    "robkeim",
+    "wolf99"
+  ]
+}

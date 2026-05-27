@@ -1,0 +1,49 @@
+{
+  "id": "rust:alphametics",
+  "trackSlug": "rust",
+  "slug": "alphametics",
+  "name": "Alphametics",
+  "uuid": "7450bd80-2388-42ac-a61f-097e82581475",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an alphametics puzzle, find the correct solution.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "external-crates",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an alphametics puzzle, find the correct solution.\n\n[Alphametics][alphametics] is a puzzle where letters in words are replaced with numbers.\n\nFor example `SEND + MORE = MONEY`:\n\n```text\n  S E N D\n  M O R E +\n-----------\nM O N E Y\n```\n\nReplacing these with valid numbers gives:\n\n```text\n  9 5 6 7\n  1 0 8 5 +\n-----------\n1 0 6 5 2\n```\n\nThis is correct because every letter is replaced by a different number and the words, translated into numbers, then make a valid sum.\n\nEach letter must represent a different digit, and the leading digit of a multi-digit number must not be zero.\n\n[alphametics]: https://en.wikipedia.org/wiki/Alphametics\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "use std::collections::HashMap;\n\npub fn solve(input: &str) -> Option<HashMap<char, u8>> {\n    todo!(\"Solve the alphametic {input:?}\")\n}\n",
+  "example_solution": "use std::collections::HashMap;\nuse std::iter;\n\nuse itertools::Itertools;\n\npub fn solve(input: &str) -> Option<HashMap<char, u8>> {\n    let (terms, solution) = input.split_once(\" == \").unwrap();\n    let numbers = iter::once(solution)\n        .chain(terms.split(\" + \"))\n        .map(|word| word.chars().map(|c| (c as u8) - b'A').collect::<Vec<_>>())\n        .collect::<Vec<_>>();\n\n    let mut unique = numbers.iter().flatten().copied().collect::<Vec<_>>();\n    unique.sort_unstable();\n    unique.dedup();\n    let mut assignment = [0; 26];\n\n    for perm in (0..10).permutations(unique.len()) {\n        for (&letter, value) in unique.iter().zip(perm) {\n            assignment[letter as usize] = value;\n        }\n\n        if numbers.iter().any(|n| assignment[n[0] as usize] == 0) {\n            continue; // leading zero is invalid\n        }\n\n        let sum: u64 = numbers[1..].iter().map(|n| parse(n, &assignment)).sum();\n        let solution = parse(&numbers[0], &assignment);\n\n        if sum == solution {\n            return Some(\n                unique\n                    .into_iter()\n                    .map(|c| ((c + b'A') as char, assignment[c as usize]))\n                    .collect(),\n            );\n        }\n    }\n    None\n}\n\nfn parse(number: &[u8], assignment: &[u8; 26]) -> u64 {\n    number.iter().fold(0, |acc, next| {\n        acc * 10 + (assignment[*next as usize] as u64)\n    })\n}\n",
+  "test_code": "use alphametics::*;\n\n#[test]\nfn puzzle_with_three_letters() {\n    let answer = solve(\"I + BB == ILL\");\n    let expected = [('I', 1), ('B', 9), ('L', 0)].into_iter().collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn solution_must_have_unique_value_for_each_letter() {\n    let answer = solve(\"A == B\");\n    assert_eq!(answer, None);\n}\n\n#[test]\n#[ignore]\nfn leading_zero_solution_is_invalid() {\n    let answer = solve(\"ACA + DD == BD\");\n    assert_eq!(answer, None);\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_two_digits_final_carry() {\n    let answer = solve(\"A + A + A + A + A + A + A + A + A + A + A + B == BCC\");\n    let expected = [('A', 9), ('B', 1), ('C', 0)].into_iter().collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_four_letters() {\n    let answer = solve(\"AS + A == MOM\");\n    let expected = [('A', 9), ('S', 2), ('M', 1), ('O', 0)]\n        .into_iter()\n        .collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_six_letters() {\n    let answer = solve(\"NO + NO + TOO == LATE\");\n    let expected = [('N', 7), ('O', 4), ('T', 9), ('L', 1), ('A', 0), ('E', 2)]\n        .into_iter()\n        .collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_seven_letters() {\n    let answer = solve(\"HE + SEES + THE == LIGHT\");\n    let expected = [\n        ('E', 4),\n        ('G', 2),\n        ('H', 5),\n        ('I', 0),\n        ('L', 1),\n        ('S', 9),\n        ('T', 7),\n    ]\n    .into_iter()\n    .collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_eight_letters() {\n    let answer = solve(\"SEND + MORE == MONEY\");\n    let expected = [\n        ('S', 9),\n        ('E', 5),\n        ('N', 6),\n        ('D', 7),\n        ('M', 1),\n        ('O', 0),\n        ('R', 8),\n        ('Y', 2),\n    ]\n    .into_iter()\n    .collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_ten_letters() {\n    let answer = solve(\"AND + A + STRONG + OFFENSE + AS + A + GOOD == DEFENSE\");\n    let expected = [\n        ('A', 5),\n        ('D', 3),\n        ('E', 4),\n        ('F', 7),\n        ('G', 8),\n        ('N', 0),\n        ('O', 2),\n        ('R', 1),\n        ('S', 6),\n        ('T', 9),\n    ]\n    .into_iter()\n    .collect();\n    assert_eq!(answer, Some(expected));\n}\n\n#[test]\n#[ignore]\nfn puzzle_with_ten_letters_and_199_addends() {\n    let answer = solve(\n        \"THIS + A + FIRE + THEREFORE + FOR + ALL + HISTORIES + I + TELL + A + TALE + THAT + FALSIFIES + ITS + TITLE + TIS + A + LIE + THE + TALE + OF + THE + LAST + FIRE + HORSES + LATE + AFTER + THE + FIRST + FATHERS + FORESEE + THE + HORRORS + THE + LAST + FREE + TROLL + TERRIFIES + THE + HORSES + OF + FIRE + THE + TROLL + RESTS + AT + THE + HOLE + OF + LOSSES + IT + IS + THERE + THAT + SHE + STORES + ROLES + OF + LEATHERS + AFTER + SHE + SATISFIES + HER + HATE + OFF + THOSE + FEARS + A + TASTE + RISES + AS + SHE + HEARS + THE + LEAST + FAR + HORSE + THOSE + FAST + HORSES + THAT + FIRST + HEAR + THE + TROLL + FLEE + OFF + TO + THE + FOREST + THE + HORSES + THAT + ALERTS + RAISE + THE + STARES + OF + THE + OTHERS + AS + THE + TROLL + ASSAILS + AT + THE + TOTAL + SHIFT + HER + TEETH + TEAR + HOOF + OFF + TORSO + AS + THE + LAST + HORSE + FORFEITS + ITS + LIFE + THE + FIRST + FATHERS + HEAR + OF + THE + HORRORS + THEIR + FEARS + THAT + THE + FIRES + FOR + THEIR + FEASTS + ARREST + AS + THE + FIRST + FATHERS + RESETTLE + THE + LAST + OF + THE + FIRE + HORSES + THE + LAST + TROLL + HARASSES + THE + FOREST + HEART + FREE + AT + LAST + OF + THE + LAST + TROLL + ALL + OFFER + THEIR + FIRE + HEAT + TO + THE + ASSISTERS + FAR + OFF + THE + TROLL + FASTS + ITS + LIFE + SHORTER + AS + STARS + RISE + THE + HORSES + REST + SAFE + AFTER + ALL + SHARE + HOT + FISH + AS + THEIR + AFFILIATES + TAILOR + A + ROOFS + FOR + THEIR + SAFE == FORTRESSES\",\n    );\n    let expected = [\n        ('A', 1),\n        ('E', 0),\n        ('F', 5),\n        ('H', 8),\n        ('I', 7),\n        ('L', 2),\n        ('O', 6),\n        ('R', 3),\n        ('S', 4),\n        ('T', 9),\n    ]\n    .into_iter()\n    .collect();\n    assert_eq!(answer, Some(expected));\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ijanos"
+  ],
+  "contributors": [
+    "Baelyk",
+    "ClashTheBunny",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "IanWhitney",
+    "lutostag",
+    "mkantor",
+    "navossoc",
+    "nfiles",
+    "nikamirrr",
+    "omer-g",
+    "petertseng",
+    "pkwiek",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

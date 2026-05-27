@@ -1,0 +1,26 @@
+{
+  "id": "wren:matching-brackets",
+  "trackSlug": "wren",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "8a7da033-311e-4ffd-8b69-ce192672564a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "class Brackets {\n  static isPaired(s) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}",
+  "example_solution": "var BRACKETS = \"{}[]()\"\nvar PAIRS = {\n  \"{\": \"}\",\n  \"(\": \")\",\n  \"[\": \"]\"\n}\nvar OPEN_BRACKETS = PAIRS.keys\n\nclass Brackets {\n  static mismatchedBracket(open, char) { PAIRS[open] != char }\n  static isPaired(s) {\n    var stack = []\n    for (char in s) {\n      if (!BRACKETS.contains(char)) continue\n      if (OPEN_BRACKETS.contains(char)) {\n        stack.add(char)\n      } else {\n        if (stack.isEmpty) return false\n\n        var openedBracket = stack[-1]\n        if (mismatchedBracket(openedBracket,char)) return false\n        // stack.pop\n        stack = stack[0...-1]\n      }\n    }\n    return stack.isEmpty\n  }\n}",
+  "test_code": "import \"./matching-brackets\" for Brackets\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"Matching Brackets\") { |do, skip|\n  do.test(\"paired square brackets\") {\n    Expect.value(Brackets.isPaired(\"[]\")).toEqual(true)\n  }\n\n  skip.test(\"empty string\") {\n    Expect.value(Brackets.isPaired(\"\")).toEqual(true)\n  }\n\n  skip.test(\"unpaired brackets\") {\n    Expect.value(Brackets.isPaired(\"[[\")).toEqual(false)\n  }\n\n  skip.test(\"wrong ordered brackets\") {\n    Expect.value(Brackets.isPaired(\"}{\")).toEqual(false)\n  }\n\n  skip.test(\"wrong closing bracket\") {\n    Expect.value(Brackets.isPaired(\"{]\")).toEqual(false)\n  }\n\n  skip.test(\"paired with whitespace\") {\n    Expect.value(Brackets.isPaired(\"{ }\")).toEqual(true)\n  }\n\n  skip.test(\"partially paired brackets\") {\n    Expect.value(Brackets.isPaired(\"{[])\")).toEqual(false)\n  }\n\n  skip.test(\"simple nested brackets\") {\n    Expect.value(Brackets.isPaired(\"{[]}\")).toEqual(true)\n  }\n\n  skip.test(\"several paired brackets\") {\n    Expect.value(Brackets.isPaired(\"{}[]\")).toEqual(true)\n  }\n\n  skip.test(\"paired and nested brackets\") {\n    Expect.value(Brackets.isPaired(\"([{}({}[])])\")).toEqual(true)\n  }\n\n  skip.test(\"unopened closing brackets\") {\n    Expect.value(Brackets.isPaired(\"{[)][]}\")).toEqual(false)\n  }\n\n  skip.test(\"unpaired and nested brackets\") {\n    Expect.value(Brackets.isPaired(\"([{])\")).toEqual(false)\n  }\n\n  skip.test(\"paired and wrong nested brackets\") {\n    Expect.value(Brackets.isPaired(\"[({]})\")).toEqual(false)\n  }\n\n  skip.test(\"paired and wrong nested brackets but innermost are correct\") {\n    Expect.value(Brackets.isPaired(\"[({}])\")).toEqual(false)\n  }\n\n  skip.test(\"paired and incomplete brackets\") {\n    Expect.value(Brackets.isPaired(\"{}[\")).toEqual(false)\n  }\n\n  skip.test(\"too many closing brackets\") {\n    Expect.value(Brackets.isPaired(\"[]]\")).toEqual(false)\n  }\n\n  skip.test(\"early unexpected brackets\") {\n    Expect.value(Brackets.isPaired(\")()\")).toEqual(false)\n  }\n\n  skip.test(\"early mismatched brackets\") {\n    Expect.value(Brackets.isPaired(\"{)()\")).toEqual(false)\n  }\n\n  skip.test(\"math expression\") {\n    Expect.value(Brackets.isPaired(\"(((185 + 223.85) * 15) - 543)/2\")).toEqual(true)\n  }\n\n  skip.test(\"complex latex expression\") {\n    Expect.value(\n      Brackets.isPaired(\n        \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\"\n      )\n    ).toEqual(true)\n  }\n}\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

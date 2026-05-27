@@ -1,0 +1,31 @@
+{
+  "id": "python:diffie-hellman",
+  "trackSlug": "python",
+  "slug": "diffie-hellman",
+  "name": "Diffie-Hellman",
+  "uuid": "92e2d5f8-7d8a-4e81-a55c-52fa6be80c74",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Diffie-Hellman key exchange.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDiffie-Hellman key exchange.\n\nAlice and Bob use Diffie-Hellman key exchange to share secrets.\nThey start with prime numbers, pick private keys, generate and share public keys, and then generate a shared secret key.\n\n## Step 0\n\nThe test program supplies prime numbers p and g.\n\n## Step 1\n\nAlice picks a private key, a, greater than 1 and less than p.\nBob does the same to pick a private key b.\n\n## Step 2\n\nAlice calculates a public key A.\n\n    A = gᵃ mod p\n\nUsing the same p and g, Bob similarly calculates a public key B from his private key b.\n\n## Step 3\n\nAlice and Bob exchange public keys.\nAlice calculates secret key s.\n\n    s = Bᵃ mod p\n\nBob calculates\n\n    s = Aᵇ mod p\n\nThe calculations produce the same result!\nAlice and Bob now share secret s.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def private_key(p):\n    pass\n\n\ndef public_key(p, g, private):\n    pass\n\n\ndef secret(p, public, private):\n    pass\n",
+  "example_solution": "import random\n\n\ndef private_key(p):\n    return random.randint(2, p-1)\n\n\ndef public_key(p, g, private):\n    return pow(g, private, p)\n\n\ndef secret(p, public, private):\n    return pow(public, private, p)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/diffie-hellman/canonical-data.json\n# File last updated on 2026-02-19\n\nimport unittest\n\nfrom diffie_hellman import (\n    private_key,\n    public_key,\n    secret,\n)\n\n\nclass DiffieHellmanTest(unittest.TestCase):\n\n    def test_private_key_is_greater_than_1_and_less_than_p(self):\n        for prime in [5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]:\n            with self.subTest(f\"prime={prime}\"):\n                key = private_key(prime)\n                self.assertTrue(1 < key < prime, msg=f\"{key} out of range, expected to be >1 and <{prime}\") # fmt: skip\n\n    def test_private_key_is_random(self):\n        \"\"\"\n        Can fail due to randomness, but most likely will not,\n        due to pseudo-randomness and the large number chosen\n        \"\"\"\n        private_keys = [private_key(2147483647) for _ in range(5)]\n        self.assertEqual(len(set(private_keys)), len(private_keys))\n\n    def test_can_calculate_public_key_using_private_key(self):\n        p = 23\n        g = 5\n        private_key = 6\n        self.assertEqual(8, public_key(p, g, private_key, )) # fmt: skip\n\n    def test_can_calculate_public_key_when_given_a_different_private_key(self):\n        p = 23\n        g = 5\n        private_key = 15\n        self.assertEqual(19, public_key(p, g, private_key, )) # fmt: skip\n\n    def test_can_calculate_secret_using_other_party_s_public_key(self):\n        p = 23\n        their_public_key = 19\n        my_private_key = 6\n        self.assertEqual(2, secret(p, their_public_key, my_private_key, )) # fmt: skip\n\n    def test_key_exchange(self):\n        p = 23\n        g = 5\n        alice_private_key = private_key(p)\n        bob_private_key = private_key(p)\n        alice_public_key = public_key(p, g, alice_private_key)\n        bob_public_key = public_key(p, g, bob_private_key)\n        secret_a = secret(p, bob_public_key, alice_private_key)\n        secret_b = secret(p, alice_public_key, bob_private_key)\n        self.assertTrue(secret_a == secret_b)\n",
+  "source": "Wikipedia, 1024 bit key from www.cryptopp.com/wiki.",
+  "source_url": "https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange",
+  "authors": [],
+  "contributors": [
+    "cmccandless",
+    "Dog",
+    "lucasloisp",
+    "N-Parsons",
+    "pyropy",
+    "tqa236"
+  ]
+}

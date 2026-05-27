@@ -1,0 +1,31 @@
+{
+  "id": "coffeescript:nucleotide-count",
+  "trackSlug": "coffeescript",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "6952588f-22fb-493e-b252-d62c404ad9ca",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class NucleotideCount\n  constructor: (args) ->\n    @nucleotideCounts =\n\n  count: (args) ->\n\nmodule.exports = NucleotideCount\n",
+  "example_solution": "class DNA\n  constructor: (@strand) ->\n    @nucleotideCounts =\n      A: @value 'A'\n      T: @value 'T'\n      C: @value 'C'\n      G: @value 'G'\n\n  value: (nucleotide) ->\n    throw new Error('Invalid nucleotide strand') if (@strand.split(\"\").some (n) -> not (['A', 'T', 'C', 'G'].includes(n)))\n    @strand.split(nucleotide).length - 1\n\n  count: (nucleotide) ->\n    throw new Error('Invalid nucleotide') unless @nucleotideCounts.hasOwnProperty(nucleotide)\n    @nucleotideCounts[nucleotide]\n\nmodule.exports = DNA\n",
+  "test_code": "NucleotideCount = require './nucleotide-count'\n\ndescribe 'NucleotideCount', ->\n  it 'has no nucleotides', ->\n    expected =\n      A: 0\n      T: 0\n      C: 0\n      G: 0\n    dna = new NucleotideCount('')\n    expect(dna.nucleotideCounts).toEqual expected\n\n  xit 'has no adoenosine', ->\n    dna = new NucleotideCount('')\n    expect(dna.count('A')).toEqual 0\n\n  xit 'repetitive cytidine gets counts', ->\n    dna = new NucleotideCount('CCCCC')\n    expect(dna.count('C')).toEqual 5\n\n  xit 'repetitive sequence has only gaunosine', ->\n    dna = new NucleotideCount('GGGGGGGG')\n    expected =\n      A: 0\n      T: 0\n      C: 0\n      G: 8\n    expect(dna.nucleotideCounts).toEqual expected\n\n  xit 'counts only thymidine', ->\n    dna = new NucleotideCount('GGGGTAACCCGG')\n    expect(dna.count('T')).toEqual 1\n\n  xit 'counts a nucleotide only once', ->\n    dna = new NucleotideCount('GGTTGG')\n    dna.count('T')\n    expect(dna.count('T')).toEqual 2\n\n  xit 'validates strand', ->\n    expect ->\n      new NucleotideCount('AGTXCG')\n    .toThrow new Error('Invalid nucleotide strand')\n\n  xit 'validates nucleotides', ->\n    dna = new NucleotideCount('GGTTGG')\n    expect ->\n      dna.count 'X'\n    .toThrow new Error('Invalid nucleotide')\n\n  xit 'counts all nucleotides', ->\n    dna = new NucleotideCount('AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC')\n    expected =\n      A: 20\n      T: 21\n      G: 17\n      C: 12\n    expect(dna.nucleotideCounts).toEqual expected\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "songawee"
+  ],
+  "contributors": [
+    "aimorris",
+    "kytrinyx",
+    "rootulp",
+    "sjakobi"
+  ]
+}

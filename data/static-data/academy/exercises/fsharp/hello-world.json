@@ -1,0 +1,31 @@
+{
+  "id": "fsharp:hello-world",
+  "trackSlug": "fsharp",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "302312cc-bd15-4ba0-8f2f-cbf411c40186",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module HelloWorld\n\nlet hello = \"Goodbye, Mars!\"",
+  "example_solution": "module HelloWorld\n\nlet hello = \"Hello, World!\"",
+  "test_code": "module HelloWorldTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen HelloWorld\n\n[<Fact>]\nlet ``Say Hi!`` () =\n    hello |> should equal \"Hello, World!\"\n\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "gleam:sum-of-multiples",
+  "trackSlug": "gleam",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "ff4ce860-92cc-4768-a482-ba10cc6d1190",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "lists",
+    "ints"
+  ],
+  "prerequisites": [
+    "ints",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "pub fn sum(factors factors: List(Int), limit limit: Int) -> Int {\n  todo\n}\n",
+  "example_solution": "import gleam/int\nimport gleam/list\nimport gleam/set.{type Set}\n\npub fn sum(factors factors: List(Int), limit limit: Int) -> Int {\n  factors\n  |> list.fold(from: set.new(), with: fn(multiples, factor) {\n    get_multiples(multiples, factor, limit)\n  })\n  |> set.to_list\n  |> int.sum\n}\n\nfn get_multiples(multiples: Set(Int), factor: Int, limit: Int) -> Set(Int) {\n  case limit <= factor {\n    True -> multiples\n    False ->\n      list.range(1, { limit - 1 } / factor)\n      |> list.map(int.multiply(_, factor))\n      |> list.fold(from: multiples, with: set.insert)\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport sum_of_multiples\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn no_multiples_within_limit_test() {\n  sum_of_multiples.sum(factors: [3, 5], limit: 1)\n  |> should.equal(0)\n}\n\npub fn one_factor_has_multiples_within_limit_test() {\n  sum_of_multiples.sum(factors: [3, 5], limit: 4)\n  |> should.equal(3)\n}\n\npub fn more_than_one_multiple_within_limit_test() {\n  sum_of_multiples.sum(factors: [3], limit: 7)\n  |> should.equal(9)\n}\n\npub fn more_than_one_factor_with_multiples_within_limit_test() {\n  sum_of_multiples.sum(factors: [3, 5], limit: 10)\n  |> should.equal(23)\n}\n\npub fn each_multiple_is_only_counted_once_test() {\n  sum_of_multiples.sum(factors: [3, 5], limit: 100)\n  |> should.equal(2318)\n}\n\npub fn a_much_larger_limit_test() {\n  sum_of_multiples.sum(factors: [3, 5], limit: 1000)\n  |> should.equal(233_168)\n}\n\npub fn three_factors_test() {\n  sum_of_multiples.sum(factors: [7, 13, 17], limit: 20)\n  |> should.equal(51)\n}\n\npub fn factors_not_relatively_prime_test() {\n  sum_of_multiples.sum(factors: [4, 6], limit: 15)\n  |> should.equal(30)\n}\n\npub fn some_pairs_of_factors_relatively_prime_and_some_not_test() {\n  sum_of_multiples.sum(factors: [5, 6, 8], limit: 150)\n  |> should.equal(4419)\n}\n\npub fn one_factor_is_a_multiple_of_another_test() {\n  sum_of_multiples.sum(factors: [5, 25], limit: 51)\n  |> should.equal(275)\n}\n\npub fn much_larger_factors_test() {\n  sum_of_multiples.sum(factors: [43, 47], limit: 10_000)\n  |> should.equal(2_203_160)\n}\n\npub fn all_numbers_are_multiples_of_1_test() {\n  sum_of_multiples.sum(factors: [1], limit: 100)\n  |> should.equal(4950)\n}\n\npub fn no_factors_means_an_empty_sum_test() {\n  sum_of_multiples.sum(factors: [], limit: 10_000)\n  |> should.equal(0)\n}\n\npub fn the_only_multiple_of_0_is_0_test() {\n  sum_of_multiples.sum(factors: [0], limit: 1)\n  |> should.equal(0)\n}\n\npub fn the_factor_0_does_not_affect_the_sum_of_multiples_of_other_factors_test() {\n  sum_of_multiples.sum(factors: [3, 0], limit: 4)\n  |> should.equal(3)\n}\n\npub fn solutions_using_include_exclude_must_extend_to_cardinality_greater_than_3_test() {\n  sum_of_multiples.sum(factors: [2, 3, 5, 7, 11], limit: 10_000)\n  |> should.equal(39_614_537)\n}\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,29 @@
+{
+  "id": "purescript:collatz-conjecture",
+  "trackSlug": "purescript",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "b2d299f3-c382-4271-bd9e-f9d5615e5403",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "module CollatzConjecture\n  ( collatz\n  ) where\n\nimport Data.Maybe (Maybe)\nimport Effect.Exception.Unsafe (unsafeThrow)\n\ncollatz :: Int -> Maybe Int\ncollatz = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module CollatzConjecture\n  ( collatz\n  ) where\n\nimport Prelude\nimport Data.Int (even)\nimport Data.Maybe (Maybe(..))\n\ncollatzHelper :: Int -> Int -> Int\ncollatzHelper acc x | x == 1    = acc\n                    | even x    = collatzHelper (acc + 1) (x / 2)\n                    | otherwise = collatzHelper (acc + 1) (x * 3 + 1)\n\ncollatz :: Int -> Maybe Int\ncollatz x = if x <= 0 then Nothing else Just $ collatzHelper 0 x\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport CollatzConjecture (collatz)\nimport Effect (Effect)\nimport Data.Maybe (Maybe(..))\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Assert as Assert\nimport Test.Unit.Main (runTest)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"CollatzConjecture.collatz\" do\n    test \"zero steps for one\" do\n      Assert.equal (Just 0) (collatz 1)\n\n    test \"divide if even\" do\n      Assert.equal (Just 4) (collatz 16)\n\n    test \"even and odd steps\" do\n      Assert.equal (Just 9) (collatz 12)\n\n    test \"Large number of even and odd steps\" do\n      Assert.equal (Just 152) (collatz 1000000)\n\n    test \"zero is an error\" do\n      Assert.equal Nothing (collatz 0)\n\n    test \"negative value is an error\" do\n      Assert.equal Nothing (collatz (-15))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "houli"
+  ],
+  "contributors": [
+    "colinwahl",
+    "spicydonuts"
+  ]
+}

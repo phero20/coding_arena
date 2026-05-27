@@ -1,0 +1,26 @@
+{
+  "id": "racket:strain",
+  "trackSlug": "racket",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "f3c6fea7-f69e-4cc5-b71f-0d34204623a7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `keep` and `discard` operation on collections.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide keep discard)\n\n(define (keep lst predicate)\n  (error \"Please implement 'keep'\"))\n\n(define (discard lst predicate)\n  (error \"Please implement 'discard'\"))\n",
+  "example_solution": "#lang racket\n\n(provide keep discard)\n\n(define (keep lst predicate)\n  (for/list ([value lst]\n             #:when (predicate value))\n    value))\n\n(define (discard lst predicate)\n  (keep lst (negate predicate)))\n",
+  "test_code": "#lang racket/base\n\n(require \"strain.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (define (always-true _) #t)\n\n  (define (always-false _) #f)\n\n  (define (contains-5? lst) (member 5 lst))\n\n  (define (starts-with-z? str) (char=? (string-ref str 0) #\\z))\n\n  (define suite\n    (test-suite\n     \"strain tests\"\n\n     (test-equal? \"keep on empty list returns empty list\"\n                  (keep '() always-true)\n                  '())\n\n     (test-equal? \"keeps everything\"\n                  (keep '(1 3 5) always-true)\n                  '(1 3 5))\n\n     (test-equal? \"keeps nothing\"\n                  (keep '(1 3 5) always-false)\n                  '())\n\n     (test-equal? \"keeps first and last\"\n                  (keep '(1 2 3) odd?)\n                  '(1 3))\n\n     (test-equal? \"keeps neither first nor last\"\n                  (keep '(1 2 3) even?)\n                  '(2))\n\n     (test-equal? \"keeps strings\"\n                  (keep '(\"apple\" \"zebra\" \"banana\" \"zombies\" \"cherimoya\" \"zealot\")\n                        starts-with-z?)\n                  '(\"zebra\" \"zombies\" \"zealot\"))\n\n     (test-equal? \"keeps lists\"\n                  (keep (list '(1 2 3) '(5 5 5) '(5 1 2) '(2 1 2) '(1 5 2) '(2 2 1) '(1 2 5))\n                        contains-5?)\n                  (list '(5 5 5) '(5 1 2) '(1 5 2) '(1 2 5)))\n\n     (test-equal? \"discard on empty list returns empty list\"\n                  (discard '() always-true)\n                  '())\n\n     (test-equal? \"discards everything\"\n                  (discard '(1 3 5) always-true)\n                  '())\n\n     (test-equal? \"discards nothing\"\n                  (discard '(1 3 5) always-false)\n                  '(1 3 5))\n\n     (test-equal? \"discards first and last\"\n                  (discard '(1 2 3) odd?)\n                  '(2))\n\n     (test-equal? \"discards neither first nor last\"\n                  (discard '(1 2 3) even?)\n                  '(1 3))\n\n     (test-equal? \"discards strings\"\n                  (discard '(\"apple\" \"zebra\" \"banana\" \"zombies\" \"cherimoya\" \"zealot\")\n                           starts-with-z?)\n                  '(\"apple\" \"banana\" \"cherimoya\"))\n\n     (test-equal? \"discards lists\"\n                  (discard (list '(1 2 3) '(5 5 5) '(5 1 2) '(2 1 2) '(1 5 2) '(2 2 1) '(1 2 5))\n                           contains-5?)\n                  (list '(1 2 3) '(2 1 2) '(2 2 1)))))\n\n  (run-tests suite))\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "Adrien-LUDWIG"
+  ],
+  "contributors": null
+}

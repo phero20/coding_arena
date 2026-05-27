@@ -1,0 +1,35 @@
+{
+  "id": "elm:pythagorean-triplet",
+  "trackSlug": "elm",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "d266a60c-4c41-4d98-a898-13dea7513cd8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "tuples"
+  ],
+  "prerequisites": [
+    "tuples",
+    "booleans",
+    "lists",
+    "let"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "module PythagoreanTriplet exposing (triplets)\n\n\ntype alias Triplet =\n    ( Int, Int, Int )\n\n\ntriplets : Int -> List Triplet\ntriplets n =\n    Debug.todo \"implement this function\"\n",
+  "example_solution": "module PythagoreanTriplet exposing (triplets)\n\n-- Solution inspired by cmcaine's answer in the Julia track.\n-- https://github.com/exercism/julia/blob/c6b067b39fb5217c745fba23906248a19521c7be/exercises/practice/pythagorean-triplet/.meta/example.jl\n\n\ntype alias Triplet =\n    ( Int, Int, Int )\n\n\n{-| For an integer n, find all triplets a,b,c such that:\na < b < c\na + b + c = n\na^2 + b^2 = c^2\n-}\ntriplets : Int -> List Triplet\ntriplets n =\n    -- 3 is the range start since 3,4,5 is the lowest Pythagorean triplet.\n    -- n // 3 is the range end since we have a < b < c and a + b + c = n.\n    List.range 3 (n // 3)\n        |> List.filterMap (computeTriplet n)\n\n\n{-| Given n and a, find the value for b and c that complete the a,b,c triplet.\n-}\ncomputeTriplet : Int -> Int -> Maybe Triplet\ncomputeTriplet n a =\n    -- From the equations:\n    --    a + b + c = n        (1)\n    --    a^2 + b^2 = c^2      (2)\n    -- we can replace c by (n - a - b) and inject it in (2) to find that\n    --    b = n(n-2a) / 2(n-a)\n    -- which is only valid if b > a and b is an integer.\n    let\n        num =\n            n * (n - 2 * a)\n\n        denum =\n            2 * (n - a)\n\n        b =\n            num // denum\n    in\n    if b > a && b * denum == num then\n        Just ( a, b, n - a - b )\n\n    else\n        Nothing\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport PythagoreanTriplet exposing (triplets)\nimport Test exposing (Test, describe, skip, test)\n\n\ntests : Test\ntests =\n    describe \"Pythagorean Triplets\"\n        [ test \"triplets whose sum is 12\" <|\n            \\() -> Expect.equal [ ( 3, 4, 5 ) ] (triplets 12)\n        , skip <|\n            test \"triplets whose sum is 108\" <|\n                \\() -> Expect.equal [ ( 27, 36, 45 ) ] (triplets 108)\n        , skip <|\n            test \"triplets whose sum is 1000\" <|\n                \\() -> Expect.equal [ ( 200, 375, 425 ) ] (triplets 1000)\n        , skip <|\n            test \"no matching triplets for 1001\" <|\n                \\() -> Expect.equal [] (triplets 1001)\n        , skip <|\n            test \"returns all matching triplets\" <|\n                \\() -> Expect.equal [ ( 9, 40, 41 ), ( 15, 36, 39 ) ] (triplets 90)\n        , skip <|\n            test \"several matching triplets\" <|\n                \\() ->\n                    Expect.equal\n                        [ ( 40, 399, 401 )\n                        , ( 56, 390, 394 )\n                        , ( 105, 360, 375 )\n                        , ( 120, 350, 370 )\n                        , ( 140, 336, 364 )\n                        , ( 168, 315, 357 )\n                        , ( 210, 280, 350 )\n                        , ( 240, 252, 348 )\n                        ]\n                        (triplets 840)\n        , skip <|\n            test \"triplets for large number\" <|\n                \\() ->\n                    Expect.equal\n                        [ ( 1200, 14375, 14425 )\n                        , ( 1875, 14000, 14125 )\n                        , ( 5000, 12000, 13000 )\n                        , ( 6000, 11250, 12750 )\n                        , ( 7500, 10000, 12500 )\n                        ]\n                        (triplets 30000)\n        ]\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "leojpod"
+  ],
+  "contributors": [
+    "mpizenberg"
+  ]
+}

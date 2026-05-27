@@ -1,0 +1,44 @@
+{
+  "id": "clojure:leap",
+  "trackSlug": "clojure",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "336aa5ec-f868-4a8a-9fd2-989b6c2fd0be",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "conditionals",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "(ns leap)\n\n(defn leap-year?\n  \"Returns true if the given year is a leap year;\n  otherwise, it returns false.\"\n  [year]\n  ;; function body\n  )\n",
+  "example_solution": "(ns leap)\n\n(defn leap-year? [year]\n  (let [[p c s] (map #(= 0 (rem year %1)) [4 100 400])]\n    (or (and p (not c))\n        (and c s))))\n",
+  "test_code": "(ns leap-test\n  (:require [clojure.test :refer [deftest testing is]]\n            leap))\n\n(deftest leap-year?_test_1\n  (testing \"year not divisible by 4 in common year\"\n    (is (false? (leap/leap-year? 2015)))))\n\n(deftest leap-year?_test_2\n  (testing \"year divisible by 2, not divisible by 4 in common year\"\n    (is (false? (leap/leap-year? 1970)))))\n\n(deftest leap-year?_test_3\n  (testing \"year divisible by 4, not divisible by 100 in leap year\"\n    (is (true? (leap/leap-year? 1996)))))\n\n(deftest leap-year?_test_4\n  (testing \"year divisible by 4 and 5 is still a leap year\"\n    (is (true? (leap/leap-year? 1960)))))\n\n(deftest leap-year?_test_5\n  (testing \"year divisible by 100, not divisible by 400 in common year\"\n    (is (false? (leap/leap-year? 2100)))))\n\n(deftest leap-year?_test_6\n  (testing \"year divisible by 100 but not by 3 is still not a leap year\"\n    (is (false? (leap/leap-year? 1900)))))\n\n(deftest leap-year?_test_7\n  (testing \"year divisible by 400 is leap year\"\n    (is (true? (leap/leap-year? 2000)))))\n\n(deftest leap-year?_test_8\n  (testing \"year divisible by 400 but not by 125 is still a leap year\"\n    (is (true? (leap/leap-year? 2400)))))\n\n(deftest leap-year?_test_9\n  (testing \"year divisible by 200, not divisible by 400 in common year\"\n    (is (false? (leap/leap-year? 1800)))))\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "canweriotnow",
+    "dkinzer",
+    "haus",
+    "jgwhite",
+    "kytrinyx",
+    "mathias",
+    "michalporeba",
+    "ovidiu141",
+    "sjwarner-bp",
+    "verdammelt",
+    "walkermatt",
+    "yurrriq",
+    "erikschierboom"
+  ]
+}

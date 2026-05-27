@@ -1,0 +1,35 @@
+{
+  "id": "vbnet:matrix",
+  "trackSlug": "vbnet",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "2d9a1b92-9315-49cb-9e47-cff0caffe8a4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "properties",
+    "classes",
+    "arrays"
+  ],
+  "prerequisites": [
+    "arrays",
+    "classes",
+    "numbers",
+    "properties"
+  ],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Class Matrix\n    Public Sub New(ByVal input As String)\n    End Sub\n\n    Public Function Row(ByVal row As Integer) As Integer()\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\n\n    Public Function Column(ByVal col As Integer) As Integer()\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Class\n",
+  "example_solution": "Imports System.Linq\n\nPublic Class Matrix\n    Private ReadOnly _rows As Integer()()\n    Private ReadOnly _cols As Integer()()\n\n    Public Sub New(ByVal input As String)\n        _rows = ParseRows(input)\n        _cols = ParseCols(_rows)\n    End Sub\n\n    Public ReadOnly Property Rows As Integer\n        Get\n            Return _rows.Length\n        End Get\n    End Property\n    Public ReadOnly Property Cols As Integer\n        Get\n            Return _cols.Length\n        End Get\n    End Property\n\n    Public Function Row(ByVal pRow As Integer) As Integer()\n        Return _rows(pRow - 1)\n    End Function\n    Public Function Column(ByVal col As Integer) As Integer()\n        Return _cols(col - 1)\n    End Function\n\n    Private Shared Function ParseRows(ByVal input As String) As Integer()()\n        Return input.Split(ChrW(10)).[Select](New Func(Of String, Integer())(AddressOf ParseRow)).ToArray()\n    End Function\n\n    Private Shared Function ParseRow(ByVal row As String) As Integer()\n        Return row.Split(\" \"c).[Select](New Func(Of String, Integer)(AddressOf Integer.Parse)).ToArray()\n    End Function\n\n    Private Shared Function ParseCols(ByVal rows As Integer()()) As Integer()()\n        Return Enumerable.Range(0, rows(0).Length).[Select](Function(y) ParseCol(rows, y)).ToArray()\n    End Function\n\n    Private Shared Function ParseCol(ByVal rows As Integer()(), ByVal y As Integer) As Integer()\n        Return Enumerable.Range(0, rows.Length).[Select](Function(x) rows(x)(y)).ToArray()\n    End Function\nEnd Class\n",
+  "test_code": "Imports Xunit\n\nPublic Class MatrixTests\n    <Fact>\n    Public Sub Extract_row_from_one_number_matrix()\n        Dim sut = New Matrix(\"1\")\n        Dim expected = {1}\n        Dim result as IEnumerable(Of Integer) = sut.Row(1)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_extract_row()\n        Dim sut = New Matrix(\"1 2\" & vbLf & \"3 4\")\n        Dim expected = {3, 4}\n        Dim result as IEnumerable(Of Integer) = sut.Row(2)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Extract_row_where_numbers_have_different_widths()\n        Dim sut = New Matrix(\"1 2\" & vbLf & \"10 20\")\n        Dim expected = {10, 20}\n        Dim result as IEnumerable(Of Integer) = sut.Row(2)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_extract_row_from_non_square_matrix_with_no_corresponding_column()\n        Dim sut = New Matrix(\"1 2 3\" & vbLf & \"4 5 6\" & vbLf & \"7 8 9\" & vbLf & \"8 7 6\")\n        Dim expected = {8, 7, 6}\n        Dim result as IEnumerable(Of Integer) = sut.Row(4)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Extract_column_from_one_number_matrix()\n        Dim sut = New Matrix(\"1\")\n        Dim expected = {1}\n        Dim result as IEnumerable(Of Integer) = sut.Column(1)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_extract_column()\n        Dim sut = New Matrix(\"1 2 3\" & vbLf & \"4 5 6\" & vbLf & \"7 8 9\")\n        Dim expected = {3, 6, 9}\n        Dim result as IEnumerable(Of Integer) = sut.Column(3)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_extract_column_from_non_square_matrix_with_no_corresponding_row()\n        Dim sut = New Matrix(\"1 2 3 4\" & vbLf & \"5 6 7 8\" & vbLf & \"9 8 7 6\")\n        Dim expected = {4, 8, 6}\n        Dim result as IEnumerable(Of Integer) = sut.Column(4)\n        Assert.Equal(expected, result)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Extract_column_where_numbers_have_different_widths()\n        Dim sut = New Matrix(\"89 1903 3\" & vbLf & \"18 3 1\" & vbLf & \"9 4 800\")\n        Dim expected = {1903, 3, 4}\n        Dim result as IEnumerable(Of Integer) = sut.Column(2)\n        Assert.Equal(expected, result)\n    End Sub\nEnd Class\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://turing.edu",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

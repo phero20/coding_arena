@@ -1,0 +1,30 @@
+{
+  "id": "emacs-lisp:grains",
+  "trackSlug": "emacs-lisp",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "d219aab6-11ec-4e0c-b041-f06c8d523946",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": ";;; grains.el --- Grains exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n(defun square (n)\n;;; Code:\n)\n\n(defun total ()\n;;; Code:\n)\n\n(provide 'grains)\n;;; grains.el ends here\n",
+  "example_solution": ";;; grains.el --- Grains exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(require 'cl-lib)\n\n(defun square (n)\n  \"Find the number of grains on square N.\"\n  (string-to-number (calc-eval (format \"2^(%d - 1)\" n))))\n\n(defun total ()\n  \"Find the total number of grains on the board.\"\n  (string-to-number (calc-eval \"2^64 - 1\")))\n\n(provide 'grains)\n;;; grains.el ends here\n",
+  "test_code": ";;; grains-test.el --- Test for Grains (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(load-file \"grains.el\")\n(declare-function square \"grains.el\" (n))\n(declare-function total \"grains.el\")\n\n(ert-deftest square-1 ()\n  (should (= 1 (square 1))))\n\n(ert-deftest square-2 ()\n  (should (= 2 (square 2))))\n\n(ert-deftest square-3 ()\n  (should (= 4 (square 3))))\n\n(ert-deftest square-4 ()\n  (should (= 8 (square 4))))\n\n(ert-deftest square-16 ()\n  (should (= 32768\n             (square 16))))\n\n(ert-deftest square-32 ()\n  (should (= 2147483648\n             (square 32))))\n\n(ert-deftest square-64 ()\n  (should (= 9223372036854775808\n             (square 64))))\n\n(ert-deftest total-grains ()\n  (should (= 18446744073709551615\n             (total))))\n\n(provide 'grains-test.el)\n;;; grains-test.el ends here.\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "canweriotnow"
+  ],
+  "contributors": [
+    "vermiculus",
+    "wasamasa",
+    "yurrriq"
+  ]
+}

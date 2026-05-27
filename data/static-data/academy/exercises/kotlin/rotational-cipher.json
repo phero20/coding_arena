@@ -1,0 +1,34 @@
+{
+  "id": "kotlin:rotational-cipher",
+  "trackSlug": "kotlin",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "7c24087a-ca61-48d3-9cb9-c3fde2edba86",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RotationalCipher {\n\n    // TODO: Implement proper constructor\n\n    fun encode(text: String): String {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "class RotationalCipher(val shiftKey: Int) {\n\n    companion object {\n        private val LOWERS = ('a'..'z').toList()\n        private val UPPERS = ('A'..'Z').toList()\n    }\n\n    fun encode(text: String): String {\n        return text.map { char ->\n            when (char) {\n                in LOWERS -> LOWERS[(LOWERS.indexOf(char) + shiftKey) % LOWERS.size]\n                in UPPERS -> UPPERS[(UPPERS.indexOf(char) + shiftKey) % UPPERS.size]\n                else      -> char\n            }\n        }.joinToString(\"\")\n    }\n\n}\n",
+  "test_code": "import org.junit.Ignore\nimport org.junit.Test\nimport kotlin.test.assertEquals\n\nclass RotationalCipherTest {\n\n    @Test\n    fun testRotateLowercaseABy0() {\n        val cipher = RotationalCipher(0)\n        assertEquals(\"a\", cipher.encode(\"a\"))\n    }\n\n    @Ignore\n    @Test\n    fun testRotateLowercaseABy1NoWrapAround() {\n        val cipher = RotationalCipher(1)\n        assertEquals(\"b\", cipher.encode(\"a\"))\n    }\n\n    @Ignore\n    @Test\n    fun testRotateLowercaseABy26SingleWrapAround() {\n        val cipher = RotationalCipher(26)\n        assertEquals(\"a\", cipher.encode(\"a\"))\n    }\n\n    @Ignore\n    @Test\n    fun testRotateLowercaseMBy13NoWrapAround() {\n        val cipher = RotationalCipher(13)\n        assertEquals(\"z\", cipher.encode(\"m\"))\n    }\n\n    @Ignore\n    @Test\n    fun testRotateLowercaseNBy1SingleWrapAround() {\n        val cipher = RotationalCipher(13)\n        assertEquals(\"a\", cipher.encode(\"n\"))\n    }\n\n    @Ignore\n    @Test\n    fun testRotateCapitalLettersNoWrapAround() {\n        val cipher = RotationalCipher(5)\n        assertEquals(\"TRL\", cipher.encode(\"OMG\"))\n    }\n\n    @Ignore\n    @Test\n    fun testSpacesAreUnalteredByRotation() {\n        val cipher = RotationalCipher(5)\n        assertEquals(\"T R L\", cipher.encode(\"O M G\"))\n    }\n\n    @Ignore\n    @Test\n    fun testNumbersAreUnalteredByRotation() {\n        val cipher = RotationalCipher(4)\n        assertEquals(\"Xiwxmrk 1 2 3 xiwxmrk\", cipher.encode(\"Testing 1 2 3 testing\"))\n    }\n\n    @Ignore\n    @Test\n    fun testPunctuationIsUnalteredByRotation() {\n        val cipher = RotationalCipher(21)\n        assertEquals(\"Gzo'n zvo, Bmviyhv!\", cipher.encode(\"Let's eat, Grandma!\"))\n    }\n\n    @Ignore\n    @Test\n    fun testAllLettersRotateCorrectly() {\n        val cipher = RotationalCipher(13)\n        assertEquals(\n                \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\",\n                cipher.encode(\"The quick brown fox jumps over the lazy dog.\"))\n    }\n\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "stkent"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "lihofm",
+    "mdowds",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "uzilan"
+  ]
+}

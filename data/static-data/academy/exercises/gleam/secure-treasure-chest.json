@@ -1,0 +1,31 @@
+{
+  "id": "gleam:secure-treasure-chest",
+  "trackSlug": "gleam",
+  "slug": "secure-treasure-chest",
+  "name": "Secure Treasure Chest",
+  "uuid": "832f4e76-4bbf-4974-8795-ad60b6d78fac",
+  "type": "concept",
+  "status": "active",
+  "blurb": "Learn about opaque types by making a more secure treasure chest",
+  "difficulty": null,
+  "concepts": [
+    "opaque-types"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "results",
+    "custom-types"
+  ],
+  "instructions": "# Instructions\n\nSharp eyed students will have noticed that the `TreasureChest` type in the previous exercise wasn't that secure!\n\nIf you used the `get_treasure` function you had to supply the password, but you could still destructure the `TreasureChest` type to get the treasure without having to know the password.\n\nLet's fix that by using an Opaque Type.\n\n## 1. Define the `TreasureChest` opaque type.\n\nThe `TreasureChest` contains two fields:\n- A password that is a `String`.\n- A treasure that is a generic type.\n\nThe `TreasureChest` type must be opaque.\n\n## 2. Define the `create` function.\n\nThis function takes two arguments:\n- A password `String`.\n- A treasure value of any type.\n\nThe function returns a `TreasureChest` containing the password and the value.\n\nIf the password is shorter than 8 characters then the function should return an error saying `Password must be at least 8 characters long`.\n\n## 3. Define `open` function.\n\nThis function takes two arguments:\n\n- A `TreasureChest`.\n- A password `String`.\n\nIf the password matches the password in the `TreasureChest` then the function should return the treasure, otherwise it should return an error saying `Incorrect password`.\n",
+  "introduction": "# Introduction\n\n## Opaque Types\n\nOpaque types in Gleam are custom types where only the module that defines the type can construct or pattern match values of the type. This is useful for creating types that should only be used in a specific way.\n\nOpaque types are defined using the `opaque` keyword.\n\n```gleam\npub opaque type PositiveInt {\n  PositiveInt(inner: Int)\n}\n```\n\nThis `PositiveInt` type is to be used in situations where an int is wanted, but it has to be zero or greater. A regular Gleam `Int` could not be used as they can also be negative.\n\nThe module that defines this type can define a function to get the inner int value, and a function for creating the `PositiveInt` type which will return an error if the value is not positive.\n\n```gleam\npub fn from_int(i: Int) -> Result(PositiveInt, String) {\n  case i {\n    _ if i < 0 -> Error(\"Value must be positive\")\n    _ -> Ok(PositiveInt(i))\n  }\n}\n\npub fn to_int(i: PositiveInt) -> Int {\n  i.inner\n}\n```\n\nWith this API other modules cannot construct a `PositiveInt` with a negative value, so any function that takes a `PositiveInt` can be sure that the value is positive.\n",
+  "hints": "# Hints\n\n## 1. Define the `TreasureChest` opaque type.\n\n- Opaque types are defined using the `opaque` keyword.\n\n## 2. Define the `create` function.\n\n- The [`string.length` function][length] can be used to get the length of a string.\n\n## 3. Define `open` function.\n\n- The `==` operator can be used to compare two strings for equality.\n\n[length]: https://hexdocs.pm/gleam_stdlib/gleam/string.html#length\n",
+  "starter_code": "// Please define the TreasureChest type\n\npub fn create(\n  password: String,\n  contents: treasure,\n) -> Result(TreasureChest(treasure), String) {\n  todo\n}\n\npub fn open(\n  chest: TreasureChest(treasure),\n  password: String,\n) -> Result(treasure, String) {\n  todo\n}\n",
+  "example_solution": "import gleam/string\n\npub opaque type TreasureChest(treasure) {\n  TreasureChest(password: String, contents: treasure)\n}\n\npub fn create(\n  password: String,\n  contents: treasure,\n) -> Result(TreasureChest(treasure), String) {\n  case string.length(password) {\n    i if i < 8 -> Error(\"Password must be at least 8 characters long\")\n    _ -> Ok(TreasureChest(password, contents))\n  }\n}\n\npub fn open(\n  chest: TreasureChest(treasure),\n  password: String,\n) -> Result(treasure, String) {\n  case password == chest.password {\n    True -> Ok(chest.contents)\n    False -> Error(\"Incorrect password\")\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport gleam/string\nimport secure_treasure_chest\nimport simplifile\n\npub fn main() {\n  test_runner.main()\n}\n\nfn compact_whitespace(graphemes: List(String), acc: String) -> String {\n  case graphemes {\n    [] -> acc\n    [\" \", \" \", ..rest] -> compact_whitespace([\" \", ..rest], acc)\n    [grapheme, ..rest] -> compact_whitespace(rest, acc <> grapheme)\n  }\n}\n\nfn read_source() -> String {\n  let assert Ok(src) = simplifile.read(\"src/secure_treasure_chest.gleam\")\n  compact_whitespace(string.to_graphemes(src), \"\")\n}\n\npub fn type_must_be_opaque_test() {\n  let src = read_source()\n  case string.contains(src, \"pub opaque type TreasureChest\") {\n    True -> Nil\n    False -> panic as \"The TreasureChest type must exist and be opaque\"\n  }\n}\n\npub fn create_is_ok_with_long_password_test() {\n  let assert Ok(_) = secure_treasure_chest.create(\"12345678\", \"My treasure\")\n}\n\npub fn create_is_error_with_short_password_test() {\n  secure_treasure_chest.create(\"1234567\", \"My treasure\")\n  |> should.equal(Error(\"Password must be at least 8 characters long\"))\n}\n\npub fn open_is_ok_with_the_correct_password_test() {\n  let assert Ok(chest) = secure_treasure_chest.create(\"wwwibble\", 100)\n  secure_treasure_chest.open(chest, \"wwwibble\")\n  |> should.equal(Ok(100))\n\n  let assert Ok(chest) = secure_treasure_chest.create(\"wwwobble\", 1.5)\n  secure_treasure_chest.open(chest, \"wwwobble\")\n  |> should.equal(Ok(1.5))\n}\n\npub fn open_is_an_error_with_an_incorrect_password_test() {\n  let assert Ok(chest) = secure_treasure_chest.create(\"wwwibble\", 100)\n  secure_treasure_chest.open(chest, \"wwwobble\")\n  |> should.equal(Error(\"Incorrect password\"))\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "lpil"
+  ],
+  "contributors": null
+}

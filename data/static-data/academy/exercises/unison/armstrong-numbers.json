@@ -1,0 +1,26 @@
+{
+  "id": "unison:armstrong-numbers",
+  "trackSlug": "unison",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "00540531-9d65-4daf-aaf6-fa2f6d47331d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "armstrongNumbers.isArmstrongNumber : Nat -> Boolean\narmstrongNumbers.isArmstrongNumber number =\n  todo \"implement isArmstrongNumber\"",
+  "example_solution": "isArmstrongNumber : Nat -> Boolean\nisArmstrongNumber number =\n  digitList = loop number []\n  result = List.foldLeft (acc digit ->  acc + (Nat.pow digit (List.size digitList))) 0 digitList\n  result === number\n\ndivMod : Nat -> Nat -> (Nat, Nat)\ndivMod a b =\n  m = Nat.mod a b\n  div = a / b\n  (div, m)\n\nloop : Nat -> [Nat] -> [Nat]\nloop current acc =\n  (tens, remainder) = divMod current 10\n  if tens === 0 then (remainder +: acc) else\n    loop tens (remainder +: acc)\n",
+  "test_code": "armstrongNumbers.test.ex1 = verify do\n  labeled \"Zero is an Armstrong number\" do\n    expected = true\n    actual = isArmstrongNumber 0\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex2 = verify do\n  labeled \"Single-digit numbers are Armstrong numbers\" do\n    expected = true\n    actual = isArmstrongNumber 5\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex3 = verify do\n  labeled \"There are no two-digit Armstrong numbers\" do\n    expected = false\n    actual = isArmstrongNumber 10\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex4 = verify do\n  labeled \"Three-digit number that is an Armstrong number\" do\n    expected = true\n    actual = isArmstrongNumber 153\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex5 = verify do\n  labeled \"Three-digit number that is not an Armstrong number\" do\n    expected = false\n    actual = isArmstrongNumber 100\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex6 = verify do\n  labeled \"Four-digit number that is an Armstrong number\" do\n    expected = true\n    actual = isArmstrongNumber 9474\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex7 = verify do\n  labeled \"Four-digit number that is not an Armstrong number\" do\n    expected = false\n    actual = isArmstrongNumber 9475\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex8 = verify do\n  labeled \"Seven-digit number that is an Armstrong number\" do\n    expected = true\n    actual = isArmstrongNumber 9926315\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\narmstrongNumbers.test.ex9 = verify do\n  labeled \"Seven-digit number that is not an Armstrong number\" do\n    expected = false\n    actual = isArmstrongNumber 9926314\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\n\ntest> armstrongNumbers.tests = join [\n  armstrongNumbers.test.ex1,\n  armstrongNumbers.test.ex2,\n  armstrongNumbers.test.ex3,\n  armstrongNumbers.test.ex4,\n  armstrongNumbers.test.ex5,\n  armstrongNumbers.test.ex6,\n  armstrongNumbers.test.ex7,\n  armstrongNumbers.test.ex8,\n  armstrongNumbers.test.ex9\n]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "rlmark"
+  ],
+  "contributors": null
+}

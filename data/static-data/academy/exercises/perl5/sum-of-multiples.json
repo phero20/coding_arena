@@ -1,0 +1,34 @@
+{
+  "id": "perl5:sum-of-multiples",
+  "trackSlug": "perl5",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "9c855ef0-08b4-4810-9a58-285a44082b94",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "package SumOfMultiples;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<sum_of_multiples>;\n\nsub sum_of_multiples ( $factors, $limit ) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package SumOfMultiples;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<sum_of_multiples>;\n\nsub sum_of_multiples ( $factors, $limit ) {\n\n    $factors = [ grep { $_ > 0 } @{$factors} ];\n    my %multiples;\n\n    for my $factor (@$factors) {\n        for ( my $i = 1; $i * $factor < $limit; $i++ ) {\n            $multiples{ $i * $factor } = 1;\n        }\n    }\n    my $sum = 0;\n    for my $multiple ( keys %multiples ) {\n        $sum += $multiple;\n    }\n\n    return $sum;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse SumOfMultiples qw<sum_of_multiples>;\n\nis( # begin: 54aaab5a-ce86-4edc-8b40-d3ab2400a279\n    sum_of_multiples( [ 3, 5 ], 1 ),\n    0,\n    \"no multiples within limit\",\n); # end: 54aaab5a-ce86-4edc-8b40-d3ab2400a279\n\nis( # begin: 361e4e50-c89b-4f60-95ef-5bc5c595490a\n    sum_of_multiples( [ 3, 5 ], 4 ),\n    3,\n    \"one factor has multiples within limit\",\n); # end: 361e4e50-c89b-4f60-95ef-5bc5c595490a\n\nis( # begin: e644e070-040e-4ae0-9910-93c69fc3f7ce\n    sum_of_multiples( [3], 7 ),\n    9,\n    \"more than one multiple within limit\",\n); # end: e644e070-040e-4ae0-9910-93c69fc3f7ce\n\nis( # begin: 607d6eb9-535c-41ce-91b5-3a61da3fa57f\n    sum_of_multiples( [ 3, 5 ], 10 ),\n    23,\n    \"more than one factor with multiples within limit\",\n); # end: 607d6eb9-535c-41ce-91b5-3a61da3fa57f\n\nis( # begin: f47e8209-c0c5-4786-b07b-dc273bf86b9b\n    sum_of_multiples( [ 3, 5 ], 100 ),\n    2318,\n    \"each multiple is only counted once\",\n); # end: f47e8209-c0c5-4786-b07b-dc273bf86b9b\n\nis( # begin: 28c4b267-c980-4054-93e9-07723db615ac\n    sum_of_multiples( [ 3, 5 ], 1000 ),\n    233168,\n    \"a much larger limit\",\n); # end: 28c4b267-c980-4054-93e9-07723db615ac\n\nis( # begin: 09c4494d-ff2d-4e0f-8421-f5532821ee12\n    sum_of_multiples( [ 7, 13, 17 ], 20 ),\n    51,\n    \"three factors\",\n); # end: 09c4494d-ff2d-4e0f-8421-f5532821ee12\n\nis( # begin: 2d0d5faa-f177-4ad6-bde9-ebb865083751\n    sum_of_multiples( [ 4, 6 ], 15 ),\n    30,\n    \"factors not relatively prime\",\n); # end: 2d0d5faa-f177-4ad6-bde9-ebb865083751\n\nis( # begin: ece8f2e8-96aa-4166-bbb7-6ce71261e354\n    sum_of_multiples( [ 5, 6, 8 ], 150 ),\n    4419,\n    \"some pairs of factors relatively prime and some not\",\n); # end: ece8f2e8-96aa-4166-bbb7-6ce71261e354\n\nis( # begin: 624fdade-6ffb-400e-8472-456a38c171c0\n    sum_of_multiples( [ 5, 25 ], 51 ),\n    275,\n    \"one factor is a multiple of another\",\n); # end: 624fdade-6ffb-400e-8472-456a38c171c0\n\nis( # begin: 949ee7eb-db51-479c-b5cb-4a22b40ac057\n    sum_of_multiples( [ 43, 47 ], 10000 ),\n    2203160,\n    \"much larger factors\",\n); # end: 949ee7eb-db51-479c-b5cb-4a22b40ac057\n\nis( # begin: 41093673-acbd-482c-ab80-d00a0cbedecd\n    sum_of_multiples( [1], 100 ),\n    4950,\n    \"all numbers are multiples of 1\",\n); # end: 41093673-acbd-482c-ab80-d00a0cbedecd\n\nis( # begin: 1730453b-baaa-438e-a9c2-d754497b2a76\n    sum_of_multiples( [], 10000 ),\n    0,\n    \"no factors means an empty sum\",\n); # end: 1730453b-baaa-438e-a9c2-d754497b2a76\n\nis( # begin: 214a01e9-f4bf-45bb-80f1-1dce9fbb0310\n    sum_of_multiples( [0], 1 ),\n    0,\n    \"the only multiple of 0 is 0\",\n); # end: 214a01e9-f4bf-45bb-80f1-1dce9fbb0310\n\nis( # begin: c423ae21-a0cb-4ec7-aeb1-32971af5b510\n    sum_of_multiples( [ 3, 0 ], 4 ),\n    3,\n    \"the factor 0 does not affect the sum of multiples of other factors\",\n); # end: c423ae21-a0cb-4ec7-aeb1-32971af5b510\n\nis( # begin: 17053ba9-112f-4ac0-aadb-0519dd836342\n    sum_of_multiples( [ 2, 3, 5, 7, 11 ], 10000 ),\n    39614537,\n    \"solutions using include-exclude must extend to cardinality greater than 3\",\n); # end: 17053ba9-112f-4ac0-aadb-0519dd836342\n\ndone_testing;\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "alexkalderimis",
+    "duffn",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

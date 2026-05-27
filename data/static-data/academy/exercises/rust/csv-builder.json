@@ -1,0 +1,33 @@
+{
+  "id": "rust:csv-builder",
+  "trackSlug": "rust",
+  "slug": "csv-builder",
+  "name": "CSV builder",
+  "uuid": "10c9f505-9aef-479f-b689-cb7959572482",
+  "type": "concept",
+  "status": "wip",
+  "blurb": "Learn about strings and string slices while working on a CSV builder",
+  "difficulty": 1,
+  "concepts": [
+    "string-vs-str"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "strings",
+    "string-slices"
+  ],
+  "instructions": "# Instructions\n\nYour company has been hired to generate CSV records from user input.\n\nWe need a builder for a CSV record per the standard defined in [RFC 4180](https://tools.ietf.org/html/rfc4180).\n\nWhile a formal specification exists, your company only needs to implement the following functionality:\n- create a new record builder\n- add an individual field to the record\n- serialize the record with basic escaping\n\nBasic escaping means:\n\n- Fields containing line breaks, double-quotes, and commas should be enclosed in double-quotes.\n\n- If double-quotes are used to enclose fields, then a double-quote appearing inside a field must be escaped by preceding it with another double-quote.\n\n\n## 1. Create a new builder\n\nYou'll need to implement the `new` method to create a new builder.\n\n```rust\nlet mut builder = CsvRecordBuilder::new();\n```\n\n## 2. Add individual fields to the record\n\nYou'll need to implement the `add` method to append fields to your record builder.\n`add` takes immutable string slices, `&str`, as the argument.\n\n```rust\nbuilder.add(\"ant\");\nbuilder.add(\"ba\\\"t\");\nbuilder.add(\"cat\");\n```\n\n\n## 3. Serialize the record with basic escaping\n\nYou'll need to implement the `build` method.\n`build` consumes the builder and returns a CSV record.\n```rust\nlet record = builder.build();\n// Note that from now on we cannot use `builder`\nassert_eq!(&record, r#\"ant,\"ba\"\"t\",cat\"#);\n```\n",
+  "introduction": "`String` and `&str` are two fundamental ways of working with textual data in Rust.\n\n`String` is an owned, vector of `u8` bytes and mutable.\n`&str` is a borrowed reference to a String slice and thus immutable.\n\nYou can also create and modify `String`'s using one of their many methods, such as `push`.\n```rust\nlet mut a_string = String::from(\"hello\");\na_string.push('!');\n```\n\nYou can also create a `String` by converting a `&str`:\n```rust\nlet a_string = \"hello\".to_string();\n```\n",
+  "hints": "## General\n\n- [TRPL book discusses string slices and how to use them](https://doc.rust-lang.org/book/ch04-03-slices.html#string-slices)\n\n## 1. Create a new builder\n\n- The [standard library documentation](https://doc.rust-lang.org/std/string/struct.String.html) has examples on creating `String`s.\n\n## 2. Add individual fields to the record\n\n- The [`push_str`](https://doc.rust-lang.org/std/string/struct.String.html#method.push_str) comes in quite handy for adding string slices to a `String`.\n",
+  "starter_code": "// This stub file contains items that aren't used yet; feel free to remove this module attribute\n// to enable stricter warnings.\n#![allow(unused)]\n\npub struct CsvRecordBuilder {\n    content: String,\n}\n\nimpl CsvRecordBuilder {\n    // Create a new builder\n    pub fn new() -> Self {\n        todo!(\"implement the `CsvRecordBuilder::new` method\")\n    }\n\n    /// Adds an item to the list separated by a space and a comma.\n    pub fn add(&mut self, val: &str) {\n        todo!(\"implement the `CsvRecordBuilder::add` method, adding {val}\")\n    }\n\n    /// Consumes the builder and returns the comma separated list\n    pub fn build(self) -> String {\n        todo!(\"implement the `CsvRecordBuilder::build` method\")\n    }\n}\n",
+  "example_solution": "pub struct CsvRecordBuilder {\n    content: String,\n}\n\nimpl CsvRecordBuilder {\n    // Create a new builder\n    pub fn new() -> Self {\n        Self {\n            content: String::new(),\n        }\n    }\n\n    /// Adds an item to the list separated by a space and a comma.\n    pub fn add(&mut self, val: &str) {\n        if !self.content.is_empty() {\n            self.content.push(',');\n        }\n\n        if val.contains(',') || val.contains('\"') || val.contains('\\n') {\n            self.content.push('\"');\n            self.content.push_str(&val.replace('\"', r#\"\"\"\"#));\n            self.content.push('\"');\n        } else {\n            self.content.push_str(val);\n        }\n    }\n\n    /// Consumes the builder and returns the CSV record.\n    pub fn build(self) -> String {\n        self.content\n    }\n}\n\nimpl Default for CsvRecordBuilder {\n    fn default() -> Self {\n        Self::new()\n    }\n}\n",
+  "test_code": "use csv_builder::*;\n\n#[test]\nfn no_escaping() {\n    let mut builder = CsvRecordBuilder::new();\n\n    builder.add(\"ant\");\n    builder.add(\"bat\");\n    builder.add(\"cat\");\n\n    let list = builder.build();\n    // Note that builder has been consumed so we cannot use it\n    assert_eq!(\"ant,bat,cat\", &list);\n}\n\n#[test]\n#[ignore]\nfn quote() {\n    let mut builder = CsvRecordBuilder::new();\n\n    builder.add(\"ant\");\n    builder.add(\"ba\\\"t\");\n    builder.add(\"cat\");\n\n    let list = builder.build();\n    assert_eq!(r#\"ant,\"ba\"\"t\",cat\"#, &list);\n}\n\n#[test]\n#[ignore]\nfn new_line() {\n    let mut builder = CsvRecordBuilder::new();\n\n    builder.add(\"ant\");\n    builder.add(\"ba\\nt\");\n\n    let list = builder.build();\n    assert_eq!(\"ant,\\\"ba\\nt\\\"\", &list);\n}\n#[test]\n#[ignore]\nfn comma() {\n    let mut builder = CsvRecordBuilder::new();\n\n    builder.add(\"ant\");\n    builder.add(\"ba,t\");\n\n    let list = builder.build();\n    assert_eq!(\"ant,\\\"ba,t\\\"\", &list);\n}\n\n#[test]\n#[ignore]\nfn empty() {\n    let builder = CsvRecordBuilder::new();\n    let list = builder.build();\n    assert!(list.is_empty());\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "gilescope",
+    "coriolinus",
+    "efx"
+  ],
+  "contributors": null
+}

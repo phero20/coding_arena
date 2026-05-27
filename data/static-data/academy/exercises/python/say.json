@@ -1,0 +1,49 @@
+{
+  "id": "python:say",
+  "trackSlug": "python",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "2f86ce8e-47c7-4858-89fc-e7729feb0f2f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "basics",
+    "conditionals",
+    "dicts",
+    "lists",
+    "loops",
+    "numbers",
+    "strings",
+    "string-methods"
+  ],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "def say(number):\n    pass\n",
+  "example_solution": "def say(number):\n    small = dict(enumerate((\n            'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',\n            'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',\n            'sixteen', 'seventeen', 'eighteen', 'nineteen')))\n\n    tens = {20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty',\n            60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety'}\n\n    kilo = 1e3\n    mega = 1e6\n    giga = 1e9\n    tera = 1e12\n\n    if number < 0:\n        raise ValueError('input out of range')\n    if number >= tera:\n        raise ValueError('input out of range')\n\n    if number < 20:\n        return small[number]\n\n    if number < 100:\n        if number % 10 == 0:\n            return tens[number]\n        return tens[number // 10 * 10] + '-' + small[number % 10]\n\n    if number < kilo:\n        if number % 100 == 0:\n            return small[number // 100] + ' hundred'\n        return small[number // 100] + ' hundred ' + say(number % 100)\n\n    if number < mega:\n        if number % kilo == 0:\n            return say(number // kilo) + ' thousand'\n        return say(number // kilo) + ' thousand ' + say(number % kilo)\n\n    if number < giga:\n        if number % mega == 0:\n            return say(number // mega) + ' million'\n        return say(number // mega) + ' million ' + say(number % mega)\n\n    if number % giga == 0:\n        return say(number // giga) + ' billion'\n    return say(number // giga) + ' billion ' + say(number % giga)",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/say/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom say import (\n    say,\n)\n\n\nclass SayTest(unittest.TestCase):\n    def test_zero(self):\n        self.assertEqual(say(0), \"zero\")\n\n    def test_one(self):\n        self.assertEqual(say(1), \"one\")\n\n    def test_fourteen(self):\n        self.assertEqual(say(14), \"fourteen\")\n\n    def test_twenty(self):\n        self.assertEqual(say(20), \"twenty\")\n\n    def test_twenty_two(self):\n        self.assertEqual(say(22), \"twenty-two\")\n\n    def test_thirty(self):\n        self.assertEqual(say(30), \"thirty\")\n\n    def test_ninety_nine(self):\n        self.assertEqual(say(99), \"ninety-nine\")\n\n    def test_one_hundred(self):\n        self.assertEqual(say(100), \"one hundred\")\n\n    def test_one_hundred_twenty_three(self):\n        self.assertEqual(say(123), \"one hundred twenty-three\")\n\n    def test_two_hundred(self):\n        self.assertEqual(say(200), \"two hundred\")\n\n    def test_nine_hundred_ninety_nine(self):\n        self.assertEqual(say(999), \"nine hundred ninety-nine\")\n\n    def test_one_thousand(self):\n        self.assertEqual(say(1000), \"one thousand\")\n\n    def test_one_thousand_two_hundred_thirty_four(self):\n        self.assertEqual(say(1234), \"one thousand two hundred thirty-four\")\n\n    def test_one_million(self):\n        self.assertEqual(say(1000000), \"one million\")\n\n    def test_one_million_two_thousand_three_hundred_forty_five(self):\n        self.assertEqual(\n            say(1002345), \"one million two thousand three hundred forty-five\"\n        )\n\n    def test_one_billion(self):\n        self.assertEqual(say(1000000000), \"one billion\")\n\n    def test_a_big_number(self):\n        self.assertEqual(\n            say(987654321123),\n            \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\",\n        )\n\n    def test_numbers_below_zero_are_out_of_range(self):\n        with self.assertRaises(ValueError) as err:\n            say(-1)\n\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"input out of range\")\n\n    def test_numbers_above_999_999_999_999_are_out_of_range(self):\n        with self.assertRaises(ValueError) as err:\n            say(1000000000000)\n\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"input out of range\")\n\n    # Additional tests for this track\n    def test_one_hundred_seventy(self):\n        self.assertEqual(say(170), \"one hundred seventy\")\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "behrtam"
+  ],
+  "contributors": [
+    "AndrejTS",
+    "cmccandless",
+    "csabella",
+    "Dog",
+    "fortrieb",
+    "gabriellhrn",
+    "ikhadykin",
+    "mandel01",
+    "N-Parsons",
+    "pheanex",
+    "pranasziaukas",
+    "tqa236",
+    "tsamoglou"
+  ]
+}

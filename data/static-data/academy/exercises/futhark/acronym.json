@@ -1,0 +1,26 @@
+{
+  "id": "futhark:acronym",
+  "trackSlug": "futhark",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "970bea05-1a05-4f88-9401-2977b8358f5d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def abbreviate (phrase: []u8): []u8 = ???\n",
+  "example_solution": "def abbreviate (phrase: []u8): []u8 =\n  let (result, _) = loop (result, letter) = (\"\", false) for ch in phrase do\n    if ch == '\\'' then (result, letter) else\n    if (ch & 223) - 'A' >= 26 then (result, false) else\n    if letter then (result, true) else\n    (result ++ [ch & 223], true)\n  in\n    result\n",
+  "test_code": "import \"acronym\"\n\n-- basic\n-- ==\n-- input { \"Portable Network Graphics\" }\n-- output { \"PNG\" }\n\n-- lowercase words\n-- ==\n-- input { \"Ruby on Rails\" }\n-- output { \"ROR\" }\n\n-- punctuation\n-- ==\n-- input { \"First In, First Out\" }\n-- output { \"FIFO\" }\n\n-- all caps word\n-- ==\n-- input { \"GNU Image Manipulation Program\" }\n-- output { \"GIMP\" }\n\n-- punctuation without whitespace\n-- ==\n-- input { \"Complementary metal-oxide semiconductor\" }\n-- output { \"CMOS\" }\n\n-- very long abbreviation\n-- ==\n-- input { \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\" }\n-- output { \"ROTFLSHTMDCOALM\" }\n\n-- consecutive delimiters\n-- ==\n-- input { \"Something - I made up from thin air\" }\n-- output { \"SIMUFTA\" }\n\n-- apostrophes\n-- ==\n-- input { \"Halley's Comet\" }\n-- output { \"HC\" }\n\n-- underscore emphasis\n-- ==\n-- input { \"The Road _Not_ Taken\" }\n-- output { \"TRNT\" }\n\ndef main (phrase: []u8): []u8 =\n  abbreviate phrase\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

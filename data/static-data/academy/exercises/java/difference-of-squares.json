@@ -1,0 +1,49 @@
+{
+  "id": "java:difference-of-squares",
+  "trackSlug": "java",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "b0da59c6-1b55-405c-b163-007ebf09f5e8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class DifferenceOfSquaresCalculator {\n\n    int computeSquareOfSumTo(int input) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    int computeSumOfSquaresTo(int input) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    int computeDifferenceOfSquares(int input) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}\n",
+  "example_solution": "import java.util.stream.IntStream;\n\nfinal class DifferenceOfSquaresCalculator {\n\n    int computeSquareOfSumTo(final int input) {\n        final int sum = input * (input + 1) / 2;\n        return (int) Math.pow(sum, 2);\n    }\n\n    int computeSumOfSquaresTo(final int input) {\n        return IntStream.rangeClosed(1, input)\n                .map(i -> (int) Math.pow(i, 2))\n                .sum();\n    }\n\n    int computeDifferenceOfSquares(final int input) {\n        return computeSquareOfSumTo(input) - computeSumOfSquaresTo(input);\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class DifferenceOfSquaresCalculatorTest {\n\n    private DifferenceOfSquaresCalculator calculator;\n\n    @BeforeEach\n    public void setUp() {\n        calculator = new DifferenceOfSquaresCalculator();\n    }\n\n    @Test\n    @DisplayName(\"square of sum 1\")\n    public void testSquareOfSumUpToOne() {\n        int expected = 1;\n        int actual = calculator.computeSquareOfSumTo(1);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"square of sum 5\")\n    public void testSquareOfSumUpToFive() {\n        int expected = 225;\n        int actual = calculator.computeSquareOfSumTo(5);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"square of sum 100\")\n    public void testSquareOfSumUpToHundred() {\n        int expected = 25502500;\n        int actual = calculator.computeSquareOfSumTo(100);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"sum of squares 1\")\n    public void testSumOfSquaresUpToOne() {\n        int expected = 1;\n        int actual = calculator.computeSumOfSquaresTo(1);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"sum of squares 5\")\n    public void testSumOfSquaresUpToFive() {\n        int expected = 55;\n        int actual = calculator.computeSumOfSquaresTo(5);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"sum of squares 100\")\n    public void testSumOfSquaresUpToHundred() {\n        int expected = 338350;\n        int actual = calculator.computeSumOfSquaresTo(100);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"difference of squares 1\")\n    public void testDifferenceOfSquaresUpToOne() {\n        int expected = 0;\n        int actual = calculator.computeDifferenceOfSquares(1);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"difference of squares 5\")\n    public void testDifferenceOfSquaresUpToFive() {\n        int expected = 170;\n        int actual = calculator.computeDifferenceOfSquares(5);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"difference of squares 100\")\n    public void testDifferenceOfSquaresUpToHundred() {\n        int expected = 25164150;\n        int actual = calculator.computeDifferenceOfSquares(100);\n        assertThat(actual).isEqualTo(expected);\n    }\n\n}\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "stkent"
+  ],
+  "contributors": [
+    "aadityakulkarni",
+    "balachandarsv",
+    "FridaTveit",
+    "hgvanpariya",
+    "javaeeeee",
+    "jmrunkle",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "morrme",
+    "msomji",
+    "muzimuzhi",
+    "rootulp",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "vasouv",
+    "weibeld",
+    "Zaldrick"
+  ]
+}

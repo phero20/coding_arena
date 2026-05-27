@@ -1,0 +1,28 @@
+{
+  "id": "common-lisp:gigasecond",
+  "trackSlug": "common-lisp",
+  "slug": "gigasecond",
+  "name": "Gigasecond",
+  "uuid": "25506c31-7274-402a-95e1-8475fcdb34e1",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Given a moment, determine the moment that would be after a gigasecond has passed.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a moment, determine the moment that would be after a gigasecond has passed.\n\nA gigasecond is 10^9 (1,000,000,000) seconds.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :gigasecond\n  (:use :cl)\n  (:export :from))\n(in-package :gigasecond)\n\n(defun from (year month day hour minute second))\n",
+  "example_solution": "(defpackage #:gigasecond\n  (:use #:cl)\n  (:export #:from))\n\n(in-package #:gigasecond)\n\n(defun from (year month day hour minute second)\n  (reverse\n   (subseq\n    (multiple-value-list\n     (let ((TZ 0))\n       (decode-universal-time\n        (+ (encode-universal-time second minute hour day month year TZ)\n           (expt 10 9))\n        TZ)))\n    0 6)))\n",
+  "test_code": ";; Ensures that gigasecond.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"gigasecond\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from gigasecond and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :gigasecond-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :gigasecond-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* gigasecond-suite)\n\n(test from-lisp-epoch\n (is (equal '(1931 9 10 1 46 40) (gigasecond:from 1900 1 1 0 0 0))))\n\n(test from-unix-epoch\n (is (equal '(2001 9 9 1 46 40) (gigasecond:from 1970 1 1 0 0 0))))\n\n(test from-20110425t120000z\n (is (equal '(2043 1 1 13 46 40) (gigasecond:from 2011 4 25 12 0 0))))\n\n(test from-19770613t235959z\n (is (equal '(2009 2 20 1 46 39) (gigasecond:from 1977 6 13 23 59 59))))\n\n(test from-19590719t123030z\n (is (equal '(1991 3 27 14 17 10) (gigasecond:from 1959 7 19 12 30 30))))\n\n(defun run-tests (&optional (test-or-suite 'gigasecond-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Chapter 9 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "http://pine.fm/LearnToProgram/?Chapter=09",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": [
+    "TatriX"
+  ]
+}

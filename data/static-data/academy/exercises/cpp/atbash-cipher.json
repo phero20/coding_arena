@@ -1,0 +1,37 @@
+{
+  "id": "cpp:atbash-cipher",
+  "trackSlug": "cpp",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "15c741a0-944d-4b06-a096-6af63137347a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "loops"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"atbash_cipher.h\"\n\nnamespace atbash_cipher {\n\n// TODO: add your solution here\n\n}  // namespace atbash_cipher\n",
+  "example_solution": "#include <sstream>\n#include <string>\n\n#include \"atbash_cipher.h\"\n\nnamespace atbash_cipher {\n\nconst char ALPHA_START = 'a';\nconst char ALPHA_END = 'z';\n\nchar atbash_transform(char c) {\n    return std::isalpha(c) ? ALPHA_END - std::tolower(c) + ALPHA_START : c;\n}\n\nstd::string encode(std::string const& plaintext) {\n    int chunkSize = 5;\n    int chunkCounter = 0;\n    std::ostringstream os;\n\n    for (std::size_t i = 0; i < plaintext.length(); i++) {\n        char currentChar = plaintext.at(i);\n\n        if (std::isalnum(currentChar)) {\n            if ((chunkCounter > 0) && ((chunkCounter) % chunkSize == 0)) {\n                os << \" \";\n            }\n\n            os << atbash_transform(currentChar);\n            chunkCounter++;\n        }\n    }\n\n    return os.str();\n}\n\nstd::string decode(std::string const& ciphertext) {\n    std::ostringstream os;\n\n    for (std::size_t i = 0; i < ciphertext.length(); i++) {\n        char currentChar = ciphertext.at(i);\n\n        if (std::isalnum(currentChar)) {\n            os << atbash_transform(currentChar);\n        }\n    }\n\n    return os.str();\n}\n\n}  // namespace atbash_cipher\n",
+  "test_code": "#include \"atbash_cipher.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nTEST_CASE(\"encode_yes\") { REQUIRE(\"bvh\" == atbash_cipher::encode(\"yes\")); }\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"encode_no\") { REQUIRE(\"ml\" == atbash_cipher::encode(\"no\")); }\n\nTEST_CASE(\"encode_OMG\") { REQUIRE(\"lnt\" == atbash_cipher::encode(\"OMG\")); }\n\nTEST_CASE(\"encode_spaces\") { REQUIRE(\"lnt\" == atbash_cipher::encode(\"O M G\")); }\n\nTEST_CASE(\"encode_mindblowingly\") {\n    REQUIRE(\"nrmwy oldrm tob\" == atbash_cipher::encode(\"mindblowingly\"));\n}\n\nTEST_CASE(\"encode_numbers\") {\n    REQUIRE(\"gvhgr mt123 gvhgr mt\" ==\n            atbash_cipher::encode(\"Testing,1 2 3, testing.\"));\n}\n\nTEST_CASE(\"encode_deep_thought\") {\n    REQUIRE(\"gifgs rhurx grlm\" == atbash_cipher::encode(\"Truth is fiction.\"));\n}\n\nTEST_CASE(\"encode_all_the_letters\") {\n    REQUIRE(\n        \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\" ==\n        atbash_cipher::encode(\"The quick brown fox jumps over the lazy dog.\"));\n}\n\nTEST_CASE(\"decode_exercism\") {\n    REQUIRE(\"exercism\" == atbash_cipher::decode(\"vcvix rhn\"));\n}\n\nTEST_CASE(\"decode_a_sentence\") {\n    REQUIRE(\"anobstacleisoftenasteppingstone\" ==\n            atbash_cipher::decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"));\n}\n\nTEST_CASE(\"decode_numbers\") {\n    REQUIRE(\"testing123testing\" ==\n            atbash_cipher::decode(\"gvhgr mt123 gvhgr mt\"));\n}\n\nTEST_CASE(\"decode_all_the_letters\") {\n    REQUIRE(\"thequickbrownfoxjumpsoverthelazydog\" ==\n            atbash_cipher::decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"));\n}\n#endif\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "vivshaw"
+  ],
+  "contributors": [
+    "AlexLeSang",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "LegalizeAdulthood",
+    "patricksjackson"
+  ]
+}

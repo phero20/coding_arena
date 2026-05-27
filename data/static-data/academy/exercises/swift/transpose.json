@@ -1,0 +1,33 @@
+{
+  "id": "swift:transpose",
+  "trackSlug": "swift",
+  "slug": "transpose",
+  "name": "Transpose",
+  "uuid": "a7074b04-3ac5-4437-817e-2dc31d9d8ae0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take input text and output it transposed.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an input text output it transposed.\n\nRoughly explained, the transpose of a matrix:\n\n```text\nABC\nDEF\n```\n\nis given by:\n\n```text\nAD\nBE\nCF\n```\n\nRows become columns and columns become rows.\nSee [transpose][].\n\nIf the input has rows of different lengths, this is to be solved as follows:\n\n- Pad to the left with spaces.\n- Don't pad to the right.\n\nTherefore, transposing this matrix:\n\n```text\nABC\nDE\n```\n\nresults in:\n\n```text\nAD\nBE\nC\n```\n\nAnd transposing:\n\n```text\nAB\nDEF\n```\n\nresults in:\n\n```text\nAD\nBE\n F\n```\n\nIn general, all characters from the input should also be present in the transposed output.\nThat means that if a column in the input text contains only spaces on its bottom-most row(s), the corresponding output row should contain the spaces in its right-most column(s).\n\n[transpose]: https://en.wikipedia.org/wiki/Transpose\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "struct Transpose {\n  static func transpose(_ lines: [String]) -> [String] {\n    // Write your code for the 'Transpose' exercise in this file.\n  }\n}\n",
+  "example_solution": "import Foundation\n\nstruct Transpose {\n  static func transpose(_ lines: [String]) -> [String] {\n    var rows = lines.map { String($0).replacingOccurrences(of: \" \", with: \"_\") }\n    let maxLength = rows.map { $0.count }.max() ?? 0\n    rows = rows.map { $0.padding(toLength: maxLength, withPad: \" \", startingAt: 0) }\n\n    var transposed: [String] = []\n    for columnIndex in 0..<maxLength {\n      let transposedLine = rows.map { row -> Character in\n        let index = row.index(row.startIndex, offsetBy: columnIndex)\n        return row[index]\n      }\n      transposed.append(\n        String(transposedLine).replacingOccurrences(\n          of: \"\\\\s+$\", with: \"\", options: .regularExpression\n        ).replacingOccurrences(of: \"_\", with: \" \"))\n    }\n\n    return transposed\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Transpose\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct TransposeTests {\n\n  @Test(\"empty string\")\n  func testEmptyString() {\n    #expect(Transpose.transpose([]) == [])\n  }\n\n  @Test(\"two characters in a row\", .enabled(if: RUNALL))\n  func testTwoCharactersInARow() {\n    #expect(Transpose.transpose([\"A1\"]) == [\"A\", \"1\"])\n  }\n\n  @Test(\"two characters in a column\", .enabled(if: RUNALL))\n  func testTwoCharactersInAColumn() {\n    #expect(Transpose.transpose([\"A\", \"1\"]) == [\"A1\"])\n  }\n\n  @Test(\"simple\", .enabled(if: RUNALL))\n  func testSimple() {\n    #expect(Transpose.transpose([\"ABC\", \"123\"]) == [\"A1\", \"B2\", \"C3\"])\n  }\n\n  @Test(\"single line\", .enabled(if: RUNALL))\n  func testSingleLine() {\n    #expect(\n      Transpose.transpose([\"Single line.\"]) == [\n        \"S\", \"i\", \"n\", \"g\", \"l\", \"e\", \" \", \"l\", \"i\", \"n\", \"e\", \".\",\n      ])\n  }\n\n  @Test(\"first line longer than second line\", .enabled(if: RUNALL))\n  func testFirstLineLongerThanSecondLine() {\n    #expect(\n      Transpose.transpose([\"The fourth line.\", \"The fifth line.\"]) == [\n        \"TT\", \"hh\", \"ee\", \"  \", \"ff\", \"oi\", \"uf\", \"rt\", \"th\", \"h \", \" l\", \"li\", \"in\", \"ne\", \"e.\",\n        \".\",\n      ])\n  }\n\n  @Test(\"second line longer than first line\", .enabled(if: RUNALL))\n  func testSecondLineLongerThanFirstLine() {\n    #expect(\n      Transpose.transpose([\"The first line.\", \"The second line.\"]) == [\n        \"TT\", \"hh\", \"ee\", \"  \", \"fs\", \"ie\", \"rc\", \"so\", \"tn\", \" d\", \"l \", \"il\", \"ni\", \"en\", \".e\",\n        \" .\",\n      ])\n  }\n\n  @Test(\"mixed line length\", .enabled(if: RUNALL))\n  func testMixedLineLength() {\n    #expect(\n      Transpose.transpose([\"The longest line.\", \"A long line.\", \"A longer line.\", \"A line.\"]) == [\n        \"TAAA\", \"h   \", \"elll\", \" ooi\", \"lnnn\", \"ogge\", \"n e.\", \"glr\", \"ei \", \"snl\", \"tei\", \" .n\",\n        \"l e\", \"i .\", \"n\", \"e\", \".\",\n      ])\n  }\n\n  @Test(\"square\", .enabled(if: RUNALL))\n  func testSquare() {\n    #expect(\n      Transpose.transpose([\"HEART\", \"EMBER\", \"ABUSE\", \"RESIN\", \"TREND\"]) == [\n        \"HEART\", \"EMBER\", \"ABUSE\", \"RESIN\", \"TREND\",\n      ])\n  }\n\n  @Test(\"rectangle\", .enabled(if: RUNALL))\n  func testRectangle() {\n    #expect(\n      Transpose.transpose([\"FRACTURE\", \"OUTLINED\", \"BLOOMING\", \"SEPTETTE\"]) == [\n        \"FOBS\", \"RULE\", \"ATOP\", \"CLOT\", \"TIME\", \"UNIT\", \"RENT\", \"EDGE\",\n      ])\n  }\n\n  @Test(\"triangle\", .enabled(if: RUNALL))\n  func testTriangle() {\n    #expect(\n      Transpose.transpose([\"T\", \"EE\", \"AAA\", \"SSSS\", \"EEEEE\", \"RRRRRR\"]) == [\n        \"TEASER\", \" EASER\", \"  ASER\", \"   SER\", \"    ER\", \"     R\",\n      ])\n  }\n\n  @Test(\"jagged triangle\", .enabled(if: RUNALL))\n  func testJaggedTriangle() {\n    #expect(\n      Transpose.transpose([\"11\", \"2\", \"3333\", \"444\", \"555555\", \"66666\"]) == [\n        \"123456\", \"1 3456\", \"  3456\", \"  3 56\", \"    56\", \"    5\",\n      ])\n  }\n}\n",
+  "source": "Reddit r/dailyprogrammer challenge #270 [Easy].",
+  "source_url": "https://web.archive.org/web/20230630051421/https://old.reddit.com/r/dailyprogrammer/comments/4msu2x/challenge_270_easy_transpose_the_input_text/",
+  "authors": [
+    "robtimp"
+  ],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "masters3d",
+    "ThomasHaz"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "scala:wordy",
+  "trackSlug": "scala",
+  "slug": "wordy",
+  "name": "Wordy",
+  "uuid": "ded3ae4c-43a7-46df-b43b-42aab419c2d8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Parse and evaluate simple math word problems returning the answer as an integer.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nParse and evaluate simple math word problems returning the answer as an integer.\n\n## Iteration 0 — Numbers\n\nProblems with no operations simply evaluate to the number given.\n\n> What is 5?\n\nEvaluates to 5.\n\n## Iteration 1 — Addition\n\nAdd two numbers together.\n\n> What is 5 plus 13?\n\nEvaluates to 18.\n\nHandle large numbers and negative numbers.\n\n## Iteration 2 — Subtraction, Multiplication and Division\n\nNow, perform the other three operations.\n\n> What is 7 minus 5?\n\n2\n\n> What is 6 multiplied by 4?\n\n24\n\n> What is 25 divided by 5?\n\n5\n\n## Iteration 3 — Multiple Operations\n\nHandle a set of operations, in sequence.\n\nSince these are verbal word problems, evaluate the expression from left-to-right, _ignoring the typical order of operations._\n\n> What is 5 plus 13 plus 6?\n\n24\n\n> What is 3 plus 2 multiplied by 3?\n\n15 (i.e. not 9)\n\n## Iteration 4 — Errors\n\nThe parser should reject:\n\n- Unsupported operations (\"What is 52 cubed?\")\n- Non-math questions (\"Who is the President of the United States\")\n- Word problems with invalid syntax (\"What is 1 plus plus 2?\")\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "import scala.math.pow\nimport scala.util.parsing.combinator.RegexParsers\n\nsealed abstract class Expression {\n  def evaluate(): Integer\n}\n\ncase class Const(value: Int) extends Expression {\n  def evaluate() = value\n}\n\ncase class Sum(e1: Expression, e2: Expression) extends Expression {\n  def evaluate(): Integer = e1.evaluate() + e2.evaluate()\n}\n\ncase class Diff(e1: Expression, e2: Expression) extends Expression {\n  def evaluate(): Integer = e1.evaluate() - e2.evaluate()\n}\n\ncase class Mult(e1: Expression, e2: Expression) extends Expression {\n  def evaluate(): Integer = e1.evaluate() * e2.evaluate()\n}\n\ncase class Div(e1: Expression, e2: Expression) extends Expression {\n  def evaluate(): Integer = e1.evaluate() / e2.evaluate()\n}\n\ncase class Pow(e1: Expression, e2: Expression) extends Expression {\n  def evaluate(): Integer = pow(e1.evaluate().toDouble, e2.evaluate().toDouble).toInt\n}\n\nobject Wordy extends RegexParsers {\n  private lazy val prefix = \"What is \"\n  private lazy val questionMark = \"?\"\n  private lazy val operators = \"plus\" | \"minus\" | \"multiplied by\" |\n    \"divided by\" | \"raised to the\"\n\n  private def operation = expr ~ rep(operators ~ expr) ^^ {\n    case op ~ list => list.foldLeft(op) {\n      case (x, \"plus\" ~ y) => Sum(x, y)\n      case (x, \"minus\" ~ y) => Diff(x, y)\n      case (x, \"multiplied by\" ~ y) => Mult(x, y)\n      case (x, \"divided by\" ~ y) => Div(x, y)\n      case (x, \"raised to the\" ~ y) => Pow(x, y)\n    }\n  }\n\n  private def operand: Parser[Const] = \"\"\"-?\\d+\"\"\".r ^^ {s => Const(s.toInt)}\n  private def expr: Parser[Expression] = operand | operation\n\n  // Top level parser\n  private def questionParser = prefix ~> operation <~ questionMark\n\n  def parse(str: String): ParseResult[Expression] = parseAll(questionParser, str)\n\n  def answer(question: String): Option[Int] = parse(question) match {\n    case Success(result: Expression, _) => Some(result.evaluate())\n    case _ => None\n  }\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass WordyTest extends AnyFunSuite with Matchers {\n\n  test(\"addition\") {\n    Wordy.answer(\"What is 1 plus 1?\") should be(Some(2))\n  }\n\n  test(\"more addition\") {\n    pending\n    Wordy.answer(\"What is 53 plus 2?\") should be(Some(55))\n  }\n\n  test(\"addition with negative numbers\") {\n    pending\n    Wordy.answer(\"What is -1 plus -10?\") should be(Some(-11))\n  }\n\n  test(\"large addition\") {\n    pending\n    Wordy.answer(\"What is 123 plus 45678?\") should be(Some(45801))\n  }\n\n  test(\"subtraction\") {\n    pending\n    Wordy.answer(\"What is 4 minus -12?\") should be(Some(16))\n  }\n\n  test(\"multiplication\") {\n    pending\n    Wordy.answer(\"What is -3 multiplied by 25?\") should be(Some(-75))\n  }\n\n  test(\"division\") {\n    pending\n    Wordy.answer(\"What is 33 divided by -3?\") should be(Some(-11))\n  }\n\n  test(\"multiple additions\") {\n    pending\n    Wordy.answer(\"What is 1 plus 1 plus 1?\") should be(Some(3))\n  }\n\n  test(\"addition and subtraction\") {\n    pending\n    Wordy.answer(\"What is 1 plus 5 minus -2?\") should be(Some(8))\n  }\n\n  test(\"multiple subtraction\") {\n    pending\n    Wordy.answer(\"What is 20 minus 4 minus 13?\") should be(Some(3))\n  }\n\n  test(\"subtraction then addition\") {\n    pending\n    Wordy.answer(\"What is 17 minus 6 plus 3?\") should be(Some(14))\n  }\n\n  test(\"multiple multiplication\") {\n    pending\n    Wordy.answer(\"What is 2 multiplied by -2 multiplied by 3?\") should be(\n      Some(-12))\n  }\n\n  test(\"addition and multiplication\") {\n    pending\n    Wordy.answer(\"What is -3 plus 7 multiplied by -2?\") should be(Some(-8))\n  }\n\n  test(\"multiple division\") {\n    pending\n    Wordy.answer(\"What is -12 divided by 2 divided by -3?\") should be(Some(2))\n  }\n\n  test(\"unknown operation\") {\n    pending\n    Wordy.answer(\"What is 52 cubed?\") should be(None)\n  }\n\n  test(\"Non math question\") {\n    pending\n    Wordy.answer(\"Who is the President of the United States?\") should be(None)\n  }\n}\n",
+  "source": "Inspired by one of the generated questions in the Extreme Startup game.",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

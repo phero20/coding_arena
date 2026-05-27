@@ -1,0 +1,30 @@
+{
+  "id": "batch:acronym",
+  "trackSlug": "batch",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "c58b5f94-0d2c-4d1f-9191-2eb4eefac1d9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "arrays",
+    "loops",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "@echo off\nsetlocal enabledelayedexpansion\n\nset \"phrase=%~1 %~2 %~3 %~4 %~5 %~6 %~7 %~8 %~9\"\nset \"acronym=\"\n\nREM Your code goes here\n\n\necho !acronym!\n",
+  "example_solution": "@echo off\nsetlocal enabledelayedexpansion\n\nset \"phrase=%~1 %~2 %~3 %~4 %~5 %~6 %~7 %~8 %~9\"\nset \"acronym=\"\n\nREM replace some of special characters which cmd interpeter care.\nset \"phrase=%phrase:-= %\"\nset \"phrase=%phrase:_= %\"\n\nfor %%a in (%phrase%) do (\n    set \"word=%%~a\"\n    set \"word=!word:~0,1!\"\n    set \"acronym=!acronym!!word!\"\n)\n\nREM Uppercase output\nfor %%A in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do set \"acronym=!acronym:%%A=%%A!\"\n\necho !acronym!\n",
+  "test_code": "@echo off\nREM ---------------------------------------------------\nREM Acronym Unit Testing\nREM \nREM sUnit Testing Framework version: 0.2\nREM ---------------------------------------------------\n\nset isTestRunner=false\nif \"%1\" == \"test-runner\" (\n    set isTestRunner=true\n)\n\n:Main\n    REM Initalize result variable\n    set \"slug=acronym\"\n\n    CALL :Initialize\n\n    REM --------------------\n    REM Test Case Start \\/\\/\n    REM Resource: https://github.com/exercism/problem-specifications/blob/main/exercises/acronym/canonical-data.json\n    REM --------------------\n    set \"expected=PNG\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: basic.\"\n    CALL :Assert \"Portable Network Graphics\"\n\n    set \"expected=ROR\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: lowercase words.\"\n    CALL :Assert \"Ruby on Rails\"\n\n    set \"expected=FIFO\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: punctuation.\"\n    CALL :Assert \"First In, First Out\"\n\n    set \"expected=GIMP\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: all caps word.\"\n    CALL :Assert \"GNU Image Manipulation Program\"\n\n    set \"expected=CMOS\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: punctuation without whitespace.\"\n    CALL :Assert \"Complementary metal-oxide semiconductor\"\n\n    set \"expected=ROTFLSHTMDCOALM\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: very long abbreviation.\"\n    CALL :Assert \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n\n    set \"expected=SIMUFTA\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: consecutive delimiters.\"\n    CALL :Assert \"Something - I made up from thin air\"\n\n    set \"expected=HC\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: apostrophes.\"\n    CALL :Assert \"Halley's Comet\"\n\n    set \"expected=TRNT\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: underscore emphasis.\"\n    CALL :Assert \"The Road _Not_ Taken\"\n\n    REM --------------------\n    REM Test Case End /\\/\\/\\\n    REM --------------------\n\n    CALL :ResolveStatus\n    exit /b %errorlevel%\nREM End of Main\n\nREM ---------------------------------------------------\nREM Assert [..Parameters(up to 9)]\nREM ---------------------------------------------------\nGOTO :End REM Prevents the code below from being executed\n:Assert\nset \"stdout=\"\n\nREM Run the program and capture the output then delete the file\nset filePath=%slug%.bat\nif \"%isTestRunner%\"==\"true\" (\n    set filePath=.meta\\Example.bat\n)\nset batPath=%~dp0\nCALL %batPath%%filePath% %1 %2 %~3 %~4 %~5 %~6 %~7 %~8 %~9 > stdout.bin 2>&1\nset /p stdout=< stdout.bin\ndel stdout.bin\n\nREM Check if the result is correct\nif \"%stdout%\" == \"%expected%\" (\n    if defined if_success (\n        echo %if_success%\n\n        REM Reset the variable to avoid duplicating the message.\n        set \"if_success=\"\n        set \"if_failed=\"\n    )\n\n    REM If the result is correct, exit with code 0\n    set /a successCount+=1\n    exit /b 0\n) else (\n    if defined if_failed (\n        echo %if_failed%\n\n        REM Reset the variable to avoid duplicating the message.\n        set \"if_success=\"\n        set \"if_failed=\"\n    )\n\n    REM If the result is incorrect, exit with code 1\n    set /a failCount+=1\n    exit /b 1\n)\nGOTO :EOF REM Go back to the line after the call to :Assert\n\n:Initialize\nREM It's for initialize, not about checking empty file\nset \"successCount=0\"\nset \"failCount=0\"\nGOTO :EOF REM Go back to the line after the call to :CheckEmptyFile\n\n:ResolveStatus\nset \"status=\"\nif %failCount% gtr 0 (\n    REM status: Fail\n    REM message: The test failed.\n    exit /b 1\n\n) else (\n    REM status: Pass\n    exit /b 0\n    \n)\nGOTO :EOF REM Go back to the line after the call to :ExportResultAsJson\n\n:End\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "GroophyLifefor"
+  ],
+  "contributors": null
+}

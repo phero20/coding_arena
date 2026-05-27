@@ -1,0 +1,28 @@
+{
+  "id": "lua:change",
+  "trackSlug": "lua",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "6de1c104-16d0-41a3-8bed-a6994b7b2748",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "return function(amount, values)\nend\n",
+  "example_solution": "return function(amount, values)\n  assert(amount >= 0, \"target can't be negative\")\n  if amount == 0 then\n    return {}\n  end\n\n  local counts = {}\n  local coins = {}\n  for total = 1, amount do\n    local best_count = amount + 1\n    local best_coin = 0\n    for _, value in ipairs(values) do\n      if value == total then\n        best_count = 1\n        best_coin = value\n      elseif total > value then\n        local count = counts[total - value] + 1\n        if count < best_count then\n          best_count = count\n          best_coin = value\n        end\n      end\n    end\n    table.insert(counts, best_count)\n    table.insert(coins, best_coin)\n  end\n\n  assert(counts[amount] <= amount, \"can't make target with given coins\")\n\n  local result = {}\n  local remaining = amount\n  while remaining > 0 do\n    table.insert(result, coins[remaining])\n    remaining = remaining - coins[remaining]\n  end\n  return result\nend\n",
+  "test_code": "local change = require('change')\n\ndescribe('change', function()\n  it('change for 1 cent', function()\n    assert.same({ 1 }, change(1, { 1, 5, 10, 25 }))\n  end)\n\n  it('single coin change', function()\n    assert.same({ 25 }, change(25, { 1, 5, 10, 25, 100 }))\n  end)\n\n  it('multiple coin change', function()\n    assert.same({ 5, 10 }, change(15, { 1, 5, 10, 25, 100 }))\n  end)\n\n  it('change with lilliputian coins', function()\n    assert.same({ 4, 4, 15 }, change(23, { 1, 4, 15, 20, 50 }))\n  end)\n\n  it('change with lower elbonia coins', function()\n    assert.same({ 21, 21, 21 }, change(63, { 1, 5, 10, 21, 25 }))\n  end)\n\n  it('large target values', function()\n    assert.same({ 2, 2, 5, 20, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100 },\n                change(999, { 1, 2, 5, 10, 20, 50, 100 }))\n  end)\n\n  it('possible change without unit coins available', function()\n    assert.same({ 2, 2, 2, 5, 10 }, change(21, { 2, 5, 10, 20, 50 }))\n  end)\n\n  it('another possible change without unit coins available', function()\n    assert.same({ 4, 4, 4, 5, 5, 5 }, change(27, { 4, 5 }))\n  end)\n\n  it('a greedy approach is not optimal', function()\n    assert.same({ 10, 10 }, change(20, { 1, 10, 11 }))\n  end)\n\n  it('no coins make 0 change', function()\n    assert.same({}, change(0, { 1, 5, 10, 21, 25 }))\n  end)\n\n  it('error testing for change smaller than the smallest of coins', function()\n    assert.has.error(function()\n      change(3, { 5, 10 })\n    end, \"can't make target with given coins\")\n  end)\n\n  it('error if no combination can add up to target', function()\n    assert.has.error(function()\n      change(94, { 5, 10 })\n    end, \"can't make target with given coins\")\n  end)\n\n  it('cannot find negative change values', function()\n    assert.has.error(function()\n      change(-5, { 1, 2, 5 })\n    end, \"target can't be negative\")\n  end)\nend)\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

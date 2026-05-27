@@ -1,0 +1,37 @@
+{
+  "id": "perl5:etl",
+  "trackSlug": "perl5",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "e193fb19-5122-405f-88e0-59e5ee94f64b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "arrays-and-lists",
+    "hashes",
+    "references"
+  ],
+  "prerequisites": [
+    "references"
+  ],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "package ETL;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<transform>;\n\nsub transform ($data) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package ETL;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<transform>;\n\nsub transform ($data) {\n    return {\n        map {\n            my $val = $_;\n            map { lc($_) => $val } @{ $data->{$_} }\n        } keys %{$data}\n    };\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse ETL qw<transform>;\n\nis( # begin: 78a7a9f9-4490-4a47-8ee9-5a38bb47d28f\n    transform(\n        {\n            1 => [\"A\"]\n        }\n    ),\n    hash {\n        field a => 1;\n        end;\n    },\n    \"single letter\",\n); # end: 78a7a9f9-4490-4a47-8ee9-5a38bb47d28f\n\nis( # begin: 60dbd000-451d-44c7-bdbb-97c73ac1f497\n    transform(\n        {\n            1 => [ \"A\", \"E\", \"I\", \"O\", \"U\" ]\n        }\n    ),\n    hash {\n        field a => 1;\n        field e => 1;\n        field i => 1;\n        field o => 1;\n        field u => 1;\n        end;\n    },\n    \"single score with multiple letters\",\n); # end: 60dbd000-451d-44c7-bdbb-97c73ac1f497\n\nis( # begin: f5c5de0c-301f-4fdd-a0e5-df97d4214f54\n    transform(\n        {\n            1 => [ \"A\", \"E\" ],\n            2 => [ \"D\", \"G\" ]\n        }\n    ),\n    hash {\n        field a => 1;\n        field d => 2;\n        field e => 1;\n        field g => 2;\n        end;\n    },\n    \"multiple scores with multiple letters\",\n); # end: f5c5de0c-301f-4fdd-a0e5-df97d4214f54\n\nis( # begin: 5db8ea89-ecb4-4dcd-902f-2b418cc87b9d\n    transform(\n        {\n            1  => [ \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\" ],\n            10 => [ \"Q\", \"Z\" ],\n            2  => [ \"D\", \"G\" ],\n            3  => [ \"B\", \"C\", \"M\", \"P\" ],\n            4  => [ \"F\", \"H\", \"V\", \"W\", \"Y\" ],\n            5  => [\"K\"],\n            8  => [ \"J\", \"X\" ]\n        }\n    ),\n    hash {\n        field a => 1;\n        field b => 3;\n        field c => 3;\n        field d => 2;\n        field e => 1;\n        field f => 4;\n        field g => 2;\n        field h => 4;\n        field i => 1;\n        field j => 8;\n        field k => 5;\n        field l => 1;\n        field m => 3;\n        field n => 1;\n        field o => 1;\n        field p => 3;\n        field q => 10;\n        field r => 1;\n        field s => 1;\n        field t => 1;\n        field u => 1;\n        field v => 4;\n        field w => 4;\n        field x => 8;\n        field y => 4;\n        field z => 10;\n        end;\n    },\n    \"multiple scores with differing numbers of letters\",\n); # end: 5db8ea89-ecb4-4dcd-902f-2b418cc87b9d\n\ndone_testing;\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "darksuji",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

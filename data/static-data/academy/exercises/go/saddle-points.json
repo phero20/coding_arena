@@ -1,0 +1,40 @@
+{
+  "id": "go:saddle-points",
+  "trackSlug": "go",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "c78102b0-aaa3-4edb-a315-4fcdc26ccae8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n      ↓\n      1  2  3  4\n    |-----------\n  1 | 9  8  7  8\n→ 2 |[5] 3  2  4\n  3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "package saddlepoints\n\n// Define the Matrix and Pair types here.\n\nfunc New(s string) (*Matrix, error) {\n\tpanic(\"Please implement the New function\")\n}\n\nfunc (m *Matrix) Saddle() []Pair {\n\tpanic(\"Please implement the Saddle function\")\n}\n",
+  "example_solution": "package saddlepoints\n\nimport (\n\t\"errors\"\n\t\"strconv\"\n\t\"strings\"\n)\n\n// Maintenance note:  This section should generally match\n// exercises/practice/matrix/.meta/example.go.\n\ntype Matrix [][]int\n\nfunc New(s string) (*Matrix, error) {\n\tvar err error\n\tlines := strings.Split(s, \"\\n\")\n\tm := make(Matrix, len(lines))\n\tfor i, l := range lines {\n\t\tws := strings.Fields(l)\n\t\tif i > 0 && len(ws) != len(m[0]) {\n\t\t\treturn nil, errors.New(\"rows have unequal length\")\n\t\t}\n\t\trow := make([]int, len(ws))\n\t\tfor i, w := range ws {\n\t\t\tif row[i], err = strconv.Atoi(w); err != nil {\n\t\t\t\treturn nil, errors.New(\"invalid int in element data\")\n\t\t\t}\n\t\t}\n\t\tm[i] = row\n\t}\n\treturn &m, nil\n}\n\nfunc (m *Matrix) Set(row, col, val int) (ok bool) {\n\tmm := *m\n\tif row < 0 || row >= len(mm) || col < 0 {\n\t\treturn false\n\t}\n\tif cols := len(mm[0]); col >= cols {\n\t\treturn false\n\t}\n\tmm[row][col] = val\n\treturn true\n}\n\nfunc (m *Matrix) Rows() [][]int {\n\tr := make([][]int, len(*m))\n\tfor i, mr := range *m {\n\t\tr[i] = append([]int{}, mr...)\n\t}\n\treturn r\n}\n\nfunc (m *Matrix) Cols() [][]int {\n\tmm := *m\n\tif len(mm) == 0 {\n\t\treturn nil\n\t}\n\tc := make([][]int, len(mm[0]))\n\tfor i := range c {\n\t\tcol := make([]int, len(mm))\n\t\tfor j := range col {\n\t\t\tcol[j] = mm[j][i]\n\t\t}\n\t\tc[i] = col\n\t}\n\treturn c\n}\n\n// End of the section affected by the maintenance-note\n\ntype Pair struct{ r, c int }\n\nfunc (m *Matrix) Saddle() (p []Pair) {\n\tcols := m.Cols()\n\tcolMin := make([][]int, len(cols))\n\tfor c, col := range cols {\n\t\tcolMin[c] = mins(col)\n\t}\n\tfor r, row := range *m {\n\t\tfor _, c := range maxs(row) {\n\t\t\tfor _, rmin := range colMin[c] {\n\t\t\t\tif rmin == r {\n\t\t\t\t\tp = append(p, Pair{r + 1, c + 1})\n\t\t\t\t\tbreak\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn p\n}\n\n// min returns indexes of s that are the minimum value\nfunc mins(s []int) []int {\n\tif len(s) == 0 {\n\t\treturn nil\n\t}\n\tlast := len(s) - 1\n\tminv := s[last]\n\txmin := []int{last}\n\tfor x, v := range s[:last] {\n\t\tswitch {\n\t\tcase v < minv:\n\t\t\tminv = v\n\t\t\txmin = xmin[:1]\n\t\t\txmin[0] = x\n\t\tcase v == minv:\n\t\t\txmin = append(xmin, x)\n\t\t}\n\t}\n\treturn xmin\n}\n\n// same code as above, but with >\nfunc maxs(s []int) []int {\n\tif len(s) == 0 {\n\t\treturn nil\n\t}\n\tlast := len(s) - 1\n\tmaxv := s[last]\n\txmax := []int{last}\n\tfor x, v := range s[:last] {\n\t\tswitch {\n\t\tcase v > maxv:\n\t\t\tmaxv = v\n\t\t\txmax = xmax[:1]\n\t\t\txmax[0] = x\n\t\tcase v == maxv:\n\t\t\txmax = append(xmax, x)\n\t\t}\n\t}\n\treturn xmax\n}\n",
+  "test_code": "// Short cut!  Have you already done the matrix exercise?\n// If it seems helpful, copy your code from the matrix exercise\n// to this directory so you have access to it.  You can leave it as matrix.go\n// and start a new file saddle_points.go with additional code that completes\n// this exercise. If you do copy the matrix.go file, do not forget to submit both\n// saddle_points.go and matrix.go as part of your solution.\n// You will also need to update the package name.\n\npackage saddlepoints\n\nimport (\n\t\"strconv\"\n\t\"strings\"\n\t\"testing\"\n)\n\nfunc TestSaddle(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tin := generateString(tc.input)\n\t\t\tm, err := New(in)\n\t\t\tif err != nil {\n\t\t\t\tt.Fatalf(\"TestSaddle needs working New. New(%q) returned %q.  Error not expected.\", in, err)\n\t\t\t}\n\t\t\tif got := m.Saddle(); !eq(got, tc.expectedOutput) {\n\t\t\t\tt.Fatalf(\"%v.Saddle() = %v, want %v\", m, got, tc.expectedOutput)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc generateString(in [][]int) string {\n\tvar parts []string\n\tfor _, numbersPerLine := range in {\n\t\tvar lineParts []string\n\t\tfor _, number := range numbersPerLine {\n\t\t\tlineParts = append(lineParts, strconv.Itoa(number))\n\t\t}\n\t\tparts = append(parts, strings.Join(lineParts, \" \"))\n\t}\n\treturn strings.Join(parts, \"\\n\")\n}\n\nfunc eq(got, exp []Pair) bool {\n\tif len(got) != len(exp) {\n\t\treturn false\n\t}\nexp:\n\tfor _, e := range exp {\n\t\tfor _, g := range got {\n\t\t\tif g == e {\n\t\t\t\tcontinue exp\n\t\t\t}\n\t\t}\n\t\treturn false\n\t}\n\treturn true\n}\n\nfunc BenchmarkSaddle(b *testing.B) {\n\tms := make([]*Matrix, len(testCases))\n\tvar err error\n\tfor i, tc := range testCases {\n\t\tin := generateString(tc.input)\n\t\tif ms[i], err = New(in); err != nil {\n\t\t\tb.Fatalf(\"BenchmarkSaddle needs working New. New(%q) returned %q.  Error not expected.\", in, err)\n\t\t}\n\t}\n\tb.ResetTimer()\n\tfor range b.N {\n\t\tfor _, m := range ms {\n\t\t\tm.Saddle()\n\t\t}\n\t}\n}\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "dvrkps",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "tleen",
+    "eklatzer"
+  ]
+}

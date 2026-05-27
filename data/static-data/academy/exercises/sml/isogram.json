@@ -1,0 +1,26 @@
+{
+  "id": "sml:isogram",
+  "trackSlug": "sml",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "ae8fa578-1308-44b2-8e71-d7566553379c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "fun isIsogram s =\n  raise Fail \"'isIsogram' is not implemented\"\n",
+  "example_solution": "val isIsogram: string -> bool =\n  let\n    val a = Char.ord #\"a\"\n\n    (* We represent each letter by setting a different bit,\n     * for example the letter c is encoded as ...00100 binary.\n     *)\n    fun letterValue (c: char): word =\n      Word.<<(0wx1, Word.fromInt(Char.ord (Char.toLower c) - a))\n\n    (* seen represents the set of letters that have been seen\n     * so far. For example, if we have seen the letters d and c,\n     * this is encoded as ...01100 binary.\n     * If we find a letter in l that matches a letter already\n     * seen, we return false.\n     *)\n    fun recurse (seen: word) (l: char list): bool =\n      case l of\n          nil => true\n        | c :: rest =>\n            let\n              val seen' = Word.orb (seen, letterValue c)\n            in\n              seen' <> seen andalso recurse seen' rest\n            end\n  in\n    recurse 0wx0 o List.filter Char.isAlpha o String.explode\n  end\n",
+  "test_code": "(* version 1.0.0 *)\n\nuse \"testlib.sml\";\nuse \"isogram.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"isogram\" [\n    test \"empty string\"\n      (fn _ => isIsogram \"\" |> Expect.truthy),\n\n    test \"isogram with only lower case characters\"\n      (fn _ => isIsogram \"isogram\" |> Expect.truthy),\n\n    test \"word with one duplicated character\"\n      (fn _ => isIsogram \"eleven\" |> Expect.falsy),\n\n    test \"word with one duplicated character from the end of the alphabet\"\n      (fn _ => isIsogram \"zzyzx\" |> Expect.falsy),\n\n    test \"longest reported english isogram\"\n      (fn _ => isIsogram \"subdermatoglyphic\" |> Expect.truthy),\n\n    test \"word with duplicated character in mixed case\"\n      (fn _ => isIsogram \"Alphabet\" |> Expect.falsy),\n\n    test \"word with duplicated character in mixed case, lowercase first\"\n      (fn _ => isIsogram \"alphAbet\" |> Expect.falsy),\n\n    test \"hypothetical isogrammic word with hyphen\"\n      (fn _ => isIsogram \"thumbscrew-japingly\" |> Expect.truthy),\n\n    test \"hypothetical word with duplicated character following hyphen\"\n      (fn _ => isIsogram \"thumbscrew-jappingly\" |> Expect.falsy),\n\n    test \"isogram with duplicated hyphen\"\n      (fn _ => isIsogram \"six-year-old\" |> Expect.truthy),\n\n    test \"made-up name that is an isogram\"\n      (fn _ => isIsogram \"Emily Jung Schwartzkopf\" |> Expect.truthy),\n\n    test \"duplicated character in the middle\"\n      (fn _ => isIsogram \"accentor\" |> Expect.falsy),\n\n    test \"same first and last characters\"\n      (fn _ => isIsogram \"angola\" |> Expect.falsy),\n\n    test \"word with duplicated character and with two hyphens\"\n      (fn _ => isIsogram \"up-to-date\" |> Expect.falsy)\n  ]\n\nval _ = Test.run testsuite\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

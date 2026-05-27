@@ -1,0 +1,26 @@
+{
+  "id": "red:collatz-conjecture",
+  "trackSlug": "red",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "1091dfb5-d55e-4f38-8ce1-5e17d80d99cb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe Collatz Conjecture or 3x+1 problem can be summarized as follows:\n\nTake any positive integer n.\nIf n is even, divide n by 2 to get n / 2.\nIf n is odd, multiply n by 3 and add 1 to get 3n + 1.\nRepeat the process indefinitely.\nThe conjecture states that no matter which number you start with, you will always reach 1 eventually.\n\nGiven a number n, return the number of steps required to reach 1.\n\n## Examples\n\nStarting with n = 12, the steps would be as follows:\n\n0. 12\n1. 6\n2. 3\n3. 10\n4. 5\n5. 16\n6. 8\n7. 4\n8. 2\n9. 1\n\nResulting in 9 steps.\nSo for input n = 12, the return value would be 9.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Collatz Conjecture\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nsteps: function [\n\tnumber\n] [\n\tcause-error 'user 'message \"You need to implement steps function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Collatz Conjecture\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nsteps: function [\n\tnumber\n] [\n\tif not positive? number [\n\t\tcause-error 'user 'message \"Only positive integers are allowed\"\t\t\n\t]\n\n\tsteps: 0\n\twhile [number <> 1] [\n\t\tnumber: either even? number [\n\t\t\tnumber / 2\n\t\t] [\n\t\t\t(number * 3) + 1\n\t\t]\n\t\tsteps: steps + 1\n\t]\n\n\tsteps\n]\n\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Collatz Conjecture\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %collatz-conjecture.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"zero steps for one\"\n    input: #[\n        number: 1\n    ]\n    expected: 0\n    function: \"steps\"\n    uuid: \"540a3d51-e7a6-47a5-92a3-4ad1838f0bfd\"\n] #[\n    description: \"divide if even\"\n    input: #[\n        number: 16\n    ]\n    expected: 4\n    function: \"steps\"\n    uuid: \"3d76a0a6-ea84-444a-821a-f7857c2c1859\"\n] #[\n    description: \"even and odd steps\"\n    input: #[\n        number: 12\n    ]\n    expected: 9\n    function: \"steps\"\n    uuid: \"754dea81-123c-429e-b8bc-db20b05a87b9\"\n] #[\n    description: \"large number of even and odd steps\"\n    input: #[\n        number: 1000000\n    ]\n    expected: 152\n    function: \"steps\"\n    uuid: \"ecfd0210-6f85-44f6-8280-f65534892ff6\"\n] #[\n    description: \"zero is an error\"\n    input: #[\n        number: 0\n    ]\n    expected: #[\n        error: \"Only positive integers are allowed\"\n    ]\n    function: \"steps\"\n    uuid: \"2187673d-77d6-4543-975e-66df6c50e2da\"\n] #[\n    description: \"negative value is an error\"\n    input: #[\n        number: -15\n    ]\n    expected: #[\n        error: \"Only positive integers are allowed\"\n    ]\n    function: \"steps\"\n    uuid: \"ec11f479-56bc-47fd-a434-bcd7a31a7a2e\"\n]]\n\n\nforeach c-case canonical-cases [\n\texpect-code: compose [\n\t\t(to word! c-case/function) (values-of c-case/input)\n\t]\n\tcase-code: reduce\n\t\teither all [\n\t\t\tmap? c-case/expected\n\t\t\tstring? c-case/expected/error\n\t\t] [\n\t\t\t['expect-error/message quote 'user expect-code c-case/expected/error]\n\t\t] [\n\t\t\t['expect c-case/expected expect-code]\n\t\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "An unsolved problem in mathematics named after mathematician Lothar Collatz",
+  "source_url": "https://en.wikipedia.org/wiki/3x_%2B_1_problem",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

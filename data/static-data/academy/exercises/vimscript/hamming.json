@@ -1,0 +1,29 @@
+{
+  "id": "vimscript:hamming",
+  "trackSlug": "vimscript",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "9cda4dfe-bdce-4a0b-9be2-ebafabd57271",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "\"\n\" This function takes two strings which represent strands and returns\n\" their Hamming distance.\n\"\n\" If the lengths of the strands don't match, throw this exception:\n\"\n\"     'strands must be of equal length'\n\"\nfunction! Distance(strand1, strand2)\n\n  \" your solution goes here\n\nendfunction\n",
+  "example_solution": "\"\n\" This function takes two strings which represent strands and returns\n\" their Hamming distance.\n\"\n\" If the lengths of the strands don't match, throw this exception:\n\"\n\"     'left and right strands must be of equal length'\n\"\nfunction! Distance(strand1, strand2)\n  if len(a:strand1) != len(a:strand2)\n    throw 'strands must be of equal length'\n  endif\n  let distance = 0\n  for i in range(len(a:strand1))\n    let distance += (a:strand1[i] != a:strand2[i])\n  endfor\n  return distance\nendfunction\n",
+  "test_code": "\nExecute (empty strands):\n  let g:strand1 = \"\"\n  let g:strand2 = \"\"\n  let g:expected = 0\n  AssertEqual g:expected, Distance(g:strand1, g:strand2)\n\nExecute (single letter identical strands):\n  let g:strand1 = \"A\"\n  let g:strand2 = \"A\"\n  let g:expected = 0\n  AssertEqual g:expected, Distance(g:strand1, g:strand2)\n\nExecute (single letter different strands):\n  let g:strand1 = \"G\"\n  let g:strand2 = \"T\"\n  let g:expected = 1\n  AssertEqual g:expected, Distance(g:strand1, g:strand2)\n\nExecute (long identical strands):\n  let g:strand1 = \"GGACTGAAATCTG\"\n  let g:strand2 = \"GGACTGAAATCTG\"\n  let g:expected = 0\n  AssertEqual g:expected, Distance(g:strand1, g:strand2)\n\nExecute (long different strands):\n  let g:strand1 = \"GGACGGATTCTG\"\n  let g:strand2 = \"AGGACGGATTCT\"\n  let g:expected = 9\n  AssertEqual g:expected, Distance(g:strand1, g:strand2)\n\nExecute (disallow first strand longer):\n  let g:strand1 = \"AATG\"\n  let g:strand2 = \"AAA\"\n  let g:expected = \"strands must be of equal length\"\n  AssertThrows call Distance(g:strand1, g:strand2)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (disallow second strand longer):\n  let g:strand1 = \"ATA\"\n  let g:strand2 = \"AGTG\"\n  let g:expected = \"strands must be of equal length\"\n  AssertThrows call Distance(g:strand1, g:strand2)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (disallow empty first strand):\n  let g:strand1 = \"\"\n  let g:strand2 = \"G\"\n  let g:expected = \"strands must be of equal length\"\n  AssertThrows call Distance(g:strand1, g:strand2)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (disallow empty second strand):\n  let g:strand1 = \"G\"\n  let g:strand2 = \"\"\n  let g:expected = \"strands must be of equal length\"\n  AssertThrows call Distance(g:strand1, g:strand2)\n  AssertEqual g:expected, g:vader_exception\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "mhinz"
+  ],
+  "contributors": [
+    "kotp",
+    "kytrinyx"
+  ]
+}

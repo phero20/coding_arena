@@ -1,0 +1,32 @@
+{
+  "id": "zig:reverse-string",
+  "trackSlug": "zig",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "c4f19b16-4da3-4c81-bbf6-babde6ace276",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "slices",
+    "strings"
+  ],
+  "prerequisites": [
+    "slices",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "/// Writes a reversed copy of `s` to `buffer`.\npub fn reverse(buffer: []u8, s: []const u8) []u8 {\n    _ = buffer;\n    _ = s;\n    @compileError(\"please implement the reverse function\");\n}\n",
+  "example_solution": "const assert = @import(\"std\").debug.assert;\n\n/// Writes a reversed copy of `s` to `buffer`.\n/// Asserts `buffer.len >= s.len`.\npub fn reverse(buffer: []u8, s: []const u8) []u8 {\n    assert(buffer.len >= s.len);\n    for (s, 0..) |c, i| {\n        buffer[s.len - 1 - i] = c;\n    }\n    return buffer[0..s.len];\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst reverse_string = @import(\"reverse_string.zig\");\n\nfn testReverse(comptime s: []const u8, expected: []const u8) !void {\n    const buffer_size = 80; // exceeds length of test strings\n    var buffer: [buffer_size]u8 = undefined;\n    const actual = reverse_string.reverse(&buffer, s);\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"an empty string\" {\n    try testReverse(\"\", \"\");\n}\n\ntest \"a word\" {\n    try testReverse(\"robot\", \"tobor\");\n}\n\ntest \"a capitalized word\" {\n    try testReverse(\"Ramen\", \"nemaR\");\n}\n\ntest \"a sentence with punctuation\" {\n    try testReverse(\"I'm hungry!\", \"!yrgnuh m'I\");\n}\n\ntest \"a palindrome\" {\n    try testReverse(\"racecar\", \"racecar\");\n}\n\ntest \"an even-sized word\" {\n    try testReverse(\"drawer\", \"reward\");\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "coffeescript:reverse-string",
+  "trackSlug": "coffeescript",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "1b4c8b0f-a7cc-4db1-a0ad-485dc2b320d7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "class ReverseString  \n  @reverse: (str) -> \n\nmodule.exports = ReverseString\n",
+  "example_solution": "class ReverseString  \n  @reverse: (str) -> \n    str.split(\"\").reverse().join \"\"\n\nmodule.exports = ReverseString\n",
+  "test_code": "ReverseString = require './reverse-string'\n\ndescribe 'ReverseString', ->\n  it 'An empty string', ->\n    reversed = ReverseString.reverse(\"\")\n    expect(reversed).toEqual(\"\")\n\n  xit 'A word', ->\n    reversed = ReverseString.reverse(\"robot\")\n    expect(reversed).toEqual(\"tobor\")\n\n  xit 'A capitalized word', ->\n    reversed = ReverseString.reverse(\"Ramen\")\n    expect(reversed).toEqual(\"nemaR\")\n\n  xit 'A sentence with punctuation', ->\n    reversed = ReverseString.reverse(\"I'm hungry!\")\n    expect(reversed).toEqual(\"!yrgnuh m'I\")\n\n  xit 'A palindrome', ->\n    reversed = ReverseString.reverse(\"racecar\")\n    expect(reversed).toEqual(\"racecar\")\n\n  xit 'An even-sized word', ->\n    reversed = ReverseString.reverse(\"drawer\")\n    expect(reversed).toEqual(\"reward\")\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "uiua:pythagorean-triplet",
+  "trackSlug": "uiua",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "e8e19e09-01b2-462c-abe5-b124f740b4f0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "# Find the Pythagorean triplet for a given sum\n# Triplets ? Sum\nTripletsWithSum ← |1 ⊙(⍤\"Please implement TripletsWithSum\" 0)\n",
+  "example_solution": "GeneratePairs    ← ⊸⍜°√/+⍉⧅₂<↘₁⇡\nFilterValidPairs ← ⊸≡/+▽⊃(=⊸⌊|⍉⊂)\nTripletsWithSum  ← |1 ◴≡⍆▽=⟜(FilterValidPairs GeneratePairs)\n",
+  "test_code": "~ \"pythagorean-triplet.ua\" ~ TripletsWithSum\n\n# Triplets whose sum is 12\n⍤⤙≍ [3_4_5] TripletsWithSum 12\n\n# Triplets whose sum is 108\n⍤⤙≍ [27_36_45] TripletsWithSum 108\n\n# Triplets whose sum is 1000\n⍤⤙≍ [200_375_425] TripletsWithSum 1000\n\n# No matching triplets for 1001\n⍤⤙≍ ↯0_3[] TripletsWithSum 1001\n\n# Returns all matching triplets\n⍤⤙≍ [9_40_41 15_36_39] TripletsWithSum 90\n\n# Several matching triplets\n⍤⤙≍ [40_399_401 56_390_394 105_360_375 120_350_370 140_336_364 168_315_357 210_280_350 240_252_348] TripletsWithSum 840\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

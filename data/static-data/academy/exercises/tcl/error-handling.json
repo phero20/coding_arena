@@ -1,0 +1,28 @@
+{
+  "id": "tcl:error-handling",
+  "trackSlug": "tcl",
+  "slug": "error-handling",
+  "name": "Error Handling",
+  "uuid": "bead03bc-099a-4d3e-877e-460ff102eed2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement various kinds of error handling and resource management.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement various kinds of error handling and resource management.\n\nAn important point of programming is how to handle errors and close resources even if errors occur.\n\nThis exercise requires you to handle various errors.\nBecause error handling is rather programming language specific you'll have to refer to the tests for your track to see what's exactly required.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc custom_error_message {message} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n\nproc handle_error {script} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "# works with any Tcl version\nproc custom_error_message_error {message} {\n    error $message\n}\n\n# requires Tcl 8.6\nproc custom_error_message_throw {message} {\n    throw CUSTOM_EXCEPTION $message\n}\n\n\n# works with any Tcl version\nproc handle_error_catch {script} {\n    set msg \"success\"\n    if {[catch $script result] != 0} {\n        switch -glob -- $result {\n            {*divide by zero*}  {set msg \"division by zero\"}\n            {*no such file*}    {set msg \"file does not exist\"}\n            {*invalid command*} {set msg \"proc does not exist\"}\n            default             {set msg \"unknown error\"}\n        }\n    }\n    return $msg\n}\n\n# requires Tcl 8.6\nproc handle_error_try_on {script} {\n    set msg \"success\"\n    try $script on error errmsg {\n        switch -glob -- $errmsg {\n            {*divide by zero*}  {set msg \"division by zero\"}\n            {*no such file*}    {set msg \"file does not exist\"}\n            {*invalid command*} {set msg \"proc does not exist\"}\n            default             {set msg \"unknown error\"}\n        }\n    }\n    return $msg\n}\n\n# requires Tcl 8.6\nproc handle_error_try_trap {script} {\n    set msg \"success\"\n    try {\n        uplevel 1 $script\n    } trap {ARITH DIVZERO} {} {\n        set msg \"division by zero\"\n    } trap {POSIX ENOENT} {} {\n        set msg \"file does not exist\"\n    } trap {TCL LOOKUP COMMAND} {} {\n        set msg \"proc does not exist\"\n    } trap {} {} {\n        set msg \"unknown error\"\n    }\n    return $msg\n}\n\n\nif {[package provide Tcl] >= \"8.6\"} {\n    interp alias {} custom_error_message {} custom_error_message_throw\n    #interp alias {} handle_error {} handle_error_try_on\n    interp alias {} handle_error {} handle_error_try_trap\n} else {\n    interp alias {} custom_error_message {} custom_error_message_error\n    interp alias {} handle_error {} handle_error_catch\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"error-handling.tcl\"\n\n\ntest error-handling-1 {\n    throw an error with the given error message\n} -body {\n    custom_error_message \"This is an error\"\n} -returnCodes error -result \"This is an error\"\n\n\nskip error-handling-2\ntest error-handling-2 \"gracefully handle division by zero\" -body {\n    handle_error {expr {1 / 0}}\n} -returnCodes ok -result \"division by zero\"\n\nskip error-handling-3\ntest error-handling-3 \"gracefully handle file does not exist\" -body {\n    handle_error {open [file join . \"no dir\" \"no file\"] r}\n} -returnCodes ok -result \"file does not exist\"\n\nskip error-handling-4\ntest error-handling-4 \"gracefully handle proc does not exist\" -body {\n    handle_error {no::such::procedure}\n} -returnCodes ok -result \"proc does not exist\"\n\n\nskip error-handling-5\ntest error-handling-5 \"gracefully handle success\" -body {\n    handle_error {append var no error here}\n} -returnCodes ok -result \"success\"\n\ncleanupTests\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

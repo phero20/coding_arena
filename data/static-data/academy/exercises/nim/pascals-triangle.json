@@ -1,0 +1,26 @@
+{
+  "id": "nim:pascals-triangle",
+  "trackSlug": "nim",
+  "slug": "pascals-triangle",
+  "name": "Pascal's Triangle",
+  "uuid": "9ba153ad-bd49-4c26-9d80-dadb496cb637",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute Pascal's triangle up to a given number of rows.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCompute Pascal's triangle up to a given number of rows.\n\nIn Pascal's Triangle each number is computed by adding the numbers to the right and left of the current position in the previous row.\n\n```text\n    1\n   1 1\n  1 2 1\n 1 3 3 1\n1 4 6 4 1\n# ... etc\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc pascal*(n: int): seq[seq[int]] =\n  discard\n",
+  "example_solution": "func createTriangle(n: int): seq[seq[int]] =\n  result = @[@[1]]\n\n  for i in 1 .. n:\n    var row = newSeqOfCap[int](n)\n    row.add 1\n    for j in 1 ..< i:\n      row.add result[i-1][j-1] + result[i-1][j]\n    row.add 1\n    result.add row\n\nconst p = createTriangle(30) # Generate rows of the triangle at compile-time.\n\nfunc pascal*(n: int): seq[seq[int]] =\n  p[0 ..< n]\n",
+  "test_code": "import unittest\nimport pascals_triangle\n\nsuite \"Pascal's Triangle\":\n  test \"zero rows\":\n    check pascal(0).len == 0\n\n  test \"single row\":\n    check pascal(1) == @[\n      @[1]\n    ]\n\n  test \"two rows\":\n    check pascal(2) == @[\n      @[1],\n      @[1, 1]\n    ]\n\n  test \"three rows\":\n    check pascal(3) == @[\n      @[1],\n      @[1, 1],\n      @[1, 2, 1]\n    ]\n\n  test \"four rows\":\n    check pascal(4) == @[\n      @[1],\n      @[1, 1],\n      @[1, 2, 1],\n      @[1, 3, 3, 1]\n    ]\n\n  test \"five rows\":\n    check pascal(5) == @[\n      @[1],\n      @[1, 1],\n      @[1, 2, 1],\n      @[1, 3, 3, 1],\n      @[1, 4, 6, 4, 1]\n    ]\n\n  test \"six rows\":\n    check pascal(6) == @[\n      @[1],\n      @[1, 1],\n      @[1, 2, 1],\n      @[1, 3, 3, 1],\n      @[1, 4, 6, 4, 1],\n      @[1, 5, 10, 10, 5, 1]\n    ]\n\n  test \"ten rows\":\n    check pascal(10) == @[\n      @[1],\n      @[1, 1],\n      @[1, 2, 1],\n      @[1, 3, 3, 1],\n      @[1, 4, 6, 4, 1],\n      @[1, 5, 10, 10, 5, 1],\n      @[1, 6, 15, 20, 15, 6, 1],\n      @[1, 7, 21, 35, 35, 21, 7, 1],\n      @[1, 8, 28, 56, 70, 56, 28, 8, 1],\n      @[1, 9, 36, 84, 126, 126, 84, 36, 9, 1]\n    ]\n",
+  "source": "Pascal's Triangle at Wolfram Math World",
+  "source_url": "https://www.wolframalpha.com/input/?i=Pascal%27s+triangle",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

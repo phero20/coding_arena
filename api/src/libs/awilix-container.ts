@@ -57,8 +57,9 @@ import { type ILeetCodeService } from "../services/stats/leetcode.service";
 import { type ProblemCache } from "../cache/problems/problem.cache";
 import { type ProblemTestCache } from "../cache/problems/problem-test.cache";
 import { type AiJudgeCache } from "../cache/judge/ai-judge.cache";
-import { type SubmissionCache } from "../cache/submissions/submission.cache";
-import { type SolutionCache } from "../cache/solutions/solution.cache";
+import { SubmissionCache } from "../cache/submissions/submission.cache";
+import { SolutionCache } from "../cache/solutions/solution.cache";
+import { type AcademyCache } from "../cache/academy/academy.cache";
 
 import { type AuthMiddleware } from "../middlewares/security/auth.middleware";
 import { type AuthorizationMiddleware } from "../middlewares/security/authorization.middleware";
@@ -85,8 +86,10 @@ import { type DiagramResolverService, type IDiagramResolverService } from "../se
 import { type GroqDiagramService, type IGroqDiagramService } from "../services/ai/groq-diagram.service";
 import { type ChatRepository, type IChatRepository } from "../repositories/chat/chat.repository";
 import { type IAcademyRepository } from "../repositories/academy/academy.repository";
-import { type IAcademyService } from "../services/academy/academy.service";
+import { type IAcademyService, type AcademyService } from "../services/academy/academy.service";
+import { type AcademyExecutionService } from "../services/academy/academy-execution.service";
 import { type AcademyController } from "../controllers/academy/academy.controller";
+import { type AcademyExecutionController } from "../controllers/academy/academy-execution.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -169,6 +172,8 @@ export interface ICradle {
   groqDiagramService: IGroqDiagramService;
   leetcodeService: ILeetCodeService;
   academyService: IAcademyService;
+  academyExecutionService: AcademyExecutionService;
+  academyAiJudgeService: import("../services/academy/academy-ai-judge.service").AcademyAiJudgeService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -180,6 +185,7 @@ export interface ICradle {
   rawSubmissionService: SubmissionService;
   rawSolutionService: import("../services/solutions/solution.service").SolutionService;
   rawWorkspaceService: WorkspaceService;
+  rawAcademyService: AcademyService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -204,6 +210,7 @@ export interface ICradle {
   submissionCache: SubmissionCache;
   solutionCache: SolutionCache;
   workspaceCache: WorkspaceCache;
+  academyCache: AcademyCache;
 
   // Controllers
   authController: AuthController;
@@ -222,6 +229,7 @@ export interface ICradle {
   workspaceController: WorkspaceController;
   chatController: ChatController;
   academyController: AcademyController;
+  academyExecutionController: AcademyExecutionController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

@@ -1,0 +1,28 @@
+{
+  "id": "crystal:eliuds-eggs",
+  "trackSlug": "crystal",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "bdf29951-ece0-4212-ae1f-c4a09359aa45",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "bit-manipulation"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "class EliudsEggs\n  def self.egg_count(number : Int32) : Int32\n    # Write your code for the 'Eliuds Eggs' exercise in this file.\n  end\nend\n",
+  "example_solution": "class EliudsEggs\n  def self.egg_count(number : Int32) : Int32\n    count : Int32 = 0\n    while number > 0\n      count += (number & 1)\n      number = number >> 1\n    end\n    count\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"EliudsEggs\" do\n  it \"0 eggs\" do\n    EliudsEggs.egg_count(0).should eq(0)\n  end\n\n  pending \"1 egg\" do\n    EliudsEggs.egg_count(16).should eq(1)\n  end\n\n  pending \"4 eggs\" do\n    EliudsEggs.egg_count(89).should eq(4)\n  end\n\n  pending \"13 eggs\" do\n    EliudsEggs.egg_count(2000000000).should eq(13)\n  end\nend\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "kahgoh"
+  ],
+  "contributors": null
+}

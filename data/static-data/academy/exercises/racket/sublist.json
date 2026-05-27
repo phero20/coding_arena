@@ -1,0 +1,36 @@
+{
+  "id": "racket:sublist",
+  "trackSlug": "racket",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "fb1f08a1-fd0f-42dc-a402-718a86d7775b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "lists",
+    "cond",
+    "case",
+    "if",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "recursion"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide sublist?)\n\n(define (sublist? list-one list-two)\n  (error \"Please implement 'sublist?'\"))\n",
+  "example_solution": "#lang racket\n\n(provide sublist?)\n\n(define (sublist? s l)\n  (match (list s l)\n    [(list '() '()) 'equal]\n    [(list '() _) 'sublist]\n    [(list _ '()) 'superlist]\n    [(list s l) #:when (= (length s) (length l))\n                (if (equal? s l) 'equal 'unequal)]\n    [(list _ _2) (let*-values\n                     [((s-len) (length s))\n                      ((l-len) (length l))\n                      ((which len a b)\n                       (if (< s-len l-len)\n                           (values 'sublist s-len s l)\n                           (values 'superlist l-len l s)))\n                      ((starts-with?)\n                       (lambda (b) (and\n                                    (equal? (car a) (car b)) ; should we even check further?\n                                    (equal? a (take b len)))))\n                      ]\n                   (let find [(b-len (length b)) (b b)]\n                     (cond\n                       [(< b-len len) 'unequal]\n                       [(starts-with? b) which]\n                       [#t (find (sub1 b-len) (cdr b))]\n                       ))\n                   )]\n    )\n  )\n",
+  "test_code": "#lang racket\n\n(require \"sublist.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (define million (range 1000000))\n  (define million+1 (range 1 1000001))\n  (define million1s (make-list 1000000 1))\n\n  (define suite\n    (test-suite \"sublist tests\"\n                (test-equal? \"empty lists\"\n                  (sublist? '() '()) 'equal)\n\n                (test-equal? \"empty within non empty list\"\n                  (sublist? '() '(1 2 3)) 'sublist)\n\n                (test-equal? \"non empty list contains empty list\"\n                  (sublist? '(1 2 3) '()) 'superlist)\n\n                (test-equal? \"list equals itself\"\n                  (sublist? '(1 2 3) '(1 2 3)) 'equal)\n\n                (test-equal? \"different lists\"\n                  (sublist? '(1 2 3) '(2 3 4)) 'unequal)\n\n                (test-equal? \"false start\"\n                  (sublist? '(1 2 5) '(0 1 2 3 1 2 5 6)) 'sublist)\n              \n                (test-equal? \"consecutive\"\n                  (sublist? '(1 1 2) '(0 1 1 1 2 1 2)) 'sublist)\n\n                (test-equal? \"sublist at start\"\n                  (sublist? '(0 1 2) '(0 1 2 3 4 5)) 'sublist)\n\n                (test-equal? \"sublist at middle\"\n                  (sublist? '(2 3 4) '(0 1 2 3 4 5)) 'sublist)\n\n                (test-equal? \"sublist at end\"\n                (sublist? '(3 4 5) '(0 1 2 3 4 5)) 'sublist)\n\n                ; superlist at start, middle, end\n                (test-equal? \"at start of superlist\"\n                  (sublist? '(0 1 2 3 4 5) '(0 1 2)) 'superlist)\n\n                (test-equal? \"in middle of superlist\"\n                  (sublist? '(0 1 2 3 4 5) '(2 3)) 'superlist)\n\n                (test-equal? \"at end of superlist\"\n                  (sublist? '(0 1 2 3 4 5) '(3 4 5)) 'superlist)\n\n                (test-equal? \"first list missing element from second list\"\n                  (sublist? '(1 3) '(1 2 3)) 'unequal)\n\n                (test-equal?  \"second list missing element from first list\"\n                  (sublist? '(1 2 3) '(1 3)) 'unequal)\n\n                (test-equal? \"first list missing additional digits from second list\"\n                  (sublist? '(1 2) '(1 22)) 'unequal)\n\n                (test-equal? \"order matters to a list\"\n                  (sublist? '(1 2 3) '(3 2 1)) 'unequal)\n                  \n                (test-equal?  \"same digits but different numbers\"\n                  (sublist? '(1 0 1) '(10 1)) 'unequal)))\n                  \n  (run-tests suite))\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "czrpb"
+  ],
+  "contributors": [
+    "charmparticle"
+  ]
+}

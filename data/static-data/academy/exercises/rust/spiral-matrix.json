@@ -1,0 +1,37 @@
+{
+  "id": "rust:spiral-matrix",
+  "trackSlug": "rust",
+  "slug": "spiral-matrix",
+  "name": "Spiral Matrix",
+  "uuid": "8dea3473-36f4-4228-b24b-bee8d9389167",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the size, return a square matrix of numbers in spiral order.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to return a square matrix of a given size.\n\nThe matrix should be filled with natural numbers, starting from 1 in the top-left corner, increasing in an inward, clockwise spiral order, like these examples:\n\n## Examples\n\n### Spiral matrix of size 3\n\n```text\n1 2 3\n8 9 4\n7 6 5\n```\n\n### Spiral matrix of size 4\n\n```text\n 1  2  3 4\n12 13 14 5\n11 16 15 6\n10  9  8 7\n```\n",
+  "introduction": "# Introduction\n\nIn a small village near an ancient forest, there was a legend of a hidden treasure buried deep within the woods.\nDespite numerous attempts, no one had ever succeeded in finding it.\nThis was about to change, however, thanks to a young explorer named Elara.\nShe had discovered an old document containing instructions on how to locate the treasure.\nUsing these instructions, Elara was able to draw a map that revealed the path to the treasure.\n\nTo her surprise, the path followed a peculiar clockwise spiral.\nIt was no wonder no one had been able to find the treasure before!\nWith the map in hand, Elara embarks on her journey to uncover the hidden treasure.\n",
+  "hints": null,
+  "starter_code": "pub fn spiral_matrix(size: u32) -> Vec<Vec<u32>> {\n    todo!(\"Function that returns the spiral matrix of square size {size}\");\n}\n",
+  "example_solution": "pub fn spiral_matrix(size: u32) -> Vec<Vec<u32>> {\n    let mut matrix: Vec<Vec<u32>> = vec![vec![0; size as usize]; size as usize];\n    let num_concentric_squares = (f64::from(size) / 2.0).ceil() as usize;\n    let mut counter: u32 = 1;\n    let mut sidelen = size as usize;\n    for i in 0..num_concentric_squares {\n        for j in 0..sidelen {\n            matrix[i][i + j] = counter;\n            counter += 1;\n        }\n\n        for j in 1..sidelen {\n            matrix[i + j][size as usize - 1 - i] = counter;\n            counter += 1;\n        }\n\n        for j in (0..sidelen - 1).rev() {\n            matrix[size as usize - 1 - i][i + j] = counter;\n            counter += 1;\n        }\n\n        for j in (1..sidelen - 1).rev() {\n            matrix[i + j][i] = counter;\n\n            counter += 1;\n        }\n        if sidelen >= 2 {\n            sidelen -= 2;\n        } else {\n            sidelen -= 1;\n        }\n    }\n    matrix\n}\n",
+  "test_code": "use spiral_matrix::*;\n\n#[test]\nfn empty_spiral() {\n    let input = 0;\n    let output = spiral_matrix(input);\n    let expected: [[u32; 0]; 0] = [];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn trivial_spiral() {\n    let input = 1;\n    let output = spiral_matrix(input);\n    let expected: [[u32; 1]; 1] = [[1]];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn spiral_of_size_2() {\n    let input = 2;\n    let output = spiral_matrix(input);\n    let expected: [[u32; 2]; 2] = [[1, 2], [4, 3]];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn spiral_of_size_3() {\n    let input = 3;\n    let output = spiral_matrix(input);\n    let expected: [[u32; 3]; 3] = [[1, 2, 3], [8, 9, 4], [7, 6, 5]];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn spiral_of_size_4() {\n    let input = 4;\n    let output = spiral_matrix(input);\n    let expected: [[u32; 4]; 4] = [\n        [1, 2, 3, 4],\n        [12, 13, 14, 5],\n        [11, 16, 15, 6],\n        [10, 9, 8, 7],\n    ];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn spiral_of_size_5() {\n    let input = 5;\n    let output = spiral_matrix(input);\n    let expected: [[u32; 5]; 5] = [\n        [1, 2, 3, 4, 5],\n        [16, 17, 18, 19, 6],\n        [15, 24, 25, 20, 7],\n        [14, 23, 22, 21, 8],\n        [13, 12, 11, 10, 9],\n    ];\n    assert_eq!(output, expected);\n}\n",
+  "source": "Reddit r/dailyprogrammer challenge #320 [Easy] Spiral Ascension.",
+  "source_url": "https://web.archive.org/web/20230607064729/https://old.reddit.com/r/dailyprogrammer/comments/6i60lr/20170619_challenge_320_easy_spiral_ascension/",
+  "authors": [
+    "Menkir"
+  ],
+  "contributors": [
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "lutostag",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

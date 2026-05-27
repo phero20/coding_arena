@@ -1,0 +1,34 @@
+{
+  "id": "gleam:scrabble-score",
+  "trackSlug": "gleam",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "109a8a3e-cc3f-4f2a-a385-c12f9e9865cf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "dicts"
+  ],
+  "prerequisites": [
+    "dicts",
+    "lists",
+    "labelled-arguments",
+    "case-expressions",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "pub fn score(word: String) -> Int {\n  todo\n}\n",
+  "example_solution": "import gleam/dict\nimport gleam/list\nimport gleam/string\n\npub fn score(word word: String) -> Int {\n  let word_values =\n    dict.from_list([\n      #(\"a\", 1),\n      #(\"b\", 3),\n      #(\"c\", 3),\n      #(\"d\", 2),\n      #(\"e\", 1),\n      #(\"f\", 4),\n      #(\"g\", 2),\n      #(\"h\", 4),\n      #(\"i\", 1),\n      #(\"j\", 8),\n      #(\"k\", 5),\n      #(\"l\", 1),\n      #(\"m\", 3),\n      #(\"n\", 1),\n      #(\"o\", 1),\n      #(\"p\", 3),\n      #(\"q\", 10),\n      #(\"r\", 1),\n      #(\"s\", 1),\n      #(\"t\", 1),\n      #(\"u\", 1),\n      #(\"v\", 4),\n      #(\"w\", 4),\n      #(\"x\", 8),\n      #(\"y\", 4),\n      #(\"z\", 10),\n    ])\n\n  word\n  |> string.lowercase\n  |> string.to_graphemes\n  |> list.fold(0, fn(acc, x) {\n    case dict.get(word_values, x) {\n      Ok(value) -> acc + value\n      _ -> acc\n    }\n  })\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport scrabble_score\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn lowercase_letter_test() {\n  scrabble_score.score(\"a\")\n  |> should.equal(1)\n}\n\npub fn uppercase_letter_test() {\n  scrabble_score.score(\"A\")\n  |> should.equal(1)\n}\n\npub fn valuable_letter_test() {\n  scrabble_score.score(\"f\")\n  |> should.equal(4)\n}\n\npub fn short_word_test() {\n  scrabble_score.score(\"at\")\n  |> should.equal(2)\n}\n\npub fn short_valuable_word_test() {\n  scrabble_score.score(\"zoo\")\n  |> should.equal(12)\n}\n\npub fn medium_word_test() {\n  scrabble_score.score(\"street\")\n  |> should.equal(6)\n}\n\npub fn medium_valuable_word_test() {\n  scrabble_score.score(\"quirky\")\n  |> should.equal(22)\n}\n\npub fn long_mixed_case_word_test() {\n  scrabble_score.score(\"OxyphenButazone\")\n  |> should.equal(41)\n}\n\npub fn english_like_word_test() {\n  scrabble_score.score(\"pinata\")\n  |> should.equal(8)\n}\n\npub fn empty_input_test() {\n  scrabble_score.score(\"\")\n  |> should.equal(0)\n}\n\npub fn entire_alphabet_available_test() {\n  scrabble_score.score(\"abcdefghijklmnopqrstuvwxyz\")\n  |> should.equal(87)\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "suraj-mandal"
+  ],
+  "contributors": null
+}

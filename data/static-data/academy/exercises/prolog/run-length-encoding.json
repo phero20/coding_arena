@@ -1,0 +1,26 @@
+{
+  "id": "prolog:run-length-encoding",
+  "trackSlug": "prolog",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "0fe1f2de-d2d5-4703-b90f-369c07b52973",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "encode(Plaintext, Ciphertext).\n\ndecode(Ciphertext, Plaintext).\n",
+  "example_solution": ":- use_module(library(dcg/basics)).\n\nencode(Plaintext, Ciphertext) :-\n    atom_chars(Plaintext, Plainchars),\n    encode_runs(Plainchars, Runs),\n    maplist(encode_run, Runs, EncodedRuns),\n    flatten(EncodedRuns, Cipherchars),\n    atomics_to_string(Cipherchars, Ciphertext).\n\nencode_runs([], []).\nencode_runs([X], [X-1]).\nencode_runs([X,X|Xs], [X-N|Ys]) :- encode_runs([X|Xs], [X-N1|Ys]), N is N1+1, !.\nencode_runs([X,Y|Xs], [X-1|Ys]) :- X \\= Y, encode_runs([Y|Xs], Ys), !.\n\nencode_run(X-1, [X]) :- !.\nencode_run(X-N, [N,X]) :- !.\n\ndecode(Ciphertext, Plaintext) :-\n    atom_chars(Ciphertext, Cipherchars),\n    decode_runs(Cipherchars, Runs),\n    maplist(decode_run, Runs, DecodedRuns),\n    flatten(DecodedRuns, Plainchars),\n    atomics_to_string(Plainchars, Plaintext).\n\ndecode_runs([], []).\ndecode_runs([X|Xs], [Y-Number|Runs]) :-\n    char_type(X, 'digit'),\n    phrase(integer(Number), [X|Xs], [Y|Ys]),\n    decode_runs(Ys, Runs),\n    !.\ndecode_runs([X|Xs], [X-1|Runs]) :- decode_runs(Xs, Runs), !.\n\ndecode_run(X-1, [X]) :- !.\ndecode_run(X-N, [X|Xs]) :- N1 is N - 1, decode_run(X-N1, Xs), !.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(run_length_encoding).\n\n    test(encode_empty_string, condition(true)) :-\n        encode(\"\", Ciphertext),\n        Ciphertext == \"\".\n\n    test(encode_single_characters_only_are_encoded_without_count, condition(pending)) :-\n        encode(\"XYZ\", Ciphertext),\n        Ciphertext == \"XYZ\".\n\n    test(encode_string_with_no_single_characters, condition(pending)) :-\n        encode(\"AABBBCCCC\", Ciphertext),\n        Ciphertext == \"2A3B4C\".\n\n    test(encode_single_characters_mixed_with_repeated_characters, condition(pending)) :-\n        encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\", Ciphertext),\n        Ciphertext == \"12WB12W3B24WB\".\n\n    test(encode_multiple_whitespace_mixed_in_string, condition(pending)) :-\n        encode(\"  hsqq qww  \", Ciphertext),\n        Ciphertext == \"2 hs2q q2w2 \".\n\n    test(encode_lowercase_characters, condition(pending)) :-\n        encode(\"aabbbcccc\", Ciphertext),\n        Ciphertext == \"2a3b4c\".\n\n    test(decode_empty_string, condition(pending)) :-\n        decode(\"\", Plaintext),\n        Plaintext == \"\".\n\n    test(decode_single_characters_only, condition(pending)) :-\n        decode(\"XYZ\", Plaintext),\n        Plaintext == \"XYZ\".\n\n    test(decode_string_with_no_single_characters, condition(pending)) :-\n        decode(\"2A3B4C\", Plaintext),\n        Plaintext == \"AABBBCCCC\".\n\n    test(decode_single_characters_with_repeated_characters, condition(pending)) :-\n        decode(\"12WB12W3B24WB\", Plaintext),\n        Plaintext == \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\".\n\n    test(decode_multiple_whitespace_mixed_in_string, condition(pending)) :-\n        decode(\"2 hs2q q2w2 \", Plaintext),\n        Plaintext == \"  hsqq qww  \".\n\n    test(decode_lowercase_string, condition(pending)) :-\n        decode(\"2a3b4c\", Plaintext),\n        Plaintext == \"aabbbcccc\".\n\n    test(encode_followed_by_decode_gives_original_string, condition(pending)) :-\n        encode(\"zzz ZZ  zZ\", Ciphertext),\n        decode(Ciphertext, Plaintext),\n        Plaintext == \"zzz ZZ  zZ\".\n\n:- end_tests(run_length_encoding).\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

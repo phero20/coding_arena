@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:rna-transcription",
+  "trackSlug": "arm64-assembly",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "ddfea5dc-0838-4a35-9936-1fb72cd7b1c4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": ".text\n.globl to_rna\n\nto_rna:\n        ret\n",
+  "example_solution": ".text\n.globl to_rna\n\n.macro MAP from, to\n        mov     w4, \\to\n        cmp     w2, \\from\n        csel    w3, w4, w3, eq          /* conditionally update output byte */\n.endm\n\n/* extern void to_rna(char *buffer, const char *dna); */\nto_rna:\n        ldrb    w2, [x1], #1            /* load byte, with post-increment */\n        mov     w3, w2\n        MAP     #'G', #'C'\n        MAP     #'C', #'G'\n        MAP     #'T', #'A'\n        MAP     #'A', #'U'\n        strb    w3, [x0], #1            /* store byte, post-increment */\n        cbnz    w3, to_rna\n\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#define BUFFER_SIZE 80\n\nextern void to_rna(char *buffer, const char *dna);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_empty_rna_sequence(void) {\n    char buffer[BUFFER_SIZE];\n\n    to_rna(buffer, \"\");\n    TEST_ASSERT_EQUAL_STRING(\"\", buffer);\n}\n\nvoid test_rna_complement_of_cytosine_is_guanine(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    to_rna(buffer, \"C\");\n    TEST_ASSERT_EQUAL_STRING(\"G\", buffer);\n}\n\nvoid test_rna_complement_of_guanine_is_cytosine(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    to_rna(buffer, \"G\");\n    TEST_ASSERT_EQUAL_STRING(\"C\", buffer);\n}\n\nvoid test_rna_complement_of_thymine_is_adenine(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    to_rna(buffer, \"T\");\n    TEST_ASSERT_EQUAL_STRING(\"A\", buffer);\n}\n\nvoid test_rna_complement_of_adenine_is_uracil(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    to_rna(buffer, \"A\");\n    TEST_ASSERT_EQUAL_STRING(\"U\", buffer);\n}\n\nvoid test_rna_complement(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    to_rna(buffer, \"ACGTGGTCTTAA\");\n    TEST_ASSERT_EQUAL_STRING(\"UGCACCAGAAUU\", buffer);\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_empty_rna_sequence);\n    RUN_TEST(test_rna_complement_of_cytosine_is_guanine);\n    RUN_TEST(test_rna_complement_of_guanine_is_cytosine);\n    RUN_TEST(test_rna_complement_of_thymine_is_adenine);\n    RUN_TEST(test_rna_complement_of_adenine_is_uracil);\n    RUN_TEST(test_rna_complement);\n    return UNITY_END();\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

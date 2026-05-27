@@ -1,0 +1,26 @@
+{
+  "id": "sml:strain",
+  "trackSlug": "sml",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "e929f6cf-04f8-41dd-b333-69be7b06d857",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `keep` and `discard` operation on collections.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "fun keep f l =\n  raise Fail \"'keep' is not implemented\"\n\nfun discard f l =\n  raise Fail \"'discard' is not implemented\"\n",
+  "example_solution": "fun keep f nil = nil\n  | keep f (first :: rest) =\n    let\n      val suffix = keep f rest\n    in\n      if f first then first :: suffix\n      else suffix\n    end\n\nfun discard f nil = nil\n  | discard f (first :: rest) =\n    let\n      val suffix = discard f rest\n    in\n      if f first then suffix\n      else first :: suffix\n    end\n",
+  "test_code": "(* version 1.0.0 *)\n\nuse \"testlib.sml\";\nuse \"strain.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"strain\" [\n    test \"keep on empty list returns empty list\"\n      (fn _ => let\n        val l = []\n      in\n        keep (fn x => true) l |> Expect.equalTo []\n      end),\n\n    test \"keeps everything\"\n      (fn _ => let\n        val l = [1, 3, 5]\n      in\n        keep (fn x => true) l |> Expect.equalTo [1, 3, 5]\n      end),\n\n    test \"keeps nothing\"\n      (fn _ => let\n        val l = [1, 3, 5]\n      in\n        keep (fn x => false) l |> Expect.equalTo []\n      end),\n\n    test \"keeps first and last\"\n      (fn _ => let\n        val l = [1, 2, 3]\n      in\n        keep (fn x => x mod 2 = 1) l |> Expect.equalTo [1, 3]\n      end),\n\n    test \"keeps neither first nor last\"\n      (fn _ => let\n        val l = [1, 2, 3]\n      in\n        keep (fn x => x mod 2 = 0) l |> Expect.equalTo [2]\n      end),\n\n    test \"keeps strings\"\n      (fn _ => let\n        val l = [\"apple\", \"zebra\", \"banana\", \"zombies\", \"cherimoya\", \"zealot\"]\n      in\n        keep (String.isPrefix \"z\") l |> Expect.equalTo [\"zebra\", \"zombies\", \"zealot\"]\n      end),\n\n    test \"keeps lists\"\n      (fn _ => let\n        val l = [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]]\n      in\n        keep (List.exists (fn x => x = 5)) l |> Expect.equalTo [[5, 5, 5], [5, 1, 2], [1, 5, 2], [1, 2, 5]]\n      end),\n\n    test \"discard on empty list returns empty list\"\n      (fn _ => let\n        val l = []\n      in\n        discard (fn x => true) l |> Expect.equalTo []\n      end),\n\n    test \"discards everything\"\n      (fn _ => let\n        val l = [1, 3, 5]\n      in\n        discard (fn x => true) l |> Expect.equalTo []\n      end),\n\n    test \"discards nothing\"\n      (fn _ => let\n        val l = [1, 3, 5]\n      in\n        discard (fn x => false) l |> Expect.equalTo [1, 3, 5]\n      end),\n\n    test \"discards first and last\"\n      (fn _ => let\n        val l = [1, 2, 3]\n      in\n        discard (fn x => x mod 2 = 1) l |> Expect.equalTo [2]\n      end),\n\n    test \"discards neither first nor last\"\n      (fn _ => let\n        val l = [1, 2, 3]\n      in\n        discard (fn x => x mod 2 = 0) l |> Expect.equalTo [1, 3]\n      end),\n\n    test \"discards strings\"\n      (fn _ => let\n        val l = [\"apple\", \"zebra\", \"banana\", \"zombies\", \"cherimoya\", \"zealot\"]\n      in\n        discard (String.isPrefix \"z\") l |> Expect.equalTo [\"apple\", \"banana\", \"cherimoya\"]\n      end),\n\n    test \"discards lists\"\n      (fn _ => let\n        val l = [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]]\n      in\n        discard (List.exists (fn x => x = 5)) l |> Expect.equalTo [[1, 2, 3], [2, 1, 2], [2, 2, 1]]\n      end)\n  ]\n\nval _ = Test.run testsuite\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

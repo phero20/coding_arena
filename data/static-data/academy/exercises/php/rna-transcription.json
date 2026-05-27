@@ -1,0 +1,31 @@
+{
+  "id": "php:rna-transcription",
+  "trackSlug": "php",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "81d96250-f2e4-4228-a8e9-254b6b8784ac",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "<?php\n\n/*\n * By adding type hints and enabling strict type checking, code can become\n * easier to read, self-documenting and reduce the number of potential bugs.\n * By default, type declarations are non-strict, which means they will attempt\n * to change the original type to match the type specified by the\n * type-declaration.\n *\n * In other words, if you pass a string to a function requiring a float,\n * it will attempt to convert the string value to a float.\n *\n * To enable strict mode, a single declare directive must be placed at the top\n * of the file.\n * This means that the strictness of typing is configured on a per-file basis.\n * This directive not only affects the type declarations of parameters, but also\n * a function's return type.\n *\n * For more info review the Concept on strict type checking in the PHP track\n * <link>.\n *\n * To disable strict typing, comment out the directive below.\n */\n\ndeclare(strict_types=1);\n\nfunction toRna(string $dna): string\n{\n    throw new \\BadFunctionCallException(\"Implement the toRna function\");\n}\n",
+  "example_solution": "<?php\n\ndeclare(strict_types=1);\n\nfunction toRna($strand)\n{\n    return strtr($strand, 'CGTA', 'GCAU');\n}\n",
+  "test_code": "<?php\n\ndeclare(strict_types=1);\n\nuse PHPUnit\\Framework\\TestCase;\nuse PHPUnit\\Framework\\Attributes\\TestDox;\n\nclass RnaTranscriptionTest extends TestCase\n{\n    public static function setUpBeforeClass(): void\n    {\n        require_once 'RnaTranscription.php';\n    }\n\n    /**\n     * uuid b4631f82-c98c-4a2f-90b3-c5c2b6c6f661\n     */\n    #[TestDox('It handles an empty string')]\n    public function testHandlesEmptyString(): void\n    {\n        $this->assertSame('', toRna(''));\n    }\n\n    /**\n     * uuid a9558a3c-318c-4240-9256-5d5ed47005a6\n     */\n    #[TestDox('It transcribes guanine to cytosine')]\n    public function testTranscribesGuanineToCytosine(): void\n    {\n        $this->assertSame('G', toRna('C'));\n    }\n\n    /**\n     * uuid 6eedbb5c-12cb-4c8b-9f51-f8320b4dc2e7\n     */\n    #[TestDox('It transcribes cytosine to guanine')]\n    public function testTranscribesCytosineToGuanine(): void\n    {\n        $this->assertSame('C', toRna('G'));\n    }\n\n    /**\n     * uuid 870bd3ec-8487-471d-8d9a-a25046488d3e\n     */\n    #[TestDox('It transcribes thymine to adenine')]\n    public function testTranscribesThymineToAdenine(): void\n    {\n        $this->assertSame('A', toRna('T'));\n    }\n\n    /**\n     * uuid aade8964-02e1-4073-872f-42d3ffd74c5f\n     */\n    #[TestDox('It transcribes adenine to uracil')]\n    public function testTranscribesAdenineToUracil(): void\n    {\n        $this->assertSame('U', toRna('A'));\n    }\n\n    /**\n     * uuid 79ed2757-f018-4f47-a1d7-34a559392dbf\n     */\n    #[TestDox('RNA complement')]\n    public function testTranscribesAllOccurrencesOne(): void\n    {\n        $this->assertSame('UGCACCAGAAUU', toRna('ACGTGGTCTTAA'));\n    }\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [],
+  "contributors": [
+    "arueckauer",
+    "dkinzer",
+    "kunicmarko20",
+    "kytrinyx",
+    "lafent",
+    "petemcfarlane"
+  ]
+}

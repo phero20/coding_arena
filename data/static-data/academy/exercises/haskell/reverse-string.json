@@ -1,0 +1,26 @@
+{
+  "id": "haskell:reverse-string",
+  "trackSlug": "haskell",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "8ed8f6d7-ee0a-4d61-99b5-c8b86f01c5de",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "module ReverseString (reverseString) where\n\nreverseString :: String -> String\nreverseString str = error \"You need to implement this function.\"\n",
+  "example_solution": "module ReverseString (reverseString) where\n\nreverseString :: String -> String\nreverseString input = reverse input\n",
+  "test_code": "{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport ReverseString (reverseString)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"reverseString\" $ for_ cases test\n  where\n\n    test Case{..} = it explanation assertion\n      where\n        explanation = unwords [show input, \"-\", description]\n        assertion   = reverseString input `shouldBe` expected\n\ndata Case = Case { description :: String\n                 , input       :: String\n                 , expected    :: String\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"empty string\"\n               , input       = \"\"\n               , expected    = \"\"\n               }\n        , Case { description = \"a word\"\n               , input       = \"robot\"\n               , expected    = \"tobor\"\n               }\n        , Case { description = \"a capitalized word\"\n               , input       = \"Ramen\"\n               , expected    = \"nemaR\"\n               }\n        , Case { description = \"a sentence with punctuation\"\n               , input       = \"I am hungry!\"\n               , expected    = \"!yrgnuh ma I\"\n               }\n        , Case { description = \"a palindrome\"\n               , input       = \"racecar\"\n               , expected    = \"racecar\"\n               }\n        , Case { description = \"an even-sized word\"\n               , input       = \"drawer\"\n               , expected    = \"reward\"\n               }\n        ]\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "cdimitroulas"
+  ],
+  "contributors": null
+}

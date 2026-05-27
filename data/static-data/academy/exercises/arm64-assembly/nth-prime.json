@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:nth-prime",
+  "trackSlug": "arm64-assembly",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "2008083a-fdc5-4a14-8668-6e58f7cd187e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ".text\n.globl prime\n\nprime:\n        ret\n",
+  "example_solution": ".text\n.globl prime\n\n/* extern uint64_t prime(uint64_t number); */\nprime:\n        cmp     x0, #3\n        blt     .small\n\n        clz     x1, x0                  /* count leading zero bits */\n        mov     x2, #64\n        sub     x1, x2, x1              /* ceil(log2(number + 1)) */\n        mul     x1, x0, x1              /* number * ceil(log2(number + 1)) */\n        lsr     x1, x1, #1              /* divide by 2 */\n        add     x1, x1, #15\n        and     x1, x1, #-16            /* round up to multiple of 16 */\n        mov     x3, sp\n        sub     sp, sp, x1              /* allocate space on stack */\n        mov     x4, #-1\n        mov     x5, sp\n\n.fill:\n        stp     x4, x4, [x3, #-16]!     /* store pair, pre-decrement */\n        cmp     x3, x5\n        bne     .fill\n\n        mov     x4, #1\n        sub     x0, x0, #1              /* we skip the prime 2 */\n\n.search:\n        add     x4, x4, #2              /* candidate prime */\n        lsr     x6, x4, #1              /* divide by 2 */\n        ldrb    w5, [sp, x6]\n        cbz     w5, .search             /* if composite, move on to next candidate */\n\n        sub     x0, x0, #1              /* number of primes required */\n        cbz     x0, .exit\n\n        mul     x5, x4, x4              /* multiple of prime */\n        lsr     x5, x5, #1              /* divide by 2 */\n\n.mark:\n        cmp     x5, x1\n        bhs     .search                 /* unsigned >= */\n\n        strb    wzr, [sp, x5]           /* mark as composite */\n        add     x5, x5, x4\n        b       .mark\n\n.exit:\n        mov     x0, x4\n        add     sp, sp, x1              /* restore original stack pointer */\n        ret\n\n.small:\n        add     x0, x0, #1\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#include <stdint.h>\n\nextern uint64_t prime(uint64_t number);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_first_prime(void) {\n    TEST_ASSERT_EQUAL_UINT(2, prime(1));\n}\n\nvoid test_second_prime(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT(3, prime(2));\n}\n\nvoid test_sixth_prime(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT(13, prime(6));\n}\n\nvoid test_big_prime(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT(104743, prime(10001));\n}\n\nvoid test_seventh_prime(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT(17, prime(7));\n}\n\nvoid test_very_big_prime(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT(821647, prime(65537));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_first_prime);\n    RUN_TEST(test_second_prime);\n    RUN_TEST(test_sixth_prime);\n    RUN_TEST(test_big_prime);\n    RUN_TEST(test_seventh_prime);\n    RUN_TEST(test_very_big_prime);\n    return UNITY_END();\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

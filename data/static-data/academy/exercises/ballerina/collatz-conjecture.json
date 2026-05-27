@@ -1,0 +1,26 @@
+{
+  "id": "ballerina:collatz-conjecture",
+  "trackSlug": "ballerina",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "59ed1b9f-e19a-4b36-baa4-ccc7fd8332ff",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "# Returns the number of steps required to reach 1.\n#\n# + n - number\n# + return - number of steps\nfunction collatzSteps(int n) returns int|error {\n    // TODO Implement this function.\n}\n",
+  "example_solution": "function collatzSteps(int number) returns int|error {\n    if number < 1 {\n        return error(\"Only positive integers are allowed\");\n    }\n\n    int steps = 0;\n    int n = number;\n\n    while n != 1 {\n        n = n % 2 == 0 ? n/2 : 3*n + 1;\n        steps += 1;\n    }\n    return steps;\n}\n",
+  "test_code": "import ballerina/test;\n\n@test:Config {}\nfunction testZeroStepsForOne() {\n    test:assertEquals(collatzSteps(1), 0);\n}\n\n@test:Config {\n    enable: false\n}\nfunction testDivideIfEven() {\n    test:assertEquals(collatzSteps(16), 4);\n}\n\n@test:Config {\n    enable: false\n}\nfunction testEvenAndOddSteps() {\n    test:assertEquals(collatzSteps(12), 9);\n}\n\n@test:Config {\n    enable: false\n}\nfunction testLargeNumberOfEvenAndOddSteps() {\n    test:assertEquals(collatzSteps(1000000), 152);\n}\n\n@test:Config {\n    enable: false\n}\nfunction errorTestZero() {\n    int|error e = collatzSteps(0);\n    if e is error {\n        test:assertEquals(e.message().toString(), \"Only positive integers are allowed\");\n    } else {\n        test:assertFail(msg = \"Expecting an error\");\n    }\n}\n\n@test:Config {\n    enable: false\n}\nfunction errorTestNegative() {\n    int|error e = collatzSteps(-15);\n    if e is error {\n        test:assertEquals(e.message().toString(), \"Only positive integers are allowed\");\n    } else {\n        test:assertFail(msg = \"Expecting an error\");\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

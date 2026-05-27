@@ -1,0 +1,33 @@
+{
+  "id": "cpp:series",
+  "trackSlug": "cpp",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "0ab70460-3a2f-4c37-bb78-716ba720fe34",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"series.h\"\n\nnamespace series {\n\n// TODO: add your solution here\n\n}  // namespace series\n",
+  "example_solution": "#include <sstream>\n#include <stdexcept>\n#include <string>\n#include <vector>\n\n#include \"series.h\"\n\nusing namespace std;\n\nnamespace series {\n\ninline string slice_me(const string &input, unsigned int start,\n                       unsigned int window) {\n    auto end = start + window;\n    stringstream baby_slice;\n    for (size_t pos = start; pos < end; pos++) baby_slice << input[pos];\n    return baby_slice.str();\n}\n\nstring digits(const string &input) {\n    return slice_me(input, 0, input.length());\n}\n\nvector<string> slice(const string &input, size_t window) {\n    auto len = input.length();\n    if (len < window || window < 1)\n        throw domain_error(\"Window size must be within size of the slice.\");\n    vector<string> ginger_slice;\n    ginger_slice.reserve(len / window);\n    auto end = len - window;\n    for (size_t position = 0; position <= end; position++)\n        ginger_slice.emplace_back(slice_me(input, position, window));\n    return ginger_slice;\n}\n\n}  // namespace series\n",
+  "test_code": "#include \"series.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n#include <stdexcept>\nusing namespace std;\n\nTEST_CASE(\"slices_of_one_from_one\") {\n    const vector<string> expected{\"1\"};\n\n    const vector<string> actual{series::slice(\"1\", 1)};\n\n    REQUIRE(expected == actual);\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"slices_of_one_from_two\") {\n    const vector<string> expected{\"1\", \"2\"};\n\n    const vector<string> actual{series::slice(\"12\", 1)};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"slices_of_two\") {\n    const vector<string> expected{\"35\"};\n\n    const vector<string> actual{series::slice(\"35\", 2)};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"slices_of_two_overlap\") {\n    const vector<string> expected{\"91\", \"14\", \"42\"};\n\n    const vector<string> actual{series::slice(\"9142\", 2)};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"slices_can_include_duplicates\") {\n    const vector<string> expected{\"777\", \"777\", \"777\", \"777\"};\n\n    const vector<string> actual{series::slice(\"777777\", 3)};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"slices_of_a_long_series\") {\n    const vector<string> expected{\"91849\", \"18493\", \"84939\", \"49390\",\n                                  \"93904\", \"39042\", \"90424\", \"04243\"};\n\n    const vector<string> actual{series::slice(\"918493904243\", 5)};\n\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"slice_length_is_too_large\") {\n    REQUIRE_THROWS_AS(series::slice(\"12345\", 6), domain_error);\n}\n\nTEST_CASE(\"slice_length_cannot_be_zero\") {\n    REQUIRE_THROWS_AS(series::slice(\"12345\", 0), domain_error);\n}\n\nTEST_CASE(\"slice_length_cannot_be_negative\") {\n    REQUIRE_THROWS_AS(series::slice(\"123\", -1), domain_error);\n}\n\nTEST_CASE(\"empty_series_is_invalid\") {\n    REQUIRE_THROWS_AS(series::slice(\"\", 1), domain_error);\n}\n#endif\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "patricksjackson"
+  ]
+}

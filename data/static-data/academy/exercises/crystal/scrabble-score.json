@@ -1,0 +1,30 @@
+{
+  "id": "crystal:scrabble-score",
+  "trackSlug": "crystal",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "0768322b-89aa-4aa1-9dac-d694c4417f52",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "hash"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "module ScrabbleScore\n  def self.score(word : String) : Int32\n    # Write your code for the 'Scrabble Score' exercise in this file.\n  end\nend\n",
+  "example_solution": "module ScrabbleScore\n  extend self\n\n  SCORES = {\n    'A' => 1, 'E' => 1, 'I' => 1, 'O' => 1, 'U' => 1, 'L' => 1,\n    'N' => 1, 'R' => 1, 'S' => 1, 'T' => 1, 'D' => 2, 'G' => 2,\n    'B' => 3, 'C' => 3, 'M' => 3, 'P' => 3, 'F' => 4, 'H' => 4,\n    'V' => 4, 'W' => 4, 'Y' => 4, 'K' => 5, 'J' => 8, 'X' => 8,\n    'Q' => 10, 'Z' => 10,\n  } of Char => Int32\n\n  def score(word : String) : Int32\n    word.upcase.chars.map { |c| SCORES[c] }.sum\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"ScrabbleScore\" do\n  it \"lowercase letter\" do\n    ScrabbleScore.score(\"a\").should eq(1)\n  end\n\n  pending \"uppercase letter\" do\n    ScrabbleScore.score(\"A\").should eq(1)\n  end\n\n  pending \"valuable letter\" do\n    ScrabbleScore.score(\"f\").should eq(4)\n  end\n\n  pending \"short word\" do\n    ScrabbleScore.score(\"at\").should eq(2)\n  end\n\n  pending \"short, valuable word\" do\n    ScrabbleScore.score(\"zoo\").should eq(12)\n  end\n\n  pending \"medium word\" do\n    ScrabbleScore.score(\"street\").should eq(6)\n  end\n\n  pending \"medium, valuable word\" do\n    ScrabbleScore.score(\"quirky\").should eq(22)\n  end\n\n  pending \"long, mixed-case word\" do\n    ScrabbleScore.score(\"OxyphenButazone\").should eq(41)\n  end\n\n  pending \"english-like word\" do\n    ScrabbleScore.score(\"pinata\").should eq(8)\n  end\n\n  pending \"empty input\" do\n    ScrabbleScore.score(\"\").should eq(0)\n  end\n\n  pending \"entire alphabet available\" do\n    ScrabbleScore.score(\"abcdefghijklmnopqrstuvwxyz\").should eq(87)\n  end\nend\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "issyl0"
+  ]
+}

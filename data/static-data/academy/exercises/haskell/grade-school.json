@@ -1,0 +1,37 @@
+{
+  "id": "haskell:grade-school",
+  "trackSlug": "haskell",
+  "slug": "grade-school",
+  "name": "Grade School",
+  "uuid": "ba13fdf3-9a36-4286-8b78-75964d1aa373",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given students' names along with the grade that they are in, create a roster for the school.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven students' names along with the grade that they are in, create a roster\nfor the school.\n\nIn the end, you should be able to:\n\n- Add a student's name to the roster for a grade\n  - \"Add Jim to grade 2.\"\n  - \"OK.\"\n- Get a list of all students enrolled in a grade\n  - \"Which students are in grade 2?\"\n  - \"We've only got Jim just now.\"\n- Get a sorted list of all students in all grades.  Grades should sort\n  as 1, 2, 3, etc., and students within a grade should be sorted\n  alphabetically by name.\n  - \"Who all is enrolled in school right now?\"\n  - \"Let me think. We have\n  Anna, Barb, and Charlie in grade 1,\n  Alex, Peter, and Zoe in grade 2\n  and Jim in grade 5.\n  So the answer is: Anna, Barb, Charlie, Alex, Peter, Zoe and Jim\"\n\nNote that all our students only have one name.  (It's a small town, what\ndo you want?)\n\n## For bonus points\n\nDid you get the tests passing and the code clean? If you want to, these\nare some additional things you could try:\n\n- If you're working in a language with mutable data structures and your\n  implementation allows outside code to mutate the school's internal DB\n  directly, see if you can prevent this. Feel free to introduce additional\n  tests.\n\nThen please share your thoughts in a comment on the submission. Did this\nexperiment make the code better? Worse? Did you learn anything from it?\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module School (School, add, empty, grade, sorted) where\n\ndata School = Dummy\n\nadd :: Int -> String -> School -> School\nadd gradeNum student school = error \"You need to implement this function.\"\n\nempty :: School\nempty = error \"You need to implement this function.\"\n\ngrade :: Int -> School -> [String]\ngrade gradeNum school = error \"You need to implement this function.\"\n\nsorted :: School -> [(Int, [String])]\nsorted school = error \"You need to implement this function.\"\n",
+  "example_solution": "module School (School, empty, grade, add, sorted) where\nimport qualified Data.Map as M\nimport qualified Data.Set as S\nimport Control.Arrow (second)\n\ntype Grade = Int\ntype Student = String\nnewtype School = School { unSchool :: M.Map Grade (S.Set Student) }\n\nempty :: School\nempty = School M.empty\n\nsorted :: School -> [(Grade, [Student])]\nsorted = map (second S.toAscList) . M.toAscList . unSchool\n\ngrade :: Grade -> School -> [Student]\ngrade gradeNum = S.toAscList . M.findWithDefault S.empty gradeNum . unSchool\n\nadd :: Grade -> Student -> School -> School\nadd gradeNum student =\n  School . M.insertWith S.union gradeNum (S.singleton student) . unSchool\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE TupleSections #-}\n\nimport Test.Hspec        (Spec, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport School (add, empty, grade, sorted)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = do\n\n          let fromList = foldr (uncurry add) empty\n          let fromGrade g = fromList . map (g,)\n\n          it \"add student\" $\n            sorted (add 2 \"Aimee\" empty) `shouldBe` [(2, [\"Aimee\"])]\n\n          it \"add more students in same class\" $\n            sorted (fromGrade 2 [\"James\", \"Blair\", \"Paul\"])\n            `shouldBe` [(2, [\"Blair\", \"James\", \"Paul\"])]\n\n          it \"add students to different grades\" $\n            sorted (fromList [(3, \"Chelsea\"), (7, \"Logan\")])\n            `shouldBe` [(3, [\"Chelsea\"]), (7, [\"Logan\"])]\n\n          it \"empty list if no students\" $\n            sorted empty `shouldBe` []\n\n          it \"get students in a grade\" $\n            grade 5 (fromList [(5, \"Franklin\"), (5, \"Bradley\"), (1, \"Jeff\")])\n            `shouldBe` [\"Bradley\", \"Franklin\"]\n\n          it \"get students in a non-existent grade\" $\n            grade 1 empty `shouldBe` []\n\n          it \"sorted school\" $\n            sorted (fromList [ (4, \"Jennifer\"   )\n                             , (6, \"Kareem\"     )\n                             , (4, \"Christopher\")\n                             , (3, \"Kyle\"       ) ] )\n            `shouldBe` [ (3, [\"Kyle\"                   ] )\n                       , (4, [\"Christopher\", \"Jennifer\"] )\n                       , (6, [\"Kareem\"                 ] ) ]\n",
+  "source": "A pairing session with Phil Battos at gSchool",
+  "source_url": null,
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "eparovyshnaya",
+    "ffflorian",
+    "iHiD",
+    "kytrinyx",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

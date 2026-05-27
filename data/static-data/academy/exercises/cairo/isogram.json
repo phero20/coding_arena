@@ -1,0 +1,26 @@
+{
+  "id": "cairo:isogram",
+  "trackSlug": "cairo",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "e4f31195-2143-4739-b4b6-b8413339bf0c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn is_isogram(phrase: ByteArray) -> bool {\n    panic!(\"implement `is_isogram`\")\n}\n",
+  "example_solution": "use core::dict::Felt252Dict;\n\npub fn is_isogram(phrase: ByteArray) -> bool {\n    let mut seen: Felt252Dict<bool> = Default::default();\n\n    let mut success = true;\n    let mut i = 0;\n    while i < phrase.len() {\n        let chr = lowercase(phrase[i]);\n        if seen.get(chr.into()) {\n            success = false;\n            break;\n        }\n\n        if chr >= 'a' && chr <= 'z' {\n            seen.insert(chr.into(), true);\n        }\n\n        i += 1;\n    }\n\n    success\n}\n\npub fn lowercase(chr: u8) -> u8 {\n    if chr >= 'A' && chr <= 'Z' {\n        chr + 32\n    } else {\n        chr\n    }\n}\n",
+  "test_code": "use isogram::is_isogram;\n\n#[test]\nfn empty_string() {\n    let phrase = \"\";\n    assert!(is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn isogram_with_only_lower_case_characters() {\n    let phrase = \"isogram\";\n    assert!(is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn word_with_one_duplicated_character() {\n    let phrase = \"eleven\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn word_with_one_duplicated_character_from_the_end_of_the_alphabet() {\n    let phrase = \"zzyzx\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn longest_reported_english_isogram() {\n    let phrase = \"subdermatoglyphic\";\n    assert!(is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn word_with_duplicated_character_in_mixed_case() {\n    let phrase = \"Alphabet\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn word_with_duplicated_character_in_mixed_case_lowercase_first() {\n    let phrase = \"alphAbet\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn hypothetical_isogrammic_word_with_hyphen() {\n    let phrase = \"thumbscrew-japingly\";\n    assert!(is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn hypothetical_word_with_duplicated_character_following_hyphen() {\n    let phrase = \"thumbscrew-jappingly\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn isogram_with_duplicated_hyphen() {\n    let phrase = \"six-year-old\";\n    assert!(is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn made_up_name_that_is_an_isogram() {\n    let phrase = \"Emily Jung Schwartzkopf\";\n    assert!(is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn duplicated_character_in_the_middle() {\n    let phrase = \"accentor\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn same_first_and_last_characters() {\n    let phrase = \"angola\";\n    assert!(!is_isogram(phrase));\n}\n\n#[test]\n#[ignore]\nfn word_with_duplicated_character_and_with_two_hyphens() {\n    let phrase = \"up-to-date\";\n    assert!(!is_isogram(phrase));\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

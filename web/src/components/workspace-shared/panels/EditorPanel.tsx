@@ -94,7 +94,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
     data: tests,
     isLoading,
     error,
-  } = useProblemTestsQuery(problem.problem_id, "PUBLIC");
+  } = useProblemTestsQuery(problem.problem_id, "PUBLIC", mode !== "exercise");
   const publicTests = Array.isArray(tests) ? (tests[0] ?? null) : tests;
 
   const preferences = useEditorStore((state) => state.preferences);

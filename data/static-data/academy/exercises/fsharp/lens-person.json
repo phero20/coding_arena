@@ -1,0 +1,34 @@
+{
+  "id": "fsharp:lens-person",
+  "trackSlug": "fsharp",
+  "slug": "lens-person",
+  "name": "Lens Person",
+  "uuid": "443fdb8c-1a97-4086-be6a-b541faa961a5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Use lenses to update nested records (specific to languages with immutable data).",
+  "difficulty": 9,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nUse lenses to update nested records (specific to languages with immutable data).\n\nUpdating fields of nested, immutable records is kind of annoying.\nThe code for such cases is as cumbersome as the structure is deep.\nIf you have, say, a Person, that contains an Address, which has a Street, that has a Number, updating the Number requires creating a new Street with the new Number, then a new Address with the new Street and, finally, a new Person with the new Address.\nConfused already?\n\nOne solution to this problem is to use [lenses][lenses].\n\nImplement several record accessing functions using lenses.\nThe test suite also allows you to avoid lenses altogether so you can experiment with different approaches.\n\n[lenses]: https://en.wikibooks.org/wiki/Haskell/Lenses_and_functional_references\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module LensPerson\n\n// TODO: implement this module",
+  "example_solution": "module LensPerson\n\nopen Aether\nopen Aether.Operators\nopen System\n\ntype Address = \n    { street: string\n      houseNumber: int\n      place: string\n      country: string }\n\n    static member street_ =\n        (fun a -> a.street), (fun b a -> { a with street = b })\n\ntype Born = \n    { at: Address\n      on: DateTime }\n\n    static member at_ =\n        (fun a -> a.at), (fun b a -> { a with at = b })\n\n    static member on_ =\n        (fun a -> a.on), (fun b a -> { a with on = b })\n\n    static member birthMonth_ =\n        (fun a -> a.on.Month), (fun b a -> { a with on = DateTime(a.on.Year, b, a.on.Day) })\n\ntype Name = \n    { name: string\n      surName: string }\n\ntype Person = \n    { name: Name\n      born: Born\n      address: Address }\n\n    static member born_ =\n        (fun a -> a.born), (fun b a -> { a with born = b })\n\n    static member address_ =\n        (fun a -> a.address), (fun b a -> { a with address = b })\n        \nlet bornAtStreet = Person.born_ >-> Born.at_ >-> Address.street_\n\nlet bornOn = Person.born_ >-> Born.on_\n        \nlet currentStreet = Person.address_ >-> Address.street_\n\nlet birthMonth = Person.born_ >-> Born.birthMonth_",
+  "test_code": "// This file was created manually and its version is 1.0.0.\n\nmodule LensPersonTest\n\nopen System\nopen Xunit\nopen FsUnit.Xunit\nopen Aether\nopen Aether.Operators\nopen LensPerson\n\nlet testPerson =\n    { name = \n        { name = \"Jane Joanna\"\n          surName = \"Doe\" }\n      born = \n        { at = \n            { street = \"Longway\"\n              houseNumber = 1024\n              place = \"Springfield\"\n              country = \"United States\" }\n          on = DateTime(1984, 4, 12) }\n      address = \n        { street = \"Shortlane\"\n          houseNumber = 2\n          place = \"Fallmeadow\"\n          country = \"Canada\" } }\n\n[<Fact>]\nlet ``Set born at street`` () =\n    Optic.get bornAtStreet testPerson |> should equal \"Longway\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Set current street`` () =\n    Optic.set currentStreet \"Middleroad\" testPerson |> Optic.get currentStreet |> should equal \"Middleroad\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Upper case born at street`` () =\n    Optic.map bornAtStreet (fun x -> x.ToUpper()) testPerson |> Optic.get bornAtStreet |> should equal \"LONGWAY\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Set birth month`` () =\n    Optic.set birthMonth 9 testPerson |> Optic.get bornOn |> should equal <| DateTime(1984, 9, 12)",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

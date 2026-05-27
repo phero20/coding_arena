@@ -1,0 +1,32 @@
+{
+  "id": "awk:simple-report",
+  "trackSlug": "awk",
+  "slug": "simple-report",
+  "name": "Simple Report",
+  "uuid": "76968bde-3bca-4cfe-b280-2d0b0db3df12",
+  "type": "concept",
+  "status": null,
+  "blurb": "Generate a simple report from an input CSV file.",
+  "difficulty": null,
+  "concepts": [
+    "nums-strs"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "fundamentals"
+  ],
+  "instructions": "# Instructions\n\nYou are helping a friend generate a report from readings he has taken in different corners of his garden.\nUnfortunately, your friend has stored the data in a strange format.\nEach reading is a set of comma separated fields.\nHowever, he has stored two-digit numbers across two columns.\n\n| field number | meaning |\n| --- | --- |\n| 1 | ID number |\n| 2 | location |\n| 3 | first reading, tens value |\n| 4 | first reading, ones value |\n| 5 | second reading, tens value |\n| 6 | second reading, ones value |\n\nFor an input row like `101,house,4,2,5,4`\n- the first reading is `42`,\n- the second reading is `54`.\n\n## Task 1: Generate the report\n\nYour task is find the average of the two readings and output the results of each row in the following format\n\n```none\n#<id>, <label> = <average>\n```\n\nSince the average of 42 and 54 is 48, the output for the sample row should be:\n\n```none\n#101, house = 48\n```\n",
+  "introduction": "# Introduction\n\n## Numbers and Strings\n\nAWK is a very small language and only has a few basic data types.\nIn this lession we'll go over numbers and strings.\n\n### Numbers\n\nNumbers in AWK are implemented as double-precision floating point numbers.\nThere is no distinction between integers, floats and doubles.\n\nAWK understands octal number constants (starting with `0`) and hexadecimal number constants (starting with `0x` or `0X`).\n\n#### Numeric operations\n\nYou can use the standard arithmetic operators `+`, `-`, `*`, `/`, `%`.\nThe exponentiation operator is `^`.\nThere are some builtin numeric functions, including trigonometric functions, random number generation, and `int(x)` to truncate a number to the nearest integer between _x_ and zero.\n\n### Strings\n\nAWK strings are sequences of characters.\nSpecify a string constant using double quotes.\n\n#### String operations\n\nThere is only one string operation: concatenation.\nConcatenation does not have a special operator;\nsimply placing two strings next to each other concatenates them:\n\n```awk\nBEGIN {\n    hw = \"Hello\" \"World\"\n    print hw\n}\n# => HelloWorld\n```\n\n~~~~exercism/note\n`print` is a **statement** not a function.\n`print` does not require parentheses.\n~~~~\n\nAWK has a wealth of string manipulation functions.\nWe will be introduced to them in depth as we proceed through the track.\n\n### Converting between numbers and strings\n\nThere are no explicit operators to convert between numbers and strings.\nAWK will do this implicitly based on the context of the program.\nThis makes working with input field values very simple: AWK generally just does what you want it to do.\n\n* `print x + y` will convert the values of the `x` and `y` variables to numbers thanks to the `+` numeric operation.\n* `print x y` will convert the values of the `x` and `y` variables to strings thanks to the concatenation operation.\n\nIf you want to be explicit about it, `0 + x` gives the number representation of _x_ and `\"\" x` gives the string representation of _x_.\n\n#### From strings to numbers\n\nThe manner that AWK converts a string to a number can be confusing.\nA simple way to think of it is that AWK reads \"number characters\" from the start of a string until it finds a \"non-number\" character.\nSome examples are:\n\n* `\"2.5\"` converts to the number `2.5`;\n* `\"1e3\"` converts to the number `1000` (scientific notation);\n* `\"456abc\"` converts to the number `456` (because `a` is not a \"numeral\", conversion stops there).\n* `\"abc789\"` converts to the number `0` (there are no numbers at the **start** of the string).\n",
+  "hints": "# Hints\n\n## Task 1: Generate the report\n\n- Use string contatenation to join the number fields.\n- Use arithmetic to calculate the average.\n- Use the `print` statement and string contatenation to generate the output line.\n",
+  "starter_code": "BEGIN {\n    # define the field separator\n}\n\n{\n    # generate and print the output for each record\n}\n",
+  "example_solution": "BEGIN {\n    FS = \",\"\n}\n\n{ \n    n1 = $3 $4\n    n2 = $5 $6\n    avg = (n1 + n2) / 2\n    print \"#\" $1 \", \" $2 \" = \" avg\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n@test \"Generate the report\" {\n    ## task 1\n    run gawk -f simple-report.awk input.csv\n\n    assert_success\n    assert_line --index 0 \"#1, north = 85\"\n    assert_line --index 1 \"#2, east = 66\"\n    assert_line --index 2 \"#3, south = 98\"\n    assert_line --index 3 \"#4, west = 54\"\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "IsaacG"
+  ]
+}

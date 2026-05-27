@@ -1,0 +1,26 @@
+{
+  "id": "powershell:pangram",
+  "trackSlug": "powershell",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "2673f9af-29a9-48b5-96f3-30588a402cd2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "Function Invoke-Panagram() {\n    <#\n    .SYNOPSIS\n    Determine if a sentence is a pangram.\n    \n    .DESCRIPTION\n    A pangram is a sentence using every letter of the alphabet at least once.\n    \n    .PARAMETER Sentence\n    The sentence to check\n    \n    .EXAMPLE\n    Invoke-Panagram -Sentence \"The quick brown fox jumps over the lazy dog\"\n    \n    Returns: $true\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Sentence\n    )\n\n    Throw \"Please implement this function\"\n}\n",
+  "example_solution": "Function Invoke-Panagram() {\n    <#\n    .SYNOPSIS\n    Determine if a sentence is a pangram.\n    \n    .DESCRIPTION\n    A pangram is a sentence using every letter of the alphabet at least once.\n    \n    .PARAMETER Sentence\n    The sentence to check\n    \n    .EXAMPLE\n    Invoke-Panagram -Sentence \"The quick brown fox jumps over the lazy dog\"\n    \n    Returns: $true\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Sentence\n    )\n\n    $Sentence = $Sentence.ToLower()\n\n    $FoundLetters = @()\n    $Letters = $Sentence.ToCharArray()\n    foreach ($item in $Letters) {\n        if ($FoundLetters -notcontains $item -and $item -match \"[a-z]\") {\n            $FoundLetters += $item\n        }\n    }\n\n    if ($FoundLetters.Count -eq 26) {\n        return $true\n    }\n    return $false\n}\n",
+  "test_code": "BeforeAll {\n    . \".\\Pangram.ps1\"\n}\n\nDescribe \"PangramTests\" {\n\tIt \"empty sentence\" {\n        $got = Invoke-Panagram -Sentence \"\"\n\n        $got | Should -BeFalse\n\t}\n\n    It \"perfect lower case\" {\n        $got = Invoke-Panagram -Sentence \"abcdefghijklmnopqrstuvwxyz\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"only lower case\" {\n        $got = Invoke-Panagram -Sentence \"the quick brown fox jumps over the lazy dog\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"missing the letter 'x'\" {\n        $got = Invoke-Panagram -Sentence \"a quick movement of the enemy will jeopardize five gunboats\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"missing the letter 'h'\" {\n        $got = Invoke-Panagram -Sentence \"five boxing wizards jump quickly at it\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"with underscores\" {\n        $got = Invoke-Panagram -Sentence \"the_quick_brown_fox_jumps_over_the_lazy_dog\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"with numbers\" {\n        $got = Invoke-Panagram -Sentence \"the 1 quick brown fox jumps over the 2 lazy dogs\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"missing letters replaced by numbers\" {\n        $got = Invoke-Panagram -Sentence \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"mixed case and punctuation\" {\n        $got = Invoke-Panagram -Sentence \"`\"Five quacking Zephyrs jolt my wax bed.`\"\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"a-m and A-M are 26 different characters but not a pangram\" {\n        $got = Invoke-Panagram -Sentence \"abcdefghijklm ABCDEFGHIJKLM\"\n\n        $got | Should -BeFalse\n    }\n}",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "meatball133"
+  ],
+  "contributors": null
+}

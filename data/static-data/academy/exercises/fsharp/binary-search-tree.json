@@ -1,0 +1,43 @@
+{
+  "id": "fsharp:binary-search-tree",
+  "trackSlug": "fsharp",
+  "slug": "binary-search-tree",
+  "name": "Binary Search Tree",
+  "uuid": "4e786e56-2658-445f-ac91-64dd9c38dbb3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Insert and search for numbers in a binary tree.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "constructors",
+    "members"
+  ],
+  "prerequisites": [
+    "classes",
+    "constructors",
+    "members",
+    "numbers",
+    "options",
+    "records"
+  ],
+  "instructions": "# Instructions\n\nInsert and search for numbers in a binary tree.\n\nWhen we need to represent sorted data, an array does not make a good data structure.\n\nSay we have the array `[1, 3, 4, 5]`, and we add 2 to it so it becomes `[1, 3, 4, 5, 2]`.\nNow we must sort the entire array again!\nWe can improve on this by realizing that we only need to make space for the new item `[1, nil, 3, 4, 5]`, and then adding the item in the space we added.\nBut this still requires us to shift many elements down by one.\n\nBinary Search Trees, however, can operate on sorted data much more efficiently.\n\nA binary search tree consists of a series of connected nodes.\nEach node contains a piece of data (e.g. the number 3), a variable named `left`, and a variable named `right`.\nThe `left` and `right` variables point at `nil`, or other nodes.\nSince these other nodes in turn have other nodes beneath them, we say that the left and right variables are pointing at subtrees.\nAll data in the left subtree is less than or equal to the current node's data, and all data in the right subtree is greater than the current node's data.\n\nFor example, if we had a node containing the data 4, and we added the data 2, our tree would look like this:\n\n![A graph with root node 4 and a single child node 2.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2.svg)\n\n```text\n      4\n     /\n    2\n```\n\nIf we then added 6, it would look like this:\n\n![A graph with root node 4 and two child nodes 2 and 6.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2-6.svg)\n\n```text\n      4\n     / \\\n    2   6\n```\n\nIf we then added 3, it would look like this\n\n![A graph with root node 4, two child nodes 2 and 6, and a grandchild node 3.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2-6-3.svg)\n\n```text\n       4\n     /   \\\n    2     6\n     \\\n      3\n```\n\nAnd if we then added 1, 5, and 7, it would look like this\n\n![A graph with root node 4, two child nodes 2 and 6, and four grandchild nodes 1, 3, 5 and 7.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2-6-1-3-5-7.svg)\n\n```text\n          4\n        /   \\\n       /     \\\n      2       6\n     / \\     / \\\n    1   3   5   7\n```\n\n## Credit\n\nThe images were created by [habere-et-dispertire][habere-et-dispertire] using [PGF/TikZ][pgf-tikz] by Till Tantau.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[pgf-tikz]: https://en.wikipedia.org/wiki/PGF/TikZ\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module BinarySearchTree\n\nlet left node  = failwith \"You need to implement this function.\"\n\nlet right node = failwith \"You need to implement this function.\"\n\nlet data node = failwith \"You need to implement this function.\"\n\nlet create items = failwith \"You need to implement this function.\"\n\nlet sortedData node = failwith \"You need to implement this function.\"",
+  "example_solution": "module BinarySearchTree\n\ntype Node = { left: Node option; value: int; right: Node option }\n\nlet left node  = node.left\nlet right node = node.right\nlet data node = node.value\n\nlet private singleton value = { left = None; right = None; value = value }\n\nlet rec private insert newValue (tree: Node) =\n    let loop newValue = \n        function\n        | Some x -> Some <| insert newValue x\n        | None   -> Some <| singleton newValue\n\n    match newValue with\n    | x when x <= tree.value -> \n        { tree with left  = loop newValue tree.left }\n    | _ -> \n        { tree with right = loop newValue tree.right }\n\nlet sortedData tree = \n    let rec loop = \n        function\n        | Some node -> loop node.left @ [node.value] @ loop node.right\n        | None -> []\n\n    loop <| Some tree\n\nlet create = \n    function\n    | []    -> failwith \"Cannot create tree from empty list.\"\n    | x::xs -> List.fold (fun acc elem -> insert elem acc) (singleton x) xs\n",
+  "test_code": "module BinarySearchTreeTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen BinarySearchTree\n\n[<Fact>]\nlet ``Data is retained`` () =\n    let treeData = create [4]\n    treeData |> data |> should equal 4\n    treeData |> left |> should equal None\n    treeData |> right |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Smaller number at left node`` () =\n    let treeData = create [4; 2]\n    treeData |> data |> should equal 4\n    treeData |> left |> Option.map data |> should equal (Some 2)\n    treeData |> left |> Option.bind left |> should equal None\n    treeData |> left |> Option.bind right |> should equal None\n    treeData |> right |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Same number at left node`` () =\n    let treeData = create [4; 4]\n    treeData |> data |> should equal 4\n    treeData |> left |> Option.map data |> should equal (Some 4)\n    treeData |> left |> Option.bind left |> should equal None\n    treeData |> left |> Option.bind right |> should equal None\n    treeData |> right |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Greater number at right node`` () =\n    let treeData = create [4; 5]\n    treeData |> data |> should equal 4\n    treeData |> left |> should equal None\n    treeData |> right |> Option.map data |> should equal (Some 5)\n    treeData |> right |> Option.bind left |> should equal None\n    treeData |> right |> Option.bind right |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can create complex tree`` () =\n    let treeData = create [4; 2; 6; 1; 3; 5; 7]\n    treeData |> data |> should equal 4\n    treeData |> left |> Option.map data |> should equal (Some 2)\n    treeData |> left |> Option.bind left |> Option.map data |> should equal (Some 1)\n    treeData |> left |> Option.bind left |> Option.bind left |> should equal None\n    treeData |> left |> Option.bind left |> Option.bind right |> should equal None\n    treeData |> left |> Option.bind right |> Option.map data |> should equal (Some 3)\n    treeData |> left |> Option.bind right |> Option.bind left |> should equal None\n    treeData |> left |> Option.bind right |> Option.bind right |> should equal None\n    treeData |> right |> Option.map data |> should equal (Some 6)\n    treeData |> right |> Option.bind left |> Option.map data |> should equal (Some 5)\n    treeData |> right |> Option.bind left |> Option.bind left |> should equal None\n    treeData |> right |> Option.bind left |> Option.bind right |> should equal None\n    treeData |> right |> Option.bind right |> Option.map data |> should equal (Some 7)\n    treeData |> right |> Option.bind right |> Option.bind left |> should equal None\n    treeData |> right |> Option.bind right |> Option.bind right |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can sort single number`` () =\n    let treeData = create [2]\n    sortedData treeData |> should equal [2]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can sort if second number is smaller than first`` () =\n    let treeData = create [2; 1]\n    sortedData treeData |> should equal [1; 2]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can sort if second number is same as first`` () =\n    let treeData = create [2; 2]\n    sortedData treeData |> should equal [2; 2]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can sort if second number is greater than first`` () =\n    let treeData = create [2; 3]\n    sortedData treeData |> should equal [2; 3]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can sort complex tree`` () =\n    let treeData = create [2; 1; 3; 6; 7; 5]\n    sortedData treeData |> should equal [1; 2; 3; 5; 6; 7]\n\n",
+  "source": "Josh Cheek",
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "theprash",
+    "valentin-p",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "wren:grains",
+  "trackSlug": "wren",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "945040c2-e0bd-4b25-87f7-33cd153c240f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "class Grains {\n  static square(num) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n\n  static total {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "// export const square = (num) => {\n//   if (num < 1 || num > 64) {\n//     throw new Error('square must be between 1 and 64');\n//   }\n//   return BigInt(2) ** BigInt(num - 1);\n// };\n\n// export const total = () => {\n//   let result = BigInt(0);\n\n//   for (let squareNum = 1; squareNum <= 64; squareNum++) {\n//     result += square(squareNum);\n//   }\n\n//   return result;\n// };\n\nvar SQUARES = (1..64)\n\nclass Grains {\n  static square(n) {\n    if (!SQUARES.contains(n)) Fiber.abort(\"square must be between 1 and 64\")\n    return 2.pow(n-1)\n  }\n  static total {\n    return SQUARES.reduce(0) { |sum,n| sum + square(n) }\n  }\n}",
+  "test_code": "import \"./grains\" for Grains\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"Grains\") { |do, skip|\n  do.describe(\"returns the number of grains on the square\") {\n    do.test(\"grains on square 1\") {\n      Expect.value(Grains.square(1)).toEqual(1)\n    }\n\n    skip.test(\"grains on square 2\") {\n      Expect.value(Grains.square(2)).toEqual(2)\n    }\n\n    skip.test(\"grains on square 3\") {\n      Expect.value(Grains.square(3)).toEqual(4)\n    }\n\n    skip.test(\"grains on square 4\") {\n      Expect.value(Grains.square(4)).toEqual(8)\n    }\n\n    skip.test(\"grains on square 16\") {\n      Expect.value(Grains.square(16)).toEqual(32768)\n    }\n\n    skip.test(\"grains on square 32\") {\n      Expect.value(Grains.square(32)).toEqual(2147483648)\n    }\n\n    skip.test(\"grains on square 64\") {\n      Expect.value(Grains.square(64)).toEqual(9223372036854775808)\n    }\n\n    skip.test(\"square 0 raises an exception\") {\n      Expect.that {\n        Grains.square(0)\n      }.abortsWith(\"square must be between 1 and 64\")\n    }\n\n    skip.test(\"negative square raises an exception\") {\n      Expect.that {\n        Grains.square(-1)\n      }.abortsWith(\"square must be between 1 and 64\")\n    }\n\n    skip.test(\"square greater than 64 raises an exception\") {\n      Expect.that {\n        Grains.square(65)\n      }.abortsWith(\"square must be between 1 and 64\")\n    }\n  }\n\n  skip.test(\"returns the total number of grains on the board\") {\n    Expect.value(Grains.total).toEqual(18446744073709551615)\n  }\n}\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

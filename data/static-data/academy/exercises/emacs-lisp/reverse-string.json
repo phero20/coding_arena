@@ -1,0 +1,28 @@
+{
+  "id": "emacs-lisp:reverse-string",
+  "trackSlug": "emacs-lisp",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "59c6319b-2799-4e4c-bef1-e28626878446",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": ";;; reverse-string.el --- Reverse String (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun reverse-string (value)\n  (error\n   \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'reverse-string)\n;;; reverse-string.el ends here\n",
+  "example_solution": ";;; reverse-string.el --- Reverse String (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(require 'cl-lib)\n(require 'ucs-normalize)\n\n(defun combining-mark-p (char)\n  (let ((category (get-char-code-property char 'general-category)))\n    (or (string= category \"Mn\")  ; Nonspacing_Mark\n        (string= category \"Mc\")  ; Spacing_Mark\n        (string= category \"Me\")))) ; Enclosing_Mark\n\n(defun split-grapheme-clusters (str)\n  (let ((clusters '())\n        (i 0)\n        (len (length str)))\n    (while (< i len)\n      (let ((start i))\n        (setq i (1+ i))\n        (while (and (< i len)\n                    (combining-mark-p (aref str i)))\n          (setq i (1+ i)))\n        (push (substring str start i) clusters)))\n    (nreverse clusters)))\n\n(defun reverse-string (value)\n  (let* ((decomposed (ucs-normalize-NFD-string value))\n         (clusters (split-grapheme-clusters decomposed)))\n    (apply #'concat (reverse clusters))))\n\n(provide 'reverse-string)\n;;; reverse-string.el ends here\n",
+  "test_code": ";;; reverse-string-test.el --- Reverse String (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(load-file \"reverse-string.el\")\n(declare-function reverse-string \"reverse-string.el\" (value))\n\n\n(ert-deftest an-empty-string ()\n  (should (string= (reverse-string \"\") \"\")))\n\n\n(ert-deftest a-word ()\n  (should (string= (reverse-string \"robot\") \"tobor\")))\n\n\n(ert-deftest a-capitalized-word ()\n  (should (string= (reverse-string \"Ramen\") \"nemaR\")))\n\n\n(ert-deftest a-sentence-with-punctuation ()\n  (should (string= (reverse-string \"I'm hungry!\") \"!yrgnuh m'I\")))\n\n\n(ert-deftest a-palindrome ()\n  (should (string= (reverse-string \"racecar\") \"racecar\")))\n\n\n(ert-deftest an-even-sized-word ()\n  (should (string= (reverse-string \"drawer\") \"reward\")))\n\n(ert-deftest wide-characters ()\n  (should (string= (reverse-string \"子猫\") \"猫子\")))\n\n(ert-deftest grapheme-cluster-with-pre-combined-form ()\n  (should (string= (reverse-string \"Würstchenstand\") \"dnatsnehctsrüW\")))\n\n(ert-deftest grapheme-cluster ()\n  (should (string= (reverse-string \"ผู้เขียนโปรแกรม\") \"มรกแรปโนยขีเผู้\")))\n\n\n(provide 'reverse-string-test)\n;;; reverse-string-test.el ends here\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "fapdash"
+  ],
+  "contributors": [
+    "kmarker1101"
+  ]
+}

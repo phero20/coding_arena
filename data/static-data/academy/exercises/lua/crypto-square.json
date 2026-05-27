@@ -1,0 +1,28 @@
+{
+  "id": "lua:crypto-square",
+  "trackSlug": "lua",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "07f03e4f-be9a-411f-9501-efa610b16f7b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return {\n  ciphertext = function(plaintext)\n  end\n}\n",
+  "example_solution": "local function normalized_plaintext(plaintext)\n  return plaintext:lower():gsub('%p*%s*', '')\nend\n\nlocal function size(plaintext)\n  return math.ceil(math.sqrt(#normalized_plaintext(plaintext)))\nend\n\nlocal function segments(plaintext)\n  local normalized_plaintext = normalized_plaintext(plaintext)\n  local segment_size = size(plaintext)\n  local segments = {}\n\n  while #normalized_plaintext > 0 do\n    local segment = normalized_plaintext:sub(1, segment_size)\n    while #segment < segment_size do\n      segment = segment .. \" \"\n    end\n    table.insert(segments, segment)\n    normalized_plaintext = normalized_plaintext:sub(segment_size + 1)\n  end\n\n  return segments\nend\n\nlocal function normalized_ciphertext(plaintext)\n  local segments = segments(plaintext)\n  local enciphered = {}\n\n  for i = 1, size(plaintext) do\n    local normalized_ciphertext = ''\n    for _, segment in ipairs(segments) do\n      normalized_ciphertext = normalized_ciphertext .. segment:sub(i, i)\n    end\n    table.insert(enciphered, normalized_ciphertext)\n  end\n\n  return table.concat(enciphered, ' ')\nend\n\nreturn {\n  ciphertext = function(plaintext)\n    return normalized_ciphertext(plaintext)\n  end\n}\n",
+  "test_code": "local crypto_square = require('crypto-square')\n\ndescribe('crypto-square', function()\n  it('empty plaintext results in an empty ciphertext', function()\n    assert.are.equal('', crypto_square.ciphertext(''))\n  end)\n\n  it('normalization results in empty plaintext', function()\n    assert.are.equal('', crypto_square.ciphertext('... --- ...'))\n  end)\n\n  it('Lowercase', function()\n    assert.are.equal('a', crypto_square.ciphertext('A'))\n  end)\n\n  it('Remove spaces', function()\n    assert.are.equal('b', crypto_square.ciphertext('  b '))\n  end)\n\n  it('Remove punctuation', function()\n    assert.are.equal('1', crypto_square.ciphertext('@1,%!'))\n  end)\n\n  it('9 character plaintext results in 3 chunks of 3 characters', function()\n    assert.are.equal('tsf hiu isn', crypto_square.ciphertext('This is fun!'))\n  end)\n\n  it('8 character plaintext results in 3 chunks, the last one with a trailing space', function()\n    assert.are.equal('clu hlt io ', crypto_square.ciphertext('Chill out.'))\n  end)\n\n  it('54 character plaintext results in 8 chunks, the last two with trailing spaces', function()\n    assert.are.equal('imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau ',\n                     crypto_square.ciphertext('If man was meant to stay on the ground, god would have given us roots.'))\n  end)\nend)\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

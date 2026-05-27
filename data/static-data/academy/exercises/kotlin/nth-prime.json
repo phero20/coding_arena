@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:nth-prime",
+  "trackSlug": "kotlin",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "6e2bbe8d-b6ab-4675-9c31-5b437cefd0c4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object Prime {\n\n    fun nth(n: Int): Int {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "import java.math.BigInteger\n\nobject Prime {\n\n    fun nth(n: Int): Int {\n        require(n > 0) { \"There is no zeroth prime.\" }\n\n        return primes().drop(n - 1).first().toInt()\n    }\n\n    private fun primes(): Sequence<BigInteger> = generateSequence(BigInteger.valueOf(2)) { previous ->\n        previous.nextProbablePrime()\n    }\n\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport org.junit.Rule\nimport org.junit.rules.ExpectedException\nimport kotlin.test.assertEquals\n\nclass PrimeTest {\n\n    @Rule\n    @JvmField\n    var expectedException: ExpectedException = ExpectedException.none()\n\n    @Test\n    fun firstPrime() {\n        assertEquals(2, Prime.nth(1))\n    }\n\n    @Ignore\n    @Test\n    fun secondPrime() {\n        assertEquals(3, Prime.nth(2))\n    }\n\n    @Ignore\n    @Test\n    fun sixthPrime() {\n        assertEquals(13, Prime.nth(6))\n    }\n\n    @Ignore\n    @Test\n    fun bigPrime() {\n        assertEquals(104743, Prime.nth(10001))\n    }\n\n    @Ignore\n    @Test\n    fun undefinedPrime() {\n        expectedException.expect(IllegalArgumentException::class.java)\n        expectedException.expectMessage(\"There is no zeroth prime.\")\n\n        Prime.nth(0)\n    }\n\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "kytrinyx",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:high-scores",
+  "trackSlug": "vimscript",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "a0013679-117c-4ee4-852d-9b287adf7075",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "function! HighScores(scores) abort\n  \" your implementation goes here\nendfunction\n",
+  "example_solution": "function! HighScores(scores) abort\n  return {'scores': a:scores,\n    \\ 'Scores': function('Scores'),\n    \\ 'Latest': function('Latest'),\n    \\ 'PersonalBest': function('PersonalBest'),\n    \\ 'PersonalTopThree': function('PersonalTopThree')}\nendfunction\n\nfunction! Scores() dict\n  return self.scores\nendfunction\n\nfunction! Latest() dict\n  let l:last = len(self.scores) - 1\n  return self.scores[l:last]\nendfunction\n\nfunction! PersonalBest() dict\n  let l:max = self.scores[0]\n  for l:score in self.scores\n    if l:score > l:max\n      let l:max = l:score\n    endif\n  endfor\n\n  return l:max\nendfunction\n\nfunction! PersonalTopThree() dict\n  let l:descending = reverse(sort(copy(self.scores), 'n'))\n  if len(l:descending) >= 3\n    let l:descending = l:descending[0:2]\n  endif\n\n  return l:descending\nendfunction\n",
+  "test_code": "\nExecute (List of scores):\n  let g:scores = [30, 50, 20, 70]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = [30, 50, 20, 70]\n  AssertEqual g:expected, highScores.Scores()\n\nExecute (Latest score):\n  let g:scores = [100, 0, 90, 30]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = 30\n  AssertEqual g:expected, highScores.Latest()\n\nExecute (Personal best):\n  let g:scores = [40, 100, 70]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = 100\n  AssertEqual g:expected, highScores.PersonalBest()\n\nExecute (Personal top three from a list of scores):\n  let g:scores = [10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = [100, 90, 70]\n  AssertEqual g:expected, highScores.PersonalTopThree()\n\nExecute (Personal top highest to lowest):\n  let g:scores = [20, 10, 30]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = [30, 20, 10]\n  AssertEqual g:expected, highScores.PersonalTopThree()\n\nExecute (Personal top when there is a tie):\n  let g:scores = [40, 20, 40, 30]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = [40, 40, 30]\n  AssertEqual g:expected, highScores.PersonalTopThree()\n\nExecute (Personal top when there are less than 3):\n  let g:scores = [30, 70]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = [70, 30]\n  AssertEqual g:expected, highScores.PersonalTopThree()\n\nExecute (Personal top when there is only one):\n  let g:scores = [40]\n  let g:highScores = HighScores(g:scores)\n  let g:expected = [40]\n  AssertEqual g:expected, highScores.PersonalTopThree()\n\nExecute (Latest score after personal top scores):\n  let g:scores = [70, 50, 20, 30]\n  let g:highScores = HighScores(g:scores)\n  call highScores.PersonalTopThree()\n  let g:expected = 30\n  AssertEqual g:expected, highScores.Latest()\n\nExecute (Scores after personal top scores):\n  let g:scores = [30, 50, 20, 70]\n  let g:highScores = HighScores(g:scores)\n  call highScores.PersonalTopThree()\n  let g:expected = [30, 50, 20, 70]\n  AssertEqual g:expected, highScores.Scores()\n\nExecute (Latest score after personal best):\n  let g:scores = [20, 70, 15, 25, 30]\n  let g:highScores = HighScores(g:scores)\n  call highScores.PersonalBest()\n  let g:expected = 30\n  AssertEqual g:expected, highScores.Latest()\n\nExecute (Scores after personal best):\n  let g:scores = [20, 70, 15, 25, 30]\n  let g:highScores = HighScores(g:scores)\n  call highScores.PersonalBest()\n  let g:expected = [20, 70, 15, 25, 30]\n  AssertEqual g:expected, highScores.Scores()\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,49 @@
+{
+  "id": "elixir:raindrops",
+  "trackSlug": "elixir",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "4522b139-6f0c-4172-a4fa-6a6adef33a9e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "enum"
+  ],
+  "prerequisites": [
+    "integers",
+    "multiple-clause-functions",
+    "guards",
+    "if",
+    "strings",
+    "maps",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "defmodule Raindrops do\n  @doc \"\"\"\n  Returns a string based on raindrop factors.\n\n  - If the number contains 3 as a prime factor, output 'Pling'.\n  - If the number contains 5 as a prime factor, output 'Plang'.\n  - If the number contains 7 as a prime factor, output 'Plong'.\n  - If the number does not contain 3, 5, or 7 as a prime factor,\n    just pass the number's digits straight through.\n  \"\"\"\n  @spec convert(pos_integer) :: String.t()\n  def convert(number) do\n  end\nend\n",
+  "example_solution": "defmodule Raindrops do\n  def convert(number),\n    do: output({[sound(number, 3), sound(number, 5), sound(number, 7)], number})\n\n  defp sound(n, 3) when rem(n, 3) == 0, do: \"Pling\"\n  defp sound(n, 5) when rem(n, 5) == 0, do: \"Plang\"\n  defp sound(n, 7) when rem(n, 7) == 0, do: \"Plong\"\n  defp sound(_, _), do: \"\"\n\n  defp output({[\"\", \"\", \"\"], number}), do: \"#{number}\"\n  defp output({sounds, _}), do: Enum.join(sounds)\nend\n",
+  "test_code": "defmodule RaindropsTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"1\" do\n    assert Raindrops.convert(1) == \"1\"\n  end\n\n  @tag :pending\n  test \"3\" do\n    assert Raindrops.convert(3) == \"Pling\"\n  end\n\n  @tag :pending\n  test \"5\" do\n    assert Raindrops.convert(5) == \"Plang\"\n  end\n\n  @tag :pending\n  test \"7\" do\n    assert Raindrops.convert(7) == \"Plong\"\n  end\n\n  @tag :pending\n  test \"6\" do\n    assert Raindrops.convert(6) == \"Pling\"\n  end\n\n  @tag :pending\n  test \"8\" do\n    assert Raindrops.convert(8) == \"8\"\n  end\n\n  @tag :pending\n  test \"9\" do\n    assert Raindrops.convert(9) == \"Pling\"\n  end\n\n  @tag :pending\n  test \"10\" do\n    assert Raindrops.convert(10) == \"Plang\"\n  end\n\n  @tag :pending\n  test \"14\" do\n    assert Raindrops.convert(14) == \"Plong\"\n  end\n\n  @tag :pending\n  test \"15\" do\n    assert Raindrops.convert(15) == \"PlingPlang\"\n  end\n\n  @tag :pending\n  test \"21\" do\n    assert Raindrops.convert(21) == \"PlingPlong\"\n  end\n\n  @tag :pending\n  test \"25\" do\n    assert Raindrops.convert(25) == \"Plang\"\n  end\n\n  @tag :pending\n  test \"35\" do\n    assert Raindrops.convert(35) == \"PlangPlong\"\n  end\n\n  @tag :pending\n  test \"49\" do\n    assert Raindrops.convert(49) == \"Plong\"\n  end\n\n  @tag :pending\n  test \"52\" do\n    assert Raindrops.convert(52) == \"52\"\n  end\n\n  @tag :pending\n  test \"105\" do\n    assert Raindrops.convert(105) == \"PlingPlangPlong\"\n  end\n\n  @tag :pending\n  test \"12121\" do\n    assert Raindrops.convert(12121) == \"12121\"\n  end\nend\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "jinyeow",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

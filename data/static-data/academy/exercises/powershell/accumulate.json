@@ -1,0 +1,29 @@
+{
+  "id": "powershell:accumulate",
+  "trackSlug": "powershell",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "6554629d-0fb9-442a-89b7-c39192b2562c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Function Get-Accumulation() {\n    <#\n    .SYNOPSIS\n    Accumulate a list of values based on the operation given.\n\n    .DESCRIPTION\n    Given the collection of numbers:\n\n    - 1, 2, 3, 4, 5\n\n    And the operation:\n\n    - square a number `$x = $x * $x`\n\n    Your code should be able to produce the collection of squares:\n\n    - 1, 4, 9, 16, 25\n\n    Check out the test suite to see the expected function signature.\n\n    .PARAMETER List\n    Collection of numbers to perform an operation on.\n\n    .PARAMETER Func\n    A scriptblock containing the operation to perform on the given $List\n\n    .EXAMPLE\n    Get-Accumulation -List 1,2,3,4,5 -Func { <some code here> }\n    #>\n    [CmdletBinding()]\n    Param(\n        [PSObject[]]$List,\n        [scriptblock]$Func\n    )\n\n    Throw \"Please implement this function\"\n}\n",
+  "example_solution": "Function Get-Accumulation() {\n    <#\n    .SYNOPSIS\n    Accumulate a list of values based on the operation given.\n\n    .DESCRIPTION\n    Given the collection of numbers:\n\n    - 1, 2, 3, 4, 5\n\n    And the operation:\n\n    - square a number `$x = $x * $x`\n\n    Your code should be able to produce the collection of squares:\n\n    - 1, 4, 9, 16, 25\n\n    Check out the test suite to see the expected function signature.\n\n    .PARAMETER List\n    Collection of numbers to perform an operation on.\n\n    .PARAMETER Func\n    A scriptblock containing the operation to perform on the given $List\n\n    .EXAMPLE\n    Get-Accumulation -List 1,2,3,4,5 -Func { <some code here> }\n    #>\n    Param(\n        [PSObject[]]$List,\n        [scriptblock]$Func\n    )\n    $result = @()\n\n    foreach ($value in $List) {\n        $result += Invoke-Command -Scriptblock $Func -ArgumentList $value\n    }\n\n    return $result\n\n}\n",
+  "test_code": "BeforeAll {\n    . \"./accumulate.ps1\"\n}\n\nDescribe 'Test Get-Accumulation.ps1' {\n    It \"accumulate empty\" {\n        $got = Get-Accumulation -List @() -Func { Param($numbers) $numbers * $numbers }\n        $want = @()\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"accumulate squares\" {\n        $got = Get-Accumulation -List @(1, 2, 3) -Func { Param($numbers) $numbers * $numbers }\n        $want = @(1, 4, 9)\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"accumulate upcases\" {\n        $got = Get-Accumulation -List @(\"Hello\", \"world\") -Func { Param($word) $word.ToUpper() }\n        $want = @(\"HELLO\", \"WORLD\")\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"accumulate reversed strings\" {\n        $got = Get-Accumulation -List @(\"the\", \"quick\", \"brown\", \"fox\", \"etc\") -Func { Param($word) $word[-1..-($word.Length)] -join \"\" }\n        $want = @(\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\")\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"accumulate recursively\" {\n        $got = Get-Accumulation -List @(\"a\", \"b\", \"c\") -Func { Param($letter) return @(\"1\", \"2\", \"3\") | ForEach-Object { Invoke-Command -Scriptblock {Param($number) $letter + $number } -ArgumentList $_ } } \n        $want = @(\"a1\", \"a2\", \"a3\", \"b1\", \"b2\", \"b3\", \"c1\", \"c2\", \"c3\")\n\n        $got | Should -BeExactly $want\n    }\n}\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "Kryo",
+    "meatball133"
+  ],
+  "contributors": [
+    "glennj"
+  ]
+}

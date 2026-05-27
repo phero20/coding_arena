@@ -1,0 +1,34 @@
+{
+  "id": "haskell:hexadecimal",
+  "trackSlug": "haskell",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "964c07aa-abca-49b8-8428-1b81ee39066d",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Hexadecimal (hexToInt) where\n\nhexToInt = error \"You need to implement this function.\"\n",
+  "example_solution": "module Hexadecimal (hexToInt) where\n\n{-# ANN digitToInt \"HLint: ignore Use isDigit\" #-}\ndigitToInt :: Char -> Maybe Int\ndigitToInt c\n  | c >= '0' && c <= '9' = Just $ n - fromEnum '0'\n  | c >= 'a' && c <= 'f' = Just $ n - fromEnum 'a' + 10\n  | c >= 'A' && c <= 'F' = Just $ n - fromEnum 'A' + 10\n  | otherwise            = Nothing\n  where n = fromEnum c\n\nhexToInt :: String -> Int\nhexToInt = go 0\n  where\n    go acc (c:cs) = case digitToInt c of\n      Just n -> (go $! acc * 16 + n) cs\n      _      -> 0\n    go acc [] = acc\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Hexadecimal (hexToInt)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"hexToInt\" $ for_ cases test\n  where\n\n    test (input, expected) = it description assertion\n      where\n        description = show input\n        assertion   = hexToInt input `shouldBe` expected\n\n    cases = [ (     \"1\",        1)\n            , (     \"c\",       12)\n            , (    \"10\",       16)\n            , (    \"af\",      175)\n            , (   \"100\",      256)\n            , (\"19ace\" ,   105166)\n            , (\"carrot\",        0)\n            , (\"000000\",        0)\n            , (\"ffffff\", 16777215)\n            , (\"ffff00\", 16776960) ]\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "kytrinyx",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

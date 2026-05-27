@@ -1,0 +1,40 @@
+{
+  "id": "ruby:robot-name",
+  "trackSlug": "ruby",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "76a0fd0a-cc65-4be3-acc8-7348bb67ad5a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Robot Name' exercise in this file. Make the tests in\n`robot_name_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/robot-name` directory.\n=end\n",
+  "example_solution": "class Robot\n  def self.forget\n    @@name_enumerator = [*'AA000'..'ZZ999'].shuffle.each\n  end\n\n  self.forget\n\n  attr_reader :name\n\n  def initialize\n    reset\n  end\n\n  def reset\n    @name = @@name_enumerator.next\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'robot_name'\n\nclass RobotTest < Minitest::Test\n  NAME_REGEXP = /^[A-Z]{2}\\d{3}$/\n\n  def setup\n    Robot.forget\n  end\n\n  def test_can_create_a_robot\n    skip\n    refute_nil Robot.new\n  end\n\n  def test_has_name\n    skip\n    assert_match NAME_REGEXP, Robot.new.name\n  end\n\n  def test_name_sticks\n    skip\n    robot = Robot.new\n    original_name = robot.name\n    assert_equal original_name, robot.name\n  end\n\n  def test_reset_changes_name\n    skip\n    robot = Robot.new\n    original_name = robot.name\n    robot.reset\n    refute_equal original_name, robot.name\n  end\n\n  def test_reset_before_name_called_does_not_cause_an_error\n    skip\n    robot = Robot.new\n    robot.reset\n    assert_match NAME_REGEXP, Robot.new.name\n  end\n\n  def test_reset_multiple_times\n    skip\n    robot = Robot.new\n    names = []\n    5.times do\n      robot.reset\n      names << robot.name\n    end\n    # This will probably be 5, but name uniqueness is only a requirement\n    # accross multiple robots and consecutive calls to reset.\n    assert names.uniq.size > 1\n  end\n\n  def test_different_robots_have_different_names\n    skip\n    refute_equal Robot.new.name, Robot.new.name\n  end\n\n  # This test assumes you're using Kernel.rand as a source of randomness\n  def test_different_name_when_chosen_name_is_taken\n    skip\n    same_seed = 1234\n    Kernel.srand same_seed\n    robot1 = Robot.new\n    name1  = robot1.name\n    Kernel.srand same_seed\n    robot2 = Robot.new\n    name2 = robot2.name\n    refute_equal name1, name2\n  end\n\n  def test_generate_all_robots\n    skip\n    all_names_count = 26 * 26 * 1000\n    time_limit = Time.now + 60 # seconds\n    seen_names = Hash.new(0)\n    robots = []\n    while seen_names.size < all_names_count && Time.now < time_limit\n      robot = Robot.new\n      seen_names[robot.name] += 1\n      robots << robot\n    end\n    timeout_message = \"Timed out trying to generate all possible robots\"\n    assert_equal all_names_count, robots.size, timeout_message\n    assert seen_names.values.all? { |count| count == 1 }, \"Some names used more than once\"\n    assert seen_names.keys.all? { |name| name.match(NAME_REGEXP) }, \"Not all names match #{NAME_REGEXP}\"\n  end\nend\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "callahat",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "StevenXL",
+    "tryantwit",
+    "vitoreiji"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "elixir:perfect-numbers",
+  "trackSlug": "elixir",
+  "slug": "perfect-numbers",
+  "name": "Perfect Numbers",
+  "uuid": "cf4816a5-8cee-4a85-8bbb-236c0676123c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "atoms",
+    "cond",
+    "pattern-matching"
+  ],
+  "prerequisites": [
+    "atoms",
+    "tuples",
+    "cond",
+    "case",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "guards",
+    "enum",
+    "recursion"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.\n\nThe Greek mathematician [Nicomachus][nicomachus] devised a classification scheme for positive integers, identifying each as belonging uniquely to the categories of [perfect](#perfect), [abundant](#abundant), or [deficient](#deficient) based on their [aliquot sum][aliquot-sum].\nThe _aliquot sum_ is defined as the sum of the factors of a number not including the number itself.\nFor example, the aliquot sum of `15` is `1 + 3 + 5 = 9`.\n\n## Perfect\n\nA number is perfect when it equals its aliquot sum.\nFor example:\n\n- `6` is a perfect number because `1 + 2 + 3 = 6`\n- `28` is a perfect number because `1 + 2 + 4 + 7 + 14 = 28`\n\n## Abundant\n\nA number is abundant when it is less than its aliquot sum.\nFor example:\n\n- `12` is an abundant number because `1 + 2 + 3 + 4 + 6 = 16`\n- `24` is an abundant number because `1 + 2 + 3 + 4 + 6 + 8 + 12 = 36`\n\n## Deficient\n\nA number is deficient when it is greater than its aliquot sum.\nFor example:\n\n- `8` is a deficient number because `1 + 2 + 4 = 7`\n- Prime numbers are deficient\n\n## Task\n\nImplement a way to determine whether a given number is [perfect](#perfect).\nDepending on your language track, you may also need to implement a way to determine whether a given number is [abundant](#abundant) or [deficient](#deficient).\n\n[nicomachus]: https://en.wikipedia.org/wiki/Nicomachus\n[aliquot-sum]: https://en.wikipedia.org/wiki/Aliquot_sum\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule PerfectNumbers do\n  @doc \"\"\"\n  Determine the aliquot sum of the given `number`, by summing all the factors\n  of `number`, aside from `number` itself.\n\n  Based on this sum, classify the number as:\n\n  :perfect if the aliquot sum is equal to `number`\n  :abundant if the aliquot sum is greater than `number`\n  :deficient if the aliquot sum is less than `number`\n  \"\"\"\n  @spec classify(number :: integer) :: {:ok, atom} | {:error, String.t()}\n  def classify(number) do\n  end\nend\n",
+  "example_solution": "defmodule PerfectNumbers do\n  @doc \"\"\"\n  Determine the aliquot sum of the given `number`, by summing all the factors\n  of `number`, aside from `number` itself.\n\n  Based on this sum, classify the number as:\n\n  :perfect if the aliquot sum is equal to `number`\n  :abundant if the aliquot sum is greater than `number`\n  :deficient if the aliquot sum is less than `number`\n  \"\"\"\n  @spec classify(number :: integer) :: {:ok, atom} | {:error, String.t()}\n  def classify(number) when number < 1,\n    do: {:error, \"Classification is only possible for natural numbers.\"}\n\n  def classify(number) do\n    {:ok, number |> aliquot_sum |> do_classify(number)}\n  end\n\n  defp do_classify(aliquot, aliquot), do: :perfect\n  defp do_classify(aliquot, number) when aliquot > number, do: :abundant\n  defp do_classify(_, _), do: :deficient\n\n  defp aliquot_sum(number) do\n    number\n    |> factors\n    |> Enum.reject(&(&1 == number))\n    |> Enum.sum()\n  end\n\n  defp factors(number), do: factors(number, div(number, 2))\n  defp factors(1, _), do: [1]\n  defp factors(_, 1), do: [1]\n  defp factors(number, i) when rem(number, i) == 0, do: [i | factors(number, i - 1)]\n  defp factors(number, i), do: factors(number, i - 1)\nend\n",
+  "test_code": "defmodule PerfectNumbersTest do\n  use ExUnit.Case\n\n  describe \"Perfect numbers\" do\n    # @tag :pending\n    test \"Smallest perfect number is classified correctly\" do\n      assert PerfectNumbers.classify(6) == {:ok, :perfect}\n    end\n\n    @tag :pending\n    test \"Medium perfect number is classified correctly\" do\n      assert PerfectNumbers.classify(28) == {:ok, :perfect}\n    end\n\n    @tag :pending\n    test \"Large perfect number is classified correctly\" do\n      assert PerfectNumbers.classify(33_550_336) == {:ok, :perfect}\n    end\n  end\n\n  describe \"Abundant numbers\" do\n    @tag :pending\n    test \"Smallest abundant number is classified correctly\" do\n      assert PerfectNumbers.classify(12) == {:ok, :abundant}\n    end\n\n    @tag :pending\n    test \"Medium abundant number is classified correctly\" do\n      assert PerfectNumbers.classify(30) == {:ok, :abundant}\n    end\n\n    @tag :pending\n    test \"Large abundant number is classified correctly\" do\n      assert PerfectNumbers.classify(33_550_335) == {:ok, :abundant}\n    end\n\n    @tag :pending\n    test \"Perfect square abundant number is classified correctly\" do\n      assert PerfectNumbers.classify(196) == {:ok, :abundant}\n    end\n  end\n\n  describe \"Deficient numbers\" do\n    @tag :pending\n    test \"Smallest prime deficient number is classified correctly\" do\n      assert PerfectNumbers.classify(2) == {:ok, :deficient}\n    end\n\n    @tag :pending\n    test \"Smallest non-prime deficient number is classified correctly\" do\n      assert PerfectNumbers.classify(4) == {:ok, :deficient}\n    end\n\n    @tag :pending\n    test \"Medium deficient number is classified correctly\" do\n      assert PerfectNumbers.classify(32) == {:ok, :deficient}\n    end\n\n    @tag :pending\n    test \"Large deficient number is classified correctly\" do\n      assert PerfectNumbers.classify(33_550_337) == {:ok, :deficient}\n    end\n\n    @tag :pending\n    test \"Edge case (no factors other than itself) is classified correctly\" do\n      assert PerfectNumbers.classify(1) == {:ok, :deficient}\n    end\n  end\n\n  describe \"Invalid inputs\" do\n    @tag :pending\n    test \"Zero is rejected (as it is not a positive integer)\" do\n      assert PerfectNumbers.classify(0) ==\n               {:error, \"Classification is only possible for natural numbers.\"}\n    end\n\n    @tag :pending\n    test \"Negative integer is rejected (as it is not a positive integer)\" do\n      assert PerfectNumbers.classify(-1) ==\n               {:error, \"Classification is only possible for natural numbers.\"}\n    end\n  end\nend\n",
+  "source": "Taken from Chapter 2 of Functional Thinking by Neal Ford.",
+  "source_url": "https://www.oreilly.com/library/view/functional-thinking/9781449365509/",
+  "authors": [
+    "DoggettCK"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "neenjaw",
+    "sotojuan"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "bash:acronym",
+  "trackSlug": "bash",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "601ec92f-8e98-499a-ae3d-66494f38139c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n#\n\nif [ \"$#\" -ne 1 ]; then\n  echo \"Usage: $0 '<phrase1>'\" >&2\n  exit 1\nfi\n\nphrase=$(echo \"$1\" | tr -s '*-' ' ')\nset -f -- $phrase\n\nshopt -s extglob\nfor word in \"$@\"; do\n    initial=\"$(echo \"${word##+(_)}\" | head -c 1 | tr '[:lower:]' '[:upper:]')\"\n    acronym+=$initial\ndone\necho \"$acronym\"\n\nexit 0\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.7.0.1\n\n@test 'basic' {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh 'Portable Network Graphics'\n  assert_success\n  assert_output 'PNG'\n}\n\n@test 'lowercase words' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh 'Ruby on Rails'\n  assert_success\n  assert_output 'ROR'\n}\n\n@test 'punctuation' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh 'First In, First Out'\n  assert_success\n  assert_output 'FIFO'\n}\n\n@test 'all caps word' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh 'GNU Image Manipulation Program'\n  assert_success\n  assert_output 'GIMP'\n}\n\n@test 'punctuation without whitespace' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh 'Complementary metal-oxide semiconductor'\n  assert_success\n  assert_output 'CMOS'\n}\n\n@test 'very long abbreviation' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh 'Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'\n  assert_success\n  assert_output 'ROTFLSHTMDCOALM'\n}\n\n@test \"consecutive delimiters\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh \"Something - I made up from thin air\"\n  assert_success\n  assert_output \"SIMUFTA\"\n}\n\n@test \"apostrophes\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh \"Halley's Comet\"\n  assert_success\n  assert_output \"HC\"\n}\n\n@test \"underscore emphasis\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh \"The Road __Not__ Taken\"\n  assert_success\n  assert_output \"TRNT\"\n}\n\n# bash-specific test: Focus the student's attention on the effects of \n# word splitting and filename expansion:\n# https://www.gnu.org/software/bash/manual/bash.html#Shell-Expansions\n\n@test \"contains shell globbing character\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash acronym.sh \"Two * Words\"\n  assert_success\n  assert_output \"TW\"\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "netserf"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "lemoncurry",
+    "sjwarner-bp",
+    "ZapAnton"
+  ]
+}

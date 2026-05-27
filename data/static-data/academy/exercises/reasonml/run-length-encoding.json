@@ -1,0 +1,30 @@
+{
+  "id": "reasonml:run-length-encoding",
+  "trackSlug": "reasonml",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "1c8245de-3ae2-4b59-83a9-d34c540f67f0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let encode = (_) => {\n  failwith(\"TODO: implement encode function\");\n};\n\nlet decode = (_) => {\n  failwith(\"TODO: implement decode function\");\n};",
+  "example_solution": "let isDigit = (ch: char) => {\n  let ord = Char.code(ch);\n  ord >= 48 && ord <= 57;\n};\n\nlet rec toInt = (s: string, ptr: int, acc: int) => {\n  if(ptr == String.length(s)) {\n    (ptr, acc)\n  } else {\n    if(!isDigit(s.[ptr])) {\n      (ptr, acc)\n    } else {\n      toInt(s, ptr + 1, 10 * acc + Char.code(s.[ptr]) - 48)\n    }\n  }\n};\n\nlet rec unfoldString = (startPtr: int, acc: string, consume, s: string): string => {\n  if(s == \"\" || startPtr == String.length(s)) {\n    acc;\n  } else {\n    let (nextPtr, nextChunk) = consume(s, startPtr);\n    unfoldString(nextPtr, acc ++ nextChunk, consume, s);\n  }\n};\n\nlet rec skipWhileUnchanged = (s: string, startPtr: int, ptr: int): int => {\n  if(ptr < String.length(s) && s.[ptr] == s.[startPtr]) {\n    skipWhileUnchanged(s, startPtr, ptr + 1)\n  } else {\n    ptr  \n  }\n};\n\nlet chunk = (plainText: string, startPtr: int) => {\n  let nextPtr = skipWhileUnchanged(plainText, startPtr, startPtr + 1);\n  let chunkLength = nextPtr - startPtr;\n  let chunkChar = plainText.[startPtr];\n  let chunked = if(chunkLength == 1) {\n    String.make(1, chunkChar)\n  } else {\n    string_of_int(chunkLength) ++ String.make(1, chunkChar)\n  };\n  (nextPtr, chunked);\n};\n\nlet expand = (rleText: string, startPtr: int) => {\n  let firstChar = rleText.[startPtr];\n  let (nextPtr, size) = if(isDigit(firstChar)) {\n    toInt(rleText, startPtr, 0)\n  } else {\n    (startPtr, 1)\n  };\n  let expansionChar = rleText.[nextPtr];\n  (nextPtr + 1, String.make(size, expansionChar))\n};\n\nlet encode = unfoldString(0, \"\", chunk);\n\nlet decode = unfoldString(0, \"\", expand);\n",
+  "test_code": "open Jest;\nopen Expect;\nopen RunLengthEncoding;\n\ndescribe(\"encode function\", () => {\n  test(\"empty string\", () =>\n    expect(encode(\"\")) |> toBe(\"\")\n  );\n  test(\"single characters only are encoded without count\", () =>\n    expect(encode(\"XYZ\")) |> toBe(\"XYZ\")\n  );\n  test(\"string with no single characters\", () =>\n    expect(encode(\"AABBBCCCC\")) |> toBe(\"2A3B4C\")\n  );\n  test(\"single characters mixed with repeated characters\", () =>\n    expect(encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")) |> toBe(\"12WB12W3B24WB\")\n  );\n  test(\"multiple whitespace mixed in string\", () =>\n    expect(encode(\"  hsqq qww  \")) |> toBe(\"2 hs2q q2w2 \")\n  );\n  test(\"lowercase characters\", () =>\n    expect(encode(\"aabbbcccc\")) |> toBe(\"2a3b4c\")\n  );\n});\n\ndescribe(\"decode function\", () => {\n  test(\"empty string\", () =>\n    expect(decode(\"\")) |> toBe(\"\")\n  );\n  test(\"single characters only\", () =>\n    expect(decode(\"XYZ\")) |> toBe(\"XYZ\")\n  );\n  test(\"string with no single characters\", () =>\n    expect(decode(\"2A3B4C\")) |> toBe(\"AABBBCCCC\")\n  );\n  test(\"single characters with repeated characters\", () =>\n    expect(decode(\"12WB12W3B24WB\")) |> toBe(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")\n  );\n  test(\"multiple whitespace mixed in string\", () =>\n    expect(decode(\"2 hs2q q2w2 \")) |> toBe(\"  hsqq qww  \")\n  );\n  test(\"lower case string\", () =>\n    expect(decode(\"2a3b4c\")) |> toBe(\"aabbbcccc\")\n  );\n});\n\ndescribe(\"Encode/decode are inverse operations\", () => {\n  test(\"encode(followed by decode gives original string\", () =>\n    expect(encode(\"zzz ZZ  zZ\") |> decode) |> toBe(\"zzz ZZ  zZ\")\n  );\n});",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "naartjie",
+    "ohana54",
+    "tejasbubane"
+  ]
+}

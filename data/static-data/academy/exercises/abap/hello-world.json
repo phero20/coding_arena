@@ -1,0 +1,26 @@
+{
+  "id": "abap:hello-world",
+  "trackSlug": "abap",
+  "slug": "hello-world",
+  "name": "Hello, World!",
+  "uuid": "837b21ed-7f1c-45d0-ad9d-c0c8e081b707",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "CLASS zcl_hello_world DEFINITION PUBLIC.\n  PUBLIC SECTION.\n    METHODS hello RETURNING VALUE(result) TYPE string.\nENDCLASS.\n\nCLASS zcl_hello_world IMPLEMENTATION.\n\n  METHOD hello.\n    result = 'Goodbye, Mars!'.\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "example_solution": "CLASS zcl_hello_world DEFINITION PUBLIC.\n  PUBLIC SECTION.\n    METHODS hello RETURNING VALUE(result) TYPE string.\nENDCLASS.\n\nCLASS zcl_hello_world IMPLEMENTATION.\n\n  METHOD hello.\n    result = 'Hello, World!'.\n  ENDMETHOD.\n\nENDCLASS.",
+  "test_code": "CLASS ltcl_hello_world DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT FINAL.\n  PRIVATE SECTION.\n    METHODS test FOR TESTING RAISING cx_static_check.\nENDCLASS.\n\nCLASS ltcl_hello_world IMPLEMENTATION.\n\n  METHOD test.\n    cl_abap_unit_assert=>assert_equals(\n      act = NEW zcl_hello_world( )->hello( )\n      exp = 'Hello, World!' ).\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "larshp"
+  ],
+  "contributors": null
+}

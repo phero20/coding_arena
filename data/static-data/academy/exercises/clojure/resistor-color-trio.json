@@ -1,0 +1,31 @@
+{
+  "id": "clojure:resistor-color-trio",
+  "trackSlug": "clojure",
+  "slug": "resistor-color-trio",
+  "name": "Resistor Color Trio",
+  "uuid": "4f8bc34b-59bd-4a93-a120-d5e5ee3bd4a3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a human-readable label.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "vectors",
+    "strings",
+    "conditionals"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know only three things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n  To get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\n- Each band acts as a digit of a number.\n  For example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n  In this exercise, you are going to create a helpful program so that you don't have to remember the values of the bands.\n  The program will take 3 colors as input, and outputs the correct value, in ohms.\n  The color bands are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nIn Resistor Color Duo you decoded the first two colors.\nFor instance: orange-orange got the main value `33`.\nThe third color stands for how many zeros need to be added to the main value.\nThe main value plus the zeros gives us a value in ohms.\nFor the exercise it doesn't matter what ohms really are.\nFor example:\n\n- orange-orange-black would be 33 and no zeros, which becomes 33 ohms.\n- orange-orange-red would be 33 and 2 zeros, which becomes 3300 ohms.\n- orange-orange-orange would be 33 and 3 zeros, which becomes 33000 ohms.\n\n(If Math is your thing, you may want to think of the zeros as exponents of 10.\nIf Math is not your thing, go with the zeros.\nIt really is the same thing, just in plain English instead of Math lingo.)\n\nThis exercise is about translating the colors into a label:\n\n> \"... ohms\"\n\nSo an input of `\"orange\", \"orange\", \"black\"` should return:\n\n> \"33 ohms\"\n\nWhen we get to larger resistors, a [metric prefix][metric-prefix] is used to indicate a larger magnitude of ohms, such as \"kiloohms\".\nThat is similar to saying \"2 kilometers\" instead of \"2000 meters\", or \"2 kilograms\" for \"2000 grams\".\n\nFor example, an input of `\"orange\", \"orange\", \"orange\"` should return:\n\n> \"33 kiloohms\"\n\n[metric-prefix]: https://en.wikipedia.org/wiki/Metric_prefix\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns resistor-color-trio)\n\n(defn resistor-label\n  \"Returns the resistor label based on the given color bands.\"\n  [colors]\n  ;; function body\n  )\n",
+  "example_solution": "(ns resistor-color-trio)\n\n(def colors [\"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\"])\n\n(defn- color->value [color] (.indexOf colors color))\n\n(defn- pow [a b] (reduce * (repeat b a)))\n\n(defn- colors->value [colors]\n  (let [[value-1 value-2 value-3] (map color->value colors)]\n    (* (+ (* 10 value-1) value-2) (pow 10 value-3))))\n\n(def units [nil \"kilo\" \"mega\" \"giga\"])\n\n(defn unit-label [[amount unit]] (str amount \" \" unit \"ohms\"))\n\n(defn resistor-label [colors]\n  (let [value (colors->value colors)]\n    (->> units\n         (map-indexed vector)\n         (some\n          (fn [[idx unit]]\n            (when (<= value (pow 1000 (inc idx)))\n              [(quot value (pow 1000 idx)) unit])))\n         (unit-label))))\n",
+  "test_code": "(ns resistor-color-trio-test\n  (:require [clojure.test :refer [deftest testing is]]\n            resistor-color-trio))\n\n(deftest resistor-label_test_1\n  (testing \"Orange and orange and black\"\n    (is (= \"33 ohms\" (resistor-color-trio/resistor-label [\"orange\" \"orange\" \"black\"])))))\n\n(deftest resistor-label_test_2\n  (testing \"Blue and grey and brown\"\n    (is (= \"680 ohms\" (resistor-color-trio/resistor-label [\"blue\" \"grey\" \"brown\"])))))\n\n(deftest resistor-label_test_3\n  (testing \"Red and black and red\"\n    (is (= \"2 kiloohms\" (resistor-color-trio/resistor-label [\"red\" \"black\" \"red\"])))))\n\n(deftest resistor-label_test_4\n  (testing \"Green and brown and orange\"\n    (is (= \"51 kiloohms\" (resistor-color-trio/resistor-label [\"green\" \"brown\" \"orange\"])))))\n\n(deftest resistor-label_test_5\n  (testing \"Yellow and violet and yellow\"\n    (is (= \"470 kiloohms\" (resistor-color-trio/resistor-label [\"yellow\" \"violet\" \"yellow\"])))))\n\n(deftest resistor-label_test_6\n  (testing \"Blue and violet and blue\"\n    (is (= \"67 megaohms\" (resistor-color-trio/resistor-label [\"blue\" \"violet\" \"blue\"])))))\n\n(deftest resistor-label_test_7\n  (testing \"Minimum possible value\"\n    (is (= \"0 ohms\" (resistor-color-trio/resistor-label [\"black\" \"black\" \"black\"])))))\n\n(deftest resistor-label_test_8\n  (testing \"Maximum possible value\"\n    (is (= \"99 gigaohms\" (resistor-color-trio/resistor-label [\"white\" \"white\" \"white\"])))))\n\n(deftest resistor-label_test_9\n  (testing \"First two colors make an invalid octal number\"\n    (is (= \"8 ohms\" (resistor-color-trio/resistor-label [\"black\" \"grey\" \"black\"])))))\n\n(deftest resistor-label_test_10\n  (testing \"Ignore extra colors\"\n    (is (= \"650 kiloohms\" (resistor-color-trio/resistor-label [\"blue\" \"green\" \"yellow\" \"orange\"])))))\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1549",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

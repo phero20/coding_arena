@@ -1,0 +1,29 @@
+{
+  "id": "vimscript:difference-of-squares",
+  "trackSlug": "vimscript",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "e6662c3e-9d5e-4744-977e-ed12f3171e1e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\n\" Find the difference between the square of the sum and the sum of the squares\n\" of the first N natural numbers.\n\"\n\" Examples:\n\"\n\"   :echo SquareOfSum(3)\n\"   36\n\"   :echo SumOfSquares(3)\n\"   14\n\"   :echo DifferenceOfSquares(3)\n\"   22\n\"\nfunction! DifferenceOfSquares(number) abort\n  \" your implementation goes here\nendfunction\n\nfunction! SquareOfSum(number) abort\n  \" your implementation goes here\nendfunction\n\nfunction! SumOfSquares(number) abort\n  \" your implementation goes here\nendfunction\n",
+  "example_solution": "function! DifferenceOfSquares(number) abort\n  return SquareOfSum(a:number) - SumOfSquares(a:number)\nendfunction\n\nfunction! SquareOfSum(number) abort\n  let sum = 0\n  for n in range(1, a:number)\n    let sum += n\n  endfor\n  return float2nr(pow(sum, 2))\nendfunction\n\nfunction! SumOfSquares(number) abort\n  let sum = 0\n  for n in range(1, a:number)\n    let sum += float2nr(pow(n, 2))\n  endfor\n  return sum\nendfunction\n",
+  "test_code": "\nExecute (square of sum 1):\n  let g:number = 1\n  let g:expected = 1\n  AssertEqual g:expected, SquareOfSum(g:number)\n\nExecute (square of sum 5):\n  let g:number = 5\n  let g:expected = 225\n  AssertEqual g:expected, SquareOfSum(g:number)\n\nExecute (square of sum 100):\n  let g:number = 100\n  let g:expected = 25502500\n  AssertEqual g:expected, SquareOfSum(g:number)\n\nExecute (sum of squares 1):\n  let g:number = 1\n  let g:expected = 1\n  AssertEqual g:expected, SumOfSquares(g:number)\n\nExecute (sum of squares 5):\n  let g:number = 5\n  let g:expected = 55\n  AssertEqual g:expected, SumOfSquares(g:number)\n\nExecute (sum of squares 100):\n  let g:number = 100\n  let g:expected = 338350\n  AssertEqual g:expected, SumOfSquares(g:number)\n\nExecute (difference of squares 1):\n  let g:number = 1\n  let g:expected = 0\n  AssertEqual g:expected, DifferenceOfSquares(g:number)\n\nExecute (difference of squares 5):\n  let g:number = 5\n  let g:expected = 170\n  AssertEqual g:expected, DifferenceOfSquares(g:number)\n\nExecute (difference of squares 100):\n  let g:number = 100\n  let g:expected = 25164150\n  AssertEqual g:expected, DifferenceOfSquares(g:number)\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "mhinz"
+  ],
+  "contributors": [
+    "kotp",
+    "kytrinyx"
+  ]
+}

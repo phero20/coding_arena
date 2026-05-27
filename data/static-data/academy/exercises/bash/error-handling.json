@@ -1,0 +1,38 @@
+{
+  "id": "bash:error-handling",
+  "trackSlug": "bash",
+  "slug": "error-handling",
+  "name": "Error Handling",
+  "uuid": "b2b4ee35-108f-45ce-b294-c10d332e5579",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement various kinds of error handling and resource management.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement various kinds of error handling and resource management.\n\nAn important point of programming is how to handle errors and close resources even if errors occur.\n\nThis exercise requires you to handle various errors.\nBecause error handling is rather programming language specific you'll have to refer to the tests for your track to see what's exactly required.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\nif (( $# != 1 )); then\n  echo \"Usage: $0 <person>\" >&2\n  exit 1\nfi\n\necho \"Hello, $1\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 0.0.1\n\n@test \"correct arguments\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash error_handling.sh Alice\n\n  assert_success\n  assert_output \"Hello, Alice\"\n}\n\n@test \"one long argument\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash error_handling.sh \"Alice and Bob\"\n\n  assert_success\n  assert_output \"Hello, Alice and Bob\"\n}\n\n@test \"incorrect arguments\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash error_handling.sh Alice Bob\n\n  assert_failure\n  assert_output \"Usage: error_handling.sh <person>\"\n}\n\n@test \"print usage banner with no value given\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash error_handling.sh\n\n  assert_failure\n  assert_output \"Usage: error_handling.sh <person>\"\n}\n\n@test \"empty argument\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash error_handling.sh \"\"\n\n  assert_success\n  assert_output \"Hello, \"\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "jaggededgedjustice"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "kytrinyx",
+    "sbonds",
+    "sjwarner-bp",
+    "Smarticles101",
+    "ZapAnton"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "pyret:two-fer",
+  "trackSlug": "pyret",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "198c1176-536a-49db-828b-0dc1655d7da9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "function-arguments"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: two-fer end\n\nfun two-fer(name):\n  raise(\"please implement the two-fer function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: two-fer end\n\nfun two-fer(name):\n  ask:\n    | name == \"\" then: \"One for you, one for me.\"\n    | otherwise: \"One for \" + name + \", one for me.\"\n  end\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"two-fer.arr\")\n\ncheck \"no name given\":\n  two-fer(\"\") is \"One for you, one for me.\"\nend\n\ncheck \"a name given\":\n  two-fer(\"Alice\") is \"One for Alice, one for me.\"\nend\n\ncheck \"another name given\":\n  two-fer(\"Bob\") is \"One for Bob, one for me.\"\nend\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

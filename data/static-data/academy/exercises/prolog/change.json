@@ -1,0 +1,27 @@
+{
+  "id": "prolog:change",
+  "trackSlug": "prolog",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "7e1807fa-a305-4412-9a53-ed51c484e66c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "fewest_coins(Coins, Target, Change).\n",
+  "example_solution": "fewest_coins(Coins, Target, Change) :-\n    make_change(Target, Coins, [], Change).\n\nmake_change(Val, Coins, Wallet, Change) :-\n    (   Val=:=0\n    ->  sort(0, @=<, Wallet, Change)\n    ;   include(choose(Val, Coins), Coins, Chosen),\n        (   max_list(Chosen, Coin)\n        ;   min_list(Coins, Coin), Coin=<Val\n        ), !,\n        append(Wallet, [Coin], Ching),\n        make_change(Val-Coin, Coins, Ching, Change)\n    ).\n\nchoose(Val, Coins, Coin) :-\n    Coin=<Val,\n    Diff is Val-Coin,\n    (   Diff=:=0\n    ;   \\+ include({Diff}/[C]>>(C>1, 0 is Diff mod C), Coins, [])\n    ).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(change).\n\n    test(change_for_1_cent, condition(true)) :-\n        fewest_coins([1, 5, 10, 25], 1, Change),\n        Change == [1].\n\n    test(single_coin_change, condition(pending)) :-\n        fewest_coins([1, 5, 10, 25, 100], 25, Change),\n        Change == [25].\n\n    test(multiple_coin_change, condition(pending)) :-\n        fewest_coins([1, 5, 10, 25, 100], 15, Change),\n        Change == [5, 10].\n\n    test(change_with_lilliputian_coins, condition(pending)) :-\n        fewest_coins([1, 4, 15, 20, 50], 23, Change),\n        Change == [4, 4, 15].\n\n    test(change_with_lower_elbonia_coins, condition(pending)) :-\n        fewest_coins([1, 5, 10, 21, 25], 63, Change),\n        Change == [21, 21, 21].\n\n    test(large_target_values, condition(pending)) :-\n        fewest_coins([1, 2, 5, 10, 20, 50, 100], 999, Change),\n        Change == [2, 2, 5, 20, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100].\n\n    test(possible_change_without_unit_coins_available, condition(pending)) :-\n        fewest_coins([2, 5, 10, 20, 50], 21, Change),\n        Change == [2, 2, 2, 5, 10].\n\n    test(another_possible_change_without_unit_coins_available, condition(pending)) :-\n        fewest_coins([4, 5], 27, Change),\n        Change == [4, 4, 4, 5, 5, 5].\n\n    test(no_coins_make_0_change, condition(pending)) :-\n        fewest_coins([1, 5, 10, 21, 25], 0, Change),\n        Change == [].\n\n    test(greedy_approach_is_not_always_optimal, condition(pending)) :-\n        fewest_coins([1, 10, 11], 20, Change),\n        Change == [10, 10].\n\n    test(error_testing_for_change_smaller_than_the_smallest_of_coins, [fail, condition(pending)]) :-\n        fewest_coins([5, 10], 3, _).\n\n    test(error_if_no_combination_can_add_up_to_target, [fail, condition(pending)]) :-\n        fewest_coins([5, 10], 94, _).\n\n    test(cannot_find_negative_change_values, [fail, condition(pending)]) :-\n        fewest_coins([1, 2, 5], -5, _).\n\n:- end_tests(change).\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "erikschierboom",
+    "neenjaw"
+  ],
+  "contributors": null
+}

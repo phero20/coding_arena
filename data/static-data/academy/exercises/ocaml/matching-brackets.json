@@ -1,0 +1,33 @@
+{
+  "id": "ocaml:matching-brackets",
+  "trackSlug": "ocaml",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "9f7b9da6-afff-4d2b-862e-df1b3a0a7cef",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "let are_balanced _ =\n    failwith \"'are_balanced' is missing\"\n",
+  "example_solution": "open Base\nopen Base.Continue_or_stop\n\n(* Fold over the characters of s. When an open bracket is met, push this onto a\n   stack. When a close bracket is met, and the most recent open bracket matches\n   it, pop this from the stack. When a close bracket is met that doesn't match\n   an open bracket (empty stack, or mismatching top-element of stack), stop. *)\nlet are_balanced =\n  String.fold_until ~init:[] ~finish:List.is_empty\n    ~f:(fun stack c -> match stack, c with\n      | _, '[' | _, '{' | _, '(' -> Continue (c::stack)\n      | '['::bs, ']' -> Continue bs\n      | '{'::bs, '}' -> Continue bs\n      | '('::bs, ')' -> Continue bs\n      | _, ']' | _, '}' | _, ')' -> Stop false\n      | _ -> Continue stack)\n",
+  "test_code": "open Base\nopen OUnit2\nopen Matching_brackets\n\nlet ae exp got _test_ctxt =\n  assert_equal exp got ~printer:Bool.to_string\n\nlet tests = [\n  \"paired square brackets\" >::\n  ae true (are_balanced \"[]\");\n  \"empty string\" >::\n  ae true (are_balanced \"\");\n  \"unpaired brackets\" >::\n  ae false (are_balanced \"[[\");\n  \"wrong ordered brackets\" >::\n  ae false (are_balanced \"}{\");\n  \"wrong closing bracket\" >::\n  ae false (are_balanced \"{]\");\n  \"paired with whitespace\" >::\n  ae true (are_balanced \"{ }\");\n  \"partially paired brackets\" >::\n  ae false (are_balanced \"{[])\");\n  \"simple nested brackets\" >::\n  ae true (are_balanced \"{[]}\");\n  \"several paired brackets\" >::\n  ae true (are_balanced \"{}[]\");\n  \"paired and nested brackets\" >::\n  ae true (are_balanced \"([{}({}[])])\");\n  \"unopened closing brackets\" >::\n  ae false (are_balanced \"{[)][]}\");\n  \"unpaired and nested brackets\" >::\n  ae false (are_balanced \"([{])\");\n  \"paired and wrong nested brackets\" >::\n  ae false (are_balanced \"[({]})\");\n  \"paired and wrong nested brackets but innermost are correct\" >::\n  ae false (are_balanced \"[({}])\");\n  \"paired and incomplete brackets\" >::\n  ae false (are_balanced \"{}[\");\n  \"too many closing brackets\" >::\n  ae false (are_balanced \"[]]\");\n  \"early unexpected brackets\" >::\n  ae false (are_balanced \")()\");\n  \"early mismatched brackets\" >::\n  ae false (are_balanced \"{)()\");\n  \"math expression\" >::\n  ae true (are_balanced \"(((185 + 223.85) * 15) - 543)/2\");\n  \"complex latex expression\" >::\n  ae true (are_balanced \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\");\n]\n\nlet () =\n  run_test_tt_main (\"matching-brackets tests\" >::: tests)\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "dvberkel",
+    "iHiD",
+    "marionebl",
+    "Peaupote",
+    "sbl",
+    "sshine"
+  ]
+}

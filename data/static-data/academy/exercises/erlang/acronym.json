@@ -1,0 +1,26 @@
+{
+  "id": "erlang:acronym",
+  "trackSlug": "erlang",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "16e89060-3e51-46d2-8dc2-88082b83254f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-module(acronym).\n\n-export([abbreviate/1]).\n\n\nabbreviate(_Phrase) -> undefined.\n",
+  "example_solution": "-module(example).\n\n-export([abbreviate/1]).\n\nabbreviate(Phrase) ->\n    abbreviate(Phrase, []).\n\nabbreviate([First, Second | Rest], Acc) when First >= $A, First =< $Z, Second >= $A, Second =< $Z ->\n    abbreviate([First | Rest], Acc);\nabbreviate([First | Rest], Acc) when First >= $A, First =< $Z ->\n    abbreviate(Rest, [First | Acc]);\nabbreviate([First, Second | Rest], Acc) when First == $\\s orelse First == $- orelse First == $_,\n                                             Second /= $\\s, Second /= $-, Second /= $_->\n    abbreviate(Rest, [Second | Acc]);\nabbreviate([_ | Rest], Acc) ->\n    abbreviate(Rest, Acc);\nabbreviate([], Acc) ->\n    string:uppercase(lists:reverse(Acc)).\n\n",
+  "test_code": "-module(acronym_tests).\n\n-include_lib(\"erl_exercism/include/exercism.hrl\").\n-include_lib(\"eunit/include/eunit.hrl\").\n\n\n\n\n'1_basic_test_'() ->\n    Input = \"Portable Network Graphics\",\n    Expected = \"PNG\",\n    {\"basic\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'2_lowercase_words_test_'() ->\n    Input = \"Ruby on Rails\",\n    Expected = \"ROR\",\n    {\"lowercase words\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'3_punctuation_test_'() ->\n    Input = \"First In, First Out\",\n    Expected = \"FIFO\",\n    {\"punctuation\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'4_all_caps_words_test_'() ->\n    Input = \"GNU Image Manipulation Program\",\n    Expected = \"GIMP\",\n    {\"all caps word\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'5_punctuation_without_whitespace_test_'() ->\n    Input = \"Complementary metal-oxide semiconductor\",\n    Expected = \"CMOS\",\n    {\"punctuation without whitespace\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'6_very_long_abbreviation_test_'() ->\n    Input = \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\",\n    Expected = \"ROTFLSHTMDCOALM\",\n    {\"very long abbreviation\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'7_consecutive_delimiters_test_'() ->\n    Input = \"Something - I made up from thin air\",\n    Expected = \"SIMUFTA\",\n    {\"consecutive delimiters\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'8_apostrophes_test_'() ->\n    Input = \"Halley's Comet\",\n    Expected = \"HC\",\n    {\"apostrophes\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n\n'9_underscore_emphasis_test_'() ->\n    Input = \"The Road _Not_ Taken\",\n    Expected = \"TRNT\",\n    {\"underscore emphasis\",\n     ?_assertEqual(Expected,\n                   acronym:abbreviate(Input))}.\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

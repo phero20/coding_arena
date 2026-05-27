@@ -1,0 +1,28 @@
+{
+  "id": "batch:hello-world",
+  "trackSlug": "batch",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "d4919f7e-5e88-48a1-a357-e79cd6f98346",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "basics"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "@Echo Goodbye, Mars!\n",
+  "example_solution": "@echo Hello, World!\n",
+  "test_code": "@echo off\nREM ---------------------------------------------------\nREM Hello World Unit Test\nREM ---------------------------------------------------\n\nset isTestRunner=false\nif \"%1\" == \"test-runner\" (\n    set isTestRunner=true\n)\n\n:Main\n    REM Initalize result variable\n    set \"slug=HelloWorld\"\n\n    CALL :Initialize\n\n    REM --------------------\n    REM Test Case Start \\/\\/\n    REM --------------------\n    set \"expected=Hello, World!\"\n    set \"if_success=Test passed\"\n    set \"if_failed=Test failed: Your output have to be 'Hello, World!'\"\n    CALL :Assert\n\n    REM --------------------\n    REM Test Case End /\\/\\/\\\n    REM --------------------\n\n    CALL :ResolveStatus\n    exit /b %errorlevel%\nREM End of Main\n\nREM ---------------------------------------------------\nREM Assert [..Parameters(up to 9)]\nREM ---------------------------------------------------\nGOTO :End REM Prevents the code below from being executed\n:Assert\nset \"stdout=\"\n\nREM Run the program and capture the output then delete the file\nset filePath=%slug%.bat\nif \"%isTestRunner%\"==\"true\" (\n    set filePath=.meta\\Example.bat\n)\nset batPath=%~dp0\nCALL %batPath%%filePath% %~1 %~2 %~3 %~4 %~5 %~6 %~7 %~8 %~9 > stdout.bin 2>&1\nset /p stdout=< stdout.bin\ndel stdout.bin\n\nREM Check if the result is correct\nif \"%stdout%\" == \"%expected%\" (\n    if defined if_success (\n        echo %if_success%\n\n        REM Reset the variable to avoid duplicating the message.\n        set \"if_success=\"\n        set \"if_failed=\"\n    )\n\n    REM If the result is correct, exit with code 0\n    set /a successCount+=1\n    exit /b 0\n) else (\n    if defined if_failed (\n        echo %if_failed%\n\n        REM Reset the variable to avoid duplicating the message.\n        set \"if_success=\"\n        set \"if_failed=\"\n    )\n\n    REM If the result is incorrect, exit with code 1\n    set /a failCount+=1\n    exit /b 1\n)\nGOTO :EOF REM Go back to the line after the call to :Assert\n\n:Initialize\nREM It's for initialize, not about checking empty file\nset \"successCount=0\"\nset \"failCount=0\"\nGOTO :EOF REM Go back to the line after the call to :CheckEmptyFile\n\n:ResolveStatus\nset \"status=\"\nif %failCount% gtr 0 (\n    REM status: Fail\n    REM message: The test failed.\n    exit /b 1\n\n) else (\n    REM status: Pass\n    exit /b 0\n    \n)\nGOTO :EOF REM Go back to the line after the call to :ExportResultAsJson\n\n:End\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "GroophyLifefor"
+  ],
+  "contributors": null
+}

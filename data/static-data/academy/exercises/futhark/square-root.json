@@ -1,0 +1,26 @@
+{
+  "id": "futhark:square-root",
+  "trackSlug": "futhark",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "5503c06f-9b33-49fb-96ec-1be8622c59cf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "def square_root (radicand: i32): i32 = ???\n",
+  "example_solution": "def square_root (radicand: i32): i32 =\n  let (n) = loop (n) = (0) while n * n < radicand do\n    (n + 1)\n  in\n    n\n",
+  "test_code": "import \"square_root\"\n\n-- root of 1\n-- ==\n-- input { 1 }\n-- output { 1 }\n\n-- root of 4\n-- ==\n-- input { 4 }\n-- output { 2 }\n\n-- root of 25\n-- ==\n-- input { 25 }\n-- output { 5 }\n\n-- root of 81\n-- ==\n-- input { 81 }\n-- output { 9 }\n\n-- root of 196\n-- ==\n-- input { 196 }\n-- output { 14 }\n\n-- root of 65025\n-- ==\n-- input { 65025 }\n-- output { 255 }\n\nlet main (radicand: i32): i32 =\n  square_root radicand\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

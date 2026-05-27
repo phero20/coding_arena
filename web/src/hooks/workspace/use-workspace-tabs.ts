@@ -16,8 +16,16 @@ export interface WorkspaceTab {
   icon: LucideIcon;
 }
 
-export function useWorkspaceTabs(mode: "practice" | "arena") {
+export function useWorkspaceTabs(mode: "practice" | "arena" | "exercise") {
   const tabs = useMemo(() => {
+    if (mode === "exercise") {
+      return [
+        { id: "description", label: "Description", icon: BookOpen },
+        { id: "hints", label: "Hints", icon: HelpCircle },
+        { id: "solutions", label: "Solutions", icon: CheckCircle2 },
+      ];
+    }
+
     const baseTabs: WorkspaceTab[] = [
       { id: "description", label: "Description", icon: BookOpen },
       { id: "hints", label: "Hints", icon: HelpCircle },

@@ -1,0 +1,26 @@
+{
+  "id": "8th:list-ops",
+  "trackSlug": "8th",
+  "slug": "list-ops",
+  "name": "List Ops",
+  "uuid": "3f882da7-7702-468a-aa43-010917e30a17",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement basic list operations.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement basic list operations.\n\nIn functional languages list operations like `length`, `map`, and `reduce` are very common.\nImplement a series of basic list operations, without using existing functions.\n\nThe precise number and names of the operations to be implemented will be track dependent to avoid conflicts with existing names, but the general operations you will implement include:\n\n- `append` (_given two lists, add all items in the second list to the end of the first list_);\n- `concatenate` (_given a series of lists, combine all items in all lists into one flattened list_);\n- `filter` (_given a predicate and a list, return the list of all items for which `predicate(item)` is True_);\n- `length` (_given a list, return the total number of items within it_);\n- `map` (_given a function and a list, return the list of the results of applying `function(item)` on all items_);\n- `foldl` (_given a function, a list, and initial accumulator, fold (reduce) each item into the accumulator from the left_);\n- `foldr` (_given a function, a list, and an initial accumulator, fold (reduce) each item into the accumulator from the right_);\n- `reverse` (_given a list, return a list with all the original items, but in reversed order_).\n\nNote, the ordering in which arguments are passed to the fold functions (`foldl`, `foldr`) is significant.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": length \\ a -- n\n\n;\n\n: append \\ a a -- a\n\n;\n\n: concat \\ a -- a\n\n;\n\n: filter \\ a w -- a\n\n;\n\n: map \\ a w -- a\n;\n\n: reverse \\ a -- a\n\n;\n\n: foldl \\ a x w -- x'\n\n;\n\n: foldr \\ a x w -- x'\n\n;\n",
+  "example_solution": ": append \\ a a -- a\n  ' a:push a:each! drop\n;\n\n: concat \\ a -- a\n  a:new swap ' append a:each! drop\n;\n\n: filter \\ a w -- a\n  >r a:new swap ( dup r@  w:exec if a:push else drop then ) a:each! drop rdrop\n;\n\n: length \\ a -- n\n  0 swap ( drop n:1+ ) a:each! drop\n;\n\n: map \\ a w -- a\n  >r a:new swap ( r@ w:exec a:push ) a:each! drop rdrop\n;\n\n: reverse \\ a -- a\n  a:new swap ' a:slide a:each! drop\n;\n\n: foldl \\ a x w -- x'\n  >r swap ( r@ w:exec ) a:each! drop rdrop\n;\n\n: foldr \\ a x w -- x'\n  >r swap reverse ( r@ w:exec ) a:each! drop rdrop\n;\n",
+  "test_code": "\"list-ops.8th\" f:include\nneeds exercism/test\nwith: test\n22 tests\n\n\"empty lists\"\n    ( [] [] append )\n    []\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"list to empty list\"\n    ( [] [1, 2, 3, 4] append )\n    [1, 2, 3, 4]\n    equal?\n\n\"empty list to list\"\n    ( [1, 2, 3, 4] [] append )\n    [1, 2, 3, 4]\n    equal?\n\n\"non-empty lists\"\n    ( [1, 2] [2, 3, 4, 5] append )\n    [1, 2, 2, 3, 4, 5]\n    equal?\n\n\"empty list\"\n    ( [] concat )\n    []\n    equal?\n\n\"list of lists\"\n    ( [[1, 2], [3], [], [4, 5, 6]] concat )\n    [1, 2, 3, 4, 5, 6]\n    equal?\n\n\"list of nested lists\"\n    ( [[[1], [2]], [[3]], [[]], [[4, 5, 6]]] concat )\n    [[1], [2], [3], [], [4, 5, 6]]\n    equal?\n\n: odd? \\ n -- T\n    2 n:/mod drop 1 n:=\n;\n\n\"empty list\"\n    ( [] ' odd? filter )\n    []\n    equal?\n\n\"non-empty list\"\n    ( [1, 2, 3, 5] ' odd? filter )\n    [1, 3, 5]\n    equal?\n\n\"empty list\"\n    ( [] length )\n    0\n    equal?\n\n\"non-empty list\"\n    ( [1, 2, 3, 4] length )\n    4\n    equal?\n\n\"empty list\"\n    ( [] ' n:1+ map )\n    []\n    equal?\n\n\"non-empty list\"\n    ( [1, 3, 5, 7] ' n:1+ map )\n    [2, 4, 6, 8]\n    equal?\n\n\"empty list\"\n    ( [] 2 ' n:* foldl )\n    2\n    equal?\n\n\"direction independent function applied to non-empty list\"\n    ( [1, 2, 3, 4] 5 ' n:+ foldl )\n    15\n    equal?\n\n\"direction dependent function applied to non-empty list\"\n    ( [1, 2, 3, 4] 24 ( swap n:/ ) foldl )\n    64\n    equal?\n\n\"empty list\"\n    ( [] 2 ' n:* foldr )\n    2\n    equal?\n\n\"direction independent function applied to non-empty list\"\n    ( [1, 2, 3, 4] 5 ' n:+ foldr )\n    15\n    equal?\n\n\"direction dependent function applied to non-empty list\"\n    ( [1, 2, 3, 4] 24 ( swap n:/ ) foldr )\n    9\n    equal?\n\n\"empty list\"\n    ( [] reverse )\n    []\n    equal?\n\n\"non-empty list\"\n    ( [1, 3, 5, 7] reverse )\n    [7, 5, 3, 1]\n    equal?\n\n\"list of lists is not flattened\"\n    ( [[1, 2], [3], [], [4, 5, 6]] reverse )\n    [[4, 5, 6], [], [3], [1, 2]]\n    equal?\n\nend-of-tests\n;with\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

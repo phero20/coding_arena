@@ -1,0 +1,26 @@
+{
+  "id": "raku:high-scores",
+  "trackSlug": "raku",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "94471fe8-e533-4046-a7a2-32f35d5a56ff",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit class HighScores;\n\nhas $.scores;\n\nmethod scores             { }\nmethod latest             { }\nmethod personal-best      { }\nmethod personal-top-three { }\n",
+  "example_solution": "unit class HighScores;\n\nhas $.scores;\n\nmethod scores             { $!scores                      }\nmethod latest             { $!scores.tail                 }\nmethod personal-best      { $!scores.max                  }\nmethod personal-top-three { $!scores.sort.reverse.head(3) }\n",
+  "test_code": "#!/usr/bin/env raku\nuse Test;\nuse lib $?FILE.IO.parent(2).add('lib');\nuse HighScores;\n\ncmp-ok( # begin: 1035eb93-2208-4c22-bab8-fef06769a73c\n  HighScores.new( scores => [30, 50, 20, 70] ).scores,\n  \"eqv\",\n  [30, 50, 20, 70],\n  \"List of scores\",\n); # end: 1035eb93-2208-4c22-bab8-fef06769a73c\n\ncmp-ok( # begin: 6aa5dbf5-78fa-4375-b22c-ffaa989732d2\n  HighScores.new( scores => [100, 0, 90, 30] ).latest,\n  \"==\",\n  30,\n  \"Latest score\",\n); # end: 6aa5dbf5-78fa-4375-b22c-ffaa989732d2\n\ncmp-ok( # begin: b661a2e1-aebf-4f50-9139-0fb817dd12c6\n  HighScores.new( scores => [40, 100, 70] ).personal-best,\n  \"==\",\n  100,\n  \"Personal best\",\n); # end: b661a2e1-aebf-4f50-9139-0fb817dd12c6\n\ncmp-ok( # begin: 3d996a97-c81c-4642-9afc-80b80dc14015\n  HighScores.new( scores => [10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70] ).personal-top-three,\n  \"==\",\n  3,\n  \"Top 3 scores: Personal top three from a list of scores\",\n); # end: 3d996a97-c81c-4642-9afc-80b80dc14015\n\ncmp-ok( # begin: 1084ecb5-3eb4-46fe-a816-e40331a4e83a\n  HighScores.new( scores => [20, 10, 30] ).personal-top-three,\n  \"==\",\n  3,\n  \"Top 3 scores: Personal top highest to lowest\",\n); # end: 1084ecb5-3eb4-46fe-a816-e40331a4e83a\n\ncmp-ok( # begin: e6465b6b-5a11-4936-bfe3-35241c4f4f16\n  HighScores.new( scores => [40, 20, 40, 30] ).personal-top-three,\n  \"==\",\n  3,\n  \"Top 3 scores: Personal top when there is a tie\",\n); # end: e6465b6b-5a11-4936-bfe3-35241c4f4f16\n\ncmp-ok( # begin: f73b02af-c8fd-41c9-91b9-c86eaa86bce2\n  HighScores.new( scores => [30, 70] ).personal-top-three,\n  \"==\",\n  2,\n  \"Top 3 scores: Personal top when there are less than 3\",\n); # end: f73b02af-c8fd-41c9-91b9-c86eaa86bce2\n\ncmp-ok( # begin: 16608eae-f60f-4a88-800e-aabce5df2865\n  HighScores.new( scores => [40] ).personal-top-three,\n  \"==\",\n  1,\n  \"Top 3 scores: Personal top when there is only one\",\n); # end: 16608eae-f60f-4a88-800e-aabce5df2865\n\ncmp-ok( # begin: 2df075f9-fec9-4756-8f40-98c52a11504f\n  ( given HighScores.new( scores => [70, 50, 20, 30] ) { sink .personal-top-three; .latest } ),\n  \"==\",\n  30,\n  \"Top 3 scores: Latest score after personal top scores\",\n); # end: 2df075f9-fec9-4756-8f40-98c52a11504f\n\ncmp-ok( # begin: 809c4058-7eb1-4206-b01e-79238b9b71bc\n  ( given HighScores.new( scores => [30, 50, 20, 70] ) { sink .personal-top-three; .scores } ),\n  \"eqv\",\n  [30, 50, 20, 70],\n  \"Top 3 scores: Scores after personal top scores\",\n); # end: 809c4058-7eb1-4206-b01e-79238b9b71bc\n\ncmp-ok( # begin: ddb0efc0-9a86-4f82-bc30-21ae0bdc6418\n  ( given HighScores.new( scores => [20, 70, 15, 25, 30] ) { sink .personal-best; .latest } ),\n  \"==\",\n  30,\n  \"Top 3 scores: Latest score after personal best\",\n); # end: ddb0efc0-9a86-4f82-bc30-21ae0bdc6418\n\ncmp-ok( # begin: 6a0fd2d1-4cc4-46b9-a5bb-2fb667ca2364\n  ( given HighScores.new( scores => [20, 70, 15, 25, 30] ) { sink .personal-best; .scores } ),\n  \"eqv\",\n  [20, 70, 15, 25, 30],\n  \"Top 3 scores: Scores after personal best\",\n); # end: 6a0fd2d1-4cc4-46b9-a5bb-2fb667ca2364\n\ndone-testing;\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "habere-et-dispertire"
+  ],
+  "contributors": null
+}

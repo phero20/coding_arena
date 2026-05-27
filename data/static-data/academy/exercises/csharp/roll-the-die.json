@@ -1,0 +1,35 @@
+{
+  "id": "csharp:roll-the-die",
+  "trackSlug": "csharp",
+  "slug": "roll-the-die",
+  "name": "Roll the Die!",
+  "uuid": "d8a43f1e-4ed0-4015-8307-fba1d9cdd117",
+  "type": "concept",
+  "status": null,
+  "blurb": "Learn about randomness by generating numbers in a game.",
+  "difficulty": null,
+  "concepts": [
+    "randomness"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nContinuing the theme of the wizards and warriors game, it is time to add an all purpose die rolling method. This will be the traditional 18 sided die with numbers 1 to 18. Players also generate a spell strength.\n\n## 1. Enable a _wizards and warriors_ player to roll a die.\n\nImplement a `RollDie()` method on the `Player` class.\n\n```csharp\nvar player = new Player();\nplayer.RollDie();\n// => >= 1 <= 18\n```\n\n## 2. Players need their strength. Provide a means to generate spell strength\n\nImplement a `GenerateSpellStrength()` method on the player class. The spell strength is between 0.0 and up to but not including 100.0.\n\nNote that spell strength must be a real number (not an integer) to reduce the possibility of a tie when the strengths of two adversaries are compared.\n\n```csharp\nvar player = new Player();\nplayer.GenerateSpellStrength();\n// => >= 0.0 < 100.0\n```\n",
+  "introduction": "# Introduction\n\n## Randomness\n\nIn C# randomness is achieved with the help of `System.Random`. Typically, you create an instance and then call one of its `Next()` or `NextDouble()` methods, possibly multiple times depending on the use-case.\n",
+  "hints": "# Hints\n\n## General\n\nThis [article][system-random] is an excellent introduction to the subject.\n\n## 1. Enable a wizards and warriors player to roll a die.\n\nThis [article][random-integers] explains how to generate integers.\n\n## 2. Players need their strength. Provide a means to generate spell strength\n\nThis [article][random-reals] explains how to generate real numbers.\n\n[system-random]: https://docs.microsoft.com/en-us/dotnet/api/system.random\n[random-integers]: https://docs.microsoft.com/en-us/dotnet/api/system.random.next\n[random-reals]: https://docs.microsoft.com/en-us/dotnet/api/system.random.nextdouble\n",
+  "starter_code": "public class Player\n{\n    public int RollDie()\n    {\n        throw new NotImplementedException(\"Please implement the Player.RollDie() method\");\n    }\n\n    public double GenerateSpellStrength()\n    {\n        throw new NotImplementedException(\"Please implement the Player.GenerateSpellStrength() method\");\n    }\n}\n",
+  "example_solution": "public class Player\n{\n    private static Random random = new Random();\n    private const int DIE_HIGH = 18;\n\n    public int RollDie()\n    {\n        return random.Next(1, DIE_HIGH + 1);\n    }\n\n    public double GenerateSpellStrength()\n    {\n        return random.NextDouble() * 100;\n    }\n}\n",
+  "test_code": "using Exercism.Tests;\nusing System.Collections.Generic;\n\npublic class RollTheDieTests\n{\n    [Fact]\n    [Task(1)]\n    public void RollDie()\n    {\n        var rollCount = 1000;\n        var rolls = new HashSet<int>(rollCount);\n        var player = new Player();\n        for (var i = 0; i < rollCount; i++)\n        {\n            var roll = player.RollDie();\n            rolls.Add(roll);\n            Assert.InRange(player.RollDie(), 1, 18);\n        }\n        Assert.Equal(18, rolls.Count);\n    }\n\n    [Fact]\n    [Task(2)]\n    public void GenerateSpellStrength()\n    {\n        var rollCount = 100;\n        var minUniqueValues = rollCount - 5; // Allow up to 5 duplicates\n        var rolls = new HashSet<double>(rollCount);\n        var player = new Player();\n        for (var i = 0; i < rollCount; i++)\n        {\n            var strength = player.GenerateSpellStrength();\n            rolls.Add(strength);\n            Assert.InRange(strength, 0.0, 100.0);\n        }\n        \n        Assert.InRange(rolls.Count, minUniqueValues, rollCount);\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "mikedamay"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "yzAlvin",
+    "aage",
+    "karanchadha10"
+  ]
+}

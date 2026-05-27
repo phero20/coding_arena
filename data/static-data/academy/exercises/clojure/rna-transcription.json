@@ -1,0 +1,47 @@
+{
+  "id": "clojure:rna-transcription",
+  "trackSlug": "clojure",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "d8773153-d717-43f1-9324-c7e8cf00455c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "(ns rna-transcription)\n\n(defn to-rna\n  \"Returns the RNA complement of the given DNA string sequence.\"\n  [dna]\n  ;; function body\n  )\n",
+  "example_solution": "(ns rna-transcription)\n\n(def dna->rna {\\G \\C\n               \\C \\G\n               \\A \\U\n               \\T \\A})\n\n(defn to-rna [dna]\n  (apply str (map dna->rna dna)))\n",
+  "test_code": "(ns rna-transcription-test\n  (:require [clojure.test :refer [deftest testing is]]\n            rna-transcription))\n\n(deftest to-rna_test_1\n  (testing \"Empty RNA sequence\"\n    (is (= \"\" (rna-transcription/to-rna \"\")))))\n\n(deftest to-rna_test_2\n  (testing \"RNA complement of cytosine is guanine\"\n    (is (= \"G\" (rna-transcription/to-rna \"C\")))))\n\n(deftest to-rna_test_3\n  (testing \"RNA complement of guanine is cytosine\"\n    (is (= \"C\" (rna-transcription/to-rna \"G\")))))\n\n(deftest to-rna_test_4\n  (testing \"RNA complement of thymine is adenine\"\n    (is (= \"A\" (rna-transcription/to-rna \"T\")))))\n\n(deftest to-rna_test_5\n  (testing \"RNA complement of adenine is uracil\"\n    (is (= \"U\" (rna-transcription/to-rna \"A\")))))\n\n(deftest to-rna_test_6\n  (testing \"RNA complement\"\n    (is (= \"UGCACCAGAAUU\" (rna-transcription/to-rna \"ACGTGGTCTTAA\")))))\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "achengs",
+    "AndreaCrotti",
+    "apcomplete",
+    "canweriotnow",
+    "dkinzer",
+    "eval",
+    "haus",
+    "jgwhite",
+    "kytrinyx",
+    "mathias",
+    "meientau",
+    "mitchlloyd",
+    "seeflanigan",
+    "sjwarner-bp",
+    "solaryeti",
+    "tejasbubane",
+    "yurrriq",
+    "tasxatzial"
+  ]
+}

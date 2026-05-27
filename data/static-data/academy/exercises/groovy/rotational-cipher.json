@@ -1,0 +1,30 @@
+{
+  "id": "groovy:rotational-cipher",
+  "trackSlug": "groovy",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "449fc372-ba30-4c45-99b4-8053e9cdf502",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RotationalCipher {\n    private int key\n\n    RotationalCipher(int key) {\n        this.key = key\n    }\n\n    String rotate(String cipherText) {\n        throw new UnsupportedOperationException('Method implementation is missing')\n    }\n}\n",
+  "example_solution": "class RotationalCipher {\n    private int key\n    private char a = 'a'\n    private char A = 'A'\n\n    RotationalCipher(int key) {\n        this.key = key\n    }\n\n    private char rotateChar(char c) {\n        if (!c.isLetter()) {\n            return c\n        }\n        char base = c.isUpperCase() ? A : a\n        (c - base + this.key) % 26 + base\n    }\n\n    String rotate(String cipherText) {\n        cipherText.toCharArray().collect { rotateChar(it) }.join()\n    }\n\n}\n",
+  "test_code": "import spock.lang.*\n\nclass RotationalCipherSpec extends Specification {\n\n    def \"Rotate a by 0, same output as input\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text || expected\n        0        | 'a'  || 'a'\n    }\n\n    @Ignore\n    def \"Rotate a by 1\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text || expected\n        1        | 'a'  || 'b'\n    }\n\n    @Ignore\n    def \"Rotate a by 26, same output as input\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text || expected\n        26       | 'a'  || 'a'\n    }\n\n    @Ignore\n    def \"Rotate m by 13\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text || expected\n        13       | 'm'  || 'z'\n    }\n\n    @Ignore\n    def \"Rotate n by 13 with wrap around alphabet\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text || expected\n        13       | 'n'  || 'a'\n    }\n\n    @Ignore\n    def \"Rotate capital letters\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text  || expected\n        5        | 'OMG' || 'TRL'\n    }\n\n    @Ignore\n    def \"Rotate spaces\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text    || expected\n        5        | 'O M G' || 'T R L'\n    }\n\n    @Ignore\n    def \"Rotate numbers\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text                    || expected\n        4        | 'Testing 1 2 3 testing' || 'Xiwxmrk 1 2 3 xiwxmrk'\n    }\n\n    @Ignore\n    def \"Rotate punctuation\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text                  || expected\n        21       | \"Let's eat, Grandma!\" || \"Gzo'n zvo, Bmviyhv!\"\n    }\n\n    @Ignore\n    def \"Rotate all letters\"() {\n        expect:\n        new RotationalCipher(shiftKey).rotate(text) == expected\n\n        where:\n        shiftKey | text                                           || expected\n        13       | 'The quick brown fox jumps over the lazy dog.' || 'Gur dhvpx oebja sbk whzcf bire gur ynml qbt.'\n    }\n\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "Raibaz"
+  ],
+  "contributors": [
+    "amscotti",
+    "ikhadykin",
+    "sjwarner-bp"
+  ]
+}

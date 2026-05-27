@@ -1,0 +1,28 @@
+{
+  "id": "arturo:raindrops",
+  "trackSlug": "arturo",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "446fe3c2-ac91-4baa-b78f-e83def979eaf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "raindrops: function[n][\n    panic \"Please implement the raindrops function\"\n]\n",
+  "example_solution": "raindrops: function[n][\n    sound: \"\"\n\n    when.any [\n        zero? mod n 3 -> ++ 'sound \"Pling\"\n        zero? mod n 5 -> ++ 'sound \"Plang\"\n        zero? mod n 7 -> ++ 'sound \"Plong\"\n    ]\n\n    if empty? sound -> sound: to :string n\n\n    sound\n]\n",
+  "test_code": "import.version:3.0.0 {unitt}! \nimport {src/raindrops}!\n\ndescribe \"Raindrops\" [\n    it \"the sound of 1 is 1\" [\n        expects.be:'equal? @[\n            \"1\"\n            raindrops 1\n        ]\n    ]\n\n    it.skip \"the sound for 3 is Pling\" [\n        expects.be:'equal? @[\n            \"Pling\"\n            raindrops 3\n        ]\n    ]\n\n    it.skip \"the sound for 5 is Plang\" [\n        expects.be:'equal? @[\n            \"Plang\"\n            raindrops 5\n        ]\n    ]\n\n    it.skip \"the sound of 7 is Plong\" [\n        expects.be:'equal? @[\n            \"Plong\"\n            raindrops 7\n        ]\n    ]\n\n    it.skip \"the sound for 6 is Pling as it has a factor of 3\" [\n        expects.be:'equal? @[\n            \"Pling\"\n            raindrops 6\n        ]\n    ]\n\n    it.skip \"2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base\" [\n        expects.be:'equal? @[\n            \"8\"\n            raindrops 8\n        ]\n    ]\n\n    it.skip \"the sound of 9 is Pling as it has a factor of 3\" [\n        expects.be:'equal? @[\n            \"Pling\"\n            raindrops 9\n        ]\n    ]\n\n    it.skip \"the sound for 10 is Plang as it has a factor of 5\" [\n        expects.be:'equal? @[\n            \"Plang\"\n            raindrops 10\n        ]\n    ]\n\n    it.skip \"the sound for 14 is Plong as it has a factor of 7\" [\n        expects.be:'equal? @[\n            \"Plong\"\n            raindrops 14\n        ]\n    ]\n\n    it.skip \"the sound for 15 is PlingPlang as it has factors 3 and 5\" [\n        expects.be:'equal? @[\n            \"PlingPlang\"\n            raindrops 15\n        ]\n    ]\n\n    it.skip \"the sound for 21 is PlingPlong as it has factors 3 and 7\" [\n        expects.be:'equal? @[\n            \"PlingPlong\"\n            raindrops 21\n        ]\n    ]\n\n    it.skip \"the sound for 25 is Plang as it has a factor of 5\" [\n        expects.be:'equal? @[\n            \"Plang\"\n            raindrops 25\n        ]\n    ]\n\n    it.skip \"the sound for 27 is Pling as it has a factor of 3\" [\n        expects.be:'equal? @[\n            \"Pling\"\n            raindrops 27\n        ]\n    ]\n\n    it.skip \"the sound for 35 is PlangPlong as it has factors 5 and 7\" [\n        expects.be:'equal? @[\n            \"PlangPlong\"\n            raindrops 35\n        ]\n    ]\n\n    it.skip \"the sound for 49 is Plong as it has a factor of 7\" [\n        expects.be:'equal? @[\n            \"Plong\"\n            raindrops 49\n        ]\n    ]\n\n    it.skip \"the sound for 52 is 52\" [\n        expects.be:'equal? @[\n            \"52\"\n            raindrops 52\n        ]\n    ]\n\n    it.skip \"the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7\" [\n        expects.be:'equal? @[\n            \"PlingPlangPlong\"\n            raindrops 105\n        ]\n    ]\n\n    it.skip \"the sound for 3125 is Plang as it has a factor of 5\" [\n        expects.be:'equal? @[\n            \"Plang\"\n            raindrops 3125\n        ]\n    ]\n]\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": [
+    "BNAndras"
+  ]
+}

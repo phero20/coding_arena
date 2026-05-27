@@ -1,0 +1,31 @@
+{
+  "id": "purescript:bob",
+  "trackSlug": "purescript",
+  "slug": "bob",
+  "name": "Bob",
+  "uuid": "021a1f60-6086-4d8f-a8be-0f64cfd9620d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what Bob will reply to someone when they say something to him or ask him a question.\n\nBob only ever answers one of five things:\n\n- **\"Sure.\"**\n  This is his response if you ask him a question, such as \"How are you?\"\n  The convention used for questions is that it ends with a question mark.\n- **\"Whoa, chill out!\"**\n  This is his answer if you YELL AT HIM.\n  The convention used for yelling is ALL CAPITAL LETTERS.\n- **\"Calm down, I know what I'm doing!\"**\n  This is what he says if you yell a question at him.\n- **\"Fine. Be that way!\"**\n  This is how he responds to silence.\n  The convention used for silence is nothing, or various combinations of whitespace characters.\n- **\"Whatever.\"**\n  This is what he answers to anything else.\n",
+  "introduction": "# Introduction\n\nBob is a [lackadaisical][] teenager.\nHe likes to think that he's very cool.\nAnd he definitely doesn't get excited about things.\nThat wouldn't be cool.\n\nWhen people talk to him, his responses are pretty limited.\n\n[lackadaisical]: https://www.collinsdictionary.com/dictionary/english/lackadaisical\n",
+  "hints": null,
+  "starter_code": "module Bob\n  ( hey\n  ) where\n\nimport Effect.Exception.Unsafe (unsafeThrow)\n\nhey :: String -> String\nhey = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module Bob where\n\nimport Prelude\n\nimport Data.Either as Either\nimport Data.String.Common as String\nimport Data.String.Regex as Regex\nimport Data.String.Regex.Flags (noFlags)\nimport Partial.Unsafe (unsafeCrashWith)\n\nhey :: String -> String\nhey msg =\n  if isYell msg && isQuestion msg then\n    \"Calm down, I know what I'm doing!\"\n  else if isQuestion msg then\n    \"Sure.\"\n  else if isYell msg then\n    \"Whoa, chill out!\"\n  else if isSilence msg then\n    \"Fine. Be that way!\"\n  else\n    \"Whatever.\"\n\nisQuestion :: String -> Boolean\nisQuestion =\n  testRegex \"\\\\?$\"\n\nisYell :: String -> Boolean\nisYell str = hasLetter str && allUpper str\n  where\n  hasLetter = testRegex \"[a-zA-Z]\"\n  allUpper s = String.toUpper s == s\n\nisSilence :: String -> Boolean\nisSilence =\n  testRegex \"^[\\\\s\\\\t\\\\n]*$\"\n\ntestRegex :: String -> String -> Boolean\ntestRegex patternStr =\n  Regex.test\n  $ Either.either (\\_ -> unsafeCrashWith \"Invalid regex pattern\") identity\n  $ Regex.regex patternStr noFlags\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport Effect (Effect)\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Main (runTest)\nimport Test.Unit.Assert as Assert\nimport Bob as Bob\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"Bob.hey\" do\n    test \"stating something\" do\n      Assert.equal \"Whatever.\" $\n        Bob.hey \"Tom-ay-totom-aaaah-to.\"\n\n    test \"shouting\" do\n      Assert.equal \"Whoa, chill out!\" $\n        Bob.hey \"WATCH OUT!\"\n\n    test \"asking a question\" do\n      Assert.equal \"Sure.\" $\n        Bob.hey \"Does this cryogenic chamber make me look fat?\"\n\n    test \"asking a numeric question\" do\n      Assert.equal \"Sure.\" $\n        Bob.hey \"You arewhat, like 15?\"\n\n    test \"talking forcefully\" do\n      Assert.equal \"Whatever.\" $\n        Bob.hey \"Let's go make out behind the gym!\"\n\n    test \"using acronyms in regular speech\" do\n      Assert.equal \"Whatever.\" $\n        Bob.hey \"It's OK if you don't want to go to the DMV.\"\n\n    test \"forceful questions\" do\n      Assert.equal \"Calm down, I know what I'm doing!\" $\n        Bob.hey \"WHAT THE HELL WERE YOU THINKING?\"\n\n    test \"shouting numbers\" do\n      Assert.equal \"Whoa, chill out!\" $\n        Bob.hey \"12, 3 GO!\"\n\n    test \"only numbers\" do\n      Assert.equal \"Whatever.\" $\n        Bob.hey \"12, 3\"\n\n    test \"question with only numbers\" do\n      Assert.equal \"Sure.\" $\n        Bob.hey \"4?\"\n\n    test \"shouting with special characters\" do\n      Assert.equal \"Whoa, chill out!\" $\n        Bob.hey \"ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!\"\n\n    test \"shouting with no exclamation mark\" do\n      Assert.equal \"Whoa, chill out!\" $\n        Bob.hey \"I HATE YOU\"\n\n    test \"statement containing a question mark\" do\n      Assert.equal \"Whatever.\" $\n        Bob.hey \"Ending with ? means a question.\"\n\n    test \"prattling on\" do\n      Assert.equal \"Sure.\" $\n        Bob.hey \"Wait! Hang on. Are you going to be OK?\"\n\n    test \"silence\" do\n      Assert.equal \"Fine. Be that way!\" $\n        Bob.hey \"\"\n\n    test \"prolonged silence\" do\n      Assert.equal \"Fine. Be that way!\" $\n        Bob.hey \"       \"\n\n    test \"alternate silences\" do\n      Assert.equal \"Fine. Be that way!\" $\n        Bob.hey \"\\t  \\n  \\t   \"\n\n    test \"on multiple line questions\" do\n      Assert.equal \"Whatever.\" $\n        Bob.hey \"\\nDoes this cryogenic chamber make me look fat?\\nno\"\n",
+  "source": "Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=06",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": [
+    "colinwahl",
+    "icyrockcom",
+    "joshburgess",
+    "spicydonuts"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "delphi:leap",
+  "trackSlug": "delphi",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "9e54a998-450c-4020-834e-eaa77f909744",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "unit uLeap;\n\ninterface\n\ntype\n  TYear = class\n  public\n    class function IsLeap(aYear: integer): Boolean; static;\n  end;\nimplementation\n\nclass function TYear.IsLeap(aYear: integer): Boolean;\nbegin\n  result := ((aYear mod 400) = 0) or (((aYear mod 4) = 0) and ((aYear mod 100) <> 0));\nend;\n\nend.\n",
+  "test_code": "unit uLeapTests;\n\ninterface\nuses\n  DUnitX.TestFramework;\n\nconst\n  CanonicalVersion = '1.5.0';\n\ntype\n\n  [TestFixture]\n  YearTest = class(TObject)\n  public\n    [Test]\n//    [Ignore('Comment the \"[Ignore]\" statement to run the test')]\n    procedure year_not_divisible_by_4_common_year;\n\n    [Test]\n    [Ignore]\n    procedure year_divisible_by_2_not_divisible_by_4_common_year;\n    \n    [Test]\n    [Ignore]\n    procedure year_divisible_by_4_not_divisible_by_100_leap_year;\n\n    [Test]\n    [Ignore]\n    procedure year_divisible_by_100_not_divisible_by_400_common_year;\n\n    [Test]\n    [Ignore]\n    procedure year_divisible_by_400_leap_year;\n\n    [Test]\n    [Ignore]\n    procedure year_divisible_by_200_not_divisible_by_400_common_year;\n  end;\n\nimplementation\nuses uLeap;\n\nprocedure YearTest.year_not_divisible_by_4_common_year;\nbegin\n  assert.IsFalse(TYear.IsLeap(2015), 'Expected ''false'', 2015 is not a leap year.');\nend;\n\nprocedure YearTest.year_divisible_by_4_not_divisible_by_100_leap_year;\nbegin\n  assert.IsTrue(TYear.IsLeap(1996), 'Expected ''true'', 1996 is a leap year.');\nend;\n\nprocedure YearTest.year_divisible_by_100_not_divisible_by_400_common_year;\nbegin\n  assert.IsFalse(TYear.IsLeap(2100), 'Expected ''false'', 2100 is not a leap year.');\nend;\n\nprocedure YearTest.year_divisible_by_200_not_divisible_by_400_common_year;\nbegin\n  assert.IsFalse(TYear.IsLeap(1800), 'Expected ''false'', 1800 is not a leap year.');\nend;\n\nprocedure YearTest.year_divisible_by_2_not_divisible_by_4_common_year;\nbegin\n  assert.IsFalse(TYear.IsLeap(1970), 'Expected ''false'', 1970 is not a leap year.');\nend;\n\nprocedure YearTest.year_divisible_by_400_leap_year;\nbegin\n  assert.IsTrue(TYear.IsLeap(2000), 'Expected ''true'', 2000 is a leap year.');\nend;\n\ninitialization\n  TDUnitX.RegisterTestFixture(YearTest);\nend.\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "rpottsoh"
+  ],
+  "contributors": null
+}

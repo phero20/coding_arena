@@ -1,0 +1,32 @@
+{
+  "id": "rust:resistor-color",
+  "trackSlug": "rust",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "51c31e6a-b7ec-469d-8a28-dd821fd857d2",
+  "type": "concept",
+  "status": "active",
+  "blurb": "Convert a resistor band's color to its numeric representation and back, using external crates",
+  "difficulty": 1,
+  "concepts": [
+    "external-crates"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "functions",
+    "enums"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- Black: 0\n- Brown: 1\n- Red: 2\n- Orange: 3\n- Yellow: 4\n- Green: 5\n- Blue: 6\n- Violet: 7\n- Grey: 8\n- White: 9\n\nThe goal of this exercise is to create a way to:\n1. look up the numerical value associated with a particular color band\n2. convert the numerical value into a string representing color\n3. list the different band colors\n\nFor task number one, you will need the external crate [`int-enum`](https://docs.rs/int-enum/0.5.0/int_enum/) and for task number three, you'll need [`enum-iterator`](https://docs.rs/enum-iterator/1.2.0/enum_iterator/).\nThey're both already included in this exercise's `Cargo.toml`.\nBe sure to check the crates' documentation to learn how to use them.\nYou can look into the default implementation of the Debug trait for Enums to complete task number two.\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array: Better Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article](https://en.wikipedia.org/wiki/Electronic_color_code)\n",
+  "introduction": "# Introduction\n\nMost programs have dependencies on some libraries. Managing those by hand can be a pain. Luckily, the Rust ecosystem comes standard with `cargo`! `cargo` can manage dependencies for a project.\n\nYou will often see external packages being referred to as \"crates\" in Rust. A crate is a compilation unit in Rust. A crate can be compiled into a binary or into a library.\n\nMost of the time, adding an external dependency is as simple as adding a line to your `Cargo.toml` file.\n\nIn this exercise, [`enum-iterator`](https://docs.rs/enum-iterator/1.2.0/enum_iterator/) and [`int-enum`](https://docs.rs/int-enum/0.5.0/int_enum/) dependencies were added for you.\n",
+  "hints": "# Hints\n\n## General\n\n- Use the `enum-iterator` crate to be able to iterate over enums. Check out [docs](https://docs.rs/enum-iterator/1.2.0/enum_iterator/) to find out how.\n\n- Use the `int-enum` crate to be able to convert from int to enum. See the [docs](https://docs.rs/int-enum/0.5.0/int_enum/) for details.\n\n- The `Debug` trait is there because you'll likely need it.\n\n- You'll need to extend the list of `derive`d traits on your colors enum.\n",
+  "starter_code": "#[derive(Debug, PartialEq, Eq)]\npub enum ResistorColor {\n    Black,\n    Blue,\n    Brown,\n    Green,\n    Grey,\n    Orange,\n    Red,\n    Violet,\n    White,\n    Yellow,\n}\n\npub fn color_to_value(color: ResistorColor) -> u32 {\n    todo!(\"convert color {color:?} into a numerical representation\")\n}\n\npub fn value_to_color_string(value: u32) -> String {\n    todo!(\"convert the value {value} into a string representation of color\")\n}\n\npub fn colors() -> Vec<ResistorColor> {\n    todo!(\"return a list of all the colors ordered by resistance\")\n}\n",
+  "example_solution": "use enum_iterator::{Sequence, all};\nuse int_enum::IntEnum;\n\n#[repr(usize)]\n#[derive(Clone, Copy, Debug, PartialEq, IntEnum, Sequence)]\npub enum ResistorColor {\n    Black = 0,\n    Brown = 1,\n    Red = 2,\n    Orange = 3,\n    Yellow = 4,\n    Green = 5,\n    Blue = 6,\n    Violet = 7,\n    Grey = 8,\n    White = 9,\n}\n\npub fn color_to_value(color: ResistorColor) -> usize {\n    color.into()\n}\n\npub fn value_to_color_string(value: usize) -> String {\n    ResistorColor::try_from(value)\n        .map(|color| format!(\"{color:?}\"))\n        .unwrap_or_else(|_| \"value out of range\".into())\n}\n\npub fn colors() -> Vec<ResistorColor> {\n    all::<ResistorColor>().collect()\n}\n",
+  "test_code": "use resistor_color::{ResistorColor, color_to_value, colors, value_to_color_string};\n\n#[test]\nfn black() {\n    assert_eq!(color_to_value(ResistorColor::Black), 0);\n}\n\n#[test]\n#[ignore]\nfn orange() {\n    assert_eq!(color_to_value(ResistorColor::Orange), 3);\n}\n\n#[test]\n#[ignore]\nfn white() {\n    assert_eq!(color_to_value(ResistorColor::White), 9);\n}\n\n#[test]\n#[ignore]\nfn two() {\n    assert_eq!(value_to_color_string(2), String::from(\"Red\"));\n}\n\n#[test]\n#[ignore]\nfn six() {\n    assert_eq!(value_to_color_string(6), String::from(\"Blue\"));\n}\n\n#[test]\n#[ignore]\nfn eight() {\n    assert_eq!(value_to_color_string(8), String::from(\"Grey\"));\n}\n\n#[test]\n#[ignore]\nfn eleven_out_of_range() {\n    assert_eq!(\n        value_to_color_string(11),\n        String::from(\"value out of range\")\n    );\n}\n\n#[test]\n#[ignore]\nfn all_colors() {\n    use ResistorColor::*;\n    assert_eq!(\n        colors(),\n        vec![\n            Black, Brown, Red, Orange, Yellow, Green, Blue, Violet, Grey, White\n        ]\n    );\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "still-flow",
+    "coriolinus"
+  ],
+  "contributors": []
+}

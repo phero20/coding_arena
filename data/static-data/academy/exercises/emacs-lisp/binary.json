@@ -1,0 +1,26 @@
+{
+  "id": "emacs-lisp:binary",
+  "trackSlug": "emacs-lisp",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "7307e13e-7a18-4654-8df4-96951d4dccc6",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion.\nGiven a binary input string, your program should produce a decimal output.\nThe program should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood as a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The *n*th number gets multiplied by 10^*(n-1)*.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; binary.el --- Binary exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n(defun to-decimal (binary-string)\n;;; Code:\n)\n\n(provide 'binary)\n;;; binary.el ends here\n",
+  "example_solution": ";;; binary.el --- Binary exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(defun to-decimal (binary-string)\n  \"Convert BINARY-STRING to a decimal integer.\"\n  (string-to-number binary-string 2))\n\n\n(provide 'binary)\n;;; binary.el ends here\n",
+  "test_code": ";;; binary-test.el --- Tests for Binary exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(load-file \"binary.el\")\n(declare-function to-decimal \"binary.el\" (binary-string))\n\n(ert-deftest binary-1-is-decimal-1 ()\n  (should (= 1 (to-decimal \"1\"))))\n\n(ert-deftest binary-10-is-decimal-2 ()\n  (should (= 2 (to-decimal \"10\"))))\n\n(ert-deftest binary-11-is-decimal-3 ()\n  (should (= 3 (to-decimal \"11\"))))\n\n(ert-deftest binary-100-is-decimal-4 ()\n  (should (= 4 (to-decimal \"100\"))))\n\n(ert-deftest binary-1001-is-decimal-9 ()\n  (should (= 9 (to-decimal \"1001\"))))\n\n(ert-deftest binary-11010-is-decimal-26 ()\n  (should (= 26 (to-decimal \"11010\"))))\n\n(ert-deftest binary-10001101000-is-decimal-1128 ()\n  (should (= 1128 (to-decimal \"10001101000\"))))\n\n(ert-deftest invalid-binary-is-decimal-0 ()\n  (should (= 0 (to-decimal \"carrot\"))))\n\n(provide 'binary-test)\n;;; binary-test.el ends here\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "canweriotnow"
+  ],
+  "contributors": null
+}

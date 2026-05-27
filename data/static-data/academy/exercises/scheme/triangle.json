@@ -1,0 +1,26 @@
+{
+  "id": "scheme:triangle",
+  "trackSlug": "scheme",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "d3ee5c3d-1d5e-4843-b390-e83d72615ea7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (triangle a b c)\n  'implement-me!)\n",
+  "example_solution": "(import (rnrs))\n\n(define (any f xs)\n  (fold-left (lambda (r x) (or r (f x))) #f xs))\n\n(define (every f xs)\n  (fold-left (lambda (r x) (and r (f x))) #t xs))\n\n(define (string-any f s)\n  (any f (string->list s)))\n\n(define (string-every f s)\n  (every f (string->list s)))\n\n(define (nub xs)\n  (fold-left (lambda (ys x)\n               (if (any (lambda (y) (equal? x y)) ys) ys\n                   (cons x ys)))\n             '() xs))\n\n(define (impl-safe-sort f xs)\n  (call/cc\n   (lambda (k)\n     (with-exception-handler\n         (lambda (e)\n           ;; Uh-oh, we're using Guile!\n           (k (sort xs f)))\n       (lambda ()\n         (sort f xs))))))\n\n(define (triangle a b c)\n  (let ([xs (impl-safe-sort > (list a b c))])\n    (if (>= (car xs) (apply + (cdr xs)))\n        (error \"Invalid triangle\")\n        (case (length (nub xs))\n          [(1) 'equilateral]\n          [(2) 'isosceles]\n          [else 'scalene]))))\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success \"equilateral: 2 2 2\" equal? triangle\n      '(2 2 2) 'equilateral)\n     (test-success \"equilateral: 10 10 10\" equal? triangle\n       '(10 10 10) 'equilateral)\n     (test-success \"isosceles: 3 4 4\" equal? triangle '(3 4 4)\n       'isosceles)\n     (test-success \"isosceles: 4 3 4\" equal? triangle '(4 3 4)\n       'isosceles)\n     (test-success \"isosceles: 4 4 3\" equal? triangle '(4 4 3)\n       'isosceles)\n     (test-success \"isosceles: 10 10 2\" equal? triangle\n       '(10 10 2) 'isosceles)\n     (test-success \"scalene: 3 4 5\" equal? triangle '(3 4 5)\n       'scalene)\n     (test-success \"scalene: 10 11 12\" equal? triangle\n       '(10 11 12) 'scalene)\n     (test-success \"scalene: 5 4 2\" equal? triangle '(5 4 2)\n       'scalene)\n     (test-error \"invalid: 0 0 0\" triangle '(0 0 0))\n     (test-error \"invalid: 3 4 -5\" triangle '(3 4 -5))\n     (test-error \"invalid: 1 1 3\" triangle '(1 1 3))\n     (test-error \"invalid: 2 4 2\" triangle '(2 4 2))))\n\n(run-with-cli \"triangle.scm\" (list test-cases))\n\n",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://web.archive.org/web/20220831105330/http://rubykoans.com",
+  "authors": [
+    "tongkiat"
+  ],
+  "contributors": null
+}

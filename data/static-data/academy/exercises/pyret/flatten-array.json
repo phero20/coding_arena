@@ -1,0 +1,26 @@
+{
+  "id": "pyret:flatten-array",
+  "trackSlug": "pyret",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "23b5a864-186c-4a4d-ba32-83608b0d18f6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: flatten end\n\nfun flatten(lst):\n  raise(\"please implement the flatten function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: flatten end\n\nimport lists as L\n\nfun flatten(lst):\n  lst.foldr(lam(elt, acc):\n      ask:\n        | elt == nothing then:\n          acc\n        | is-empty(elt) then:\n          acc\n        | is-link(elt) then:\n          result = flatten(elt)\n          result.append(acc)\n        | otherwise:\n          L.push(acc, elt)\n      end\n    end,\n    [list: ])\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"flatten-array.arr\")\n\ncheck \"empty\":\n  input = [list: ]\n\n  expected = [list: ]\n\n  flatten(input) is expected\nend\n\ncheck \"no nesting\":\n  input = [list: 0, 1, 2]\n\n  expected = [list: 0, 1, 2]\n\n  flatten(input) is expected\nend\n\ncheck \"flattens a nested array\":\n  input = [list: [list: ]]\n\n  expected = [list: ]\n\n  flatten(input) is expected\nend\n\ncheck \"flattens array with just integers present\":\n  input = [list: 1, [list: 2, 3, 4, 5, 6, 7], 8]\n\n  expected = [list: 1, 2, 3, 4, 5, 6, 7, 8]\n\n  flatten(input) is expected\nend\n\ncheck \"5 level nesting\":\n  input = [list:\n    0,\n    2,\n    [list:\n      [list: 2, 3],\n      8,\n      100,\n      4,\n      [list:\n        [list:\n          [list: 50]]]],\n    -2]\n\n  expected = [list:\n    0,\n    2,\n    2,\n    3,\n    8,\n    100,\n    4,\n    50,\n    -2]\n\n  flatten(input) is expected\nend\n\ncheck \"6 level nesting\":\n  input = [list:\n    1,\n    [list:\n      2,\n      [list: [list: 3]],\n      [list:\n      4,\n      [list: [list: 5]]],\n      6,\n      7],\n    8]\n\n  expected = [list:\n    1,\n    2,\n    3,\n    4,\n    5,\n    6,\n    7,\n    8]\n\n  flatten(input) is expected\nend\n\ncheck \"nothing values are omitted from the final result\":\n  input = [list: 1, 2, nothing]\n\n  expected = [list: 1, 2]\n\n  flatten(input) is expected\nend\n\ncheck \"consecutive nothing values at the front of the array are omitted from the final result\":\n  input = [list: nothing, nothing, 3]\n\n  expected = [list: 3]\n\n  flatten(input) is expected\nend\n\ncheck \"consecutive nothing values in the middle of the array are omitted from the final result\":\n  input = [list: 1, nothing, nothing, 4]\n\n  expected = [list: 1, 4]\n\n  flatten(input) is expected\nend\n\ncheck \"6 level nest array with nothing values\":\n  input = [list:\n    0,\n    2,\n    [list:\n      [list: 2, 3],\n      8,\n      [list: [list: 100 ]],\n      nothing,\n      [list: [list: nothing]]],\n    -2]\n\n  expected = [list:\n    0,\n    2,\n    2,\n    3,\n    8,\n    100,\n    -2]\n\n  flatten(input) is expected\nend\n\ncheck \"all values in nested array are nothing\":\n  input = [list:\n    nothing,\n    [list:\n      [list:\n        [list: nothing]]],\n    nothing,\n    nothing,\n    [list:\n      [list:\n        nothing,\n        nothing],\n      nothing],\n    nothing]\n\n  expected = [list: ]\n\n  flatten(input) is expected\nend\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

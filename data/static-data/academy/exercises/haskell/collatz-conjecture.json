@@ -1,0 +1,32 @@
+{
+  "id": "haskell:collatz-conjecture",
+  "trackSlug": "haskell",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "6eba4eac-8395-4ad6-ac21-3651a11ab4b4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe Collatz Conjecture or 3x+1 problem can be summarized as follows:\n\nTake any positive integer n.\nIf n is even, divide n by 2 to get n / 2.\nIf n is odd, multiply n by 3 and add 1 to get 3n + 1.\nRepeat the process indefinitely.\nThe conjecture states that no matter which number you start with, you will always reach 1 eventually.\n\nGiven a number n, return the number of steps required to reach 1.\n\n## Examples\n\nStarting with n = 12, the steps would be as follows:\n\n0. 12\n1. 6\n2. 3\n3. 10\n4. 5\n5. 16\n6. 8\n7. 4\n8. 2\n9. 1\n\nResulting in 9 steps.\nSo for input n = 12, the return value would be 9.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module CollatzConjecture (collatz) where\n\ncollatz :: Integer -> Maybe Integer\ncollatz n = error \"You need to implement this function.\"\n",
+  "example_solution": "module CollatzConjecture (collatz) where\n\ncollatzHelper :: Integer -> Integer -> Maybe Integer\ncollatzHelper t x | x == 1    = Just t\n                  | even x    = collatzHelper (t+1) (x `div` 2)\n                  | otherwise = collatzHelper (t+1) (x*3 + 1)\n\ncollatz :: Integer -> Maybe Integer\ncollatz x = if x <= 0 then Nothing else collatzHelper 0 x\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport CollatzConjecture (collatz)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"collatz\" $ for_ cases test\n  where\n\n    test Case{..} = it description assertion\n      where\n        assertion = collatz number `shouldBe` expected\n\n\ndata Case = Case { description :: String\n                 , number      :: Integer\n                 , expected    :: Maybe Integer\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"zero steps for one\"\n               , number      = 1\n               , expected    = Just 0\n               }\n        , Case { description = \"divide if even\"\n               , number      = 16\n               , expected    = Just 4\n               }\n        , Case { description = \"even and odd steps\"\n               , number      = 12\n               , expected    = Just 9\n               }\n        , Case { description = \"large number of even and odd steps\"\n               , number      = 1000000\n               , expected    = Just 152\n               }\n        , Case { description = \"zero is an error\"\n               , number      = 0\n               , expected    = Nothing\n               }\n        , Case { description = \"negative value is an error\"\n               , number      = -15\n               , expected    = Nothing\n               }\n        ]\n",
+  "source": "An unsolved problem in mathematics named after mathematician Lothar Collatz",
+  "source_url": "https://en.wikipedia.org/wiki/3x_%2B_1_problem",
+  "authors": [],
+  "contributors": [
+    "guygastineau",
+    "iHiD",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "sshine",
+    "tejasbubane"
+  ]
+}

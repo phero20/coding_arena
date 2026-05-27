@@ -52,11 +52,11 @@ export function useSubmissionStatusQuery(submissionId: string | null) {
 /**
  * Fetch the history of code submissions for a specific user and problem.
  */
-export function useUserSubmissionsQuery(problemId: string) {
+export function useUserSubmissionsQuery(problemId: string, enabled: boolean = true) {
   return useQuery({
     queryKey: ["user-submissions", problemId],
     queryFn: () => getUserSubmissions(problemId),
-    enabled: !!problemId,
+    enabled: !!problemId && enabled,
   });
 }
 

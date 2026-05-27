@@ -1,0 +1,26 @@
+{
+  "id": "lean:resistor-color",
+  "trackSlug": "lean",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "189eb2e7-d2b2-4439-aa13-ade013566bdb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "/-\n  You must define syntax for colors using the `c*` prefix, e.g., `c*black`.\n  This syntax should expand to its corresponding value as a `Fin 10`, according to the instructions.\n\n  You must also define syntax `c*all` that expands to an array containing all color values.\n\n  Macros and notations are not qualified by namespace.\n  For this reason, this exercise does not define a namespace.\n-/\n",
+  "example_solution": "/-\nnotation \"c*black\"  => (0 : Fin 10)\nnotation \"c*brown\"  => (1 : Fin 10)\nnotation \"c*red\"    => (2 : Fin 10)\nnotation \"c*orange\" => (3 : Fin 10)\nnotation \"c*yellow\" => (4 : Fin 10)\nnotation \"c*green\"  => (5 : Fin 10)\nnotation \"c*blue\"   => (6 : Fin 10)\nnotation \"c*violet\" => (7 : Fin 10)\nnotation \"c*grey\"   => (8 : Fin 10)\nnotation \"c*white\"  => (9 : Fin 10)\nnotation \"c*all\"    => (Array.finRange 10)\n-/\n\nsyntax \"c*\" ident:term\n\nmacro_rules\n  | `(c*black)  => `((⟨0, by decide⟩ : Fin 10))\n  | `(c*brown)  => `((⟨1, by decide⟩ : Fin 10))\n  | `(c*red)    => `((⟨2, by decide⟩ : Fin 10))\n  | `(c*orange) => `((⟨3, by decide⟩ : Fin 10))\n  | `(c*yellow) => `((⟨4, by decide⟩ : Fin 10))\n  | `(c*green)  => `((⟨5, by decide⟩ : Fin 10))\n  | `(c*blue)   => `((⟨6, by decide⟩ : Fin 10))\n  | `(c*violet) => `((⟨7, by decide⟩ : Fin 10))\n  | `(c*grey)   => `((⟨8, by decide⟩ : Fin 10))\n  | `(c*white)  => `((⟨9, by decide⟩ : Fin 10))\n  | `(c*all)    => `((Array.finRange 10))\n",
+  "test_code": "import LeanTest\nimport ResistorColor\n\nopen LeanTest\n\ntheorem h_black: c*black = (0 : Fin 10) := by rfl\ntheorem h_brown: c*brown = (1 : Fin 10) := by rfl\ntheorem h_red: c*red = (2 : Fin 10) := by rfl\ntheorem h_orange: c*orange = (3 : Fin 10) := by rfl\ntheorem h_yellow: c*yellow = (4 : Fin 10) := by rfl\ntheorem h_green: c*green = (5 : Fin 10) := by rfl\ntheorem h_blue: c*blue = (6 : Fin 10) := by rfl\ntheorem h_violet: c*violet = (7 : Fin 10) := by rfl\ntheorem h_grey: c*grey = (8 : Fin 10) := by rfl\ntheorem h_white: c*white = (9 : Fin 10) := by rfl\ntheorem h_all: c*all = #[c*black, c*brown, c*red, c*orange, c*yellow, c*green, c*blue, c*violet, c*grey, c*white] := by rfl\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode []\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "oxe-i"
+  ],
+  "contributors": null
+}

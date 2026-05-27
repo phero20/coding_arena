@@ -1,0 +1,35 @@
+{
+  "id": "swift:dominoes",
+  "trackSlug": "swift",
+  "slug": "dominoes",
+  "name": "Dominoes",
+  "uuid": "68d71c7f-5259-4030-821f-8449a142b677",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make a chain of dominoes.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nMake a chain of dominoes.\n\nCompute a way to order a given set of domino stones so that they form a correct domino chain.\nIn the chain, the dots on one half of a stone must match the dots on the neighboring half of an adjacent stone.\nAdditionally, the dots on the halves of the stones without neighbors (the first and last stone) must match each other.\n\nFor example given the stones `[2|1]`, `[2|3]` and `[1|3]` you should compute something\nlike `[1|2] [2|3] [3|1]` or `[3|2] [2|1] [1|3]` or `[1|3] [3|2] [2|1]` etc, where the first and last numbers are the same.\n\nFor stones `[1|2]`, `[4|1]` and `[2|3]` the resulting chain is not valid: `[4|1] [1|2] [2|3]`'s first and last numbers are not the same.\n4 != 3\n\nSome test cases may use duplicate stones in a chain solution, assume that multiple Domino sets are being used.\n",
+  "introduction": "# Introduction\n\nIn Toyland, the trains are always busy delivering treasures across the city, from shiny marbles to rare building blocks.\nThe tracks they run on are made of colorful domino-shaped pieces, each marked with two numbers.\nFor the trains to move, the dominoes must form a perfect chain where the numbers match.\n\nToday, an urgent delivery of rare toys is on hold.\nYou've been handed a set of track pieces to inspect.\nIf they can form a continuous chain, the train will be on its way, bringing smiles across Toyland.\nIf not, the set will be discarded, and another will be tried.\n\nThe toys are counting on you to solve this puzzle.\nWill the dominoes connect the tracks and send the train rolling, or will the set be left behind?\n",
+  "hints": null,
+  "starter_code": "struct Dominoes {\n  // Write your code for the 'Dominoes' exercise here.\n}\n",
+  "example_solution": "struct Dominoes {\n  private var dominos: [(Int, Int)]\n\n  init(_ dominos: [(Int, Int)]) {\n    self.dominos = dominos\n  }\n\n  var chained: Bool {\n    guard !dominos.isEmpty else {\n      return true\n    }\n    // A set to keep track of used dominos during backtracking\n    var usedDominos = Set<Int>()\n\n    // Start the chain with any domino as the first one\n    for (index, domino) in dominos.enumerated() {\n      usedDominos.insert(index)\n      if backtrackChain(from: domino, usedDominos: &usedDominos) {\n        return true\n      }\n      usedDominos.remove(index)\n    }\n\n    return false\n  }\n\n  private func backtrackChain(from domino: (Int, Int), usedDominos: inout Set<Int>) -> Bool {\n    let lastValue = domino.1\n\n    // Check if we have reached the end of the chain\n    if usedDominos.count == dominos.count {\n      // Check if the lastValue matches the firstValue of the initial domino\n      return lastValue == dominos.first!.0\n    }\n\n    for (index, nextDomino) in dominos.enumerated() {\n      if !usedDominos.contains(index) {\n        // Check if the lastValue matches the firstValue of the next domino\n        if lastValue == nextDomino.0 {\n          usedDominos.insert(index)\n          if backtrackChain(from: nextDomino, usedDominos: &usedDominos) {\n            return true\n          }\n          usedDominos.remove(index)\n        }\n        // Check if the lastValue matches the secondValue of the next domino\n        if lastValue == nextDomino.1 {\n          usedDominos.insert(index)\n          if backtrackChain(from: (nextDomino.1, nextDomino.0), usedDominos: &usedDominos) {\n            return true\n          }\n          usedDominos.remove(index)\n        }\n      }\n    }\n\n    return false\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Dominoes\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct DominoesTests {\n\n  @Test(\"empty input = empty output\")\n  func testEmptyInputEmptyOutput() {\n    let input = [(Int, Int)]()\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"singleton input = singleton output\", .enabled(if: RUNALL))\n  func testSingletonInputSingletonOutput() {\n    let input = [(1, 1)]\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"singleton that can't be chained\", .enabled(if: RUNALL))\n  func testSingletonThatCantBeChained() {\n    let input = [(1, 2)]\n    #expect(!Dominoes(input).chained)\n  }\n\n  @Test(\"three elements\", .enabled(if: RUNALL))\n  func testThreeElements() {\n    let input = [(1, 2), (3, 1), (2, 3)]\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"can reverse dominoes\", .enabled(if: RUNALL))\n  func testCanReverseDominoes() {\n    let input = [(1, 2), (1, 3), (2, 3)]\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"can't be chained\", .enabled(if: RUNALL))\n  func testCantBeChained() {\n    let input = [(1, 2), (4, 1), (2, 3)]\n    #expect(!Dominoes(input).chained)\n  }\n\n  @Test(\"disconnected - simple\", .enabled(if: RUNALL))\n  func testDisconnectedSimple() {\n    let input = [(1, 1), (2, 2)]\n    #expect(!Dominoes(input).chained)\n  }\n\n  @Test(\"disconnected - double loop\", .enabled(if: RUNALL))\n  func testDisconnectedDoubleLoop() {\n    let input = [(1, 2), (2, 1), (3, 4), (4, 3)]\n    #expect(!Dominoes(input).chained)\n  }\n\n  @Test(\"disconnected - single isolated\", .enabled(if: RUNALL))\n  func testDisconnectedSingleIsolated() {\n    let input = [(1, 2), (2, 3), (3, 1), (4, 4)]\n    #expect(!Dominoes(input).chained)\n  }\n\n  @Test(\"need backtrack\", .enabled(if: RUNALL))\n  func testNeedBacktrack() {\n    let input = [(1, 2), (2, 3), (3, 1), (2, 4), (2, 4)]\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"separate loops\", .enabled(if: RUNALL))\n  func testSeparateLoops() {\n    let input = [(1, 2), (2, 3), (3, 1), (1, 1), (2, 2), (3, 3)]\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"nine elements\", .enabled(if: RUNALL))\n  func testNineElements() {\n    let input = [(1, 2), (5, 3), (3, 1), (1, 2), (2, 4), (1, 6), (2, 3), (3, 4), (5, 6)]\n    #expect(Dominoes(input).chained)\n  }\n\n  @Test(\"separate three-domino loops\", .enabled(if: RUNALL))\n  func testSeparateThreeDominoLoops() {\n    let input = [(1, 2), (2, 3), (3, 1), (4, 5), (5, 6), (6, 4)]\n    #expect(!Dominoes(input).chained)\n  }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "masters3d",
+    "meatball133"
+  ],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "petertseng",
+    "robtimp",
+    "ThomasHaz"
+  ]
+}

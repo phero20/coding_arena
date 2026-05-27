@@ -1,0 +1,38 @@
+{
+  "id": "haskell:leap",
+  "trackSlug": "haskell",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "0ad7d756-1cbd-44f4-a64f-0dc7e9eb40f4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "module LeapYear (isLeapYear) where\n\nisLeapYear :: Integer -> Bool\nisLeapYear year = error \"You need to implement this function.\"\n",
+  "example_solution": "module LeapYear (isLeapYear) where\n\nisLeapYear :: Int -> Bool\nisLeapYear year = hasFactor 4 && (not (hasFactor 100) || hasFactor 400)\n  where hasFactor n = year `rem` n == 0",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport LeapYear (isLeapYear)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"isLeapYear\" $ for_ cases test\n  where\n\n    test Case{..} = it explanation assertion\n      where\n        explanation = unwords [show input, \"-\", description]\n        assertion   = isLeapYear (fromIntegral input) `shouldBe` expected\n\ndata Case = Case { description :: String\n                 , input       :: Integer\n                 , expected    :: Bool\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"year not divisible by 4 in common year\"\n               , input       = 2015\n               , expected    = False\n               }\n        , Case { description = \"year divisible by 2, not divisible by 4 in common year\"\n               , input       = 1970\n               , expected    = False\n               }\n        , Case { description = \"year divisible by 4, not divisible by 100 in leap year\"\n               , input       = 1996\n               , expected    = True\n               }\n        , Case { description = \"year divisible by 4 and 5 is still a leap year\"\n               , input       = 1960\n               , expected    = True\n               }\n        , Case { description = \"year divisible by 100, not divisible by 400 in common year\"\n               , input       = 2100\n               , expected    = False\n               }\n        , Case { description = \"year divisible by 100 but not by 3 is still not a leap year\"\n               , input       = 1900\n               , expected    = False\n               }\n        , Case { description = \"year divisible by 400 in leap year\"\n               , input       = 2000\n               , expected    = True\n               }\n        , Case { description = \"year divisible by 400 but not by 125 is still a leap year\"\n               , input       = 2400\n               , expected    = True\n               }\n        , Case { description = \"year divisible by 200, not divisible by 400 in common year\"\n               , input       = 1800\n               , expected    = False\n               }\n        ]\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "karen-pal",
+    "kytrinyx",
+    "navossoc",
+    "paulrex",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane",
+    "tofische"
+  ]
+}

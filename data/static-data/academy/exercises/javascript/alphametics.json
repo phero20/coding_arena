@@ -1,0 +1,41 @@
+{
+  "id": "javascript:alphametics",
+  "trackSlug": "javascript",
+  "slug": "alphametics",
+  "name": "Alphametics",
+  "uuid": "a602bd33-69fc-4b67-a3d3-95198853095e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an alphametics puzzle, find the correct solution.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "arithmetic-operators",
+    "array-analysis",
+    "array-transformations",
+    "conditionals",
+    "for-loops",
+    "functions",
+    "objects",
+    "rest-and-spread"
+  ],
+  "instructions": "# Instructions\n\nGiven an alphametics puzzle, find the correct solution.\n\n[Alphametics][alphametics] is a puzzle where letters in words are replaced with numbers.\n\nFor example `SEND + MORE = MONEY`:\n\n```text\n  S E N D\n  M O R E +\n-----------\nM O N E Y\n```\n\nReplacing these with valid numbers gives:\n\n```text\n  9 5 6 7\n  1 0 8 5 +\n-----------\n1 0 6 5 2\n```\n\nThis is correct because every letter is replaced by a different number and the words, translated into numbers, then make a valid sum.\n\nEach letter must represent a different digit, and the leading digit of a multi-digit number must not be zero.\n\n[alphametics]: https://en.wikipedia.org/wiki/Alphametics\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Alphametics' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const solve = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "const DIGITS = [...Array(10).keys()];\n\nexport function solve(puzzle) {\n  const parts = puzzle\n    .split(/[+|==]/g)\n    .map((o) => o.trim())\n    .filter((o) => o !== '');\n\n  if (parts.length < 3) {\n    return null;\n  }\n\n  const firstLetters = new Set(parts.map((p) => p[0]));\n  const letterCounts = countLetters(parts, parts.pop());\n\n  return tryPermutations(letterCounts, firstLetters);\n}\n\nfunction countLetters(terms, total) {\n  const counts = {};\n\n  terms.forEach((term) => {\n    [...term].forEach((letter, i, { length }) => {\n      counts[letter] = (counts[letter] ?? 0) + 10 ** (length - 1 - i);\n    });\n  });\n\n  [...total].forEach((letter, i, { length }) => {\n    counts[letter] = (counts[letter] ?? 0) - 10 ** (length - 1 - i);\n  });\n\n  return counts;\n}\n\nfunction testPermutation(letterCounts, numbers) {\n  const letters = Object.keys(letterCounts);\n  const counts = Object.values(letterCounts);\n  return counts.reduce((sum, count, i) => sum + count * numbers[i], 0) === 0\n    ? letters.reduce(\n        (solution, letter, i) => ({ ...solution, [letter]: numbers[i] }),\n        {},\n      )\n    : null;\n}\n\nfunction tryPermutations(letterCounts, firstLetters, numbers = []) {\n  const letters = Object.keys(letterCounts);\n  if (numbers.length === letters.length) {\n    return testPermutation(letterCounts, numbers);\n  }\n\n  for (const digit of DIGITS) {\n    if (\n      numbers.includes(digit) ||\n      (digit === 0 && firstLetters.has(letters[numbers.length]))\n    ) {\n      continue;\n    }\n\n    const result = tryPermutations(letterCounts, firstLetters, [\n      ...numbers,\n      digit,\n    ]);\n\n    if (result) {\n      return result;\n    }\n  }\n\n  return null;\n}\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { solve } from './alphametics';\n\ndescribe('Solve the alphametics puzzle', () => {\n  test('puzzle with three letters', () => {\n    const puzzle = 'I + BB == ILL';\n    const expected = {\n      I: 1,\n      B: 9,\n      L: 0,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n\n  xtest('solution must have unique value for each letter', () => {\n    const puzzle = 'A == B';\n    expect(solve(puzzle)).toBeNull();\n  });\n\n  xtest('leading zero solution is invalid', () => {\n    const puzzle = 'ACA + DD == BD';\n    expect(solve(puzzle)).toBeNull();\n  });\n\n  xtest('puzzle with four letters', () => {\n    const puzzle = 'AS + A == MOM';\n    const expected = {\n      A: 9,\n      S: 2,\n      M: 1,\n      O: 0,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n\n  xtest('puzzle with six letters', () => {\n    const puzzle = 'NO + NO + TOO == LATE';\n    const expected = {\n      N: 7,\n      O: 4,\n      T: 9,\n      L: 1,\n      A: 0,\n      E: 2,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n\n  xtest('puzzle with seven letters', () => {\n    const puzzle = 'HE + SEES + THE == LIGHT';\n    const expected = {\n      E: 4,\n      G: 2,\n      H: 5,\n      I: 0,\n      L: 1,\n      S: 9,\n      T: 7,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n\n  xtest('puzzle with eight letters', () => {\n    const puzzle = 'SEND + MORE == MONEY';\n    const expected = {\n      S: 9,\n      E: 5,\n      N: 6,\n      D: 7,\n      M: 1,\n      O: 0,\n      R: 8,\n      Y: 2,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n\n  xtest('puzzle with ten letters', () => {\n    const puzzle = 'AND + A + STRONG + OFFENSE + AS + A + GOOD == DEFENSE';\n    const expected = {\n      A: 5,\n      D: 3,\n      E: 4,\n      F: 7,\n      G: 8,\n      N: 0,\n      O: 2,\n      R: 1,\n      S: 6,\n      T: 9,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n\n  xtest('puzzle with ten letters and 199 addends', () => {\n    const puzzle =\n      'THIS + A + FIRE + THEREFORE + FOR + ALL + HISTORIES + I + TELL + A + TALE + THAT + FALSIFIES + ITS + TITLE + TIS + A + LIE + THE + TALE + OF + THE + LAST + FIRE + HORSES + LATE + AFTER + THE + FIRST + FATHERS + FORESEE + THE + HORRORS + THE + LAST + FREE + TROLL + TERRIFIES + THE + HORSES + OF + FIRE + THE + TROLL + RESTS + AT + THE + HOLE + OF + LOSSES + IT + IS + THERE + THAT + SHE + STORES + ROLES + OF + LEATHERS + AFTER + SHE + SATISFIES + HER + HATE + OFF + THOSE + FEARS + A + TASTE + RISES + AS + SHE + HEARS + THE + LEAST + FAR + HORSE + THOSE + FAST + HORSES + THAT + FIRST + HEAR + THE + TROLL + FLEE + OFF + TO + THE + FOREST + THE + HORSES + THAT + ALERTS + RAISE + THE + STARES + OF + THE + OTHERS + AS + THE + TROLL + ASSAILS + AT + THE + TOTAL + SHIFT + HER + TEETH + TEAR + HOOF + OFF + TORSO + AS + THE + LAST + HORSE + FORFEITS + ITS + LIFE + THE + FIRST + FATHERS + HEAR + OF + THE + HORRORS + THEIR + FEARS + THAT + THE + FIRES + FOR + THEIR + FEASTS + ARREST + AS + THE + FIRST + FATHERS + RESETTLE + THE + LAST + OF + THE + FIRE + HORSES + THE + LAST + TROLL + HARASSES + THE + FOREST + HEART + FREE + AT + LAST + OF + THE + LAST + TROLL + ALL + OFFER + THEIR + FIRE + HEAT + TO + THE + ASSISTERS + FAR + OFF + THE + TROLL + FASTS + ITS + LIFE + SHORTER + AS + STARS + RISE + THE + HORSES + REST + SAFE + AFTER + ALL + SHARE + HOT + FISH + AS + THEIR + AFFILIATES + TAILOR + A + ROOFS + FOR + THEIR + SAFE == FORTRESSES';\n    const expected = {\n      A: 1,\n      E: 0,\n      F: 5,\n      H: 8,\n      I: 7,\n      L: 2,\n      O: 6,\n      R: 3,\n      S: 4,\n      T: 9,\n    };\n    expect(solve(puzzle)).toEqual(expected);\n  });\n});\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "rchavarria",
+    "slaymance",
+    "SleeplessByte",
+    "tejasbubane",
+    "xarxziux"
+  ]
+}

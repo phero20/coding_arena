@@ -1,0 +1,55 @@
+{
+  "id": "python:saddle-points",
+  "trackSlug": "python",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "71c96c5f-f3b6-4358-a9c6-fc625e2edda2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "loops"
+  ],
+  "prerequisites": [
+    "basics",
+    "conditionals",
+    "lists",
+    "list-methods",
+    "loops",
+    "sets"
+  ],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n      ↓\n      1  2  3  4\n    |-----------\n  1 | 9  8  7  8\n→ 2 |[5] 3  2  4\n  3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "def saddle_points(matrix):\n    pass\n",
+  "example_solution": "def saddle_points(matrix):\n    if not matrix:\n        return []\n\n    if any(len(row) != len(matrix[0]) for row in matrix):\n        raise ValueError('irregular matrix')\n\n    mmax = [max(row) for row in matrix]\n    mmin = [min(col) for col in zip(*matrix)]\n\n    points = [{'row': index + 1, 'column': col_index + 1}\n              for index, _ in enumerate(matrix)\n              for col_index, _ in enumerate(matrix[0])\n              if mmax[index] == mmin[col_index]]\n\n    return points or []\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/saddle-points/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom saddle_points import (\n    saddle_points,\n)\n\n\ndef sorted_points(point_list):\n    return sorted(point_list, key=lambda p: (p[\"row\"], p[\"column\"]))\n\n\nclass SaddlePointsTest(unittest.TestCase):\n    def test_can_identify_single_saddle_point(self):\n        matrix = [[9, 8, 7], [5, 3, 2], [6, 6, 7]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points([{\"row\": 2, \"column\": 1}]),\n        )\n\n    def test_can_identify_that_empty_matrix_has_no_saddle_points(self):\n        matrix = []\n        self.assertEqual(sorted_points(saddle_points(matrix)), sorted_points([]))\n\n    def test_can_identify_lack_of_saddle_points_when_there_are_none(self):\n        matrix = [[1, 2, 3], [3, 1, 2], [2, 3, 1]]\n        self.assertEqual(sorted_points(saddle_points(matrix)), sorted_points([]))\n\n    def test_can_identify_multiple_saddle_points_in_a_column(self):\n        matrix = [[4, 5, 4], [3, 5, 5], [1, 5, 4]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points(\n                [\n                    {\"row\": 1, \"column\": 2},\n                    {\"row\": 2, \"column\": 2},\n                    {\"row\": 3, \"column\": 2},\n                ]\n            ),\n        )\n\n    def test_can_identify_multiple_saddle_points_in_a_row(self):\n        matrix = [[6, 7, 8], [5, 5, 5], [7, 5, 6]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points(\n                [\n                    {\"row\": 2, \"column\": 1},\n                    {\"row\": 2, \"column\": 2},\n                    {\"row\": 2, \"column\": 3},\n                ]\n            ),\n        )\n\n    def test_can_identify_saddle_point_in_bottom_right_corner(self):\n        matrix = [[8, 7, 9], [6, 7, 6], [3, 2, 5]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points([{\"row\": 3, \"column\": 3}]),\n        )\n\n    def test_can_identify_saddle_points_in_a_non_square_matrix(self):\n        matrix = [[3, 1, 3], [3, 2, 4]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points([{\"row\": 1, \"column\": 3}, {\"row\": 1, \"column\": 1}]),\n        )\n\n    def test_can_identify_that_saddle_points_in_a_single_column_matrix_are_those_with_the_minimum_value(\n        self,\n    ):\n        matrix = [[2], [1], [4], [1]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points([{\"row\": 2, \"column\": 1}, {\"row\": 4, \"column\": 1}]),\n        )\n\n    def test_can_identify_that_saddle_points_in_a_single_row_matrix_are_those_with_the_maximum_value(\n        self,\n    ):\n        matrix = [[2, 5, 3, 5]]\n        self.assertEqual(\n            sorted_points(saddle_points(matrix)),\n            sorted_points([{\"row\": 1, \"column\": 2}, {\"row\": 1, \"column\": 4}]),\n        )\n\n    # Additional tests for this track\n\n    def test_irregular_matrix(self):\n        matrix = [[3, 2, 1], [0, 1], [2, 1, 0]]\n        with self.assertRaises(ValueError) as err:\n            saddle_points(matrix)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"irregular matrix\")\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "Alexhans",
+    "AnAccountForReportingBugs",
+    "behrtam",
+    "BethanyG",
+    "cmccandless",
+    "crsmi",
+    "ctholho",
+    "DocFogel",
+    "Dog",
+    "elyssonmr",
+    "ikhadykin",
+    "ilmanzo",
+    "kytrinyx",
+    "N-Parsons",
+    "pheanex",
+    "pywkm",
+    "sjakobi",
+    "tqa236",
+    "yawpitch"
+  ]
+}

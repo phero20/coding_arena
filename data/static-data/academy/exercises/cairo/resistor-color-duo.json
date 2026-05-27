@@ -1,0 +1,26 @@
+{
+  "id": "cairo:resistor-color-duo",
+  "trackSlug": "cairo",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "5fd540f6-75d1-4b8f-ae56-08c246277e5d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#[derive(Debug, Drop)]\npub enum Color {\n    Black,\n    Brown,\n    Red,\n    Orange,\n    Yellow,\n    Green,\n    Blue,\n    Violet,\n    Grey,\n    White,\n}\n\npub fn value(colors: Array<Color>) -> u8 {\n    panic!(\"implement `value`\")\n}\n",
+  "example_solution": "#[derive(Copy, Debug, Drop)]\npub enum Color {\n    Black,\n    Brown,\n    Red,\n    Orange,\n    Yellow,\n    Green,\n    Blue,\n    Violet,\n    Grey,\n    White,\n}\n\npub fn value(colors: Array<Color>) -> u8 {\n    color_value(*colors[0]) * 10 + color_value(*colors[1])\n}\n\nfn color_value(color: Color) -> u8 {\n    match color {\n        Color::Black => 0,\n        Color::Brown => 1,\n        Color::Red => 2,\n        Color::Orange => 3,\n        Color::Yellow => 4,\n        Color::Green => 5,\n        Color::Blue => 6,\n        Color::Violet => 7,\n        Color::Grey => 8,\n        Color::White => 9,\n    }\n}\n",
+  "test_code": "use resistor_color_duo::{Color, value};\n\n#[test]\nfn brown_and_black() {\n    let colors = array![Color::Brown, Color::Black];\n    let output = value(colors);\n    let expected = 10;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn blue_and_grey() {\n    let colors = array![Color::Blue, Color::Grey];\n    let output = value(colors);\n    let expected = 68;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn yellow_and_violet() {\n    let colors = array![Color::Yellow, Color::Violet];\n    let output = value(colors);\n    let expected = 47;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn white_and_red() {\n    let colors = array![Color::White, Color::Red];\n    let output = value(colors);\n    let expected = 92;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn orange_and_orange() {\n    let colors = array![Color::Orange, Color::Orange];\n    let output = value(colors);\n    let expected = 33;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn ignore_additional_colors() {\n    let colors = array![Color::Green, Color::Brown, Color::Orange];\n    let output = value(colors);\n    let expected = 51;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn black_and_brown_one_digit() {\n    let colors = array![Color::Black, Color::Brown];\n    let output = value(colors);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

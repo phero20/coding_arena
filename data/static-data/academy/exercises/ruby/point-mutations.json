@@ -1,0 +1,35 @@
+{
+  "id": "ruby:point-mutations",
+  "trackSlug": "ruby",
+  "slug": "point-mutations",
+  "name": "Point Mutations",
+  "uuid": "89bd3d71-000f-4cd9-9a84-ad1b22ddbd33",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Calculate the Hamming difference between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming difference between two DNA strands.\n\nA mutation is simply a mistake that occurs during the creation or\ncopying of a nucleic acid, in particular DNA. Because nucleic acids are\nvital to cellular functions, mutations tend to cause a ripple effect\nthroughout the cell. Although mutations are technically mistakes, a very\nrare mutation may equip the cell with a beneficial attribute. In fact,\nthe macro effects of evolution are attributable by the accumulated\nresult of beneficial microscopic mutations over many generations.\n\nThe simplest and most common type of nucleic acid mutation is a point\nmutation, which replaces one base with another at a single nucleotide.\n\nBy counting the number of differences between two homologous DNA strands\ntaken from different genomes with a common ancestor, we get a measure of\nthe minimum number of point mutations that could have occurred on the\nevolutionary path between the two strands.\n\nThis is called the 'Hamming distance'\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThe Hamming distance between these two DNA strands is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length. Hence you\nmay assume that only sequences of equal length will be passed to your hamming\ndistance function.\n\n**Note: This problem is deprecated, replaced by the one called `hamming`.**\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Point Mutations' exercise in this file. Make the tests in\n`point_mutations_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/point-mutations` directory.\n=end\n",
+  "example_solution": "class DNA\n  attr_reader :strand\n  def initialize(strand)\n    @strand = strand\n  end\n\n  def hamming_distance(other_strand)\n    strand.chars.zip(other_strand.chars).count do |a, b|\n      b && a != b\n    end\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'point_mutations'\n\nclass DNATest < Minitest::Test\n  def test_no_difference_between_empty_strands\n    assert_equal 0, DNA.new('').hamming_distance('')\n  end\n\n  def test_no_difference_between_identical_strands\n    skip\n    assert_equal 0, DNA.new('GGACTGA').hamming_distance('GGACTGA')\n  end\n\n  def test_complete_hamming_distance_in_small_strand\n    skip\n    assert_equal 3, DNA.new('ACT').hamming_distance('GGA')\n  end\n\n  def test_hamming_distance_in_off_by_one_strand\n    skip\n    strand = 'GGACGGATTCTGACCTGGACTAATTTTGGGG'\n    distance = 'AGGACGGATTCTGACCTGGACTAATTTTGGGG'\n    assert_equal 19, DNA.new(strand).hamming_distance(distance)\n  end\n\n  def test_small_hamming_distance_in_middle_somewhere\n    skip\n    assert_equal 1, DNA.new('GGACG').hamming_distance('GGTCG')\n  end\n\n  def test_larger_distance\n    skip\n    assert_equal 2, DNA.new('ACCAGGG').hamming_distance('ACTATGG')\n  end\n\n  def test_ignores_extra_length_on_other_strand_when_longer\n    skip\n    assert_equal 3, DNA.new('AAACTAGGGG').hamming_distance('AGGCTAGCGGTAGGAC')\n  end\n\n  def test_ignores_extra_length_on_original_strand_when_longer\n    skip\n    strand = 'GACTACGGACAGGGTAGGGAAT'\n    distance = 'GACATCGCACACC'\n    assert_equal 5, DNA.new(strand).hamming_distance(distance)\n  end\n\n  def test_does_not_actually_shorten_original_strand\n    skip\n    dna = DNA.new('AGACAACAGCCAGCCGCCGGATT')\n    assert_equal 1, dna.hamming_distance('AGGCAA')\n    assert_equal 4, dna.hamming_distance('AGACATCTTTCAGCCGCCGGATTAGGCAA')\n    assert_equal 1, dna.hamming_distance('AGG')\n  end\nend\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "http://rosalind.info/problems/hamm/",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "meaganewaller",
+    "tryantwit"
+  ]
+}

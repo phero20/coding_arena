@@ -1,0 +1,26 @@
+{
+  "id": "wren:accumulate",
+  "trackSlug": "wren",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "7a8cd1a3-6e95-43f6-a98c-53e837557bbb",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "var Accumulate = Fn.new { |list, fn|\n  Fiber.abort(\"Remove this statement and implement this function\")\n}",
+  "example_solution": "var Accumulate = Fn.new { |list, fn|\n  var out = []\n  for (item in list) {\n    out.add(fn.call(item))\n  }\n  return out\n}",
+  "test_code": "import \"./accumulate\" for Accumulate\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"accumulate\") { |do, skip|\n  do.test(\"accumulation empty\") {\n    Expect.value(Accumulate.call([]) { |e| e * e }).toEqual([])\n  }\n\n  skip.test(\"accumulate squares\") {\n    var result = Accumulate.call([1, 2, 3]) { |e| e * e }\n    Expect.value(result).toEqual([1, 4, 9])\n  }\n\n  skip.test(\"accumulate hellos\") {\n    var fn = Fn.new { |name| \"hello, %(name)\" }\n    var result = Accumulate.call(\"bob mary sue\".split(\" \"), fn)\n    Expect.value(result).toEqual([\"hello, bob\", \"hello, mary\", \"hello, sue\"])\n  }\n\n  skip.test(\"accumulate reversed strings\") {\n    var result = Accumulate.call(\"the quick brown fox etc\".split(\" \")) { |word| word[-1..0] }\n    Expect.value(result).toEqual([\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"])\n  }\n\n  skip.test(\"accumulate recursively\") {\n    var result = Accumulate.call(\"a b c\".split(\" \")) { |char |\n      return Accumulate.call(\"1 2 3\".split(\" \")) { |digit |\n        return char + digit\n      }\n    }\n\n    Expect.value(result).toEqual([\n      [\"a1\", \"a2\", \"a3\"],\n      [\"b1\", \"b2\", \"b3\"],\n      [\"c1\", \"c2\", \"c3\"],\n    ])\n  }\n}\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,30 @@
+{
+  "id": "reasonml:isogram",
+  "trackSlug": "reasonml",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "4e7e7b4b-b279-47c2-9d5a-3c44f7bbeb34",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let is_isogram = (_) => {\n  failwith(\"TODO: implement is_isogram function\");\n};",
+  "example_solution": "let charlist = Array.map(w => w.[0]);\n\nlet rec check_repeats = word_list =>\n  switch (word_list) {\n  | [] => true\n  | [x, ...xs] => ! List.mem(x, xs) && check_repeats(xs)\n  };\n\nlet clean = List.filter(x => ! (x == '-' || x == ' '));\n\nlet is_isogram = word =>\n  String.lowercase_ascii(word)\n  |> Js.String.split(\"\")\n  |> charlist\n  |> Array.to_list\n  |> clean\n  |> check_repeats;\n",
+  "test_code": "open Jest;\n\ndescribe(\"Isograms\", () => {\n  open Expect;\n\n  test(\"Empty string\", () =>\n    expect(Isogram.is_isogram(\"\")) |> toBe(true)\n  );\n\n  test(\"Isogram with only lower case characters\", () =>\n    expect(Isogram.is_isogram(\"isogram\")) |> toBe(true)\n  );\n\n  test(\"Word with one duplicated character\", () =>\n    expect(Isogram.is_isogram(\"eleven\")) |> toBe(false)\n  );\n\n  test(\"Longest reported english isogram\", () =>\n    expect(Isogram.is_isogram(\"subdermatoglyphic\")) |> toBe(true)\n  );\n\n  test(\"Word with duplicated character in mixed case\", () =>\n    expect(Isogram.is_isogram(\"Alphabet\")) |> toBe(false)\n  );\n\n  test(\"Hypothetical isogrammic word with hyphen\", () =>\n    expect(Isogram.is_isogram(\"thumbscrew-japingly\")) |> toBe(true)\n  );\n\n  test(\"Isogram with duplicated hyphen\", () =>\n    expect(Isogram.is_isogram(\"six-year-old\")) |> toBe(true)\n  );\n\n  test(\"Made-up name that is an isogram\", () =>\n    expect(Isogram.is_isogram(\"Emily Jung Schwartzkopf\")) |> toBe(true)\n  );\n\n  test(\"Duplicated character in the middle\", () =>\n    expect(Isogram.is_isogram(\"accentor\")) |> toBe(false)\n  );\n});\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "tejasbubane"
+  ],
+  "contributors": [
+    "naartjie",
+    "ohana54",
+    "stevejb71"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "perl5:binary",
+  "trackSlug": "perl5",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "2e74fa26-f946-4b79-87b9-27f60f03af8f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion. Given a binary input\nstring, your program should produce a decimal output. The\nprogram should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The *n*th number gets multiplied by 10^*(n-1)*.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package Binary;\n\nuse strict;\nuse warnings;\n\nsub new {\n    my ( $class, $binary ) = @_;\n\n    return undef;\n}\n\nsub to_decimal {\n    my $self = shift;\n\n    return undef;\n}\n\n__PACKAGE__;\n",
+  "example_solution": "package Binary;\n\nuse strict;\nuse warnings;\n\nsub new {\n    my ( $class, $binary ) = @_;\n    my $self = bless { binary => $binary } => $class;\n\n    return $self;\n}\n\nsub to_decimal {\n    my $self = shift;\n\n    return 0 if $self->{binary} =~ m/[^01]/;\n\n    my $decimal = 0;\n    my $index   = length $self->{binary};\n\n    foreach my $bit ( split // => $self->{binary} ) {\n        $decimal += $bit * 2** --$index;\n    }\n\n    return $decimal;\n}\n\n__PACKAGE__;\n",
+  "test_code": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\n\nuse Test2::Bundle::More;\nuse FindBin qw($Bin);\nuse lib $Bin, \"$Bin/local/lib/perl5\";\n\nmy @cases = (\n    {   input    => \"1\",\n        expected => 1,\n    },\n    {   input    => \"10\",\n        expected => 2,\n    },\n    {   input    => \"11\",\n        expected => 3,\n    },\n    {   input    => \"100\",\n        expected => 4,\n    },\n    {   input    => \"1001\",\n        expected => 9,\n    },\n    {   input    => \"11010\",\n        expected => 26,\n    },\n    {   input    => \"10001101000\",\n        expected => 1128,\n    },\n    {   input    => \"carrot23\",\n        expected => 0,\n    },\n);\n\nmy $module = 'Binary';\n\nplan 4 + @cases;\n\nok -e \"$Bin/$module.pm\", \"Missing $module.pm\",\n    or BAIL_OUT \"You need to create a file called $module.pm\";\n\neval \"use $module\";\n\nok !$@, \"Cannot load $module\",\n    or BAIL_OUT \"Cannot load $module. Does it compile? Does it end with 1;?\";\n\ncan_ok $module, \"new\"\n    or BAIL_OUT \"Missing package $module; or missing sub new()\";\ncan_ok $module, \"to_decimal\"\n    or BAIL_OUT \"Missing package $module; or missing sub to_decimal()\";\n\nforeach my $c (@cases) {\n    my $binary = $module->new( $c->{input} );\n    is $binary->to_decimal, $c->{expected},\n        \"Binary($c->{input}) to_decimal $c->{expected}\";\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

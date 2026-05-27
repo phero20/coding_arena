@@ -1,0 +1,38 @@
+{
+  "id": "csharp:nth-prime",
+  "trackSlug": "csharp",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "60ef0713-70e2-4ee7-9207-86910e616ec1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "lazy-evaluation",
+    "yield"
+  ],
+  "prerequisites": [
+    "numbers",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public static class NthPrime\n{\n    public static int Prime(int nth)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class NthPrime\n{\n    public static int Prime(int nth)\n    {\n        if (nth < 1)\n            throw new ArgumentOutOfRangeException();\n\n        return Primes().Skip(nth - 1).First();\n    }\n\n    private static IEnumerable<int> Primes()\n    {\n        yield return 2;\n        yield return 3;\n\n        foreach (var prime in PossiblePrimes().Where(IsPrime))\n        {\n            yield return prime;\n        }\n    }\n\n    private static IEnumerable<int> PossiblePrimes()\n    {\n        var n = 6;\n\n        while (true)\n        {\n            yield return n - 1;\n            yield return n + 1;\n\n            n += 6;\n        }\n    }\n\n    private static bool IsPrime(int n)\n    {\n        var r = (int)Math.Floor(Math.Sqrt(n));\n\n        return r < 5 || Enumerable.Range(5, r - 4).All(x => n % x != 0);\n    }\n}",
+  "test_code": "public class NthPrimeTests\n{\n    [Fact]\n    public void First_prime()\n    {\n        Assert.Equal(2, NthPrime.Prime(1));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Second_prime()\n    {\n        Assert.Equal(3, NthPrime.Prime(2));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Sixth_prime()\n    {\n        Assert.Equal(13, NthPrime.Prime(6));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Big_prime()\n    {\n        Assert.Equal(104743, NthPrime.Prime(10001));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void There_is_no_zeroth_prime()\n    {\n        Assert.Throws<ArgumentOutOfRangeException>(() => NthPrime.Prime(0));\n    }\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "bressain",
+    "j2jensen",
+    "jmbradnan",
+    "robkeim",
+    "wolf99"
+  ]
+}

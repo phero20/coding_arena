@@ -1,0 +1,30 @@
+{
+  "id": "fsharp:log-levels",
+  "trackSlug": "fsharp",
+  "slug": "log-levels",
+  "name": "Log Levels",
+  "uuid": "ab0e683f-46e8-4679-99d2-def4c337e4b8",
+  "type": "concept",
+  "status": null,
+  "blurb": "Learn about strings by parsing application logs",
+  "difficulty": null,
+  "concepts": [
+    "strings"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nIn this exercise you'll be processing log-lines.\n\nEach log line is a string formatted as follows: `\"[<LEVEL>]: <MESSAGE>\"`.\n\nThere are three different log levels:\n\n- `INFO`\n- `WARNING`\n- `ERROR`\n\nYou have three tasks, each of which will take a log line and ask you to do something with it.\n\n## 1. Get message from a log line\n\nImplement the `message` function to return a log line's message:\n\n```fsharp\nmessage \"[ERROR]: Invalid operation\"\n// => \"Invalid operation\"\n```\n\nAny leading or trailing white space should be removed:\n\n```fsharp\nmessage \"[WARNING]:  Disk almost full\\r\\n\"\n// => \"Disk almost full\"\n```\n\n## 2. Get log level from a log line\n\nImplement the `logLevel` function to return a log line's log level, which should be returned in lowercase:\n\n```fsharp\nlogLevel \"[ERROR]: Invalid operation\"\n// => \"error\"\n```\n\n## 3. Reformat a log line\n\nImplement the `reformat` function that reformats the log line, putting the message first and the log level after it in parentheses:\n\n```fsharp\nreformat \"[INFO]: Operation completed\"\n// => \"Operation completed (info)\"\n```\n",
+  "introduction": "# Introduction\n\n## Strings\n\nA `string` in F# is an object that represents immutable text as a sequence of Unicode characters (letters, digits, punctuation, etc.) and is defined as follows:\n\n```fsharp\nlet fruit = \"Apple\"\n```\n\nStrings are manipulated by either calling the string's methods, or using the `String` module's functions. Once a string has been constructed, its value can never change. Any methods/functions that appear to modify a string will actually return a new string.\n\nStrings can be concatenated or formatted a few different ways.\n* You can use the `+` operator for concatenation:\n```fsharp\nlet sentence = \"Apple\" + \" is a type of fruit.\"\n```\n* You can use the `sprintf` function for formatting text, where you have placeholders in a format text (`%s` for a `string`) and provide the values as arguments:\n```fsharp\nlet sentence = sprintf \"%s is a type of %s.\" \"Apple\" \"fruit\"\n```\n",
+  "hints": "# Hints\n\n## General\n\n- The `string` class has many useful [built-in methods][methods].\n\n## 1. Get message from a log line\n\n- There are [several methods][index-of] to find the index at which some text occurs in a `string`.\n- Removing white space is [built-in][trim].\n\n## 2. Get log level from a log line\n\n- A `string` can be converted to lowercase using a [built-in method][to-lower].\n\n## 3. Reformat a log line\n\n- There is a [built-in operator][plus-operator] to concatenate strings.\n\n[methods]: https://docs.microsoft.com/en-us/dotnet/api/system.string?view=netcore-3.1#methods\n[index-of]: https://docs.microsoft.com/en-us/dotnet/api/system.string.indexof?view=netcore-3.1\n[trim]: https://docs.microsoft.com/en-us/dotnet/api/system.string.trim?view=netcore-3.1\n[to-lower]: https://docs.microsoft.com/en-us/dotnet/api/system.string.tolower?view=netcore-3.1\n[plus-operator]: https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/strings#string-operators\n",
+  "starter_code": "module LogLevels\n\nlet message (logLine: string): string = failwith \"Please implement the 'message' function\"\n\nlet logLevel(logLine: string): string = failwith \"Please implement the 'logLevel' function\"\n\nlet reformat(logLine: string): string = failwith \"Please implement the 'reformat' function\"\n",
+  "example_solution": "module LogLevels\n\nlet message (logLine: string): string = logLine.Substring(logLine.IndexOf(':') + 1).Trim()\n\nlet logLevel (logLine: string): string = logLine.Substring(1, logLine.IndexOf(']') - 1).ToLower()\n\nlet reformat (logLine: string): string = message logLine + \" (\" + logLevel logLine + \")\"\n",
+  "test_code": "module LogLevelsTests\n\nopen FsUnit.Xunit\nopen Xunit\nopen Exercism.Tests\n\nopen LogLevels\n\n[<Fact>]\n[<Task(1)>]\nlet ``Error message``() = message \"[ERROR]: Stack overflow\" |> should equal \"Stack overflow\"\n\n[<Fact>]\n[<Task(1)>]\nlet ``Warning message``() = message \"[WARNING]: Disk almost full\" |> should equal \"Disk almost full\"\n\n[<Fact>]\n[<Task(1)>]\nlet ``Info message``() = message \"[INFO]: File moved\" |> should equal \"File moved\"\n\n[<Fact>]\n[<Task(1)>]\nlet ``Message with leading and trailing white space``() =\n    message \"[WARNING]:   \\tTimezone not set  \\r\\n\"\n    |> should equal \"Timezone not set\"\n\n[<Fact>]\n[<Task(2)>]\nlet ``Error log level``() = logLevel \"[ERROR]: Disk full\" |> should equal \"error\"\n\n[<Fact>]\n[<Task(2)>]\nlet ``Warning log level``() = logLevel \"[WARNING]: Unsafe password\" |> should equal \"warning\"\n\n[<Fact>]\n[<Task(2)>]\nlet ``Info log level``() = logLevel \"[INFO]: Timezone changed\" |> should equal \"info\"\n\n[<Fact>]\n[<Task(3)>]\nlet ``Error reformat``() = reformat \"[ERROR]: Segmentation fault\" |> should equal \"Segmentation fault (error)\"\n\n[<Fact>]\n[<Task(3)>]\nlet ``Warning reformat``() =\n    reformat \"[WARNING]: Decreased performance\" |> should equal \"Decreased performance (warning)\"\n\n[<Fact>]\n[<Task(3)>]\nlet ``Info reformat``() = reformat \"[INFO]: Disk defragmented\" |> should equal \"Disk defragmented (info)\"\n\n[<Fact>]\n[<Task(3)>]\nlet ``Reformat with leading and trailing white space``() =\n    reformat \"[ERROR]: \\t Corrupt disk\\t \\t \\r\\n\"\n    |> should equal \"Corrupt disk (error)\"\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

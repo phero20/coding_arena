@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:difference-of-squares",
+  "trackSlug": "moonscript",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "fe0d1922-3f7e-4fe6-baba-c5a8a495a3c7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "square_of_sum = (n) ->\n  error 'Implement square_of_sum'\n\nsum_of_squares = (n) ->\n  error 'Implement sum_of_squares'\n\ndifference_of_squares = (n) ->\n  error 'Implement difference_of_squares'\n\n{ :square_of_sum, :sum_of_squares, :difference_of_squares }\n",
+  "example_solution": "square_of_sum = (n) -> (n * (n + 1) // 2) ^ 2\n\nsum_of_squares = (n) -> n * (n + 1) * (2 * n + 1) // 6\n\ndifference_of_squares = (n) -> square_of_sum(n) - sum_of_squares(n)\n\n{ :square_of_sum, :sum_of_squares, :difference_of_squares }\n",
+  "test_code": "DifferenceOfSquares = require 'difference_of_squares'\n\ndescribe 'difference-of-squares:', ->\n  describe 'Square the sum of the numbers up to the given number:', ->\n    it 'square of sum 1', ->\n      result = DifferenceOfSquares.square_of_sum 1\n      assert.are.equal 1, result\n\n    pending 'square of sum 5', ->\n      result = DifferenceOfSquares.square_of_sum 5\n      assert.are.equal 225, result\n\n    pending 'square of sum 100', ->\n      result = DifferenceOfSquares.square_of_sum 100\n      assert.are.equal 25502500, result\n\n  describe 'Sum the squares of the numbers up to the given number:', ->\n    pending 'sum of squares 1', ->\n      result = DifferenceOfSquares.sum_of_squares 1\n      assert.are.equal 1, result\n\n    pending 'sum of squares 5', ->\n      result = DifferenceOfSquares.sum_of_squares 5\n      assert.are.equal 55, result\n\n    pending 'sum of squares 100', ->\n      result = DifferenceOfSquares.sum_of_squares 100\n      assert.are.equal 338350, result\n\n  describe 'Subtract sum of squares from square of sums:', ->\n    pending 'difference of squares 1', ->\n      result = DifferenceOfSquares.difference_of_squares 1\n      assert.are.equal 0, result\n\n    pending 'difference of squares 5', ->\n      result = DifferenceOfSquares.difference_of_squares 5\n      assert.are.equal 170, result\n\n    pending 'difference of squares 100', ->\n      result = DifferenceOfSquares.difference_of_squares 100\n      assert.are.equal 25164150, result\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

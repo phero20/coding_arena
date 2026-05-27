@@ -1,0 +1,26 @@
+{
+  "id": "pyret:rotational-cipher",
+  "trackSlug": "pyret",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "1c9c40a6-4af3-4691-9b15-554f4ccab5f1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: my-rotate end\n\nfun my-rotate(phrase, shift-key):\n  raise(\"Please implement the my-rotate function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: my-rotate end\n\nfun my-rotate(phrase, shift-key):\n  string-explode(phrase).map(lam(char):\n    code = string-to-code-point(char)\n    ask:\n      | (97 <= code) and (code <= 122) then:\n        string-from-code-point(num-modulo(((code - 97) + shift-key), 26) + 97)\n      | (65 <= code) and (code <= 90) then:\n        string-from-code-point(num-modulo(((code - 65) + shift-key), 26) + 65)\n      | otherwise: char\n    end\n  end).join-str(\"\")\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"rotational-cipher.arr\")\n\ncheck \"rotate a by 0, same output as input\":\n  my-rotate(\"a\", 0) is \"a\"\nend\n\ncheck \"rotate a by 1\":\n  my-rotate(\"a\", 1) is \"b\"\nend\n\ncheck \"rotate a by 26, same output as input\":\n  my-rotate(\"a\", 26) is \"a\"\nend\n\ncheck \"rotate m by 13\":\n  my-rotate(\"m\", 13) is \"z\"\nend\n\ncheck \"rotate n by 13 with wrap around alphabet\":\n  my-rotate(\"n\", 13) is \"a\"\nend\n\ncheck \"rotate capital letters\":\n  my-rotate(\"OMG\", 5) is \"TRL\"\nend\n\ncheck \"rotate spaces\":\n  my-rotate(\"O M G\", 5) is \"T R L\"\nend\n\ncheck \"rotate numbers\":\n  my-rotate(\"Testing 1 2 3 testing\", 4) is \"Xiwxmrk 1 2 3 xiwxmrk\"\nend\n\ncheck \"rotate punctuation\":\n  my-rotate(\"Let's eat, Grandma!\", 21) is \"Gzo'n zvo, Bmviyhv!\"\nend\n\ncheck \"rotate all letters\":\n  my-rotate(\"The quick brown fox jumps over the lazy dog.\", 13) is \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

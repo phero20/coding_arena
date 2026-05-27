@@ -1,0 +1,35 @@
+{
+  "id": "perl5:raindrops",
+  "trackSlug": "perl5",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "85154a10-06e3-4543-8513-4de30b43d015",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "booleans-and-conditionals",
+    "numbers",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "package Raindrops;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<raindrop>;\n\nsub raindrop ($number) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package Raindrops;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<raindrop>;\n\nsub raindrop ($number) {\n    my $drops = '';\n\n    if ( $number % 3 == 0 ) {\n        $drops .= 'Pling';\n    }\n    if ( $number % 5 == 0 ) {\n        $drops .= 'Plang';\n    }\n    if ( $number % 7 == 0 ) {\n        $drops .= 'Plong';\n    }\n\n    return $drops || $number;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse Raindrops qw<raindrop>;\n\nis( # begin: 1575d549-e502-46d4-a8e1-6b7bec6123d8\n    raindrop(1),\n    \"1\",\n    \"the sound for 1 is 1\",\n); # end: 1575d549-e502-46d4-a8e1-6b7bec6123d8\n\nis( # begin: 1f51a9f9-4895-4539-b182-d7b0a5ab2913\n    raindrop(3),\n    \"Pling\",\n    \"the sound for 3 is Pling\",\n); # end: 1f51a9f9-4895-4539-b182-d7b0a5ab2913\n\nis( # begin: 2d9bfae5-2b21-4bcd-9629-c8c0e388f3e0\n    raindrop(5),\n    \"Plang\",\n    \"the sound for 5 is Plang\",\n); # end: 2d9bfae5-2b21-4bcd-9629-c8c0e388f3e0\n\nis( # begin: d7e60daa-32ef-4c23-b688-2abff46c4806\n    raindrop(7),\n    \"Plong\",\n    \"the sound for 7 is Plong\",\n); # end: d7e60daa-32ef-4c23-b688-2abff46c4806\n\nis( # begin: 6bb4947b-a724-430c-923f-f0dc3d62e56a\n    raindrop(6),\n    \"Pling\",\n    \"the sound for 6 is Pling as it has a factor 3\",\n); # end: 6bb4947b-a724-430c-923f-f0dc3d62e56a\n\nis( # begin: ce51e0e8-d9d4-446d-9949-96eac4458c2d\n    raindrop(8),\n    \"8\",\n    \"2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base\",\n); # end: ce51e0e8-d9d4-446d-9949-96eac4458c2d\n\nis( # begin: 0dd66175-e3e2-47fc-8750-d01739856671\n    raindrop(9),\n    \"Pling\",\n    \"the sound for 9 is Pling as it has a factor 3\",\n); # end: 0dd66175-e3e2-47fc-8750-d01739856671\n\nis( # begin: 022c44d3-2182-4471-95d7-c575af225c96\n    raindrop(10),\n    \"Plang\",\n    \"the sound for 10 is Plang as it has a factor 5\",\n); # end: 022c44d3-2182-4471-95d7-c575af225c96\n\nis( # begin: 37ab74db-fed3-40ff-b7b9-04acdfea8edf\n    raindrop(14),\n    \"Plong\",\n    \"the sound for 14 is Plong as it has a factor of 7\",\n); # end: 37ab74db-fed3-40ff-b7b9-04acdfea8edf\n\nis( # begin: 31f92999-6afb-40ee-9aa4-6d15e3334d0f\n    raindrop(15),\n    \"PlingPlang\",\n    \"the sound for 15 is PlingPlang as it has factors 3 and 5\",\n); # end: 31f92999-6afb-40ee-9aa4-6d15e3334d0f\n\nis( # begin: ff9bb95d-6361-4602-be2c-653fe5239b54\n    raindrop(21),\n    \"PlingPlong\",\n    \"the sound for 21 is PlingPlong as it has factors 3 and 7\",\n); # end: ff9bb95d-6361-4602-be2c-653fe5239b54\n\nis( # begin: d2e75317-b72e-40ab-8a64-6734a21dece1\n    raindrop(25),\n    \"Plang\",\n    \"the sound for 25 is Plang as it has a factor 5\",\n); # end: d2e75317-b72e-40ab-8a64-6734a21dece1\n\nis( # begin: a09c4c58-c662-4e32-97fe-f1501ef7125c\n    raindrop(27),\n    \"Pling\",\n    \"the sound for 27 is Pling as it has a factor 3\",\n); # end: a09c4c58-c662-4e32-97fe-f1501ef7125c\n\nis( # begin: bdf061de-8564-4899-a843-14b48b722789\n    raindrop(35),\n    \"PlangPlong\",\n    \"the sound for 35 is PlangPlong as it has factors 5 and 7\",\n); # end: bdf061de-8564-4899-a843-14b48b722789\n\nis( # begin: c4680bee-69ba-439d-99b5-70c5fd1a7a83\n    raindrop(49),\n    \"Plong\",\n    \"the sound for 49 is Plong as it has a factor 7\",\n); # end: c4680bee-69ba-439d-99b5-70c5fd1a7a83\n\nis( # begin: 17f2bc9a-b65a-4d23-8ccd-266e8c271444\n    raindrop(52),\n    \"52\",\n    \"the sound for 52 is 52\",\n); # end: 17f2bc9a-b65a-4d23-8ccd-266e8c271444\n\nis( # begin: e46677ed-ff1a-419f-a740-5c713d2830e4\n    raindrop(105),\n    \"PlingPlangPlong\",\n    \"the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7\",\n); # end: e46677ed-ff1a-419f-a740-5c713d2830e4\n\nis( # begin: 13c6837a-0fcd-4b86-a0eb-20572f7deb0b\n    raindrop(3125),\n    \"Plang\",\n    \"the sound for 3125 is Plang as it has a factor 5\",\n); # end: 13c6837a-0fcd-4b86-a0eb-20572f7deb0b\n\ndone_testing;\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "szabgab"
+  ],
+  "contributors": [
+    "darksuji",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

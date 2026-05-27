@@ -1,0 +1,30 @@
+{
+  "id": "scheme:atbash-cipher",
+  "trackSlug": "scheme",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "82169e85-3938-48da-ada9-7394adadc57a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (encode phrase)\n  'implement-me!)\n\n(define (decode phrase)\n  'implement-me!)\n\n",
+  "example_solution": "(import (rnrs))\n\n(define (encode phrase)\n  (apply string-append\n         (atbash-chunks 5\n                        (map convert\n                             (filter relevant-char?\n                                     (string->list\n                                      (string-downcase phrase)))))))\n\n(define (decode phrase)\n  (list->string\n   (map convert\n        (filter relevant-char?\n                (string->list phrase)))))\n\n(define (convert char)\n  (if (char-alphabetic? char)\n      (integer->char\n       (+ 97 (- 122 (char->integer char))))\n      char))\n\n(define (relevant-char? char)\n  (or (char-alphabetic? char)\n      (char-numeric? char)))\n\n(define (atbash-chunks size text)\n  (let loop ((n (length text)) (text text) (needs-space? #f))\n    (if (<= n 0)\n        '()\n        (let ((next (if needs-space?\n                        (cons #\\space (list-head text (min n size)))\n                        (list-head text (min n size)))))\n          (cons (list->string next)\n                (loop (- n size)\n                      (list-tail text (min n size))\n                      (or #t needs-space?)))))))\n\n\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success \"encode yes\" equal? encode '(\"yes\") \"bvh\") (test-success \"encode no\" equal? encode '(\"no\") \"ml\")\n     (test-success \"encode OMG\" equal? encode '(\"OMG\") \"lnt\")\n     (test-success \"encode spaces\" equal? encode '(\"O M G\")\n       \"lnt\")\n     (test-success \"encode mindblowingly\" equal? encode\n       '(\"mindblowingly\") \"nrmwy oldrm tob\")\n     (test-success \"encode numbers\" equal? encode\n       '(\"Testing,1 2 3, testing.\") \"gvhgr mt123 gvhgr mt\")\n     (test-success \"encode deep thought\" equal? encode\n       '(\"Truth is fiction.\") \"gifgs rhurx grlm\")\n     (test-success \"encode all the letters\" equal? encode\n       '(\"The quick brown fox jumps over the lazy dog.\")\n       \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n     (test-success \"decode exercism\" equal? decode '(\"vcvix rhn\")\n       \"exercism\")\n     (test-success \"decode a sentence\" equal? decode\n       '(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\")\n       \"anobstacleisoftenasteppingstone\")\n     (test-success \"decode numbers\" equal? decode\n       '(\"gvhgr mt123 gvhgr mt\") \"testing123testing\")\n     (test-success \"decode all the letters\" equal? decode\n       '(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n       \"thequickbrownfoxjumpsoverthelazydog\")\n     (test-success \"decode with too many spaces\" equal? decode\n       '(\"vc vix    r hn\") \"exercism\")\n     (test-success \"decode with no spaces\" equal? decode\n       '(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\")\n       \"anobstacleisoftenasteppingstone\")))\n\n(run-with-cli \"atbash-cipher.scm\" (list test-cases))\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "mattwellss"
+  ],
+  "contributors": [
+    "benreyn",
+    "guygastineau",
+    "jitwit"
+  ]
+}

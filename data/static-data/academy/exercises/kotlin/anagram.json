@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:anagram",
+  "trackSlug": "kotlin",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "f754e1cc-cb88-4776-ab11-3e6ae8362d5a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "class Anagram {\n    // TODO: implement proper constructor to complete the task\n\n    fun match(anagrams: Collection<String>): Set<String> {\n        TODO(\"Implement the function to complete the task\")\n    }\n}\n",
+  "example_solution": "class Anagram(private val word: String) {\n\n    fun match(anagrams: Collection<String>) =\n            anagrams.filter { containSameChars(it.lowercase()) }\n                    .filterNot { it.equals(word, ignoreCase = true) }\n                    .toSet()\n\n    private fun containSameChars(candidate: String) =\n            candidate.lowercase().toCharArray().sorted() == word.lowercase().toCharArray().sorted()\n\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport kotlin.test.assertEquals\nimport kotlin.test.assertTrue\n\nclass AnagramTest {\n\n    @Test\n    fun `no matches`() =\n        anagramsOf(\"diaper\")\n            .searchedIn(\"hello\", \"world\", \"zombies\", \"pants\")\n            .shouldBeEmpty()\n\n    @Ignore\n    @Test\n    fun `detects two anagrams`() =\n        anagramsOf(\"master\")\n            .searchedIn(\"stream\", \"pigeon\", \"maters\")\n            .shouldBeOnly(\"maters\", \"stream\")\n\n    @Ignore\n    @Test\n    fun `does not detect anagram subsets`() =\n        anagramsOf(\"good\")\n            .searchedIn(\"dog\", \"goody\")\n            .shouldBeEmpty()\n\n    @Ignore\n    @Test\n    fun `detects anagram`() =\n        anagramsOf(\"listen\")\n            .searchedIn(\"enlists\", \"google\", \"inlets\", \"banana\")\n            .shouldBeOnly(\"inlets\")\n\n    @Ignore\n    @Test\n    fun `detects three anagrams`() =\n        anagramsOf(\"allergy\")\n            .searchedIn(\"gallery\", \"ballerina\", \"regally\", \"clergy\", \"largely\", \"leading\")\n            .shouldBeOnly(\"gallery\", \"largely\", \"regally\")\n\n    @Ignore\n    @Test\n    fun `detects multiple anagrams with different case`() =\n        anagramsOf(\"nose\")\n            .searchedIn(\"Eons\", \"ONES\")\n            .shouldBeOnly(\"Eons\", \"ONES\")\n\n    @Ignore\n    @Test\n    fun `does not detect non-anagrams with identical checksum`() =\n        anagramsOf(\"mass\")\n            .searchedIn(\"last\")\n            .shouldBeEmpty()\n\n    @Ignore\n    @Test\n    fun `detects anagrams case-insensitively`() =\n        anagramsOf(\"Orchestra\")\n            .searchedIn(\"cashregister\", \"Carthorse\", \"radishes\")\n            .shouldBeOnly(\"Carthorse\")\n\n    @Ignore\n    @Test\n    fun `detects anagrams using case-insensitive subject`() =\n        anagramsOf(\"Orchestra\")\n            .searchedIn(\"cashregister\", \"carthorse\", \"radishes\")\n            .shouldBeOnly(\"carthorse\")\n\n    @Ignore\n    @Test\n    fun `detects anagrams using case-insensitive possible matches`() =\n\n        anagramsOf(\"orchestra\")\n            .searchedIn(\"cashregister\", \"Carthorse\", \"radishes\")\n            .shouldBeOnly(\"Carthorse\")\n\n    @Ignore\n    @Test\n    fun `does not detect an anagram if the original word is repeated`() =\n        anagramsOf(\"go\")\n            .searchedIn(\"go Go GO\")\n            .shouldBeEmpty()\n\n    @Ignore\n    @Test\n    fun `anagrams must use all letters exactly once`() =\n        anagramsOf(\"tapper\")\n            .searchedIn(\"patter\")\n            .shouldBeEmpty()\n\n    @Ignore\n    @Test\n    fun `words are not anagrams of themselves (case-insensitive)`() =\n        anagramsOf(\"BANANA\")\n            .searchedIn(\"Banana\")\n            .shouldBeEmpty()\n\n    @Ignore\n    @Test\n    fun `words other than themselves can be anagrams`() =\n        anagramsOf(\"LISTEN\")\n            .searchedIn(\"Listen\", \"Silent\", \"LISTEN\")\n            .shouldBeOnly(\"Silent\")\n}\n\nprivate fun anagramsOf(source: String) = Anagram(source)\nprivate fun Anagram.searchedIn(vararg variants: String) = this.match(setOf(*variants))\nprivate fun Set<String>.shouldBeOnly(vararg expectation: String) = assertEquals(setOf(*expectation), this)\nprivate fun Set<String>.shouldBeEmpty() = assertTrue(this.isEmpty())\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "sup95",
+    "uzilan"
+  ]
+}

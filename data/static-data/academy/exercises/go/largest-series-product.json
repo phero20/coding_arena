@@ -1,0 +1,39 @@
+{
+  "id": "go:largest-series-product",
+  "trackSlug": "go",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "8ec72d61-d830-48cf-819d-cd4faf0cf67d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "package largestseriesproduct\n\nfunc LargestSeriesProduct(digits string, span int) (int64, error) {\n\tpanic(\"Please implement the LargestSeriesProduct function\")\n}\n",
+  "example_solution": "package largestseriesproduct\n\nimport \"fmt\"\n\nfunc LargestSeriesProduct(digits string, span int) (int64, error) {\n\tif span < 0 {\n\t\treturn 0, fmt.Errorf(\"span is negative: %d\", span)\n\t}\n\tif len(digits) < span {\n\t\treturn 0, fmt.Errorf(\"len(%s) < span: %d < %d\", digits, len(digits), span)\n\t}\n\tv := make([]int64, len(digits))\n\tfor i, r := range digits {\n\t\tif r < '0' || r > '9' {\n\t\t\treturn 0, fmt.Errorf(\"input %q contains non-digits\", digits)\n\t\t}\n\t\tv[i] = int64(r - '0')\n\t}\n\tmaxsp := int64(0)\n\tfor i, last := 0, len(v)-span+1; i < last; i++ {\n\t\tsp := int64(1)\n\t\tfor _, d := range v[i : i+span] {\n\t\t\tsp *= d\n\t\t}\n\t\tif sp > maxsp {\n\t\t\tmaxsp = sp\n\t\t}\n\t}\n\treturn maxsp, nil\n}\n",
+  "test_code": "package largestseriesproduct\n\nimport \"testing\"\n\nfunc TestLargestSeriesProduct(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual, err := LargestSeriesProduct(tc.digits, tc.span)\n\t\t\tif tc.error == \"\" {\n\t\t\t\t// we do not expect error\n\t\t\t\tif err != nil {\n\t\t\t\t\tt.Fatalf(\"LargestSeriesProduct(%q, %d) returned error: %v\\nwant: %d\", tc.digits, tc.span, err, tc.expected)\n\t\t\t\t}\n\n\t\t\t\tif actual != tc.expected {\n\t\t\t\t\tt.Fatalf(\"LargestSeriesProduct(%q, %d) = %d, want: %d\", tc.digits, tc.span, actual, tc.expected)\n\t\t\t\t}\n\t\t\t} else if err == nil {\n\t\t\t\t// expect error but got nil\n\t\t\t\tt.Fatalf(\"LargestSeriesProduct(%q, %d) = %d, want error: %q\", tc.digits, tc.span, actual, tc.error)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkLargestSeriesProduct(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range testCases {\n\t\t\tLargestSeriesProduct(test.digits, test.span)\n\t\t}\n\t}\n}\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "eklatzer"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "go:eliuds-eggs",
+  "trackSlug": "go",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "82fb24cc-ac33-4cce-a77a-b59ce3c77832",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "package eliudseggs\n\nfunc EggCount(displayValue int) int {\n\tpanic(\"Please implement the EggCount function\")\n}\n",
+  "example_solution": "// Package eliudseggs contains an example solution for eliuds-eggs exercise.\npackage eliudseggs\n\n// EggCount determines the actual egg count from the displayed value.\nfunc EggCount(displayValue int) int {\n\tcount := 0\n\tfor displayValue > 0 {\n\t\tif (displayValue & 1) == 1 {\n\t\t\tcount++\n\t\t}\n\t\tdisplayValue >>= 1\n\t}\n\treturn count\n}\n",
+  "test_code": "package eliudseggs\n\nimport \"testing\"\n\nfunc TestEggCount(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tgot := EggCount(tc.input)\n\t\t\tif got != tc.expected {\n\t\t\t\tt.Fatalf(\"EggCount(%d) = %d, want: %d\", tc.input, got, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkEggCount(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tEggCount(tc.input)\n\t\t}\n\t}\n}\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "KasimKaizer"
+  ],
+  "contributors": null
+}

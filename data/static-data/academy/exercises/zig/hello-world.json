@@ -1,0 +1,30 @@
+{
+  "id": "zig:hello-world",
+  "trackSlug": "zig",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "25a0331e-612f-48c1-8a3f-9b0e9601a2fa",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "functions",
+    "slices",
+    "type-coercion"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn hello() []const u8 {\n    return \"Goodbye, Mars!\";\n}\n",
+  "example_solution": "pub fn hello() []const u8 {\n    return \"Hello, World!\";\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst hello_world = @import(\"hello_world.zig\");\n\ntest \"say hi!\" {\n    const expected = \"Hello, World!\";\n    const actual = hello_world.hello();\n    try testing.expectEqualStrings(expected, actual);\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "massivelivefun"
+  ],
+  "contributors": null
+}

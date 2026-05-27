@@ -1,0 +1,28 @@
+{
+  "id": "lua:sublist",
+  "trackSlug": "lua",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "3e2510c0-76ea-40cf-a56c-5f6d2c4a33c2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(l1, l2)\nend\n",
+  "example_solution": "local function is_sublist(l1, l2)\n  if #l1 == 0 then\n    return true\n  end\n\n  for i = 1, #l2 - #l1 + 1 do\n    for j = 1, #l1 do\n      if l2[i + j - 1] ~= l1[j] then\n        break\n      end\n      if j == #l1 then\n        return true\n      end\n    end\n  end\n\n  return false\nend\n\nreturn function(l1, l2)\n  local l1_sublist = is_sublist(l1, l2)\n  local l2_sublist = is_sublist(l2, l1)\n\n  if l1_sublist and l2_sublist then\n    return 'equal'\n  elseif l1_sublist then\n    return 'sublist'\n  elseif l2_sublist then\n    return 'superlist'\n  else\n    return 'unequal'\n  end\nend\n",
+  "test_code": "local sublist = require('sublist')\n\ndescribe('sublist', function()\n  it('empty lists', function()\n    assert.equal('equal', sublist({}, {}))\n  end)\n\n  it('empty list within non empty list', function()\n    assert.equal('sublist', sublist({}, { 1, 2, 3 }))\n  end)\n\n  it('non empty list contains empty list', function()\n    assert.equal('superlist', sublist({ 1, 2, 3 }, {}))\n  end)\n\n  it('list equals itself', function()\n    assert.equal('equal', sublist({ 1, 2, 3 }, { 1, 2, 3 }))\n  end)\n\n  it('different lists', function()\n    assert.equal('unequal', sublist({ 1, 2, 3 }, { 2, 3, 4 }))\n  end)\n\n  it('false start', function()\n    assert.equal('sublist', sublist({ 1, 2, 5 }, { 0, 1, 2, 3, 1, 2, 5, 6 }))\n  end)\n\n  it('consecutive', function()\n    assert.equal('sublist', sublist({ 1, 1, 2 }, { 0, 1, 1, 1, 2, 1, 2 }))\n  end)\n\n  it('sublist at start', function()\n    assert.equal('sublist', sublist({ 0, 1, 2 }, { 0, 1, 2, 3, 4, 5 }))\n  end)\n\n  it('sublist in middle', function()\n    assert.equal('sublist', sublist({ 2, 3, 4 }, { 0, 1, 2, 3, 4, 5 }))\n  end)\n\n  it('sublist at end', function()\n    assert.equal('sublist', sublist({ 3, 4, 5 }, { 0, 1, 2, 3, 4, 5 }))\n  end)\n\n  it('at start of superlist', function()\n    assert.equal('superlist', sublist({ 0, 1, 2, 3, 4, 5 }, { 0, 1, 2 }))\n  end)\n\n  it('in middle of superlist', function()\n    assert.equal('superlist', sublist({ 0, 1, 2, 3, 4, 5 }, { 2, 3 }))\n  end)\n\n  it('at end of superlist', function()\n    assert.equal('superlist', sublist({ 0, 1, 2, 3, 4, 5 }, { 3, 4, 5 }))\n  end)\n\n  it('first list missing element from second list', function()\n    assert.equal('unequal', sublist({ 1, 3 }, { 1, 2, 3 }))\n  end)\n\n  it('second list missing element from first list', function()\n    assert.equal('unequal', sublist({ 1, 2, 3 }, { 1, 3 }))\n  end)\n\n  it('first list missing additional digits from second list', function()\n    assert.equal('unequal', sublist({ 1, 2 }, { 1, 22 }))\n  end)\n\n  it('order matters to a list', function()\n    assert.equal('unequal', sublist({ 1, 2, 3 }, { 3, 2, 1 }))\n  end)\n\n  it('same digits but different numbers', function()\n    assert.equal('unequal', sublist({ 1, 0, 1 }, { 10, 1 }))\n  end)\nend)\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

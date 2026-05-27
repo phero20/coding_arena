@@ -1,0 +1,38 @@
+{
+  "id": "clojure:isogram",
+  "trackSlug": "clojure",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "ced9928a-05dc-4afa-9645-a2f2e548fe6e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns isogram)\n\n(defn isogram?\n  \"Returns true if the given string is an isogram;\n  otherwise, it returns false.\"\n  [s]\n  ;; function body\n  )\n",
+  "example_solution": "(ns isogram)\n\n(defn isogram?\n  [s]\n  (->> s\n       clojure.string/lower-case\n       (filter #(Character/isAlphabetic (int %)))\n       frequencies\n       vals\n       (every? #{1})))\n",
+  "test_code": "(ns isogram-test\n  (:require [clojure.test :refer [deftest testing is]]\n            isogram))\n\n(deftest isogram?_test_1\n  (testing \"empty string\"\n    (is (true? (isogram/isogram? \"\")))))\n\n(deftest isogram?_test_2\n  (testing \"isogram with only lower case characters\"\n    (is (true? (isogram/isogram? \"isogram\")))))\n\n(deftest isogram?_test_3\n  (testing \"word with one duplicated character\"\n    (is (false? (isogram/isogram? \"eleven\")))))\n\n(deftest isogram?_test_4\n  (testing \"word with one duplicated character from the end of the alphabet\"\n    (is (false? (isogram/isogram? \"zzyzx\")))))\n\n(deftest isogram?_test_5\n  (testing \"longest reported english isogram\"\n    (is (true? (isogram/isogram? \"subdermatoglyphic\")))))\n\n(deftest isogram?_test_6\n  (testing \"word with duplicated character in mixed case\"\n    (is (false? (isogram/isogram? \"Alphabet\")))))\n\n(deftest isogram?_test_7\n  (testing \"word with duplicated character in mixed case, lowercase first\"\n    (is (false? (isogram/isogram? \"alphAbet\")))))\n\n(deftest isogram?_test_8\n  (testing \"hypothetical isogrammic word with hyphen\"\n    (is (true? (isogram/isogram? \"thumbscrew-japingly\")))))\n\n(deftest isogram?_test_9\n  (testing \"hypothetical word with duplicated character following hyphen\"\n    (is (false? (isogram/isogram? \"thumbscrew-jappingly\")))))\n\n(deftest isogram?_test_10\n  (testing \"isogram with duplicated hyphen\"\n    (is (true? (isogram/isogram? \"six-year-old\")))))\n\n(deftest isogram?_test_11\n  (testing \"made-up name that is an isogram\"\n    (is (true? (isogram/isogram? \"Emily Jung Schwartzkopf\")))))\n\n(deftest isogram?_test_12\n  (testing \"duplicated character in the middle\"\n    (is (false? (isogram/isogram? \"accentor\")))))\n\n(deftest isogram?_test_13\n  (testing \"same first and last characters\"\n    (is (false? (isogram/isogram? \"angola\")))))\n\n(deftest isogram?_test_14\n  (testing \"word with duplicated character and with two hyphens\"\n    (is (false? (isogram/isogram? \"up-to-date\")))))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "querenker"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "haus",
+    "sjwarner-bp",
+    "yurrriq",
+    "tasxatzial",
+    "erikschierboom"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "uiua:anagram",
+  "trackSlug": "uiua",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "8234660c-0df9-4585-a9a6-3a9406eb999b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "# Find all the anagrams of a word in an array of words\n# Anagrams ? Target Words\nFindAnagrams ← |2 ⊙⋅(⍤ \"Please implement FindAnagrams\" 0)\n",
+  "example_solution": "# Find all the anagrams of a word in an array of words\nFilterSelf  ← |2 ▽≠⊙(¯⌵.)(¯⌵□)\nGetAnagrams ← |3 ▽=⊙□\nSort        ← |1 ⍆¯⌵\n# Anagrams ? Target Words\nFindAnagrams ← |2 FilterSelf : GetAnagrams≡(□Sort°□):Sort :⤙⊙:.\n",
+  "test_code": "~ \"anagram.ua\" ~ FindAnagrams\n\n# no matches\n⍤⤙≍ {} FindAnagrams \"diaper\" {\"hello\" \"world\" \"zombies\" \"pants\"}\n\n# detects two anagrams\n⍤⤙≍ {\"lemons\" \"melons\"} FindAnagrams \"solemn\" {\"lemons\" \"cherry\" \"melons\"}\n\n# does not detect anagram subsets\n⍤⤙≍ {} FindAnagrams \"good\" {\"dog\" \"goody\"}\n\n# detects anagram\n⍤⤙≍ {\"inlets\"} FindAnagrams \"listen\" {\"enlists\" \"google\" \"inlets\" \"banana\"}\n\n# detects three anagrams\n⍤⤙≍ {\"gallery\" \"regally\" \"largely\"} FindAnagrams \"allergy\" {\"gallery\" \"ballerina\" \"regally\" \"clergy\" \"largely\" \"leading\"}\n\n# detects multiple anagrams with different case\n⍤⤙≍ {\"Eons\" \"ONES\"} FindAnagrams \"nose\" {\"Eons\" \"ONES\"}\n\n# does not detect non-anagrams with identical checksum\n⍤⤙≍ {} FindAnagrams \"mass\" {\"last\"}\n\n# detects anagrams case-insensitively\n⍤⤙≍ {\"Carthorse\"} FindAnagrams \"Orchestra\" {\"cashregister\" \"Carthorse\" \"radishes\"}\n\n# detects anagrams using case-insensitive subject\n⍤⤙≍ {\"carthorse\"} FindAnagrams \"Orchestra\" {\"cashregister\" \"carthorse\" \"radishes\"}\n\n# detects anagrams using case-insensitive possible matches\n⍤⤙≍ {\"Carthorse\"} FindAnagrams \"orchestra\" {\"cashregister\" \"Carthorse\" \"radishes\"}\n\n# does not detect an anagram if the original word is repeated\n⍤⤙≍ {} FindAnagrams \"go\" {\"goGoGO\"}\n\n# anagrams must use all letters exactly once\n⍤⤙≍ {} FindAnagrams \"tapper\" {\"patter\"} # \n\n# words are not anagrams of themselves\n⍤⤙≍ {} FindAnagrams \"BANANA\" {\"BANANA\"}\n\n# words are not anagrams of themselves even if letter case is partially different\n⍤⤙≍ {} FindAnagrams \"BANANA\" {\"Banana\"}\n\n# words are not anagrams of themselves even if letter case is completely different\n⍤⤙≍ {} FindAnagrams \"BANANA\" {\"banana\"}\n\n# words other than themselves can be anagrams\n⍤⤙≍ {\"Silent\"} FindAnagrams \"LISTEN\" {\"LISTEN\" \"Silent\"}\n\n# handles case of greek letters #might discard\n⍤⤙≍ {\"ΒΓΑ\" \"γβα\"} FindAnagrams \"ΑΒΓ\" {\"ΒΓΑ\" \"ΒΓΔ\" \"γβα\" \"αβγ\"}\n\n# different characters may have the same bytes\n⍤⤙≍ {} FindAnagrams \"a⬂\" {\"€a\"}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "glaxxie"
+  ],
+  "contributors": null
+}

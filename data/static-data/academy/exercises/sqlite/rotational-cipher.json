@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:rotational-cipher",
+  "trackSlug": "sqlite",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "76fd6c44-a09b-41a7-9fec-addf26b35059",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-- Schema:\n-- CREATE TABLE \"rotational-cipher\" (\n--   text      TEXT NOT NULL,\n--   shift_key INTEGER NOT NULL,\n--   result    TEXT\n-- );\n--\n-- Task: update the rotational-cipher table and set the result based on text and shift_key.\n",
+  "example_solution": "UPDATE \"rotational-cipher\"\nSET\n  result = (\n    WITH RECURSIVE\n      rcte (text, chr, shift) AS (\n        VALUES\n          (text, NULL, NULL)\n        UNION ALL\n        SELECT\n          SUBSTR(text, 2),\n          SUBSTR(text, 1, 1),\n          IIF(\n            GLOB('[A-Za-z]', SUBSTR(text, 1, 1)),\n            UNICODE(SUBSTR(text, 1, 1)) + shift_key,\n            UNICODE(SUBSTR(text, 1, 1))\n          )\n        FROM\n          rcte\n        WHERE\n          text <> ''\n      )\n    SELECT\n      GROUP_CONCAT(\n        CHAR(\n          CASE\n            WHEN GLOB('[A-Z]', chr)\n            AND shift > UNICODE('Z') THEN shift - UNICODE('Z') + UNICODE('A') - 1\n            WHEN GLOB('[a-z]', chr)\n            AND shift > UNICODE('z') THEN shift - UNICODE('z') + UNICODE('a') - 1\n            ELSE shift\n          END\n        ),\n        ''\n      )\n    FROM\n      rcte\n    WHERE\n      chr NOTNULL\n  );\n",
+  "test_code": "-- Create database:\n.read ./create_fixture.sql\n-- Read user student solution and save any output as markdown in user_output.md:\n.mode markdown\n.output user_output.md\n.read ./rotational-cipher.sql\n.output\n-- Create a clean testing environment:\n.read ./create_test_table.sql\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      text,\n      shift_key,\n      result\n    FROM\n      \"rotational-cipher\"\n  ) AS actual\nWHERE\n  (actual.text, actual.shift_key, actual.result) = (tests.text, tests.shift_key, tests.expected);\n\n-- Update message for failed tests to give helpful information:\nUPDATE tests\nSET\n  message = (\n    'Result for \"' || PRINTF(\n      'text=%s, shift_key=%d',\n      tests.text,\n      tests.shift_key\n    ) || '\"' || ' is <' || COALESCE(actual.result, 'NULL') || '> but should be <' || tests.expected || '>'\n  )\nFROM\n  (\n    SELECT\n      text,\n      shift_key,\n      result\n    FROM\n      \"rotational-cipher\"\n  ) AS actual\nWHERE\n  (actual.text, actual.shift_key) = (tests.text, tests.shift_key)\n  AND tests.status = 'fail';\n\n-- Save results to ./output.json (needed by the online test-runner)\n.mode json\n.once './output.json'\nSELECT\n  description,\n  status,\n  message,\n  output,\n  test_code,\n  task_id\nFROM\n  tests;\n\n-- Display test results in readable form for the student:\n.mode table\nSELECT\n  description,\n  status,\n  message\nFROM\n  tests;\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

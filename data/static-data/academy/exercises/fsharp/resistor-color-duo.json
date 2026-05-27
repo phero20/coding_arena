@@ -1,0 +1,31 @@
+{
+  "id": "fsharp:resistor-color-duo",
+  "trackSlug": "fsharp",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "4ecde4e3-308c-42e9-bb41-0e746d74b526",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "numbers"
+  ],
+  "prerequisites": [
+    "numbers",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module ResistorColorDuo\n\nlet value colors =\n    failwith \"Please implement the 'value' function\"\n",
+  "example_solution": "module ResistorColorDuo\n\nlet private colors =\n    [ \"black\"\n      \"brown\"\n      \"red\"\n      \"orange\"\n      \"yellow\"\n      \"green\"\n      \"blue\"\n      \"violet\"\n      \"grey\"\n      \"white\" ]\n\nlet private colorCode color = List.findIndex ((=) color) colors\n\nlet value colors =\n    colorCode (List.item 0 colors) * 10\n    + colorCode (List.item 1 colors)\n",
+  "test_code": "module ResistorColorDuoTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen ResistorColorDuo\n\n[<Fact>]\nlet ``Brown and black`` () =\n    value [\"brown\"; \"black\"] |> should equal 10\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Blue and grey`` () =\n    value [\"blue\"; \"grey\"] |> should equal 68\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Yellow and violet`` () =\n    value [\"yellow\"; \"violet\"] |> should equal 47\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``White and red`` () =\n    value [\"white\"; \"red\"] |> should equal 92\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Orange and orange`` () =\n    value [\"orange\"; \"orange\"] |> should equal 33\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Ignore additional colors`` () =\n    value [\"green\"; \"brown\"; \"orange\"] |> should equal 51\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Black and brown, one-digit`` () =\n    value [\"black\"; \"brown\"] |> should equal 1\n\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

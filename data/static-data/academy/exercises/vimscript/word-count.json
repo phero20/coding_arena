@@ -1,0 +1,29 @@
+{
+  "id": "vimscript:word-count",
+  "trackSlug": "vimscript",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "d85603b2-f143-48bd-8184-67959b53b1d0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "\"\n\" Given a phrase, return a dictionary containing the count of occurrences of\n\" each word.\n\"\n\" Example:\n\"\n\"   :echo WordCount('olly olly in come free')\n\"   {'olly': 2, 'come': 1, 'in': 1, 'free': 1}\n\"\nfunction! WordCount(phrase) abort\n\n  \" your solution goes here\n\nendfunction\n",
+  "example_solution": "function! WordCount(phrase)\n  let words = {}\n\n  for word in split(a:phrase, \"[^[:alnum:]']\\\\+\")\n    let word = substitute(tolower(word), \"^'\\\\+\\\\|'\\\\+$\", '', 'g')\n    if strlen(word) > 0\n      let words[word] = get(words, word) + 1\n    endif\n  endfor\n\n  return words\nendfunction\n",
+  "test_code": "Execute (count one word):\n  let g:sentence = \"word\"\n  let g:expected = {'word': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (count one of each word):\n  let g:sentence = \"one of each\"\n  let g:expected = {'of': 1, 'one': 1, 'each': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (multiple occurrences of a word):\n  let g:sentence = \"one fish two fish red fish blue fish\"\n  let g:expected = {'one': 1, 'blue': 1, 'two': 1, 'fish': 4, 'red': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (handles cramped lists):\n  let g:sentence = \"one,two,three\"\n  let g:expected = {'one': 1, 'two': 1, 'three': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (handles expanded lists):\n  let g:sentence = \"one,\\ntwo,\\nthree\"\n  let g:expected = {'one': 1, 'two': 1, 'three': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (ignore punctuation):\n  let g:sentence = \"car: carpet as java: javascript!!&@$%^&\"\n  let g:expected = {'car': 1, 'carpet': 1, 'as': 1, 'java': 1, 'javascript': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (include numbers):\n  let g:sentence = \"testing, 1, 2 testing\"\n  let g:expected = {'1': 1, 'testing': 2, '2': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (normalize case):\n  let g:sentence = \"go Go GO Stop stop\"\n  let g:expected = {'go': 3, 'stop': 2}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (with apostrophes):\n  let g:sentence = \"'First: don't laugh. Then: don't cry. You're getting it.'\"\n  let g:expected = {'first': 1, 'laugh': 1, 'then': 1, 'getting': 1, 'it': 1, \"you're\": 1, \"don't\": 2, 'cry': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (with quotations):\n  let g:sentence = \"Joe can't tell between 'large' and large.\"\n  let g:expected = {'large': 2, \"can't\": 1, 'and': 1, 'tell': 1, 'joe': 1, 'between': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (substrings from the beginning):\n  let g:sentence = \"Joe can't tell between app, apple and a.\"\n  let g:expected = {'a': 1, 'apple': 1, 'and': 1, \"can't\": 1, 'app': 1, 'tell': 1, 'joe': 1, 'between': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (multiple spaces not detected as a word):\n  let g:sentence = \" multiple   whitespaces\"\n  let g:expected = {'whitespaces': 1, 'multiple': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (alternating word separators not detected as a word):\n  let g:sentence = \",\\n,one,\\n ,two \\n 'three'\"\n  let g:expected = {'one': 1, 'two': 1, 'three': 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n\nExecute (quotation for word with apostrophe):\n  let g:sentence = \"can, can't, 'can't'\"\n  let g:expected = {\"can't\": 2, \"can\": 1}\n  AssertEqual g:expected, WordCount(g:sentence)\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "mhinz"
+  ],
+  "contributors": [
+    "kotp",
+    "kytrinyx"
+  ]
+}

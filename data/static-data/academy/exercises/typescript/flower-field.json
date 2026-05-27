@@ -1,0 +1,31 @@
+{
+  "id": "typescript:flower-field",
+  "trackSlug": "typescript",
+  "slug": "flower-field",
+  "name": "Flower Field",
+  "uuid": "f1c96aaa-0944-4a11-83df-9f3a4f5417f0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Mark all the flowers in a garden.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add flower counts to empty squares in a completed Flower Field garden.\nThe garden itself is a rectangle board composed of squares that are either empty (`' '`) or a flower (`'*'`).\n\nFor each empty square, count the number of flowers adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent flowers, leave it empty.\nOtherwise replace it with the count of adjacent flowers.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Flower Field][history] is a compassionate reimagining of the popular game Minesweeper.\nThe object of the game is to find all the flowers in the garden using numeric hints that indicate how many flowers are directly adjacent (horizontally, vertically, diagonally) to a square.\n\"Flower Field\" shipped in regional versions of Microsoft Windows in Italy, Germany, South Korea, Japan and Taiwan.\n\n[history]: https://web.archive.org/web/20020409051321fw_/http://rcm.usr.dsi.unimi.it/rcmweb/fnm/\n",
+  "hints": null,
+  "starter_code": "export function annotate(field: unknown): unknown {\n  throw new Error('Remove this statement and implement this function')\n}\n",
+  "example_solution": "const FLOWER = '*'\n\nconst DELTAS = [\n  [-1, -1],\n  [-1, 0],\n  [-1, 1],\n  [1, 1],\n  [1, 0],\n  [1, -1],\n  [0, 1],\n  [0, -1],\n]\n\nexport function annotate(rows: string[]): string[] {\n  if (noDataPresent(rows)) {\n    return rows\n  }\n\n  const inputBoard = rows.map((row) => [...row])\n\n  const result = inputBoard.map((row, x) =>\n    [...row].map((cell, y) => cellToFlowerOrCount(cell, inputBoard, x, y))\n  )\n\n  return stringify(result as string[][])\n}\n\nfunction cellToFlowerOrCount(\n  cell: string,\n  inputBoard: string[][],\n  x: number,\n  y: number\n): number | '*' | ' ' {\n  if (cell === FLOWER) {\n    return FLOWER\n  }\n  return countAdjacentFlowers(inputBoard, x, y) || ' '\n}\n\nfunction countAdjacentFlowers(board: string[][], x: number, y: number): number {\n  return DELTAS.filter((d) => adjacentSquareIsOnBoard(board, x, d)).filter(\n    (d) => adjacentSquareHasFlower(board, x, y, d)\n  ).length\n}\n\nfunction stringify(board: string[][]): string[] {\n  return board.map((row) => row.join(''))\n}\n\nfunction noDataPresent(rows: string[]): boolean {\n  return rows.length === 0 || rows[0].length === 0\n}\n\nfunction adjacentSquareIsOnBoard(\n  board: string[][],\n  x: number,\n  d: number[]\n): string[] {\n  return board[x + d[0]]\n}\n\nfunction adjacentSquareHasFlower(\n  board: string[][],\n  x: number,\n  y: number,\n  d: number[]\n): boolean {\n  return board[x + d[0]][y + d[1]] === FLOWER\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { annotate } from './flower-field.ts'\n\ndescribe('Flower Field annotate', () => {\n  it('handles no rows', () => {\n    expect(annotate([])).toEqual([])\n  })\n\n  xit('handles no columns', () => {\n    expect(annotate([''])).toEqual([''])\n  })\n\n  xit('handles no flowers', () => {\n    const input = ['   ', '   ', '   ']\n    const expected = ['   ', '   ', '   ']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles garden full of flowers', () => {\n    const input = ['***', '***', '***']\n    const expected = ['***', '***', '***']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles flower surrounded by spaces', () => {\n    const input = ['   ', ' * ', '   ']\n    const expected = ['111', '1*1', '111']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles space surrounded by flowers', () => {\n    const input = ['***', '* *', '***']\n    const expected = ['***', '*8*', '***']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles horizontal line', () => {\n    const input = [' * * ']\n    const expected = ['1*2*1']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles horizontal line, flowers at edges', () => {\n    const input = ['*   *']\n    const expected = ['*1 1*']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles vertical line', () => {\n    const input = [' ', '*', ' ', '*', ' ']\n    const expected = ['1', '*', '2', '*', '1']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles vertical line, flowers at edges', () => {\n    const input = ['*', ' ', ' ', ' ', '*']\n    const expected = ['*', '1', ' ', '1', '*']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles cross', () => {\n    const input = ['  *  ', '  *  ', '*****', '  *  ', '  *  ']\n    const expected = [' 2*2 ', '25*52', '*****', '25*52', ' 2*2 ']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles large gardem', () => {\n    const input = [' *  * ', '  *   ', '    * ', '   * *', ' *  * ', '      ']\n    const expected = [\n      '1*22*1',\n      '12*322',\n      ' 123*2',\n      '112*4*',\n      '1*22*2',\n      '111111',\n    ]\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('multiple adjacent flowers', () => {\n    expect(annotate([' ** '])).toEqual(['1**1'])\n  })\n})\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "CRivasGomez"
+  ],
+  "contributors": [
+    "BNAndras",
+    "iignatov",
+    "masters3d",
+    "SleeplessByte"
+  ]
+}

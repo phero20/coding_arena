@@ -1,0 +1,32 @@
+{
+  "id": "racket:atbash-cipher",
+  "trackSlug": "racket",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "92d97f99-04f9-4a52-942d-d1a9fa96375f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "algorithms",
+    "cryptography",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide encode decode)\n\n(define (encode m)\n  (error \"Please implement 'encode'\"))\n\n(define (decode m)\n  (error \"Please implement 'decode'\"))\n",
+  "example_solution": "#lang racket\n\n(provide (contract-out\n          [encode (string? . -> . string?)]\n          [decode (string? . -> . string?)]))\n\n(define (prepare-string m)\n  (filter (λ(s)\n            (or (char-numeric? s)\n                (char-alphabetic? s)))\n          (string->list\n           (string-downcase m))))\n\n(define (atbash-char c)\n  (if (char-numeric? c)\n      c\n      (integer->char\n       (+ (char->integer #\\a)\n          (- (char->integer #\\z) (char->integer c))))))\n\n(define (group v chunk-size)\n  (let loop ([v v]\n             [N (length v)]\n             [answer '()])\n    (if (<= N chunk-size)\n        (string-join (reverse (cons (list->string v) answer)))\n        (let-values ([(h t) (split-at v chunk-size)])\n          (loop t (- N chunk-size) (cons (list->string h) answer))))))\n\n(define (encode m)\n  (group (map atbash-char (prepare-string m)) 5))\n\n(define (decode m)\n  (list->string (map atbash-char (prepare-string m))))\n",
+  "test_code": "#lang racket/base\n\n; Tests adapted from canonical-data.json v1.2.0\n(require \"atbash-cipher.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n  (run-tests\n   (test-suite \"atbash-cipher encode tests\"\n               (test-equal? \"encode yes\"\n                            (encode \"yes\")\n                            \"bvh\")\n\n               (test-equal? \"encode no\"\n                            (encode \"no\")\n                            \"ml\")\n\n               (test-equal? \"encode OMG\"\n                            (encode \"OMG\")\n                            \"lnt\")\n\n               (test-equal? \"encode O M G\"\n                            (encode \"O M G\")\n                            \"lnt\")\n\n               (test-equal? \"encode mindblowingly\"\n                            (encode \"mindblowingly\")\n                            \"nrmwy oldrm tob\")\n\n               (test-equal? \"encode numbers\"\n                            (encode \"Testing,1 2 3, testing.\")\n                            \"gvhgr mt123 gvhgr mt\")\n\n               (test-equal? \"encode deep thought\"\n                            (encode \"Truth is fiction.\")\n                            \"gifgs rhurx grlm\")\n \n               (test-equal? \"encode all the letters\"\n                            (encode \"The quick brown fox jumps over the lazy dog.\")\n                            \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")))\n  \n  (run-tests\n   (test-suite \"atbash-cipher decode tests\"\n               (test-equal? \"decode exercism\"\n                            (decode \"vcvix rhn\")\n                            \"exercism\")\n\n               (test-equal? \"decode a sentence\"\n                            (decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\")\n                            \"anobstacleisoftenasteppingstone\")\n\n               (test-equal? \"decode numbers\"\n                            (decode \"gvhgr mt123 gvhgr mt\")\n                            \"testing123testing\")\n\n               (test-equal? \"decode all the letters\"\n                            (decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n                            \"thequickbrownfoxjumpsoverthelazydog\")\n\n               (test-equal? \"decode with too many spaces\"\n                            (decode \"vc vix    r hn\")\n                            \"exercism\")\n\n               (test-equal? \"decode with no spaces\"\n                            (decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\")\n                            \"anobstacleisoftenasteppingstone\"))))",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "cousinitt"
+  ],
+  "contributors": [
+    "robertpostill"
+  ]
+}

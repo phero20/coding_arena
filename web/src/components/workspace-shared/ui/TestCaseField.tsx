@@ -41,7 +41,7 @@ const CopyButton: React.FC<{ value: string }> = ({ value }) => {
 export const TestCaseField: React.FC<
   TestCaseFieldProps & { isError?: boolean }
 > = ({ label, value, isOutput, isError }) => {
-  const displayValue = !isOutput ? beautifyTestCaseInput(value) : value;
+  const displayValue = (!isOutput && !isError) ? beautifyTestCaseInput(value) : value;
 
   return (
     <Card className="space-y-1.5 group p-4 ">

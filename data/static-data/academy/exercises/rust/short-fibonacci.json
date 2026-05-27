@@ -1,0 +1,32 @@
+{
+  "id": "rust:short-fibonacci",
+  "trackSlug": "rust",
+  "slug": "short-fibonacci",
+  "name": "A Short Fibonacci Sequence",
+  "uuid": "c481e318-ddd7-4f8a-91eb-dadb7315e304",
+  "type": "concept",
+  "status": "active",
+  "blurb": "Learn the `vec!` macro to build a short Fibonacci Sequence.",
+  "difficulty": 1,
+  "concepts": [
+    "vec-macro"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "functions",
+    "integers"
+  ],
+  "instructions": "# Instructions\n\nYou are going to initialize empty buffers and list the first five numbers, or elements, of the Fibonacci sequence.\n\nThe Fibonacci sequence is a set of numbers where the next element is the sum of the prior two. We start the sequence at one. So the first two elements are 1 and 1.\n\n## 1. Create a buffer of `count` zeroes.\n\nCreate a function that creates a buffer of `count` zeroes.\n\n```rust\nlet my_buffer = create_buffer(5);\n// [0, 0, 0, 0, 0]\n```\n\n## 2. List the first five elements of the Fibonacci sequence\n\nCreate a function that returns the first five numbers of the Fibonacci sequence.\nIts first five elements are `1, 1, 2, 3, 5`\n\n```rust\nlet first_five = fibonacci();\n// [1, 1, 2, 3, 5]\n```\n",
+  "introduction": "# Introduction\n\nRust provides a macro `vec![]` to help you create Vectors.\nThis comes in quite handy when you need to initialize lists.\n",
+  "hints": "# Hints\n\n## General\n\n- Check out the Rust documentation on [the `vec!` macro](https://doc.rust-lang.org/std/macro.vec.html).\n",
+  "starter_code": "/// Create an empty vector\npub fn create_empty() -> Vec<u8> {\n    todo!()\n}\n\n/// Create a buffer of `count` zeroes.\n///\n/// Applications often use buffers when serializing data to send over the network.\npub fn create_buffer(count: usize) -> Vec<u8> {\n    todo!(\"create a zeroized buffer of {count} bytes\")\n}\n\n/// Create a vector containing the first five elements of the Fibonacci sequence.\n///\n/// Fibonacci's sequence is the list of numbers where the next number is a sum of the previous two.\n/// Its first five elements are `1, 1, 2, 3, 5`.\npub fn fibonacci() -> Vec<u8> {\n    todo!()\n}\n",
+  "example_solution": "/// Create an empty vector\npub fn create_empty() -> Vec<u8> {\n    vec![]\n}\n\n/// Create a buffer of `count` zeroes.\n///\n/// Applications often use buffers when serializing data to send over the network.\npub fn create_buffer(count: usize) -> Vec<u8> {\n    vec![0; count]\n}\n\n/// Create a vector containing the first five elements of the Fibonacci sequence.\n///\n/// Fibonacci's sequence is the list of numbers where the next number is a sum of the previous two.\n/// Its first five elements are `1, 1, 2, 3, 5`.\npub fn fibonacci() -> Vec<u8> {\n    vec![1, 1, 2, 3, 5]\n}\n",
+  "test_code": "use short_fibonacci::*;\n\n#[test]\nfn empty() {\n    assert_eq!(create_empty(), Vec::new());\n}\n\n#[test]\n#[ignore]\nfn buffer() {\n    for n in 0..10 {\n        let zeroized = create_buffer(n);\n        assert_eq!(zeroized.len(), n);\n        assert!(zeroized.iter().all(|&v| v == 0));\n    }\n}\n\n#[test]\n#[ignore]\nfn first_five_elements() {\n    let fibb = fibonacci();\n    assert_eq!(fibb.len(), 5);\n    assert_eq!(fibb[0], 1);\n    assert_eq!(fibb[1], 1);\n    for window in fibb.windows(3) {\n        assert_eq!(window[0] + window[1], window[2]);\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "efx",
+    "coriolinus"
+  ],
+  "contributors": null
+}

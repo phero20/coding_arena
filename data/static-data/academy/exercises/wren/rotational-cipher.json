@@ -1,0 +1,26 @@
+{
+  "id": "wren:rotational-cipher",
+  "trackSlug": "wren",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "a9b73982-6a92-4a4e-80b0-14ae00ffa93c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RotationalCipher {\n  static rotate(text, shiftKey) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class RotationalCipher {\n  static rotateBy(shiftKey) {\n    return Fn.new {|codePoint|\n      if ((65..90).contains(codePoint)) {\n        codePoint = (codePoint - 65 + shiftKey) % 26 + 65\n      } else if ((97..122).contains(codePoint)) {\n        codePoint = (codePoint - 97 + shiftKey) % 26 + 97\n      }\n      return String.fromCodePoint(codePoint)\n    }\n  }\n\n  static rotate(text, shiftKey) { text.codePoints.map(rotateBy(shiftKey)).join() }\n}\n",
+  "test_code": "import \"./rotational-cipher\" for RotationalCipher\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"RotationalCipher\") { |do, skip|\n  do.test(\"rotate a by 0, same output as input\") {\n    var phrase = \"a\"\n    var expect = \"a\"\n    Expect.value(RotationalCipher.rotate(phrase, 0)).toEqual(expect)\n  }\n\n  skip.test(\"rotate a by 1\") {\n    var phrase = \"a\"\n    var expect = \"b\"\n    Expect.value(RotationalCipher.rotate(phrase, 1)).toEqual(expect)\n  }\n\n  skip.test(\"rotate a by 26, same output as input\") {\n    var phrase = \"a\"\n    var expect = \"a\"\n    Expect.value(RotationalCipher.rotate(phrase, 26)).toEqual(expect)\n  }\n\n  skip.test(\"rotate m by 13\") {\n    var phrase = \"m\"\n    var expect = \"z\"\n    Expect.value(RotationalCipher.rotate(phrase, 13)).toEqual(expect)\n  }\n\n  skip.test(\"rotate n by 13 with wrap around alphabet\") {\n    var phrase = \"n\"\n    var expect = \"a\"\n    Expect.value(RotationalCipher.rotate(phrase, 13)).toEqual(expect)\n  }\n\n  skip.test(\"rotate capital letters\") {\n    var phrase = \"OMG\"\n    var expect = \"TRL\"\n    Expect.value(RotationalCipher.rotate(phrase, 5)).toEqual(expect)\n  }\n\n  skip.test(\"rotate spaces\") {\n    var phrase = \"O M G\"\n    var expect = \"T R L\"\n    Expect.value(RotationalCipher.rotate(phrase, 5)).toEqual(expect)\n  }\n\n  skip.test(\"rotate numbers\") {\n    var phrase = \"Testing 1 2 3 testing\"\n    var expect = \"Xiwxmrk 1 2 3 xiwxmrk\"\n    Expect.value(RotationalCipher.rotate(phrase, 4)).toEqual(expect)\n  }\n\n  skip.test(\"rotate punctuation\") {\n    var phrase = \"Let's eat, Grandma!\"\n    var expect = \"Gzo'n zvo, Bmviyhv!\"\n    Expect.value(RotationalCipher.rotate(phrase, 21)).toEqual(expect)\n  }\n\n  skip.test(\"rotate all letters\") {\n    var phrase = \"The quick brown fox jumps over the lazy dog.\"\n    var expect = \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n    Expect.value(RotationalCipher.rotate(phrase, 13)).toEqual(expect)\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

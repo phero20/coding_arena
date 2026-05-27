@@ -1,0 +1,26 @@
+{
+  "id": "r:etl",
+  "trackSlug": "r",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "85da6686-83eb-4ff8-ad76-ca7031361ca6",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "etl <- function(input) {\n\n}\n",
+  "example_solution": "etl <- function(input) {\n  output <- setNames(\n    unlist(input, use.names = FALSE),\n    rep(names(input), lengths(input))\n  )\n  output <- sort(tolower(output))\n\n  as.list(\n    setNames(\n      as.numeric(names(output)),\n      output\n    )\n  )\n}\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/etl/canonical-data.json\n# File last updated on 2026-03-19\n\nsource(\"./etl.R\")\nlibrary(testthat)\n\ntest_that(\"single letter\", {\n  input <- list('1' = c('A'))\n  expected <- list(a = 1)\n  expect_equal(etl(input), expected)\n})\n\ntest_that(\"single score with multiple letters\", {\n  input <- list('1' = c('A', 'E', 'I', 'O', 'U'))\n  expected <- list(a = 1, e = 1, i = 1, o = 1, u = 1)\n  expect_equal(etl(input), expected)\n})\n\ntest_that(\"multiple scores with multiple letters\", {\n  input <- list('1' = c('A', 'E'), '2' = c('D', 'G'))\n  expected <- list(a = 1, d = 2, e = 1, g = 2)\n  expect_equal(etl(input), expected)\n})\n\ntest_that(\"multiple scores with differing numbers of letters\", {\n  input <- list(\n    '1' = c('A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'),\n    '2' = c('D', 'G'),\n    '3' = c('B', 'C', 'M', 'P'),\n    '4' = c('F', 'H', 'V', 'W', 'Y'),\n    '5' = c('K'),\n    '8' = c('J', 'X'),\n    '10' = c('Q', 'Z')\n  )\n  expected <- list(\n    a = 1,\n    b = 3,\n    c = 3,\n    d = 2,\n    e = 1,\n    f = 4,\n    g = 2,\n    h = 4,\n    i = 1,\n    j = 8,\n    k = 5,\n    l = 1,\n    m = 3,\n    n = 1,\n    o = 1,\n    p = 3,\n    q = 10,\n    r = 1,\n    s = 1,\n    t = 1,\n    u = 1,\n    v = 4,\n    w = 4,\n    x = 8,\n    y = 4,\n    z = 10\n  )\n  expect_equal(etl(input), expected)\n})\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "jonmcalder"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "vlang:isogram",
+  "trackSlug": "vlang",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "dc522fc7-94e5-4527-ac6e-e713ac4a5ec2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn is_isogram(word string) bool {\n}\n",
+  "example_solution": "module main\n\nfn is_isogram(word string) bool {\n\tupper := word.to_upper().split('')\n\tfor i, letter in upper {\n\t\tif letter != ' ' && letter != '-' && (letter in upper[..i] || letter in upper[i + 1..]) {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}\n",
+  "test_code": "module main\n\nfn test_empty_string() {\n\tassert is_isogram('')\n}\n\nfn test_isogram() {\n\tassert is_isogram('isogram')\n}\n\nfn test_eleven() {\n\tassert !is_isogram('eleven')\n}\n\nfn test_duplicate_z() {\n\tassert !is_isogram('zzyzx')\n}\n\nfn test_longest_english_isogram() {\n\tassert is_isogram('subdermatoglyphic')\n}\n\nfn test_duplicate_mixed_case() {\n\tassert !is_isogram('Alphabet')\n}\n\nfn test_duplicate_mixed_case_2() {\n\tassert !is_isogram('alphAbet')\n}\n\nfn test_with_hyphen() {\n\tassert is_isogram('thumbscrew-japingly')\n}\n\nfn test_with_hyphen_double_p() {\n\tassert !is_isogram('thumbscrew-jappingly')\n}\n\nfn test_with_double_hyphen() {\n\tassert is_isogram('six-year-old')\n}\n\nfn test_with_name() {\n\tassert is_isogram('Emily Jung Schwartzkopf')\n}\n\nfn test_duplicate_in_middle() {\n\tassert !is_isogram('accentor')\n}\n\nfn test_first_and_last_same() {\n\tassert !is_isogram('angola')\n}\n\nfn test_with_duplicated_char_and_hypens() {\n\tassert !is_isogram('up-to-date')\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "1ethanhansen"
+  ],
+  "contributors": null
+}

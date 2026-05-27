@@ -1,0 +1,26 @@
+{
+  "id": "go:line-up",
+  "trackSlug": "go",
+  "slug": "line-up",
+  "name": "Line Up",
+  "uuid": "6c016e0e-e3d9-4bac-8b7b-6a5cb3cffbec",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help lining up customers at Yaʻqūb's Deli.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a name and a number, your task is to produce a sentence using that name and that number as an [ordinal numeral][ordinal-numeral].\nYaʻqūb expects to use numbers from 1 up to 999.\n\nRules:\n\n- Numbers ending in 1 (unless ending in 11) → `\"st\"`\n- Numbers ending in 2 (unless ending in 12) → `\"nd\"`\n- Numbers ending in 3 (unless ending in 13) → `\"rd\"`\n- All other numbers → `\"th\"`\n\nExamples:\n\n- `\"Mary\", 1` → `\"Mary, you are the 1st customer we serve today. Thank you!\"`\n- `\"John\", 12` → `\"John, you are the 12th customer we serve today. Thank you!\"`\n- `\"Dahir\", 162` → `\"Dahir, you are the 162nd customer we serve today. Thank you!\"`\n\n[ordinal-numeral]: https://en.wikipedia.org/wiki/Ordinal_numeral\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at a deli in town, slicing, weighing, and wrapping orders for a line of hungry customers that gets longer every day.\nWaiting customers are starting to lose track of who is next, so he wants numbered tickets they can use to track the order in which they arrive.\n\nTo make the customers feel special, he does not want the ticket to have only a number on it.\nThey shall get a proper English sentence with their name and number on it.\n",
+  "hints": null,
+  "starter_code": "package lineup\n\nfunc Format(name string, number int) string {\n\tpanic(\"Please implement the Format function\")\n}\n",
+  "example_solution": "package lineup\n\nimport \"fmt\"\n\nfunc Format(name string, number int) string {\n\tsuffix := \"th\"\n\tif number%100/10 != 1 {\n\t\tswitch number % 10 {\n\t\tcase 1:\n\t\t\tsuffix = \"st\"\n\t\tcase 2:\n\t\t\tsuffix = \"nd\"\n\t\tcase 3:\n\t\t\tsuffix = \"rd\"\n\t\t}\n\t}\n\treturn fmt.Sprintf(\"%s, you are the %d%s customer we serve today. Thank you!\", name, number, suffix)\n}\n",
+  "test_code": "package lineup\n\nimport \"testing\"\n\nfunc TestFormat(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Format(tc.name, tc.number); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Format(%q, %d) = %q, want: %q\", tc.name, tc.number, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkFormat(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tFormat(tc.name, tc.number)\n\t\t}\n\t}\n}\n",
+  "source": "mk-mxp, based on previous work from Exercism contributors codedge and neenjaw",
+  "source_url": "https://forum.exercism.org/t/new-exercise-ordinal-numbers/19147",
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

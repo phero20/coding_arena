@@ -1,0 +1,36 @@
+{
+  "id": "clojure:accumulate",
+  "trackSlug": "clojure",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "49f62bbc-0f60-4922-b5a6-f266b80442f4",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns accumulate)\n\n(defn accumulate [] ;; <- arglist goes here\n      ;; your code goes here\n)\n",
+  "example_solution": "(ns accumulate)\n\n(defn accumulate [f xs]\n  (loop [xs xs\n         accum []]\n    (if\n     (empty? xs) accum\n     (recur (rest xs) (conj accum (f (first xs)))))))\n\n",
+  "test_code": "(ns accumulate-test\n  (:require [clojure.test :refer [deftest is]]\n            accumulate))\n\n(defn- square [n] (* n n))\n\n(defn- to-s [xs] (apply str xs))\n\n(deftest empty-accumulation\n  (is (= [] (accumulate/accumulate square []))))\n\n(deftest accumulate-squares\n  (is (= [1 4 9] (accumulate/accumulate square [1 2 3]))))\n\n(deftest accumulate-upcases\n  (is (= [\"HELLO\", \"WORLD\"]\n         (->> [\"hello\" \"world\"]\n              (accumulate/accumulate clojure.string/upper-case)\n              (map to-s)))))\n\n(deftest accumulate-reversed-strings\n  (is (= [\"eht\" \"kciuq\" \"nworb\" \"xof\" \"cte\"]\n         (->> [\"the\" \"quick\" \"brown\" \"fox\" \"etc\"]\n              (accumulate/accumulate reverse)\n              (map to-s)))))\n\n(deftest accumulate-recursively\n  (is (= [[\"a1\" \"a2\" \"a3\"] [\"b1\" \"b2\" \"b3\"] [\"c1\" \"c2\" \"c3\"]]\n         (-> #(accumulate/accumulate (fn [n] (str % n)) [1 2 3])\n             (accumulate/accumulate \"abc\")))))\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "geofflane"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "canweriotnow",
+    "dkinzer",
+    "haus",
+    "kytrinyx",
+    "mathias",
+    "rubysolo",
+    "sjwarner-bp",
+    "yurrriq"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "java:darts",
+  "trackSlug": "java",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "4d400a44-b190-4a0c-affb-99fad8ea18da",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "if-else-statements"
+  ],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Darts {\n    int score(double xOfDart, double yOfDart) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n}\n",
+  "example_solution": "class Darts {\n\n    private static final int RADIUS_CIRCLE_OUTER = 10;\n    private static final int RADIUS_CIRCLE_MIDDLE = 5;\n    private static final int RADIUS_CIRCLE_INNER = 1;\n\n    int score(double x, double y) {\n        if (RADIUS_CIRCLE_MIDDLE < distanceDartToOrigin(x, y)\n                && distanceDartToOrigin(x, y) <= RADIUS_CIRCLE_OUTER) {\n            return 1;\n        } else if (RADIUS_CIRCLE_INNER < distanceDartToOrigin(x, y)\n                && distanceDartToOrigin(x, y) <= RADIUS_CIRCLE_MIDDLE) {\n            return 5;\n        } else if (distanceDartToOrigin(x, y) <= RADIUS_CIRCLE_INNER) {\n            return 10;\n        }\n        return 0;\n    }\n\n    private double distanceDartToOrigin(double x, double y) {\n        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class DartsTest {\n\n    Darts darts = new Darts();\n    @Test\n    @DisplayName(\"Missed target\")\n    public void missedTarget() {\n        assertThat(darts.score(-9, 9)).isEqualTo(0);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"On the outer circle\")\n    public void onTheOuterCircle() {\n        assertThat(darts.score(0, 10)).isEqualTo(1);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"On the middle circle\")\n    public void onTheMiddleCircle() {\n        assertThat(darts.score(-5, 0)).isEqualTo(5);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"On the inner circle\")\n    public void onTheInnerCircle() {\n        assertThat(darts.score(0, -1)).isEqualTo(10);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Exactly on center\")\n    public void exactlyOnCentre() {\n        assertThat(darts.score(0, 0)).isEqualTo(10);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Near the center\")\n    public void nearTheCentre() {\n        assertThat(darts.score(-0.1, -0.1)).isEqualTo(10);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Just within the inner circle\")\n    public void justWithinTheInnerCircle() {\n        assertThat(darts.score(0.7, 0.7)).isEqualTo(10);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Just outside the inner circle\")\n    public void justOutsideTheInnerCircle() {\n        assertThat(darts.score(0.8, -0.8)).isEqualTo(5);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Just within the middle circle\")\n    public void justWithinTheMiddleCircle() {\n        assertThat(darts.score(-3.5, 3.5)).isEqualTo(5);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Just outside the middle circle\")\n    public void justOutsideTheMiddleCircle() {\n        assertThat(darts.score(-3.6, -3.6)).isEqualTo(1);\n    }\n\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Just within the outer circle\")\n    public void justWithinTheOuterCircle() {\n        assertThat(darts.score(-7.0, 7.0)).isEqualTo(1);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Just outside the outer circle\")\n    public void justOutsideTheOuterCircle() {\n        assertThat(darts.score(7.1, -7.1)).isEqualTo(0);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Asymmetric position between the inner and middle circles\")\n    public void asymmetricPositionBetweenTheInnerAndMiddleCircles() {\n        assertThat(darts.score(0.5, -4)).isEqualTo(5);\n    }\n\n}\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "lemoncurry"
+  ],
+  "contributors": [
+    "ccouzens",
+    "FridaTveit",
+    "jmrunkle",
+    "msomji",
+    "muzimuzhi",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "jennylia"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "x86-64-assembly:reverse-string",
+  "trackSlug": "x86-64-assembly",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "799bdac9-e905-4fbd-aa55-94dc1154dc5e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "section .text\nglobal reverse\nreverse:\n    ; Provide your implementation here\n    ; The function has type signature void reverse(char *str)\n    ; It has no return value\n    ; The argument is of type char*, which is the address of a writable NUL-terminated sequence of bytes stored in memory\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "example_solution": ";\n; Reverse a string.\n;\n; Parameters:\n;   rdi - str\n;\nsection .text\nglobal reverse\nreverse:\n    xor eax, eax               ; Initialize string length\n    cmp byte [rdi], 0          ; Check if input string is empty\n    je .return                 ; If empty, return\n.len_loop_start:\n    inc eax                    ; Increment string length\n    cmp byte [rdi + rax], 0    ; See if we reached end of input string\n    jne .len_loop_start        ; If chars remain, loop back\n\n    xor ecx, ecx               ; Set start index to 0\n    dec eax                    ; Set end index to string length - 1\n.rev_loop_start:\n    mov dl, byte [rdi + rcx]   ; Save char at start index\n    mov sil, byte [rdi + rax]  ; Save char at end index\n    mov byte [rdi + rax], dl   ; Set char at start to end\n    mov byte [rdi + rcx], sil  ; Set char at end to start\n    inc ecx                    ; Increment start index\n    dec eax                    ; Decrement end index\n    cmp ecx, eax               ; See if we swapped every char\n    jl .rev_loop_start         ; If chars remain, loop back\n\n.return:\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "test_code": "#include \"vendor/unity.h\"\n\nextern void reverse(char *str);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_an_empty_string(void) {\n    char str[] = \"\";\n\n    reverse(str);\n    TEST_ASSERT_EQUAL_STRING(\"\", str);\n}\n\nvoid test_a_word(void) {\n    TEST_IGNORE();\n    char str[] = \"robot\";\n\n    reverse(str);\n    TEST_ASSERT_EQUAL_STRING(\"tobor\", str);\n}\n\nvoid test_a_capitalized_word(void) {\n    TEST_IGNORE();\n    char str[] = \"Ramen\";\n\n    reverse(str);\n    TEST_ASSERT_EQUAL_STRING(\"nemaR\", str);\n}\n\nvoid test_a_sentence_with_punctuation(void) {\n    TEST_IGNORE();\n    char str[] = \"I'm hungry!\";\n\n    reverse(str);\n    TEST_ASSERT_EQUAL_STRING(\"!yrgnuh m'I\", str);\n}\n\nvoid test_a_palindrome(void) {\n    TEST_IGNORE();\n    char str[] = \"racecar\";\n\n    reverse(str);\n    TEST_ASSERT_EQUAL_STRING(\"racecar\", str);\n}\n\nvoid test_an_evensized_word(void) {\n    TEST_IGNORE();\n    char str[] = \"drawer\";\n\n    reverse(str);\n    TEST_ASSERT_EQUAL_STRING(\"reward\", str);\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_an_empty_string);\n    RUN_TEST(test_a_word);\n    RUN_TEST(test_a_capitalized_word);\n    RUN_TEST(test_a_sentence_with_punctuation);\n    RUN_TEST(test_a_palindrome);\n    RUN_TEST(test_an_evensized_word);\n    return UNITY_END();\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "bergjohan"
+  ],
+  "contributors": null
+}

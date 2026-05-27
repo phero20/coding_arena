@@ -1,0 +1,26 @@
+{
+  "id": "nim:say",
+  "trackSlug": "nim",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "ef24428e-289c-48d0-967b-961d95246f3c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number from 0 to 999,999,999,999, spell out that number in English.\n\n## Step 1\n\nHandle the basic case of 0 through 99.\n\nIf the input to the program is `22`, then the output should be `'twenty-two'`.\n\nYour program should complain loudly if given a number outside the blessed range.\n\nSome good test cases for this program are:\n\n- 0\n- 14\n- 50\n- 98\n- -1\n- 100\n\n### Extension\n\nIf you're on a Mac, shell out to Mac OS X's `say` program to talk out loud.\nIf you're on Linux or Windows, eSpeakNG may be available with the command `espeak`.\n\n## Step 2\n\nImplement breaking a number up into chunks of thousands.\n\nSo `1234567890` should yield a list like 1, 234, 567, and 890, while the far simpler `1000` should yield just 1 and 0.\n\n## Step 3\n\nNow handle inserting the appropriate scale word between those chunks.\n\nSo `1234567890` should yield `'1 billion 234 million 567 thousand 890'`\n\nThe program must also report any values that are out of range.\nIt's fine to stop at \"trillion\".\n\n## Step 4\n\nPut it all together to get nothing but plain English.\n\n`12345` should give `twelve thousand three hundred forty-five`.\n\nThe program must also report any values that are out of range.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc say*(n: int64): string =\n  discard\n",
+  "example_solution": "const\n  small = [\"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\",\n           \"eight\", \"nine\", \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n           \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"]\n  tens = [\"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\",\n          \"eighty\", \"ninety\"]\n  scale = [\"thousand\", \"million\", \"billion\"]\n\nfunc modAndMaybeAddSep(s: var string, n: var int64, a: int, sep: char) =\n  n = n mod a\n  if n != 0:\n    s.add sep\n\nfunc addSmall(s: var string, n: int64) =\n  var n = n\n  if n >= 100:\n    s.add small[n div 100]\n    s.add \" hundred\"\n    modAndMaybeAddSep(s, n, 100, ' ')\n  if n >= 20:\n    s.add tens[n div 10]\n    modAndMaybeAddSep(s, n, 10, '-')\n  if n > 0:\n    s.add small[n]\n\nfunc say*(n: int64): string =\n  if n < 0 or n >= 1e12.int:\n    raise newException(ValueError, \"Number is out of range: \" & $n)\n  if n == 0:\n    return small[n]\n\n  result = \"\"\n  var n = n\n  for i, x in [1e9.int, 1e6.int, 1e3.int]:\n    if n >= x:\n      result.addSmall(n div x)\n      result.add \" \"\n      result.add scale[2-i]\n      modAndMaybeAddSep(result, n, x, ' ')\n  result.addSmall(n mod 1000)\n",
+  "test_code": "import unittest\nimport say\n\nsuite \"Say\":\n  test \"zero\":\n    check say(0) == \"zero\"\n\n  test \"one\":\n    check say(1) == \"one\"\n\n  test \"fourteen\":\n    check say(14) == \"fourteen\"\n\n  test \"twenty\":\n    check say(20) == \"twenty\"\n\n  test \"twenty-two\":\n    check say(22) == \"twenty-two\"\n\n  test \"thirty\":\n    check say(30) == \"thirty\"\n\n  test \"ninety-nine\":\n    check say(99) == \"ninety-nine\"\n\n  test \"one hundred\":\n    check say(100) == \"one hundred\"\n\n  test \"one hundred twenty-three\":\n    check say(123) == \"one hundred twenty-three\"\n\n  test \"two hundred\":\n    check say(200) == \"two hundred\"\n\n  test \"nine hundred ninety-nine\":\n    check say(999) == \"nine hundred ninety-nine\"\n\n  test \"one thousand\":\n    check say(1000) == \"one thousand\"\n\n  test \"one thousand two hundred thirty-four\":\n    check say(1234) == \"one thousand two hundred thirty-four\"\n\n  test \"one million\":\n    check say(1_000_000) == \"one million\"\n\n  test \"one million two thousand three hundred forty-five\":\n    check say(1_002_345) == \"one million two thousand three hundred forty-five\"\n\n  test \"one billion\":\n    check say(1_000_000_000) == \"one billion\"\n\n  test \"a big number\":\n    check say(987_654_321_123) == \"nine hundred eighty-seven billion \" &\n                                  \"six hundred fifty-four million \" &\n                                  \"three hundred twenty-one thousand \" &\n                                  \"one hundred twenty-three\"\n\n  test \"numbers below zero are out of range\":\n    expect ValueError:\n      discard say(-1)\n\n  test \"numbers above 999,999,999,999 are out of range\":\n    expect ValueError:\n      discard say(1_000_000_000_000)\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://coderanch.com/wiki/718804",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

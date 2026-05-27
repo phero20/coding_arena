@@ -1,0 +1,36 @@
+{
+  "id": "clojure:proverb",
+  "trackSlug": "clojure",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "540d93a9-707f-4043-b46c-1dc83f2d50d8",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "vectors"
+  ],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns proverb)\n\n(defn recite [] ;; <- arglist goes here\n    ;; your code goes here\n)\n",
+  "example_solution": "(ns proverb\n  (:require [clojure.string :as str]))\n\n(def last-line \"And all for the want of a %s.\")\n\n(defn- line [[cause-subject effect-subject]]\n  (format \"For want of a %s the %s was lost.\" cause-subject effect-subject))\n\n(defn recite [subjects]\n  (if (empty? subjects) \"\"\n    (->> subjects\n    (partition 2 1)\n    (map line)\n    (#(conj (vec %) (format last-line (first subjects))))\n    (str/join \"\\n\"))))\n",
+  "test_code": "(ns proverb-test\n  (:require [clojure.test :refer [deftest is]]\n            [proverb :refer [recite]]\n            [clojure.string :as str]))\n\n(deftest zero-pieces\n  (is (=\n        (recite ())\n        \"\")))\n      \n(deftest one-piece\n  (is (=\n        (recite '(\"nail\"))\n        \"And all for the want of a nail.\")))\n\n(deftest two-pieces\n  (is (=\n        (recite '(\"nail\" \"shoe\"))\n        (str/join \"\\n\" [\"For want of a nail the shoe was lost.\"\n                        \"And all for the want of a nail.\"]))))\n\n(deftest three-pieces\n  (is (=\n        (recite '(\"nail\" \"shoe\" \"horse\"))\n        (str/join \"\\n\" [\"For want of a nail the shoe was lost.\"\n                        \"For want of a shoe the horse was lost.\"\n                        \"And all for the want of a nail.\"]))))\n\n(deftest full-proverb\n  (is (= (recite '(\"nail\" \"shoe\" \"horse\" \"rider\" \"message\" \"battle\" \"kingdom\"))\n         (str/join \"\\n\" [\"For want of a nail the shoe was lost.\"\n                         \"For want of a shoe the horse was lost.\"\n                         \"For want of a horse the rider was lost.\"\n                         \"For want of a rider the message was lost.\"\n                         \"For want of a message the battle was lost.\"\n                         \"For want of a battle the kingdom was lost.\"\n                         \"And all for the want of a nail.\"]))))\n\n(deftest four-pieces-modernized\n  (is (=\n        (recite '(\"pin\" \"gun\" \"soldier\" \"battle\"))\n        (str/join \"\\n\" [\"For want of a pin the gun was lost.\"\n                        \"For want of a gun the soldier was lost.\"\n                        \"For want of a soldier the battle was lost.\"\n                        \"And all for the want of a pin.\"]))))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "querenker"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "haus",
+    "m1kal",
+    "sjwarner-bp",
+    "UnrelatedString",
+    "yurrriq"
+  ]
+}

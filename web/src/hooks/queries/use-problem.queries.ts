@@ -5,7 +5,8 @@ import {
   getProblemBySlug, 
   getProblemById, 
   getProblemsByTopic, 
-  getProblems 
+  getProblems,
+  getUserSolvedProblems
 } from "@/services/queries/problem.queries";
 import { getTestsForProblemAndType } from "@/services/queries/problem-test.queries";
 
@@ -70,10 +71,21 @@ export function useProblemsByTopicQuery(topic: string, limit?: number) {
 /**
  * Fetch test cases for a problem filtered by visibility (e.g. PUBLIC).
  */
-export function useProblemTestsQuery(problemId: string, type: any = "PUBLIC") {
+export function useProblemTestsQuery(problemId: string, type: any = "PUBLIC", enabled: boolean = true) {
   return useQuery({
     queryKey: ["problem-tests", problemId, type],
     queryFn: () => getTestsForProblemAndType(problemId, type),
-    enabled: !!problemId,
+    enabled: !!problemId && enabled,
+  });
+}
+
+/**
+ * Fetch all problems a specific user has solved.
+ */
+export function useUserSolvedProblemsQuery(userId: string | undefined, enabled: boolean = true) {
+  return useQuery({
+    queryKey: ["user-solved-problems", userId],
+    queryFn: () => getUserSolvedProblems(userId!),
+    enabled: !!userId && enabled,
   });
 }

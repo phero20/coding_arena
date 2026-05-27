@@ -1,0 +1,46 @@
+{
+  "id": "ruby:simple-linked-list",
+  "trackSlug": "ruby",
+  "slug": "simple-linked-list",
+  "name": "Simple Linked List",
+  "uuid": "fa7b91c2-842c-42c8-bdf9-00bb3e71a7f5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a simple linked list implementation that uses Elements and a List.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "instance-variables"
+  ],
+  "prerequisites": [
+    "instance-variables",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nWrite a prototype of the music player application.\n\nFor the prototype, each song will simply be represented by a number.\nGiven a range of numbers (the song IDs), create a singly linked list.\n\nGiven a singly linked list, you should be able to reverse the list to play the songs in the opposite order.\n\n~~~~exercism/note\nThe linked list is a fundamental data structure in computer science, often used in the implementation of other data structures.\n\nThe simplest kind of linked list is a **singly** linked list.\nThat means that each element (or \"node\") contains data, along with something that points to the next node in the list.\n\nIf you want to dig deeper into linked lists, check out [this article][intro-linked-list] that explains it using nice drawings.\n\n[intro-linked-list]: https://medium.com/basecs/whats-a-linked-list-anyway-part-1-d8b7e6508b9d\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a music streaming company.\n\nYou've been tasked with creating a playlist feature for your music player application.\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Simple Linked List' exercise in this file. Make the tests in\n`simple_linked_list_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/simple-linked-list` directory.\n=end\n",
+  "example_solution": "class Element\n  attr_reader :datum\n  attr_accessor :next\n  def initialize(value)\n    @datum = value\n    @next  = nil\n  end\nend\n\nclass SimpleLinkedList\n  def initialize(array = [])\n    create_from_array(array)\n  end\n\n  def to_a\n    result = []\n    pointer = @head\n    while pointer\n      result << pointer.datum\n      pointer = pointer.next\n    end\n    result\n  end\n\n  def push(element)\n    element.next = @head unless @head.nil?\n    @head = element\n    self\n  end\n\n  def pop\n    element = @head\n    @head = element.next if element\n    element\n  end\n\n  def reverse!\n    previous = nil\n    pointer = @head\n    while pointer\n      temp = pointer.next\n      pointer.next = previous\n      previous = pointer\n      pointer = temp\n    end\n    @head = previous\n    self\n  end\n\n  private\n\n  def create_from_array(array)\n    array.each { |value| push(Element.new(value)) }\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'simple_linked_list'\n\nclass LinkedListTest < Minitest::Test\n  def test_element\n    element = Element.new(1)\n    assert_equal 1, element.datum\n  end\n\n  def test_element_can_hold_a_different_value\n    skip\n    element = Element.new(10)\n    assert_equal 10, element.datum\n  end\n\n  def test_element_next\n    skip\n    element = Element.new(1)\n    assert_nil element.next\n  end\n\n  def test_element_next_can_be_assigned_to\n    skip\n    first  = Element.new(1)\n    second = Element.new(2)\n    first.next = second\n    assert_equal second, first.next\n  end\n\n  def test_list_push\n    skip\n    list = SimpleLinkedList.new\n    element = Element.new(1)\n    assert_equal list, list.push(element)\n  end\n\n  def test_list_pop\n    skip\n    list = SimpleLinkedList.new\n    element = Element.new(1)\n    list.push(element)\n    assert_equal element, list.pop\n  end\n\n  def test_list_pop_empty\n    skip\n    list = SimpleLinkedList.new\n    assert_nil list.pop\n  end\n\n  def test_list_pop_is_last_in_first_out\n    skip\n    list = SimpleLinkedList.new\n    first = Element.new(1)\n    second = Element.new(2)\n    list.push(first).push(second)\n    assert_equal second, list.pop\n  end\n\n  def test_list_empty_to_array\n    skip\n    list = SimpleLinkedList.new\n    assert_empty list.to_a\n  end\n\n  def test_list_single_to_array\n    skip\n    list = SimpleLinkedList.new\n    first = Element.new(1)\n    list.push(first)\n    assert_equal [1], list.to_a\n  end\n\n  def test_list_multiple_to_array\n    skip\n    list = SimpleLinkedList.new\n    first = Element.new(1)\n    second = Element.new(2)\n    third = Element.new(3)\n    list.push(first).push(second).push(third)\n    assert_equal [3, 2, 1], list.to_a\n  end\n\n  def test_list_create_from_array\n    skip\n    array = [1, 2, 3]\n    list = SimpleLinkedList.new(array)\n    assert_equal [3, 2, 1], list.to_a\n  end\n\n  def test_list_created_from_array_still_made_up_of_elements\n    skip\n    array = [1, 2, 3]\n    list = SimpleLinkedList.new(array)\n    assert_instance_of Element, list.pop\n  end\n\n  def test_list_from_array_still_acts_as_lifo\n    skip\n    array = [1, 2, 3]\n    list = SimpleLinkedList.new(array)\n    element = list.pop\n    assert_equal 3, element.datum\n  end\n\n  def test_list_in_place_reverse!\n    skip\n    first = Element.new(1)\n    second = Element.new(2)\n    third = Element.new(3)\n    list = SimpleLinkedList.new\n    list.push(first).push(second).push(third)\n\n    assert_equal [1, 2, 3], list.reverse!.to_a\n  end\n\n  def test_list_in_place_reverse_are_the_same_elements\n    skip\n    first = Element.new(1)\n    second = Element.new(2)\n    list = SimpleLinkedList.new\n    list.push(first).push(second)\n\n    list.reverse!\n\n    assert_equal first, list.pop\n    assert_equal second, list.pop\n  end\n\n  def test_list_reverse_empty_list\n    skip\n    list = SimpleLinkedList.new\n    assert_equal list, list.reverse!\n  end\n\n  def test_works_for_1_through_10\n    skip\n    list = SimpleLinkedList.new(1..10)\n    expected = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]\n    assert_equal expected, list.to_a\n  end\nend\n",
+  "source": "Inspired by 'Data Structures and Algorithms with Object-Oriented Design Patterns in Ruby', singly linked-lists.",
+  "source_url": "https://web.archive.org/web/20160731005714/http://brpreiss.com/books/opus8/html/page96.html",
+  "authors": [
+    "vosechu"
+  ],
+  "contributors": [
+    "alxndr",
+    "budmc29",
+    "cadwallion",
+    "copiousfreetime",
+    "dkinzer",
+    "etrepum",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "kytrinyx",
+    "tryantwit",
+    "zvkemp"
+  ]
+}

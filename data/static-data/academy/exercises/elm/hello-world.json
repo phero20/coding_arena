@@ -1,0 +1,33 @@
+{
+  "id": "elm:hello-world",
+  "trackSlug": "elm",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "2c3902df-93e1-48d1-829d-4daa93a1f06f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module HelloWorld exposing (helloWorld)\n\n\nhelloWorld =\n    \"Goodbye, Mars!\"\n",
+  "example_solution": "module HelloWorld exposing (helloWorld)\n\n\nhelloWorld : String\nhelloWorld =\n    \"Hello, World!\"\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport HelloWorld exposing (helloWorld)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    test \"Hello, World!\" <|\n        \\() ->\n            Expect.equal \"Hello, World!\" helloWorld\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "benreyn",
+    "nathanielknight",
+    "parkerl",
+    "tgecho",
+    "TrevorBramble",
+    "tuxagon"
+  ]
+}

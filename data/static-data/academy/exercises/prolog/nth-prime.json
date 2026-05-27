@@ -1,0 +1,26 @@
+{
+  "id": "prolog:nth-prime",
+  "trackSlug": "prolog",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "457b365a-df7b-4a2f-a01a-53cab10d55aa",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "nth_prime(N, Prime).\n",
+  "example_solution": "prime(2) :- !.\nprime(3) :- !.\nprime(P) :- P > 3, P mod 2 =\\= 0, prime(P, 3), !.\nprime(P, N) :- (N*N > P -> true; P mod N =\\= 0, M is N + 2, prime(P, M)), !.\n\nnext_prime(N, N):- prime(N), !.\nnext_prime(N, Prime):- NextN is N + 1, next_prime(NextN, Prime).\n\nnth_prime(1, 2) :- !.\nnth_prime(2, 3) :- !.\nnth_prime(N, Prime):-\n    N > 2,\n    PrevN is N - 1,\n    nth_prime(PrevN, PrevPrime),\n    NextN is PrevPrime + 1,\n    next_prime(NextN, Prime).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(nth_prime).\n\n    test(first_prime, condition(true)) :-\n        nth_prime(1, Prime),\n        Prime == 2.\n\n    test(second_prime, condition(pending)) :-\n        nth_prime(2, Prime),\n        Prime == 3.\n\n    test(sixth_prime, condition(pending)) :-\n        nth_prime(6, Prime),\n        Prime == 13.\n\n    test(big_prime, condition(pending)) :-\n        nth_prime(10001, Prime),\n        Prime == 104743.\n\n    test(there_is_no_zeroth_prime, [fail, condition(pending)]) :-\n        nth_prime(0, _).\n\n:- end_tests(nth_prime).\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

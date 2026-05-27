@@ -1,0 +1,26 @@
+{
+  "id": "lean:space-age",
+  "trackSlug": "lean",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "94b163ce-11c1-43fa-b2a8-1137c715f17f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "namespace SpaceAge\n\n/-\n  You should define a Planet type here\n-/\n\ndef age (planet : Planet) (seconds : Nat) : Float :=\n  sorry --remove this line and implement the function\n\nend SpaceAge\n",
+  "example_solution": "namespace SpaceAge\n\ninductive Planet where\n  | Mercury : Planet\n  | Venus  : Planet\n  | Mars : Planet\n  | Earth : Planet\n  | Jupiter : Planet\n  | Saturn : Planet\n  | Uranus : Planet\n  | Neptune : Planet\n\ndef earthlyPeriodInSeconds : Float := 60 * 60 * 24 * 365.25\n\ndef period : Planet -> Float\n  | .Mercury  =>  0.2408467\n  | .Venus    =>  0.61519726\n  | .Earth    =>  1.0\n  | .Mars     =>  1.8808158\n  | .Jupiter  =>  11.862615\n  | .Saturn   =>  29.447498\n  | .Uranus   =>  84.016846\n  | .Neptune  =>  164.79132\n\ndef age (planet : Planet) (seconds : Nat) : Float :=\n  (seconds.toFloat / earthlyPeriodInSeconds) / period planet\n\nend SpaceAge\n",
+  "test_code": "import LeanTest\nimport SpaceAge\n\nopen LeanTest\n\ndef spaceAgeTests : TestSuite :=\n  (TestSuite.empty \"SpaceAge\")\n  |>.addTest \"age on Earth\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Earth 1000000000) 31.680000 31.700000)\n  |>.addTest \"age on Mercury\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Mercury 2134835688) 280.870000 280.890000)\n  |>.addTest \"age on Venus\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Venus 189839836) 9.770000 9.790000)\n  |>.addTest \"age on Mars\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Mars 2129871239) 35.870000 35.890000)\n  |>.addTest \"age on Jupiter\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Jupiter 901876382) 2.400000 2.420000)\n  |>.addTest \"age on Saturn\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Saturn 2000000000) 2.140000 2.160000)\n  |>.addTest \"age on Uranus\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Uranus 1210123456) 0.450000 0.470000)\n  |>.addTest \"age on Neptune\" (do\n      return assertInRange (SpaceAge.age SpaceAge.Planet.Neptune 1821023456) 0.340000 0.360000)\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [spaceAgeTests]\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "oxe-i"
+  ],
+  "contributors": null
+}

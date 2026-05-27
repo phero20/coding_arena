@@ -1,0 +1,41 @@
+{
+  "id": "go:word-search",
+  "trackSlug": "go",
+  "slug": "word-search",
+  "name": "Word Search",
+  "uuid": "7fdf352b-e5a3-452e-91a2-03587be48ad0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a program to solve a word search puzzle.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIn word search puzzles you get a square of letters and have to find specific words in them.\n\nFor example:\n\n```text\njefblpepre\ncamdcimgtc\noivokprjsm\npbwasqroua\nrixilelhrs\nwolcqlirpc\nscreeaumgr\nalxhpburyi\njalaycalmp\nclojurermt\n```\n\nThere are several programming languages hidden in the above square.\n\nWords can be hidden in all kinds of directions: left-to-right, right-to-left, vertical and diagonal.\n\nGiven a puzzle and a list of words return the location of the first and last letter of each word.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package wordsearch\n\nfunc Solve(words []string, puzzle []string) (map[string][2][2]int, error) {\n\tpanic(\"Please implement the Solve function\")\n}\n",
+  "example_solution": "package wordsearch\n\nimport \"fmt\"\n\nfunc Solve(words, puzzle []string) (map[string][2][2]int, error) {\n\tpositions := make(map[string][2][2]int, len(words))\n\tfor _, word := range words {\n\t\tspan, err := find(word, puzzle)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tpositions[word] = span\n\t}\n\treturn positions, nil\n}\n\ntype dir struct {\n\tcx, cy int\n}\n\nvar (\n\tnorth     = dir{0, -1}\n\tnortheast = dir{1, -1}\n\teast      = dir{1, 0}\n\tsoutheast = dir{1, 1}\n\tsouth     = dir{0, 1}\n\tsouthwest = dir{-1, 1}\n\twest      = dir{-1, 0}\n\tnorthwest = dir{-1, -1}\n)\n\nvar dirs = []dir{north, northeast, east, southeast, south, southwest, west, northwest}\n\nvar zeroSpan = [2][2]int{{0, 0}, {0, 0}}\n\nfunc find(word string, puzzle []string) ([2][2]int, error) {\n\tfor x := 0; x < len(puzzle[0]); x++ {\n\t\tfor y := 0; y < len(puzzle); y++ {\n\t\t\tfor _, dir := range dirs {\n\t\t\t\tif span, ok := try(word, puzzle, x, y, dir); ok {\n\t\t\t\t\treturn span, nil\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn zeroSpan, fmt.Errorf(\"Didn't find %q\", word)\n}\n\nfunc try(word string, puzzle []string, startX, startY int, dir dir) ([2][2]int, bool) {\n\tx, y := startX, startY\n\tfor _, c := range word {\n\t\tif lc, ok := lookup(x, y, puzzle); !ok || lc != c {\n\t\t\treturn zeroSpan, false\n\t\t}\n\t\tx += dir.cx\n\t\ty += dir.cy\n\t}\n\t// Need to remove the last increment to get the position of the last character.\n\treturn [2][2]int{{startX, startY}, {x - dir.cx, y - dir.cy}}, true\n}\n\nfunc lookup(x, y int, puzzle []string) (rune, bool) {\n\tif x >= 0 && x < len(puzzle[0]) && y >= 0 && y < len(puzzle) {\n\t\t// Yes, yes, this won't work with multi-byte codepoints.\n\t\treturn rune(puzzle[y][x]), true\n\t}\n\treturn 0, false\n}\n",
+  "test_code": "package wordsearch\n\nimport (\n\t\"reflect\"\n\t\"testing\"\n)\n\nfunc TestSolve(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual, err := Solve(tc.words, tc.puzzle)\n\t\t\tswitch {\n\t\t\tcase tc.expectError:\n\t\t\t\tif err == nil {\n\t\t\t\t\tt.Fatalf(\"Solve(%v, %v) = %v, expected error\", tc.words, tc.puzzle, actual)\n\t\t\t\t}\n\t\t\tcase err != nil:\n\t\t\t\tt.Fatalf(\"Solve(%v, %v) returned error: %v, want: %v\", tc.words, tc.puzzle, err, tc.expected)\n\t\t\tcase !reflect.DeepEqual(actual, tc.expected):\n\t\t\t\tt.Fatalf(\"Solve(%v, %v) = %v, want: %v\", tc.words, tc.puzzle, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkSolve(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tSolve(tc.words, tc.puzzle)\n\t\t}\n\t}\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "pminten"
+  ],
+  "contributors": [
+    "Akasurde",
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "soniakeys",
+    "eklatzer"
+  ]
+}

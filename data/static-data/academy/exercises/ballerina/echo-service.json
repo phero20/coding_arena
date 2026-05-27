@@ -1,0 +1,32 @@
+{
+  "id": "ballerina:echo-service",
+  "trackSlug": "ballerina",
+  "slug": "echo-service",
+  "name": "Echo Service",
+  "uuid": "19dbfc2c-3e23-4a23-b7b6-cac5dec6690c",
+  "type": "practice",
+  "status": "active",
+  "blurb": "Creating a service in ballerina is easy. Now you can add a query parameter and a relative path.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreating a service in Ballerina is easy. Now you can add a query parameter and a relative path.\n\n## Objectives\n\n- Modify the provided code.\n- It should have an echo endpoint that returns the value of a query parameter `sound`. The service should respond to a GET HTTP request at the path `/echo?sound=hello`.\n- It should have another endpoint to define the word \"echo\" that returns the string `\"A sound or series of sounds caused by the reflection of sound waves from a surface back to the listener.\"`. The service should respond to a GET HTTP request at the path `/echo/definition`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import ballerina/http;\n\nservice / on new http:Listener(8080) {\n\n    // This resource should accept a GET request at the path `/echo` and have a query param `sound`\n    resource {\n        return sound;\n    }\n\n    // This resource should accept a GET request at the path `/echo/definition`\n    resource {\n         return \"A sound or series of sounds caused by the reflection of sound waves from a surface back to the listener.\";\n    }\n}\n",
+  "example_solution": "import ballerina/http;\n\nservice / on new http:Listener(8080) {\n\n    // Resource returns the same request payload back to the client.\n    resource function get echo(string sound) returns string {\n        // Extract the payload from the response and return back to the client as a response.\n        return sound;\n    }\n\n    // You can combine the base path and the relative path to get the path of the resource (i.e., `/echo/definition`).\n    resource function get echo/definition() returns string {\n        return \"A sound or series of sounds caused by the reflection of sound waves from a surface back to the listener.\";\n    }\n}\n",
+  "test_code": "import ballerina/http;\nimport ballerina/test;\n\nfinal http:Client testClient = check new (\"http://localhost:8080\");\n\n@test:Config\npublic function testEcho() returns error? {\n    string payload = \"Hello\";\n    string response = check testClient->get(\"/echo?sound=\" + payload);\n    test:assertEquals(response, payload);\n}\n\n@test:Config\npublic function testEchoDefinition() returns error? {\n    string response = check testClient->get(\"/echo/definition\");\n    test:assertEquals(response, \"A sound or series of sounds caused by the reflection of sound waves from a surface back to the listener.\");\n}\n",
+  "source": "This is an exercise to introduce users to the Ballerina Network interactions interface",
+  "source_url": "https://ballerina.io/learn/by-example/#network-interaction",
+  "authors": [],
+  "contributors": [
+    "hemikak",
+    "kasun04",
+    "lafernando",
+    "ldclakmal",
+    "vinok88",
+    "vordimous",
+    "ThisaruGuruge"
+  ]
+}

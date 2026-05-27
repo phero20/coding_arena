@@ -1,0 +1,28 @@
+{
+  "id": "julia:prime-factors",
+  "trackSlug": "julia",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "b6b7e95b-c4ca-438c-a5e7-d76cb44e5b19",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "function prime_factors(n)\n\nend\n",
+  "example_solution": "function isprime(n)\n    if n == 1\n        return false\n    elseif n == 2\n        return true\n    else\n        for i = 2:(n ^ (0.5)) + 1\n            if n % i == 0\n                return false\n            end\n        end\n        return true\n    end\nend\n\nfunction prime_factors(n)\n    count = 0\n    final = [1]\n    k = n\n    if n == 1\n        return []\n    end\n    while k != 1\n        count += 1\n        if k % count == 0 && isprime(count) == true\n            k = k/count\n            final = [final; [count]]\n            count = 0\n        end\n\n\n    end\n    return final[2:end]\nend\n",
+  "test_code": "using Test\n\ninclude(\"prime-factors.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"no factors\" begin\n        @test prime_factors(1) == []\n    end\n\n    @testset \"prime number\" begin\n        @test prime_factors(2) == [2]\n    end\n\n    @testset \"another prime number\" begin\n        @test prime_factors(3) == [3]\n    end\n\n    @testset \"product of first prime\" begin\n        @test prime_factors(4) == [2, 2]\n    end\n\n    @testset \"square of a prime\" begin\n        @test prime_factors(9) == [3, 3]\n    end\n\n    @testset \"product of first and second prime\" begin\n        @test prime_factors(6) == [2, 3]\n    end\n\n    @testset \"cube of a prime\" begin\n        @test prime_factors(8) == [2, 2, 2]\n    end\n\n    @testset \"product of second prime\" begin\n        @test prime_factors(27) == [3, 3, 3]\n    end\n\n    @testset \"product of primes and non-primes\" begin\n        @test prime_factors(12) == [2, 2, 3]\n    end\n\n    @testset \"product of third prime\" begin\n        @test prime_factors(625) == [5, 5, 5, 5]\n    end\n\n    @testset \"product of primes\" begin\n        @test prime_factors(901255) == [5, 17, 23, 461]\n    end\n\n    @testset \"factors include a large prime\" begin\n        @test prime_factors(93819012551) == [11, 9539, 894119]\n    end\nend\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "NandVinchhi"
+  ],
+  "contributors": [
+    "SaschaMann"
+  ]
+}

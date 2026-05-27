@@ -1,0 +1,26 @@
+{
+  "id": "emacs-lisp:nth-prime",
+  "trackSlug": "emacs-lisp",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "4dfd9ac8-d0e8-4db5-a68c-75e8647b19c4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; nth-prime.el --- Nth Prime (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun prime (number)\n  (error \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'nth-prime)\n;;; nth-prime.el ends here\n\n",
+  "example_solution": ";;; nth-prime.el --- Nth Prime (exercism)  -*- lexical-binding: t; -*-\n\n\n;;; Commentary:\n\n; We use the prime number theorem to over-estimate the nth prime\n; as 1 + n (log2 n)\n\n; We use the Sieve of Eratosthenes to generate primes.\n\n\n;;; Code:\n\n(require 'cl-lib)\n\n(defun over-estimate (number)\n  (cl-loop for count from 1\n    while (< (ash 1 count) number)\n    finally return (1+ (* number count))))\n\n(defun prime (number)\n  (when (= number 0)\n    (error \"there is no zeroth prime\"))\n  (let* ((limit (over-estimate number))\n         (table (make-bool-vector (1+ limit) t))\n         (count 0))\n    (cl-loop for p from 2\n      for psq = (* p p)\n      until (< limit psq)\n      do (when (aref table p)\n           (cl-loop for m from psq to limit by p\n             do (aset table m nil))))\n    (cl-loop for p from 2\n      do (when (aref table p)\n           (setq count (1+ count)))\n      until (= count number)\n      finally return p)))\n\n\n(provide 'nth-prime)\n;;; nth-prime.el ends here\n\n",
+  "test_code": ";;; nth-prime-test.el --- Tests for Nth Prime (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(load-file \"nth-prime.el\")\n(declare-function prime \"nth-prime.el\" (number))\n\n\n(ert-deftest first-prime ()\n  (should (= 2 (prime 1))))\n\n\n(ert-deftest second-prime ()\n  (should (= 3 (prime 2))))\n\n\n(ert-deftest sixth-prime ()\n  (should (= 13 (prime 6))))\n\n\n(ert-deftest big-prime ()\n  (should (= 104743 (prime 10001))))\n\n\n(ert-deftest there-is-no-zeroth-prime ()\n  (should-error (prime 0)))\n\n\n(provide 'nth-prime-test)\n;;; nth-prime-test.el ends here\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

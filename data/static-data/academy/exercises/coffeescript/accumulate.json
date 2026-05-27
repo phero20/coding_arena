@@ -1,0 +1,29 @@
+{
+  "id": "coffeescript:accumulate",
+  "trackSlug": "coffeescript",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "b4670a87-1436-4e83-a641-76a6ec00fab8",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Array::accumulate = (args) ->\n",
+  "example_solution": "Array::accumulate = (accumulator) ->\n  return this.map(accumulator) if typeof Array::map is 'function'\n  accumulator i for i in this\n",
+  "test_code": "require './accumulate'\n\ndescribe '[].accumulate()', ->\n\n  it 'empty accumulation', ->\n    accumulator = (e) -> e * e\n    expect([].accumulate(accumulator)).toEqual []\n\n  xit 'accumulate squares', ->\n    accumulator = (number) -> number * number\n    expect([1, 2, 3].accumulate accumulator).toEqual [1, 4, 9]\n\n  xit 'accumulate upcases', ->\n    accumulator = (word) -> word.toUpperCase()\n    result      = 'hello world'.split(/\\s/).accumulate accumulator\n\n    expect(result).toEqual ['HELLO', 'WORLD']\n\n  xit 'accumulate reversed strings', ->\n    accumulator = (word) -> word.split('').reverse().join('')\n    result      = 'the quick brown fox etc'.split(/\\s/).accumulate accumulator\n\n    expect(result).toEqual ['eht', 'kciuq', 'nworb', 'xof', 'cte']\n\n  xit 'accumulate recursively', ->\n    result = 'a b c'.split(/\\s+/).accumulate (char)  ->\n      '1 2 3'.split(/\\s+/).accumulate (digit) -> \"#{char}#{digit}\"\n\n    expect(result).toEqual([['a1', 'a2', 'a3'], ['b1', 'b2', 'b3'], ['c1', 'c2', 'c3']])\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [],
+  "contributors": [
+    "aimorris",
+    "kytrinyx",
+    "rootulp",
+    "shidel-dev"
+  ]
+}

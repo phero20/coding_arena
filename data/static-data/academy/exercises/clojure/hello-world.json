@@ -1,0 +1,32 @@
+{
+  "id": "clojure:hello-world",
+  "trackSlug": "clojure",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "5279db5b-86f3-4074-9513-36a88c5ef9fc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns hello-world)\n\n(defn hello []\n  \"Goodbye, Mars!\")\n",
+  "example_solution": "(ns hello-world)\n\n(defn hello []\n  \"Hello, World!\")\n",
+  "test_code": "(ns hello-world-test\n  (:require [clojure.test :refer [deftest is]]\n            hello-world))\n\n(deftest hello-world-test\n  (is (= \"Hello, World!\" (hello-world/hello))))\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [],
+  "contributors": [
+    "AndreaCrotti",
+    "christianpoveda",
+    "haus",
+    "jcorrado",
+    "sjwarner-bp",
+    "tejasbubane",
+    "yurrriq"
+  ]
+}

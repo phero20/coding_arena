@@ -1,0 +1,26 @@
+{
+  "id": "lean:leap",
+  "trackSlug": "lean",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "6b67166f-60d8-442e-96d7-f2630c7a091d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "namespace Leap\n\ndef leapYear (year : UInt16) : Bool :=\n  sorry --remove this line and implement the function\n\nend Leap\n",
+  "example_solution": "namespace Leap\n\ndef leapYear (year : UInt16) : Bool :=\n  year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)\n\nend Leap\n",
+  "test_code": "import LeanTest\nimport Leap\n\nopen LeanTest\n\ndef leapTests : TestSuite :=\n  (TestSuite.empty \"Leap\")\n  |>.addTest \"year not divisible by 4 in common year\" (do\n      return assertFalse (Leap.leapYear 2015))\n  |>.addTest \"year divisible by 2, not divisible by 4 in common year\" (do\n      return assertFalse (Leap.leapYear 1970))\n  |>.addTest \"year divisible by 4, not divisible by 100 in leap year\" (do\n      return assertTrue (Leap.leapYear 1996))\n  |>.addTest \"year divisible by 4 and 5 is still a leap year\" (do\n      return assertTrue (Leap.leapYear 1960))\n  |>.addTest \"year divisible by 100, not divisible by 400 in common year\" (do\n      return assertFalse (Leap.leapYear 2100))\n  |>.addTest \"year divisible by 100 but not by 3 is still not a leap year\" (do\n      return assertFalse (Leap.leapYear 1900))\n  |>.addTest \"year divisible by 400 is leap year\" (do\n      return assertTrue (Leap.leapYear 2000))\n  |>.addTest \"year divisible by 400 but not by 125 is still a leap year\" (do\n      return assertTrue (Leap.leapYear 2400))\n  |>.addTest \"year divisible by 200, not divisible by 400 in common year\" (do\n      return assertFalse (Leap.leapYear 1800))\n\n  def main : IO UInt32 := do\n    runTestSuitesWithExitCode [leapTests]\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

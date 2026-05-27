@@ -1,0 +1,45 @@
+{
+  "id": "ruby:roman-numerals",
+  "trackSlug": "ruby",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "b7ca9519-c33b-418b-a4ef-858a3d4d6855",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "numbers",
+    "loops"
+  ],
+  "prerequisites": [
+    "strings",
+    "loops",
+    "numbers"
+  ],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Roman Numerals' exercise in this file. Make the tests in\n`roman_numerals_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/roman-numerals` directory.\n=end\n",
+  "example_solution": "class Integer\n  ROMAN_MAPPINGS = \n   {\n      1000 => 'M',\n      900 => 'CM',\n      500 => 'D',\n      400 => 'CD',\n      100 => 'C',\n      90 => 'XC',\n      50 => 'L',\n      40 => 'XL',\n      10 => 'X',\n      9 => 'IX',\n      5 => 'V',\n      4 => 'IV',\n      1 => 'I'\n    }\n\n  def to_roman\n    i = self\n    s = String.new\n    ROMAN_MAPPINGS.each do |arabic, roman|\n      while i >= arabic\n        s << roman\n        i -= arabic\n      end\n    end\n    s\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'roman_numerals'\n\nclass RomanNumeralsTest < Minitest::Test\n  def test_1_is_i\n    # skip\n    actual = 1.to_roman\n    expected = 'I'\n    assert_equal expected, actual\n  end\n\n  def test_2_is_ii\n    skip\n    actual = 2.to_roman\n    expected = 'II'\n    assert_equal expected, actual\n  end\n\n  def test_3_is_iii\n    skip\n    actual = 3.to_roman\n    expected = 'III'\n    assert_equal expected, actual\n  end\n\n  def test_4_is_iv\n    skip\n    actual = 4.to_roman\n    expected = 'IV'\n    assert_equal expected, actual\n  end\n\n  def test_5_is_v\n    skip\n    actual = 5.to_roman\n    expected = 'V'\n    assert_equal expected, actual\n  end\n\n  def test_6_is_vi\n    skip\n    actual = 6.to_roman\n    expected = 'VI'\n    assert_equal expected, actual\n  end\n\n  def test_9_is_ix\n    skip\n    actual = 9.to_roman\n    expected = 'IX'\n    assert_equal expected, actual\n  end\n\n  def test_16_is_xvi\n    skip\n    actual = 16.to_roman\n    expected = 'XVI'\n    assert_equal expected, actual\n  end\n\n  def test_27_is_xxvii\n    skip\n    actual = 27.to_roman\n    expected = 'XXVII'\n    assert_equal expected, actual\n  end\n\n  def test_48_is_xlviii\n    skip\n    actual = 48.to_roman\n    expected = 'XLVIII'\n    assert_equal expected, actual\n  end\n\n  def test_49_is_xlix\n    skip\n    actual = 49.to_roman\n    expected = 'XLIX'\n    assert_equal expected, actual\n  end\n\n  def test_59_is_lix\n    skip\n    actual = 59.to_roman\n    expected = 'LIX'\n    assert_equal expected, actual\n  end\n\n  def test_66_is_lxvi\n    skip\n    actual = 66.to_roman\n    expected = 'LXVI'\n    assert_equal expected, actual\n  end\n\n  def test_93_is_xciii\n    skip\n    actual = 93.to_roman\n    expected = 'XCIII'\n    assert_equal expected, actual\n  end\n\n  def test_141_is_cxli\n    skip\n    actual = 141.to_roman\n    expected = 'CXLI'\n    assert_equal expected, actual\n  end\n\n  def test_163_is_clxiii\n    skip\n    actual = 163.to_roman\n    expected = 'CLXIII'\n    assert_equal expected, actual\n  end\n\n  def test_166_is_clxvi\n    skip\n    actual = 166.to_roman\n    expected = 'CLXVI'\n    assert_equal expected, actual\n  end\n\n  def test_402_is_cdii\n    skip\n    actual = 402.to_roman\n    expected = 'CDII'\n    assert_equal expected, actual\n  end\n\n  def test_575_is_dlxxv\n    skip\n    actual = 575.to_roman\n    expected = 'DLXXV'\n    assert_equal expected, actual\n  end\n\n  def test_666_is_dclxvi\n    skip\n    actual = 666.to_roman\n    expected = 'DCLXVI'\n    assert_equal expected, actual\n  end\n\n  def test_911_is_cmxi\n    skip\n    actual = 911.to_roman\n    expected = 'CMXI'\n    assert_equal expected, actual\n  end\n\n  def test_1024_is_mxxiv\n    skip\n    actual = 1024.to_roman\n    expected = 'MXXIV'\n    assert_equal expected, actual\n  end\n\n  def test_1666_is_mdclxvi\n    skip\n    actual = 1666.to_roman\n    expected = 'MDCLXVI'\n    assert_equal expected, actual\n  end\n\n  def test_3000_is_mmm\n    skip\n    actual = 3000.to_roman\n    expected = 'MMM'\n    assert_equal expected, actual\n  end\n\n  def test_3001_is_mmmi\n    skip\n    actual = 3001.to_roman\n    expected = 'MMMI'\n    assert_equal expected, actual\n  end\n\n  def test_3888_is_mmmdccclxxxviii\n    skip\n    actual = 3888.to_roman\n    expected = 'MMMDCCCLXXXVIII'\n    assert_equal expected, actual\n  end\n\n  def test_3999_is_mmmcmxcix\n    skip\n    actual = 3999.to_roman\n    expected = 'MMMCMXCIX'\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "boddhisattva",
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "mike-hewitson",
+    "tryantwit"
+  ]
+}

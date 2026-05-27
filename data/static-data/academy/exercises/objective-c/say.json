@@ -1,0 +1,29 @@
+{
+  "id": "objective-c:say",
+  "trackSlug": "objective-c",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "9292d37e-2b5f-45a2-b995-ebcce9d90376",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "#import \"Say.h\"\n\n@implementation Say\n\n// TODO: add your solution here\n\n@end\n",
+  "example_solution": "#import \"SayExample.h\"\n\n@implementation Say\n\n+ (NSString *)say:(long)number {\n    NSArray<NSString *> *smallNumbers = @[\n                                          @\"zero\", @\"one\", @\"two\", @\"three\", @\"four\", @\"five\",\n                                          @\"six\", @\"seven\", @\"eight\", @\"nine\", @\"ten\",\n                                          @\"eleven\", @\"twelve\", @\"thirteen\", @\"fourteen\", @\"fifteen\",\n                                          @\"sixteen\", @\"seventeen\", @\"eighteen\", @\"nineteen\"\n                                          ];\n    \n    NSArray<NSString *> *decades = @[\n                                     @\"twenty\", @\"thirty\", @\"forty\", @\"fifty\",\n                                     @\"sixty\", @\"seventy\", @\"eighty\", @\"ninety\"\n                                     ];\n    \n    NSArray<NSString *> *largeGroupNames = @[@\"billion\", @\"million\", @\"thousand\", @\"hundred\"];\n    \n    NSArray<NSNumber *> *largeGroupAmounts = @[@1000000000, @1000000, @1000, @100];\n    \n    if (number < 0 || number >= 1000000000000) {\n        return NULL;\n    }\n\n    if (number < 20) {\n        return smallNumbers[number];\n    }\n    \n    for (int i = 0; i < largeGroupAmounts.count; i++) {\n        int amount = largeGroupAmounts[i].intValue;\n        \n        if (number >= amount) {\n            NSString *groupName = largeGroupNames[i];\n            NSString *result = [[Say say:(number / amount)] stringByAppendingString:[NSString stringWithFormat:@\" %@\", groupName]];\n            long remainder = number % amount;\n            \n            if (remainder == 0) {\n                return result;\n            }\n            return [result stringByAppendingString:[NSString stringWithFormat:@\" %@\", [Say say:remainder]]];\n        }\n    }\n    \n    long decade = number / 10;\n    int remainder = number % 10;\n    NSString *decadeName = decades[decade - 2];\n    \n    if (remainder == 0) {\n        return decadeName;\n    }\n    return [decadeName stringByAppendingString:[NSString stringWithFormat:@\"-%@\", [Say say:remainder]]];\n}\n\n@end\n",
+  "test_code": "#import <XCTest/XCTest.h>\n\n#if __has_include(\"SayExample.h\")\n# import \"SayExample.h\"\n#else\n# import \"Say.h\"\n#endif\n\n@interface SayTest : XCTestCase\n\n@end\n\n@implementation SayTest\n\n- (void)testZero {\n    XCTAssertEqualObjects(@\"zero\", [Say say:0]);\n}\n\n- (void)testOne {\n    XCTAssertEqualObjects(@\"one\", [Say say:1]);\n}\n\n- (void)testFourteen {\n    XCTAssertEqualObjects(@\"fourteen\", [Say say:14]);\n}\n\n- (void)testTwenty {\n    XCTAssertEqualObjects(@\"twenty\", [Say say:20]);\n}\n\n- (void)testTwentyTwo {\n    XCTAssertEqualObjects(@\"twenty-two\", [Say say:22]);\n}\n\n- (void)testOneHundred {\n    XCTAssertEqualObjects(@\"one hundred\", [Say say:100]);\n}\n\n- (void)testOneHundredTwentyThree {\n    XCTAssertEqualObjects(@\"one hundred twenty-three\", [Say say:123]);\n}\n\n- (void)testOneThousand {\n    XCTAssertEqualObjects(@\"one thousand\", [Say say:1000]);\n}\n\n- (void)testOneThousandTwoHundredThirtyFour {\n    XCTAssertEqualObjects(@\"one thousand two hundred thirty-four\", [Say say:1234]);\n}\n\n- (void)testOneMillion {\n    XCTAssertEqualObjects(@\"one million\", [Say say:1000000]);\n}\n\n- (void)testOneMillionTwoThousandThreeHundredFortyFive {\n    XCTAssertEqualObjects(@\"one million two thousand three hundred forty-five\", [Say say:1002345]);\n}\n\n- (void)testOneBillion {\n    XCTAssertEqualObjects(@\"one billion\", [Say say:1000000000]);\n}\n\n- (void)testABigNumber {\n    XCTAssertEqualObjects(@\"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\", [Say say:987654321123]);\n}\n\n- (void)testNumbersBelowZeroAreOutOfRange {\n    XCTAssertNil([Say say:-1]);\n}\n\n- (void)testNumbersAbove999999999999AreOutOfRange {\n    XCTAssertNil([Say say:1000000000000]);\n}\n\n@end\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "robtimp"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "masters3d"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "zig:isbn-verifier",
+  "trackSlug": "zig",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "d9242387-064a-4ba8-8b04-b5cfe68ae9a2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "integers",
+    "math",
+    "strings"
+  ],
+  "prerequisites": [
+    "integers",
+    "math",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn isValidIsbn10(s: []const u8) bool {\n    _ = s;\n    @compileError(\"please implement the isValidIsbn10 function\");\n}\n",
+  "example_solution": "pub fn isValidIsbn10(s: []const u8) bool {\n    if (s.len < 10) return false;\n    var digit_count: usize = 0;\n    var sum: usize = 0;\n    var n: usize = 10;\n\n    for (s, 0..) |c, i| {\n        switch (c) {\n            '0'...'9' => sum += (c - '0') * n,\n            'X' => if (i == s.len - 1) {\n                sum += 10 * n;\n            } else return false,\n            '-' => continue,\n            else => return false,\n        }\n        if (n > 0) n -= 1;\n        digit_count += 1;\n    }\n\n    return (sum % 11 == 0) and digit_count == 10;\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst isValidIsbn10 = @import(\"isbn_verifier.zig\").isValidIsbn10;\n\ntest \"valid ISBN\" {\n    try testing.expect(isValidIsbn10(\"3-598-21508-8\"));\n}\n\ntest \"invalid ISBN check digit\" {\n    try testing.expect(!isValidIsbn10(\"3-598-21508-9\"));\n}\n\ntest \"valid ISBN with a check digit of 10\" {\n    try testing.expect(isValidIsbn10(\"3-598-21507-X\"));\n}\n\ntest \"check digit is a character other than X\" {\n    try testing.expect(!isValidIsbn10(\"3-598-21507-A\"));\n}\n\ntest \"invalid check digit in ISBN is not treated as zero\" {\n    try testing.expect(!isValidIsbn10(\"4-598-21507-B\"));\n}\n\ntest \"invalid character in ISBN is not treated as zero\" {\n    try testing.expect(!isValidIsbn10(\"3-598-P1581-X\"));\n}\n\ntest \"X is only valid as a check digit\" {\n    try testing.expect(!isValidIsbn10(\"3-598-2X507-9\"));\n}\n\ntest \"only one check digit is allowed\" {\n    try testing.expect(!isValidIsbn10(\"3-598-21508-96\"));\n}\n\ntest \"X is not substituted by the value 10\" {\n    try testing.expect(!isValidIsbn10(\"3-598-2X507-5\"));\n}\n\ntest \"valid ISBN without separating dashes\" {\n    try testing.expect(isValidIsbn10(\"3598215088\"));\n}\n\ntest \"ISBN without separating dashes and X as check digit\" {\n    try testing.expect(isValidIsbn10(\"359821507X\"));\n}\n\ntest \"ISBN without check digit and dashes\" {\n    try testing.expect(!isValidIsbn10(\"359821507\"));\n}\n\ntest \"too long ISBN and no dashes\" {\n    try testing.expect(!isValidIsbn10(\"3598215078X\"));\n}\n\ntest \"too short ISBN\" {\n    try testing.expect(!isValidIsbn10(\"00\"));\n}\n\ntest \"ISBN without check digit\" {\n    try testing.expect(!isValidIsbn10(\"3-598-21507\"));\n}\n\ntest \"check digit of X should not be used for 0\" {\n    try testing.expect(!isValidIsbn10(\"3-598-21515-X\"));\n}\n\ntest \"empty ISBN\" {\n    try testing.expect(!isValidIsbn10(\"\"));\n}\n\ntest \"input is 9 characters\" {\n    try testing.expect(!isValidIsbn10(\"134456729\"));\n}\n\ntest \"invalid characters are not ignored after checking length\" {\n    try testing.expect(!isValidIsbn10(\"3132P34035\"));\n}\n\ntest \"invalid characters are not ignored before checking length\" {\n    try testing.expect(!isValidIsbn10(\"3598P215088\"));\n}\n\ntest \"input is too long but contains a valid ISBN\" {\n    try testing.expect(!isValidIsbn10(\"98245726788\"));\n}\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "groovy:reverse-string",
+  "trackSlug": "groovy",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "b914a2c6-fe84-4112-93c9-361362487fa7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "class ReverseString {\n\n    static reverse(String value) {\n        throw new UnsupportedOperationException('method not implemented.')\n    }\n\n}",
+  "example_solution": "class ReverseString {\n\n    static reverse(String value) {\n        value.reverse()\n    }\n\n}",
+  "test_code": "import spock.lang.*\n\nclass ReverseStringSpec extends Specification {\n\n    def \"An empty string\"() {\n        expect:\n        ReverseString.reverse(value) == expected\n\n        where:\n        value || expected\n        ''    || ''\n    }\n\n    @Ignore\n    def \"A word\"() {\n        expect:\n        ReverseString.reverse(value) == expected\n\n        where:\n        value   || expected\n        'robot' || 'tobor'\n    }\n\n    @Ignore\n    def \"A capitalized word\"() {\n        expect:\n        ReverseString.reverse(value) == expected\n\n        where:\n        value   || expected\n        'Ramen' || 'nemaR'\n    }\n\n    @Ignore\n    def \"A sentence with punctuation\"() {\n        expect:\n        ReverseString.reverse(value) == expected\n\n        where:\n        value         || expected\n        \"I'm hungry!\" || \"!yrgnuh m'I\"\n    }\n\n    @Ignore\n    def \"A palindrome\"() {\n        expect:\n        ReverseString.reverse(value) == expected\n\n        where:\n        value     || expected\n        'racecar' || 'racecar'\n    }\n\n    @Ignore\n    def \"An even-sized word\"() {\n        expect:\n        ReverseString.reverse(value) == expected\n\n        where:\n        value    || expected\n        'drawer' || 'reward'\n    }\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": null
+}

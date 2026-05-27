@@ -1,0 +1,26 @@
+{
+  "id": "ballerina:leap",
+  "trackSlug": "ballerina",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "5efd28d2-6d3f-44d9-8e55-ce7088de398b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "public function isLeapYear(int year) returns boolean {\n    // TODO: implement this function\n}\n",
+  "example_solution": "public function isLeapYear(int year) returns boolean {\n    return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);\n}\n",
+  "test_code": "import ballerina/test;\n\n@test:Config\nfunction yearNotDivisibleBy4InCommonYear() {\n    test:assertFalse(isLeapYear(2015));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy2NotDivisibleBy4InCommonYear() {\n    test:assertFalse(isLeapYear(1970));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy4NotDivisibleBy100InLeapYear() {\n    test:assertTrue(isLeapYear(1996));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy4And5IsStillALeapYear() {\n    test:assertTrue(isLeapYear(1960));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy100NotDivisibleBy400InCommonYear() {\n    test:assertFalse(isLeapYear(2100));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy100ButNotBy3IsStillNotALeapYear() {\n    test:assertFalse(isLeapYear(1900));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy400IsLeapYear() {\n    test:assertTrue(isLeapYear(2000));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy400ButNotBy125IsStillALeapYear() {\n    test:assertTrue(isLeapYear(2400));\n}\n\n@test:Config {\n    enable: false\n}\nfunction yearDivisibleBy200NotDivisibleBy400InCommonYear() {\n    test:assertFalse(isLeapYear(1800));\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

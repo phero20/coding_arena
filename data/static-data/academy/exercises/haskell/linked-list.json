@@ -1,0 +1,36 @@
+{
+  "id": "haskell:linked-list",
+  "trackSlug": "haskell",
+  "slug": "linked-list",
+  "name": "Linked List",
+  "uuid": "34b8a4fe-6761-4675-a5a9-e8c92c93fd8f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a doubly linked list.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour team has decided to use a doubly linked list to represent each train route in the schedule.\nEach station along the train's route will be represented by a node in the linked list.\n\nYou don't need to worry about arrival and departure times at the stations.\nEach station will simply be represented by a number.\n\nRoutes can be extended, adding stations to the beginning or end of a route.\nThey can also be shortened by removing stations from the beginning or the end of a route.\n\nSometimes a station gets closed down, and in that case the station needs to be removed from the route, even if it is not at the beginning or end of the route.\n\nThe size of a route is measured not by how far the train travels, but by how many stations it stops at.\n\n~~~~exercism/note\nThe linked list is a fundamental data structure in computer science, often used in the implementation of other data structures.\nAs the name suggests, it is a list of nodes that are linked together.\nIt is a list of \"nodes\", where each node links to its neighbor or neighbors.\nIn a **singly linked list** each node links only to the node that follows it.\nIn a **doubly linked list** each node links to both the node that comes before, as well as the node that comes after.\n\nIf you want to dig deeper into linked lists, check out [this article][intro-linked-list] that explains it using nice drawings.\n\n[intro-linked-list]: https://medium.com/basecs/whats-a-linked-list-anyway-part-1-d8b7e6508b9d\n~~~~\n",
+  "introduction": "# Introduction\n\nYou are working on a project to develop a train scheduling system for a busy railway network.\n\nYou've been asked to develop a prototype for the train routes in the scheduling system.\nEach route consists of a sequence of train stations that a given train stops at.\n",
+  "hints": null,
+  "starter_code": "module Deque (Deque, mkDeque, pop, push, shift, unshift) where\n\ndata Deque a = Dummy\n\nmkDeque :: IO (Deque a)\nmkDeque = error \"You need to implement this function.\"\n\npop :: Deque a -> IO (Maybe a)\npop deque = error \"You need to implement this function.\"\n\npush :: Deque a -> a -> IO ()\npush deque x = error \"You need to implement this function.\"\n\nunshift :: Deque a -> a -> IO ()\nunshift deque x = error \"You need to implement this function.\"\n\nshift :: Deque a -> IO (Maybe a)\nshift deque = error \"You need to implement this function.\"\n",
+  "example_solution": "{-# LANGUAGE TupleSections #-}\nmodule Deque (Deque, mkDeque, push, pop, shift, unshift) where\n\nimport Control.Concurrent.STM ( STM, TMVar, takeTMVar, putTMVar, readTMVar\n                              , swapTMVar, atomically, newEmptyTMVar, newTMVar)\nimport Control.Monad (void)\n\ndata Node a = Node { nodeValue :: a\n                   , nodeNext :: TMVar (Node a)\n                   , nodePrev :: TMVar (Node a) }\n\ninstance Eq (Node a) where\n  (Node _ na pa) == (Node _ nb pb) = (na == nb) && (pa == pb)\n\nnewtype Deque a = Deque { unDeque :: TMVar (Maybe (Node a)) }\n                deriving (Eq)\n\nmkNode :: a -> STM (Node a)\nmkNode a = Node a <$> newEmptyTMVar <*> newEmptyTMVar\n\nmkDeque :: IO (Deque a)\nmkDeque = atomically $ Deque <$> newTMVar Nothing\n\nmkRoot :: a -> STM (Node a)\nmkRoot a = do\n  n <- mkNode a\n  putTMVar (nodeNext n) n\n  putTMVar (nodePrev n) n\n  return n\n\ndeleteNode :: Node a -> STM (Maybe (Node a))\ndeleteNode n = do\n  prev <- takeTMVar (nodePrev n)\n  next <- takeTMVar (nodeNext n)\n  if n == prev\n    then return Nothing\n    else do\n    void $ swapTMVar (nodeNext prev) next\n    void $ swapTMVar (nodePrev next) prev\n    return $ Just next\n\nmkBefore :: Node a -> a -> STM (Node a)\nmkBefore front a = do\n  n <- mkNode a\n  back <- swapTMVar (nodePrev front) n\n  void $ swapTMVar (nodeNext back) n\n  putTMVar (nodeNext n) front\n  putTMVar (nodePrev n) back\n  return n\n\nwithDeque :: STM (Maybe (Node a), b)\n             -> (Node a -> STM (Maybe (Node a), b))\n             -> Deque a\n             -> IO b\nwithDeque def go d = atomically $ do\n  let var = unDeque d\n  (mFront, r) <- takeTMVar var >>= maybe def go\n  putTMVar var mFront\n  return r\n\nvoidreturn :: STM a -> STM (a, ())\nvoidreturn = fmap (, ())\n\npush :: Deque a -> a -> IO ()\npush d a = withDeque (voidreturn $ Just <$> mkRoot a) (voidreturn . go) d\n  where go front = mkBefore front a >> return (Just front)\n\nunshift :: Deque a -> a -> IO ()\nunshift d a = withDeque (voidreturn $ Just <$> mkRoot a) (voidreturn . go) d\n  where go front = Just <$> mkBefore front a\n\npop :: Deque a -> IO (Maybe a)\npop = withDeque (return (Nothing, Nothing)) go\n  where go front = do\n          back <- readTMVar (nodePrev front)\n          (, Just (nodeValue back)) <$> deleteNode back\n\nshift :: Deque a -> IO (Maybe a)\nshift = withDeque (return (Nothing, Nothing)) go\n  where go front = (, Just (nodeValue front)) <$> deleteNode front\n",
+  "test_code": "import Test.Hspec        (Spec, it, shouldReturn)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Deque (mkDeque, pop, push, shift, unshift)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\n{-# ANN module \"HLint: ignore Reduce duplication\" #-}\nspecs :: Spec\nspecs = do\n\n    it \"push pop\" $ do\n      deque <- mkDeque\n      push deque 'a'\n      push deque 'b'\n      pop deque `shouldReturn` Just 'b'\n      pop deque `shouldReturn` Just 'a'\n\n    it \"push shift\" $ do\n      deque <- mkDeque\n      push deque 'a'\n      push deque 'b'\n      shift deque `shouldReturn` Just 'a'\n      shift deque `shouldReturn` Just 'b'\n\n    it \"unshift shift\" $ do\n      deque <- mkDeque\n      unshift deque 'a'\n      unshift deque 'b'\n      shift deque `shouldReturn` Just 'b'\n      shift deque `shouldReturn` Just 'a'\n\n    it \"unshift pop\" $ do\n      deque <- mkDeque\n      unshift deque 'a'\n      unshift deque 'b'\n      pop deque `shouldReturn` Just 'a'\n      pop deque `shouldReturn` Just 'b'\n\n    it \"example\" $ do\n      deque <- mkDeque\n      push deque 'a'\n      push deque 'b'\n      pop deque `shouldReturn` Just 'b'\n      push deque 'c'\n      shift deque `shouldReturn` Just 'a'\n      unshift deque 'd'\n      push deque 'e'\n      shift deque `shouldReturn` Just 'd'\n      pop deque `shouldReturn` Just 'e'\n      pop deque `shouldReturn` Just 'c'\n",
+  "source": "Classic computer science topic",
+  "source_url": null,
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "kytrinyx",
+    "lpalma",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

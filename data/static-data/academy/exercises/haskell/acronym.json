@@ -1,0 +1,37 @@
+{
+  "id": "haskell:acronym",
+  "trackSlug": "haskell",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "4b5b2254-1c68-449a-8150-c1d33b8de9d1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n|Input|Output|\n|-|-|\n|As Soon As Possible|ASAP|\n|Liquid-crystal display|LCD|\n|Thank George It's Friday!|TGIF|\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Acronym (abbreviate) where\n\nabbreviate :: String -> String\nabbreviate xs = error \"You need to implement this function.\"\n",
+  "example_solution": "module Acronym (abbreviate) where\n\nimport Data.Char (isAlpha, isUpper, toUpper)\n\nabbreviate :: String -> String\nabbreviate = concatMap initials . words . map replaceNonWord\n\ninitials :: String -> String\ninitials [] = []\ninitials (x:xs) = toUpper x : rest\n  where rest = if not $ isAcronym xs\n               then filter isUpper xs\n               else []\n\nisAcronym :: String -> Bool\nisAcronym = all isUpper\n\nreplaceNonWord :: Char -> Char\nreplaceNonWord '\\'' = '\\''\nreplaceNonWord x\n  | isAlpha x = x\n  | otherwise = ' '\n",
+  "test_code": "{-# LANGUAGE OverloadedStrings #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Data.String       (fromString)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Acronym (abbreviate)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"abbreviate\" $ for_ cases test\n  where\n    test Case {..} = it description $\n      abbreviate (fromString input) `shouldBe` fromString expected\n\ndata Case = Case { description :: String\n                 , input       :: String\n                 , expected    :: String\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"basic\"\n               , input       = \"Portable Network Graphics\"\n               , expected    = \"PNG\"\n               }\n        , Case { description = \"lowercase words\"\n               , input       = \"Ruby on Rails\"\n               , expected    = \"ROR\"\n               }\n        -- Although this case was removed in specification 1.1.0,\n        -- the Haskell track has chosen to keep it,\n        -- since it makes the problem more interesting.\n        , Case { description = \"camelcase\"\n               , input       = \"HyperText Markup Language\"\n               , expected    = \"HTML\"\n               }\n        , Case { description = \"punctuation\"\n               , input       = \"First In, First Out\"\n               , expected    = \"FIFO\"\n               }\n        , Case { description = \"all caps word\"\n               , input       = \"GNU Image Manipulation Program\"\n               , expected    = \"GIMP\"\n               }\n        , Case { description = \"punctuation without whitespace\"\n               , input       = \"Complementary metal-oxide semiconductor\"\n               , expected    = \"CMOS\"\n               }\n        , Case { description = \"very long abbreviation\"\n               , input       = \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n               , expected    = \"ROTFLSHTMDCOALM\"\n               }\n        , Case { description = \"consecutive delimiters\"\n               , input       = \"Something - I made up from thin air\"\n               , expected    = \"SIMUFTA\"\n               }\n        , Case { description = \"apostrophes\"\n               , input       = \"Halley's Comet\"\n               , expected    = \"HC\"\n               }\n        , Case { description = \"underscore emphasis\"\n               , input       = \"The Road _Not_ Taken\"\n               , expected    = \"TRNT\"\n               }\n        ]\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "lpalma"
+  ],
+  "contributors": [
+    "alanvardy",
+    "iHiD",
+    "marionebl",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sharno",
+    "sshine",
+    "tejasbubane"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "emacs-lisp:series",
+  "trackSlug": "emacs-lisp",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "2e10ca92-6232-418e-b9ea-506ac1eba195",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; series.el --- Series (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun slices (series slice-length)\n  (error \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'series)\n;;; series.el ends here\n\n",
+  "example_solution": ";;; series.el --- Series (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n\n(defun slices (series slice-length)\n  (cond\n    ((equal \"\" series) (error \"series cannot be empty\"))\n    ((> slice-length (length series)) (error \"slice length cannot be greater than series length\"))\n    ((= slice-length 0) (error \"slice length cannot be zero\"))\n    ((< slice-length 0) (error \"slice length cannot be negative\"))\n    (t (mapcar (lambda (start)\n                       (substring series start (+ start slice-length)))\n               (number-sequence 0 (- (length series) slice-length))))))\n\n\n(provide 'series)\n;;; series.el ends here\n\n",
+  "test_code": ";;; series-test.el --- Tests for Series (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(load-file \"series.el\")\n(declare-function slices \"series.el\" (series slice-length))\n\n\n(ert-deftest slices-of-one-from-one ()\n  (should (equal '(\"1\") (slices \"1\" 1))))\n\n\n(ert-deftest slices-of-one-from-two ()\n  (should (equal '(\"1\" \"2\") (slices \"12\" 1))))\n\n\n(ert-deftest slices-of-two ()\n  (should (equal '(\"35\") (slices \"35\" 2))))\n\n\n(ert-deftest slices-of-two-overlap ()\n  (should (equal '(\"91\" \"14\" \"42\") (slices \"9142\" 2))))\n\n\n(ert-deftest slices-can-include-duplicates ()\n  (should (equal '(\"777\" \"777\" \"777\" \"777\") (slices \"777777\" 3))))\n\n\n(ert-deftest slices-of-a-long-series ()\n  (should (equal '(\"91849\"\n                   \"18493\"\n                   \"84939\"\n                   \"49390\"\n                   \"93904\"\n                   \"39042\"\n                   \"90424\"\n                   \"04243\")\n                 (slices \"918493904243\" 5))))\n\n\n(ert-deftest slice-length-is-too-large ()\n  (should-error (slices \"12345\" 6)))\n\n\n(ert-deftest slice-length-is-way-too-large ()\n  (should-error (slices \"12345\" 42)))\n\n\n(ert-deftest slice-length-cannot-be-zero ()\n  (should-error (slices \"12345\" 0)))\n\n\n(ert-deftest slice-length-cannot-be-negative ()\n  (should-error (slices \"123\" -1)))\n\n\n(ert-deftest empty-series-is-invalid ()\n  (should-error (slices \"\" 1)))\n\n\n(provide 'series-test)\n;;; series-test.el ends here\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

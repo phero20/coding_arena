@@ -1,0 +1,26 @@
+{
+  "id": "nim:proverb",
+  "trackSlug": "nim",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "8d876470-08d5-4efe-b9d1-4a6812c1e586",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc recite*(words: openArray[string]): string =\n  discard\n",
+  "example_solution": "import std/strformat\n\nfunc recite*(a: openArray[string]): string =\n  result = \"\"\n  if a.len > 0:\n    for i in 0 ..< a.high:\n      result.add &\"For want of a {a[i]} the {a[i+1]} was lost.\\n\"\n    result.add &\"And all for the want of a {a[0]}.\"\n",
+  "test_code": "import unittest\nimport proverb\n\nsuite \"Proverb\":\n  test \"zero pieces\":\n    const words: seq[string] = @[]\n    const expected = \"\"\n    check recite(words) == expected\n\n  test \"one piece\":\n    const words = @[\"nail\"]\n    const expected = \"And all for the want of a nail.\"\n    check recite(words) == expected\n\n  test \"two pieces\":\n    const words = @[\"nail\", \"shoe\"]\n    const expected = \"For want of a nail the shoe was lost.\\n\" &\n                     \"And all for the want of a nail.\"\n    check recite(words) == expected\n\n  test \"three pieces\":\n    const words = @[\"nail\", \"shoe\", \"horse\"]\n    const expected = \"For want of a nail the shoe was lost.\\n\" &\n                     \"For want of a shoe the horse was lost.\\n\" &\n                     \"And all for the want of a nail.\"\n    check recite(words) == expected\n\n  test \"full proverb\":\n    const words = @[\"nail\", \"shoe\", \"horse\", \"rider\",\n                    \"message\", \"battle\", \"kingdom\"]\n    const expected = \"For want of a nail the shoe was lost.\\n\" &\n                     \"For want of a shoe the horse was lost.\\n\" &\n                     \"For want of a horse the rider was lost.\\n\" &\n                     \"For want of a rider the message was lost.\\n\" &\n                     \"For want of a message the battle was lost.\\n\" &\n                     \"For want of a battle the kingdom was lost.\\n\" &\n                     \"And all for the want of a nail.\"\n    check recite(words) == expected\n\n  test \"four pieces modernized\":\n    const words = @[\"pin\", \"gun\", \"soldier\", \"battle\"]\n    const expected = \"For want of a pin the gun was lost.\\n\" &\n                     \"For want of a gun the soldier was lost.\\n\" &\n                     \"For want of a soldier the battle was lost.\\n\" &\n                     \"And all for the want of a pin.\"\n    check recite(words) == expected\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

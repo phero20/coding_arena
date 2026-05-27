@@ -1,0 +1,31 @@
+{
+  "id": "gleam:largest-series-product",
+  "trackSlug": "gleam",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "34293b12-1d94-43d9-a9cb-27b8bff92d67",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "case-expressions",
+    "ints",
+    "lists",
+    "results"
+  ],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "pub fn largest_product(digits: String, span: Int) -> Result(Int, Nil) {\n  todo\n}\n",
+  "example_solution": "import gleam/int\nimport gleam/list\nimport gleam/result\nimport gleam/string\n\npub fn largest_product(digits: String, span: Int) -> Result(Int, Nil) {\n  let characters = string.to_graphemes(digits)\n  let num_characters = list.length(characters)\n\n  case span {\n    0 -> Ok(1)\n    _ if span < 0 || span > num_characters -> Error(Nil)\n    _ ->\n      characters\n      |> list.try_map(int.parse)\n      |> result.map(list.window(_, by: span))\n      |> result.map(fn(slices) {\n        slices\n        |> list.map(int.product)\n        |> list.sort(fn(a, b) { int.compare(b, a) })\n        |> list.first\n        |> result.unwrap(1)\n      })\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport largest_series_product\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn finds_the_largest_product_if_span_equals_length_test() {\n  largest_series_product.largest_product(\"29\", 2)\n  |> should.equal(Ok(18))\n}\n\npub fn can_find_the_largest_product_of_2_with_numbers_in_order_test() {\n  largest_series_product.largest_product(\"0123456789\", 2)\n  |> should.equal(Ok(72))\n}\n\npub fn can_find_the_largest_product_of_2_test() {\n  largest_series_product.largest_product(\"576802143\", 2)\n  |> should.equal(Ok(48))\n}\n\npub fn can_find_the_largest_product_of_3_with_numbers_in_order_test() {\n  largest_series_product.largest_product(\"0123456789\", 3)\n  |> should.equal(Ok(504))\n}\n\npub fn can_find_the_largest_product_of_3_test() {\n  largest_series_product.largest_product(\"1027839564\", 3)\n  |> should.equal(Ok(270))\n}\n\npub fn can_find_the_largest_product_of_5_with_numbers_in_order_test() {\n  largest_series_product.largest_product(\"0123456789\", 5)\n  |> should.equal(Ok(15_120))\n}\n\npub fn can_get_the_largest_product_of_a_big_number_test() {\n  largest_series_product.largest_product(\n    \"73167176531330624919225119674426574742355349194934\",\n    6,\n  )\n  |> should.equal(Ok(23_520))\n}\n\npub fn reports_one_for_empty_string_and_empty_products_test() {\n  largest_series_product.largest_product(\"\", 0)\n  |> should.equal(Ok(1))\n}\n\npub fn reports_one_for_nonempty_string_and_empty_products_test() {\n  largest_series_product.largest_product(\"123\", 0)\n  |> should.equal(Ok(1))\n}\n\npub fn reports_zero_if_the_only_digits_are_zero_test() {\n  largest_series_product.largest_product(\"0000\", 2)\n  |> should.equal(Ok(0))\n}\n\npub fn reports_zero_if_all_spans_include_zero_test() {\n  largest_series_product.largest_product(\"99099\", 3)\n  |> should.equal(Ok(0))\n}\n\npub fn rejects_span_longer_than_string_length_test() {\n  largest_series_product.largest_product(\"123\", 4)\n  |> should.equal(Error(Nil))\n}\n\npub fn rejects_empty_string_and_nonzero_span_test() {\n  largest_series_product.largest_product(\"\", 1)\n  |> should.equal(Error(Nil))\n}\n\npub fn rejects_invalid_character_in_digits_test() {\n  largest_series_product.largest_product(\"1234a5\", 2)\n  |> should.equal(Error(Nil))\n}\n\npub fn rejects_negative_span_test() {\n  largest_series_product.largest_product(\"12345\", -1)\n  |> should.equal(Error(Nil))\n}\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

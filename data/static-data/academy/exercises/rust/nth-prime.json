@@ -1,0 +1,44 @@
+{
+  "id": "rust:nth-prime",
+  "trackSlug": "rust",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "ee5048a7-c625-434d-a0a2-4fd54757ee02",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn nth(n: u32) -> u32 {\n    todo!(\"What is the 0-indexed {n}th prime number?\")\n}\n",
+  "example_solution": "fn is_prime(n: u32) -> bool {\n    let mut i = 3;\n    while (i * i) < (n + 1) {\n        if n.is_multiple_of(i) {\n            return false;\n        }\n        i += 1;\n    }\n    true\n}\n\npub fn nth(n: u32) -> u32 {\n    if n == 0 {\n        2\n    } else {\n        let mut count = 0;\n        let mut candidate = 1;\n        while count < n {\n            candidate += 2;\n            if is_prime(candidate) {\n                count += 1;\n            }\n        }\n        candidate\n    }\n}\n",
+  "test_code": "use nth_prime::*;\n\n#[test]\nfn first_prime() {\n    let output = nth(0);\n    let expected = 2;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn second_prime() {\n    let output = nth(1);\n    let expected = 3;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn sixth_prime() {\n    let output = nth(5);\n    let expected = 13;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn big_prime() {\n    let output = nth(10_000);\n    let expected = 104_743;\n    assert_eq!(output, expected);\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "sacherjj"
+  ],
+  "contributors": [
+    "attilahorvath",
+    "cbzehner",
+    "coriolinus",
+    "cwhakes",
+    "eddyp",
+    "efx",
+    "ErikSchierboom",
+    "imbolc",
+    "lutostag",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

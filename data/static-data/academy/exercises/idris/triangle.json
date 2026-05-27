@@ -1,0 +1,26 @@
+{
+  "id": "idris:triangle",
+  "trackSlug": "idris",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "c80a5798-0138-43ed-a7fe-7d8cbd6da105",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\n~~~~exercism/note\n_Degenerate triangles_ are triangles where the sum of the length of two sides is **equal** to the length of the third side, e.g. `1, 1, 2`.\nWe opted to not include tests for degenerate triangles in this exercise.\nYou may handle those situations if you wish to do so, or safely ignore them.\n~~~~\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Triangle\n\nimport Data.Vect\n\nexport\nisEquilateral : Vect 3 Integer -> Bool\nisEquilateral sides = ?isEquilateral_rhs\n\nexport\nisIsosceles : Vect 3 Integer -> Bool\nisIsosceles sides = ?isIsosceles_rhs\n\nexport\nisScalene : Vect 3 Integer -> Bool\nisScalene sides = ?isScalene_rhs\n",
+  "example_solution": "module Triangle\n\nimport Data.Vect\n\nisTriangle : Vect 3 Integer -> Bool\nisTriangle (first :: second :: third :: nil) = (first > 0) &&\n                                               (second > 0) &&\n                                               (third > 0) &&\n                                               (first <= second + third) &&\n                                               (second <= first + third) &&\n                                               (third <= first + second)\n\n-- number of distinct values\ncardinality : Vect 3 Integer -> Integer\ncardinality (first :: second :: third :: nil) =\n    if (first == second) && (first == third) then 1\n    else if (first == second) || (first == third) || (second == third) then 2\n    else 3\n\nexport\nisEquilateral : Vect 3 Integer -> Bool\nisEquilateral sides = (isTriangle sides) && (cardinality sides == 1)\n\nexport\nisIsosceles : Vect 3 Integer -> Bool\nisIsosceles sides = (isTriangle sides) && (cardinality sides <= 2)\n\nexport\nisScalene : Vect 3 Integer -> Bool\nisScalene sides = (isTriangle sides) && (cardinality sides == 3)\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport Triangle\nimport Data.Vect\n\ntests : List Test\ntests =\n  [ test \"all sides are equal\"                      (assert $       isEquilateral [2, 2, 2])\n  , test \"any side is unequal\"                      (assert $ not $ isEquilateral [2, 3, 2])\n  , test \"no sides are equal\"                       (assert $ not $ isEquilateral [5, 4, 6])\n  , test \"all zero sides is not a triangle\"         (assert $ not $ isEquilateral [0, 0, 0])\n  , test \"last two sides are equal\"                 (assert $       isIsosceles [3, 4, 4])\n  , test \"first two sides are equal\"                (assert $       isIsosceles [4, 4, 3])\n  , test \"first and last sides are equal\"           (assert $       isIsosceles [4, 3, 4])\n  , test \"equilateral triangles are also isosceles\" (assert $       isIsosceles [4, 4, 4])\n  , test \"no sides are equal\"                       (assert $ not $ isIsosceles [2, 3, 4])\n  , test \"first triangle inequality violation\"      (assert $ not $ isIsosceles [1, 1, 3])\n  , test \"second triangle inequality violation\"     (assert $ not $ isIsosceles [1, 3, 1])\n  , test \"third triangle inequality violation\"      (assert $ not $ isIsosceles [3, 1, 1])\n  , test \"no sides are equal\"                       (assert $       isScalene [5, 4, 6])\n  , test \"all sides are equal\"                      (assert $ not $ isScalene [4, 4, 4])\n  , test \"first and second sides are equal\"         (assert $ not $ isScalene [4, 4, 3])\n  , test \"first and third sides are equal\"          (assert $ not $ isScalene [3, 4, 3])\n  , test \"second and third sides are equal\"         (assert $ not $ isScalene [4, 3, 3])\n  , test \"may not violate triangle inequality\"      (assert $ not $ isScalene [7, 3, 2])\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://web.archive.org/web/20220831105330/http://rubykoans.com",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

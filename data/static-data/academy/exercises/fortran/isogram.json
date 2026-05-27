@@ -1,0 +1,26 @@
+{
+  "id": "fortran:isogram",
+  "trackSlug": "fortran",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "0c16dde4-a74a-49e0-8b2c-6fa4a104e7b9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module isogram\n  implicit none\n\ncontains\n\n  function isIsogram(phrase) result(no_repeats)\n    character(len=*), intent(in) :: phrase\n    logical :: no_repeats\n\n    no_repeats = phrase == \"phrase\" ! Replace this line with your implementation\n  end function isIsogram\n\nend module isogram\n",
+  "example_solution": "module isogram\n  implicit none\n\ncontains\n\n  function isIsogram(phrase) result(no_repeats)\n    character(len=*), intent(in) :: phrase\n    logical :: no_repeats\n    logical :: seen(26)\n    integer :: i, letter\n\n    seen = .false.\n\n    do i = 1, len_trim(phrase)\n      select case (phrase(i:i))\n       case ('a':'z')\n        letter = ichar(phrase(i:i)) - ichar('a') + 1\n       case ('A':'Z')\n        letter = ichar(phrase(i:i)) - ichar('A') + 1\n       case ('-')\n        cycle\n       case (' ')\n        cycle\n       case default\n        no_repeats = .false.\n        return\n      end select\n\n      if (seen(letter)) then\n        no_repeats = .false.\n        return\n      end if\n\n      seen(letter) = .true.\n    end do\n\n    no_repeats = .true.\n  end function isIsogram\n\nend module isogram\n",
+  "test_code": "! The tests were created from https://github.com/exercism/problem-specifications/blob/main/exercises/isogram/canonical-data.json\n\nprogram isogram_test_main\n  use TesterMain\n  use isogram\n  implicit none\n\n  ! Test 1: empty string\n  call assert_equal(.true., isIsogram(\"\"), &\n    \"empty string\")\n\n  ! Test 2: isogram with only lower case characters\n  call assert_equal(.true., isIsogram(\"isogram\"), &\n    \"isogram with only lower case characters\")\n\n  ! Test 3: word with one duplicated character\n  call assert_equal(.false., isIsogram(\"eleven\"), &\n    \"word with one duplicated character\")\n\n  ! Test 4: word with one duplicated character from the end of the alphabet\n  call assert_equal(.false., isIsogram(\"zzyzx\"), &\n    \"word with one duplicated character from the end of the alphabet\")\n\n  ! Test 5: longest reported english isogram\n  call assert_equal(.true., isIsogram(\"subdermatoglyphic\"), &\n    \"longest reported english isogram\")\n\n  ! Test 6: word with duplicated character in mixed case\n  call assert_equal(.false., isIsogram(\"Alphabet\"), &\n    \"word with duplicated character in mixed case\")\n\n  ! Test 7: word with duplicated character in mixed case, lowercase first\n  call assert_equal(.false., isIsogram(\"alphAbet\"), &\n    \"word with duplicated character in mixed case, lowercase first\")\n\n  ! Test 8: hypothetical isogrammic word with hyphen\n  call assert_equal(.true., isIsogram(\"thumbscrew-japingly\"), &\n    \"hypothetical isogrammic word with hyphen\")\n\n  ! Test 9: hypothetical word with duplicated character following hyphen\n  call assert_equal(.false., isIsogram(\"thumbscrew-jappingly\"), &\n    \"hypothetical word with duplicated character following hyphen\")\n\n  ! Test 10: isogram with duplicated hyphen\n  call assert_equal(.true., isIsogram(\"six-year-old\"), &\n    \"isogram with duplicated hyphen\")\n\n  ! Test 11: made-up name that is an isogram\n  call assert_equal(.true., isIsogram(\"Emily Jung Schwartzkopf\"), &\n    \"made-up name that is an isogram\")\n\n  ! Test 12: duplicated character in the middle\n  call assert_equal(.false., isIsogram(\"accentor\"), &\n    \"duplicated character in the middle\")\n\n  ! Test 13: same first and last characters\n  call assert_equal(.false., isIsogram(\"angola\"), &\n    \"same first and last characters\")\n\n  ! Test 14: word with duplicated character and with two hyphens\n  call assert_equal(.false., isIsogram(\"up-to-date\"), &\n    \"word with duplicated character and with two hyphens\")\n\n  call test_report()\n\nend program\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "simisc"
+  ],
+  "contributors": null
+}

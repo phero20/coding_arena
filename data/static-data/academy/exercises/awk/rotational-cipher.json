@@ -1,0 +1,26 @@
+{
+  "id": "awk:rotational-cipher",
+  "trackSlug": "awk",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "beb92b14-a0db-4749-bb0d-9a791dc5ba0a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# These variables are initialized on the command line (using '-v'):\n# - distance\n\nBEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "# These variables are initialized on the command line (using '-v'):\n# - distance\n\n@load \"ordchr\"\n\nBEGIN {\n    FS = \"\"\n    OFS = \"\"\n    A = ord(\"A\")\n    a = ord(\"a\")\n}\n\n{\n    out = \"\"\n    for (i = 1; i <= NF; i++) {\n        if (\"A\" <= $i && $i <= \"Z\")\n            $i = chr((ord($i) - A + distance) % 26 + A)\n        else if (\"a\" <= $i && $i <= \"z\")\n            $i = chr((ord($i) - a + distance) % 26 + a)\n    }\n    print\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n@test \"rotate a by 0, same output as input\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=0 <<< \"a\"\n    assert_success\n    assert_output \"a\"\n}\n\n@test \"rotate a by 1\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=1 <<< \"a\"\n    assert_success\n    assert_output \"b\"\n}\n\n@test \"rotate a by 26, same output as input\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=26 <<< \"a\"\n    assert_success\n    assert_output \"a\"\n}\n\n@test \"rotate m by 13\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=13 <<< \"m\"\n    assert_success\n    assert_output \"z\"\n}\n\n@test \"rotate n by 13 with wrap around alphabet\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=13 <<< \"n\"\n    assert_success\n    assert_output \"a\"\n}\n\n@test \"rotate capital letters\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=5 <<< \"OMG\"\n    assert_success\n    assert_output \"TRL\"\n}\n\n@test \"rotate spaces\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=5 <<< \"O M G\"\n    assert_success\n    assert_output \"T R L\"\n}\n\n@test \"rotate numbers\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=4 <<< \"Testing 1 2 3 testing\"\n    assert_success\n    assert_output \"Xiwxmrk 1 2 3 xiwxmrk\"\n}\n\n@test \"rotate punctuation\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=21 <<< \"Let's eat, Grandma!\"\n    assert_success\n    assert_output \"Gzo'n zvo, Bmviyhv!\"\n}\n\n@test \"rotate all letters\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f rotational-cipher.awk -v distance=13 <<< \"The quick brown fox jumps over the lazy dog.\"\n    assert_success\n    assert_output \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

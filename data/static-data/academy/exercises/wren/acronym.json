@@ -1,0 +1,26 @@
+{
+  "id": "wren:acronym",
+  "trackSlug": "wren",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "c89e1937-d6c4-43bf-9fe6-06ebc5f70d5b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Acronym {\n  static parse(phrase) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}",
+  "example_solution": "class Strings {\n    static upcase(s) {\n        return s.bytes.map { |x|\n            if ((97..122).contains(x)) x = x - 32\n            return String.fromByte(x)\n        }.join(\"\")\n    }\n}\n\nclass Acronym {\n  static parse(s) {\n    return s.replace(\"'\",\"\").\n      // REGEX would be nicer\n      replace(\"-\",\" \").\n      replace(\"_\",\" \").\n      split(\" \").where {|x| x != \"\" }.\n      map {|x| Strings.upcase(x[0]) }.\n      join(\"\")\n  }\n}",
+  "test_code": "import \"./acronym\" for Acronym\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"Acronyms\") { |do, skip|\n  // basic\n  do.test(\"title cased phrases\") {\n    Expect.value(Acronym.parse(\"Portable Network Graphics\")).toEqual(\"PNG\")\n  }\n\n  // lowercase words\n  skip.test(\"other title cased phrases\") {\n    Expect.value(Acronym.parse(\"Ruby on Rails\")).toEqual(\"ROR\")\n  }\n\n  // punctuation\n  skip.test(\"phrases with punctuation\") {\n    Expect.value(Acronym.parse(\"First In, First Out\")).toEqual(\"FIFO\")\n  }\n\n  // all caps word\n  skip.test(\"phrases with all uppercase words\") {\n    Expect.value(Acronym.parse(\"GNU Image Manipulation Program\")).toEqual(\"GIMP\")\n  }\n\n  // punctuation without whitespace\n  skip.test(\"phrases with punctuation without whitespace\") {\n    Expect.value(Acronym.parse(\"Complementary metal-oxide semiconductor\")).toEqual(\"CMOS\")\n  }\n\n  // very long abbreviation\n  skip.test(\"long phrases\") {\n    Expect.value(\n      Acronym.parse(\n        \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n      )\n    ).toEqual(\"ROTFLSHTMDCOALM\")\n  }\n\n  // consecutive delimiters\n  skip.test(\"phrases with consecutive delimiters\") {\n    Expect.value(Acronym.parse(\"Something - I made up from thin air\")).toEqual(\"SIMUFTA\")\n  }\n\n  // apostrophes\n  skip.test(\"phrases with apostrophes\") {\n    Expect.value(Acronym.parse(\"Halley's Comet\")).toEqual(\"HC\")\n  }\n\n  // underscore emphasis\n  skip.test(\"phrases with underscore emphasis\") {\n    Expect.value(Acronym.parse(\"The Road _Not_ Taken\")).toEqual(\"TRNT\")\n  }\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,50 @@
+{
+  "id": "python:sublist",
+  "trackSlug": "python",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "cc5eb848-09bc-458c-8fb6-3a17687cb4eb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "comparisons"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "comparisons",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\"\"\nThis exercise stub and the test suite contain several enumerated constants.\n\nEnumerated constants can be done with a NAME assigned to an arbitrary,\nbut unique value. An integer is traditionally used because it’s memory\nefficient.\nIt is a common practice to export both constants and functions that work with\nthose constants (ex. the constants in the os, subprocess and re modules).\n\nYou can learn more here: https://en.wikipedia.org/wiki/Enumerated_type\n\"\"\"\n\n# Possible sublist categories.\n# Change the values as you see fit.\nSUBLIST = None\nSUPERLIST = None\nEQUAL = None\nUNEQUAL = None\n\n\ndef sublist(list_one, list_two):\n    pass\n",
+  "example_solution": "SUBLIST = 0\nSUPERLIST = 1\nEQUAL = 2\nUNEQUAL = 3\n\n\ndef sublist(list_one, list_two):\n    if list_one == list_two:\n        return EQUAL\n    if contains(list_one, list_two):\n        return SUPERLIST\n    if contains(list_two, list_one):\n        return SUBLIST\n    return UNEQUAL\n\n\ndef contains(list_one, list_two):\n    if not list_two:\n        return True\n    if len(list_two) > len(list_one):\n        return False\n    for idx in range(len(list_one) - len(list_two) + 1):\n        if list_one[idx] != list_two[0]:\n            continue\n        for edx, _ in enumerate(list_two):\n            if list_one[idx + edx] != list_two[edx]:\n                break\n        else:\n            return True\n    return False\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/sublist/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom sublist import (\n    sublist,\n    SUBLIST,\n    SUPERLIST,\n    EQUAL,\n    UNEQUAL,\n)\n\n\nclass SublistTest(unittest.TestCase):\n    def test_empty_lists(self):\n        self.assertEqual(sublist([], []), EQUAL)\n\n    def test_empty_list_within_non_empty_list(self):\n        self.assertEqual(sublist([], [1, 2, 3]), SUBLIST)\n\n    def test_non_empty_list_contains_empty_list(self):\n        self.assertEqual(sublist([1, 2, 3], []), SUPERLIST)\n\n    def test_list_equals_itself(self):\n        self.assertEqual(sublist([1, 2, 3], [1, 2, 3]), EQUAL)\n\n    def test_different_lists(self):\n        self.assertEqual(sublist([1, 2, 3], [2, 3, 4]), UNEQUAL)\n\n    def test_false_start(self):\n        self.assertEqual(sublist([1, 2, 5], [0, 1, 2, 3, 1, 2, 5, 6]), SUBLIST)\n\n    def test_consecutive(self):\n        self.assertEqual(sublist([1, 1, 2], [0, 1, 1, 1, 2, 1, 2]), SUBLIST)\n\n    def test_sublist_at_start(self):\n        self.assertEqual(sublist([0, 1, 2], [0, 1, 2, 3, 4, 5]), SUBLIST)\n\n    def test_sublist_in_middle(self):\n        self.assertEqual(sublist([2, 3, 4], [0, 1, 2, 3, 4, 5]), SUBLIST)\n\n    def test_sublist_at_end(self):\n        self.assertEqual(sublist([3, 4, 5], [0, 1, 2, 3, 4, 5]), SUBLIST)\n\n    def test_at_start_of_superlist(self):\n        self.assertEqual(sublist([0, 1, 2, 3, 4, 5], [0, 1, 2]), SUPERLIST)\n\n    def test_in_middle_of_superlist(self):\n        self.assertEqual(sublist([0, 1, 2, 3, 4, 5], [2, 3]), SUPERLIST)\n\n    def test_at_end_of_superlist(self):\n        self.assertEqual(sublist([0, 1, 2, 3, 4, 5], [3, 4, 5]), SUPERLIST)\n\n    def test_first_list_missing_element_from_second_list(self):\n        self.assertEqual(sublist([1, 3], [1, 2, 3]), UNEQUAL)\n\n    def test_second_list_missing_element_from_first_list(self):\n        self.assertEqual(sublist([1, 2, 3], [1, 3]), UNEQUAL)\n\n    def test_first_list_missing_additional_digits_from_second_list(self):\n        self.assertEqual(sublist([1, 2], [1, 22]), UNEQUAL)\n\n    def test_order_matters_to_a_list(self):\n        self.assertEqual(sublist([1, 2, 3], [3, 2, 1]), UNEQUAL)\n\n    def test_same_digits_but_different_numbers(self):\n        self.assertEqual(sublist([1, 0, 1], [10, 1]), UNEQUAL)\n\n    # Additional tests for this track\n    def test_unique_return_values(self):\n        self.assertEqual(len(set([SUBLIST, SUPERLIST, EQUAL, UNEQUAL])), 4)\n\n    def test_inner_spaces(self):\n        self.assertEqual(sublist([\"a c\"], [\"a\", \"c\"]), UNEQUAL)\n\n    def test_large_lists(self):\n        self.assertEqual(\n            sublist(\n                list(range(1000)) * 1000 + list(range(1000, 1100)),\n                list(range(900, 1050)),\n            ),\n            SUPERLIST,\n        )\n\n    def test_spread_sublist(self):\n        self.assertEqual(\n            sublist(list(range(3, 200, 3)), list(range(15, 200, 15))), UNEQUAL\n        )\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "anunciado",
+    "behrtam",
+    "cmccandless",
+    "csabella",
+    "Dog",
+    "dvermd",
+    "Grociu",
+    "ikhadykin",
+    "kytrinyx",
+    "N-Parsons",
+    "patricksjackson",
+    "Peque",
+    "pheanex",
+    "sjakobi",
+    "tqa236"
+  ]
+}

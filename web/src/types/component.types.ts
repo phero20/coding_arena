@@ -105,6 +105,7 @@ export interface ProblemRowProps {
   isSelectPage: boolean;
   onSelect: () => void;
   isHosting: boolean;
+  isSolved?: boolean;
 }
 
 // ProblemTable.tsx
@@ -144,6 +145,7 @@ export interface BaseWorkspaceProps {
   hasSubmitted?: boolean;
   confirmSubmit?: boolean;
   isArena?: boolean;
+  hideRun?: boolean;
 }
 
 // ConsolePanel.tsx
@@ -164,15 +166,16 @@ export interface ConsolePanelProps {
 // DescriptionPanel.tsx
 export interface DescriptionPanelProps {
   problem: Problem;
-  mode?: "practice" | "arena";
+  mode?: "practice" | "arena" | "exercise";
   room?: ArenaRoom | null;
   roomId?: string;
+  trackSlug?: string;
 }
 
 // EditorPanel.tsx
 export interface EditorPanelProps {
   problem: Problem;
-  mode?: "practice" | "arena";
+  mode?: "practice" | "arena" | "exercise";
   runResult?: (RunSubmissionResponse & { overallStatus?: ExecutionVerdict | "IDLE" }) | null;
   isRunning?: boolean;
   runError?: Error | string | null;
@@ -213,6 +216,8 @@ export interface SolutionViewerProps {
   officialSolution?: string;
   onAddSolution?: () => void;
   defaultTab?: string;
+  mode?: "practice" | "arena" | "exercise";
+  trackSlug?: string;
 }
 
 // SubmissionHistory.tsx
@@ -245,6 +250,8 @@ export interface WorkspaceHeaderProps {
   confirmSubmit?: boolean;
   /** Hide the Submit button entirely (e.g. Compiler Playground) */
   hideSubmit?: boolean;
+  /** Hide the Run button entirely (e.g. Academy mode) */
+  hideRun?: boolean;
   onToggleScratchpad?: () => void;
   isScratchpadOpen?: boolean;
   isArena?: boolean;

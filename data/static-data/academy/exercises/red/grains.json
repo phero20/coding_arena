@@ -1,0 +1,29 @@
+{
+  "id": "red:grains",
+  "trackSlug": "red",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "668915db-bc3d-4ff4-a339-174ed2f35940",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "errors",
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard given that the number on each square doubles.\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chess board, with the number of grains doubling on each successive square.\n\nThere are 64 squares on a chessboard (where square 1 has one grain, square 2 has two grains, and so on).\n\nWrite code that shows:\n\n- how many grains were on a given square, and\n- the total number of grains on the chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Grains\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nsquare: function [\n\tsquare\n] [\n\tcause-error 'user 'message \"You need to implement square function.\"\n]\n\ntotal: function [] [\n\tcause-error 'user 'message \"You need to implement total function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Grains\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nsquare: function [\n\t\"Returns the number of grains on a given square\"\n\tsquare [integer!]\n\treturn: [integer!]\n] [\n\tif (square < 1) or (square > 64) [\n\t\tcause-error 'user 'message \"square must be between 1 and 64\"\n\t]\n\n\tpower 2 (square - 1)\n]\n\ntotal: function [\n\t\"Returns the total number of grains on a chessboard\"\n\treturn: [integer!]\n] [\n\t(power 2 64) - 1\n]\n\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Grains\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\n test-init/limit %grains.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"grains on square 1\"\n    input: #[\n        square: 1\n    ]\n    expected: 1\n    function: \"square\"\n    uuid: \"9fbde8de-36b2-49de-baf2-cd42d6f28405\"\n] #[\n    description: \"grains on square 2\"\n    input: #[\n        square: 2\n    ]\n    expected: 2\n    function: \"square\"\n    uuid: \"ee1f30c2-01d8-4298-b25d-c677331b5e6d\"\n] #[\n    description: \"grains on square 3\"\n    input: #[\n        square: 3\n    ]\n    expected: 4\n    function: \"square\"\n    uuid: \"10f45584-2fc3-4875-8ec6-666065d1163b\"\n] #[\n    description: \"grains on square 4\"\n    input: #[\n        square: 4\n    ]\n    expected: 8\n    function: \"square\"\n    uuid: \"a7cbe01b-36f4-4601-b053-c5f6ae055170\"\n] #[\n    description: \"grains on square 16\"\n    input: #[\n        square: 16\n    ]\n    expected: 32768\n    function: \"square\"\n    uuid: \"c50acc89-8535-44e4-918f-b848ad2817d4\"\n] #[\n    description: \"grains on square 32\"\n    input: #[\n        square: 32\n    ]\n    expected: 2147483648.0\n    function: \"square\"\n    uuid: \"acd81b46-c2ad-4951-b848-80d15ed5a04f\"\n] #[\n    description: \"grains on square 64\"\n    input: #[\n        square: 64\n    ]\n    expected: 9.223372036854776e18\n    function: \"square\"\n    uuid: \"c73b470a-5efb-4d53-9ac6-c5f6487f227b\"\n] #[\n    description: \"square 0 is invalid\"\n    input: #[\n        square: 0\n    ]\n    expected: #[\n        error: \"square must be between 1 and 64\"\n    ]\n    function: \"square\"\n    uuid: \"1d47d832-3e85-4974-9466-5bd35af484e3\"\n] #[\n    description: \"negative square is invalid\"\n    input: #[\n        square: -1\n    ]\n    expected: #[\n        error: \"square must be between 1 and 64\"\n    ]\n    function: \"square\"\n    uuid: \"61974483-eeb2-465e-be54-ca5dde366453\"\n] #[\n    description: \"square greater than 64 is invalid\"\n    input: #[\n        square: 65\n    ]\n    expected: #[\n        error: \"square must be between 1 and 64\"\n    ]\n    function: \"square\"\n    uuid: \"a95e4374-f32c-45a7-a10d-ffec475c012f\"\n] #[\n    description: \"returns the total number of grains on the board\"\n    input: #[]\n    expected: 18446744073709551615\n    function: \"total\"\n    uuid: \"6eb07385-3659-4b45-a6be-9dc474222750\"\n]]\n\n\nforeach c-case canonical-cases [\n\texpect-code: compose [\n\t\t(to word! c-case/function) (values-of c-case/input)\n\t]\n\tcase-code: reduce\n\t\teither all [\n\t\t\tmap? c-case/expected\n\t\t\tstring? c-case/expected/error\n\t\t] [\n\t\t\t['expect-error/message quote 'user expect-code c-case/expected/error]\n\t\t] [\n\t\t\t['expect c-case/expected expect-code]\n\t\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

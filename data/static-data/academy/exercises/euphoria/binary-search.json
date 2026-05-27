@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:binary-search",
+  "trackSlug": "euphoria",
+  "slug": "binary-search",
+  "name": "Binary Search",
+  "uuid": "223011f0-eb1a-4b5a-9868-6b45958c150a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a binary search algorithm.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to implement a binary search algorithm.\n\nA binary search algorithm finds an item in a list by repeatedly splitting it in half, only keeping the half which contains the item we're looking for.\nIt allows us to quickly narrow down the possible locations of our item until we find it, or until we've eliminated all possible locations.\n\n~~~~exercism/caution\nBinary search only works when a list has been sorted.\n~~~~\n\nThe algorithm looks like this:\n\n- Find the middle element of a _sorted_ list and compare it with the item we're looking for.\n- If the middle element is our item, then we're done!\n- If the middle element is greater than our item, we can eliminate that element and all the elements **after** it.\n- If the middle element is less than our item, we can eliminate that element and all the elements **before** it.\n- If every element of the list has been eliminated then the item is not in the list.\n- Otherwise, repeat the process on the part of the list that has not been eliminated.\n\nHere's an example:\n\nLet's say we're looking for the number 23 in the following sorted list: `[4, 8, 12, 16, 23, 28, 32]`.\n\n- We start by comparing 23 with the middle element, 16.\n- Since 23 is greater than 16, we can eliminate the left half of the list, leaving us with `[23, 28, 32]`.\n- We then compare 23 with the new middle element, 28.\n- Since 23 is less than 28, we can eliminate the right half of the list: `[23]`.\n- We've found our item.\n",
+  "introduction": "# Introduction\n\nYou have stumbled upon a group of mathematicians who are also singer-songwriters.\nThey have written a song for each of their favorite numbers, and, as you can imagine, they have a lot of favorite numbers (like [0][zero] or [73][seventy-three] or [6174][kaprekars-constant]).\n\nYou are curious to hear the song for your favorite number, but with so many songs to wade through, finding the right song could take a while.\nFortunately, they have organized their songs in a playlist sorted by the title — which is simply the number that the song is about.\n\nYou realize that you can use a binary search algorithm to quickly find a song given the title.\n\n[zero]: https://en.wikipedia.org/wiki/0\n[seventy-three]: https://en.wikipedia.org/wiki/73_(number)\n[kaprekars-constant]: https://en.wikipedia.org/wiki/6174_(number)\n",
+  "hints": null,
+  "starter_code": "public function my_find(sequence values, atom value)\n\nend function\n",
+  "example_solution": "include std/math.e\ninclude std/sequence.e\n\npublic function my_find(sequence values, atom value)\n  integer start = 1\n  integer stop = length(values)\n\n  while start <= stop do\n    integer index = trunc((start + stop) / 2)\n    atom item = values[index]\n    if item = value then\n      return index\n    elsif item < value then\n        start = index + 1\n    else\n        stop = index - 1\n    end if\n  end while\n\n  return -1\nend function\n",
+  "test_code": "include std/unittest.e\n\ninclude binary-search.ex\n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"finds a value in a sequence with one element\",\n            1,\n            my_find({6}, 6))\ntest_equal(\"finds a value in the middle of a sequence\",\n            4,\n            my_find({1, 3, 4, 6, 8, 9, 11}, 6))\ntest_equal(\"finds a value at the beginning of a sequence\",\n            1,\n            my_find({1, 3, 4, 6, 8, 9, 11}, 1))\ntest_equal(\"finds a value at the end of a sequence\",\n            7,\n            my_find({1, 3, 4, 6, 8, 9, 11}, 11))\ntest_equal(\"finds a value in a sequence of odd length\",\n            10,\n            my_find({1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 634}, 144))\ntest_equal(\"finds a value in a sequence of even length\",\n            6,\n            my_find({1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377}, 21))\ntest_equal(\"identifies that a value is not included in the sequence\",\n            -1,\n            my_find({1, 3, 4, 6, 8, 9, 11}, 7))\ntest_equal(\"a value smaller than the sequence's smallest value is not found\",\n            -1,\n            my_find({1, 3, 4, 6, 8, 9, 11}, 0))\ntest_equal(\"a value smaller than the sequence's largest value is not found\",\n            -1,\n            my_find({1, 3, 4, 6, 8, 9, 11}, 13))\ntest_equal(\"nothing is found in an empty array\",\n            -1,\n            my_find({}, 1))\ntest_equal(\"nothing is found when the left and right bounds cross\",\n            -1,\n            my_find({1, 2}, 0))\n\ntest_report()\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

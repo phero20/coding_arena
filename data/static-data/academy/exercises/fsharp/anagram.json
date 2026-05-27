@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:anagram",
+  "trackSlug": "fsharp",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "cffcb076-295f-497f-8ef1-059a8fa65536",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "classes",
+    "strings"
+  ],
+  "prerequisites": [
+    "classes",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "module Anagram\n\nlet findAnagrams sources target = failwith \"You need to implement this function.\"",
+  "example_solution": "module Anagram\n\nopen System\n\nlet normalize (str:string) = new string(str.ToLowerInvariant().ToCharArray() |> Array.sort)    \nlet unequal str other = not (String.Equals(str, other, StringComparison.InvariantCultureIgnoreCase))\n       \nlet findAnagrams sources target = \n    let normalizedTarget = normalize target\n    let isMatch str = normalize str = normalizedTarget && unequal str target\n    \n    List.filter isMatch sources",
+  "test_code": "module AnagramTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Anagram\n\n[<Fact>]\nlet ``No matches`` () =\n    let candidates = [\"hello\"; \"world\"; \"zombies\"; \"pants\"]\n    findAnagrams candidates \"diaper\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects two anagrams`` () =\n    let candidates = [\"lemons\"; \"cherry\"; \"melons\"]\n    findAnagrams candidates \"solemn\" |> should equal [\"lemons\"; \"melons\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Does not detect anagram subsets`` () =\n    let candidates = [\"dog\"; \"goody\"]\n    findAnagrams candidates \"good\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects anagram`` () =\n    let candidates = [\"enlists\"; \"google\"; \"inlets\"; \"banana\"]\n    findAnagrams candidates \"listen\" |> should equal [\"inlets\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects three anagrams`` () =\n    let candidates = [\"gallery\"; \"ballerina\"; \"regally\"; \"clergy\"; \"largely\"; \"leading\"]\n    findAnagrams candidates \"allergy\" |> should equal [\"gallery\"; \"regally\"; \"largely\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects multiple anagrams with different case`` () =\n    let candidates = [\"Eons\"; \"ONES\"]\n    findAnagrams candidates \"nose\" |> should equal [\"Eons\"; \"ONES\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Does not detect non-anagrams with identical checksum`` () =\n    let candidates = [\"last\"]\n    findAnagrams candidates \"mass\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects anagrams case-insensitively`` () =\n    let candidates = [\"cashregister\"; \"Carthorse\"; \"radishes\"]\n    findAnagrams candidates \"Orchestra\" |> should equal [\"Carthorse\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects anagrams using case-insensitive subject`` () =\n    let candidates = [\"cashregister\"; \"carthorse\"; \"radishes\"]\n    findAnagrams candidates \"Orchestra\" |> should equal [\"carthorse\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Detects anagrams using case-insensitive possible matches`` () =\n    let candidates = [\"cashregister\"; \"Carthorse\"; \"radishes\"]\n    findAnagrams candidates \"orchestra\" |> should equal [\"Carthorse\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Does not detect an anagram if the original word is repeated`` () =\n    let candidates = [\"goGoGO\"]\n    findAnagrams candidates \"go\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Anagrams must use all letters exactly once`` () =\n    let candidates = [\"patter\"]\n    findAnagrams candidates \"tapper\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Words are not anagrams of themselves`` () =\n    let candidates = [\"BANANA\"]\n    findAnagrams candidates \"BANANA\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Words are not anagrams of themselves even if letter case is partially different`` () =\n    let candidates = [\"Banana\"]\n    findAnagrams candidates \"BANANA\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Words are not anagrams of themselves even if letter case is completely different`` () =\n    let candidates = [\"banana\"]\n    findAnagrams candidates \"BANANA\" |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Words other than themselves can be anagrams`` () =\n    let candidates = [\"LISTEN\"; \"Silent\"]\n    findAnagrams candidates \"LISTEN\" |> should equal [\"Silent\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Handles case of greek letters`` () =\n    let candidates = [\"ΒΓΑ\"; \"ΒΓΔ\"; \"γβα\"; \"αβγ\"]\n    findAnagrams candidates \"ΑΒΓ\" |> should equal [\"ΒΓΑ\"; \"γβα\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Different characters may have the same bytes`` () =\n    let candidates = [\"€a\"]\n    findAnagrams candidates \"a⬂\" |> should be Empty\n\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "jwood803",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

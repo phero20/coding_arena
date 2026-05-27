@@ -1,0 +1,28 @@
+{
+  "id": "nim:acronym",
+  "trackSlug": "nim",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "cc35f8f2-488e-40f7-adcd-1e690cabc6f8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc abbreviate*(s: string): string =\n  discard\n",
+  "example_solution": "import std/strutils\n\nfunc abbreviate*(s: string): string =\n  result = \"\"\n  for i in 0 ..< s.len:\n    if s[i] in {'A'..'Z', 'a'..'z'}:\n      if i == 0 or s[i-1] in {' ', '-', '_'}:\n        result.add s[i].toUpperAscii()\n",
+  "test_code": "import unittest\nimport acronym\n\nsuite \"Acronym\":\n  test \"basic\":\n    check abbreviate(\"Portable Network Graphics\") == \"PNG\"\n\n  test \"lowercase words\":\n    check abbreviate(\"Ruby on Rails\") == \"ROR\"\n\n  test \"punctuation\":\n    check abbreviate(\"First In, First Out\") == \"FIFO\"\n\n  test \"all caps word\":\n    check abbreviate(\"GNU Image Manipulation Program\") == \"GIMP\"\n\n  test \"punctuation without whitespace\":\n    check abbreviate(\"Complementary metal-oxide semiconductor\") == \"CMOS\"\n\n  test \"very long abbreviation\":\n    check abbreviate(\"Rolling On The Floor Laughing So Hard That \" &\n                     \"My Dogs Came Over And Licked Me\") == \"ROTFLSHTMDCOALM\"\n\n  test \"consecutive delimiters\":\n    check abbreviate(\"Something - I made up from thin air\") == \"SIMUFTA\"\n\n  test \"apostrophes\":\n    check abbreviate(\"Halley's Comet\") == \"HC\"\n\n  test \"underscore emphasis\":\n    check abbreviate(\"The Road _Not_ Taken\") == \"TRNT\"\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

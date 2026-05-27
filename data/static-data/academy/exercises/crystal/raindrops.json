@@ -1,0 +1,31 @@
+{
+  "id": "crystal:raindrops",
+  "trackSlug": "crystal",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "a1a95816-b9e8-480e-beca-477531cdaa4c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "conditionals"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "class Raindrops\n  def self.convert(num : Int32) : String\n    # Write your code for the 'Raindrops' exercise in this file.\n  end\nend\n",
+  "example_solution": "class Raindrops\n  def self.convert(num : Int32)\n    drops = String.build do |str|\n      str << \"Pling\" if num % 3 == 0\n      str << \"Plang\" if num % 5 == 0\n      str << \"Plong\" if num % 7 == 0\n    end\n    drops.empty? ? num.to_s : drops\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Raindrops\" do\n  it \"the sound for 1 is 1\" do\n    Raindrops.convert(1).should eq(\"1\")\n  end\n\n  pending \"the sound for 3 is Pling\" do\n    Raindrops.convert(3).should eq(\"Pling\")\n  end\n\n  pending \"the sound for 5 is Plang\" do\n    Raindrops.convert(5).should eq(\"Plang\")\n  end\n\n  pending \"the sound for 7 is Plong\" do\n    Raindrops.convert(7).should eq(\"Plong\")\n  end\n\n  pending \"the sound for 6 is Pling as it has a factor 3\" do\n    Raindrops.convert(6).should eq(\"Pling\")\n  end\n\n  pending \"2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base\" do\n    Raindrops.convert(8).should eq(\"8\")\n  end\n\n  pending \"the sound for 9 is Pling as it has a factor 3\" do\n    Raindrops.convert(9).should eq(\"Pling\")\n  end\n\n  pending \"the sound for 10 is Plang as it has a factor 5\" do\n    Raindrops.convert(10).should eq(\"Plang\")\n  end\n\n  pending \"the sound for 14 is Plong as it has a factor of 7\" do\n    Raindrops.convert(14).should eq(\"Plong\")\n  end\n\n  pending \"the sound for 15 is PlingPlang as it has factors 3 and 5\" do\n    Raindrops.convert(15).should eq(\"PlingPlang\")\n  end\n\n  pending \"the sound for 21 is PlingPlong as it has factors 3 and 7\" do\n    Raindrops.convert(21).should eq(\"PlingPlong\")\n  end\n\n  pending \"the sound for 25 is Plang as it has a factor 5\" do\n    Raindrops.convert(25).should eq(\"Plang\")\n  end\n\n  pending \"the sound for 27 is Pling as it has a factor 3\" do\n    Raindrops.convert(27).should eq(\"Pling\")\n  end\n\n  pending \"the sound for 35 is PlangPlong as it has factors 5 and 7\" do\n    Raindrops.convert(35).should eq(\"PlangPlong\")\n  end\n\n  pending \"the sound for 49 is Plong as it has a factor 7\" do\n    Raindrops.convert(49).should eq(\"Plong\")\n  end\n\n  pending \"the sound for 52 is 52\" do\n    Raindrops.convert(52).should eq(\"52\")\n  end\n\n  pending \"the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7\" do\n    Raindrops.convert(105).should eq(\"PlingPlangPlong\")\n  end\n\n  pending \"the sound for 3125 is Plang as it has a factor 5\" do\n    Raindrops.convert(3125).should eq(\"Plang\")\n  end\nend\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "mhelmetag"
+  ],
+  "contributors": [
+    "amscotti",
+    "issyl0"
+  ]
+}

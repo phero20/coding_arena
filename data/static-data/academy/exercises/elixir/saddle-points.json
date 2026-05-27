@@ -1,0 +1,43 @@
+{
+  "id": "elixir:saddle-points",
+  "trackSlug": "elixir",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "8e5c050a-ff42-4a23-ba32-84595b7476f4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "maps"
+  ],
+  "prerequisites": [
+    "lists",
+    "strings",
+    "enum",
+    "maps"
+  ],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n      ↓\n      1  2  3  4\n    |-----------\n  1 | 9  8  7  8\n→ 2 |[5] 3  2  4\n  3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "defmodule SaddlePoints do\n  @doc \"\"\"\n  Parses a string representation of a matrix\n  to a list of rows\n  \"\"\"\n  @spec rows(String.t()) :: [[integer]]\n  def rows(str) do\n  end\n\n  @doc \"\"\"\n  Parses a string representation of a matrix\n  to a list of columns\n  \"\"\"\n  @spec columns(String.t()) :: [[integer]]\n  def columns(str) do\n  end\n\n  @doc \"\"\"\n  Calculates all the saddle points from a string\n  representation of a matrix\n  \"\"\"\n  @spec saddle_points(String.t()) :: [{integer, integer}]\n  def saddle_points(str) do\n  end\nend\n",
+  "example_solution": "defmodule SaddlePoints do\n  @doc \"\"\"\n  Parses a string representation of a matrix\n  to a list of rows\n  \"\"\"\n  @spec rows(String.t()) :: [[integer]]\n  def rows(str) do\n    str\n    |> String.split(\"\\n\", trim: true)\n    |> Enum.map(&parse_row/1)\n  end\n\n  defp parse_row(str) do\n    str\n    |> String.split(\" \", trim: true)\n    |> Enum.map(&String.to_integer/1)\n  end\n\n  @doc \"\"\"\n  Parses a string representation of a matrix\n  to a list of columns\n  \"\"\"\n  @spec columns(String.t()) :: [[integer]]\n  def columns(str) do\n    str\n    |> rows\n    |> Enum.zip()\n    |> Enum.map(&Tuple.to_list/1)\n  end\n\n  @doc \"\"\"\n  Calculates all the saddle points from a string\n  representation of a matrix\n  \"\"\"\n  @spec saddle_points(String.t()) :: [{integer, integer}]\n  def saddle_points(str) do\n    rows = rows(str)\n    columns = columns(str)\n\n    rows\n    |> generate_coordinates\n    |> Enum.filter(&is_saddle_point?(&1, rows, columns))\n    |> Enum.map(fn {x, y} -> {x + 1, y + 1} end)\n  end\n\n  defp is_saddle_point?(point, rows, columns) do\n    max_in_row?(point, rows) && min_in_column?(point, columns)\n  end\n\n  defp max_in_row?({x, y}, rows) do\n    row = Enum.at(rows, x)\n    Enum.at(row, y) == Enum.max(row)\n  end\n\n  defp min_in_column?({x, y}, columns) do\n    column = Enum.at(columns, y)\n    Enum.at(column, x) == Enum.min(column)\n  end\n\n  defp generate_coordinates(rows) do\n    rows\n    |> Enum.with_index()\n    |> Enum.flat_map(&generate_coordinates_row/1)\n  end\n\n  defp generate_coordinates_row({row, row_index}) do\n    row\n    |> Enum.with_index()\n    |> Enum.map(fn {_, col_index} -> {row_index, col_index} end)\n  end\nend\n",
+  "test_code": "defmodule SaddlePointsTest do\n  use ExUnit.Case\n\n  describe \"rows\" do\n    # @tag :pending\n    test \"extract rows\" do\n      rows = SaddlePoints.rows(\"1 2\\n10 20\")\n      assert rows == [[1, 2], [10, 20]]\n    end\n\n    @tag :pending\n    test \"extract a row\" do\n      rows = SaddlePoints.rows(\"9 7\\n8 6\")\n      assert Enum.at(rows, 0) == [9, 7]\n    end\n\n    @tag :pending\n    test \"extract other row\" do\n      rows = SaddlePoints.rows(\"9 8 7\\n19 18 17\")\n      assert Enum.at(rows, 1) == [19, 18, 17]\n    end\n\n    @tag :pending\n    test \"extract other row again\" do\n      rows = SaddlePoints.rows(\"1 4 9\\n16 25 36\")\n      assert Enum.at(rows, 1) == [16, 25, 36]\n    end\n\n    @tag :pending\n    test \"empty matrix has no rows\" do\n      rows = SaddlePoints.rows(\"\")\n      assert rows == []\n    end\n  end\n\n  describe \"columns\" do\n    @tag :pending\n    test \"extract a column\" do\n      columns = SaddlePoints.columns(\"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\")\n      assert Enum.at(columns, 0) == [1, 4, 7, 8]\n    end\n\n    @tag :pending\n    test \"extract another column\" do\n      columns = SaddlePoints.columns(\"89 1903 3\\n18 3 1\\n9 4 800\")\n      assert Enum.at(columns, 1) == [1903, 3, 4]\n    end\n\n    @tag :pending\n    test \"empty matrix has no columns\" do\n      columns = SaddlePoints.columns(\"\")\n      assert columns == []\n    end\n  end\n\n  describe \"saddle_points\" do\n    @tag :pending\n    test \"a saddle point\" do\n      saddle_points = SaddlePoints.saddle_points(\"9 8 1\\n5 3 2\\n6 6 7\")\n      assert saddle_points == [{2, 1}]\n    end\n\n    @tag :pending\n    test \"another saddle point\" do\n      saddle_points = SaddlePoints.saddle_points(\"18 3 39 19 91\\n38 10 8 77 320\\n3 4 8 6 7\")\n      assert saddle_points == [{3, 3}]\n    end\n\n    @tag :pending\n    test \"empty matrix has no saddle points\" do\n      saddle_points = SaddlePoints.saddle_points(\"\")\n      assert saddle_points == []\n    end\n\n    @tag :pending\n    test \"no saddle point\" do\n      saddle_points = SaddlePoints.saddle_points(\"1 2 3\\n3 1 2\\n2 3 1\")\n      assert saddle_points == []\n    end\n\n    @tag :pending\n    test \"multiple saddle points\" do\n      saddle_points = SaddlePoints.saddle_points(\"4 5 4\\n3 5 5\\n1 5 4\")\n      assert saddle_points == [{1, 2}, {2, 2}, {3, 2}]\n    end\n\n    @tag :pending\n    test \"multiple saddle points in a row\" do\n      saddle_points = SaddlePoints.saddle_points(\"6 7 7\\n5 5 5\\n7 5 6\")\n      assert saddle_points == [{2, 1}, {2, 2}, {2, 3}]\n    end\n\n    @tag :pending\n    test \"saddle point in bottom right corner\" do\n      saddle_points = SaddlePoints.saddle_points(\"8 7 9\\n6 7 6\\n3 2 5\")\n      assert saddle_points == [{3, 3}]\n    end\n\n    @tag :pending\n    test \"saddle points in a non square matrix\" do\n      saddle_points = SaddlePoints.saddle_points(\"3 1 3\\n3 2 4\")\n      assert saddle_points == [{1, 1}, {1, 3}]\n    end\n\n    @tag :pending\n    test \"saddle points in a single column matrix are those with the minimum value\" do\n      saddle_points = SaddlePoints.saddle_points(\"2\\n1\\n4\\n1\")\n      assert saddle_points == [{2, 1}, {4, 1}]\n    end\n\n    @tag :pending\n    test \"saddle points in a single row matrix are those with the maximum value\" do\n      saddle_points = SaddlePoints.saddle_points(\"2 5 3 5\")\n      assert saddle_points == [{1, 2}, {1, 4}]\n    end\n  end\nend\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "dalexj"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "DoggettCK",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "waiting-for-dev"
+  ]
+}

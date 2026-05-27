@@ -1,0 +1,31 @@
+{
+  "id": "java:tim-from-marketing",
+  "trackSlug": "java",
+  "slug": "tim-from-marketing",
+  "name": "Tim from Marketing",
+  "uuid": "28bd20c5-4fdd-4660-9225-54f24aae24e4",
+  "type": "concept",
+  "status": "active",
+  "blurb": "Learn about the null literal and nullable variables in java by printing name badges.",
+  "difficulty": null,
+  "concepts": [
+    "nullability"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "if-else-statements",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nIn this exercise you'll be writing code to print name badges for factory employees.\n\n## 1. Print a badge for an employee\n\nEmployees have an ID, name and department name. Employee badge labels are formatted as follows: `\"[id] - name - DEPARTMENT\"`.\nImplement the `Badge.print()` method to return an employee's badge label:\n\n```java\nBadge badge = new Badge();\nbadge.print(734, \"Ernest Johnny Payne\", \"Strategic Communication\");\n// => \"[734] - Ernest Johnny Payne - STRATEGIC COMMUNICATION\"\n```\n\nNote that the department should be uppercased on the label.\n\n## 2. Print a badge for a new employee\n\nDue to a quirk in the computer system, new employees occasionally don't yet have an ID when they start working at the factory.\nAs badges are required, they will receive a temporary badge without the ID prefix. Modify the `Badge.print()` method to support new employees that don't yet have an ID:\n\n```java\nBadge badge = new Badge();\nBadge.print(null, \"Jane Johnson\", \"Procurement\");\n// => \"Jane Johnson - PROCUREMENT\"\n```\n\n## 3. Print a badge for the owner\n\nEven the factory's owner has to wear a badge at all times.\nHowever, an owner does not have a department. In this case, the label should print `\"OWNER\"` instead of the department name.\nModify the `Badge.print()` method to print a label for the owner:\n\n```java\nBadge badge = new Badge();\nbadge.print(254, \"Charlotte Hale\", null);\n// => \"[254] - Charlotte Hale - OWNER\"\n```\n\nNote that it is possible for the owner to also be a new employee:\n\n```java\nBadge badge = new Badge();\nbadge.print(null, \"Charlotte Hale\", null);\n// => \"Charlotte Hale - OWNER\"\n```\n",
+  "introduction": "# Introduction\n\n## Nullability\n\nIn Java, the `null` literal is used to denote the absence of a value.\n\nPrimitive data types in Java all have a default value and therefore can never be `null`.\nBy convention, they start with a lowercase letter e.g `int`.\n\nReference types contain the memory address of an object and can have a value of `null`.\nThey generally start with an uppercase letter, e.g. `String`.\n\nAttempting to assign a primitive variable a value of `null` will result in a compile time error as the variable always holds a primitive value of the type assigned.\n\n```java\n//Throws compile time error stating the required type is int, but null was provided\nint number = null;\n```\n\nAssigning a reference variable a `null` value will not result in a compile time error as reference variables are nullable.\n\n```java\n//No error will occur as the String variable str is nullable\nString str = null;\n```\n",
+  "hints": "# Hints\n\n## 1. Print a badge for an employee\n\n- [String interpolation][string-interpolation] can be used to create description strings.\n- There is a [built-in method to convert a string to uppercase][to-upper-case].\n\n## 2. Print a badge for a new employee\n\n- You should check if the ID is `null` before using it.\n- You can use the [equality operators][equality-operators] to compare the value to `null`\n\n## 3. Print a badge for the owner\n\n- You should check if the department is `null` before using it.\n- You can use the [equality operators][equality-operators] to compare the value to `null`\n\n[string-interpolation]: https://www.baeldung.com/java-string-interpolation\n[to-upper-case]:https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#toUpperCase--\n[equality-operators]: https://docs.oracle.com/cd/E21764_01/apirefs.1111/e17787/com/sigmadynamics/util/Null.html#isNull_java_lang_String_\n",
+  "starter_code": "class Badge {\n    public String print(Integer id, String name, String department) {\n        throw new UnsupportedOperationException(\"Please implement the Badge.print() method\");\n    }\n}\n",
+  "example_solution": "public class Badge {\n\n    public String print(Integer id, String name, String department) {\n\n        String worksAt;\n\n        if (department == null) {\n            worksAt = \"OWNER\";\n        } else {\n            worksAt = department.toUpperCase();\n        }\n\n        if (id == null) {\n            return name + \" - \" + worksAt;\n        }\n\n        return \"[\" + id + \"] - \" + name + \" - \" + worksAt;\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Tag;\nimport org.junit.jupiter.api.Test;\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class BadgeTest {\n\n    @Test\n    @Tag(\"task:1\")\n    @DisplayName(\"Printing a badge for an employee\")\n    public void labelForEmployee() {\n        Badge badge = new Badge();\n        assertThat(badge.print(17, \"Ryder Herbert\", \"Marketing\"))\n                .isEqualTo(\"[17] - Ryder Herbert - MARKETING\");\n    }\n\n    @Test\n    @Tag(\"task:2\")\n    @DisplayName(\"Printing a badge for a new employee\")\n    public void labelForNewEmployee() {\n        Badge badge = new Badge();\n        assertThat(badge.print(null, \"Bogdan Rosario\", \"Marketing\")).isEqualTo(\"Bogdan Rosario - MARKETING\");\n    }\n\n    @Test\n    @Tag(\"task:3\")\n    @DisplayName(\"Printing a badge for the owner\")\n    public void labelForOwner() {\n        Badge badge = new Badge();\n        assertThat(badge.print(59, \"Julie Sokato\", null)).isEqualTo(\"[59] - Julie Sokato - OWNER\");\n    }\n\n    @Test\n    @Tag(\"task:3\")\n    @DisplayName(\"Printing a badge for the owner who is a new employee\")\n    public void labelForNewOwner() {\n        Badge badge = new Badge();\n        assertThat(badge.print(null, \"Amare Osei\", null)).isEqualTo(\"Amare Osei - OWNER\");\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "smcg468"
+  ],
+  "contributors": null
+}

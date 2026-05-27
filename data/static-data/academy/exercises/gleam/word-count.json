@@ -1,0 +1,32 @@
+{
+  "id": "gleam:word-count",
+  "trackSlug": "gleam",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "0c7a2f06-1e53-4043-9e1a-386e90e945b4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "dicts"
+  ],
+  "prerequisites": [
+    "lists",
+    "strings",
+    "dicts"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "import gleam/dict.{type Dict}\n\npub fn count_words(input: String) -> Dict(String, Int) {\n  todo\n}\n",
+  "example_solution": "import gleam/dict.{type Dict}\nimport gleam/list\nimport gleam/option\nimport gleam/regexp\nimport gleam/string\n\npub fn count_words(input: String) -> Dict(String, Int) {\n  let assert Ok(re) = regexp.from_string(\"[a-z0-9]+('[a-z0-9]+)?\")\n  input\n  |> string.lowercase\n  |> regexp.scan(re, _)\n  |> list.map(fn(m) { m.content })\n  |> list.fold(dict.new(), increment)\n}\n\nfn increment(counts: Dict(String, Int), word: String) -> Dict(String, Int) {\n  dict.upsert(counts, word, fn(previous) { option.unwrap(previous, 0) + 1 })\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport gleam/dict\nimport word_count\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn count_one_word_test() {\n  \"word\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"word\", 1)]))\n}\n\npub fn count_one_of_each_word_test() {\n  \"one of each\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"one\", 1), #(\"of\", 1), #(\"each\", 1)]))\n}\n\npub fn multiple_occurrences_of_a_word_test() {\n  \"one fish two fish red fish blue fish\"\n  |> word_count.count_words\n  |> should.equal(\n    dict.from_list([\n      #(\"one\", 1),\n      #(\"fish\", 4),\n      #(\"two\", 1),\n      #(\"red\", 1),\n      #(\"blue\", 1),\n    ]),\n  )\n}\n\npub fn handles_cramped_lists_test() {\n  \"one,two,three\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"one\", 1), #(\"two\", 1), #(\"three\", 1)]))\n}\n\npub fn handles_expanded_lists_test() {\n  \"one,\\ntwo,\\nthree\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"one\", 1), #(\"two\", 1), #(\"three\", 1)]))\n}\n\npub fn ignore_punctuation_test() {\n  \"car: carpet as java: javascript!!&@$%^&\"\n  |> word_count.count_words\n  |> should.equal(\n    dict.from_list([\n      #(\"car\", 1),\n      #(\"carpet\", 1),\n      #(\"as\", 1),\n      #(\"java\", 1),\n      #(\"javascript\", 1),\n    ]),\n  )\n}\n\npub fn include_numbers_test() {\n  \"testing, 1, 2 testing\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"testing\", 2), #(\"1\", 1), #(\"2\", 1)]))\n}\n\npub fn normalize_case_test() {\n  \"go Go GO Stop stop\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"go\", 3), #(\"stop\", 2)]))\n}\n\npub fn with_apostrophes_test() {\n  \"'First: don't laugh. Then: don't cry. You're getting it.'\"\n  |> word_count.count_words\n  |> should.equal(\n    dict.from_list([\n      #(\"first\", 1),\n      #(\"don't\", 2),\n      #(\"laugh\", 1),\n      #(\"then\", 1),\n      #(\"cry\", 1),\n      #(\"you're\", 1),\n      #(\"getting\", 1),\n      #(\"it\", 1),\n    ]),\n  )\n}\n\npub fn with_quotations_test() {\n  \"Joe can't tell between 'large' and large.\"\n  |> word_count.count_words\n  |> should.equal(\n    dict.from_list([\n      #(\"joe\", 1),\n      #(\"can't\", 1),\n      #(\"tell\", 1),\n      #(\"between\", 1),\n      #(\"large\", 2),\n      #(\"and\", 1),\n    ]),\n  )\n}\n\npub fn substrings_from_the_beginning_test() {\n  \"Joe can't tell between app, apple and a.\"\n  |> word_count.count_words\n  |> should.equal(\n    dict.from_list([\n      #(\"joe\", 1),\n      #(\"can't\", 1),\n      #(\"tell\", 1),\n      #(\"between\", 1),\n      #(\"app\", 1),\n      #(\"apple\", 1),\n      #(\"and\", 1),\n      #(\"a\", 1),\n    ]),\n  )\n}\n\npub fn multiple_spaces_not_detected_as_a_word_test() {\n  \" multiple   whitespaces\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"multiple\", 1), #(\"whitespaces\", 1)]))\n}\n\npub fn alternating_word_separators_not_detected_as_a_word_test() {\n  \",\\n,one,\\n ,two \\n 'three'\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"one\", 1), #(\"two\", 1), #(\"three\", 1)]))\n}\n\npub fn quotation_for_word_with_apostrophe_test() {\n  \"can, can't, 'can't'\"\n  |> word_count.count_words\n  |> should.equal(dict.from_list([#(\"can\", 1), #(\"can't\", 2)]))\n}\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "lpil"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "common-lisp:pangram",
+  "trackSlug": "common-lisp",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "43760aca-393a-4cb2-9c5a-62a2d1e34032",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "filtering"
+  ],
+  "prerequisites": [
+    "filtering",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "(defpackage :pangram\n  (:use :cl)\n  (:export :pangramp))\n\n(in-package :pangram)\n\n(defun pangramp (sentence))\n",
+  "example_solution": "(defpackage :pangram\n  (:use :cl)\n  (:export :pangramp))\n\n(in-package :pangram)\n\n(defun pangramp (sentence)\n (let ((filtered (remove-if-not #'alpha-char-p (string-downcase sentence))))\n   (= 26 (length (remove-duplicates filtered)))))\n",
+  "test_code": ";; Ensures that pangram.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"pangram\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from pangram and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :pangram-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :pangram-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* pangram-suite)\n\n(test empty-sentence\n    (let ((sentence \"\"))\n      (is-false (pangram:pangramp sentence))))\n\n(test perfect-lower-case\n    (let ((sentence \"abcdefghijklmnopqrstuvwxyz\"))\n      (is-true (pangram:pangramp sentence))))\n\n(test only-lower-case\n    (let ((sentence \"the quick brown fox jumps over the lazy dog\"))\n      (is-true (pangram:pangramp sentence))))\n\n(test missing-the-letter-x\n    (let ((sentence \"a quick movement of the enemy will jeopardize five gunboats\"))\n      (is-false (pangram:pangramp sentence))))\n\n(test missing-the-letter-h\n    (let ((sentence \"five boxing wizards jump quickly at it\"))\n      (is-false (pangram:pangramp sentence))))\n\n(test with-underscores\n    (let ((sentence \"the_quick_brown_fox_jumps_over_the_lazy_dog\"))\n      (is-true (pangram:pangramp sentence))))\n\n(test with-numbers\n    (let ((sentence \"the 1 quick brown fox jumps over the 2 lazy dogs\"))\n      (is-true (pangram:pangramp sentence))))\n\n(test missing-letters-replaced-by-numbers\n    (let ((sentence \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"))\n      (is-false (pangram:pangramp sentence))))\n\n(test mixed-case-and-punctuation\n    (let ((sentence \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"))\n      (is-true (pangram:pangramp sentence))))\n\n(test case-insensitive\n    (let ((sentence \"the quick brown fox jumps over with lazy FX\"))\n      (is-false (pangram:pangramp sentence))))\n\n(test a-m-and-a-m-are-26-different-characters-but-not-a-pangram\n    (let ((sentence \"abcdefghijklm ABCDEFGHIJKLM\"))\n      (is-false (pangram:pangramp sentence))))\n\n(defun run-tests (&optional (test-or-suite 'pangram-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": null
+}

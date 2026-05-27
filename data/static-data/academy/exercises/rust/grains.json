@@ -1,0 +1,42 @@
+{
+  "id": "rust:grains",
+  "trackSlug": "rust",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "9e69dd5d-472d-43d7-a8bb-60e4a7bed175",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "pub fn square(s: u32) -> u64 {\n    todo!(\"grains of rice on square {s}\");\n}\n\npub fn total() -> u64 {\n    todo!();\n}\n",
+  "example_solution": "pub fn square(s: u32) -> u64 {\n    if s == 0 || s > 64 {\n        panic!(\"Square must be between 1 and 64\");\n    }\n\n    2u64.pow(s - 1)\n}\n\npub fn total() -> u64 {\n    (1..65).fold(0, |acc, s| acc + square(s))\n}\n",
+  "test_code": "use grains::*;\n\n#[test]\nfn grains_on_square_1() {\n    assert_eq!(square(1), 1);\n}\n\n#[test]\n#[ignore]\nfn grains_on_square_2() {\n    assert_eq!(square(2), 2);\n}\n\n#[test]\n#[ignore]\nfn grains_on_square_3() {\n    assert_eq!(square(3), 4);\n}\n\n#[test]\n#[ignore]\nfn grains_on_square_4() {\n    assert_eq!(square(4), 8);\n}\n\n#[test]\n#[ignore]\nfn grains_on_square_16() {\n    assert_eq!(square(16), 32_768);\n}\n\n#[test]\n#[ignore]\nfn grains_on_square_32() {\n    assert_eq!(square(32), 2_147_483_648);\n}\n\n#[test]\n#[ignore]\nfn grains_on_square_64() {\n    assert_eq!(square(64), 9_223_372_036_854_775_808);\n}\n\n#[test]\n#[ignore]\n#[should_panic]\nfn square_0_is_invalid() {\n    square(0);\n}\n\n#[test]\n#[ignore]\n#[should_panic]\nfn square_greater_than_64_is_invalid() {\n    square(65);\n}\n#[test]\n#[ignore]\nfn returns_the_total_number_of_grains_on_the_board() {\n    assert_eq!(grains::total(), 18_446_744_073_709_551_615);\n}\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "IanWhitney"
+  ],
+  "contributors": [
+    "ClashTheBunny",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "krodyrobi",
+    "lutostag",
+    "navossoc",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "TheDarkula",
+    "xakon",
+    "ZapAnton"
+  ]
+}

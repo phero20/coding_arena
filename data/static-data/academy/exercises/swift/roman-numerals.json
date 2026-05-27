@@ -1,0 +1,36 @@
+{
+  "id": "swift:roman-numerals",
+  "trackSlug": "swift",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "942d0c4b-eaef-4576-b3f8-383757c53768",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "extension Int {\n  // Write your code for the 'RomanNumerals' exercise in this file.\n}\n",
+  "example_solution": "extension Int {\n    func toRomanNumeral() -> String {\n        let arabicToRoman = [1000: \"M\", 900: \"CM\", 500: \"D\", 400: \"CD\", 100: \"C\", 90: \"XC\", 50: \"L\", 40: \"XL\", 10: \"X\", 9: \"IX\", 5: \"V\", 4: \"IV\", 1: \"I\"]\n        var i = self\n        var s = \"\"\n        for arabic in arabicToRoman.keys.sorted(by: > ) {\n            while i >= arabic {\n                s += arabicToRoman[arabic] ?? \"\"\n                i -= arabic\n            }\n        }\n        return s\n    }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import RomanNumerals\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct RomanNumeralsTests {\n\n  @Test(\"1 is I\")\n  func test1IsI() {\n    #expect(1.toRomanNumeral() == \"I\")\n  }\n\n  @Test(\"2 is II\", .enabled(if: RUNALL))\n  func test2IsIi() {\n    #expect(2.toRomanNumeral() == \"II\")\n  }\n\n  @Test(\"3 is III\", .enabled(if: RUNALL))\n  func test3IsIii() {\n    #expect(3.toRomanNumeral() == \"III\")\n  }\n\n  @Test(\"4 is IV\", .enabled(if: RUNALL))\n  func test4IsIv() {\n    #expect(4.toRomanNumeral() == \"IV\")\n  }\n\n  @Test(\"5 is V\", .enabled(if: RUNALL))\n  func test5IsV() {\n    #expect(5.toRomanNumeral() == \"V\")\n  }\n\n  @Test(\"6 is VI\", .enabled(if: RUNALL))\n  func test6IsVi() {\n    #expect(6.toRomanNumeral() == \"VI\")\n  }\n\n  @Test(\"9 is IX\", .enabled(if: RUNALL))\n  func test9IsIx() {\n    #expect(9.toRomanNumeral() == \"IX\")\n  }\n\n  @Test(\"16 is XVI\", .enabled(if: RUNALL))\n  func test16IsXvi() {\n    #expect(16.toRomanNumeral() == \"XVI\")\n  }\n\n  @Test(\"27 is XXVII\", .enabled(if: RUNALL))\n  func test27IsXxvii() {\n    #expect(27.toRomanNumeral() == \"XXVII\")\n  }\n\n  @Test(\"48 is XLVIII\", .enabled(if: RUNALL))\n  func test48IsXlviii() {\n    #expect(48.toRomanNumeral() == \"XLVIII\")\n  }\n\n  @Test(\"49 is XLIX\", .enabled(if: RUNALL))\n  func test49IsXlix() {\n    #expect(49.toRomanNumeral() == \"XLIX\")\n  }\n\n  @Test(\"59 is LIX\", .enabled(if: RUNALL))\n  func test59IsLix() {\n    #expect(59.toRomanNumeral() == \"LIX\")\n  }\n\n  @Test(\"66 is LXVI\", .enabled(if: RUNALL))\n  func test66IsLxvi() {\n    #expect(66.toRomanNumeral() == \"LXVI\")\n  }\n\n  @Test(\"93 is XCIII\", .enabled(if: RUNALL))\n  func test93IsXciii() {\n    #expect(93.toRomanNumeral() == \"XCIII\")\n  }\n\n  @Test(\"141 is CXLI\", .enabled(if: RUNALL))\n  func test141IsCxli() {\n    #expect(141.toRomanNumeral() == \"CXLI\")\n  }\n\n  @Test(\"163 is CLXIII\", .enabled(if: RUNALL))\n  func test163IsClxiii() {\n    #expect(163.toRomanNumeral() == \"CLXIII\")\n  }\n\n  @Test(\"166 is CLXVI\", .enabled(if: RUNALL))\n  func test166IsClxvi() {\n    #expect(166.toRomanNumeral() == \"CLXVI\")\n  }\n\n  @Test(\"402 is CDII\", .enabled(if: RUNALL))\n  func test402IsCdii() {\n    #expect(402.toRomanNumeral() == \"CDII\")\n  }\n\n  @Test(\"575 is DLXXV\", .enabled(if: RUNALL))\n  func test575IsDlxxv() {\n    #expect(575.toRomanNumeral() == \"DLXXV\")\n  }\n\n  @Test(\"666 is DCLXVI\", .enabled(if: RUNALL))\n  func test666IsDclxvi() {\n    #expect(666.toRomanNumeral() == \"DCLXVI\")\n  }\n\n  @Test(\"911 is CMXI\", .enabled(if: RUNALL))\n  func test911IsCmxi() {\n    #expect(911.toRomanNumeral() == \"CMXI\")\n  }\n\n  @Test(\"1024 is MXXIV\", .enabled(if: RUNALL))\n  func test1024IsMxxiv() {\n    #expect(1024.toRomanNumeral() == \"MXXIV\")\n  }\n\n  @Test(\"1666 is MDCLXVI\", .enabled(if: RUNALL))\n  func test1666IsMdclxvi() {\n    #expect(1666.toRomanNumeral() == \"MDCLXVI\")\n  }\n\n  @Test(\"3000 is MMM\", .enabled(if: RUNALL))\n  func test3000IsMmm() {\n    #expect(3000.toRomanNumeral() == \"MMM\")\n  }\n\n  @Test(\"3001 is MMMI\", .enabled(if: RUNALL))\n  func test3001IsMmmi() {\n    #expect(3001.toRomanNumeral() == \"MMMI\")\n  }\n\n  @Test(\"3888 is MMMDCCCLXXXVIII\", .enabled(if: RUNALL))\n  func test3888IsMmmdccclxxxviii() {\n    #expect(3888.toRomanNumeral() == \"MMMDCCCLXXXVIII\")\n  }\n\n  @Test(\"3999 is MMMCMXCIX\", .enabled(if: RUNALL))\n  func test3999IsMmmcmxcix() {\n    #expect(3999.toRomanNumeral() == \"MMMCMXCIX\")\n  }\n}\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "bhargavg",
+    "hankturowski",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "nickkjordan",
+    "robtimp",
+    "ThomasHaz",
+    "meatball133"
+  ]
+}

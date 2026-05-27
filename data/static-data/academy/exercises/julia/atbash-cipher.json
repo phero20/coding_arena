@@ -1,0 +1,30 @@
+{
+  "id": "julia:atbash-cipher",
+  "trackSlug": "julia",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "a4638670-941d-4213-8407-d9ebba70bd42",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "function encode(input)\n\nend\n\nfunction decode(input)\n\nend\n\n",
+  "example_solution": "cipher(input::AbstractString) = map(x->isletter(x) ? Char(219-Int(x)) : x, lowercase(filter(c -> isletter(c) || isnumeric(c), input)))\nencode(input::AbstractString) = join(collect((m.match for m = eachmatch(r\"(.{1,5})\", cipher(input)))), ' ')\ndecode(input::AbstractString) = cipher(input)\n\n",
+  "test_code": "using Test\n\ninclude(\"atbash-cipher.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"encoding from English to atbash\" begin\n        @test encode(\"yes\") == \"bvh\"\n        @test encode(\"no\") == \"ml\"\n        @test encode(\"OMG\") == \"lnt\"\n        @test encode(\"O M G\") == \"lnt\"\n        @test encode(\"mindblowingly\") == \"nrmwy oldrm tob\"\n        @test encode(\"Testing,1 2 3, testing.\") == \"gvhgr mt123 gvhgr mt\"\n        @test encode(\"Truth is fiction.\") == \"gifgs rhurx grlm\"\n        @test encode(\"The quick brown fox jumps over the lazy dog.\") == \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n    end\n\n    @testset \"decoding from atbash to English\" begin\n        @test decode(\"vcvix rhn\") == \"exercism\"\n        @test decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\") == \"anobstacleisoftenasteppingstone\"\n        @test decode(\"gvhgr mt123 gvhgr mt\") == \"testing123testing\"\n        @test decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\") == \"thequickbrownfoxjumpsoverthelazydog\"\n        @test decode(\"vc vix    r hn\") == \"exercism\"\n        @test decode(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\") == \"anobstacleisoftenasteppingstone\"\n    end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "andrej-makarov-skrt"
+  ],
+  "contributors": [
+    "cmcaine",
+    "SaschaMann",
+    "Teo-ShaoWei"
+  ]
+}

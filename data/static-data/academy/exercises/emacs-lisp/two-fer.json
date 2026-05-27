@@ -1,0 +1,29 @@
+{
+  "id": "emacs-lisp:two-fer",
+  "trackSlug": "emacs-lisp",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "36e5dc3a-2122-484a-ae82-beb7b813e2cd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": ";;; two-fer.el --- Two-fer Exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n(defun two-fer (&optional name)\n;;; Code:\n)\n\n(provide 'two-fer)\n;;; two-fer.el ends here\n",
+  "example_solution": ";;; two-fer.el --- Two-fer Exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(defun two-fer (&optional name)\n  (let ((player (or name \"you\")))\n    (concat \"One for \" player \", one for me.\")))\n\n(provide 'two-fer)\n\n;;; two-fer.el ends here\n",
+  "test_code": ";;; two-fer-test.el --- Tests for Two-fer (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n;; Common test data version: 1.2.0 4fc1acb\n\n;;; Code:\n\n(load-file \"two-fer.el\")\n(declare-function two-fer \"two-fer.el\" (&optional name))\n\n(ert-deftest no-name-given ()\n  (should (string= (two-fer) \"One for you, one for me.\")))\n\n(ert-deftest a-name-given ()\n  (should (string= (two-fer \"Alice\") \"One for Alice, one for me.\")))\n\n(ert-deftest another-name-given ()\n  (should (string= (two-fer \"Bob\") \"One for Bob, one for me.\")))\n\n(provide 'two-fer-test)\n\n;;; two-fer-test.el ends here\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "benreyn"
+  ],
+  "contributors": [
+    "bcfurtado",
+    "vermiculus"
+  ]
+}

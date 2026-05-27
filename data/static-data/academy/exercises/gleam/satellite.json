@@ -1,0 +1,37 @@
+{
+  "id": "gleam:satellite",
+  "trackSlug": "gleam",
+  "slug": "satellite",
+  "name": "Satellite",
+  "uuid": "34fa6aa9-c3de-4d59-abfd-cfe1b76d7748",
+  "type": "practice",
+  "status": null,
+  "blurb": "Rebuild binary trees from pre-order and in-order traversals.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "custom-types",
+    "recursion",
+    "sets"
+  ],
+  "prerequisites": [
+    "results",
+    "lists",
+    "sets",
+    "recursion",
+    "custom-types",
+    "generics"
+  ],
+  "instructions": "# Instructions\n\nImagine you need to transmit a binary tree to a satellite approaching Alpha Centauri and you have limited bandwidth.\nSince the tree has no repeating items it can be uniquely represented by its [pre-order and in-order traversals][wiki].\n\nWrite the software for the satellite to rebuild the tree from the traversals.\n\nA pre-order traversal reads the value of the current node before (hence \"pre\") reading the left subtree in pre-order.\nAfterwards the right subtree is read in pre-order.\n\nAn in-order traversal reads the left subtree in-order then the current node and finally the right subtree in-order.\nSo in order from left to right.\n\nFor example the pre-order traversal of this tree is [a, i, x, f, r].\nThe in-order traversal of this tree is [i, a, f, x, r]\n\n```text\n  a\n / \\\ni   x\n   / \\\n  f   r\n```\n\nNote: the first item in the pre-order traversal is always the root.\n\n[wiki]: https://en.wikipedia.org/wiki/Tree_traversal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub type Tree(a) {\n  Nil\n  Node(value: a, left: Tree(a), right: Tree(a))\n}\n\npub type Error {\n  DifferentLengths\n  DifferentItems\n  NonUniqueItems\n}\n\npub fn tree_from_traversals(\n  inorder inorder: List(a),\n  preorder preorder: List(a),\n) -> Result(Tree(a), Error) {\n  todo\n}\n",
+  "example_solution": "import gleam/list\nimport gleam/set\n\npub type Tree(a) {\n  Nil\n  Node(value: a, left: Tree(a), right: Tree(a))\n}\n\npub type Error {\n  DifferentLengths\n  DifferentItems\n  NonUniqueItems\n}\n\npub fn tree_from_traversals(\n  inorder inorder: List(a),\n  preorder preorder: List(a),\n) -> Result(Tree(a), Error) {\n  let inorder_set = set.from_list(inorder)\n  let preorder_set = set.from_list(preorder)\n\n  let inorder_length = list.length(inorder)\n  let preorder_length = list.length(preorder)\n\n  let different_length = inorder_length != preorder_length\n  let different_elements = inorder_set != preorder_set\n  let duplicate_elements = inorder_length != set.size(inorder_set)\n\n  case Nil {\n    _ if different_length -> Error(DifferentLengths)\n    _ if different_elements -> Error(DifferentItems)\n    _ if duplicate_elements -> Error(NonUniqueItems)\n    _ -> Ok(tree_from_traversals_safe(inorder, preorder))\n  }\n}\n\nfn tree_from_traversals_safe(inorder: List(a), preorder: List(a)) -> Tree(a) {\n  case preorder {\n    [] -> Nil\n    [value, ..rest_preorder] -> {\n      let assert #(left_inorder, [_value, ..right_inorder]) =\n        list.split_while(inorder, fn(x) { x != value })\n      let #(left_preorder, right_preorder) =\n        list.split(rest_preorder, list.length(left_inorder))\n\n      let left = tree_from_traversals_safe(left_inorder, left_preorder)\n      let right = tree_from_traversals_safe(right_inorder, right_preorder)\n      Node(value: value, left: left, right: right)\n    }\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport satellite.{DifferentItems, DifferentLengths, Nil, Node, NonUniqueItems}\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn empty_tree_test() {\n  satellite.tree_from_traversals(inorder: [], preorder: [])\n  |> should.equal(Ok(Nil))\n}\n\npub fn tree_with_one_item_test() {\n  satellite.tree_from_traversals(inorder: [\"a\"], preorder: [\"a\"])\n  |> should.equal(Ok(Node(value: \"a\", left: Nil, right: Nil)))\n}\n\npub fn tree_with_many_items_test() {\n  satellite.tree_from_traversals(inorder: [\"i\", \"a\", \"f\", \"x\", \"r\"], preorder: [\n    \"a\", \"i\", \"x\", \"f\", \"r\",\n  ])\n  |> should.equal(\n    Ok(Node(\n      value: \"a\",\n      left: Node(value: \"i\", left: Nil, right: Nil),\n      right: Node(\n        value: \"x\",\n        left: Node(value: \"f\", left: Nil, right: Nil),\n        right: Node(value: \"r\", left: Nil, right: Nil),\n      ),\n    )),\n  )\n}\n\npub fn reject_traversals_of_different_length_test() {\n  satellite.tree_from_traversals(inorder: [\"b\", \"a\", \"r\"], preorder: [\"a\", \"b\"])\n  |> should.equal(Error(DifferentLengths))\n}\n\npub fn reject_inconsistent_traversals_of_same_length_test() {\n  satellite.tree_from_traversals(inorder: [\"a\", \"b\", \"c\"], preorder: [\n    \"x\", \"y\", \"z\",\n  ])\n  |> should.equal(Error(DifferentItems))\n}\n\npub fn reject_traversals_with_repeated_items_test() {\n  satellite.tree_from_traversals(inorder: [\"b\", \"a\", \"a\"], preorder: [\n    \"a\", \"b\", \"a\",\n  ])\n  |> should.equal(Error(NonUniqueItems))\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": null
+}

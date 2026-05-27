@@ -1,0 +1,33 @@
+{
+  "id": "haskell:perfect-numbers",
+  "trackSlug": "haskell",
+  "slug": "perfect-numbers",
+  "name": "Perfect Numbers",
+  "uuid": "928b22c5-f2bd-4496-8605-fcff2dad2c3a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a number is perfect, abundant, or deficient based on\nNicomachus' (60 - 120 CE) classification scheme for positive integers.\n\nThe Greek mathematician [Nicomachus][nicomachus] devised a classification scheme for positive integers, identifying each as belonging uniquely to the categories of **perfect**, **abundant**, or **deficient** based on their [aliquot sum][aliquot-sum].\nThe aliquot sum is defined as the sum of the factors of a number not including the number itself.\nFor example, the aliquot sum of 15 is (1 + 3 + 5) = 9\n\n- **Perfect**: aliquot sum = number\n  - 6 is a perfect number because (1 + 2 + 3) = 6\n  - 28 is a perfect number because (1 + 2 + 4 + 7 + 14) = 28\n- **Abundant**: aliquot sum > number\n  - 12 is an abundant number because (1 + 2 + 3 + 4 + 6) = 16\n  - 24 is an abundant number because (1 + 2 + 3 + 4 + 6 + 8 + 12) = 36\n- **Deficient**: aliquot sum < number\n  - 8 is a deficient number because (1 + 2 + 4) = 7\n  - Prime numbers are deficient\n\nImplement a way to determine whether a given number is **perfect**.\nDepending on your language track, you may also need to implement a way to determine whether a given number is **abundant** or **deficient**.\n\n[nicomachus]: https://en.wikipedia.org/wiki/Nicomachus\n[aliquot-sum]: https://en.wikipedia.org/wiki/Aliquot_sum\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module PerfectNumbers (classify, Classification(..)) where\n\ndata Classification = Deficient | Perfect | Abundant deriving (Eq, Show)\n\nclassify :: Int -> Maybe Classification\nclassify = error \"You need to implement this function.\"\n",
+  "example_solution": "module PerfectNumbers (classify, Classification(..)) where\n\ndata Classification = Deficient | Perfect | Abundant deriving (Eq, Show)\n\nclassify :: Int -> Maybe Classification\nclassify n | n < 1        = Nothing\n           | n < divisors = Just Abundant\n           | n > divisors = Just Deficient\n           | otherwise    = Just Perfect\n  where divisors = sum $ filter ((0==) . mod n) [1..(div n 2)]\n",
+  "test_code": "{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport PerfectNumbers (Classification(Deficient, Perfect, Abundant), classify)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"classify\" $ for_ cases test\n  where\n\n    test Case{..} = it description assertion\n      where\n        assertion = classify number `shouldBe` expected\n\n\ndata Case = Case { description :: String\n                 , number      :: Int\n                 , expected    :: Maybe Classification\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"Smallest perfect number is classified correctly\"\n               , number      = 6\n               , expected    = Just Perfect\n               }\n        , Case { description = \"Medium perfect number is classified correctly\"\n               , number      = 28\n               , expected    = Just Perfect\n               }\n        , Case { description = \"Large perfect number is classified correctly\"\n               , number      = 33550336\n               , expected    = Just Perfect\n               }\n        , Case { description = \"Smallest abundant number is classified correctly\"\n               , number      = 12\n               , expected    = Just Abundant\n               }\n        , Case { description = \"Medium abundant number is classified correctly\"\n               , number      = 30\n               , expected    = Just Abundant\n               }\n        , Case { description = \"Large abundant number is classified correctly\"\n               , number      = 33550335\n               , expected    = Just Abundant\n               }\n        , Case { description = \"Smallest prime deficient number is classified correctly\"\n               , number      = 2\n               , expected    = Just Deficient\n               }\n        , Case { description = \"Smallest non-prime deficient number is classified correctly\"\n               , number      = 4\n               , expected    = Just Deficient\n               }\n        , Case { description = \"Medium deficient number is classified correctly\"\n               , number      = 32\n               , expected    = Just Deficient\n               }\n        , Case { description = \"Large deficient number is classified correctly\"\n               , number      = 33550337\n               , expected    = Just Deficient\n               }\n        , Case { description = \"Edge case (no factors other than itself) is classified correctly\"\n               , number      = 1\n               , expected    = Just Deficient\n               }\n        , Case { description = \"Zero is rejected (not a natural number)\"\n               , number      = 0\n               , expected    = Nothing\n               }\n        , Case { description = \"Negative integer is rejected (not a natural number)\"\n               , number      = -1\n               , expected    = Nothing\n               }\n        ]\n",
+  "source": "Taken from Chapter 2 of Functional Thinking by Neal Ford.",
+  "source_url": "https://www.oreilly.com/library/view/functional-thinking/9781449365509/",
+  "authors": [
+    "Average-user"
+  ],
+  "contributors": [
+    "ee7",
+    "iHiD",
+    "petertseng",
+    "ppartarr",
+    "sshine",
+    "tejasbubane"
+  ]
+}

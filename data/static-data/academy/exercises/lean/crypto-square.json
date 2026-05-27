@@ -1,0 +1,26 @@
+{
+  "id": "lean:crypto-square",
+  "trackSlug": "lean",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "15a4f6f9-be4b-48bb-927d-fe337c5434b6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "namespace CryptoSquare\n\ndef ciphertext (plaintext : String) : String :=\n  sorry --remove this line and implement the function\n\nend CryptoSquare\n",
+  "example_solution": "namespace CryptoSquare\n\ndef countAlphanum (plaintext : String) : Nat := Id.run do\n  let mut count := 0\n  for c in plaintext.toList do\n    if Char.isAlphanum c then\n      count := count + 1\n  return count\n\ndef squareRoot (radicand : Nat) : Nat := Id.run do\n  for guess in [0:radicand] do\n    if guess * guess >= radicand then return guess\n  return radicand\n\ndef ciphertext (plaintext : String) : String :=\n  let length := countAlphanum plaintext\n  if length == 0 then \"\"\n  else Id.run do\n    let columns := squareRoot length\n    let rows := (length + columns - 1) / columns\n    let mut chars := Array.replicate ((rows * columns) + columns - 1) ' '\n    let mut count := 0\n    for c in (String.toLower plaintext).toList do\n      if Char.isAlphanum c then\n        let index := (count % columns) * (rows + 1) + (count / columns)\n        chars := chars.set! index c\n        count := count + 1\n    return String.ofList chars.toList\n\nend CryptoSquare\n",
+  "test_code": "import LeanTest\nimport CryptoSquare\n\nopen LeanTest\n\ndef cryptoSquareTests : TestSuite :=\n  (TestSuite.empty \"CryptoSquare\")\n  |>.addTest \"empty plaintext results in an empty ciphertext\" (do\n      return assertEqual \"\" (CryptoSquare.ciphertext \"\"))\n  |>.addTest \"normalization results in empty plaintext\" (do\n      return assertEqual \"\" (CryptoSquare.ciphertext \"... --- ...\"))\n  |>.addTest \"Lowercase\" (do\n      return assertEqual \"a\" (CryptoSquare.ciphertext \"A\"))\n  |>.addTest \"Remove spaces\" (do\n      return assertEqual \"b\" (CryptoSquare.ciphertext \"  b \"))\n  |>.addTest \"Remove punctuation\" (do\n      return assertEqual \"1\" (CryptoSquare.ciphertext \"@1,%!\"))\n  |>.addTest \"9 character plaintext results in 3 chunks of 3 characters\" (do\n      return assertEqual \"tsf hiu isn\" (CryptoSquare.ciphertext \"This is fun!\"))\n  |>.addTest \"8 character plaintext results in 3 chunks, the last one with a trailing space\" (do\n      return assertEqual \"clu hlt io \" (CryptoSquare.ciphertext \"Chill out.\"))\n  |>.addTest \"54 character plaintext results in 8 chunks, the last two with trailing spaces\" (do\n      return assertEqual \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \" (CryptoSquare.ciphertext \"If man was meant to stay on the ground, god would have given us roots.\"))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [cryptoSquareTests]\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

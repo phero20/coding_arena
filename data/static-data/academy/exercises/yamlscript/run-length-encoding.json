@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:run-length-encoding",
+  "trackSlug": "yamlscript",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "fa43daa5-91a7-4e04-84cc-e997b8b4752e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn encode(string):\n  # Implement the 'encode' function.\n\ndefn decode(string):\n  # Implement the 'decode' function.\n\ndefn consistency(string):\n  # Implement the 'consistency' function.\n",
+  "example_solution": "!YS-v0\n\ndefn encode(string):\n  partition-by(a string)\n   .mapcat(count.juxt(first))\n   .remove(eq(1)):join\n\ndefn decode(string):\n  string.re-seq(/(\\d+)?(.)/)\n    .map(fn([[_ n c]]\n         (c * I(n || 1)))):join\n\ndefn consistency(string):\n  string:encode:decode\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'run-length-encoding.ys'\n\ntest::\n- name: Empty string\n  code: encode(\"\")\n  want: ''\n\n- name: Single characters only are encoded without count\n  code: encode(\"XYZ\")\n  want: XYZ\n\n- name: String with no single characters\n  code: encode(\"AABBBCCCC\")\n  want: 2A3B4C\n\n- name: Single characters mixed with repeated characters\n  code: encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")\n  want: 12WB12W3B24WB\n\n- name: Multiple whitespace mixed in string\n  code: encode(\"  hsqq qww  \")\n  want: '2 hs2q q2w2 '\n\n- name: Lowercase characters\n  code: encode(\"aabbbcccc\")\n  want: 2a3b4c\n\n- name: Empty string\n  code: decode(\"\")\n  want: ''\n\n- name: Single characters only\n  code: decode(\"XYZ\")\n  want: XYZ\n\n- name: String with no single characters\n  code: decode(\"2A3B4C\")\n  want: AABBBCCCC\n\n- name: Single characters with repeated characters\n  code: decode(\"12WB12W3B24WB\")\n  want: WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\n\n- name: Multiple whitespace mixed in string\n  code: decode(\"2 hs2q q2w2 \")\n  want: '  hsqq qww  '\n\n- name: Lowercase string\n  code: decode(\"2a3b4c\")\n  want: aabbbcccc\n\n- name: Encode followed by decode gives original string\n  code: consistency(\"zzz ZZ  zZ\")\n  want: zzz ZZ  zZ\n\ndone: 13\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

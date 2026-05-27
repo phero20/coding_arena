@@ -1,0 +1,26 @@
+{
+  "id": "coffeescript:minesweeper",
+  "trackSlug": "coffeescript",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "fe341c5e-0292-455f-93be-1ffb8f0b4b3b",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "class Minesweeper\n  @annotate: (minefield) ->\n\nmodule.exports = Minesweeper\n",
+  "example_solution": "class Minesweeper\n  @annotate: (minefield) ->\n    if minefield.length < 1\n      return minefield\n    if minefield[0].length < 1\n      return minefield\n\n    board = minefield.map (row) -> row.split ''\n\n    board.map (row, x) ->\n      r = row.map (cell, y) ->\n        if cell == '*'\n          return cell\n        count = 0\n        for i in [-1..1]\n          for j in [-1..1]\n            if i + x >= 0 && i + x < board.length && j + y >= 0 && j + y < row.length\n              count += 1 if board[i + x][j + y] == '*'\n        if count == 0\n          ' '\n        else\n          count.toString()\n      r.join ''\n\nmodule.exports = Minesweeper\n",
+  "test_code": "Minesweeper = require './minesweeper'\n\ndescribe 'Minesweeper', ->\n  it 'no rows', ->\n    minefield = []\n    expect(Minesweeper.annotate minefield).toEqual []\n\n  xit 'no columns', ->\n    minefield = ['']\n    expect(Minesweeper.annotate minefield).toEqual ['']\n\n  xit 'no mines', ->\n    minefield = [\n      '   '\n      '   '\n      '   '\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '   '\n      '   '\n      '   '\n    ]\n\n  xit 'minefield with only mines', ->\n    minefield = [\n      '***'\n      '***'\n      '***'\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '***'\n      '***'\n      '***'\n    ]\n\n  xit 'mine surrounded by spaces', ->\n    minefield = [\n      '   '\n      ' * '\n      '   '\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '111'\n      '1*1'\n      '111'\n    ]\n\n  xit 'space surrounded by mines', ->\n    minefield = [\n      '***'\n      '* *'\n      '***'\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '***'\n      '*8*'\n      '***'\n    ]\n\n  xit 'horizontal line', ->\n    minefield = [' * * ']\n    expect(Minesweeper.annotate minefield).toEqual ['1*2*1']\n\n  xit 'horizontal line, mines at edges', ->\n    minefield = ['*   *']\n    expect(Minesweeper.annotate minefield).toEqual ['*1 1*']\n\n  xit 'vertical line', ->\n    minefield = [\n      ' '\n      '*'\n      ' '\n      '*'\n      ' '\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '1'\n      '*'\n      '2'\n      '*'\n      '1'\n    ]\n\n  xit 'vertical line, mines at edges', ->\n    minefield = [\n      '*'\n      ' '\n      ' '\n      ' '\n      '*'\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '*'\n      '1'\n      ' '\n      '1'\n      '*'\n    ]\n\n  xit 'cross', ->\n    minefield = [\n      '  *  '\n      '  *  '\n      '*****'\n      '  *  '\n      '  *  '\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      ' 2*2 '\n      '25*52'\n      '*****'\n      '25*52'\n      ' 2*2 '\n    ]\n\n  xit 'large minefield', ->\n    minefield = [\n      ' *  * '\n      '  *   '\n      '    * '\n      '   * *'\n      ' *  * '\n      '      '\n    ]\n    expect(Minesweeper.annotate minefield).toEqual [\n      '1*22*1'\n      '12*322'\n      ' 123*2'\n      '112*4*'\n      '1*22*2'\n      '111111'\n    ]\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

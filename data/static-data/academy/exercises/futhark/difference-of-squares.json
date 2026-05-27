@@ -1,0 +1,26 @@
+{
+  "id": "futhark:difference-of-squares",
+  "trackSlug": "futhark",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "d8a3472c-a7ac-4ddc-8448-7f4645b51f38",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def square_of_sum (n: i32): i32 = ???\n\ndef sum_of_squares (n: i32): i32 = ???\n\ndef difference_of_squares (n: i32): i32 = ???\n  ",
+  "example_solution": "def square (n: i32): i32 = n ** 2\n\ndef square_of_sum (n: i32): i32 = i32.sum (1...n) |> square\n\ndef sum_of_squares (n: i32): i32 = map square (1...n) |> i32.sum\n\ndef difference_of_squares (n: i32): i32 = square_of_sum n - sum_of_squares n\n",
+  "test_code": "import \"difference_of_squares\"\n\n-- square of sum 1\n-- ==\n-- entry: test_square_of_sum\n-- input { 1 }\n-- output { 1 }\n\n-- square of sum 5\n-- ==\n-- entry: test_square_of_sum\n-- input { 5 }\n-- output { 225 }\n\n-- square of sum 100\n-- ==\n-- entry: test_square_of_sum\n-- input { 100 }\n-- output { 25502500 }\n\n-- sum of squares 1\n-- ==\n-- entry: test_sum_of_squares\n-- input { 1 }\n-- output { 1 }\n\n-- sum of squares 5\n-- ==\n-- entry: test_sum_of_squares\n-- input { 5 }\n-- output { 55 }\n\n-- sum of squares 100\n-- ==\n-- entry: test_sum_of_squares\n-- input { 100 }\n-- output { 338350 }\n\n-- difference of squares 1\n-- ==\n-- entry: test_difference_of_squares\n-- input { 1 }\n-- output { 0 }\n\n-- difference of squares 5\n-- ==\n-- entry: test_difference_of_squares\n-- input { 5 }\n-- output { 170 }\n\n-- difference of squares 100\n-- ==\n-- entry: test_difference_of_squares\n-- input { 100 }\n-- output { 25164150 }\n\nentry test_square_of_sum (n: i32): i32 =\n  square_of_sum n\n\nentry test_sum_of_squares (n: i32): i32 =\n  sum_of_squares n\n\nentry test_difference_of_squares (n: i32): i32 =\n  difference_of_squares n\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

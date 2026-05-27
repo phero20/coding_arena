@@ -1,0 +1,26 @@
+{
+  "id": "nim:rotational-cipher",
+  "trackSlug": "nim",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "b60b8bfd-a2a7-4da0-8a22-894fff5abab2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc rotate*(s: string, n: int): string =\n  discard\n",
+  "example_solution": "const alphabetLen = len('a'..'z')\n\nfunc rotate(c: char, n: 0..alphabetLen, isLower: static bool): char =\n  const last = when isLower: 'z'.ord else: 'Z'.ord\n  var rotated = c.ord + n\n  if rotated > last:\n    rotated -= alphabetLen\n  char(rotated)\n\nfunc rotate*(s: string, n: 0..alphabetLen): string =\n  result = newString(s.len)\n  for i, c in s:\n    if c in {'a'..'z'}:\n      result[i] = rotate(c, n, true)\n    elif c in {'A'..'Z'}:\n      result[i] = rotate(c, n, false)\n    else:\n      result[i] = c\n",
+  "test_code": "import unittest\nimport rotational_cipher\n\nsuite \"Rotational Cipher\":\n  test \"rotate a by 0, same output as input\":\n    check rotate(\"a\", 0) == \"a\"\n\n  test \"rotate a by 1\":\n    check rotate(\"a\", 1) == \"b\"\n\n  test \"rotate a by 26, same output as input\":\n    check rotate(\"a\", 26) == \"a\"\n\n  test \"rotate m by 13\":\n    check rotate(\"m\", 13) == \"z\"\n\n  test \"rotate n by 13 with wrap around alphabet\":\n    check rotate(\"n\", 13) == \"a\"\n\n  test \"rotate capital letters\":\n    check rotate(\"OMG\", 5) == \"TRL\"\n\n  test \"rotate spaces\":\n    check rotate(\"O M G\", 5) == \"T R L\"\n\n  test \"rotate numbers\":\n    check rotate(\"Testing 1 2 3 testing\", 4) == \"Xiwxmrk 1 2 3 xiwxmrk\"\n\n  test \"rotate punctuation\":\n    check rotate(\"Let's eat, Grandma!\", 21) == \"Gzo'n zvo, Bmviyhv!\"\n\n  test \"rotate all letters\":\n    check rotate(\"The quick brown fox jumps over the lazy dog.\",\n                 13) == \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

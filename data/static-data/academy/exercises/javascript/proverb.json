@@ -1,0 +1,38 @@
+{
+  "id": "javascript:proverb",
+  "trackSlug": "javascript",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "5626f5b6-207b-458b-92b6-eff2cadb240a",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "arrays",
+    "for-loops",
+    "conditionals",
+    "rest-and-spread",
+    "template-strings"
+  ],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Proverb' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const proverb = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "const lastArgIsOptions = (args) => {\n  const last = args[args.length - 1];\n  return typeof last === 'object';\n};\n\nconst conclusion = (firstArg, qualifier = '') =>\n  `And all for the want of a ${qualifier}${firstArg}.`;\n\nexport const proverb = (...args) => {\n  let options = {};\n  if (lastArgIsOptions(args)) {\n    options = args.pop();\n  }\n\n  if (args.length === 0) {\n    return '';\n  }\n\n  const allExceptLastArg = args.slice(0, -1);\n  const chainOfEvents = allExceptLastArg.map(\n    (arg, index) => `For want of a ${arg} the ${args[index + 1]} was lost.`,\n  );\n\n  const qualifier = options.qualifier\n    ? `${options.qualifier} `\n    : options.qualifier;\n  chainOfEvents.push(conclusion(args[0], qualifier));\n\n  return chainOfEvents.join('\\n');\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { proverb } from './proverb';\n\ndescribe('Proverb', () => {\n  test('zero pieces', () => {\n    const result = proverb();\n\n    expect(result).toEqual('');\n  });\n\n  xtest('one piece', () => {\n    const result = proverb('nail');\n\n    expect(result).toEqual('And all for the want of a nail.');\n  });\n\n  xtest('two pieces', () => {\n    const result = proverb('nail', 'shoe');\n\n    expect(result).toEqual(\n      `For want of a nail the shoe was lost.\nAnd all for the want of a nail.`,\n    );\n  });\n\n  xtest('three pieces', () => {\n    const result = proverb('nail', 'shoe', 'horse');\n\n    expect(result).toEqual(\n      `For want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nAnd all for the want of a nail.`,\n    );\n  });\n\n  xtest('the whole proverb', () => {\n    const result = proverb(\n      'nail',\n      'shoe',\n      'horse',\n      'rider',\n      'message',\n      'battle',\n      'kingdom',\n    );\n\n    expect(result).toEqual(\n      `For want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.`,\n    );\n  });\n\n  xtest('proverb is the same each time', () => {\n    expect(proverb('nail', 'shoe')).toEqual(proverb('nail', 'shoe'));\n  });\n\n  xtest('four pieces modernized', () => {\n    const result = proverb('pin', 'gun', 'soldier', 'battle');\n\n    expect(result).toEqual(\n      `For want of a pin the gun was lost.\nFor want of a gun the soldier was lost.\nFor want of a soldier the battle was lost.\nAnd all for the want of a pin.`,\n    );\n  });\n\n  xtest('the use of an optional qualifier in the final consequence', () => {\n    const result = proverb(\n      'nail',\n      'shoe',\n      'horse',\n      'rider',\n      'message',\n      'battle',\n      'kingdom',\n      { qualifier: 'horseshoe' },\n    );\n\n    expect(result).toEqual(\n      `For want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a horseshoe nail.`,\n    );\n  });\n});\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "skabbass1"
+  ],
+  "contributors": [
+    "ankorGH",
+    "serixscorpio",
+    "SleeplessByte",
+    "tejasbubane",
+    "xarxziux"
+  ]
+}

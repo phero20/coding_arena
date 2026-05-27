@@ -1,0 +1,30 @@
+{
+  "id": "go:high-scores",
+  "trackSlug": "go",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "19c9f4a4-a3e4-4647-8735-35de97dd3e7b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "methods"
+  ],
+  "prerequisites": [
+    "methods"
+  ],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package highscores\n\ntype HighScores struct{}\n\n// NewHighScores returns a new HighScores object.\nfunc NewHighScores(scores []int) *HighScores {\n\tpanic(\"Please implement the NewHighScores function\")\n}\n\n// Scores returns all the scores.\nfunc (s *HighScores) Scores() []int {\n\tpanic(\"Please implement the Scores function\")\n}\n\n// Latest returns the latest (last) score.\nfunc (s *HighScores) Latest() int {\n\tpanic(\"Please implement the Latest function\")\n}\n\n// PersonalBest returns the best (highest) score.\nfunc (s *HighScores) PersonalBest() int {\n\tpanic(\"Please implement the PersonalBest function\")\n}\n\n// TopThree returns the top three scores.\nfunc (s *HighScores) TopThree() []int {\n\tpanic(\"Please implement the TopThree function\")\n}\n",
+  "example_solution": "package highscores\n\nimport \"slices\"\n\ntype HighScores struct {\n\tscores []int\n}\n\nfunc NewHighScores(scores []int) *HighScores {\n\treturn &HighScores{scores}\n}\n\nfunc (s *HighScores) Scores() []int {\n\treturn s.scores\n}\n\nfunc (s *HighScores) Latest() int {\n\treturn s.scores[len(s.scores)-1]\n}\n\nfunc (s *HighScores) PersonalBest() int {\n\tscores := slices.Clone(s.scores)\n\tslices.Sort(scores)\n\treturn scores[len(scores)-1]\n}\n\nfunc (s *HighScores) TopThree() []int {\n\tscores := slices.Clone(s.scores)\n\tslices.Sort(scores)\n\tslices.Reverse(scores)\n\treturn scores[:min(3, len(scores))]\n}\n",
+  "test_code": "package highscores\n\nimport (\n\t\"slices\"\n\t\"testing\"\n)\n\nfunc TestHighScoreIntFuncs(t *testing.T) {\n\tfor _, tc := range intTestCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\th := NewHighScores(tc.input)\n\t\t\tif actual := tc.call(h); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"h = NewHighScores(%#v); %s = %d, want: %d\", tc.input, tc.callMsg, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestHighScoreSliceFuncs(t *testing.T) {\n\tfor _, tc := range sliceTestCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\th := NewHighScores(tc.input)\n\t\t\tif actual := tc.call(h); !slices.Equal(actual, tc.expected) {\n\t\t\t\tt.Fatalf(\"h = NewHighScores(%#v); %s = %#v, want: %#v\", tc.input, tc.callMsg, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkHighScores(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range intTestCases {\n\t\t\ttc.call(NewHighScores(tc.input))\n\t\t}\n\t\tfor _, tc := range sliceTestCases {\n\t\t\ttc.call(NewHighScores(tc.input))\n\t\t}\n\t}\n}\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

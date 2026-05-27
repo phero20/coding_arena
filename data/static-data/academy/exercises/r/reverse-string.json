@@ -1,0 +1,27 @@
+{
+  "id": "r:reverse-string",
+  "trackSlug": "r",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "684e330d-7ee6-4151-9fc3-c1ca376136c3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "# Uncomment the line below to enable grapheme cluster tests\n# enable_grapheme_clusters <- TRUE\n\nreverse <- function(text) {\n    \n}\n",
+  "example_solution": "library(stringr)\n\nenable_grapheme_clusters <- TRUE\n\nreverse <- function(text) {\n  str_split(text, \"\") |>\n    lapply(rev) |>\n    sapply(paste, collapse = \"\")\n}\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/reverse-string/canonical-data.json\n# File last updated on 2026-03-12\n\nsource(\"./reverse-string.R\")\nlibrary(testthat)\n\ntest_that(\"an empty string\", {\n  expect_equal(reverse(\"\"), \"\")\n})\n\ntest_that(\"a word\", {\n  expect_equal(reverse(\"robot\"), \"tobor\")\n})\n\ntest_that(\"a capitalized word\", {\n  expect_equal(reverse(\"Ramen\"), \"nemaR\")\n})\n\ntest_that(\"a sentence with punctuation\", {\n  expect_equal(reverse(\"I'm hungry!\"), \"!yrgnuh m'I\")\n})\n\ntest_that(\"a palindrome\", {\n  expect_equal(reverse(\"racecar\"), \"racecar\")\n})\n\ntest_that(\"an even-sized word\", {\n  expect_equal(reverse(\"drawer\"), \"reward\")\n})\n\ntest_that(\"wide characters\", {\n  expect_equal(reverse(\"子猫\"), \"猫子\")\n})\n\nif (exists(\"enable_grapheme_clusters\") && enable_grapheme_clusters) {\n  test_that(\"grapheme cluster with pre-combined form\", {\n    expect_equal(reverse(\"Würstchenstand\"), \"dnatsnehctsrüW\")\n  })\n}\n\nif (exists(\"enable_grapheme_clusters\") && enable_grapheme_clusters) {\n  test_that(\"grapheme clusters\", {\n    expect_equal(reverse(\"ผู้เขียนโปรแกรม\"), \"มรกแรปโนยขีเผู้\")\n  })\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "colinleach",
+    "jonmcalder"
+  ],
+  "contributors": null
+}

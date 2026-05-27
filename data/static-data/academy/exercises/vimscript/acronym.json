@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:acronym",
+  "trackSlug": "vimscript",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "370ac427-a90d-4bb1-8b76-d9c92866df51",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\n\" Convert a phrase into an uppercased acronym formed from\n\" the initial letter of each word, ignoring leading underscores\n\"\n\" Examples:\n\"\n\"   :echo Abbreviate('First In, First Out')\n\"   FIFO\n\"\n\"   :echo Abbreviate('The Road _Not_ Taken')\n\"   TRNT\n\"\nfunction! Abbreviate(phrase) abort\n  \" your code goes here\nendfunction \n",
+  "example_solution": "function! Abbreviate(phrase) abort\n  let l:result = ''\n  let l:phrase = substitute(a:phrase, '_', ' ', 'g')\n  for l:section in split(l:phrase, ' ')\n    for l:word in split(l:section, '-')\n      let l:result .= toupper(l:word[0])\n    endfor\n  endfor\n\n  return l:result\nendfunction \n",
+  "test_code": "\nExecute (basic):\n  let g:phrase = \"Portable Network Graphics\"\n  let g:expected = \"PNG\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (lowercase words):\n  let g:phrase = \"Ruby on Rails\"\n  let g:expected = \"ROR\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (punctuation):\n  let g:phrase = \"First In, First Out\"\n  let g:expected = \"FIFO\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (all caps word):\n  let g:phrase = \"GNU Image Manipulation Program\"\n  let g:expected = \"GIMP\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (punctuation without whitespace):\n  let g:phrase = \"Complementary metal-oxide semiconductor\"\n  let g:expected = \"CMOS\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (very long abbreviation):\n  let g:phrase = \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n  let g:expected = \"ROTFLSHTMDCOALM\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (consecutive delimiters):\n  let g:phrase = \"Something - I made up from thin air\"\n  let g:expected = \"SIMUFTA\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (apostrophes):\n  let g:phrase = \"Halley's Comet\"\n  let g:expected = \"HC\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n\nExecute (underscore emphasis):\n  let g:phrase = \"The Road _Not_ Taken\"\n  let g:expected = \"TRNT\"\n  AssertEqual g:expected, Abbreviate(g:phrase)\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

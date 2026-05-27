@@ -1,0 +1,34 @@
+{
+  "id": "gleam:anagram",
+  "trackSlug": "gleam",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "093aa488-077f-4180-9d8c-59d0ad8837da",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "lists"
+  ],
+  "prerequisites": [
+    "strings",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "pub fn find_anagrams(word: String, candidates: List(String)) -> List(String) {\n  todo\n}\n",
+  "example_solution": "import gleam/list\nimport gleam/string\n\nfn normalize(word: String) {\n  word\n  |> string.lowercase\n  |> string.to_graphemes\n  |> list.sort(string.compare)\n  |> string.concat\n}\n\nfn is_anagram(normalized_word: String, candidate: String) {\n  normalized_word == normalize(candidate)\n}\n\npub fn find_anagrams(word: String, candidates: List(String)) -> List(String) {\n  let normalized_word = normalize(word)\n\n  candidates\n  |> list.filter(fn(candidate) {\n    string.lowercase(word) != string.lowercase(candidate)\n  })\n  |> list.filter(is_anagram(normalized_word, _))\n}\n",
+  "test_code": "import anagram.{find_anagrams}\nimport exercism/should\nimport exercism/test_runner\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn no_matches_test() {\n  find_anagrams(\"diaper\", [\"hello\", \"world\", \"zombies\", \"pants\"])\n  |> should.equal([])\n}\n\npub fn detects_two_anagrams_test() {\n  find_anagrams(\"solemn\", [\"lemons\", \"cherry\", \"melons\"])\n  |> should.equal([\"lemons\", \"melons\"])\n}\n\npub fn does_not_detect_anagram_subsets_test() {\n  find_anagrams(\"good\", [\"dog\", \"goody\"])\n  |> should.equal([])\n}\n\npub fn detects_anagram_test() {\n  find_anagrams(\"listen\", [\"enlists\", \"google\", \"inlets\", \"banana\"])\n  |> should.equal([\"inlets\"])\n}\n\npub fn detects_three_anagrams_test() {\n  find_anagrams(\"allergy\", [\n    \"gallery\", \"ballerina\", \"regally\", \"clergy\", \"largely\", \"leading\",\n  ])\n  |> should.equal([\"gallery\", \"regally\", \"largely\"])\n}\n\npub fn detects_multiple_anagrams_with_different_case_test() {\n  find_anagrams(\"nose\", [\"Eons\", \"ONES\"])\n  |> should.equal([\"Eons\", \"ONES\"])\n}\n\npub fn does_not_detect_non_anagrams_with_identical_checksum_test() {\n  find_anagrams(\"mass\", [\"last\"])\n  |> should.equal([])\n}\n\npub fn detects_anagrams_case_insensitively_test() {\n  find_anagrams(\"Orchestra\", [\"cashregister\", \"Carthorse\", \"radishes\"])\n  |> should.equal([\"Carthorse\"])\n}\n\npub fn detects_anagrams_using_case_insensitive_subject_test() {\n  find_anagrams(\"Orchestra\", [\"cashregister\", \"carthorse\", \"radishes\"])\n  |> should.equal([\"carthorse\"])\n}\n\npub fn detects_anagrams_using_case_insensitive_possible_matches_test() {\n  find_anagrams(\"orchestra\", [\"cashregister\", \"Carthorse\", \"radishes\"])\n  |> should.equal([\"Carthorse\"])\n}\n\npub fn does_not_detect_an_anagram_if_the_original_word_is_repeated_test() {\n  find_anagrams(\"go\", [\"go Go GO\"])\n  |> should.equal([])\n}\n\npub fn anagrams_must_use_all_letters_exactly_once_test() {\n  find_anagrams(\"tapper\", [\"patter\"])\n  |> should.equal([])\n}\n\npub fn words_are_not_anagrams_of_themselves_test() {\n  find_anagrams(\"BANANA\", [\"BANANA\"])\n  |> should.equal([])\n}\n\npub fn words_are_not_anagrams_of_themselves_even_if_letter_case_is_partially_different_test() {\n  find_anagrams(\"BANANA\", [\"Banana\"])\n  |> should.equal([])\n}\n\npub fn words_are_not_anagrams_of_themselves_even_if_letter_case_is_completely_different_test() {\n  find_anagrams(\"BANANA\", [\"banana\"])\n  |> should.equal([])\n}\n\npub fn words_other_than_themselves_can_be_anagrams_test() {\n  find_anagrams(\"LISTEN\", [\"LISTEN\", \"Silent\"])\n  |> should.equal([\"Silent\"])\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "massivefermion"
+  ],
+  "contributors": [
+    "lpil",
+    "kytrinyx"
+  ]
+}

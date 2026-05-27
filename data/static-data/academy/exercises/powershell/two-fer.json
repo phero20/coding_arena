@@ -1,0 +1,30 @@
+{
+  "id": "powershell:two-fer",
+  "trackSlug": "powershell",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "45f285c2-9358-451d-a931-1dee54df7b67",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "Function Get-TwoFer(){\n    <#\n    .SYNOPSIS\n    \"Two-fer\" is short for two for one. One for you and one for me.\n    \n    .DESCRIPTION\n    If the given name is \"Alice\", the result should be \"One for Alice, one for me.\"\n    If no name is given, the result should be \"One for you, one for me.\"\n    \n    .PARAMETER Name\n    The name to use.\n    \n    .EXAMPLE\n    Get-TwoFer\n\n    Will return: One for you, one for me\n\n    .EXAMPLE\n    Get-TwoFer -Name Alice\n    \n    Will return: One for Alice, one for me\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Name\n    )\n\n    Throw \"Please implement this function\"\n}",
+  "example_solution": "Function Get-TwoFer(){\n    <#\n    .SYNOPSIS\n    \"Two-fer\" is short for two for one. One for you and one for me.\n    \n    .DESCRIPTION\n    If the given name is \"Alice\", the result should be \"One for Alice, one for me.\"\n    If no name is given, the result should be \"One for you, one for me.\"\n    \n    .PARAMETER Name\n    The name to use.\n    \n    .EXAMPLE\n    Get-TwoFer\n\n    Will return: One for you, one for me\n\n    .EXAMPLE\n    Get-TwoFer -Name Alice\n    \n    Will return: One for Alice, one for me\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Name = \"you\"\n    )\n\n    \"One for $Name, one for me\"\n}",
+  "test_code": "BeforeAll {\n    . \".\\TwoFer.ps1\"\n}\n\nDescribe \"Get-TwoFer Tests\" {\n    It \"no name given\"{\n        Get-TwoFer | Should -BeExactly \"One for you, one for me\"\n    }\n\n    It \"a name given\"{\n        Get-TwoFer -Name \"Alice\" | Should -BeExactly \"One for Alice, one for me\"\n    }\n\n    It \"another name given\"{\n        Get-TwoFer -Name \"Bob\" | Should -BeExactly \"One for Bob, one for me\"\n    }\n}\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "gyssels"
+  ],
+  "contributors": [
+    "cmccandless",
+    "kchenery",
+    "sjwarner"
+  ]
+}

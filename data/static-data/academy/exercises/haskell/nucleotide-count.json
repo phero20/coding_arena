@@ -1,0 +1,41 @@
+{
+  "id": "haskell:nucleotide-count",
+  "trackSlug": "haskell",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "00feb0e9-ae1e-43fc-a0ea-8f2d0d0b9f49",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module DNA (nucleotideCounts, Nucleotide(..)) where\n\nimport Data.Map (Map)\n\ndata Nucleotide = A | C | G | T deriving (Eq, Ord, Show)\n\nnucleotideCounts :: String -> Either String (Map Nucleotide Int)\nnucleotideCounts xs = error \"You need to implement this function.\"\n",
+  "example_solution": "{-# LANGUAGE TupleSections #-}\nmodule DNA (nucleotideCounts, Nucleotide(..)) where\n\nimport Data.Map.Strict (Map, fromDistinctAscList, fromListWith, findWithDefault)\n\ndata Nucleotide = A | C | G | T deriving (Eq, Ord, Show)\n\nnucleotideCounts :: String -> Either String (Map Nucleotide Int)\nnucleotideCounts xs = fromDistinctAscList <$> mapM count' [A,C,G,T]\n  where\n    count' x = (x,) <$> occur' x\n    occur' x = findWithDefault 0 x . countOccurrences <$> mapM valid xs\n    countOccurrences = fromListWith (+) . flip zip (repeat 1)\n\nvalid :: Char -> Either String Nucleotide\nvalid c = case c of\n  'A' -> Right A\n  'C' -> Right C\n  'G' -> Right G\n  'T' -> Right T\n  _   -> Left $ \"Invalid nucleotide \" ++ show c\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# language LambdaCase #-}\n\nimport Data.Either       (isLeft)\nimport Data.Map          (findWithDefault)\nimport Test.Hspec        (Spec, describe, it, shouldSatisfy)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport DNA (nucleotideCounts, Nucleotide(..))\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = do\n\n          let x `matchesMap` y = shouldSatisfy x $ \\case\n                Right count -> and [ findWithDefault 0 n count == c | (n,c) <- y ]\n                Left _ -> False\n\n          describe \"nucleotideCounts\" $ do\n\n            it \"empty dna strand has no nucleotides\" $\n              nucleotideCounts \"\" `matchesMap` [ (A, 0)\n                                               , (C, 0)\n                                               , (G, 0)\n                                               , (T, 0) ]\n\n            it \"can count one nucleotide in single-character input\" $\n              nucleotideCounts \"G\" `matchesMap` [ (A, 0)\n                                                , (C, 0)\n                                                , (G, 1)\n                                                , (T, 0) ]\n\n            it \"repetitive-sequence-has-only-guanosine\" $\n              nucleotideCounts \"GGGGGGGG\" `matchesMap` [ (A, 0)\n                                                       , (C, 0)\n                                                       , (G, 8)\n                                                       , (T, 0) ]\n\n            it \"counts all nucleotides\" $\n              nucleotideCounts \"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"\n              `matchesMap` [ (A, 20)\n                           , (C, 12)\n                           , (G, 17)\n                           , (T, 21) ]\n\n            it \"validates strand\" $\n              nucleotideCounts \"AGXXACT\" `shouldSatisfy` isLeft\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "cmcaine",
+    "Dysp",
+    "iHiD",
+    "jitwit",
+    "kytrinyx",
+    "lpalma",
+    "mambocab",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "samjonester",
+    "sjakobi",
+    "sshine",
+    "tejasbubane"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "prolog:difference-of-squares",
+  "trackSlug": "prolog",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "dcaaf329-c4d7-4cc3-b6fa-8161c13f02ad",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "square_of_sum(N, Result).\n\nsum_of_squares(N, Result).\n\ndifference(N, Result).\n",
+  "example_solution": ":- use_module(library(clpfd)).\n\nsquare_of_sum(N, Result) :-\n    Sum is N * (N + 1) / 2,\n    Result is Sum * Sum.\n\nsum_of_squares(N, Result) :-\n    Result is (N * (N + 1) * (2 * N + 1)) / 6.\n\ndifference(N, Result) :-\n    square_of_sum(N, SquareOfSum),\n    sum_of_squares(N, SumOfSquares),\n    Result is SquareOfSum - SumOfSquares.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(difference_of_squares).\n\ntest(square_of_sum_1, condition(true)) :-\n  square_of_sum(1, Result),\n  Result == 1.\n\ntest(square_of_sum_5, condition(pending)) :-\n  square_of_sum(5, Result),\n  Result == 225.\n\ntest(square_of_sum_100, condition(pending)) :-\n  square_of_sum(100, Result),\n  Result == 25_502_500.\n\ntest(sum_of_squares_1, condition(pending)) :-\n  sum_of_squares(1, Result),\n  Result == 1.\n\ntest(sum_of_squares_5, condition(pending)) :-\n  sum_of_squares(5, Result),\n  Result == 55.\n\ntest(sum_of_squares_100, condition(pending)) :-\n  sum_of_squares(100, Result),\n  Result == 338_350.\n\ntest(difference_of_squares_1, condition(pending)) :-\n  difference(1, Result),\n  Result == 0.\n\ntest(difference_of_squares_5, condition(pending)) :-\n  difference(5, Result),\n  Result == 170.\n\ntest(difference_of_squares_100, condition(pending)) :-\n  difference(100, Result),\n  Result == 25_164_150.\n\n:- end_tests(difference_of_squares).\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

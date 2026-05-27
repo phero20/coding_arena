@@ -1,0 +1,26 @@
+{
+  "id": "lean:matching-brackets",
+  "trackSlug": "lean",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "ab9e4f55-cdde-4caf-be65-49427c497e78",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "namespace MatchingBrackets\n\ndef isPaired (value : String) : Bool :=\n  sorry --remove this line and implement the function\n\nend MatchingBrackets\n",
+  "example_solution": "namespace MatchingBrackets\n\ndef process (pending : Option (List Char)) (c : Char) : Option (List Char) :=\n  match pending with\n  | none => none\n  | some list =>\n      match c with\n      | '[' => some (']' :: list)\n      | '{' => some ('}' :: list)\n      | '(' => some (')' :: list)\n      | ']' | '}' | ')' => if List.head? list == some c\n                           then List.tail? list\n                           else none\n      | _ => pending\n\ndef isPaired (value : String) : Bool :=\n  some [] == String.foldl process (some []) value\n\nend MatchingBrackets\n",
+  "test_code": "import LeanTest\nimport MatchingBrackets\n\nopen LeanTest\n\ndef matchingBracketsTests : TestSuite :=\n  (TestSuite.empty \"MatchingBrackets\")\n  |>.addTest \"paired square brackets\" (do\n      return assertTrue (MatchingBrackets.isPaired \"[]\"))\n  |>.addTest \"empty string\" (do\n      return assertTrue (MatchingBrackets.isPaired \"\"))\n  |>.addTest \"unpaired brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"[[\"))\n  |>.addTest \"wrong ordered brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"}{\"))\n  |>.addTest \"wrong closing bracket\" (do\n      return assertFalse (MatchingBrackets.isPaired \"{]\"))\n  |>.addTest \"paired with whitespace\" (do\n      return assertTrue (MatchingBrackets.isPaired \"{ }\"))\n  |>.addTest \"partially paired brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"{[])\"))\n  |>.addTest \"simple nested brackets\" (do\n      return assertTrue (MatchingBrackets.isPaired \"{[]}\"))\n  |>.addTest \"several paired brackets\" (do\n      return assertTrue (MatchingBrackets.isPaired \"{}[]\"))\n  |>.addTest \"paired and nested brackets\" (do\n      return assertTrue (MatchingBrackets.isPaired \"([{}({}[])])\"))\n  |>.addTest \"unopened closing brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"{[)][]}\"))\n  |>.addTest \"unpaired and nested brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"([{])\"))\n  |>.addTest \"paired and wrong nested brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"[({]})\"))\n  |>.addTest \"paired and wrong nested brackets but innermost are correct\" (do\n      return assertFalse (MatchingBrackets.isPaired \"[({}])\"))\n  |>.addTest \"paired and incomplete brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"{}[\"))\n  |>.addTest \"too many closing brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"[]]\"))\n  |>.addTest \"early unexpected brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \")()\"))\n  |>.addTest \"early mismatched brackets\" (do\n      return assertFalse (MatchingBrackets.isPaired \"{)()\"))\n  |>.addTest \"math expression\" (do\n      return assertTrue (MatchingBrackets.isPaired \"(((185 + 223.85) * 15) - 543)/2\"))\n  |>.addTest \"complex latex expression\" (do\n      return assertTrue (MatchingBrackets.isPaired \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\"))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [matchingBracketsTests]\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

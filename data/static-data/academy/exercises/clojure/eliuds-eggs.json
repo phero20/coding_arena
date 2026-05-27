@@ -1,0 +1,28 @@
+{
+  "id": "clojure:eliuds-eggs",
+  "trackSlug": "clojure",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "bfe1789f-8388-4285-bed9-26f694e12c70",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "(ns eliuds-eggs)\n\n(defn egg-count\n  \"Returns the number of 1 bits in the binary representation of the given number.\"\n  [num]\n  ;; function body\n  )\n",
+  "example_solution": "(ns eliuds-eggs)\n\n(defn egg-count [number]\n  (loop [value number acc 0]\n    (if (= 0 value)\n      acc\n      (recur (quot value 2) (+ acc (rem value 2))))))",
+  "test_code": "(ns eliuds-eggs-test\n  (:require [clojure.test :refer [deftest testing is]]\n            eliuds-eggs))\n\n(deftest egg-count_test_1\n  (testing \"0 eggs\"\n    (is (= 0 (eliuds-eggs/egg-count 0)))))\n\n(deftest egg-count_test_2\n  (testing \"1 egg\"\n    (is (= 1 (eliuds-eggs/egg-count 16)))))\n\n(deftest egg-count_test_3\n  (testing \"4 eggs\"\n    (is (= 4 (eliuds-eggs/egg-count 89)))))\n\n(deftest egg-count_test_4\n  (testing \"13 eggs\"\n    (is (= 13 (eliuds-eggs/egg-count 2000000000)))))\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "kahgoh"
+  ],
+  "contributors": null
+}

@@ -15,15 +15,22 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PracticeProblemCard } from "@/components/academy/tracks/practice/practice-problem-card";
+import type { PracticeExercise } from "@/types/academy";
 
 interface ConceptViewProps {
   trackSlug: string;
   conceptSlug: string;
+  exercises?: ConceptExercise[];
 }
 
 type ReferenceLink = {
   label: string;
   href: string;
+};
+
+type ConceptExercise = PracticeExercise & {
+  concepts?: string[];
 };
 
 const referenceLinkPattern = /^\[([^\]]+)\]:\s+(\S+)\s*$/gm;
@@ -43,7 +50,7 @@ function extractReferenceLinks(markdown: string) {
   return Array.from(links.values());
 }
 
-const markdownComponents: any = {
+export const markdownComponents: any = {
   code({ node, inline, className, children, ...props }: any) {
     const fullMatch = /language-(.+)/.exec(className || "");
     const isExercism =
@@ -104,7 +111,24 @@ const markdownComponents: any = {
         style={vscDarkPlus as any}
         language={match[1]}
         PreTag="div"
-        className="rounded-lg overflow-hidden my-5 border"
+        className="rounded-lg overflow-hidden my-5 border bg-backgroud w-full"
+        customStyle={{
+          margin: 0,
+          padding: "1rem",
+          background: "transparent",
+          width: "100%",
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-all",
+          overflowX: "hidden",
+        }}
+        codeTagProps={{
+          style: {
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-all",
+            display: "block",
+            maxWidth: "100%",
+          },
+        }}
         {...props}
       >
         {String(children).replace(/\n$/, "")}
@@ -150,7 +174,11 @@ const markdownComponents: any = {
   ),
 };
 
-export function ConceptView({ trackSlug, conceptSlug }: ConceptViewProps) {
+export function ConceptView({
+  trackSlug,
+  conceptSlug,
+  exercises = [],
+}: ConceptViewProps) {
   const {
     data: concept,
     isLoading,
@@ -168,6 +196,15 @@ export function ConceptView({ trackSlug, conceptSlug }: ConceptViewProps) {
       referenceLinks: extractReferenceLinks(combinedMarkdown),
     };
   }, [concept?.about, concept?.introduction]);
+
+  const relatedExercises = useMemo(() => {
+    return exercises.filter(
+      (exercise) =>
+        exercise.status !== "deprecated" &&
+        Array.isArray(exercise.concepts) &&
+        exercise.concepts.includes(conceptSlug),
+    );
+  }, [conceptSlug, exercises]);
 
   return (
     <QueryGuard
@@ -196,6 +233,19 @@ export function ConceptView({ trackSlug, conceptSlug }: ConceptViewProps) {
               {markdown}
             </ReactMarkdown>
           </div>
+
+          {relatedExercises.length > 0 && (
+            <div className="mt-12 pt-8 border-t">
+              <div className="flex items-center justify-between gap-4 mb-4">
+                <h3 className="text-lg font-bold">Practice challenges</h3>
+              </div>
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                {relatedExercises.map((exercise) => (
+                  <PracticeProblemCard key={exercise.slug} exercise={exercise} />
+                ))}
+              </div>
+            </div>
+          )}
 
           {referenceLinks.length > 0 && (
             <div className="mt-12 pt-6 border-t">

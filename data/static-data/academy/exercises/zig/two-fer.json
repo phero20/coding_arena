@@ -1,0 +1,38 @@
+{
+  "id": "zig:two-fer",
+  "trackSlug": "zig",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "866a09d8-6949-4363-b83f-7b9fefb53893",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "conditionals",
+    "error-sets",
+    "functions",
+    "optionals",
+    "slices"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "error-sets",
+    "functions",
+    "optionals",
+    "slices"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "pub fn twoFer(buffer: []u8, name: ?[]const u8) ![]u8 {\n    _ = buffer;\n    _ = name;\n    @compileError(\"respond with the appropriate message given a particular name\");\n}\n",
+  "example_solution": "const fmt = @import(\"std\").fmt;\n\npub fn twoFer(buffer: []u8, name: ?[]const u8) fmt.BufPrintError![]u8 {\n    return fmt.bufPrint(buffer, \"One for {s}, one for me.\", .{name orelse \"you\"});\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst two_fer = @import(\"two_fer.zig\");\n\nconst buffer_size = 100;\n\ntest \"no name given\" {\n    var response: [buffer_size]u8 = undefined;\n    const expected = \"One for you, one for me.\";\n    const actual = try two_fer.twoFer(&response, null);\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"a name given\" {\n    var response: [buffer_size]u8 = undefined;\n    const expected = \"One for Alice, one for me.\";\n    const actual = try two_fer.twoFer(&response, \"Alice\");\n    try testing.expectEqualStrings(expected, actual);\n}\n\ntest \"another name given\" {\n    var response: [buffer_size]u8 = undefined;\n    const expected = \"One for Bob, one for me.\";\n    const actual = try two_fer.twoFer(&response, \"Bob\");\n    try testing.expectEqualStrings(expected, actual);\n}\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "massivelivefun"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "abap:eliuds-eggs",
+  "trackSlug": "abap",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "34a2ee25-abe1-4683-a0fd-40f3e65eab55",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "CLASS zcl_eliuds_eggs DEFINITION\n  PUBLIC\n  FINAL\n  CREATE PUBLIC.\n\n  PUBLIC SECTION.\n    METHODS egg_count IMPORTING number       TYPE i\n                      RETURNING VALUE(count) TYPE i.\n  PROTECTED SECTION.\n  PRIVATE SECTION.\nENDCLASS.\n\n\n\nCLASS zcl_eliuds_eggs IMPLEMENTATION.\n  METHOD egg_count.\n    \"Implement solution\n  ENDMETHOD.\nENDCLASS.\n",
+  "example_solution": "CLASS zcl_eliuds_eggs DEFINITION\n  PUBLIC\n  FINAL\n  CREATE PUBLIC.\n\n  PUBLIC SECTION.\n    METHODS egg_count IMPORTING number       TYPE i\n                      RETURNING VALUE(count) TYPE i.\n  PROTECTED SECTION.\n  PRIVATE SECTION.\nENDCLASS.\n\n\n\nCLASS zcl_eliuds_eggs IMPLEMENTATION.\n  METHOD egg_count.\n    DATA(temp) = number.\n    WHILE temp > 0.\n      count = count + ( temp MOD 2 ).\n      temp = temp DIV 2.\n    ENDWHILE.\n  ENDMETHOD.\nENDCLASS.\n",
+  "test_code": "*\"* use this source file for your ABAP unit test classes\nCLASS ltcl_eliuds_eggs DEFINITION FINAL FOR TESTING\n  DURATION SHORT\n  RISK LEVEL HARMLESS.\n\n  PRIVATE SECTION.\n    DATA cut TYPE REF TO zcl_eliuds_eggs.\n    METHODS setup.\n    METHODS:\n      test_0_eggs FOR TESTING,\n      test_1_egg FOR TESTING,\n      test_4_eggs FOR TESTING,\n      test_13_eggs FOR TESTING.\nENDCLASS.\n\n\nCLASS ltcl_eliuds_eggs IMPLEMENTATION.\n  METHOD setup.\n    cut = NEW zcl_eliuds_eggs( ).\n  ENDMETHOD.\n\n  METHOD test_0_eggs.\n    cl_abap_unit_assert=>assert_equals(\n      exp = 0\n      act = cut->egg_count( 0 ) ).\n  ENDMETHOD.\n\n  METHOD test_1_egg.\n    cl_abap_unit_assert=>assert_equals(\n      exp = 1\n      act = cut->egg_count( 16 ) ).\n  ENDMETHOD.\n\n  METHOD test_4_eggs.\n    cl_abap_unit_assert=>assert_equals(\n      exp = 4\n      act = cut->egg_count( 89 ) ).\n  ENDMETHOD.\n\n  METHOD test_13_eggs.\n    cl_abap_unit_assert=>assert_equals(\n      exp = 13\n      act = cut->egg_count( 2000000000 ) ).\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

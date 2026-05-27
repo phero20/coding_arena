@@ -1,0 +1,39 @@
+{
+  "id": "go:isbn-verifier",
+  "trackSlug": "go",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "3530f2f0-ee5f-46a3-a8ee-e9927a637253",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "arithmetic-operators"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package isbnverifier\n\nfunc IsValidISBN(isbn string) bool {\n\tpanic(\"Please implement the IsValidISBN function\")\n}\n",
+  "example_solution": "package isbnverifier\n\nimport (\n\t\"errors\"\n\t\"math\"\n\t\"strconv\"\n\t\"unicode\"\n)\n\nfunc IsValidISBN(isbn string) bool {\n\tisbn = dropHyphen(isbn)\n\n\tary, err := strToSlice(isbn)\n\tif len(ary) != 10 || err != nil {\n\t\treturn false\n\t}\n\n\treturn calcCheckDigit(ary)\n}\n\nfunc dropHyphen(isbn string) string {\n\tvar result string\n\tfor _, char := range isbn {\n\t\tif char == '-' {\n\t\t\tcontinue\n\t\t}\n\t\tresult += string(char)\n\t}\n\treturn result\n}\n\nfunc strToSlice(isbn string) (result []int, err error) {\n\tfor pos, char := range isbn {\n\t\tswitch {\n\t\tcase unicode.IsLetter(char) && (char != 'X' || pos != 9):\n\t\t\terr = errors.New(\"invalid character\")\n\t\t\treturn result, err\n\t\tcase char == 'X':\n\t\t\tresult = append(result, 10)\n\t\tdefault:\n\t\t\ti, _ := strconv.Atoi(string(char))\n\t\t\tresult = append(result, i)\n\t\t}\n\t}\n\treturn result, err\n}\n\nfunc calcCheckDigit(isbn []int) bool {\n\tvar pool int\n\tfor idx, value := range isbn {\n\t\tpool += int(math.Abs(float64(idx)-10)) * value\n\t}\n\tresult := pool % 11\n\n\treturn result == 0\n}\n",
+  "test_code": "package isbnverifier\n\nimport (\n\t\"testing\"\n)\n\nfunc TestIsValidISBN(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual := IsValidISBN(tc.isbn)\n\t\t\tif actual != tc.expected {\n\t\t\t\tt.Errorf(\"IsValidISBN(%q)=%t, want: %t\", tc.isbn, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkIsValidISBN(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, n := range testCases {\n\t\t\tIsValidISBN(n.isbn)\n\t\t}\n\t}\n}\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "creaaa"
+  ],
+  "contributors": [
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "h311ion",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "sebito91",
+    "tinsch",
+    "eklatzer"
+  ]
+}

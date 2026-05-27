@@ -1,0 +1,53 @@
+{
+  "id": "elixir:anagram",
+  "trackSlug": "elixir",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "21e70267-097e-476f-aaff-233483514802",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "enum"
+  ],
+  "prerequisites": [
+    "strings",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "defmodule Anagram do\n  @doc \"\"\"\n  Returns all candidates that are anagrams of, but not equal to, 'base'.\n  \"\"\"\n  @spec match(String.t(), [String.t()]) :: [String.t()]\n  def match(base, candidates) do\n  end\nend\n",
+  "example_solution": "defmodule Anagram do\n  @doc \"\"\"\n  Returns those words that are anagrams of the `w` word.\n\n  Comparison is case insensitive.\n  \"\"\"\n  @spec match(String.t(), [String.t()]) :: [String.t()]\n  def match(target, words) do\n    lc_target = String.downcase(target)\n    sorted_target = sort(lc_target)\n\n    Enum.filter(words, fn word ->\n      lc_word = String.downcase(word)\n      # `and` is shortcutting\n      lc_word != lc_target and sort(lc_word) == sorted_target\n    end)\n  end\n\n  defp sort(s) do\n    # :lists.sort is specialized on lists, which saves the overhead of the\n    # reduce based Enum functions.\n    String.graphemes(s) |> :lists.sort()\n  end\nend\n",
+  "test_code": "defmodule AnagramTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"no matches\" do\n    matches = Anagram.match(\"diaper\", ~w(hello world zombies pants))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"detects two anagrams\" do\n    matches = Anagram.match(\"solemn\", ~w(lemons cherry melons))\n    assert matches == ~w(lemons melons)\n  end\n\n  @tag :pending\n  test \"does not detect anagram subsets\" do\n    matches = Anagram.match(\"good\", ~w(dog goody))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"detects anagram\" do\n    matches = Anagram.match(\"listen\", ~w(enlists google inlets banana))\n    assert matches == ~w(inlets)\n  end\n\n  @tag :pending\n  test \"detects three anagrams\" do\n    matches = Anagram.match(\"allergy\", ~w(gallery ballerina regally clergy largely leading))\n    assert matches == ~w(gallery regally largely)\n  end\n\n  @tag :pending\n  test \"detects multiple anagrams with different case\" do\n    matches = Anagram.match(\"nose\", ~w(Eons ONES))\n    assert matches == ~w(Eons ONES)\n  end\n\n  @tag :pending\n  test \"does not detect non-anagrams with identical checksum\" do\n    matches = Anagram.match(\"mass\", ~w(last))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"detect anagrams case-insensitively\" do\n    matches = Anagram.match(\"orchestra\", ~w(cashregister Carthorse radishes))\n    assert matches == ~w(Carthorse)\n  end\n\n  @tag :pending\n  test \"detects anagrams using case-insensitive subject\" do\n    matches = Anagram.match(\"Orchestra\", ~w(cashregister carthorse radishes))\n    assert matches == ~w(carthorse)\n  end\n\n  @tag :pending\n  test \"detects anagrams using case-insensitive possible matches\" do\n    matches = Anagram.match(\"orchestra\", ~w(cashregister Carthorse radishes))\n    assert matches == ~w(Carthorse)\n  end\n\n  @tag :pending\n  test \"does not detect an anagram if the original word is repeated\" do\n    matches = Anagram.match(\"go\", ~w(goGoGO))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"anagrams must use all letters exactly once\" do\n    matches = Anagram.match(\"tapper\", ~w(patter))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"words are not anagrams of themselves\" do\n    matches = Anagram.match(\"BANANA\", ~w(BANANA))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"words are not anagrams of themselves even if letter case is partially different\" do\n    matches = Anagram.match(\"BANANA\", ~w(Banana))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"words are not anagrams of themselves even if letter case is completely different\" do\n    matches = Anagram.match(\"BANANA\", ~w(banana))\n    assert matches == []\n  end\n\n  @tag :pending\n  test \"words other than themselves can be anagrams\" do\n    matches = Anagram.match(\"LISTEN\", ~w(Silent LISTEN))\n    assert matches == ~w(Silent)\n  end\n\n  @tag :pending\n  test \"handles case of greek letters\" do\n    matches = Anagram.match(\"ΑΒΓ\", ~w(ΒΓΑ ΒΓΔ γβα αβγ))\n    assert matches == ~w(ΒΓΑ γβα)\n  end\n\n  @tag :pending\n  test \"different characters may have the same bytes\" do\n    matches =\n      Anagram.match(\n        # binary representation: <<0x61, 0xE2, 0xAC, 0x82>>\n        \"a⬂\",\n        # binary representation: <<0xE2, 0x82, 0xAC, 0x61>>\n        [\"€a\"]\n      )\n\n    assert matches == []\n  end\nend\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "Br1ght0ne",
+    "Cohen-Carlisle",
+    "crazymykl",
+    "dalexj",
+    "devonestes",
+    "henrik",
+    "jeremy-w",
+    "jinyeow",
+    "kytrinyx",
+    "lpil",
+    "markijbema",
+    "neenjaw",
+    "parkerl",
+    "pminten",
+    "sotojuan",
+    "Teapane",
+    "tjcelaya",
+    "waiting-for-dev"
+  ]
+}

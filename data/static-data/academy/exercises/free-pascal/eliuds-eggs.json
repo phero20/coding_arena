@@ -1,0 +1,26 @@
+{
+  "id": "free-pascal:eliuds-eggs",
+  "trackSlug": "free-pascal",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "c40d7da4-e6a3-4048-9148-653d1205bb87",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "unit EliudsEggs;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction EggCount(const number : uint32) : uint8;\n\nimplementation\n\nuses SysUtils;\n\nfunction EggCount(const number : uint32) : uint8;\nbegin\n\n  raise ENotImplemented.Create('Please implement your solution.'); result := number * -1;\n\nend;\n\nend.\n",
+  "example_solution": "unit EliudsEggs;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction EggCount(const number : uint32) : uint8;\n\nimplementation\n\nvar\n  i, eggs : uint8;\n\nfunction EggCount(const number : uint32) : uint8;\nbegin\n\n  eggs := 0;\n\n  for i := 0 to 31 do\n    begin\n      if ((number and (1 shl i)) <> 0) then inc(eggs);\n    end;\n\n  result := eggs;\n\nend;\n\nend.\n",
+  "test_code": "unit TestCases;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nuses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;\n\ntype\n  EliudsEggsTest = class(TTestCase)\n  published\n     procedure zero_eggs;\n     procedure one_egg;\n     procedure four_eggs;\n     procedure thirteen_eggs;\n  end;\n\nimplementation\n\nuses EliudsEggs;\n\n// 559e789d-07d1-4422-9004-3b699f83bca3\nprocedure EliudsEggsTest.zero_eggs;\nbegin\n  TapAssertTrue(Self, '0 eggs', 0, EliudsEggs.EggCount(0));\nend;\n\n// 97223282-f71e-490c-92f0-b3ec9e275aba\nprocedure EliudsEggsTest.one_egg;\nbegin\n  TapAssertTrue(Self, '1 egg', 1, EliudsEggs.EggCount(16));\nend;\n\n// 1f8fd18f-26e9-4144-9a0e-57cdfc4f4ff5\nprocedure EliudsEggsTest.four_eggs;\nbegin\n  TapAssertTrue(Self, '4 eggs', 4, EliudsEggs.EggCount(89));\nend;\n\n// 0c18be92-a498-4ef2-bcbb-28ac4b06cb81\nprocedure EliudsEggsTest.thirteen_eggs;\nbegin\n  TapAssertTrue(Self, '13 eggs', 13, EliudsEggs.EggCount(2000000000));\nend;\n\ninitialization\nRegisterTest(EliudsEggsTest);\n\nend.\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

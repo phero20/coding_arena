@@ -1,0 +1,26 @@
+{
+  "id": "awk:reverse-string",
+  "trackSlug": "awk",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "7005dc56-fc42-4a81-b20d-071a335e7ead",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "BEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "BEGIN {\n\tFS = \"\"\n}\n{\n\tfor (i = NF; i; i--)\n\t\tout = out $i\n\tprint out\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.2.0.1\n\n@test \"an empty string\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f reverse-string.awk <<< \"\"\n\n  assert_success\n  assert_output \"\"\n}\n\n@test \"a word\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f reverse-string.awk <<< \"robot\"\n\n  assert_success\n  assert_output \"tobor\"\n}\n\n@test \"a capitalised word\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f reverse-string.awk <<< \"Ramen\"\n\n  assert_success\n  assert_output \"nemaR\"\n}\n\n@test \"a sentence with punctuation\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f reverse-string.awk <<< \"I'm hungry!\"\n\n  assert_success\n  assert_output \"!yrgnuh m'I\"\n}\n\n@test \"a palindrome\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f reverse-string.awk <<< \"racecar\"\n\n  assert_success\n  assert_output \"racecar\"\n}\n\n@test \"an even-sized word\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f reverse-string.awk <<< \"drawer\"\n\n  assert_success\n  assert_output \"reward\"\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

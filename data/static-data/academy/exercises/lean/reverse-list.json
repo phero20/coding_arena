@@ -1,0 +1,26 @@
+{
+  "id": "lean:reverse-list",
+  "trackSlug": "lean",
+  "slug": "reverse-list",
+  "name": "Reverse List",
+  "uuid": "367e9ad0-d3a1-403a-9c05-fc53a246c63b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Prove the equality between a custom function and the built-in List.reverse.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to prove the equality between a custom list reversing function and the built-in `List.reverse`.\n\nDue to the nature of this exercise, instead of relying on traditional runtime tests, the proof is checked by a theorem `check`.\nYou may consider the test passing if this theorem typechecks.\n\nIf you work locally or in Lean's [online playground][playground], you will get instant feedback on whether any theorem succeeds or fails, and why it fails, through Lean InfoView.\nIt is an invaluable tool, capable of showing all local values in use by your proof, and your current goal.\n\n[playground]: https://live.lean-lang.org/\n\n~~~~exercism/caution\nThe `sorry` tactic makes any proof appear to be correct. \nFor this reason, the `check` theorem might appear to automatically typecheck before any proof is actually written.\nOnce you remove `sorry` from your proof, Lean InfoView will show the correct feedback.\n~~~~\n",
+  "introduction": null,
+  "hints": "## General\n\n- The tactic [`funext`][funext] can reduce a proof of equality between functions to proving that they return the same value for all possible arguments.\nIt introduces a new argument into the proof, representing an input applied to both functions.\n\n- Using `@` before a function makes all [implicit parameters][implicit-parameters] explicit.\nThat means type variables can be brought into scope with `funext`.\n\n- The [`induction` tactic][induction-tactic] is often useful for constructing proofs by [mathematical induction][mathematical-induction] on inductive types.\n\n- Simplification tactics such as [`simp`][simp] may help after applying induction.\n\n- There are many `List` lemmas that can serve as a starting point for your proof.\nThey are listed in the [API reference][api-reference], particularly in [Init.Data.List.Basic][list-basic] and [Init.Data.List.Lemmas][list-lemmas].\n\n[funext]: https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Tactic-Reference/#funext-next\n[implicit-parameters]: https://lean-lang.org/doc/reference/latest/Terms/Functions/#implicit-functions\n[induction-tactic]: https://lean-lang.org/doc/reference/latest/Tactic-Proofs/Tactic-Reference/#induction\n[mathematical-induction]: https://en.wikipedia.org/wiki/Mathematical_induction\n[simp]: https://lean-lang.org/doc/reference/4.19.0//Tactic-Proofs/Tactic-Reference/#simp\n[api-reference]: https://lean-lang.org/doc/api/\n[list-basic]: https://lean-lang.org/doc/api/Init/Data/List/Basic.html\n[list-lemmas]: https://lean-lang.org/doc/api/Init/Data/List/Lemmas.html\n",
+  "starter_code": "import Extra\n\nnamespace ReverseList\n\n@[csimp]\ntheorem custom_reverse_eq_spec_reverse: @Extra.custom_reverse = @List.reverse := by\n  sorry --remove this line and implement the proof\n\nend ReverseList\n",
+  "example_solution": "import Extra\n\nnamespace ReverseList\n\n@[csimp]\ntheorem custom_reverse_eq_spec_reverse : @Extra.custom_reverse = @List.reverse := by\n  funext α\n  funext xs\n  induction xs with\n  | nil         => rfl\n  | cons x xs' ir => simpa [Extra.custom_reverse, List.reverse_cons] using ir\n\nend ReverseList\n",
+  "test_code": "import LeanTest\nimport ReverseList\nimport Extra\n\nopen LeanTest\n\ntheorem check: @Extra.custom_reverse = @List.reverse := by\n  exact ReverseList.custom_reverse_eq_spec_reverse\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode []\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "oxe-i"
+  ],
+  "contributors": null
+}

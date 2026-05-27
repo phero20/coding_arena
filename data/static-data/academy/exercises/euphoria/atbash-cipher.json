@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:atbash-cipher",
+  "trackSlug": "euphoria",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "e286c24b-8050-487c-affe-762e05026a40",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public function encode(sequence phase)\n\nend function\n\npublic function decode(sequence phrase)\n\nend function\n",
+  "example_solution": "include std/math.e\ninclude std/sequence.e\ninclude std/text.e\n\nfunction punctuation(atom chr)\n    return find(chr, \"!\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~\") > 0\nend function\n\npublic function encode(sequence phase)\n    integer count = 0\n    sequence result = \"\"\n\n    for i = 1 to length(phase) do\n        atom chr = phase[i]\n        if chr = ' ' then\n            continue\n        end if\n        \n        if punctuation(chr) then\n            continue\n        end if\n\n        if count = 5 then\n            result = result & ' '\n            count = 0\n        end if\n\n        if chr >= 'a' and chr <= 'z' then\n            result &= 'z' + 'a' - chr\n        elsif chr >= 'A' and chr <= 'Z' then\n            result &= 'Z' + 'A' - chr\n        else\n           result &= chr\n        end if\n\n        count += 1\n    end for\n\n    return lower(result)\nend function\n\npublic function decode(sequence phrase)\n    sequence result = \"\"\n\n    for i = 1 to length(phrase) do\n        atom chr = phrase[i]\n        if chr = ' ' then\n            continue\n        end if\n\n        if chr >= 'a' and chr <= 'z' then\n            result &= 'z' + 'a' - chr\n        elsif chr >= 'A' and chr <= 'Z' then\n            result &= 'Z' + 'A' - chr\n        else\n            result &= chr\n        end if\n    end for\n\n    return result\nend function\n",
+  "test_code": "include std/unittest.e\n\ninclude atbash-cipher.ex\n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"encode yes\",\n           \"bvh\",\n           encode(\"yes\"))\ntest_equal(\"encode no\",\n           \"ml\",\n           encode(\"no\"))\ntest_equal(\"encode OMG\",\n           \"lnt\",\n           encode(\"OMG\"))\ntest_equal(\"encode spaces\",\n           \"lnt\",\n           encode(\"O M G\"))\ntest_equal(\"encode mindblowingly\",\n           \"nrmwy oldrm tob\",\n           encode(\"mindblowingly\"))\ntest_equal(\"encode numbers\",\n           \"gvhgr mt123 gvhgr mt\",\n           encode(\"Testing,1 2 3, testing.\"))\ntest_equal(\"encode deep thought\",\n           \"gifgs rhurx grlm\",\n           encode(\"Truth is fiction.\"))\ntest_equal(\"encode all the letters\",\n           \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\",\n           encode(\"The quick brown fox jumps over the lazy dog.\"))\n\ntest_equal(\"decode exercism\",\n           \"exercism\",\n           decode(\"vcvix rhn\"))\ntest_equal(\"decode a sentence\",\n           \"anobstacleisoftenasteppingstone\",\n           decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"))\ntest_equal(\"decode numbers\",\n           \"testing123testing\",\n           decode(\"gvhgr mt123 gvhgr mt\"))\ntest_equal(\"decode all the letters\",\n           \"thequickbrownfoxjumpsoverthelazydog\",\n           decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"))\ntest_equal(\"decode with too many spaces\",\n           \"exercism\",\n           decode(\"vc vix    r hn\"))\ntest_equal(\"decode with no spaces\",\n           \"anobstacleisoftenasteppingstone\",\n           decode(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"))\n\ntest_report()\n            ",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,32 @@
+{
+  "id": "elm:acronym",
+  "trackSlug": "elm",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "851ddd78-13a0-4d8f-adda-41abde670687",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Acronym exposing (abbreviate)\n\n\nabbreviate : String -> String\nabbreviate phrase =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module Acronym exposing (abbreviate)\n\nimport Regex exposing (Regex)\nimport String\n\n\nabbreviate : String -> String\nabbreviate phrase =\n    phrase\n        |> Regex.split dashOrSpace\n        |> List.map firstLetter\n        |> String.concat\n\n\nfirstLetter : String -> String\nfirstLetter word =\n    case String.uncons word of\n        Just ( letter, _ ) ->\n            String.toUpper <| String.fromChar letter\n\n        Nothing ->\n            \"\"\n\n\ndashOrSpace : Regex\ndashOrSpace =\n    Maybe.withDefault Regex.never <|\n        Regex.fromString \"[ -]\"\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Acronym exposing (abbreviate)\nimport Expect\nimport Test exposing (Test, describe, skip, test)\n\n\ntests : Test\ntests =\n    describe \"Acronym\"\n        [ test \"basic\" <|\n            \\_ ->\n                Expect.equal \"PNG\"\n                    (abbreviate \"Portable Network Graphics\")\n        , skip <|\n            test \"lowercase words\" <|\n                \\_ ->\n                    Expect.equal \"ROR\"\n                        (abbreviate \"Ruby on Rails\")\n        , skip <|\n            test \"punctuation\" <|\n                \\_ ->\n                    Expect.equal \"FIFO\"\n                        (abbreviate \"First In, First Out\")\n        , skip <|\n            test \"all caps word\" <|\n                \\_ ->\n                    Expect.equal \"GIMP\"\n                        (abbreviate \"GNU Image Manipulation Program\")\n        , skip <|\n            test \"punctuation without whitespace\" <|\n                \\_ ->\n                    Expect.equal \"CMOS\"\n                        (abbreviate \"Complementary metal-oxide semiconductor\")\n        ]\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "tuxagon"
+  ],
+  "contributors": [
+    "nathanielknight"
+  ]
+}

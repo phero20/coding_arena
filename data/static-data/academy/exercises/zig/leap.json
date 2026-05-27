@@ -1,0 +1,32 @@
+{
+  "id": "zig:leap",
+  "trackSlug": "zig",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "5e8e92f6-e8c7-49f1-8ebf-a93f73998d47",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "conditionals",
+    "functions"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "functions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "pub fn isLeapYear(year: u32) bool {\n    _ = year;\n    @compileError(\"please implement the isLeapYear function\");\n}\n",
+  "example_solution": "pub fn isLeapYear(year: u32) bool {\n    return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0);\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst leap = @import(\"leap.zig\");\n\ntest \"year not divisible by 4 in common year\" {\n    try testing.expect(!leap.isLeapYear(2015));\n}\n\ntest \"year divisible by 2, not divisible by 4 in common year\" {\n    try testing.expect(!leap.isLeapYear(1970));\n}\n\ntest \"year divisible by 4, not divisible by 100 in leap year\" {\n    try testing.expect(leap.isLeapYear(1996));\n}\n\ntest \"year divisible by 4 and 5 is still a leap year\" {\n    try testing.expect(leap.isLeapYear(1960));\n}\n\ntest \"year divisible by 100, not divisible by 400 in common year\" {\n    try testing.expect(!leap.isLeapYear(2100));\n}\n\ntest \"year divisible by 100 but not by 3 is still not a leap year\" {\n    try testing.expect(!leap.isLeapYear(1900));\n}\n\ntest \"year divisible by 400 is leap year\" {\n    try testing.expect(leap.isLeapYear(2000));\n}\n\ntest \"year divisible by 400 but not by 125 is still a leap year\" {\n    try testing.expect(leap.isLeapYear(2400));\n}\n\ntest \"year divisible by 200, not divisible by 400 in common year\" {\n    try testing.expect(!leap.isLeapYear(1800));\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "massivelivefun"
+  ],
+  "contributors": null
+}

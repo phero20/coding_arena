@@ -1,0 +1,26 @@
+{
+  "id": "cfml:reverse-string",
+  "trackSlug": "cfml",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "9f53f896-1390-4cc9-89fc-02212a205c40",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the ReverseString exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\tfunction reverse( value ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the ReverseString exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\tfunction reverse( value ) {\n\t\tvar reversed = '';\n\n\t\tfor (i = Len(value); i >= 1; i--) {\n\t\t\treversed &= value[i];\n\t\t}\n\n\t\treturn reversed;\n\t}\n\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'ReverseString' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My ReverseString class\", function(){\t\t\t\n\n\t\t\tit( 'an empty string', function(){\n\t\t\t\texpect( SUT.reverse( value='' ) ).toBe( '' );\n\t\t\t});\n\n\t\t\tit( 'a word', function(){\n\t\t\t\texpect( SUT.reverse( value='robot' ) ).toBe( 'tobor' );\n\t\t\t});\n\n\t\t\tit( 'a capitalized word', function(){\n\t\t\t\texpect( SUT.reverse( value='Ramen' ) ).toBe( 'nemaR' );\n\t\t\t});\n\n\t\t\tit( 'a sentence with punctuation', function(){\n\t\t\t\texpect( SUT.reverse( value='I''m hungry!' ) ).toBe( '!yrgnuh m''I' );\n\t\t\t});\n\n\t\t\tit( 'a palindrome', function(){\n\t\t\t\texpect( SUT.reverse( value='racecar' ) ).toBe( 'racecar' );\n\t\t\t});\n\n\t\t\tit( 'an even-sized word', function(){\n\t\t\t\texpect( SUT.reverse( value='drawer' ) ).toBe( 'reward' );\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

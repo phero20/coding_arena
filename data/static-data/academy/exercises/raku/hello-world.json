@@ -1,0 +1,29 @@
+{
+  "id": "raku:hello-world",
+  "trackSlug": "raku",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "2803dd22-3a92-4fa9-ae7c-4354e80fe423",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#`(\n    This is a 'stub' file. It's a little start on your solution.\n    It is not a complete solution though; you will have to write some code.\n)\nunit module HelloWorld;\n\nsub hello is export {\n    return 'Goodbye, Mars!';\n}\n",
+  "example_solution": "#`(\n    This is a 'stub' file. It's a little start on your solution.\n    It is not a complete solution though; you will have to write some code.\n)\nunit module HelloWorld;\n\nsub hello is export {\n    'Hello, World!';\n}\n",
+  "test_code": "#!/usr/bin/env raku\nuse Test;\nuse lib $?FILE.IO.parent(2).add('lib'); #`[Look for the module inside the same directory as this test file.]\nuse HelloWorld;\n\ncmp-ok( # begin: af9ffe10-dc13-42d8-a742-e7bdafac449d\n    hello,           # Run the 'hello' subroutine, which is imported from your module.\n    \"eq\",            # The comparison we're using ('eq' for comparing strings).\n    \"Hello, World!\", # The expected result to compare with 'hello'.\n    \"Say Hi!\",       # The test description.\n); # end: af9ffe10-dc13-42d8-a742-e7bdafac449d\n\ndone-testing;\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "m-dango"
+  ],
+  "contributors": [
+    "kotp",
+    "kytrinyx"
+  ]
+}

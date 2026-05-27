@@ -1,0 +1,26 @@
+{
+  "id": "wasm:eliuds-eggs",
+  "trackSlug": "wasm",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "233fde6a-79d9-4d90-8f94-2a0519352a5c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "(module\n  ;;\n  ;; count the number of 1 bits in the binary representation of a number\n  ;;\n  ;; @param {i32} number - the number to count the bits of\n  ;;\n  ;; @returns {i32} the number of 1 bits in the binary representation of the number\n  ;;\n  (func (export \"eggCount\") (param $number i32) (result i32)\n    (return (i32.const 42))\n  )\n)\n",
+  "example_solution": "(module\n  (func (export \"eggCount\") (param $number i32) (result i32)\n    (local $remaining i32)\n    (local $count i32)\n\n    (if (i32.eq (local.get $number) (i32.const 0))(then\n      (return (i32.const 0))\n    ))\n\n    (local.set $remaining (local.get $number))\n    (local.set $count (i32.const 0))\n\n    ;; do while $remaining != 0\n    (loop\n      ;; Clear least-significant 1 bit using\n      ;; $remaining -= $remaining & -$remaining\n      (local.set $remaining (i32.sub (local.get $remaining) (i32.and (local.get $remaining) (i32.sub (i32.const 0) (local.get $remaining)))))\n      (local.set $count (i32.add (local.get $count) (i32.const 1)))\n      (br_if 0 (i32.ne (local.get $remaining) (i32.const 0)))\n    )\n\n    (return (local.get $count))\n  )\n)\n",
+  "test_code": "import { compileWat, WasmRunner } from \"@exercism/wasm-lib\";\n\nlet wasmModule;\nlet currentInstance;\n\nbeforeAll(async () => {\n  try {\n    const watPath = new URL(\"./eliuds-eggs.wat\", import.meta.url);\n    const { buffer } = await compileWat(watPath);\n    wasmModule = await WebAssembly.compile(buffer);\n  } catch (err) {\n    console.log(`Error compiling *.wat: \\n${err}`);\n    process.exit(1);\n  }\n});\n\ndescribe(\"eggCount()\", () => {\n  beforeEach(async () => {\n    currentInstance = null;\n\n    if (!wasmModule) {\n      return Promise.reject();\n    }\n    try {\n      currentInstance = await new WasmRunner(wasmModule);\n      return Promise.resolve();\n    } catch (err) {\n      console.log(`Error instantiating WebAssembly module: ${err}`);\n      return Promise.reject();\n    }\n  });\n\n  test(\"0 eggs\", () => {\n    expect(currentInstance.exports.eggCount(0)).toEqual(0);\n  });\n\n  xtest(\"1 egg\", () => {\n    expect(currentInstance.exports.eggCount(16)).toEqual(1);\n  });\n\n  xtest(\"4 eggs\", () => {\n    expect(currentInstance.exports.eggCount(89)).toEqual(4);\n  });\n\n  xtest(\"13 eggs\", () => {\n    expect(currentInstance.exports.eggCount(2000000000)).toEqual(13);\n  });\n});\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

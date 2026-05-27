@@ -1,0 +1,26 @@
+{
+  "id": "uiua:nth-prime",
+  "trackSlug": "uiua",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "1dabde92-f6b2-429d-9856-87c5aa1d027b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Return the Nth prime number\n# NthPrime | Nth\nPrime ← |1 ⊙(⍤ \"Please implement Prime\" 0)\n",
+  "example_solution": "IsPrime ← =1⧻°/×\nPrime   ← ⨬(⍤ \"there is no zeroth prime\" 0|⊙⋅◌⍢(⊙+⟜IsPrime+1|⋅>) 1 0)±.\n",
+  "test_code": "~ \"nth-prime.ua\" ~ Prime\n\n# First prime\n⍤⤙≍ 2 Prime 1\n\n# Second prime\n⍤⤙≍ 3 Prime 2\n\n# Sixth prime\n⍤⤙≍ 13 Prime 6\n\n# Big prime\n⍤⤙≍ 104743 Prime 10001\n\n# There is no zeroth prime\n⍤⤙≍ \"there is no zeroth prime\" ⍣(Prime 0|∘)\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "cobol:reverse-string",
+  "trackSlug": "cobol",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "47f40a37-0a60-40fc-82e6-33676f4c07fb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. reverse-string.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-STRING PIC X(64).\n\n       PROCEDURE DIVISION.\n       REVERSE-STRING.\n\nSTRING* Reverse a string and display result\n       \n       DISPLAY WS-STRING.\n",
+  "example_solution": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. reverse-string.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-STRING PIC X(64).\n\n       PROCEDURE DIVISION.\n       REVERSE-STRING.\n\n       MOVE FUNCTION REVERSE(WS-STRING)\n       TO WS-STRING.\n       \n       MOVE FUNCTION TRIM(WS-STRING LEADING)\n       TO WS-STRING.\n       \n      *DISPLAY WS-STRING.\n",
+  "test_code": "TestCase \"COBOL\"\n\tMOVE \"COBOL\" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = 'LOBOC'\n\nTestCase \"LOBOC\"\n\tMOVE \"LOBOC\" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = 'COBOL'\n\nTestCase \"EMPTY\"\n\tMOVE \" \" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = ' '\n\nTestCase \"Robot\"\n\tMOVE \"ROBOT\" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = 'TOBOR'\n\nTestCase \"Ramen\"\n\tMOVE \"Ramen\" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = 'nemaR'\n\nTestCase \"I'm hungry!\"\n\tMOVE \"I'm hungry!\" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = \"!yrgnuh m'I\"\n\nTestCase \"EMPTY\"\n\tMOVE \"drawer\" TO WS-STRING\n\tPERFORM REVERSE-STRING\n\tEXPECT WS-STRING = 'reward'\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "KTSnowy"
+  ],
+  "contributors": null
+}

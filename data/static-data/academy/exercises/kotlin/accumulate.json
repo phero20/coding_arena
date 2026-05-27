@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:accumulate",
+  "trackSlug": "kotlin",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "86015770-603b-44cf-aedf-f2a7cf79c841",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an\noperation to perform on each element of the collection, returns a new\ncollection containing the result of applying that operation to each element of\nthe input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality\nprovided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object Accumulate {\n    fun accumulate(collection: List<Any>, converter: (Any) -> Any): List<Any> {\n        TODO(\"Change the function signature and implement it to complete the task\")\n    }\n}\n",
+  "example_solution": "object Accumulate {\n    fun <T, R> accumulate(collection: List<T>, function: (T) -> R): List<R> {\n        val retVal = mutableListOf<R>()\n        for(item in collection) {\n            retVal.add(function.invoke(item))\n        }\n        return retVal\n    }\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport kotlin.test.assertEquals\n\nclass AccumulateTest {\n\n\n    @Test\n    fun emptyAccumulateProducesEmptyAccumulation() {\n        val input = listOf<Int>()\n        val expectedOutput = listOf<Int>()\n        assertEquals(expectedOutput, Accumulate.accumulate(input, { x -> x * x }))\n    }\n\n    @Ignore\n    @Test\n    fun accumulateSquares() {\n        val input = listOf(1, 2, 3)\n        val expectedOutput = listOf(1, 4, 9)\n        assertEquals(expectedOutput, Accumulate.accumulate(input, { x -> x * x }))\n    }\n\n    @Ignore\n    @Test\n    fun accumulateUpperCases() {\n        val input = listOf(\"hello\", \"world\")\n        val expectedOutput = listOf(\"HELLO\", \"WORLD\")\n        assertEquals(expectedOutput, Accumulate.accumulate(input, { it.toUpperCase() }))\n    }\n\n    @Ignore\n    @Test\n    fun accumulateReversedStrings() {\n        val input = \"the quick brown fox etc\".split(\" \")\n        val expectedOutput = \"eht kciuq nworb xof cte\".split(\" \")\n        assertEquals(expectedOutput, Accumulate.accumulate(input, { it.reversed() }))\n    }\n\n    @Ignore\n    @Test\n    fun accumulateWithinAccumulate() {\n        val input1 = listOf(\"a\", \"b\", \"c\")\n        val input2 = listOf(\"1\", \"2\", \"3\")\n        val expectedOutput = listOf(\"a1 a2 a3\", \"b1 b2 b3\", \"c1 c2 c3\")\n        assertEquals(expectedOutput, Accumulate.accumulate(input1,\n                { c -> Accumulate.accumulate(input2, { d -> c + d }).joinToString(\" \") }\n        ))\n    }\n\n    @Ignore\n    @Test\n    fun accumulateToDifferentType() {\n        val input = listOf(1, 2, 3)\n        val expectedOutput = listOf(\"1\", \"2\", \"3\")\n        assertEquals(expectedOutput, Accumulate.accumulate(input, { it.toString() }))\n    }\n}\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "kytrinyx",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

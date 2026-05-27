@@ -1,0 +1,33 @@
+{
+  "id": "javascript:binary",
+  "trackSlug": "javascript",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "0ba4d3b9-2519-49ac-bd93-f960aca6c11f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion. Given a binary input\nstring, your program should produce a decimal output. The\nprogram should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The *n*th number gets multiplied by 10^_(n-1)_.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Binary' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport class Binary {\n  constructor() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  toDecimal() {\n    throw new Error('Remove this line and implement the function');\n  }\n}\n",
+  "example_solution": "// classy solution, eh?\n\nexport class Binary {\n  constructor(binary) {\n    this.binary = binary.match(/^[01]*$/) ? parseInt(binary, 2) : null;\n  }\n\n  toDecimal() {\n    if (this.binary === null) {\n      return null;\n    }\n\n    const out = Number(this.binary.toString(10));\n    return Number.isNaN(out) ? null : out;\n  }\n}\n",
+  "test_code": "import { describe, test, expect, xtest } from '@jest/globals';\nimport { Binary } from './binary';\n\ndescribe('binary', () => {\n  test('0 is decimal 0', () => expect(new Binary('0').toDecimal()).toEqual(0));\n\n  xtest('1 is decimal 1', () => expect(new Binary('1').toDecimal()).toEqual(1));\n\n  xtest('10 is decimal 2', () =>\n    expect(new Binary('10').toDecimal()).toEqual(2));\n\n  xtest('11 is decimal 3', () =>\n    expect(new Binary('11').toDecimal()).toEqual(3));\n\n  xtest('100 is decimal 4', () =>\n    expect(new Binary('100').toDecimal()).toEqual(4));\n\n  xtest('1001 is decimal 9', () =>\n    expect(new Binary('1001').toDecimal()).toEqual(9));\n\n  xtest('11010 is decimal 26', () =>\n    expect(new Binary('11010').toDecimal()).toEqual(26));\n\n  xtest('10001101000 is decimal 1128', () =>\n    expect(new Binary('10001101000').toDecimal()).toEqual(1128));\n\n  xtest('ignores leading zeros', () =>\n    expect(new Binary('00011111').toDecimal()).toEqual(31));\n\n  xtest('invalid inputs are null', () => {\n    // \"2 is not a valid binary digit\n    expect(new Binary('2').toDecimal()).toEqual(null);\n\n    // a number containing a non-binary digit is invalid\n    expect(new Binary('01201').toDecimal()).toEqual(null);\n\n    // a number with trailing non-binary characters is invalid\n    expect(new Binary('10nope').toDecimal()).toEqual(null);\n\n    // a number with leading non-binary characters is invalid\n    expect(new Binary('nope10').toDecimal()).toEqual(null);\n\n    // a number with internal non-binary characters is invalid\n    expect(new Binary('10nope10').toDecimal()).toEqual(null);\n\n    // a number and a word whitespace separated is invalid\n    expect(new Binary('001nope').toDecimal()).toEqual(null);\n  });\n});\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "ankorGH",
+    "Futuro212",
+    "rchavarria",
+    "ryanplusplus",
+    "SleeplessByte",
+    "tejasbubane"
+  ]
+}

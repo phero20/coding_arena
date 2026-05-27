@@ -1,0 +1,38 @@
+{
+  "id": "haskell:gigasecond",
+  "trackSlug": "haskell",
+  "slug": "gigasecond",
+  "name": "Gigasecond",
+  "uuid": "317ef3e7-67ce-4940-bc90-eed1c4a27c19",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Given a moment, determine the moment that would be after a gigasecond has passed.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a moment, determine the moment that would be after a gigasecond\nhas passed.\n\nA gigasecond is 10^9 (1,000,000,000) seconds.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Gigasecond (fromDay) where\n\nimport Data.Time.Clock (UTCTime)\n\nfromDay :: UTCTime -> UTCTime\nfromDay = error \"You need to implement this function.\"\n",
+  "example_solution": "module Gigasecond (fromDay) where\nimport Data.Time.Clock (UTCTime, addUTCTime)\n\nfromDay :: UTCTime -> UTCTime\nfromDay = addUTCTime 1000000000\n",
+  "test_code": "import Data.Time.Clock   (UTCTime)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Gigasecond (fromDay)\n\nimport Data.Maybe (fromJust)\nimport Data.Time.Format.ISO8601 (iso8601ParseM)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"fromDay\" $ do\n\n          let dt = fromJust . iso8601ParseM :: String -> UTCTime\n\n          it \"from apr 25 2011\" $\n            fromDay (dt \"2011-04-25T00:00:00Z\")\n            `shouldBe` dt \"2043-01-01T01:46:40Z\"\n\n          it \"from jun 13 1977\" $\n            fromDay (dt \"1977-06-13T00:00:00Z\")\n            `shouldBe` dt \"2009-02-19T01:46:40Z\"\n\n          it \"from jul 19 1959\" $\n            fromDay (dt \"1959-07-19T00:00:00Z\")\n            `shouldBe` dt \"1991-03-27T01:46:40Z\"\n",
+  "source": "Chapter 9 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=09",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "andy5995",
+    "daniloisr",
+    "iHiD",
+    "kotp",
+    "kytrinyx",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "rpottsoh",
+    "sshine",
+    "tejasbubane"
+  ]
+}

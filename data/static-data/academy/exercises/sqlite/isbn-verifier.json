@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:isbn-verifier",
+  "trackSlug": "sqlite",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "a0a1cb68-b587-4d30-bf1c-819814847637",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-- Schema: CREATE TABLE \"isbn-verifier\" (isbn TEXT NOT NULL, result BOOL);\n-- Task: update the isbn-verifier table and set the result based on the isbn.\n",
+  "example_solution": "UPDATE \"isbn-verifier\"\nSET\n  result = FALSE\nWHERE\n  GLOB(\n    '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9X]',\n    REPLACE(isbn, '-', '')\n  ) = 0;\n\nUPDATE \"isbn-verifier\"\nSET\n  result = (\n    SUBSTRING(REPLACE(isbn, '-', ''), -10, 1) * 10 + SUBSTRING(REPLACE(isbn, '-', ''), -9, 1) * 9 + SUBSTRING(REPLACE(isbn, '-', ''), -8, 1) * 8 + SUBSTRING(REPLACE(isbn, '-', ''), -7, 1) * 7 + SUBSTRING(REPLACE(isbn, '-', ''), -6, 1) * 6 + SUBSTRING(REPLACE(isbn, '-', ''), -5, 1) * 5 + SUBSTRING(REPLACE(isbn, '-', ''), -4, 1) * 4 + SUBSTRING(REPLACE(isbn, '-', ''), -3, 1) * 3 + SUBSTRING(REPLACE(isbn, '-', ''), -2, 1) * 2 + IIF(\n      SUBSTRING(REPLACE(isbn, '-', ''), -1, 1) = 'X',\n      10,\n      SUBSTRING(REPLACE(isbn, '-', ''), -1, 1)\n    )\n  ) % 11 = 0\nWHERE\n  result ISNULL;\n",
+  "test_code": "-- Create database:\n.read ./create_fixture.sql\n-- Read user student solution and save any output as markdown in user_output.md:\n.mode markdown\n.output user_output.md\n.read ./isbn-verifier.sql\n.output\n-- Create a clean testing environment:\n.read ./create_test_table.sql\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      isbn,\n      result\n    FROM\n      \"isbn-verifier\"\n  ) AS actual\nWHERE\n  (actual.isbn, actual.result) = (tests.isbn, tests.expected);\n\n-- Update message for failed tests to give helpful information:\nUPDATE tests\nSET\n  message = (\n    'Result for \"' || tests.isbn || '\"' || ' is <' || COALESCE(actual.result, 'NULL') || '> but should be <' || tests.expected || '>'\n  )\nFROM\n  (\n    SELECT\n      isbn,\n      result\n    FROM\n      \"isbn-verifier\"\n  ) AS actual\nWHERE\n  actual.isbn = tests.isbn\n  AND tests.status = 'fail';\n\n-- Save results to ./output.json (needed by the online test-runner)\n.mode json\n.once './output.json'\nSELECT\n  description,\n  status,\n  message,\n  output,\n  test_code,\n  task_id\nFROM\n  tests;\n\n-- Display test results in readable form for the student:\n.mode table\nSELECT\n  description,\n  status,\n  message\nFROM\n  tests;\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

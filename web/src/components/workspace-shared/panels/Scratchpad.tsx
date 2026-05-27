@@ -162,7 +162,13 @@ export const Scratchpad: React.FC<ScratchpadProps> = ({
     setIsMaximized((v) => !v);
   };
 
-  const { data: tests } = useProblemTestsQuery(problem?.problem_id, "PUBLIC");
+  const { data: tests } = useProblemTestsQuery(
+    problem?.problem_id, 
+    "PUBLIC", 
+    problem?.problem_id 
+      ? !problem.problem_id.includes(":") && problem.problem_id !== "compiler-playground"
+      : false
+  );
   const publicTests = Array.isArray(tests) ? (tests[0] ?? null) : tests;
 
   const dataKey = problem?.problem_id

@@ -1,0 +1,41 @@
+{
+  "id": "fsharp:space-age",
+  "trackSlug": "fsharp",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "277d05db-0ba0-4de6-b5f8-090c251afffc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "discriminated-unions",
+    "floating-point-numbers"
+  ],
+  "prerequisites": [
+    "discriminated-unions",
+    "floating-point-numbers",
+    "integral-numbers"
+  ],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "module SpaceAge\n\n// TODO: define the Planet type\n\nlet age (planet: Planet) (seconds: int64): float = failwith \"You need to implement this function.\"",
+  "example_solution": "module SpaceAge\n\nopen System\n\ntype Planet = \n    | Mercury\n    | Venus\n    | Earth\n    | Mars\n    | Jupiter\n    | Saturn\n    | Neptune\n    | Uranus\n\nlet secondsOnEarth = 31557600.0   \n\nlet planetPeriods = \n    [Mercury, 0.2408467;\n     Venus,   0.61519726;\n     Earth,   1.0;\n     Mars,    1.8808158;\n     Jupiter, 11.862615;\n     Saturn,  29.447498;\n     Uranus,  84.016846;\n     Neptune, 164.79132] \n    |> Map.ofList\n\nlet age planet (seconds: int64) = \n    let yearsUsingPeriod (period: float) = Math.Round((float seconds / period) / secondsOnEarth, 2)\n        \n    yearsUsingPeriod planetPeriods.[planet]\n",
+  "test_code": "module SpaceAgeTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen SpaceAge\n\n[<Fact>]\nlet ``Age on Earth`` () =\n    age Earth 1000000000L |> should (equalWithin 0.01) 31.69\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Mercury`` () =\n    age Mercury 2134835688L |> should (equalWithin 0.01) 280.88\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Venus`` () =\n    age Venus 189839836L |> should (equalWithin 0.01) 9.78\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Mars`` () =\n    age Mars 2129871239L |> should (equalWithin 0.01) 35.88\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Jupiter`` () =\n    age Jupiter 901876382L |> should (equalWithin 0.01) 2.41\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Saturn`` () =\n    age Saturn 2000000000L |> should (equalWithin 0.01) 2.15\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Uranus`` () =\n    age Uranus 1210123456L |> should (equalWithin 0.01) 0.46\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Age on Neptune`` () =\n    age Neptune 1821023456L |> should (equalWithin 0.01) 0.35\n\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "jwood803"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "racket:scrabble-score",
+  "trackSlug": "racket",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "74d67f30-1f31-4289-a9bc-1bf69ec54ae2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide score)\n\n(define (score word)\n  (error \"Please implement 'score'\"))\n",
+  "example_solution": "#lang racket/base\n\n(require racket/match)\n\n(provide score)\n\n(define (score word)\n  (for/sum ([c (in-string (string-downcase word))])\n    (match c\n      [(or #\\a #\\e #\\i #\\o #\\u #\\l #\\n #\\r #\\s #\\t)  1]\n      [(or #\\d #\\g)                                  2]\n      [(or #\\b #\\c #\\m #\\p)                          3]\n      [(or #\\f #\\h #\\v #\\w #\\y)                      4]\n      [(or #\\k)                                      5]\n      [(or #\\j #\\x)                                  8]\n      [(or #\\q #\\z)                                 10]\n      [_ 0])))\n",
+  "test_code": "#lang racket/base\n\n; Tests adapted from `problem-specifications/canonical-data.json v1.1.0\n(require \"scrabble-score.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (define suite\n    (test-suite\n     \"scrabble tests\"\n\n     (test-eqv? \"lowercase letter\"\n                (score \"a\")\n                1)\n\n     (test-eqv? \"uppercase letter\"\n                (score \"A\")\n                1)\n\n     (test-eqv? \"valuable letter\"\n                (score \"f\")\n                4)\n\n     (test-eqv? \"short word\"\n                (score \"at\")\n                2)\n\n     (test-eqv? \"short, valuable word\"\n                (score \"zoo\")\n                12)\n\n     (test-eqv? \"medium word\"\n                (score \"street\")\n                6)\n\n     (test-eqv? \"medium, valuable word\"\n                (score \"quirky\")\n                22)\n\n     (test-eqv? \"long, mixed-case word\"\n                (score \"OxyphenButazone\")\n                41)\n\n     (test-eqv? \"english-like word\"\n                (score \"pinata\")\n                8)\n\n     (test-eqv? \"empty input\"\n                (score \"\")\n                0)\n\n     (test-eqv? \"entire alphabet available\"\n                (score \"abcdefghijklmnopqrstuvwxyz\")\n                87)\n\n     ))\n\n  (run-tests suite))\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "zenspider"
+  ],
+  "contributors": [
+    "cousinitt",
+    "robertpostill",
+    "yurrriq"
+  ]
+}

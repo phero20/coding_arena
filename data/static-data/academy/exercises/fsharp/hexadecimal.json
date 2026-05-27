@@ -1,0 +1,32 @@
+{
+  "id": "fsharp:hexadecimal",
+  "trackSlug": "fsharp",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "f4f80d57-a248-49d3-9329-587eb2643d4f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000, teal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Hexadecimal\n\nlet toDecimal (input: string): int = failwith \"You need to implement this function.\"\n",
+  "example_solution": "module Hexadecimal\n\nopen System\n\nlet private isValid char = \"0123456789ABCDEF\".Contains(string char)\n\nlet private charToDecimal (char: char) =\n    if Char.IsDigit(char) then (int)char - (int)'0'\n    else (int)(char) - (int)'A' + 10\n\nlet toDecimal(input: string) = \n    let chars = input.ToUpperInvariant().ToCharArray()\n    if Array.forall isValid chars then Array.fold (fun acc c -> acc * 16 + charToDecimal c) 0 chars\n    else 0",
+  "test_code": "// This file was created manually and its version is 1.0.0.\n\nmodule HexadecimalTest\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Hexadecimal\n\n[<Fact>]\nlet ``Hexadecimal 1 is decimal 1`` () =\n    toDecimal \"1\" |> should equal 1\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal c is decimal 12`` () =\n    toDecimal \"c\" |> should equal 12\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal 10 is decimal 16`` () =\n    toDecimal \"10\" |> should equal 16\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal af is decimal 175`` () =\n    toDecimal \"af\" |> should equal 175\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal 100 is decimal 256`` () =\n    toDecimal \"100\" |> should equal 256\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal 19ace is decimal 105166`` () =\n    toDecimal \"19ace\" |> should equal 105166\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal 000000 is decimal 0`` () =\n    toDecimal \"000000\" |> should equal 0\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal ffffff is decimal 16777215`` () =\n    toDecimal \"ffffff\" |> should equal 16777215\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal ffff00 is decimal 16776960`` () =\n    toDecimal \"ffff00\" |> should equal 16776960\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hexadecimal carrot is decimal 0`` () =\n    toDecimal \"carrot\" |> should equal 0\n\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

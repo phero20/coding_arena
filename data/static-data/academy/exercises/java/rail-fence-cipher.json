@@ -1,0 +1,42 @@
+{
+  "id": "java:rail-fence-cipher",
+  "trackSlug": "java",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "6e4ad4ed-cc02-4132-973d-b9163ba0ea3d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "arrays",
+    "chars",
+    "foreach-loops",
+    "if-else-statements"
+  ],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RailFenceCipher {\n\n    RailFenceCipher(int rows) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    String getEncryptedData(String message) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n    String getDecryptedData(String message) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}",
+  "example_solution": "import java.util.Arrays;\n\nclass RailFenceCipher {\n\n    private int key;\n\n    RailFenceCipher(int key) {\n        this.key = key;\n    }\n\n    String getEncryptedData(String message) {\n        String[] lines = splitIntoLines(message, false);\n        StringBuilder result = new StringBuilder();\n        for (String line : lines) {\n            result.append(line);\n        }\n        return result.toString();\n    }\n\n    String getDecryptedData(String message) {\n        String[] lines = splitIntoLines(message, true);\n\n        int charCount = 0;\n        for (int i = 0; i < key; ++i) {\n            while (lines[i].contains(\"?\")) {\n                String letter = String.valueOf(message.charAt(charCount));\n                lines[i] = lines[i].replaceFirst(\"\\\\?\", letter);\n                charCount++;\n            }\n        }\n\n        StringBuilder result = new StringBuilder();\n        int lineCount = 0;\n        int direction = -1;\n        for (int i = 0; i < message.length(); ++i) {\n            String letter = String.valueOf(lines[lineCount].charAt(0));\n            lines[lineCount] = lines[lineCount].substring(1);\n            result.append(letter);\n            direction *= lineCount == 0 || lineCount == key - 1 ? -1 : 1;\n            lineCount += direction;\n        }\n        return result.toString();\n    }\n\n    private String[] splitIntoLines(String message, boolean encrypted) {\n        String[] result = generateEmptyStrings(key);\n        int lineCount = 0;\n        int direction = -1;\n        for (char c : message.toCharArray()) {\n            String letter = String.valueOf(c);\n            result[lineCount] += encrypted ? \"?\" : letter;\n            direction *= lineCount == 0 || lineCount == key - 1 ? -1 : 1;\n            lineCount += direction;\n        }\n        return result;\n    }\n\n    private String[] generateEmptyStrings(int num) {\n        String[] strings = new String[num];\n        Arrays.fill(strings, \"\");\n        return strings;\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class RailFenceCipherTest {\n\n    private RailFenceCipher railFenceCipher;\n\n    @Test\n    @DisplayName(\"encode with two rails\")\n    public void encodeWithTwoRails() {\n        railFenceCipher = new RailFenceCipher(2);\n        assertThat(railFenceCipher.getEncryptedData(\"XOXOXOXOXOXOXOXOXO\"))\n            .isEqualTo(\"XXXXXXXXXOOOOOOOOO\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"encode with three rails\")\n    public void encodeWithThreeRails() {\n        railFenceCipher = new RailFenceCipher(3);\n        assertThat(railFenceCipher.getEncryptedData(\"WEAREDISCOVEREDFLEEATONCE\"))\n            .isEqualTo(\"WECRLTEERDSOEEFEAOCAIVDEN\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"encode with ending in the middle\")\n    public void encodeWithEndingInTheMiddle() {\n        railFenceCipher = new RailFenceCipher(4);\n        assertThat(railFenceCipher.getEncryptedData(\"EXERCISES\"))\n            .isEqualTo(\"ESXIEECSR\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"decode with three rails\")\n    public void decodeWithThreeRails() {\n        railFenceCipher = new RailFenceCipher(3);\n        assertThat(railFenceCipher.getDecryptedData(\"TEITELHDVLSNHDTISEIIEA\"))\n            .isEqualTo(\"THEDEVILISINTHEDETAILS\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"decode with five rails\")\n    public void decodeWithFiveRails() {\n        railFenceCipher = new RailFenceCipher(5);\n        assertThat(railFenceCipher.getDecryptedData(\"EIEXMSMESAORIWSCE\"))\n            .isEqualTo(\"EXERCISMISAWESOME\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"decode with six rails\")\n    public void decodeWithSixRails() {\n        railFenceCipher = new RailFenceCipher(6);\n        assertThat(railFenceCipher.getDecryptedData(\"133714114238148966225439541018335470986172518171757571896261\"))\n            .isEqualTo(\"112358132134558914423337761098715972584418167651094617711286\");\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "LeonDsouza"
+  ],
+  "contributors": [
+    "FridaTveit",
+    "hgvanpariya",
+    "jmrunkle",
+    "lemoncurry",
+    "mirkoperillo",
+    "msomji",
+    "muzimuzhi",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "sshine"
+  ]
+}

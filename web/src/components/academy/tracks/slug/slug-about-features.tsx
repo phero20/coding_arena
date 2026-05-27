@@ -33,7 +33,7 @@ export function SlugAboutFeatures({
 
   return (
     <section className="w-full ">
-      <div className="mx-auto max-w-7xl px-4 border-t-2 border-border/50 py-20">
+      <div className="mx-auto max-w-7xl px-4 border-t-2 border-border/50 pt-20 pb-0">
         
         {/* Section Heading */}
         <div className="text-center mb-20">

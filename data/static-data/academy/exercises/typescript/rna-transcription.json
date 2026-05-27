@@ -1,0 +1,30 @@
+{
+  "id": "typescript:rna-transcription",
+  "trackSlug": "typescript",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "b4db381f-1c99-44c6-948c-c8892d77823e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "export function toRna() {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function toRna(input: string): string {\n  const dictionary: { [key: string]: string } = {\n    G: 'C',\n    C: 'G',\n    T: 'A',\n    A: 'U',\n  }\n  let temp = ''\n  input.split('').forEach((element) => {\n    const current = dictionary[element]\n    if (current === undefined) {\n      throw new Error('Invalid input DNA.')\n    }\n    temp += current\n  })\n  return temp\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { toRna } from './rna-transcription.ts'\n\ndescribe('Transcriptor', () => {\n  it('transcribes cytosine to guanine', () => {\n    expect(toRna('C')).toEqual('G')\n  })\n\n  xit('transcribes guanine to cytosine', () => {\n    expect(toRna('G')).toEqual('C')\n  })\n\n  xit('transcribes adenine to uracil', () => {\n    expect(toRna('A')).toEqual('U')\n  })\n\n  xit('transcribes thymine to adenine', () => {\n    expect(toRna('T')).toEqual('A')\n  })\n\n  xit('transcribes all dna nucleotides to their rna complements', () => {\n    expect(toRna('ACGTGGTCTTAA')).toEqual('UGCACCAGAAUU')\n  })\n\n  xit('correctly handles invalid input', () => {\n    expect(() => toRna('U')).toThrow('Invalid input DNA.')\n  })\n\n  xit('correctly handles completely invalid input', () => {\n    expect(() => toRna('XXX')).toThrow('Invalid input DNA.')\n  })\n\n  xit('correctly handles partially invalid input', () => {\n    expect(() => toRna('ACGTXXXCTTAA')).toThrow('Invalid input DNA.')\n  })\n})\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "DFXLuna",
+    "lukaszklis",
+    "SleeplessByte"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "csharp:proverb",
+  "trackSlug": "csharp",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "b0a978a6-9c3f-427e-8ada-0a3951ca14fd",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "arrays"
+  ],
+  "prerequisites": [
+    "strings",
+    "arrays",
+    "for-loops"
+  ],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public static class Proverb\n{\n    public static string[] Recite(string[] subjects)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class Proverb\n{\n    public static string[] Recite(string[] subjects)\n    {\n        Func<int, string> line = (lineIndex) =>\n        {\n            if (lineIndex == subjects.Length) return $\"And all for the want of a {subjects[0]}.\";\n            else return $\"For want of a {subjects[lineIndex - 1]} the {subjects[lineIndex]} was lost.\";\n        };\n\n        return Enumerable.Range(1, subjects.Length).Select(line).ToArray();\n    }\n}",
+  "test_code": "public class ProverbTests\n{\n    [Fact]\n    public void Zero_pieces()\n    {\n        string[] subjects = [];\n        string[] expected = [\n        ];\n        Assert.Equal(expected, Proverb.Recite(subjects));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void One_piece()\n    {\n        string[] subjects = [\"nail\"];\n        string[] expected = [\n            \"And all for the want of a nail.\"\n        ];\n        Assert.Equal(expected, Proverb.Recite(subjects));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Two_pieces()\n    {\n        string[] subjects = [\"nail\", \"shoe\"];\n        string[] expected = [\n            \"For want of a nail the shoe was lost.\",\n            \"And all for the want of a nail.\"\n        ];\n        Assert.Equal(expected, Proverb.Recite(subjects));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Three_pieces()\n    {\n        string[] subjects = [\"nail\", \"shoe\", \"horse\"];\n        string[] expected = [\n            \"For want of a nail the shoe was lost.\",\n            \"For want of a shoe the horse was lost.\",\n            \"And all for the want of a nail.\"\n        ];\n        Assert.Equal(expected, Proverb.Recite(subjects));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Full_proverb()\n    {\n        string[] subjects = [\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"];\n        string[] expected = [\n            \"For want of a nail the shoe was lost.\",\n            \"For want of a shoe the horse was lost.\",\n            \"For want of a horse the rider was lost.\",\n            \"For want of a rider the message was lost.\",\n            \"For want of a message the battle was lost.\",\n            \"For want of a battle the kingdom was lost.\",\n            \"And all for the want of a nail.\"\n        ];\n        Assert.Equal(expected, Proverb.Recite(subjects));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Four_pieces_modernized()\n    {\n        string[] subjects = [\"pin\", \"gun\", \"soldier\", \"battle\"];\n        string[] expected = [\n            \"For want of a pin the gun was lost.\",\n            \"For want of a gun the soldier was lost.\",\n            \"For want of a soldier the battle was lost.\",\n            \"And all for the want of a pin.\"\n        ];\n        Assert.Equal(expected, Proverb.Recite(subjects));\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "j2jensen",
+    "jmbradnan",
+    "robkeim",
+    "ShamilS",
+    "wolf99"
+  ]
+}

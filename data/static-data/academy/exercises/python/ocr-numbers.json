@@ -1,0 +1,51 @@
+{
+  "id": "python:ocr-numbers",
+  "trackSlug": "python",
+  "slug": "ocr-numbers",
+  "name": "OCR Numbers",
+  "uuid": "98ca48ed-5818-442c-bce1-308c8b3b3b77",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a 3 x 4 grid of pipes, underscores, and spaces, determine which number is represented, or whether it is garbled.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "loops"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "lists",
+    "list-methods",
+    "loops",
+    "numbers",
+    "strings",
+    "string-methods"
+  ],
+  "instructions": "# Instructions\n\nOptical Character Recognition or OCR is software that converts images of text into machine-readable text.\nGiven a grid of characters representing some digits, convert the grid to a string of digits.\nIf the grid has multiple rows of cells, the rows should be separated in the output with a `\",\"`.\n\n- The grid is made of one of more lines of cells.\n- Each line of the grid is made of one or more cells.\n- Each cell is three columns wide and four rows high (3x4) and represents one digit.\n- Digits are drawn using pipes (`\"|\"`), underscores (`\"_\"`), and spaces (`\" \"`).\n\n## Edge cases\n\n- If the input is not a valid size, your program should indicate there is an error.\n- If the input is the correct size, but a cell is not recognizable, your program should output a `\"?\"` for that character.\n\n## Examples\n\nThe following input (without the comments) is converted to `\"1234567890\"`.\n\n```text\n      _  _     _  _  _  _  _  _  #\n    | _| _||_||_ |_   ||_||_|| | # Decimal numbers.\n    ||_  _|  | _||_|  ||_| _||_| #\n                                 # The fourth line is always blank,\n```\n\nThe following input is converted to `\"123,456,789\"`.\n\n<!-- prettier-ignore-start -->\n\n```text\n    _  _ \n  | _| _|\n  ||_  _|\n         \n    _  _ \n|_||_ |_ \n  | _||_|\n         \n _  _  _ \n  ||_||_|\n  ||_| _|\n         \n```\n\n<!-- prettier-ignore-end -->\n",
+  "introduction": "# Introduction\n\nYour best friend Marta recently landed their dream job working with a local history museum's collections.\nKnowing of your interests in programming, they confide in you about an issue at work for an upcoming exhibit on computing history.\nA local university's math department had donated several boxes of historical printouts, but given the poor condition of the documents, the decision has been made to digitize the text.\nHowever, the university's old printer had some quirks in how text was represented, and your friend could use your help to extract the data successfully.\n",
+  "hints": null,
+  "starter_code": "def convert(input_grid):\n    pass\n\n",
+  "example_solution": "NUM_ROWS = 4\nNUM_COLS = 3\n\n\ndef split_ocr(ocr):\n    return [[ocr[idx][NUM_COLS * jam:NUM_COLS * (jam + 1)] for idx in range(NUM_ROWS)]\n            for jam in range(len(ocr[0]) // NUM_COLS)]\n\n\nALL = ['    _  _     _  _  _  _  _  _ ',\n       '  | _| _||_||_ |_   ||_||_|| |',\n       '  ||_  _|  | _||_|  ||_| _||_|',\n       '                              ']\n\nOCR_LIST = split_ocr(ALL)\nOCR_LIST = [OCR_LIST[-1]] + OCR_LIST[:9]\n\n\ndef convert(input_grid):\n    split_indices = (list(range(0, len(input_grid), NUM_ROWS)) +\n                     [len(input_grid)])\n\n    lines = [input_grid[start:end]\n             for start, end in zip(split_indices[:-1], split_indices[1:])]\n\n    return ','.join(convert_one_line(line) for line in lines)\n\n\ndef convert_one_line(input_grid):\n    if len(input_grid) != NUM_ROWS:\n        raise ValueError('Number of input lines is not a multiple of four')\n\n    if len(input_grid[0]) % NUM_COLS:\n        raise ValueError('Number of input columns is not a multiple of three')\n\n    numbers = split_ocr(input_grid)\n    digits = ''\n    for num in numbers:\n        try:\n            digits += str(OCR_LIST.index(num))\n        except ValueError:\n            digits += '?'\n    return digits\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/ocr-numbers/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom ocr_numbers import (\n    convert,\n)\n\n\nclass OcrNumbersTest(unittest.TestCase):\n    def test_recognizes_0(self):\n        self.assertEqual(convert([\" _ \", \"| |\", \"|_|\", \"   \"]), \"0\")\n\n    def test_recognizes_1(self):\n        self.assertEqual(convert([\"   \", \"  |\", \"  |\", \"   \"]), \"1\")\n\n    def test_unreadable_but_correctly_sized_inputs_return(self):\n        self.assertEqual(convert([\"   \", \"  _\", \"  |\", \"   \"]), \"?\")\n\n    def test_input_with_a_number_of_lines_that_is_not_a_multiple_of_four_raises_an_error(\n        self,\n    ):\n        with self.assertRaises(ValueError) as err:\n            convert([\" _ \", \"| |\", \"   \"])\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(\n            err.exception.args[0], \"Number of input lines is not a multiple of four\"\n        )\n\n    def test_input_with_a_number_of_columns_that_is_not_a_multiple_of_three_raises_an_error(\n        self,\n    ):\n        with self.assertRaises(ValueError) as err:\n            convert([\"    \", \"   |\", \"   |\", \"    \"])\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(\n            err.exception.args[0], \"Number of input columns is not a multiple of three\"\n        )\n\n    def test_recognizes_110101100(self):\n        self.assertEqual(\n            convert(\n                [\n                    \"       _     _        _  _ \",\n                    \"  |  || |  || |  |  || || |\",\n                    \"  |  ||_|  ||_|  |  ||_||_|\",\n                    \"                           \",\n                ]\n            ),\n            \"110101100\",\n        )\n\n    def test_garbled_numbers_in_a_string_are_replaced_with(self):\n        self.assertEqual(\n            convert(\n                [\n                    \"       _     _           _ \",\n                    \"  |  || |  || |     || || |\",\n                    \"  |  | _|  ||_|  |  ||_||_|\",\n                    \"                           \",\n                ]\n            ),\n            \"11?10?1?0\",\n        )\n\n    def test_recognizes_2(self):\n        self.assertEqual(convert([\" _ \", \" _|\", \"|_ \", \"   \"]), \"2\")\n\n    def test_recognizes_3(self):\n        self.assertEqual(convert([\" _ \", \" _|\", \" _|\", \"   \"]), \"3\")\n\n    def test_recognizes_4(self):\n        self.assertEqual(convert([\"   \", \"|_|\", \"  |\", \"   \"]), \"4\")\n\n    def test_recognizes_5(self):\n        self.assertEqual(convert([\" _ \", \"|_ \", \" _|\", \"   \"]), \"5\")\n\n    def test_recognizes_6(self):\n        self.assertEqual(convert([\" _ \", \"|_ \", \"|_|\", \"   \"]), \"6\")\n\n    def test_recognizes_7(self):\n        self.assertEqual(convert([\" _ \", \"  |\", \"  |\", \"   \"]), \"7\")\n\n    def test_recognizes_8(self):\n        self.assertEqual(convert([\" _ \", \"|_|\", \"|_|\", \"   \"]), \"8\")\n\n    def test_recognizes_9(self):\n        self.assertEqual(convert([\" _ \", \"|_|\", \" _|\", \"   \"]), \"9\")\n\n    def test_recognizes_string_of_decimal_numbers(self):\n        self.assertEqual(\n            convert(\n                [\n                    \"    _  _     _  _  _  _  _  _ \",\n                    \"  | _| _||_||_ |_   ||_||_|| |\",\n                    \"  ||_  _|  | _||_|  ||_| _||_|\",\n                    \"                              \",\n                ]\n            ),\n            \"1234567890\",\n        )\n\n    def test_numbers_separated_by_empty_lines_are_recognized_lines_are_joined_by_commas(\n        self,\n    ):\n        self.assertEqual(\n            convert(\n                [\n                    \"    _  _ \",\n                    \"  | _| _|\",\n                    \"  ||_  _|\",\n                    \"         \",\n                    \"    _  _ \",\n                    \"|_||_ |_ \",\n                    \"  | _||_|\",\n                    \"         \",\n                    \" _  _  _ \",\n                    \"  ||_||_|\",\n                    \"  ||_| _|\",\n                    \"         \",\n                ]\n            ),\n            \"123,456,789\",\n        )\n",
+  "source": "Inspired by the Bank OCR kata",
+  "source_url": "https://codingdojo.org/kata/BankOCR/",
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "behrtam",
+    "cjchallis",
+    "cmccandless",
+    "Dog",
+    "emerali",
+    "ikhadykin",
+    "kytrinyx",
+    "N-Parsons",
+    "parthsharma2",
+    "pheanex",
+    "sjakobi",
+    "tqa236"
+  ]
+}

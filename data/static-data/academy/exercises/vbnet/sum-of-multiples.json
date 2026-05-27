@@ -1,0 +1,35 @@
+{
+  "id": "vbnet:sum-of-multiples",
+  "trackSlug": "vbnet",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "73799a06-b510-47e1-87a3-7496f2afc346",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "enumerables",
+    "foreach-loops",
+    "numbers"
+  ],
+  "prerequisites": [
+    "enumerables",
+    "numbers",
+    "foreach-loops",
+    "if-statements"
+  ],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "Imports System\nImports System.Collections.Generic\n\nPublic Module SumOfMultiples\n    Public Function Sum(ByVal multiples As IEnumerable(Of Integer), ByVal max As Integer) As Integer\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System.Collections.Generic\nImports System.Linq\n\nPublic Module SumOfMultiples\n    Public Function Sum(ByVal multiples As IEnumerable(Of Integer), ByVal max As Integer) As Integer\n        Return Enumerable.Where(Enumerable.Range(1, max - 1), Function(i) Enumerable.Any(multiples, Function(m) m <> 0 AndAlso i Mod m = 0)).Sum()\n    End Function\nEnd Module\n",
+  "test_code": "Imports System\nImports Xunit\n\nPublic Class SumOfMultiplesTests\n    <Fact>\n    Public Sub No_multiples_within_limit()\n        Assert.Equal(0, Sum({3, 5}, 1))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub One_factor_has_multiples_within_limit()\n        Assert.Equal(3, Sum({3, 5}, 4))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub More_than_one_multiple_within_limit()\n        Assert.Equal(9, Sum({3}, 7))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub More_than_one_factor_with_multiples_within_limit()\n        Assert.Equal(23, Sum({3, 5}, 10))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Each_multiple_is_only_counted_once()\n        Assert.Equal(2318, Sum({3, 5}, 100))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub A_much_larger_limit()\n        Assert.Equal(233168, Sum({3, 5}, 1000))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Three_factors()\n        Assert.Equal(51, Sum({7, 13, 17}, 20))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Factors_not_relatively_prime()\n        Assert.Equal(30, Sum({4, 6}, 15))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Some_pairs_of_factors_relatively_prime_and_some_not()\n        Assert.Equal(4419, Sum({5, 6, 8}, 150))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub One_factor_is_a_multiple_of_another()\n        Assert.Equal(275, Sum({5, 25}, 51))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Much_larger_factors()\n        Assert.Equal(2203160, Sum({43, 47}, 10000))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub All_numbers_are_multiples_of_1()\n        Assert.Equal(4950, Sum({1}, 100))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub No_factors_means_an_empty_sum()\n        Assert.Equal(0, Sum(Array.Empty(Of Integer)(), 10000))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_only_multiple_of_0_is_0()\n        Assert.Equal(0, Sum({0}, 1))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub The_factor_0_does_not_affect_the_sum_of_multiples_of_other_factors()\n        Assert.Equal(3, Sum({3, 0}, 4))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Solutions_using_include_exclude_must_extend_to_cardinality_greater_than_3()\n        Assert.Equal(39614537, Sum({2, 3, 5, 7, 11}, 10000))\n    End Sub\nEnd Class\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "fsharp:resistor-color",
+  "trackSlug": "fsharp",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "bd2bd26c-6eab-411d-8472-7643cb86c6c9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "lists"
+  ],
+  "prerequisites": [
+    "numbers",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module ResistorColor\n\nlet colors: string list = failwith \"You need to define the 'colors' binding.\"\n\nlet colorCode (color: string): int =\n    failwith \"Please implement the 'colorCode' function\"\n",
+  "example_solution": "module ResistorColor\n\nlet colors =\n    [ \"black\"\n      \"brown\"\n      \"red\"\n      \"orange\"\n      \"yellow\"\n      \"green\"\n      \"blue\"\n      \"violet\"\n      \"grey\"\n      \"white\" ]\n\nlet colorCode color = List.findIndex ((=) color) colors\n",
+  "test_code": "module ResistorColorTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen ResistorColor\n\n[<Fact>]\nlet ``Black`` () =\n    colorCode \"black\" |> should equal 0\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``White`` () =\n    colorCode \"white\" |> should equal 9\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Orange`` () =\n    colorCode \"orange\" |> should equal 3\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Colors`` () =\n    colors |> should equal [\"black\"; \"brown\"; \"red\"; \"orange\"; \"yellow\"; \"green\"; \"blue\"; \"violet\"; \"grey\"; \"white\"]\n\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,30 @@
+{
+  "id": "crystal:grains",
+  "trackSlug": "crystal",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "28cc9eaa-ebff-46b6-a7a9-3be60fe86ee6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "number-types"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "module Grains\n  # Write your code for the 'Grains' exercise in this file.\n  def self.square(number : Number) : Number\n  end\n\n  def self.total : Number\n  end\nend\n",
+  "example_solution": "module Grains\n  extend self\n\n  def square(number : Number) : Number\n    raise ArgumentError.new \"square must be between 1 and 64\" if number <= 0 || number > 64\n    2.to_u64**(number - 1)\n  end\n\n  def total : UInt64\n    (2.to_u128**64 - 1).to_u64\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Grains\" do\n  it \"1\" do\n    Grains.square(1).should eq(1)\n  end\n\n  pending \"2\" do\n    Grains.square(2).should eq(2)\n  end\n\n  pending \"3\" do\n    Grains.square(3).should eq(4)\n  end\n\n  pending \"4\" do\n    Grains.square(4).should eq(8)\n  end\n\n  pending \"16\" do\n    Grains.square(16).should eq(32768)\n  end\n\n  pending \"32\" do\n    Grains.square(32).should eq(2147483648)\n  end\n\n  pending \"64\" do\n    Grains.square(64).should eq(9223372036854775808_i128)\n  end\n\n  pending \"square 0 raises an exception\" do\n    expect_raises(ArgumentError) do\n      Grains.square(0)\n    end\n  end\n\n  pending \"negative square raises an exception\" do\n    expect_raises(ArgumentError) do\n      Grains.square(-1)\n    end\n  end\n\n  pending \"square greater than 64 raises an exception\" do\n    expect_raises(ArgumentError) do\n      Grains.square(65)\n    end\n  end\n\n  pending \"returns the total number of grains on the board\" do\n    Grains.total.should eq(18446744073709551615_i128)\n  end\nend\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "mhelmetag"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "racket:accumulate",
+  "trackSlug": "racket",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "b234225c-fcde-445f-9222-f80c25d0f499",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an\noperation to perform on each element of the collection, returns a new\ncollection containing the result of applying that operation to each element of\nthe input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality\nprovided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide accumulate)\n\n(define (accumulate sequence operation)\n  (error \"Please implement 'accumulate'\"))\n",
+  "example_solution": "#lang racket\n\n(provide accumulate)\n\n(define (accumulate lst op)\n  (cond\n    [(empty? lst) lst]\n    [(cons (op (car lst)) (accumulate (cdr lst) op))]))",
+  "test_code": "#lang racket\n\n(require \"accumulate.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (define reverse-words (lambda (word)\n                          (list->string (reverse (string->list word)))))\n\n  (define suite\n    (test-suite\n     \"accumulate tests\"\n\n     (test-equal? \"empty list\"\n                  (accumulate empty (lambda (arg) arg))\n                  empty)\n\n     (test-equal? \"squaring\"\n                  (accumulate '(1 3 4) (lambda (arg) (* arg arg)))\n                  '(1 9 16))\n\n     (test-equal? \"upper cases\"\n                  (let\n                      ([toupper (lambda (word) (string-upcase word))])\n                    (accumulate '(\"hello\" \"world\") toupper))\n                  '(\"HELLO\" \"WORLD\"))\n\n     (test-equal? \"reverse strings\"\n                  (accumulate (list \"the\" \"quick\" \"brown\" \"fox\" \"jumped\" \"over\" \"the\" \"lazy\" \"dog\") reverse-words)\n                  (map reverse-words '(\"the\" \"quick\" \"brown\" \"fox\" \"jumped\" \"over\" \"the\" \"lazy\" \"dog\")))))\n\n  (run-tests suite))\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "sturmer"
+  ],
+  "contributors": [
+    "arguello",
+    "PurityControl",
+    "yurrriq"
+  ]
+}

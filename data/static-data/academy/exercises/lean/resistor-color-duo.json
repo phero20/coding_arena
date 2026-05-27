@@ -1,0 +1,26 @@
+{
+  "id": "lean:resistor-color-duo",
+  "trackSlug": "lean",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "de08a88e-1fd2-49fa-b501-11649b2e42af",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import Extra\n\n/-\n  You are given syntax for colors already predefined using the `c*` prefix, e.g., `c*black`.\n  You must then define syntax that associates a sequence of colors to a number, according to the instructions.\n  The colors are within `*[[` and `]]` and separated by `, `, e.g., `*[[c*black, c*yellow, c*violet]]`.\n\n  Note that the online test runner does not have support to the `Lean` library.\n  Any solution that uses it will fail when submitted to exercism, even if correct.\n  This library is not necessary to solve the exercise.\n\n  Macros and notations are not qualified by namespace.\n  For this reason, this exercise does not define a namespace.\n-/\n",
+  "example_solution": "/-\n  The solution in this comment reuses the macro already defined in `Extra.lean`.\n  In order to make use of the values expanded by this macro, the expression must be evaluated in an elaborator.\n  However, the tools to do that are inside `Lean.Elab`, a module not supported by the online test runner.\n\n  For this reason, this solution is only presented here as a reference.\n\nimport Lean.Elab\nimport Extra\n\nopen Lean Elab Term\n\nsyntax \"*[[\" term,* \"]]\" : term\n\nelab_rules : term\n  | `(*[[ $vals,* ]]) => do\n    let elems := vals.getElems\n\n    guard (elems.size >= 2)\n\n    let a₁ ← elabTerm elems[0]! none\n    let a₂ ← elabTerm elems[1]! none\n\n    match a₁.nat? >>= fun v₁ => a₂.nat? >>= fun v₂ => pure (v₁ * 10 + v₂) with\n    | none     => throwUnsupportedSyntax\n    | some sum => return Lean.mkNatLit sum\n-/\n\nimport Extra\n\nsyntax \"*[[\" term,* \"]]\" : term\n\ndef getValue : Lean.TSyntax `term → Option Nat\n  | `(c*black)  => some 0\n  | `(c*brown)  => some 1\n  | `(c*red)    => some 2\n  | `(c*orange) => some 3\n  | `(c*yellow) => some 4\n  | `(c*green)  => some 5\n  | `(c*blue)   => some 6\n  | `(c*violet) => some 7\n  | `(c*grey)   => some 8\n  | `(c*white)  => some 9\n  | _ => none\n\nmacro_rules\n  | `(*[[ $vals,* ]]) => do\n    let elems := vals.getElems.toList\n    match elems with\n    | a₁ :: a₂ :: _ =>\n      match getValue a₁, getValue a₂ with\n      | some v₁, some v₂ => return Lean.Syntax.mkNatLit (10 * v₁ + v₂)\n      | _, _ => Lean.Macro.throwUnsupported\n    | _ => Lean.Macro.throwUnsupported\n",
+  "test_code": "import LeanTest\nimport ResistorColorDuo\n\nopen LeanTest\n\n/--\n  info: 10\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*brown, c*black]]\n\n/--\n  info: 68\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*blue, c*grey]]\n\n/--\n  info: 47\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*yellow, c*violet]]\n\n/--\n  info: 92\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*white, c*red]]\n\n/--\n  info: 33\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*orange, c*orange]]\n\n/--\n  info: 51\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*green, c*brown, c*orange]]\n\n/--\n  info: 1\n-/\n#guard_msgs(info, drop all) in\n#eval *[[c*black, c*brown]]\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode []\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "oxe-i"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,34 @@
+{
+  "id": "java:resistor-color-duo",
+  "trackSlug": "java",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "0ae1989d-df46-414d-ad1f-4bd0f0f78421",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "arrays"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class ResistorColorDuo {\n    int value(String[] colors) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n}\n",
+  "example_solution": "class ResistorColorDuo {\n    private enum Color {\n        black, brown, red, orange, yellow, green, blue, violet, grey, white;\n    };\n\n    int value(String[] colors) {\n        return 10 * Color.valueOf(colors[0]).ordinal() + Color.valueOf(colors[1]).ordinal();\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class ResistorColorDuoTest {\n    private ResistorColorDuo resistorColorDuo;\n\n    @BeforeEach\n    public void setup() {\n        resistorColorDuo = new ResistorColorDuo();\n    }\n\n    @Test\n    @DisplayName(\"Brown and black\")\n    public void testBrownAndBlack() {\n        assertThat(\n                resistorColorDuo.value(new String[]{\"brown\", \"black\"})\n        ).isEqualTo(10);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Blue and grey\")\n    public void testBlueAndGrey() {\n        assertThat(\n                resistorColorDuo.value(new String[]{ \"blue\", \"grey\" })\n        ).isEqualTo(68);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Yellow and violet\")\n    public void testYellowAndViolet() {\n        assertThat(\n                resistorColorDuo.value(new String[]{ \"yellow\", \"violet\" })\n        ).isEqualTo(47);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Orange and orange\")\n    public void testOrangeAndOrange() {\n        assertThat(\n                resistorColorDuo.value(new String[]{ \"orange\", \"orange\" })\n        ).isEqualTo(33);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"White and red\")\n    public void testWhiteAndRed() {\n        assertThat(\n                resistorColorDuo.value(new String[]{ \"white\", \"red\" })\n        ).isEqualTo(92);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Black and brown, one-digit\")\n    public void testBlackAndBrownOneDigit() {\n        assertThat(\n                resistorColorDuo.value(new String[]{ \"black\", \"brown\" })\n        ).isEqualTo(1);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Ignore additional colors\")\n    public void testIgnoreAdditionalColors() {\n        assertThat(\n                resistorColorDuo.value(new String[]{ \"green\", \"brown\", \"orange\" })\n        ).isEqualTo(51);\n    }\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "HuskyNator"
+  ],
+  "contributors": [
+    "jmrunkle",
+    "lemoncurry",
+    "msomji",
+    "muzimuzhi",
+    "sshine"
+  ]
+}

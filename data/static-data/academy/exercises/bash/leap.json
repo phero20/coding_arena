@@ -1,0 +1,38 @@
+{
+  "id": "bash:leap",
+  "trackSlug": "bash",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "e24451fd-761d-4d20-81d9-e470486ec44a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\nusage() {\n\techo \"Usage: leap.sh <year>\" >&2\n\texit 1\n}\n\n# Check number of params\nif  [[ \"$#\" != 1 ]]; then\n\tusage\nfi\n\n# Check if param is an integer\nif ! [[ $1 =~ ^[0-9]+$ ]]; then\n\tusage\nfi\n\nif [[ $(($1 % 4)) == 0 ]] \\\n\t&& [[ $(($1 % 100)) != 0 ]] \\\n\t|| [[ $(($1 % 400)) == 0 ]]; then\n\techo \"true\"\nelse\n\techo \"false\"\nfi\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.6.0.1\n# bash-specific test: Input validation\n\n@test 'year not divisible by 4: common year' {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 2015\n\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'year divisible by 2, not divisible by 4 in common year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 1970\n\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'year divisible by 4, not divisible by 100: leap year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 1996\n\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'year divisible by 4 and 5 is still a leap year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 1960\n\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'year divisible by 100, not divisible by 400: common year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 2100\n\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'year divisible by 100 but not by 3 is still not a leap year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 1900\n\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'year divisible by 400: leap year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 2000\n\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'year divisible by 400 but not by 125 is still a leap year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 2400\n\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'year divisible by 200, not divisible by 400 in common year' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 1800\n\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'No input should return an error' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh\n\n  assert_failure\n  assert_output \"Usage: leap.sh <year>\"\n}\n\n@test 'Too many arguments should return an error' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 2016 4562 4566\n\n  assert_failure\n  assert_output \"Usage: leap.sh <year>\"\n}\n\n@test 'Float number input should return an error' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 2016.54\n\n  assert_failure\n  assert_output \"Usage: leap.sh <year>\"\n}\n\n@test 'Alpha input should return an error' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash leap.sh 'abcd'\n\n  assert_failure\n  assert_output \"Usage: leap.sh <year>\"\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "kenden"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "kytrinyx",
+    "platinumthinker",
+    "sjwarner-bp",
+    "Smarticles101",
+    "ZapAnton"
+  ]
+}

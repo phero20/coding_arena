@@ -1,0 +1,26 @@
+{
+  "id": "awk:hamming",
+  "trackSlug": "awk",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "82c4b80d-a343-4eb3-af12-fb7312ec2e33",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "BEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "BEGIN {\n    FS = \"\"     # each char is a separate field\n}\nNR == 1 {\n    len = NF\n    for (i=1; i<=NF; i++)\n        first[i] = $i\n    next\n}\nlen != NF {\n    print \"strands must be of equal length\" >\"/dev/stderr\"\n    exit 1\n}\n{\n    diff = 0\n    for (i=1; i<=NF; i++)\n        if ($i != first[i])\n            diff++\n    print diff\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\npopulate_test_file() {\n    echo \"$1\" > input.txt\n    echo \"$2\" >> input.txt\n}\n\nteardown() {\n    rm -f input.txt\n}\n\n@test 'empty strands' {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file '' ''\n  run gawk -f hamming.awk input.txt\n  assert_success\n  assert_output \"0\"\n}\n\n@test 'single letter identical strands' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'A' 'A'\n  run gawk -f hamming.awk input.txt\n  assert_success\n  assert_output \"0\"\n}\n\n@test 'single letter different strands' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'G' 'T'\n  run gawk -f hamming.awk input.txt\n  assert_success\n  assert_output \"1\"\n}\n\n@test 'long identical strands' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'GGACTGAAATCTG' 'GGACTGAAATCTG'\n  run gawk -f hamming.awk input.txt\n  assert_success\n  assert_output \"0\"\n}\n\n@test 'long different strands' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'GGACGGATTCTG' 'AGGACGGATTCT'\n  run gawk -f hamming.awk input.txt\n  assert_success\n  assert_output \"9\"\n}\n\n@test 'disallow first strand longer' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'AATG' 'AAA'\n  run gawk -f hamming.awk input.txt\n  assert_failure\n  assert_output --partial \"strands must be of equal length\"\n}\n\n@test 'disallow second strand longer' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'ATA' 'AGTG'\n  run gawk -f hamming.awk input.txt\n  assert_failure\n  assert_output --partial \"strands must be of equal length\"\n}\n\n@test 'disallow empty first strand' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file '' 'G'\n  run gawk -f hamming.awk input.txt\n  assert_failure\n  assert_output --partial \"strands must be of equal length\"\n}\n\n@test 'disallow empty second strand' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  populate_test_file 'G' ''\n  run gawk -f hamming.awk input.txt\n  assert_failure\n  assert_output --partial \"strands must be of equal length\"\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

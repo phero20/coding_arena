@@ -1,0 +1,36 @@
+{
+  "id": "python:accumulate",
+  "trackSlug": "python",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "e7351e8e-d3ff-4621-b818-cd55cf05bffd",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def accumulate(collection, operation):\n    pass\n",
+  "example_solution": "# [collection(x) for x in collection] would be nice but trivial\n\n\ndef accumulate(collection, operation):\n    response = []\n    for ellement in collection:\n        response.append(operation(ellement))\n    return response\n",
+  "test_code": "import unittest\n\nfrom accumulate import accumulate\n\n\nclass AccumulateTest(unittest.TestCase):\n    def test_empty_sequence(self):\n        self.assertEqual(accumulate([], lambda x: x / 2), [])\n\n    def test_pow(self):\n        self.assertEqual(\n            accumulate([1, 2, 3, 4, 5], lambda x: x * x), [1, 4, 9, 16, 25])\n\n    def test_divmod(self):\n        self.assertEqual(\n            accumulate([10, 17, 23], lambda x: divmod(x, 7)),\n            [(1, 3), (2, 3), (3, 2)])\n\n    def test_composition(self):\n        inp = [10, 17, 23]\n        self.assertEqual(\n            accumulate(\n                accumulate(inp, lambda x: divmod(x, 7)),\n                lambda x: 7 * x[0] + x[1]), inp)\n\n    def test_capitalize(self):\n        self.assertEqual(\n            accumulate(['hello', 'world'], str.upper), ['HELLO', 'WORLD'])\n\n    def test_recursive(self):\n        inp = ['a', 'b', 'c']\n        out = [['a1', 'a2', 'a3'], ['b1', 'b2', 'b3'], ['c1', 'c2', 'c3']]\n        self.assertEqual(\n            accumulate(\n                inp, lambda x: accumulate(list('123'), lambda y: x + y)), out)\n\n\nif __name__ == '__main__':\n    unittest.main()\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "behrtam",
+    "cmccandless",
+    "Dog",
+    "iandexter",
+    "ikhadykin",
+    "N-Parsons",
+    "pheanex",
+    "sjakobi",
+    "tqa236"
+  ]
+}

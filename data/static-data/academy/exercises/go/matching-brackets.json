@@ -1,0 +1,43 @@
+{
+  "id": "go:matching-brackets",
+  "trackSlug": "go",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "6c2499f7-d42c-4d0f-9680-f5f7650023ff",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "package matchingbrackets\n\nfunc Bracket(input string) bool {\n\tpanic(\"Please implement the Bracket function\")\n}\n",
+  "example_solution": "package matchingbrackets\n\ntype bracketKind int\n\nconst (\n\tkindParen  bracketKind = iota\n\tkindSquare bracketKind = iota\n\tkindBrace  bracketKind = iota\n\tkindOther  bracketKind = iota\n)\n\n// Whether a bracket is an opening or closing bracket\ntype bracketForm bool\n\nconst (\n\tformOpen  bracketForm = true\n\tformClose bracketForm = false\n)\n\ntype charInfo struct {\n\tkind bracketKind\n\tform bracketForm\n}\n\n// Bracket returns whether all the brackets in the input string are\n// correctly nested.\nfunc Bracket(input string) bool {\n\tvar stack []bracketKind\n\tfor _, char := range input {\n\t\tci := info(char)\n\t\tif ci.kind == kindOther {\n\t\t\tcontinue\n\t\t}\n\t\tif ci.form == formOpen {\n\t\t\tstack = append(stack, ci.kind)\n\t\t} else {\n\t\t\tswitch {\n\t\t\tcase len(stack) == 0:\n\t\t\t\treturn false\n\t\t\tcase stack[len(stack)-1] == ci.kind:\n\t\t\t\tstack = stack[:len(stack)-1]\n\t\t\tdefault:\n\t\t\t\treturn false\n\t\t\t}\n\t\t}\n\t}\n\treturn len(stack) == 0\n}\n\nfunc info(char rune) charInfo {\n\tswitch char {\n\tcase '(':\n\t\treturn charInfo{kind: kindParen, form: formOpen}\n\tcase '[':\n\t\treturn charInfo{kind: kindSquare, form: formOpen}\n\tcase '{':\n\t\treturn charInfo{kind: kindBrace, form: formOpen}\n\tcase ')':\n\t\treturn charInfo{kind: kindParen, form: formClose}\n\tcase ']':\n\t\treturn charInfo{kind: kindSquare, form: formClose}\n\tcase '}':\n\t\treturn charInfo{kind: kindBrace, form: formClose}\n\tdefault:\n\t\treturn charInfo{kind: kindOther}\n\t}\n}\n",
+  "test_code": "package matchingbrackets\n\nimport (\n\t\"testing\"\n)\n\nfunc TestBracket(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual := Bracket(tc.input)\n\t\t\tif actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Bracket(%q) = %t, want: %t\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkBracket(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tt := range testCases {\n\t\t\tBracket(tt.input)\n\t\t}\n\t}\n}\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "pminten"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "dvrkps",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "rpottsoh",
+    "sebito91",
+    "strangeman",
+    "tleen",
+    "eklatzer"
+  ]
+}

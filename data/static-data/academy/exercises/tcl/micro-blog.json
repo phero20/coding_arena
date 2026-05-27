@@ -1,0 +1,26 @@
+{
+  "id": "tcl:micro-blog",
+  "trackSlug": "tcl",
+  "slug": "micro-blog",
+  "name": "Micro Blog",
+  "uuid": "30db7285-708b-4822-ba3c-285126a68cea",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an input string, truncate it to 5 characters.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYou have identified a gap in the social media market for very very short posts.\nNow that Twitter allows 280 character posts, people wanting quick social media updates aren't being served.\nYou decide to create your own social media network.\n\nTo make your product noteworthy, you make it extreme and only allow posts of 5 or less characters.\nAny posts of more than 5 characters should be truncated to 5.\n\nTo allow your users to express themselves fully, you allow Emoji and other Unicode.\n\nThe task is to truncate input strings to 5 characters.\n\n## Text Encodings\n\nText stored digitally has to be converted to a series of bytes.\nThere are 3 ways to map characters to bytes in common use.\n\n- **ASCII** can encode English language characters.\n  All characters are precisely 1 byte long.\n- **UTF-8** is a Unicode text encoding.\n  Characters take between 1 and 4 bytes.\n- **UTF-16** is a Unicode text encoding.\n  Characters are either 2 or 4 bytes long.\n\nUTF-8 and UTF-16 are both Unicode encodings which means they're capable of representing a massive range of characters including:\n\n- Text in most of the world's languages and scripts\n- Historic text\n- Emoji\n\nUTF-8 and UTF-16 are both variable length encodings, which means that different characters take up different amounts of space.\n\nConsider the letter 'a' and the emoji '😛'.\nIn UTF-16 the letter takes 2 bytes but the emoji takes 4 bytes.\n\nThe trick to this exercise is to use APIs designed around Unicode characters (codepoints) instead of Unicode codeunits.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package require Tcl 9.0\n\nproc truncate {input} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "package require Tcl 9.0\n\nproc truncate {input {size 5}} {\n    string range $input 0 $size-1\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"micro-blog.tcl\"\n\ntest micro-1 \"English language short\" -body {\n    truncate \"Hi\"\n} -returnCodes ok -match exact -result \"Hi\"\n\nskip micro-2\ntest micro-2 \"English language long\" -body {\n    truncate \"Hello there\"\n} -returnCodes ok -match exact -result \"Hello\"\n\nskip micro-3\ntest micro-3 \"German language short (broth)\" -body {\n    truncate \"brühe\"\n} -returnCodes ok -match exact -result \"brühe\"\n\nskip micro-4\ntest micro-4 \"German language long (bear carpet → beards)\" -body {\n    truncate \"Bärteppich\"\n} -returnCodes ok -match exact -result \"Bärte\"\n\nskip micro-5\ntest micro-5 \"Bulgarian language short (good)\" -body {\n    truncate \"Добър\"\n} -returnCodes ok -match exact -result \"Добър\"\n\nskip micro-6\ntest micro-6 \"Greek language short (health)\" -body {\n    truncate \"υγειά\"\n} -returnCodes ok -match exact -result \"υγειά\"\n\nskip micro-7\ntest micro-7 \"Maths short\" -body {\n    truncate \"a=πr²\"\n} -returnCodes ok -match exact -result \"a=πr²\"\n\nskip micro-8\ntest micro-8 \"Maths long\" -body {\n    truncate \"∅⊊ℕ⊊ℤ⊊ℚ⊊ℝ⊊ℂ\"\n} -returnCodes ok -match exact -result \"∅⊊ℕ⊊ℤ\"\n\nskip micro-9\ntest micro-9 \"English and emoji short\" -body {\n    truncate \"Fly 🛫\"\n} -returnCodes ok -match exact -result \"Fly 🛫\"\n\nskip micro-10\ntest micro-10 \"Emoji short\" -body {\n    truncate \"💇\"\n} -returnCodes ok -match exact -result \"💇\"\n\nskip micro-11\ntest micro-11 \"Emoji long\" -body {\n    truncate \"❄🌡🤧🤒🏥🕰😀\"\n} -returnCodes ok -match exact -result \"❄🌡🤧🤒🏥\"\n\nskip micro-12\ntest micro-12 \"Royal Flush?\" -body {\n    truncate \"🃎🂸🃅🃋🃍🃁🃊\"\n} -returnCodes ok -match exact -result \"🃎🂸🃅🃋🃍\"\n\n\ncleanupTests\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

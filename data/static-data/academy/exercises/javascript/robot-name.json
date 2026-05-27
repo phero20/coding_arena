@@ -1,0 +1,38 @@
+{
+  "id": "javascript:robot-name",
+  "trackSlug": "javascript",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "03f4dfea-e6db-4754-b2c8-ca06c8b81ef1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "classes",
+    "arrays",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "// This is only a SKELETON file for the 'Robot Name' exercise. It's been\n// provided as a convenience to get your started writing code faster.\n\nexport class Robot {}\n\nRobot.releaseNames = () => {};\n",
+  "example_solution": "// This generates ALL the possible names in order to be able to satisfy the\n// final test. This also _ensures_ it _never_ has a duplicate.\nconst LETTERS = [...'QWERTYUIOPASDFGHJKLZXCVBNM'];\nconst NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];\n\nconst ALL_NAMES = [];\n\nLETTERS.forEach((a) => {\n  LETTERS.forEach((b) => {\n    NUMBERS.forEach((c) => {\n      NUMBERS.forEach((d) => {\n        NUMBERS.forEach((e) => {\n          ALL_NAMES.push([a, b, c, d, e].join(''));\n        });\n      });\n    });\n  });\n});\n\nconst shuffled = ALL_NAMES;\nlet shuffledPointer = -1;\n\n// Fisher-Yates shuffle in order to randomly sort the current names. Normally\n// you would return a new array, but this function is going to be attached to\n// the Robot class so it may be re-shuffled at will.\nfunction shuffleNames() {\n  let j;\n  let x;\n  let i;\n\n  for (i = shuffled.length - 1; i > 0; i -= 1) {\n    j = Math.floor(Math.random() * (i + 1));\n    x = shuffled[i];\n    shuffled[i] = shuffled[j];\n    shuffled[j] = x;\n  }\n}\n\nfunction generateName() {\n  shuffledPointer += 1;\n  if (shuffledPointer > shuffled.length) {\n    throw new Error(\n      'Can not generate another name because all the names have been used.',\n    );\n  }\n  return shuffled[shuffledPointer];\n}\n\n// Initial shuffle\nshuffleNames();\n\nexport class Robot {\n  constructor() {\n    this._name = generateName();\n  }\n\n  get name() {\n    return this._name;\n  }\n\n  reset() {\n    this._name = generateName();\n  }\n}\n\nRobot.releaseNames = () => {\n  shuffledPointer = -1;\n};\n",
+  "test_code": "import {\n  afterEach,\n  beforeEach,\n  describe,\n  expect,\n  test,\n  xtest,\n} from '@jest/globals';\nimport { Robot } from './robot-name';\n\nconst areSequential = (name1, name2) => {\n  const alpha1 = name1.substring(0, 2);\n  const alpha2 = name2.substring(0, 2);\n  const num1 = Number(name1.substring(2, 5));\n  const num2 = Number(name2.substring(2, 5));\n\n  const numDiff = num2 - num1;\n  const alphaDiff =\n    (alpha2.charCodeAt(0) - alpha1.charCodeAt(0)) * 26 +\n    (alpha2.charCodeAt(1) - alpha1.charCodeAt(1));\n\n  const totalDiff = alphaDiff * 1000 + numDiff;\n\n  return Math.abs(totalDiff) <= 1;\n};\n\nconst TOTAL_NUMBER_OF_NAMES =\n  26 * // A-Z\n  26 * // A-Z\n  10 * // 0-9\n  10 * // 0-9\n  10; // 0-9\n\ndescribe('Robot', () => {\n  let robot;\n\n  beforeEach(() => {\n    robot = new Robot();\n  });\n  afterEach(() => {\n    Robot.releaseNames();\n  });\n\n  test('has a name', () => {\n    expect(robot.name).toMatch(/^[A-Z]{2}\\d{3}$/);\n  });\n\n  xtest('name is the same each time', () => {\n    expect(robot.name).toEqual(robot.name);\n  });\n\n  xtest('different robots have different names', () => {\n    const differentRobot = new Robot();\n    expect(differentRobot.name).not.toEqual(robot.name);\n  });\n\n  xtest('is able to reset the name', () => {\n    const originalName = robot.name;\n\n    robot.reset();\n    const newName = robot.name;\n\n    expect(newName).toMatch(/^[A-Z]{2}\\d{3}$/);\n    expect(originalName).not.toEqual(newName);\n  });\n\n  xtest('should set a unique name after reset', () => {\n    const NUMBER_OF_ROBOTS = 10000;\n    const usedNames = new Set();\n\n    usedNames.add(robot.name);\n    for (let i = 0; i < NUMBER_OF_ROBOTS; i += 1) {\n      robot.reset();\n      usedNames.add(robot.name);\n    }\n\n    expect(usedNames.size).toEqual(NUMBER_OF_ROBOTS + 1);\n  });\n\n  xtest('internal name cannot be modified', () => {\n    const modifyInternal = () => {\n      robot.name += 'a modification';\n    };\n    expect(() => modifyInternal()).toThrow();\n  });\n\n  xtest('new names should not be sequential', () => {\n    const name1 = robot.name;\n    const name2 = new Robot().name;\n    const name3 = new Robot().name;\n    expect(areSequential(name1, name1)).toBe(true);\n    expect(areSequential(name1, name2)).toBe(false);\n    expect(areSequential(name2, name3)).toBe(false);\n  });\n\n  xtest('names from reset should not be sequential', () => {\n    const name1 = robot.name;\n    robot.reset();\n    const name2 = robot.name;\n    robot.reset();\n    const name3 = robot.name;\n    expect(areSequential(name1, name2)).toBe(false);\n    expect(areSequential(name2, name3)).toBe(false);\n    expect(areSequential(name3, name3)).toBe(true);\n  });\n\n  // This test is optional.\n  //\n  // This test doesn't run on our online test runner because it will time-out\n  // with most implementations. It's up to you to test your solution locally.\n  test.skip(\n    'all the names can be generated',\n    () => {\n      const usedNames = new Set();\n      usedNames.add(robot.name);\n\n      for (let i = 0; i < TOTAL_NUMBER_OF_NAMES - 1; i += 1) {\n        const newRobot = new Robot();\n        usedNames.add(newRobot.name);\n      }\n\n      expect(usedNames.size).toEqual(TOTAL_NUMBER_OF_NAMES);\n    },\n    8 * 1000,\n  );\n});\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "rchavarria"
+  ],
+  "contributors": [
+    "draalger",
+    "kytrinyx",
+    "masters3d",
+    "matthewmorgan",
+    "ntshcalleia",
+    "ryanplusplus",
+    "SleeplessByte"
+  ]
+}

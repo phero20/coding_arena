@@ -1,0 +1,37 @@
+{
+  "id": "bash:two-fer",
+  "trackSlug": "bash",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "0cfac255-6871-4588-a16b-98f7692bfdbe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\necho \"One for ${1:-you}, one for me.\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.2.0.1\n\n@test \"no name given\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n  # The above line controls whether to skip the test.\n  # Normally, we skip every test except for the first one\n  # (the first one is always commented out).  This allows for\n  # a person to focus on solving a test at a time: you can\n  # comment out or delete the\n  # `[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip`\n  # line to run the test when you are ready.\n  #\n  # You can also run all the tests by setting the\n  # `$BATS_RUN_SKIPPED` environment variable, like this:\n  #\n  #     $ BATS_RUN_SKIPPED=true bats two_fer.bats\n\n  run bash two_fer.sh\n  assert_success\n  assert_output \"One for you, one for me.\"\n}\n\n@test \"a name given\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash two_fer.sh Alice\n  assert_success\n  assert_output \"One for Alice, one for me.\"\n}\n\n@test \"another name given\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash two_fer.sh Bob\n  assert_success\n  assert_output \"One for Bob, one for me.\"\n}\n\n# bash-specific test: Focus the student's attention on the effects of\n# word splitting and filename expansion:\n# https://www.gnu.org/software/bash/manual/bash.html#Shell-Expansions\n\n@test \"handle arg with spaces\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash two_fer.sh \"John Smith\" \"Mary Ann\"\n  assert_success\n  assert_output \"One for John Smith, one for me.\"\n}\n\n@test \"handle arg with glob char\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash two_fer.sh \"* \"\n  assert_success\n  assert_output \"One for * , one for me.\"\n}\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "Smarticles101"
+  ],
+  "contributors": [
+    "alirezaghey",
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "kytrinyx",
+    "sjwarner-bp",
+    "ZapAnton"
+  ]
+}

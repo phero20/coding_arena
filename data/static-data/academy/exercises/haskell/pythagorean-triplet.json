@@ -1,0 +1,37 @@
+{
+  "id": "haskell:pythagorean-triplet",
+  "trackSlug": "haskell",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "eb01573e-36bb-4093-bf16-4bccd8a36909",
+  "type": "practice",
+  "status": null,
+  "blurb": "There exists exactly one Pythagorean triplet for which a + b + c = 1000. Find the product a * b * c.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Triplet (tripletsWithSum) where\n\ntripletsWithSum :: Int -> [(Int, Int, Int)]\ntripletsWithSum sum = error \"You need to implement this function.\"\n",
+  "example_solution": "module Triplet (tripletsWithSum) where\n\ntripletsWithSum :: Int -> [(Int, Int, Int)]\ntripletsWithSum n =\n  [ (a, b, c)\n  | a <- [1 .. n `div` 3]\n  , let b = n `div` 2 - a * n `div` (2 * (n - a))\n  , let c = n - a - b\n  , a < b\n  , a * a + b * b == c * c\n  ]\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n\nimport Data.Foldable     (for_)\nimport Data.List         (sort)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Triplet (tripletsWithSum)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"pythagoreanTriplets\" $ for_ cases test\n  where\n    test (description, n, ts) = it description $ sort (tripletsWithSum n) `shouldBe` ts\n    cases = [ (\"triplets whose sum is 12\"\n              , 12\n              , [(3, 4, 5)]\n              )\n            , (\"triplets whose sum is 108\"\n              , 108\n              , [(27, 36, 45)]\n              )\n            , (\"triplets whose sum is 1000\"\n              , 1000\n              , [(200, 375, 425)]\n              )\n            , (\"no matching triplets for 1001\"\n              , 1001\n              , []\n              )\n            , (\"returns all matching triplets\"\n              , 90\n              , [ (9, 40, 41)\n                , (15, 36, 39)\n                ]\n              )\n            , (\"several matching triplets\"\n              , 840\n              , [ (40, 399, 401)\n                , (56, 390, 394)\n                , (105, 360, 375)\n                , (120, 350, 370)\n                , (140, 336, 364)\n                , (168, 315, 357)\n                , (210, 280, 350)\n                , (240, 252, 348)\n                ]\n              )\n            , (\"triplets for large number\"\n              , 30000\n              , [ (1200, 14375, 14425)\n                , (1875, 14000, 14125)\n                , (5000, 12000, 13000)\n                , (6000, 11250, 12750)\n                , (7500, 10000, 12500)\n                ]\n              )\n            ]\n",
+  "source": "Problem 9 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "kytrinyx",
+    "lpalma",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane",
+    "TheBestJohn"
+  ]
+}

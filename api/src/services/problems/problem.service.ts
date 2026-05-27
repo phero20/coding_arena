@@ -13,6 +13,7 @@ export interface IProblemService {
     limit: number,
   ): Promise<{ problems: Problem[]; total: number }>;
   upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem>;
+  getUserSolvedProblems(userId: string): Promise<string[]>;
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -49,5 +50,9 @@ export class ProblemService implements IProblemService {
 
   upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem> {
     return this.problemRepository.createOrUpdate(input);
+  }
+
+  getUserSolvedProblems(userId: string): Promise<string[]> {
+    return this.problemRepository.getUserSolvedProblems(userId);
   }
 }

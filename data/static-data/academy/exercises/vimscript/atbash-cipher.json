@@ -1,0 +1,29 @@
+{
+  "id": "vimscript:atbash-cipher",
+  "trackSlug": "vimscript",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "2cd8b4dd-0c07-4e62-9d49-ec9697dc978b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\n\" Create an implementation of the atbash cipher, an ancient encryption system\n\" created in the Middle East.\n\"\n\" Examples:\n\"\n\"   :echo AtbashEncode('test')\n\"   gvhg\n\"\n\"   :echo AtbashDecode('gvhg')\n\"   test\n\"\n\"   :echo AtbashDecode('gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt')\n\"   thequickbrownfoxjumpsoverthelazydog\n\"\n\nfunction! AtbashEncode(plaintext) abort\n  \" your code goes here\nendfunction\n\nfunction! AtbashDecode(cipher) abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "function! AtbashDecode(cipher) abort\n  return s:algorithm(s:normalize(a:cipher))\nendfunction\n\nfunction! AtbashEncode(plaintext) abort\n  return s:chunk(AtbashDecode(a:plaintext))\nendfunction\n\nfunction! s:normalize(text) abort\n  return substitute(tolower(a:text), '[^a-z0-9]', '', 'g')\nendfunction\n\nfunction! s:algorithm(text) abort\n  let alphabet = 'abcdefghijklmnopqrstuvwxyz'\n  let reversed = 'zyxwvutsrqponmlkjihgfedcba'\n  return tr(a:text, alphabet, reversed)\nendfunction\n\nfunction! s:chunk(text) abort\n  return join(split(a:text, '.\\{5}\\zs'))\nendfunction\n",
+  "test_code": "\" The tests are divided into two groups:\n\"\n\"   - encoding from English to atbash cipher\n\"   - decoding from atbash cipher to all-lowercase-mashed-together English\n\n\" Test encoding from English to atbash\n\nExecute (encode yes):\n  AssertEqual 'bvh', AtbashEncode('yes')\n\nExecute (encode no):\n  AssertEqual 'ml', AtbashEncode('no')\n\nExecute (encode OMG):\n  AssertEqual 'lnt', AtbashEncode('OMG')\n\nExecute (encode spaces):\n  AssertEqual 'lnt', AtbashEncode('O M G')\n\nExecute (encode mindblowingly):\n  AssertEqual 'nrmwy oldrm tob', AtbashEncode('mindblowingly')\n\nExecute (encode numbers):\n  AssertEqual 'gvhgr mt123 gvhgr mt', AtbashEncode('Testing,1 2 3, testing.')\n\nExecute (encode deep thought):\n  AssertEqual 'gifgs rhurx grlm', AtbashEncode('Truth is fiction.')\n\nExecute (encode all the letters):\n  AssertEqual\n    \\ 'gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt',\n    \\ AtbashEncode('The quick brown fox jumps over the lazy dog.')\n\n\" Test decoding from atbash to English\n\nExecute (decode exercism):\n  AssertEqual 'exercism', AtbashDecode('vcvix rhn')\n\nExecute (decode a sentence):\n  AssertEqual\n    \\ 'anobstacleisoftenasteppingstone',\n    \\ AtbashDecode('zmlyh gzxov rhlug vmzhg vkkrm thglm v')\n\nExecute (decode numbers):\n  AssertEqual 'testing123testing', AtbashDecode('gvhgr mt123 gvhgr mt')\n\nExecute (decode all the letters):\n  AssertEqual\n    \\ 'thequickbrownfoxjumpsoverthelazydog',\n    \\ AtbashDecode('gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt')\n\nExecute (decode with too many spaces):\n  AssertEqual 'exercism', AtbashDecode('vc vix    r hn')\n\nExecute (decode with no spaces):\n  AssertEqual 'anobstacleisoftenasteppingstone', AtbashDecode('zmlyhgzxovrhlugvmzhgvkkrmthglmv')\n\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "mhinz"
+  ],
+  "contributors": [
+    "kotp",
+    "kytrinyx"
+  ]
+}

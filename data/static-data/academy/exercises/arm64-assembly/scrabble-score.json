@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:scrabble-score",
+  "trackSlug": "arm64-assembly",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "4c543626-0230-408a-8da4-ee0cd98ce7c0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": ".text\n.globl score\n\nscore:\n        ret\n",
+  "example_solution": ".data\ntable: .byte 1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10\n\n.text\n.globl score\n\n/* extern int score(const char *word); */\nscore:\n        adrp    x1, table\n        add     x1, x1, :lo12:table\n        mov     x2, x0                  /* pointer into word */\n        mov     w0, #0                  /* result */\n\n.read:\n        ldrb    w3, [x2], #1            /* load byte, with post-increment */\n        cbz     w3, .return\n\n        orr     w3, w3, #32             /* force lower case */\n        sub     w3, w3, #'a'\n        cmp     w3, #26\n        bhs     .read                   /* unsigned >= */\n\n        ldrb    w4, [x1, x3]            /* load byte from table */\n        add     w0, w0, w4              /* accumulate result */\n        b       .read\n\n.return:\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\nextern int score(const char *word);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_lowercase_letter(void) {\n    TEST_ASSERT_EQUAL_INT(1, score(\"a\"));\n}\n\nvoid test_uppercase_letter(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(1, score(\"A\"));\n}\n\nvoid test_valuable_letter(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(4, score(\"f\"));\n}\n\nvoid test_short_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(2, score(\"at\"));\n}\n\nvoid test_short_valuable_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(12, score(\"zoo\"));\n}\n\nvoid test_medium_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(6, score(\"street\"));\n}\n\nvoid test_medium_valuable_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(22, score(\"quirky\"));\n}\n\nvoid test_long_mixedcase_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(41, score(\"OxyphenButazone\"));\n}\n\nvoid test_englishlike_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(8, score(\"pinata\"));\n}\n\nvoid test_empty_input(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(0, score(\"\"));\n}\n\nvoid test_entire_alphabet_available(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(87, score(\"abcdefghijklmnopqrstuvwxyz\"));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_lowercase_letter);\n    RUN_TEST(test_uppercase_letter);\n    RUN_TEST(test_valuable_letter);\n    RUN_TEST(test_short_word);\n    RUN_TEST(test_short_valuable_word);\n    RUN_TEST(test_medium_word);\n    RUN_TEST(test_medium_valuable_word);\n    RUN_TEST(test_long_mixedcase_word);\n    RUN_TEST(test_englishlike_word);\n    RUN_TEST(test_empty_input);\n    RUN_TEST(test_entire_alphabet_available);\n    return UNITY_END();\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

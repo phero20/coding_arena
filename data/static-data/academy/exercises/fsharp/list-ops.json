@@ -1,0 +1,42 @@
+{
+  "id": "fsharp:list-ops",
+  "trackSlug": "fsharp",
+  "slug": "list-ops",
+  "name": "List Ops",
+  "uuid": "47602465-a92d-43a5-9e9a-8ef09ce2104d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement basic list operations.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "generic-methods",
+    "higher-order-functions",
+    "parameters"
+  ],
+  "prerequisites": [
+    "generic-methods",
+    "higher-order-functions",
+    "lists",
+    "parameters"
+  ],
+  "instructions": "# Instructions\n\nImplement basic list operations.\n\nIn functional languages list operations like `length`, `map`, and `reduce` are very common.\nImplement a series of basic list operations, without using existing functions.\n\nThe precise number and names of the operations to be implemented will be track dependent to avoid conflicts with existing names, but the general operations you will implement include:\n\n- `append` (_given two lists, add all items in the second list to the end of the first list_);\n- `concatenate` (_given a series of lists, combine all items in all lists into one flattened list_);\n- `filter` (_given a predicate and a list, return the list of all items for which `predicate(item)` is True_);\n- `length` (_given a list, return the total number of items within it_);\n- `map` (_given a function and a list, return the list of the results of applying `function(item)` on all items_);\n- `foldl` (_given a function, a list, and initial accumulator, fold (reduce) each item into the accumulator from the left_);\n- `foldr` (_given a function, a list, and an initial accumulator, fold (reduce) each item into the accumulator from the right_);\n- `reverse` (_given a list, return a list with all the original items, but in reversed order_).\n\nNote, the ordering in which arguments are passed to the fold functions (`foldl`, `foldr`) is significant.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module ListOps\n\nlet rec foldl folder state list = failwith \"You need to implement this function.\"\n\nlet rec foldr folder state list = failwith \"You need to implement this function.\"\n\nlet length list = failwith \"You need to implement this function.\"\n\nlet reverse list = failwith \"You need to implement this function.\"\n\nlet map f list = failwith \"You need to implement this function.\"\n\nlet filter f list = failwith \"You need to implement this function.\"\n\nlet append xs ys = failwith \"You need to implement this function.\"\n\nlet concat xs = failwith \"You need to implement this function.\"",
+  "example_solution": "module ListOps\n\nlet rec foldl folder state list =\n    match list with\n    | [] -> state\n    | x::xs -> foldl folder (folder state x) xs\n\nlet rec foldr folder state list =\n    list\n    |> List.rev\n    |> foldl (fun acc item -> folder item acc) state\n\nlet length list = foldl (fun acc _ -> acc + 1) 0 list\n\nlet reverse list = foldl (fun acc item -> item :: acc) [] list\n\nlet map f list = foldr (fun item acc -> f item :: acc) [] list\n\nlet filter f list = foldr (fun item acc -> if f item then item :: acc else acc) [] list\n\nlet append xs ys = foldr (fun item acc -> item :: acc) ys xs\n\nlet concat xs = foldr append [] xs",
+  "test_code": "module ListOpsTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen ListOps\n\n[<Fact>]\nlet ``append empty lists`` () =\n    append [] [] |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``append list to empty list`` () =\n    append [] [1; 2; 3; 4] |> should equal [1; 2; 3; 4]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``append empty list to list`` () =\n    append [1; 2; 3; 4] [] |> should equal [1; 2; 3; 4]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``append non-empty lists`` () =\n    append [1; 2] [2; 3; 4; 5] |> should equal [1; 2; 2; 3; 4; 5]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``concat empty list`` () =\n    concat [] |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``concat list of lists`` () =\n    concat [[1; 2]; [3]; []; [4; 5; 6]] |> should equal [1; 2; 3; 4; 5; 6]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``concat list of nested lists`` () =\n    concat [[[1]; [2]]; [[3]]; [[]]; [[4; 5; 6]]] |> should equal [[1]; [2]; [3]; []; [4; 5; 6]]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``filter empty list`` () =\n    filter (fun acc -> acc % 2 = 1) [] |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``filter non-empty list`` () =\n    filter (fun acc -> acc % 2 = 1) [1; 2; 3; 5] |> should equal [1; 3; 5]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``length empty list`` () =\n    length [] |> should equal 0\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``length non-empty list`` () =\n    length [1; 2; 3; 4] |> should equal 4\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``map empty list`` () =\n    map (fun acc -> acc + 1) [] |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``map non-empty list`` () =\n    map (fun acc -> acc + 1) [1; 3; 5; 7] |> should equal [2; 4; 6; 8]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``foldl empty list`` () =\n    foldl (fun acc el -> el * acc) 2 [] |> should equal 2\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``foldl direction independent function applied to non-empty list`` () =\n    foldl (fun acc el -> el + acc) 5 [1; 2; 3; 4] |> should equal 15\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``foldr empty list`` () =\n    foldr (fun acc el -> el * acc) 2 [] |> should equal 2\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``foldr direction independent function applied to non-empty list`` () =\n    foldr (fun acc el -> el + acc) 5 [1; 2; 3; 4] |> should equal 15\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``reverse empty list`` () =\n    reverse [] |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``reverse non-empty list`` () =\n    reverse [1; 3; 5; 7] |> should equal [7; 5; 3; 1]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``reverse list of lists is not flattened`` () =\n    reverse [[1; 2]; [3]; []; [4; 5; 6]] |> should equal [[4; 5; 6]; []; [3]; [1; 2]]\n\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "hobbitjoe",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

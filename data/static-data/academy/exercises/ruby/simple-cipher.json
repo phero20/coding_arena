@@ -1,0 +1,45 @@
+{
+  "id": "ruby:simple-cipher",
+  "trackSlug": "ruby",
+  "slug": "simple-cipher",
+  "name": "Simple Cipher",
+  "uuid": "29c66e8a-b1b0-4bbd-be7b-9979ff51ba8f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the Vigenère cipher, a simple substitution cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "instance-variables"
+  ],
+  "prerequisites": [
+    "strings",
+    "instance-variables",
+    "loops",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the [Vigenère cipher][wiki].\nThe Vigenère cipher is a simple substitution cipher.\n\n## Cipher terminology\n\nA cipher is an algorithm used to encrypt, or encode, a string.\nThe unencrypted string is called the _plaintext_ and the encrypted string is called the _ciphertext_.\nConverting plaintext to ciphertext is called _encoding_ while the reverse is called _decoding_.\n\nIn a _substitution cipher_, each plaintext letter is replaced with a ciphertext letter which is computed with the help of a _key_.\n(Note, it is possible for replacement letter to be the same as the original letter.)\n\n## Encoding details\n\nIn this cipher, the key is a series of lowercase letters, such as `\"abcd\"`.\nEach letter of the plaintext is _shifted_ or _rotated_ by a distance based on a corresponding letter in the key.\nAn `\"a\"` in the key means a shift of 0 (that is, no shift).\nA `\"b\"` in the key means a shift of 1.\nA `\"c\"` in the key means a shift of 2, and so on.\n\nThe first letter of the plaintext uses the first letter of the key, the second letter of the plaintext uses the second letter of the key and so on.\nIf you run out of letters in the key before you run out of letters in the plaintext, start over from the start of the key again.\n\nIf the key only contains one letter, such as `\"dddddd\"`, then all letters of the plaintext are shifted by the same amount (three in this example), which would make this the same as a rotational cipher or shift cipher (sometimes called a Caesar cipher).\nFor example, the plaintext `\"iamapandabear\"` would become `\"ldpdsdqgdehdu\"`.\n\nIf the key only contains the letter `\"a\"` (one or more times), the shift distance is zero and the ciphertext is the same as the plaintext.\n\nUsually the key is more complicated than that, though!\nIf the key is `\"abcd\"` then letters of the plaintext would be shifted by a distance of 0, 1, 2, and 3.\nIf the plaintext is `\"hello\"`, we need 5 shifts so the key would wrap around, giving shift distances of 0, 1, 2, 3, and 0.\nApplying those shifts to the letters of `\"hello\"` we get `\"hfnoo\"`.\n\n## Random keys\n\nIf no key is provided, generate a key which consists of at least 100 random lowercase letters from the Latin alphabet.\n\n[wiki]: https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Simple Cipher' exercise in this file. Make the tests in\n`simple_cipher_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/simple-cipher` directory.\n=end\n",
+  "example_solution": "class Cipher\n  attr_reader :key, :key_bytes\n\n  def initialize(key = nil, key_length = 100)\n    if key\n      check_key_validity(key)\n      @key = key\n      @key_bytes = to_bytes(@key)\n    else\n      @key_bytes = []\n      key_length.times { @key_bytes << Random.rand(0...26) }\n      @key = to_string(@key_bytes)\n    end\n  end\n\n  def encode(plaintext)\n    ciphertext = []\n\n    to_bytes(plaintext).each_with_index do |byte, index|\n      ciphertext << (byte + @key_bytes[index % @key.length]) % 26\n    end\n\n    ciphertext = to_string(ciphertext)\n\n    ciphertext\n  end\n\n  def decode(ciphertext)\n    plaintext = []\n\n    to_bytes(ciphertext).each_with_index do |byte, index|\n      plaintext << (byte - @key_bytes[index % @key.length]) % 26\n    end\n\n    plaintext = to_string(plaintext)\n\n    plaintext\n  end\n\n  private\n\n  def to_bytes(string)\n    string.unpack('c*').map { |c| c - 97 }\n  end\n\n  def to_string(bytes)\n    bytes.map { |c| c + 97 }.pack('c*')\n  end\n\n  def check_key_validity(key)\n    if key =~ /[A-Z]/\n      fail ArgumentError.new('Keys must not contain capital letters')\n    elsif key =~ /[0-9]/\n      fail ArgumentError.new('Keys must not contain numbers')\n    elsif key.empty?\n      fail ArgumentError.new('Keys must contain at least one letter')\n    end\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'simple_cipher'\n\nclass RandomKeyCipherTest < Minitest::Test\n  def setup\n    @cipher = Cipher.new\n  end\n\n  def test_cipher_key_is_letters\n    assert_match(/\\A[a-z]+\\z/, @cipher.key)\n  end\n\n  # Here we take advantage of the fact that plaintext of \"aaa...\" doesn't\n  # outputs the key. This is a critical problem with shift ciphers, some\n  # characters will always output the key verbatim.\n  def test_cipher_encode\n    skip\n    plaintext = 'aaaaaaaaaa'\n    assert_equal(@cipher.key[0, 10], @cipher.encode(plaintext))\n  end\n\n  def test_cipher_decode\n    skip\n    plaintext = 'aaaaaaaaaa'\n    assert_equal(plaintext, @cipher.decode(@cipher.key[0, 10]))\n  end\n\n  def test_cipher_reversible\n    skip\n    plaintext = 'abcdefghij'\n    assert_equal(plaintext, @cipher.decode(@cipher.encode(plaintext)))\n  end\nend\n\nclass IncorrectKeyCipherTest < Minitest::Test\n  def test_cipher_with_caps_key\n    skip\n    assert_raises ArgumentError do\n      Cipher.new('ABCDEF')\n    end\n  end\n\n  def test_cipher_with_numeric_key\n    skip\n    assert_raises ArgumentError do\n      Cipher.new('12345')\n    end\n  end\n\n  def test_cipher_with_empty_key\n    skip\n    assert_raises ArgumentError do\n      Cipher.new('')\n    end\n  end\nend\n\nclass SubstitutionCipherTest < Minitest::Test\n  def setup\n    @key = 'abcdefghij'\n    @cipher = Cipher.new(@key)\n  end\n\n  def test_cipher_key_is_as_submitted\n    skip\n    assert_equal(@cipher.key, @key)\n  end\n\n  def test_cipher_encode\n    skip\n    plaintext = 'aaaaaaaaaa'\n    ciphertext = 'abcdefghij'\n    assert_equal(ciphertext, @cipher.encode(plaintext))\n  end\n\n  def test_cipher_decode\n    skip\n    plaintext = 'aaaaaaaaaa'\n    ciphertext = 'abcdefghij'\n    assert_equal(plaintext, @cipher.decode(ciphertext))\n  end\n\n  def test_cipher_reversible\n    skip\n    plaintext = 'abcdefghij'\n    assert_equal(plaintext, @cipher.decode(@cipher.encode(plaintext)))\n  end\n\n  def test_double_shift_encode\n    skip\n    plaintext = 'iamapandabear'\n    ciphertext = 'qayaeaagaciai'\n    assert_equal(ciphertext, Cipher.new('iamapandabear').encode(plaintext))\n  end\n\n  def test_cipher_encode_wrap\n    skip\n    plaintext = 'zzzzzzzzzz'\n    ciphertext = 'zabcdefghi'\n    assert_equal(ciphertext, @cipher.encode(plaintext))\n  end\nend\n\nclass PseudoShiftCipherTest < Minitest::Test\n  def setup\n    @cipher = Cipher.new('dddddddddd')\n  end\n\n  def test_cipher_encode\n    skip\n    plaintext = 'aaaaaaaaaa'\n    ciphertext = 'dddddddddd'\n    assert_equal(ciphertext, @cipher.encode(plaintext))\n  end\n\n  def test_cipher_decode\n    skip\n    plaintext = 'aaaaaaaaaa'\n    ciphertext = 'dddddddddd'\n    assert_equal(plaintext, @cipher.decode(ciphertext))\n  end\n\n  def test_cipher_reversible\n    skip\n    plaintext = 'abcdefghij'\n    assert_equal(plaintext, @cipher.decode(@cipher.encode(plaintext)))\n  end\nend\n",
+  "source": "Substitution Cipher at Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Substitution_cipher",
+  "authors": [
+    "vosechu"
+  ],
+  "contributors": [
+    "budmc29",
+    "dalexj",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "kytrinyx",
+    "markijbema",
+    "snoozer05",
+    "tryantwit"
+  ]
+}

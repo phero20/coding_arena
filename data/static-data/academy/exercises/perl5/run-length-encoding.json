@@ -1,0 +1,26 @@
+{
+  "id": "perl5:run-length-encoding",
+  "trackSlug": "perl5",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "a1b3d36c-5745-49f6-84d8-4025b3826344",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package RunLengthEncoding;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<encode decode>;\n\nsub encode ($string) {\n    return undef;\n}\n\nsub decode ($string) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package RunLengthEncoding;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<encode decode>;\n\nsub encode ($string) {\n    ( my $encoded = $string ) =~ s{(.)(\\1+)}{(1 + length $2) . $1}ge;\n    return $encoded;\n}\n\nsub decode ($string) {\n    ( my $decoded = $string ) =~ s{(\\d+)(.)}{$2 x $1}ge;\n    return $decoded;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse RunLengthEncoding qw<encode decode>;\n\nis( # begin: ad53b61b-6ffc-422f-81a6-61f7df92a231\n    encode(\"\"),\n    \"\",\n    \"run-length encode a string: empty string\",\n); # end: ad53b61b-6ffc-422f-81a6-61f7df92a231\n\nis( # begin: 52012823-b7e6-4277-893c-5b96d42f82de\n    encode(\"XYZ\"),\n    \"XYZ\",\n    \"run-length encode a string: single characters only are encoded without count\",\n); # end: 52012823-b7e6-4277-893c-5b96d42f82de\n\nis( # begin: b7868492-7e3a-415f-8da3-d88f51f80409\n    encode(\"AABBBCCCC\"),\n    \"2A3B4C\",\n    \"run-length encode a string: string with no single characters\",\n); # end: b7868492-7e3a-415f-8da3-d88f51f80409\n\nis( # begin: 859b822b-6e9f-44d6-9c46-6091ee6ae358\n    encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"),\n    \"12WB12W3B24WB\",\n    \"run-length encode a string: single characters mixed with repeated characters\",\n); # end: 859b822b-6e9f-44d6-9c46-6091ee6ae358\n\nis( # begin: 1b34de62-e152-47be-bc88-469746df63b3\n    encode(\"  hsqq qww  \"),\n    \"2 hs2q q2w2 \",\n    \"run-length encode a string: multiple whitespace mixed in string\",\n); # end: 1b34de62-e152-47be-bc88-469746df63b3\n\nis( # begin: abf176e2-3fbd-40ad-bb2f-2dd6d4df721a\n    encode(\"aabbbcccc\"),\n    \"2a3b4c\",\n    \"run-length encode a string: lowercase characters\",\n); # end: abf176e2-3fbd-40ad-bb2f-2dd6d4df721a\n\nis( # begin: 7ec5c390-f03c-4acf-ac29-5f65861cdeb5\n    decode(\"\"),\n    \"\",\n    \"run-length decode a string: empty string\",\n); # end: 7ec5c390-f03c-4acf-ac29-5f65861cdeb5\n\nis( # begin: ad23f455-1ac2-4b0e-87d0-b85b10696098\n    decode(\"XYZ\"),\n    \"XYZ\",\n    \"run-length decode a string: single characters only\",\n); # end: ad23f455-1ac2-4b0e-87d0-b85b10696098\n\nis( # begin: 21e37583-5a20-4a0e-826c-3dee2c375f54\n    decode(\"2A3B4C\"),\n    \"AABBBCCCC\",\n    \"run-length decode a string: string with no single characters\",\n); # end: 21e37583-5a20-4a0e-826c-3dee2c375f54\n\nis( # begin: 1389ad09-c3a8-4813-9324-99363fba429c\n    decode(\"12WB12W3B24WB\"),\n    \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\",\n    \"run-length decode a string: single characters with repeated characters\",\n); # end: 1389ad09-c3a8-4813-9324-99363fba429c\n\nis( # begin: 3f8e3c51-6aca-4670-b86c-a213bf4706b0\n    decode(\"2 hs2q q2w2 \"),\n    \"  hsqq qww  \",\n    \"run-length decode a string: multiple whitespace mixed in string\",\n); # end: 3f8e3c51-6aca-4670-b86c-a213bf4706b0\n\nis( # begin: 29f721de-9aad-435f-ba37-7662df4fb551\n    decode(\"2a3b4c\"),\n    \"aabbbcccc\",\n    \"run-length decode a string: lowercase string\",\n); # end: 29f721de-9aad-435f-ba37-7662df4fb551\n\nis( # begin: 2a762efd-8695-4e04-b0d6-9736899fbc16\n    decode( encode(\"zzz ZZ  zZ\") ),\n    \"zzz ZZ  zZ\",\n    \"encode and then decode: encode followed by decode gives original string\",\n); # end: 2a762efd-8695-4e04-b0d6-9736899fbc16\n\ndone_testing;\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

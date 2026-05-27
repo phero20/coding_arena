@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:scrabble-score",
+  "trackSlug": "moonscript",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "6c8091e1-01db-4294-8460-ec9296d638c5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "{\n  score: (word) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "import fold from require 'moon'\n\ntiles =\n  A: 1, E: 1, I: 1, O: 1, U: 1, L: 1, N: 1, R: 1, S: 1, T: 1,\n  D: 2, G: 2,\n  B: 3, C: 3, M: 3, P: 3,\n  F: 4, H: 4, V: 4, W: 4, Y: 4,\n  K: 5,\n  J: 8, X: 8,\n  Q: 10, Z: 10,\n\n{\n  score: (word) ->\n    return 0 if #word == 0\n    fold [tiles[c] or 0 for c in word\\upper!\\gmatch('.')], (sum, t) -> sum + t\n}\n",
+  "test_code": "Scrabble = require 'scrabble_score'\n\ndescribe 'scrabble-score:', ->\n  it 'lowercase letter', ->\n    result = Scrabble.score 'a'\n    assert.are.equal 1, result\n\n  pending 'uppercase letter', ->\n    result = Scrabble.score 'A'\n    assert.are.equal 1, result\n\n  pending 'valuable letter', ->\n    result = Scrabble.score 'f'\n    assert.are.equal 4, result\n\n  pending 'short word', ->\n    result = Scrabble.score 'at'\n    assert.are.equal 2, result\n\n  pending 'short, valuable word', ->\n    result = Scrabble.score 'zoo'\n    assert.are.equal 12, result\n\n  pending 'medium word', ->\n    result = Scrabble.score 'street'\n    assert.are.equal 6, result\n\n  pending 'medium, valuable word', ->\n    result = Scrabble.score 'quirky'\n    assert.are.equal 22, result\n\n  pending 'long, mixed-case word', ->\n    result = Scrabble.score 'OxyphenButazone'\n    assert.are.equal 41, result\n\n  pending 'english-like word', ->\n    result = Scrabble.score 'pinata'\n    assert.are.equal 8, result\n\n  pending 'empty input', ->\n    result = Scrabble.score ''\n    assert.are.equal 0, result\n\n  pending 'entire alphabet available', ->\n    result = Scrabble.score 'abcdefghijklmnopqrstuvwxyz'\n    assert.are.equal 87, result\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

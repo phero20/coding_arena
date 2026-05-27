@@ -1,0 +1,30 @@
+{
+  "id": "red:hello-world",
+  "trackSlug": "red",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "1d2e9dab-d85e-4b30-b414-1ebd969475ad",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "basics",
+    "script",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": "## General\n\nTry to replace exisiting text.\n",
+  "starter_code": "Red [\n\tdescription: {\"Hello World\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nhello: function [] [\n\t\"Goodbye, Mars!\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Hello World\" exercise solution for exercism platform}\n\tauthor: \"loziniak\"\n]\n\nhello: function [] [\n\t\"Hello, World!\"\n]\n\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Hello World\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %hello-world.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"Say Hi!\"\n    input: #[]\n    expected: \"Hello, World!\"\n    function: \"hello\"\n    uuid: \"af9ffe10-dc13-42d8-a742-e7bdafac449d\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "loziniak"
+  ],
+  "contributors": null
+}

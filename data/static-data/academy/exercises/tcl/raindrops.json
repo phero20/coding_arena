@@ -1,0 +1,28 @@
+{
+  "id": "tcl:raindrops",
+  "trackSlug": "tcl",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "cc188b91-94d2-44bc-9ede-aaa0a4a8cd1c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "proc raindrops {number} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc raindrops {num} {\n    foreach div {3 5 7} vowel {i a o} {\n        if {$num % $div == 0} {\n            append sounds \"Pl${vowel}ng\"\n        }\n    }\n    # if no divisors, then the sounds variable does not yet exist\n    expr {[info exists sounds] ? $sounds : $num}\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"raindrops.tcl\"\n\ntest raindrops-1 \"sound for 1 is 1\" -body {\n    raindrops 1\n} -returnCodes ok -result 1\n\nskip raindrops-2\ntest raindrops-2 \"sound for 3 is Pling\" -body {\n    raindrops 3\n} -returnCodes ok -result Pling\n\nskip raindrops-3\ntest raindrops-3 \"sound for 5 is Plang\" -body {\n    raindrops 5\n} -returnCodes ok -result Plang\n\nskip raindrops-4\ntest raindrops-4 \"sound for 7 is Plong\" -body {\n    raindrops 7\n} -returnCodes ok -result Plong\n\nskip raindrops-5\ntest raindrops-5 \"sound for 6 is Pling\" -body {\n    raindrops 6\n} -returnCodes ok -result Pling\n\nskip raindrops-6\ntest raindrops-6 \"sound for 8 is 8\" -body {\n    raindrops 8\n} -returnCodes ok -result 8\n\nskip raindrops-7\ntest raindrops-7 \"sound for 9 is Pling\" -body {\n    raindrops 9\n} -returnCodes ok -result Pling\n\nskip raindrops-8\ntest raindrops-8 \"sound for 10 is Plang\" -body {\n    raindrops 10\n} -returnCodes ok -result Plang\n\nskip raindrops-9\ntest raindrops-9 \"sound for 14 is Plong\" -body {\n    raindrops 14\n} -returnCodes ok -result Plong\n\nskip raindrops-10\ntest raindrops-10 \"sound for 15 is PlingPlang\" -body {\n    raindrops 15\n} -returnCodes ok -result PlingPlang\n\nskip raindrops-11\ntest raindrops-11 \"sound for 21 is PlingPlong\" -body {\n    raindrops 21\n} -returnCodes ok -result PlingPlong\n\nskip raindrops-12\ntest raindrops-12 \"sound for 25 is Plang\" -body {\n    raindrops 25\n} -returnCodes ok -result Plang\n\nskip raindrops-13\ntest raindrops-13 \"sound for 27 is Pling\" -body {\n    raindrops 27\n} -returnCodes ok -result Pling\n\nskip raindrops-14\ntest raindrops-14 \"sound for 35 is PlangPlong\" -body {\n    raindrops 35\n} -returnCodes ok -result PlangPlong\n\nskip raindrops-15\ntest raindrops-15 \"sound for 49 is Plong\" -body {\n    raindrops 49\n} -returnCodes ok -result Plong\n\nskip raindrops-16\ntest raindrops-16 \"sound for 52 is 52\" -body {\n    raindrops 52\n} -returnCodes ok -result 52\n\nskip raindrops-17\ntest raindrops-17 \"sound for 105 is PlingPlangPlong\" -body {\n    raindrops 105\n} -returnCodes ok -result PlingPlangPlong\n\nskip raindrops-18\ntest raindrops-18 \"sound for 3125 is Plang\" -body {\n    raindrops 3125\n} -returnCodes ok -result Plang\n\ncleanupTests\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

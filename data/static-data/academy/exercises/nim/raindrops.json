@@ -1,0 +1,28 @@
+{
+  "id": "nim:raindrops",
+  "trackSlug": "nim",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "4e35d149-d3b2-4e98-85bd-7a21783b59d4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "proc convert*(n: int): string =\n  discard\n",
+  "example_solution": "const lookup = block:\n  const raindrops = [\n    (3, \"Pling\"),\n    (5, \"Plang\"),\n    (7, \"Plong\"),\n  ]\n\n  func calcPeriod(a: openArray[(int, string)]): int =\n    ## Returns the product of the integers in `a`.\n    result = 1\n    for (n, _) in a:\n      result *= n\n\n  func genLookup: array[calcPeriod(raindrops), string] =\n    for i, s in result.mpairs:\n      for (n, sound) in raindrops:\n        if i mod n == 0:\n          s.add sound\n      if s.len == 0:\n        s = $i\n\n  genLookup() # Creates lookup at compile time.\n\nfunc convert*(n: uint): string =\n  lookup[n mod lookup.len]\n",
+  "test_code": "import unittest\nimport raindrops\n\nsuite \"Raindrops\":\n  test \"the sound for 1 is 1\":\n    check convert(1) == \"1\"\n\n  test \"the sound for 3 is Pling\":\n    check convert(3) == \"Pling\"\n\n  test \"the sound for 5 is Plang\":\n    check convert(5) == \"Plang\"\n\n  test \"the sound for 7 is Plong\":\n    check convert(7) == \"Plong\"\n\n  test \"the sound for 6 is Pling as it has a factor 3\":\n    check convert(6) == \"Pling\"\n\n  test \"2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base\":\n    check convert(8) == \"8\"\n\n  test \"the sound for 9 is Pling as it has a factor 3\":\n    check convert(9) == \"Pling\"\n\n  test \"the sound for 10 is Plang as it has a factor 5\":\n    check convert(10) == \"Plang\"\n\n  test \"the sound for 14 is Plong as it has a factor 7\":\n    check convert(14) == \"Plong\"\n\n  test \"the sound for 15 is PlingPlang as it has factors 3 and 5\":\n    check convert(15) == \"PlingPlang\"\n\n  test \"the sound for 21 is PlingPlong as it has factors 3 and 7\":\n    check convert(21) == \"PlingPlong\"\n\n  test \"the sound for 25 is Plang as it has a factor 5\":\n    check convert(25) == \"Plang\"\n\n  test \"the sound for 27 is Pling as it has a factor 3\":\n    check convert(27) == \"Pling\"\n\n  test \"the sound for 35 is PlangPlong as it has factors 5 and 7\":\n    check convert(35) == \"PlangPlong\"\n\n  test \"the sound for 49 is Plong as it has a factor 7\":\n    check convert(49) == \"Plong\"\n\n  test \"the sound for 52 is 52\":\n    check convert(52) == \"52\"\n\n  test \"the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7\":\n    check convert(105) == \"PlingPlangPlong\"\n\n  test \"the sound for 3125 is Plang as it has a factor 5\":\n    check convert(3125) == \"Plang\"\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "scbafk"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "r:acronym",
+  "trackSlug": "r",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "54e60174-4833-418c-b9af-2fcb5722b1d6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "acronym <- function(input) {\n    \n}\n",
+  "example_solution": "acronym <- function(input) {\n  words <- strsplit(input, \" |-\")[[1]]\n  words <- gsub(\"[[:punct:]]\", \"\", words)\n  first_letters <- lapply(words, substring, 1, 1)\n  toupper(paste(first_letters, collapse = \"\"))\n}\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/acronym/canonical-data.json\n# File last updated on 2026-03-11\n\nsource(\"./acronym.R\")\nlibrary(testthat)\n\ntest_that(\"basic\", {\n  input <- \"Portable Network Graphics\"\n  expect_equal(\n    acronym(input),\n    \"PNG\"\n  )\n})\n\ntest_that(\"lowercase words\", {\n  input <- \"Ruby on Rails\"\n  expect_equal(\n    acronym(input),\n    \"ROR\"\n  )\n})\n\ntest_that(\"punctuation\", {\n  input <- \"First In, First Out\"\n  expect_equal(\n    acronym(input),\n    \"FIFO\"\n  )\n})\n\ntest_that(\"all caps word\", {\n  input <- \"GNU Image Manipulation Program\"\n  expect_equal(\n    acronym(input),\n    \"GIMP\"\n  )\n})\n\ntest_that(\"punctuation without whitespace\", {\n  input <- \"Complementary metal-oxide semiconductor\"\n  expect_equal(\n    acronym(input),\n    \"CMOS\"\n  )\n})\n\ntest_that(\"very long abbreviation\", {\n  input <- \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n  expect_equal(\n    acronym(input),\n    \"ROTFLSHTMDCOALM\"\n  )\n})\n\ntest_that(\"consecutive delimiters\", {\n  input <- \"Something - I made up from thin air\"\n  expect_equal(\n    acronym(input),\n    \"SIMUFTA\"\n  )\n})\n\ntest_that(\"apostrophes\", {\n  input <- \"Halley's Comet\"\n  expect_equal(\n    acronym(input),\n    \"HC\"\n  )\n})\n\ntest_that(\"underscore emphasis\", {\n  input <- \"The Road _Not_ Taken\"\n  expect_equal(\n    acronym(input),\n    \"TRNT\"\n  )\n})\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "zacchaeusluke"
+  ],
+  "contributors": [
+    "jonmcalder",
+    "katrinleinweber",
+    "xarxziux"
+  ]
+}

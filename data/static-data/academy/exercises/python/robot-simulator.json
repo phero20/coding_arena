@@ -1,0 +1,51 @@
+{
+  "id": "python:robot-simulator",
+  "trackSlug": "python",
+  "slug": "robot-simulator",
+  "name": "Robot Simulator",
+  "uuid": "ca474c47-57bb-4995-bf9a-b6937479de29",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a robot simulator.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "class-customization",
+    "decorators",
+    "dict-methods"
+  ],
+  "prerequisites": [
+    "basics",
+    "conditionals",
+    "classes",
+    "dicts",
+    "lists",
+    "loops",
+    "numbers",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nWrite a robot simulator.\n\nA robot factory's test facility needs a program to verify robot movements.\n\nThe robots have three possible movements:\n\n- turn right\n- turn left\n- advance\n\nRobots are placed on a hypothetical infinite grid, facing a particular direction (north, east, south, or west) at a set of {x,y} coordinates,\ne.g., {3,8}, with coordinates increasing to the north and east.\n\nThe robot then receives a number of instructions, at which point the testing facility verifies the robot's new position, and in which direction it is pointing.\n\n- The letter-string \"RAALAL\" means:\n  - Turn right\n  - Advance twice\n  - Turn left\n  - Advance once\n  - Turn left yet again\n- Say a robot starts at {7, 3} facing north.\n  Then running this stream of instructions should leave it at {9, 4} facing west.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Globals for the directions\n# Change the values as you see fit\nEAST = None\nNORTH = None\nWEST = None\nSOUTH = None\n\n\nclass Robot:\n    def __init__(self, direction=NORTH, x_pos=0, y_pos=0):\n        pass\n",
+  "example_solution": "NORTH, EAST, SOUTH, WEST = range(4)\n\n\nclass Compass:\n    compass = [NORTH, EAST, SOUTH, WEST]\n\n    def __init__(self, direction=NORTH):\n        self.direction = direction\n\n    def left(self):\n        self.direction = self.compass[self.direction - 1]\n\n    def right(self):\n        self.direction = self.compass[(self.direction + 1) % 4]\n\n\nclass Robot:\n    def __init__(self, direction=NORTH, x_pos=0, y_pos=0):\n        self.compass = Compass(direction)\n        self.x_pos = x_pos\n        self.y_pos = y_pos\n\n    def advance(self):\n        if self.direction == NORTH:\n            self.y_pos += 1\n        elif self.direction == SOUTH:\n            self.y_pos -= 1\n        elif self.direction == EAST:\n            self.x_pos += 1\n        elif self.direction == WEST:\n            self.x_pos -= 1\n\n    def turn_left(self):\n        self.compass.left()\n\n    def turn_right(self):\n        self.compass.right()\n\n    def move(self, commands):\n        instructions = {'A': self.advance,\n                        'R': self.turn_right,\n                        'L': self.turn_left}\n        for cmd in commands:\n            if cmd in instructions:\n                instructions[cmd]()\n\n    @property\n    def direction(self):\n        return self.compass.direction\n\n    @property\n    def coordinates(self):\n        return (self.x_pos, self.y_pos)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/robot-simulator/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom robot_simulator import (\n    Robot,\n    NORTH,\n    EAST,\n    SOUTH,\n    WEST,\n)\n\n\nclass RobotSimulatorTest(unittest.TestCase):\n\n    # Test create robot\n    def test_at_origin_facing_north(self):\n        robot = Robot(NORTH, 0, 0)\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, NORTH)\n\n    def test_at_negative_position_facing_south(self):\n        robot = Robot(SOUTH, -1, -1)\n\n        self.assertEqual(robot.coordinates, (-1, -1))\n        self.assertEqual(robot.direction, SOUTH)\n\n    # Test rotating clockwise\n    def test_changes_north_to_east(self):\n        robot = Robot(NORTH, 0, 0)\n        robot.move(\"R\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, EAST)\n\n    def test_changes_east_to_south(self):\n        robot = Robot(EAST, 0, 0)\n        robot.move(\"R\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, SOUTH)\n\n    def test_changes_south_to_west(self):\n        robot = Robot(SOUTH, 0, 0)\n        robot.move(\"R\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, WEST)\n\n    def test_changes_west_to_north(self):\n        robot = Robot(WEST, 0, 0)\n        robot.move(\"R\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, NORTH)\n\n    # Test rotating counter-clockwise\n    def test_changes_north_to_west(self):\n        robot = Robot(NORTH, 0, 0)\n        robot.move(\"L\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, WEST)\n\n    def test_changes_west_to_south(self):\n        robot = Robot(WEST, 0, 0)\n        robot.move(\"L\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, SOUTH)\n\n    def test_changes_south_to_east(self):\n        robot = Robot(SOUTH, 0, 0)\n        robot.move(\"L\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, EAST)\n\n    def test_changes_east_to_north(self):\n        robot = Robot(EAST, 0, 0)\n        robot.move(\"L\")\n\n        self.assertEqual(robot.coordinates, (0, 0))\n        self.assertEqual(robot.direction, NORTH)\n\n    # Test moving forward one\n    def test_facing_north_increments_y(self):\n        robot = Robot(NORTH, 0, 0)\n        robot.move(\"A\")\n\n        self.assertEqual(robot.coordinates, (0, 1))\n        self.assertEqual(robot.direction, NORTH)\n\n    def test_facing_south_decrements_y(self):\n        robot = Robot(SOUTH, 0, 0)\n        robot.move(\"A\")\n\n        self.assertEqual(robot.coordinates, (0, -1))\n        self.assertEqual(robot.direction, SOUTH)\n\n    def test_facing_east_increments_x(self):\n        robot = Robot(EAST, 0, 0)\n        robot.move(\"A\")\n\n        self.assertEqual(robot.coordinates, (1, 0))\n        self.assertEqual(robot.direction, EAST)\n\n    def test_facing_west_decrements_x(self):\n        robot = Robot(WEST, 0, 0)\n        robot.move(\"A\")\n\n        self.assertEqual(robot.coordinates, (-1, 0))\n        self.assertEqual(robot.direction, WEST)\n\n    # Test follow series of instructions\n    def test_moving_east_and_north_from_readme(self):\n        robot = Robot(NORTH, 7, 3)\n        robot.move(\"RAALAL\")\n\n        self.assertEqual(robot.coordinates, (9, 4))\n        self.assertEqual(robot.direction, WEST)\n\n    def test_moving_west_and_north(self):\n        robot = Robot(NORTH, 0, 0)\n        robot.move(\"LAAARALA\")\n\n        self.assertEqual(robot.coordinates, (-4, 1))\n        self.assertEqual(robot.direction, WEST)\n\n    def test_moving_west_and_south(self):\n        robot = Robot(EAST, 2, -7)\n        robot.move(\"RRAAAAALA\")\n\n        self.assertEqual(robot.coordinates, (-3, -8))\n        self.assertEqual(robot.direction, SOUTH)\n\n    def test_moving_east_and_north(self):\n        robot = Robot(SOUTH, 8, 4)\n        robot.move(\"LAAARRRALLLL\")\n\n        self.assertEqual(robot.coordinates, (11, 5))\n        self.assertEqual(robot.direction, NORTH)\n",
+  "source": "Inspired by an interview question at a famous company.",
+  "source_url": null,
+  "authors": [
+    "behrtam"
+  ],
+  "contributors": [
+    "cmccandless",
+    "denislooby",
+    "Dog",
+    "Galixxon",
+    "GKotfis",
+    "Grociu",
+    "JuliaKBremer",
+    "N-Parsons",
+    "parinporecha",
+    "pheanex",
+    "tqa236"
+  ]
+}

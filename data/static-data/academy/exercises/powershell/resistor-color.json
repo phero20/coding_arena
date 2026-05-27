@@ -1,0 +1,28 @@
+{
+  "id": "powershell:resistor-color",
+  "trackSlug": "powershell",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "09637d15-2f1e-45a1-9654-1b783147676e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Function Get-ColorCode() {\n    <#\n    .SYNOPSIS\n    Translate a color to its corresponding color code.\n\n    .DESCRIPTION\n    Given a color, return its corresponding color code.\n\n    .PARAMETER Color\n    The color to translate to its corresponding color code.\n\n    .EXAMPLE\n    Get-ColorCode -Color \"black\"\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Color\n    )\n    \n    throw \"Please implement this function\"\n}\n\nFunction Get-Colors() {\n    <#\n    .SYNOPSIS\n    Return the list of all colors.\n\n    .DESCRIPTION\n    Return the list of all colors.\n\n    .EXAMPLE\n    Get-Colors\n    #>\n    \n    throw \"Please implement this function\"\n}\n",
+  "example_solution": "Function Get-ColorCode() {\n    <#\n    .SYNOPSIS\n    Translate a color to its corresponding color code.\n\n    .DESCRIPTION\n    Given a color, return its corresponding color code.\n\n    .PARAMETER Color\n    The color to translate to its corresponding color code.\n\n    .EXAMPLE\n    Get-ColorCode -Color \"black\"\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Color\n    )\n    $Colors = Get-Colors\n    return $Colors.IndexOf($Color.ToLower())\n}\n\nFunction Get-Colors() {\n    <#\n    .SYNOPSIS\n    Return the list of all colors.\n\n    .DESCRIPTION\n    Return the list of all colors.\n\n    .EXAMPLE\n    Get-Colors\n    #>\n    \n    return @(\"black\", \"brown\", \"red\", \"orange\", \"yellow\", \"green\", \"blue\", \"violet\", \"grey\", \"white\")\n}\n",
+  "test_code": "BeforeAll {\n    . \"./ResistorColor.ps1\"\n}\n\nDescribe \"Test Get-ColorCode\" {\n    It \"Black\" {\n        $got = Get-ColorCode -Color \"black\"\n        $want = 0\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"White\" {\n        $got = Get-ColorCode -Color \"white\"\n        $want = 9\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"Orange\" {\n        $got = Get-ColorCode -Color \"orange\"\n        $want = 3\n\n        $got | Should -BeExactly $want\n    }\n\n    It \"Colors\" {\n        $got = Get-Colors\n        $want = @(\"black\", \"brown\", \"red\", \"orange\", \"yellow\", \"green\", \"blue\", \"violet\", \"grey\", \"white\")\n\n        $got | Should -BeExactly $want\n    }\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "meatball133"
+  ],
+  "contributors": null
+}

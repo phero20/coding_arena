@@ -1,0 +1,32 @@
+{
+  "id": "julia:queen-attack",
+  "trackSlug": "julia",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "e68041f6-a661-41dd-94fb-2000095803ae",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "composite-types",
+    "errors"
+  ],
+  "prerequisites": [
+    "composite-types",
+    "errors"
+  ],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "struct InvalidPosition <: Exception\n\nend\n\nstruct Queen\n\nend\n\nfunction canattack(white::Queen, black::Queen)\n\nend\n",
+  "example_solution": "struct InvalidPosition <: Exception\n    message::String\nend\n\nstruct Queen\n    row::Int\n    col::Int\n    Queen(row::Int, col::Int) = \n        if row < 0\n            throw(InvalidPosition(\"row must be positive\"))\n        elseif row > 7\n            throw(InvalidPosition(\"row not on board\"))\n        elseif row < 0\n            throw(InvalidPosition(\"column must be positive\"))\n        elseif col > 7\n            throw(InvalidPosition(\"column not on board\"))\n        else\n            new(row, col)\n        end\nend\n\nfunction canattack(white::Queen, black::Queen)\n    white.row == black.row || white.col == black.col || abs(white.row - black.row) == abs(white.col - black.col)\nend\n",
+  "test_code": "using Test\n\ninclude(\"queen-attack.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"test creation of Queens\" begin\n        @testset \"Queen with a valid position\" begin\n          @test Queen(2, 2) == Queen(2, 2)\n        end\n        @testset \"Queen must have row on board\" begin\n          @test_throws InvalidPosition Queen(8, 4)\n        end\n        @testset \"Queen must have column on board\" begin\n          @test_throws InvalidPosition Queen(4, 8)\n        end\n    end\n\n    @testset \"test the ability of one queen to attack another\" begin\n        @testset \"cannot attack\" begin\n          @test !canattack(Queen(2, 4), Queen(6, 6))\n        end\n        @testset \"can attack on same row\" begin\n          @test canattack(Queen(2, 4), Queen(2, 6))\n        end\n        @testset \"can attack on same column\" begin\n          @test canattack(Queen(4, 5), Queen(2, 5))\n        end\n        @testset \"can attack on first diagonal\" begin\n          @test canattack(Queen(2, 2), Queen(0, 4))\n        end\n        @testset \"can attack on second diagonal\" begin\n          @test canattack(Queen(2, 2), Queen(3, 1))\n        end\n        @testset \"can attack on third diagonal\" begin\n          @test canattack(Queen(2, 2), Queen(1, 1))\n        end\n        @testset \"can attack on fourth diagonal\" begin\n          @test canattack(Queen(1, 7), Queen(0, 6))\n        end\n        @testset \"cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal\" begin\n          @test !canattack(Queen(4, 1), Queen(2, 5))\n        end\n    end\nend\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

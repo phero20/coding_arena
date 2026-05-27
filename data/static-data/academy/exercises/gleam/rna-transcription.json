@@ -1,0 +1,33 @@
+{
+  "id": "gleam:rna-transcription",
+  "trackSlug": "gleam",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "3a015501-58bf-427c-8c4c-2197321f4a34",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "results"
+  ],
+  "prerequisites": [
+    "lists",
+    "strings",
+    "results",
+    "case-expressions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "pub fn to_rna(dna: String) -> Result(String, Nil) {\n  todo\n}\n",
+  "example_solution": "import gleam/list\nimport gleam/result\nimport gleam/string\n\npub fn to_rna(dna: String) -> Result(String, Nil) {\n  dna\n  |> string.to_graphemes\n  |> list.try_map(convert_base)\n  |> result.map(string.concat)\n}\n\nfn convert_base(base: String) -> Result(String, Nil) {\n  case base {\n    \"G\" -> Ok(\"C\")\n    \"C\" -> Ok(\"G\")\n    \"T\" -> Ok(\"A\")\n    \"A\" -> Ok(\"U\")\n    _ -> Error(Nil)\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport rna_transcription\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn empty_rna_sequence_test() {\n  \"\"\n  |> rna_transcription.to_rna\n  |> should.equal(Ok(\"\"))\n}\n\npub fn rna_complement_of_cytosine_is_guanine_test() {\n  \"C\"\n  |> rna_transcription.to_rna\n  |> should.equal(Ok(\"G\"))\n}\n\npub fn rna_complement_of_guanine_is_cytosine_test() {\n  \"G\"\n  |> rna_transcription.to_rna\n  |> should.equal(Ok(\"C\"))\n}\n\npub fn rna_complement_of_thymine_is_adenine_test() {\n  \"T\"\n  |> rna_transcription.to_rna\n  |> should.equal(Ok(\"A\"))\n}\n\npub fn rna_complement_of_adenine_is_uracil_test() {\n  \"A\"\n  |> rna_transcription.to_rna\n  |> should.equal(Ok(\"U\"))\n}\n\npub fn rna_complement_test() {\n  \"ACGTGGTCTTAA\"\n  |> rna_transcription.to_rna\n  |> should.equal(Ok(\"UGCACCAGAAUU\"))\n}\n\npub fn invalid_dna_test() {\n  \"INVALID\"\n  |> rna_transcription.to_rna\n  |> should.equal(Error(Nil))\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": null
+}

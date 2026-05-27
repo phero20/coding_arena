@@ -1,0 +1,29 @@
+{
+  "id": "vimscript:roman-numerals",
+  "trackSlug": "vimscript",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "c24cf39c-d9f2-437d-8962-514f9ec095fe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "\"\n\" Write a function to convert Arabic numbers to Roman numerals.\n\"\n\" Examples:\n\"\n\"   :echo ToRoman(1990)\n\"   MCMXC\n\"\n\"   :echo ToRoman(2008)\n\"   MMVIII\n\"\nfunction! ToRoman(number) abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "function! ToRoman(number) abort\n  let romandict = [\n        \\ [1000, 'M' ],\n        \\ [ 900, 'CM'],\n        \\ [ 500, 'D' ],\n        \\ [ 400, 'CD'],\n        \\ [ 100, 'C' ],\n        \\ [  90, 'XC'],\n        \\ [  50, 'L' ],\n        \\ [  40, 'XL'],\n        \\ [  10, 'X' ],\n        \\ [   9, 'IX'],\n        \\ [   5, 'V' ],\n        \\ [   4, 'IV'],\n        \\ [   1, 'I' ],\n        \\ ]\n\n  let num = a:number\n  let ret = ''\n\n  for [arabic, roman] in romandict\n    while num >= arabic\n      let ret .= roman\n      let num -= arabic\n    endwhile\n  endfor\n\n  return ret\nendfunction\n",
+  "test_code": "Execute (1 is I):\n  AssertEqual 'I', ToRoman(1)\n\nExecute (2 is II):\n  AssertEqual 'II', ToRoman(2)\n\nExecute (3 is III):\n  AssertEqual 'III', ToRoman(3)\n\nExecute (4 is IV):\n  AssertEqual 'IV', ToRoman(4)\n\nExecute (5 is V):\n  AssertEqual 'V', ToRoman(5)\n\nExecute (6 is VI):\n  AssertEqual 'VI', ToRoman(6)\n\nExecute (9 is IX):\n  AssertEqual 'IX', ToRoman(9)\n\nExecute (16 is XVI):\n  AssertEqual 'XVI', ToRoman(16)\n\nExecute (27 is XXVII):\n  AssertEqual 'XXVII', ToRoman(27)\n\nExecute (48 is XLVIII):\n  AssertEqual 'XLVIII', ToRoman(48)\n\nExecute (49 is XLIX):\n  AssertEqual 'XLIX', ToRoman(49)\n\nExecute (59 is LIX):\n  AssertEqual 'LIX', ToRoman(59)\n\nExecute (66 is LXVI):\n  AssertEqual 'LXVI', ToRoman(66)\n\nExecute (93 is XCIII):\n  AssertEqual 'XCIII', ToRoman(93)\n\nExecute (141 is CXLI):\n  AssertEqual 'CXLI', ToRoman(141)\n\nExecute (163 is CLXIII):\n  AssertEqual 'CLXIII', ToRoman(163)\n\nExecute (166 is CLXVI):\n  AssertEqual 'CLXVI', ToRoman(166)\n\nExecute (402 is CDII):\n  AssertEqual 'CDII', ToRoman(402)\n\nExecute (575 is DLXXV):\n  AssertEqual 'DLXXV', ToRoman(575)\n\nExecute (666 is DCLXVI):\n  AssertEqual 'DCLXVI', ToRoman(666)\n\nExecute (911 is CMXI):\n  AssertEqual 'CMXI', ToRoman(911)\n\nExecute (1024 is MXXIV):\n  AssertEqual 'MXXIV', ToRoman(1024)\n\nExecute (1666 is MDCLXVI):\n  AssertEqual 'MDCLXVI', ToRoman(1666)\n\nExecute (3000 is MMM):\n  AssertEqual 'MMM', ToRoman(3000)\n\nExecute (3001 is MMMI):\n  AssertEqual 'MMMI', ToRoman(3001)\n\nExecute (3888 is MMMDCCCLXXXVIII):\n  AssertEqual 'MMMDCCCLXXXVIII', ToRoman(3888)\n\nExecute (3999 is MMMCMXCIX):\n  AssertEqual 'MMMCMXCIX', ToRoman(3999)\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "mhinz"
+  ],
+  "contributors": [
+    "kotp",
+    "kytrinyx"
+  ]
+}

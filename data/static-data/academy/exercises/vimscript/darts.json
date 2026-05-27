@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:darts",
+  "trackSlug": "vimscript",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "1ae2f1bd-5f62-4692-857d-faaf5223cad7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\n\" Calculate the score of a single dart toss, given the distance\n\" from the center of the board in the X and Y graph axes.\n\" The circular dartboard is ten units wide from the center to the edge.\n\"\n\" Example:\n\"\n\" :echo Darts(0, 0)\n\" 10\n\"\n\" :echo Darts(11, 11)\n\" 0\n\"\nfunction! Darts(x, y) abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "function! Darts(x, y) abort\n  let l:distance = sqrt(a:x * a:x + a:y * a:y)\n  \n  if l:distance <= 1\n    return 10\n  elseif l:distance <= 5\n    return 5\n  elseif l:distance <= 10\n    return 1\n  else\n    return 0\n  endif\nendfunction\n",
+  "test_code": "\nExecute (Missed target):\n  let g:x = -9\n  let g:y = 9\n  let g:expected = 0\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (On the outer circle):\n  let g:x = 0\n  let g:y = 10\n  let g:expected = 1\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (On the middle circle):\n  let g:x = -5\n  let g:y = 0\n  let g:expected = 5\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (On the inner circle):\n  let g:x = 0\n  let g:y = -1\n  let g:expected = 10\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Exactly on center):\n  let g:x = 0\n  let g:y = 0\n  let g:expected = 10\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Near the center):\n  let g:x = -0.1\n  let g:y = -0.1\n  let g:expected = 10\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Just within the inner circle):\n  let g:x = 0.7\n  let g:y = 0.7\n  let g:expected = 10\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Just outside the inner circle):\n  let g:x = 0.8\n  let g:y = -0.8\n  let g:expected = 5\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Just within the middle circle):\n  let g:x = -3.5\n  let g:y = 3.5\n  let g:expected = 5\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Just outside the middle circle):\n  let g:x = -3.6\n  let g:y = -3.6\n  let g:expected = 1\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Just within the outer circle):\n  let g:x = -7.0\n  let g:y = 7.0\n  let g:expected = 1\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Just outside the outer circle):\n  let g:x = 7.1\n  let g:y = -7.1\n  let g:expected = 0\n  AssertEqual g:expected, Darts(g:x, g:y)\n\nExecute (Asymmetric position between the inner and middle circles):\n  let g:x = 0.5\n  let g:y = -4\n  let g:expected = 5\n  AssertEqual g:expected, Darts(g:x, g:y)\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

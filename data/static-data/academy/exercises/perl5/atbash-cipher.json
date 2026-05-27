@@ -1,0 +1,31 @@
+{
+  "id": "perl5:atbash-cipher",
+  "trackSlug": "perl5",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "4b9872a8-bb21-4b1a-952b-032efa13b1da",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package AtbashCipher;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<encode_atbash decode_atbash>;\n\nsub encode_atbash ($phrase) {\n    return undef;\n}\n\nsub decode_atbash ($phrase) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package AtbashCipher;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<encode_atbash decode_atbash>;\n\nuse List::Util qw<pairvalues>;\n\nmy %dict;\n@dict{ 'a' .. 'z' } = reverse( 'a' .. 'z' );\n\nsub encode_atbash {\n    join( ' ', pairvalues split( /(\\w{1,5})/, decode_atbash(@_) ) );\n}\n\nsub decode_atbash {\n    join '', map { /\\d/ ? $_ : $dict{$_} } split( //, lc $_[0] =~ s/\\W//gr );\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse AtbashCipher qw<encode_atbash decode_atbash>;\n\nis( # begin: 2f47ebe1-eab9-4d6b-b3c6-627562a31c77\n    encode_atbash(\"yes\"),\n    \"bvh\",\n    \"encode: encode yes\",\n); # end: 2f47ebe1-eab9-4d6b-b3c6-627562a31c77\n\nis( # begin: b4ffe781-ea81-4b74-b268-cc58ba21c739\n    encode_atbash(\"no\"),\n    \"ml\",\n    \"encode: encode no\",\n); # end: b4ffe781-ea81-4b74-b268-cc58ba21c739\n\nis( # begin: 10e48927-24ab-4c4d-9d3f-3067724ace00\n    encode_atbash(\"OMG\"),\n    \"lnt\",\n    \"encode: encode OMG\",\n); # end: 10e48927-24ab-4c4d-9d3f-3067724ace00\n\nis( # begin: d59b8bc3-509a-4a9a-834c-6f501b98750b\n    encode_atbash(\"O M G\"),\n    \"lnt\",\n    \"encode: encode spaces\",\n); # end: d59b8bc3-509a-4a9a-834c-6f501b98750b\n\nis( # begin: 31d44b11-81b7-4a94-8b43-4af6a2449429\n    encode_atbash(\"mindblowingly\"),\n    \"nrmwy oldrm tob\",\n    \"encode: encode mindblowingly\",\n); # end: 31d44b11-81b7-4a94-8b43-4af6a2449429\n\nis( # begin: d503361a-1433-48c0-aae0-d41b5baa33ff\n    encode_atbash(\"Testing,1 2 3, testing.\"),\n    \"gvhgr mt123 gvhgr mt\",\n    \"encode: encode numbers\",\n); # end: d503361a-1433-48c0-aae0-d41b5baa33ff\n\nis( # begin: 79c8a2d5-0772-42d4-b41b-531d0b5da926\n    encode_atbash(\"Truth is fiction.\"),\n    \"gifgs rhurx grlm\",\n    \"encode: encode deep thought\",\n); # end: 79c8a2d5-0772-42d4-b41b-531d0b5da926\n\nis( # begin: 9ca13d23-d32a-4967-a1fd-6100b8742bab\n    encode_atbash(\"The quick brown fox jumps over the lazy dog.\"),\n    \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\",\n    \"encode: encode all the letters\",\n); # end: 9ca13d23-d32a-4967-a1fd-6100b8742bab\n\nis( # begin: bb50e087-7fdf-48e7-9223-284fe7e69851\n    decode_atbash(\"vcvix rhn\"),\n    \"exercism\",\n    \"decode: decode exercism\",\n); # end: bb50e087-7fdf-48e7-9223-284fe7e69851\n\nis( # begin: ac021097-cd5d-4717-8907-b0814b9e292c\n    decode_atbash(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"),\n    \"anobstacleisoftenasteppingstone\",\n    \"decode: decode a sentence\",\n); # end: ac021097-cd5d-4717-8907-b0814b9e292c\n\nis( # begin: 18729de3-de74-49b8-b68c-025eaf77f851\n    decode_atbash(\"gvhgr mt123 gvhgr mt\"),\n    \"testing123testing\",\n    \"decode: decode numbers\",\n); # end: 18729de3-de74-49b8-b68c-025eaf77f851\n\nis( # begin: 0f30325f-f53b-415d-ad3e-a7a4f63de034\n    decode_atbash(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"),\n    \"thequickbrownfoxjumpsoverthelazydog\",\n    \"decode: decode all the letters\",\n); # end: 0f30325f-f53b-415d-ad3e-a7a4f63de034\n\nis( # begin: 39640287-30c6-4c8c-9bac-9d613d1a5674\n    decode_atbash(\"vc vix    r hn\"),\n    \"exercism\",\n    \"decode: decode with too many spaces\",\n); # end: 39640287-30c6-4c8c-9bac-9d613d1a5674\n\nis( # begin: b34edf13-34c0-49b5-aa21-0768928000d5\n    decode_atbash(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"),\n    \"anobstacleisoftenasteppingstone\",\n    \"decode: decode with no spaces\",\n); # end: b34edf13-34c0-49b5-aa21-0768928000d5\n\ndone_testing;\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "dnmfarrell",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

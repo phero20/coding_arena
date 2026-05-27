@@ -1,0 +1,29 @@
+{
+  "id": "lua:robot-name",
+  "trackSlug": "lua",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "f4369803-07c4-4bbe-9bdc-3f4eea510802",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "local Robot = {}\n\nreturn Robot\n",
+  "example_solution": "local Robot = {}\n\nfunction build_name()\n  return string.char(math.random(65, 90)) .. string.char(math.random(65, 90)) .. math.random(100, 999)\nend\n\nfunction name_exists(names, name)\n  if (names.length ~= nil) then\n    for i = 1, #names do\n      if names[i] == name then\n        return true\n      end\n    end\n  end\n  return false\nend\n\nfunction Robot:new()\n  self.__index = self\n  local names = {}\n  local name = build_name()\n  if (name_exists(names, name)) then\n    name = build_name()\n  end\n  names[#names] = name\n  return setmetatable({ name = name, names = names }, self)\nend\n\nfunction Robot:reset()\n  local name = build_name()\n  local names = self.names\n  if (name_exists(names, name)) then\n    name = build_name()\n  end\n  names[#names] = name\n  self.names = names\n  self.name = name\nend\n\nreturn Robot\n",
+  "test_code": "local Robot = require('robot-name')\n\ndescribe('robot-name', function()\n  it('has a name', function()\n    local robot = Robot:new()\n    -- lua does not support fixed patterns like %w{2}%d{3}\n    assert.are.equal(string.match(robot.name, '^%a%a%d%d%d$'), robot.name)\n  end)\n\n  it('name is the same each time', function()\n    local robot = Robot:new()\n    assert.are.equal(robot.name, robot.name)\n  end)\n\n  it('different robots have different names', function()\n    local robotOne = Robot:new()\n    local robotTwo = Robot:new()\n    assert.are_not.equal(robotOne.name, robotTwo.name)\n  end)\n\n  it('is able to reset the name', function()\n    local robot = Robot:new()\n    local originalName = robot.name\n    robot:reset()\n    assert.are_not.equal(originalName, robot.name)\n  end)\nend)\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "aarti"
+  ],
+  "contributors": [
+    "etandel",
+    "ryanplusplus"
+  ]
+}

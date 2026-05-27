@@ -1,0 +1,51 @@
+{
+  "id": "java:flatten-array",
+  "trackSlug": "java",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "a732a838-8170-458a-a85e-d6b4c46f97a1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "lists",
+    "generic-types"
+  ],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "import java.util.List;\n\nclass Flattener {\n\n    List<Object> flatten(List<?> list) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}",
+  "example_solution": "import java.util.ArrayList;\nimport java.util.List;\n\nclass Flattener {\n\n    List<Object> flatten(List<?> list) {\n        List<Object> flattenedList = new ArrayList<>();\n        for (Object element: list) {\n            if (element instanceof List<?> listAsElement) {\n                flattenedList.addAll(flatten(listAsElement));\n            } else if (element != null) {\n                flattenedList.add(element);\n            }\n        }\n        return flattenedList;\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static java.util.Arrays.asList;\nimport static java.util.Collections.emptyList;\nimport static java.util.Collections.singletonList;\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class FlattenerTest {\n\n    private Flattener flattener;\n\n    @BeforeEach\n    public void setUp() {\n        flattener = new Flattener();\n    }\n\n    @Test\n    @DisplayName(\"empty\")\n    public void testEmpty() {\n        assertThat(flattener.flatten(emptyList()))\n                .isEmpty();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"no nesting\")\n    public void testFlatListIsPreserved() {\n        assertThat(flattener.flatten(asList(0, '1', \"two\")))\n                .containsExactly(0, '1', \"two\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"flattens a nested array\")\n    public void testNestedList() {\n        assertThat(flattener.flatten(singletonList(emptyList())))\n                .isEmpty();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"flattens array with just integers present\")\n    public void testASingleLevelOfNestingWithNoNulls() {\n        assertThat(flattener.flatten(asList(1, asList('2', 3, 4, 5, \"six\", \"7\"), 8)))\n                .containsExactly(1, '2', 3, 4, 5, \"six\", \"7\", 8);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"5 level nesting\")\n    public void testFiveLevelsOfNestingWithNoNulls() {\n        assertThat(flattener.flatten(\n                asList(0,\n                        '2',\n                        asList(asList(2, \"three\"),\n                                '8',\n                                100,\n                                \"four\",\n                                singletonList(singletonList(singletonList(50)))), \"-2\")))\n                .containsExactly(0, '2', 2, \"three\", '8', 100, \"four\", 50, \"-2\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"6 level nesting\")\n    public void testSixLevelsOfNestingWithNoNulls() {\n        assertThat(flattener.flatten(\n                asList(\"one\",\n                        asList('2',\n                                singletonList(singletonList(3)),\n                                asList('4',\n                                        singletonList(singletonList(5))), \"six\", 7), \"8\")))\n                .containsExactly(\"one\", '2', 3, '4', 5, \"six\", 7, \"8\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"null values are omitted from the final result\")\n    public void testNullValuesAreOmitted() {\n        assertThat(flattener.flatten(asList(\"1\", \"two\", null)))\n                .containsExactly(\"1\", \"two\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"consecutive null values at the front of the list are omitted from the final result\")\n    public void testConsecutiveNullValuesAtFrontOfListAreOmitted() {\n        assertThat(flattener.flatten(asList(null, null, 3)))\n                .containsExactly(3);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"consecutive null values in the middle of the list are omitted from the final result\")\n    public void testConsecutiveNullValuesInMiddleOfListAreOmitted() {\n        assertThat(flattener.flatten(asList(1, null, null, \"4\")))\n                .containsExactly(1, \"4\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"6 level nest list with null values\")\n    public void testSixLevelsOfNestingWithNulls() {\n        assertThat(flattener.flatten(\n                asList(\"0\",\n                        2,\n                        asList(asList(\"two\", '3'),\n                                \"8\",\n                                singletonList(singletonList(\"one hundred\")),\n                                null,\n                                singletonList(singletonList(null))),\n                        \"negative two\")))\n                .containsExactly(\"0\", 2, \"two\", '3', \"8\", \"one hundred\", \"negative two\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"all values in nested list are null\")\n    public void testNestedListsFullOfNullsOnly() {\n        assertThat(flattener.flatten(\n                asList(null,\n                        singletonList(singletonList(singletonList(null))),\n                        null,\n                        null,\n                        asList(asList(null, null), null), null)))\n                .isEmpty();\n    }\n\n}\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "stkent"
+  ],
+  "contributors": [
+    "aadityakulkarni",
+    "FridaTveit",
+    "jackattack24",
+    "jagdish-15",
+    "jmrunkle",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "michaelspets",
+    "mirkoperillo",
+    "morrme",
+    "msomji",
+    "muzimuzhi",
+    "redshirt4",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "superklamer",
+    "vivshaw",
+    "Zaldrick"
+  ]
+}

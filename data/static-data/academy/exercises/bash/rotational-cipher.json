@@ -1,0 +1,31 @@
+{
+  "id": "bash:rotational-cipher",
+  "trackSlug": "bash",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "18126ff4-8beb-430a-ab30-ae796f25b499",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\nphrase=$1\nrotation=$(( $2 % 26 ))\n\nalphabet=( {a..z} )\nrotated=( \"${alphabet[@]:rotation}\" \"${alphabet[@]:0:rotation}\" )\n\n## using `tr`:\n# from=$(IFS=; echo \"${alphabet[*]}${alphabet[*]^^}\")\n# to=$(IFS=; echo \"${rotated[*]}${rotated[*]^^}\")\n# tr \"$from\" \"$to\" <<<\"$phrase\"\n\n# using plain bash:\ndeclare -A mapping\nfor (( i=0; i < ${#alphabet[@]}; i++ )); do\n    mapping[${alphabet[i]}]=${rotated[i]}\n    mapping[${alphabet[i]^^}]=${rotated[i]^^}\ndone\n\nresult=\"\"\nfor (( i=0; i < ${#phrase}; i++ )); do\n    char=${phrase:i:1}\n    if [[ -n ${mapping[$char]} ]]; then\n        result+=${mapping[$char]}\n    else\n        result+=$char\n    fi\ndone\n\necho \"$result\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.2.0.0\n\n@test \"rotate a by 0, same output as input\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"a\"\n    run bash rotational_cipher.sh \"a\" 0\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate a by 1\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"b\"\n    run bash rotational_cipher.sh \"a\" 1\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate a by 26, same output as input\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"a\"\n    run bash rotational_cipher.sh \"a\" 26\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate m by 13\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"z\"\n    run bash rotational_cipher.sh \"m\" 13\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate n by 13 with wrap around alphabet\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"a\"\n    run bash rotational_cipher.sh \"n\" 13\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate capital letters\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"TRL\"\n    run bash rotational_cipher.sh \"OMG\" 5\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate spaces\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"T R L\"\n    run bash rotational_cipher.sh \"O M G\" 5\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate numbers\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"Xiwxmrk 1 2 3 xiwxmrk\"\n    run bash rotational_cipher.sh \"Testing 1 2 3 testing\" 4\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate punctuation\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"Gzo'n zvo, Bmviyhv!\"\n    run bash rotational_cipher.sh \"Let's eat, Grandma!\" 21\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"rotate all letters\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n    run bash rotational_cipher.sh \"The quick brown fox jumps over the lazy dog.\" 13\n    assert_success\n    assert_output \"$expected\"\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "bkhl",
+    "guygastineau",
+    "IsaacG",
+    "kotp"
+  ]
+}

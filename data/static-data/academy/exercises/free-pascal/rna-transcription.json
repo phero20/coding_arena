@@ -1,0 +1,26 @@
+{
+  "id": "free-pascal:rna-transcription",
+  "trackSlug": "free-pascal",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "2bc918ca-e9ba-4900-9a3a-69a4d1d46dc9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "unit RnaTranscription;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction ToRna(const dna : string) : string;\n\nimplementation\n\nuses SysUtils;\n\nfunction ToRna(const dna : string) : string;\nbegin\n\n  raise ENotImplemented.Create('Please implement your solution.'); result := dna;\n\nend;\n\nend.\n",
+  "example_solution": "unit RnaTranscription;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction ToRna(const dna : string) : string;\n\nimplementation\n\nvar\n  i          : integer;\n  nucleotide : string;\n  complement : string;\n  rna        : string;\n\nfunction ToRna(const dna : string) : string;\nbegin\n  rna := '';\n\n  for i:= 1 to length(dna) do\n    begin\n      nucleotide := copy(dna, i, 1);\n      case nucleotide of\n        'G' : complement := 'C';\n        'C' : complement := 'G';\n        'T' : complement := 'A';\n        'A' : complement := 'U';\n      end;\n      rna := rna + complement;\n    end;\n\n  result := rna;\nend;\n\nend.\n",
+  "test_code": "unit TestCases;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nuses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;\n\ntype\n  RnaTranscriptionTest = class(TTestCase)\n  published\n    procedure empty_rna_sequence;\n    procedure rna_complement_of_cytosine_is_guanine;\n    procedure rna_complement_of_guanine_is_cytosine;\n    procedure rna_complement_of_thymine_is_adenine;\n    procedure rna_complement_of_adenine_is_uracil;\n    procedure rna_complement;\n  end;\n\nimplementation\n\nuses RnaTranscription;\n\n// b4631f82-c98c-4a2f-90b3-c5c2b6c6f661\nprocedure RnaTranscriptionTest.empty_rna_sequence;\nbegin\n  TapAssertTrue(Self, 'Empty RNA sequence', '', RnaTranscription.ToRna(''));\nend;\n\n// a9558a3c-318c-4240-9256-5d5ed47005a6\nprocedure RnaTranscriptionTest.rna_complement_of_cytosine_is_guanine;\nbegin\n  TapAssertTrue(Self, 'RNA complement of cytosine is guanine', 'G', RnaTranscription.ToRna('C'));\nend;\n\n// 6eedbb5c-12cb-4c8b-9f51-f8320b4dc2e7\nprocedure RnaTranscriptionTest.rna_complement_of_guanine_is_cytosine;\nbegin\n  TapAssertTrue(Self, 'RNA complement of guanine is cytosine', 'C', RnaTranscription.ToRna('G'));\nend;\n\n// 870bd3ec-8487-471d-8d9a-a25046488d3e\nprocedure RnaTranscriptionTest.rna_complement_of_thymine_is_adenine;\nbegin\n  TapAssertTrue(Self, 'RNA complement of thymine is adenine', 'A', RnaTranscription.ToRna('T'));\nend;\n\n// aade8964-02e1-4073-872f-42d3ffd74c5f\nprocedure RnaTranscriptionTest.rna_complement_of_adenine_is_uracil;\nbegin\n  TapAssertTrue(Self, 'RNA complement of adenine is uracil', 'U', RnaTranscription.ToRna('A'));\nend;\n\n// 79ed2757-f018-4f47-a1d7-34a559392dbf\nprocedure RnaTranscriptionTest.rna_complement;\nbegin\n  TapAssertTrue(Self, 'RNA complement', 'UGCACCAGAAUU', RnaTranscription.ToRna('ACGTGGTCTTAA'));\nend;\n\ninitialization\nRegisterTest(RnaTranscriptionTest);\n\nend.\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

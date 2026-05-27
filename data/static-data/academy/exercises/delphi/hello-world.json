@@ -1,0 +1,28 @@
+{
+  "id": "delphi:hello-world",
+  "trackSlug": "delphi",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "497011b8-4dcf-4084-a7d1-11ea954e605f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise. Just say \"Hello, World!\".\n\n[\"Hello, World!\"](http://en.wikipedia.org/wiki/%22Hello,_world!%22_program) is\nthe traditional first program for beginning programming in a new language\nor environment.\n\nThe objectives are simple:\n\n- Write a function that returns the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit uHelloWorld;\n\ninterface\n\n  function Hello: string;\n\nimplementation\n\nfunction Hello: string;\nbegin\n  result := 'Goodbye, Mars!';\nend;\n\nend.\n",
+  "example_solution": "unit uHelloWorld;\n\ninterface\n\n  function Hello: string;\n\nimplementation\n\nfunction Hello: string;\nbegin\n  result := 'Hello, World!';\nend;\n\nend.\n",
+  "test_code": "(******************************************************************************\n You got an error, which is exactly as it should be.\n This is the first step in the Test-Driven Development\n (TDD) process.\n\n The most important part of the error is\n\n   \"cannot compile\"\n\n It's looking for a file named uHelloWorld.pas that doesn't exist.\n\n To fix the error, create a unit file named uHelloWorld.pas\n in the same directory as the file uTestHelloWorld.pas.\n\n The beginning of the new unit file should contain a unit statement:\n\n unit uHelloWorld;\n\n The new unit should contain Interface, Implementation, and End. statements.\n\n The primary focus of this exercise is to provide you with a very simple\n exercise that you can use to test the tools necessary for this language track,\n are working correctly.  To that end we are providing you with code that you may\n use as the solution to this exercise:\n\n{------------------< start solution >------------------}\nunit uHelloWorld;\n\ninterface\n\n  function Hello: string;\n\nimplementation\n\nfunction Hello: string;\nbegin\n  result := 'Hello, World!';\nend;\n\nend.\n{------------------<  end solution  >------------------}\n\n Hint: Delphi will take care of all this if you instruct it to add a new unit\n to your project.  Be sure to save the new unit as uHelloWorld.pas before\n trying to compile again.\n\n For more guidance as you work on this exercise, see\n GETTING_STARTED.md.\n******************************************************************************)\nunit uHelloWorldTests;\n\ninterface\nuses\n  DUnitX.TestFramework;\n\nconst\n  CanonicalVersion = '1.1.0.1';\n\ntype\n  [TestFixture]\n  HelloWorldTest = class(TObject)\n  public\n    [Test]\n    procedure Say_hi;\n  end;\n\nimplementation\nuses uHelloWorld;\n\nprocedure HelloWorldTest.Say_hi;\nvar\n  Expected: string;\n  Actual: string;\nbegin\n  Expected := 'Hello, World!';  //Expected: This is what is expected to be returned by the function/method (Hello) \n  Actual := Hello;              //Actual: This is what is actually returned by the function/method (Hello)\n  Assert.AreEqual(Expected, Actual);\n\n  //As you progress in this track you will find that not every exercise has Expected and\n  //Actual defined as explicitly as they have been above.  Often times you may find\n  //that the Expected outcome is inserted as an inline statement and the the call\n  //to the method being tested will be inserted in the Actual position of AreEqual like so:\n  //Assert.AreEqual('Hello, World!', Hello);\nend;\n\ninitialization\n  TDUnitX.RegisterTestFixture(HelloWorldTest);\nend.\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "rpottsoh"
+  ],
+  "contributors": [
+    "kotp"
+  ]
+}

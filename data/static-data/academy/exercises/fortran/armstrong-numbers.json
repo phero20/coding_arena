@@ -1,0 +1,26 @@
+{
+  "id": "fortran:armstrong-numbers",
+  "trackSlug": "fortran",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "b752faa1-2262-4be1-9699-1d684f6d479a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\nmodule armstrong_numbers\n  implicit none\ncontains\n\n  logical function isArmstrongNumber(i)\n    integer, intent(in) :: i\n    \n    isArmstrongNumber = .false.\n\n  end function\n\nend module\n",
+  "example_solution": "\nmodule armstrong_numbers\n  implicit none\ncontains\n\n  logical function isArmstrongNumber(i)\n    integer, intent(in) :: i\n    integer :: slen, idx, j, sum\n    character(len=100) :: s \n\n    isArmstrongNumber = .false.\n    sum = 0\n    write(s,'(i100)') i\n    s=adjustl(s)\n    slen = len_trim(s)\n    do idx =1,slen\n      read(s(idx:idx),*) j\n      sum = sum + j**slen\n    enddo\n    if (sum == i) then\n      isArmstrongNumber = .true.\n    endif \n  end function\n\nend module\n",
+  "test_code": "program armstrong_numbers_test_main\n   use TesterMain\n   use armstrong_numbers\n\n   implicit none\n\n   ! Test 1: Zero is an Armstrong number\n   call assert_equal(.true., isArmstrongNumber(0), \"Zero is an Armstrong number\")\n\n   ! Test 2: Single digit numbers are Armstrong numbers\n   call assert_equal(.true., isArmstrongNumber(5), \"Single digit numbers are Armstrong numbers\")\n\n   ! Test 3: There are no 2 digit Armstrong numbers\n   call assert_equal(.false., isArmstrongNumber(10), \"There are no 2 digit Armstrong numbers\")\n\n   ! Test 4: Three digit number that is an Armstrong number\n   call assert_equal(.true., isArmstrongNumber(153), \"Three digit number that is an Armstrong number\")\n\n   ! Test 5: Three digit number that is not an Armstrong number\n   call assert_equal(.false., isArmstrongNumber(100), \"Three digit number that is not an Armstrong number\")\n\n   ! Test 6: Four digit number that is an Armstrong number\n   call assert_equal(.true., isArmstrongNumber(9474), \"Four digit number that is an Armstrong number\")\n\n   ! Test 7: Four digit number that is not an Armstrong number\n   call assert_equal(.false., isArmstrongNumber(9475), \"Four digit number that is not an Armstrong number\")\n\n   ! Test 8: Seven digit number that is an Armstrong number\n   call assert_equal(.true., isArmstrongNumber(9926315), \"Seven digit number that is an Armstrong number\")\n\n   ! Test 9: Seven digit number that is not an Armstrong number\n   call assert_equal(.false., isArmstrongNumber(9926314), \"Seven digit number that is not an Armstrong number\")\n\n   call test_report()\n\nend program\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "pclausen"
+  ],
+  "contributors": null
+}

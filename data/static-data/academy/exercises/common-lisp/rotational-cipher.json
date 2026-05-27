@@ -1,0 +1,30 @@
+{
+  "id": "common-lisp:rotational-cipher",
+  "trackSlug": "common-lisp",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "d94532d1-9d7b-489d-8620-31310209ccee",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :rotational-cipher\n  (:use :cl)\n  (:export :rotate))\n\n(in-package :rotational-cipher)\n\n(defun rotate (text key))\n",
+  "example_solution": "(defpackage :rotational-cipher\n  (:use :cl)\n  (:export :rotate))\n\n(in-package :rotational-cipher)\n\n(defparameter +letters+ \"abcdefghijklmnopqrstuvwxyz\")\n\n(defun rotate (text key)\n  (loop while (>= key 26) do (decf key 26))\n  (let* ((lower-letters (coerce +letters+ 'list))\n         (upper-letters (coerce (string-upcase +letters+) 'list))\n         (doubled-letters (concatenate 'string +letters+ +letters+))\n         (lower-offset (coerce (subseq doubled-letters key (+ key 26)) 'list))\n         (upper-offset (coerce (subseq (string-upcase doubled-letters) key (+ key 26)) 'list))\n         (lookup (pairlis lower-letters lower-offset (pairlis upper-letters upper-offset))))\n    (map 'string (lambda (c) (if (alpha-char-p c) (cdr (assoc c lookup)) c)) text)))\n",
+  "test_code": ";; Ensures that rotational-cipher.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"rotational-cipher\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from rotational-cipher and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :rotational-cipher-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :rotational-cipher-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* rotational-cipher-suite)\n\n(test rotate-a-by-0-same-output-as-input\n    (let ((text \"a\")\n          (key 0))\n      (is (string= \"a\" (rotational-cipher:rotate text key)))))\n\n(test rotate-a-by-1\n    (let ((text \"a\")\n          (key 1))\n      (is (string= \"b\" (rotational-cipher:rotate text key)))))\n\n(test rotate-a-by-26-same-output-as-input\n    (let ((text \"a\")\n          (key 26))\n      (is (string= \"a\" (rotational-cipher:rotate text key)))))\n\n(test rotate-m-by-13\n    (let ((text \"m\")\n          (key 13))\n      (is (string= \"z\" (rotational-cipher:rotate text key)))))\n\n(test rotate-n-by-13-with-wrap-around-alphabet\n    (let ((text \"n\")\n          (key 13))\n      (is (string= \"a\" (rotational-cipher:rotate text key)))))\n\n(test rotate-capital-letters\n    (let ((text \"OMG\")\n          (key 5))\n      (is (string= \"TRL\" (rotational-cipher:rotate text key)))))\n\n(test rotate-spaces\n    (let ((text \"O M G\")\n          (key 5))\n      (is (string= \"T R L\" (rotational-cipher:rotate text key)))))\n\n(test rotate-numbers\n    (let ((text \"Testing 1 2 3 testing\")\n          (key 4))\n      (is (string= \"Xiwxmrk 1 2 3 xiwxmrk\" (rotational-cipher:rotate text key)))))\n\n(test rotate-punctuation\n    (let ((text \"Lets eat, Grandma!\")\n          (key 21))\n      (is (string= \"Gzon zvo, Bmviyhv!\" (rotational-cipher:rotate text key)))))\n\n(test rotate-all-letters\n    (let ((text \"The quick brown fox jumps over the lazy dog.\")\n          (key 13)\n          (result \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"))\n      (is (string= result (rotational-cipher:rotate text key)))))\n\n(defun run-tests (&optional (test-or-suite 'rotational-cipher-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": null
+}

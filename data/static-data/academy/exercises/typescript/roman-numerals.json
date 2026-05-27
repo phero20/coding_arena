@@ -1,0 +1,29 @@
+{
+  "id": "typescript:roman-numerals",
+  "trackSlug": "typescript",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "a4ea1a4d-d010-4039-a2b5-e3e748df7f8a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "export const toRoman = () => {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function toRoman(number: number): string {\n  let result = ''\n  let remainingNumber = number\n\n  const mappings = [\n    { arabic: 1000, roman: 'M' },\n    { arabic: 900, roman: 'CM' },\n    { arabic: 500, roman: 'D' },\n    { arabic: 400, roman: 'CD' },\n    { arabic: 100, roman: 'C' },\n    { arabic: 90, roman: 'XC' },\n    { arabic: 50, roman: 'L' },\n    { arabic: 40, roman: 'XL' },\n    { arabic: 10, roman: 'X' },\n    { arabic: 9, roman: 'IX' },\n    { arabic: 5, roman: 'V' },\n    { arabic: 4, roman: 'IV' },\n    { arabic: 1, roman: 'I' },\n  ]\n\n  mappings.forEach((mapping) => {\n    while (remainingNumber >= mapping.arabic) {\n      result += mapping.roman\n      remainingNumber -= mapping.arabic\n    }\n  })\n\n  return result\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { toRoman } from './roman-numerals.ts'\n\ndescribe('toRoman()', () => {\n  it('converts 1', () => expect(toRoman(1)).toEqual('I'))\n  xit('converts 2', () => expect(toRoman(2)).toEqual('II'))\n  xit('converts 3', () => expect(toRoman(3)).toEqual('III'))\n  xit('converts 4', () => expect(toRoman(4)).toEqual('IV'))\n  xit('converts 5', () => expect(toRoman(5)).toEqual('V'))\n  xit('converts 6', () => expect(toRoman(6)).toEqual('VI'))\n  xit('converts 9', () => expect(toRoman(9)).toEqual('IX'))\n  xit('converts 16', () => expect(toRoman(16)).toEqual('XVI'))\n  xit('converts 27', () => expect(toRoman(27)).toEqual('XXVII'))\n  xit('converts 48', () => expect(toRoman(48)).toEqual('XLVIII'))\n  xit('converts 49', () => expect(toRoman(49)).toEqual('XLIX'))\n  xit('converts 59', () => expect(toRoman(59)).toEqual('LIX'))\n  xit('converts 66', () => expect(toRoman(66)).toEqual('LXVI'))\n  xit('converts 93', () => expect(toRoman(93)).toEqual('XCIII'))\n  xit('converts 141', () => expect(toRoman(141)).toEqual('CXLI'))\n  xit('converts 163', () => expect(toRoman(163)).toEqual('CLXIII'))\n  xit('converts 166', () => expect(toRoman(166)).toEqual('CLXVI'))\n  xit('converts 402', () => expect(toRoman(402)).toEqual('CDII'))\n  xit('converts 575', () => expect(toRoman(575)).toEqual('DLXXV'))\n  xit('converts 666', () => expect(toRoman(666)).toEqual('DCLXVI'))\n  xit('converts 911', () => expect(toRoman(911)).toEqual('CMXI'))\n  xit('converts 1024', () => expect(toRoman(1024)).toEqual('MXXIV'))\n  xit('converts 1666', () => expect(toRoman(1666)).toEqual('MDCLXVI'))\n  xit('converts 3000', () => expect(toRoman(3000)).toEqual('MMM'))\n  xit('converts 3001', () => expect(toRoman(3001)).toEqual('MMMI'))\n  xit('converts 3888', () => expect(toRoman(3888)).toEqual('MMMDCCCLXXXVIII'))\n  xit('converts 3999', () => expect(toRoman(3999)).toEqual('MMMCMXCIX'))\n})\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "CRivasGomez"
+  ],
+  "contributors": [
+    "masters3d",
+    "SleeplessByte"
+  ]
+}

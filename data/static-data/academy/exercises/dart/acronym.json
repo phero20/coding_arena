@@ -1,0 +1,28 @@
+{
+  "id": "dart:acronym",
+  "trackSlug": "dart",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "3f8d18d4-4f31-405b-8aad-80f768b11db3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Acronym {\n  // Put your code here\n}\n",
+  "example_solution": "class Acronym {\n  String abbreviate(final String input) {\n    StringBuffer acronymBuilder = StringBuffer();\n\n    RegExp separatorsExp = RegExp(r'( )|(-)');\n    List<String> list = input.split(separatorsExp);\n\n    // Need to remove any empty strings in the list to avoid an error when `.toUpperCase()` is called.\n    while (list.remove(''));\n\n    for (String phrase in list) {\n      // Need to remove any underscores used for emphasis in the string.\n      phrase = phrase.replaceAll('_', '');\n\n      final String acronym = phrase.trim().substring(0, 1).toUpperCase();\n      acronymBuilder.write(acronym);\n    }\n\n    return acronymBuilder.toString();\n  }\n}\n",
+  "test_code": "import 'package:acronym/acronym.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  final acronym = Acronym();\n\n  group('Acronym', () {\n    test('basic', () {\n      final result = acronym.abbreviate('Portable Network Graphics');\n      expect(result, equals('PNG'));\n    }, skip: false);\n\n    test('lowercase words', () {\n      final result = acronym.abbreviate('Ruby on Rails');\n      expect(result, equals('ROR'));\n    }, skip: true);\n\n    test('punctuation', () {\n      final result = acronym.abbreviate('First In, First Out');\n      expect(result, equals('FIFO'));\n    }, skip: true);\n\n    test('all caps word', () {\n      final result = acronym.abbreviate('GNU Image Manipulation Program');\n      expect(result, equals('GIMP'));\n    }, skip: true);\n\n    test('punctuation without whitespace', () {\n      final result = acronym.abbreviate('Complementary metal-oxide semiconductor');\n      expect(result, equals('CMOS'));\n    }, skip: true);\n\n    test('very long abbreviation', () {\n      final result = acronym.abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me');\n      expect(result, equals('ROTFLSHTMDCOALM'));\n    }, skip: true);\n\n    test('consecutive delimiters', () {\n      final result = acronym.abbreviate('Something - I made up from thin air');\n      expect(result, equals('SIMUFTA'));\n    }, skip: true);\n\n    test('apostrophes', () {\n      final result = acronym.abbreviate('Halley\\'s Comet');\n      expect(result, equals('HC'));\n    }, skip: true);\n\n    test('underscore emphasis', () {\n      final result = acronym.abbreviate('The Road _Not_ Taken');\n      expect(result, equals('TRNT'));\n    }, skip: true);\n  });\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "Stargator"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

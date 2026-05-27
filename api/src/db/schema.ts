@@ -68,6 +68,17 @@ export const userSolvedLanguages = pgTable('user_solved_languages', {
   }
 })
  
+export const userAcademyExercises = pgTable('user_academy_exercises', {
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  trackSlug: text('track_slug').notNull(),
+  exerciseSlug: text('exercise_slug').notNull(),
+  solvedAt: timestamp('solved_at', { withTimezone: true }).notNull().defaultNow(),
+}, (table) => {
+  return {
+    pk: primaryKey({ columns: [table.userId, table.trackSlug, table.exerciseSlug] }),
+  }
+})
+
 export const follows = pgTable('follows', {
   followerId: uuid('follower_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
   followingId: uuid('following_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
@@ -103,6 +114,8 @@ export type UserStats = typeof userStats.$inferSelect
 export type UserActivity = typeof userActivity.$inferSelect
 export type UserSolvedProblem = typeof userSolvedProblems.$inferSelect
 export type UserSolvedLanguage = typeof userSolvedLanguages.$inferSelect
+export type UserAcademyExercise = typeof userAcademyExercises.$inferSelect
+export type NewUserAcademyExercise = typeof userAcademyExercises.$inferInsert
 export type Contest = typeof contests.$inferSelect
 export type NewContest = typeof contests.$inferInsert
 

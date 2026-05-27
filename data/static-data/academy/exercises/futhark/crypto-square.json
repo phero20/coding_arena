@@ -1,0 +1,26 @@
+{
+  "id": "futhark:crypto-square",
+  "trackSlug": "futhark",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "d833b43d-fd4a-4f0a-b80e-9b81b4f34ad1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def ciphertext (plaintext: []u8): []u8 = ???\n",
+  "example_solution": "def normalize [n] (plaintext: [n]u8): []u8 =\n  let (i, a) = loop (i, a) = (0, replicate n '\\0') for c in plaintext do\n    let number = c - '0'\n    let letter = (c | 32) - 'a'\n    in\n      if number < 10 then (i + 1, a with [i] = c) else\n      if letter < 26 then (i + 1, a with [i] = 'a' + letter) else\n      (i, a)\n  in\n    a[0:i]\n\ndef rows (n: i64): i64 =\n  let r = loop r = 0 while r * r < n do\n    r + 1\n  in\n    r\n\ndef columns (n: i64) (r: i64): i64 =\n  if (r - 1) * r >= n then r else\n  r + 1\n\ndef encode [n] (plaintext: [n]u8): []u8 =\n  if n == 0 then plaintext else\n  let r = rows n\n  let c = columns n r\n  let a = loop a = replicate (c * r - 1) ' ' for i in 0..<n do\n    let j = i / r\n    let k = i % r\n    in\n      a with [k * c + j] = plaintext[i]\n  in\n    a\n\ndef ciphertext (plaintext: []u8): []u8 =\n  plaintext\n  |> normalize\n  |> encode\n",
+  "test_code": "import \"crypto_square\"\n\n-- empty plaintext results in an empty ciphertext\n-- ==\n-- input { \"\" }\n-- output { \"\" }\n\n-- normalization results in empty plaintext\n-- ==\n-- input { \"... --- ...\" }\n-- output { \"\" }\n\n-- Lowercase\n-- ==\n-- input { \"A\" }\n-- output { \"a\" }\n\n-- Remove spaces\n-- ==\n-- input { \"  b \" }\n-- output { \"b\" }\n\n-- Remove punctuation\n-- ==\n-- input { \"@1,%!\" }\n-- output { \"1\" }\n\n-- 9 character plaintext results in 3 chunks of 3 characters\n-- ==\n-- input { \"This is fun!\" }\n-- output { \"tsf hiu isn\" }\n\n-- 8 character plaintext results in 3 chunks, the last one with a trailing space\n-- ==\n-- input { \"Chill out.\" }\n-- output { \"clu hlt io \" }\n\n-- 54 character plaintext results in 8 chunks, the last two with trailing spaces\n-- ==\n-- input { \"If man was meant to stay on the ground, god would have given us roots.\" }\n-- output { \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \" }\n\ndef main (plaintext: []u8): []u8 =\n  ciphertext plaintext\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

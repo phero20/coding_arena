@@ -69,3 +69,18 @@ export async function getProblems(
     meta: response.data.meta as PaginationMeta,
   };
 }
+
+/**
+ * Fetch all problems a specific user has solved.
+ */
+export async function getUserSolvedProblems(userId: string): Promise<string[]> {
+  const response = await apiClient.get<ApiResponse<string[]>>(
+    `/problems/user/${userId}/solved`,
+  );
+
+  if (!response.data.success || !response.data.data) {
+    throw new Error(response.data.message || "Failed to fetch solved problems");
+  }
+
+  return response.data.data;
+}

@@ -1,0 +1,32 @@
+{
+  "id": "bash:isogram",
+  "trackSlug": "bash",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "196a2941-0fdd-41f1-8d2b-0568930e2400",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\nLOWERCASE_INPUT=\"${1,,}\"\n\nisogram_candidate=\"${LOWERCASE_INPUT//[![:lower:]]}\"\n\nfor letter in {a..z}; do # Remove each letter only once\n  isogram_candidate=\"${isogram_candidate/$letter/}\"\ndone\n\n[[ -z $isogram_candidate ]] && echo 'true' || echo 'false'\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.7.0.0\n\n# Check if the given string is an isogram\n\n@test 'empty string' {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh ''\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'isogram with only lower case characters' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'isogram'\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'word with one duplicated character' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'eleven'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'word with one duplicated character from the end of the alphabet' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'zzyzx'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'longest reported english isogram' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'subdermatoglyphic'\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'word with duplicated character in mixed case' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'Alphabet'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'hypothetical isogrammic word with hyphen' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'thumbscrew-japingly'\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'isogram with duplicated hyphen' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'six-year-old'\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'hypothetical word with duplicated character following hyphen' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'thumbscrew-jappingly'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'made-up name that is an isogram' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'Emily Jung Schwartzkopf'\n  assert_success\n  assert_output \"true\"\n}\n\n@test 'duplicated character in the middle' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'accentor'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'word with duplicated character in mixed case, lowercase first' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'alphAbet'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'same first and last characters' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'angola'\n  assert_success\n  assert_output \"false\"\n}\n\n@test 'word with duplicated character and with two hyphens' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash isogram.sh 'up-to-date'\n  assert_success\n  assert_output \"false\"\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "guygastineau"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "IsaacG",
+    "kotp"
+  ]
+}

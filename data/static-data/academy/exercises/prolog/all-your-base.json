@@ -1,0 +1,26 @@
+{
+  "id": "prolog:all-your-base",
+  "trackSlug": "prolog",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "89830caa-c376-41ad-9041-aa33d2be5fdd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "rebase(InputBase, InputDigits, OutputBase, OutputDigits).\n",
+  "example_solution": ":- use_module(library(clpfd)).\n\ndecimal_base(_, [], Decimal, Decimal) :- !.\ndecimal_base(Base, [Digit|Digits], Acc, Decimal) :-\n    MaxDigit #= Base - 1,\n    Digit in 0..MaxDigit,\n    NewAcc #= Acc * Base + Digit,\n    decimal_base(Base, Digits, NewAcc, Decimal).\n\ndecimal_base(_, [0], 0) :- !.\ndecimal_base(Base, Digits, Decimal) :- decimal_base(Base, Digits, 0, Decimal).\n\nrebase(InputBase, InputDigits, OutputBase, OutputDigits) :-\n    InputBase #>= 2, OutputBase #>= 2,\n    decimal_base(InputBase, InputDigits, Decimal),\n    decimal_base(OutputBase, OutputDigits, Decimal).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(all_your_base).\n\n    test(single_bit_one_to_decimal, condition(true)) :-\n        rebase(2, [1], 10, Rebased),\n        Rebased == [1].\n\n    test(binary_to_single_decimal, condition(pending)) :-\n        rebase(2, [1, 0, 1], 10, Rebased),\n        Rebased == [5].\n\n    test(single_decimal_to_binary, condition(pending)) :-\n        rebase(10, [5], 2, Rebased),\n        Rebased == [1, 0, 1].\n\n    test(binary_to_multiple_decimal, condition(pending)) :-\n        rebase(2, [1, 0, 1, 0, 1, 0], 10, Rebased),\n        Rebased == [4, 2].\n\n    test(decimal_to_binary, condition(pending)) :-\n        rebase(10, [4, 2], 2, Rebased),\n        Rebased == [1, 0, 1, 0, 1, 0].\n\n    test(trinary_to_hexadecimal, condition(pending)) :-\n        rebase(3, [1, 1, 2, 0], 16, Rebased),\n        Rebased == [2, 10].\n\n    test(hexadecimal_to_trinary, condition(pending)) :-\n        rebase(16, [2, 10], 3, Rebased),\n        Rebased == [1, 1, 2, 0].\n\n    test(fifteen_bit_integer, condition(pending)) :-\n        rebase(97, [3, 46, 60], 73, Rebased),\n        Rebased == [6, 10, 45].\n\n    test(empty_list, condition(pending)) :-\n        rebase(2, [], 10, Rebased),\n        Rebased == [0].\n\n    test(single_zero, condition(pending)) :-\n        rebase(10, [0], 2, Rebased),\n        Rebased == [0].\n\n    test(multiple_zeros, condition(pending)) :-\n        rebase(10, [0, 0, 0], 2, Rebased),\n        Rebased == [0].\n\n    test(leading_zeros, condition(pending)) :-\n        rebase(7, [0, 6, 0], 10, Rebased),\n        Rebased == [4, 2].\n\n    test(input_base_is_one, [fail, condition(pending)]) :-\n        rebase(1, [0], 10, _).\n\n    test(input_base_is_zero, [fail, condition(pending)]) :-\n        rebase(0, [], 10, _).\n\n    test(input_base_is_negative, [fail, condition(pending)]) :-\n        rebase(-2, [1], 10, _).\n\n    test(negative_digit, [fail, condition(pending)]) :-\n        rebase(2, [1, -1, 1, 0, 1, 0], 10, _).\n\n    test(invalid_positive_digit, [fail, condition(pending)]) :-\n        rebase(2, [1, 2, 1, 0, 1, 0], 10, _).\n\n    test(output_base_is_one, [fail, condition(pending)]) :-\n        rebase(2, [1, 0, 1, 0, 1, 0], 1, _).\n\n    test(output_base_is_zero, [fail, condition(pending)]) :-\n        rebase(10, [7], 0, _).\n\n    test(output_base_is_negative, [fail, condition(pending)]) :-\n        rebase(2, [1], -7, _).\n\n    test(both_bases_are_negative, [fail, condition(pending)]) :-\n        rebase(-2, [1], -7, _).\n\n:- end_tests(all_your_base).\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

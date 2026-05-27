@@ -1,0 +1,29 @@
+{
+  "id": "nim:bob",
+  "trackSlug": "nim",
+  "slug": "bob",
+  "name": "Bob",
+  "uuid": "ced77a52-47fc-461f-942b-ed2e0d671d1c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what Bob will reply to someone when they say something to him or ask him a question.\n\nBob only ever answers one of five things:\n\n- **\"Sure.\"**\n  This is his response if you ask him a question, such as \"How are you?\"\n  The convention used for questions is that it ends with a question mark.\n- **\"Whoa, chill out!\"**\n  This is his answer if you YELL AT HIM.\n  The convention used for yelling is ALL CAPITAL LETTERS.\n- **\"Calm down, I know what I'm doing!\"**\n  This is what he says if you yell a question at him.\n- **\"Fine. Be that way!\"**\n  This is how he responds to silence.\n  The convention used for silence is nothing, or various combinations of whitespace characters.\n- **\"Whatever.\"**\n  This is what he answers to anything else.\n",
+  "introduction": "# Introduction\n\nBob is a [lackadaisical][] teenager.\nHe likes to think that he's very cool.\nAnd he definitely doesn't get excited about things.\nThat wouldn't be cool.\n\nWhen people talk to him, his responses are pretty limited.\n\n[lackadaisical]: https://www.collinsdictionary.com/dictionary/english/lackadaisical\n",
+  "hints": null,
+  "starter_code": "proc hey*(s: string): string =\n  discard\n",
+  "example_solution": "import std/strutils\n\nfunc isQuestion(s: string): bool =\n  ## Returns whether the last non-space character in `s` is a question mark.\n  var i = s.high\n  while i >= 0 and s[i] == ' ':\n    dec i\n  i >= 0 and s[i] == '?'\n\nfunc isYelling(s: string): bool =\n  ## Returns whether `s` contains both an uppercase letter, and no lowercase letter.\n  result = false\n  for c in s:\n    if c in {'a'..'z'}:\n      return false\n    elif c in {'A'..'Z'}:\n      result = true\n\nfunc hey*(s: string): string =\n  if isEmptyOrWhitespace(s):\n    \"Fine. Be that way!\"\n  elif isQuestion(s):\n    if isYelling(s):\n      \"Calm down, I know what I'm doing!\"\n    else:\n      \"Sure.\"\n  elif isYelling(s):\n    \"Whoa, chill out!\"\n  else:\n    \"Whatever.\"\n",
+  "test_code": "import unittest\nimport bob\n\nsuite \"Bob\":\n  test \"stating something\":\n    check hey(\"Tom-ay-to, tom-aaaah-to.\") == \"Whatever.\"\n\n  test \"shouting\":\n    check hey(\"WATCH OUT!\") == \"Whoa, chill out!\"\n\n  test \"shouting gibberish\":\n    check hey(\"FCECDFCAAB\") == \"Whoa, chill out!\"\n\n  test \"asking a question\":\n    check hey(\"Does this cryogenic chamber make me look fat?\") == \"Sure.\"\n\n  test \"asking a numeric question\":\n    check hey(\"You are, what, like 15?\") == \"Sure.\"\n\n  test \"asking gibberish\":\n    check hey(\"fffbbcbeab?\") == \"Sure.\"\n\n  test \"talking forcefully\":\n    check hey(\"Hi there!\") == \"Whatever.\"\n\n  test \"using acronyms in regular speech\":\n    check hey(\"It's OK if you don't want to go work for NASA.\") == \"Whatever.\"\n\n  test \"forceful question\":\n    check hey(\"WHAT'S GOING ON?\") == \"Calm down, I know what I'm doing!\"\n\n  test \"shouting numbers\":\n    check hey(\"1, 2, 3 GO!\") == \"Whoa, chill out!\"\n\n  test \"no letters\":\n    check hey(\"1, 2, 3\") == \"Whatever.\"\n\n  test \"question with no letters\":\n    check hey(\"4?\") == \"Sure.\"\n\n  test \"shouting with special characters\":\n    check hey(\"ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!\") == \"Whoa, chill out!\"\n\n  test \"shouting with no exclamation mark\":\n    check hey(\"I HATE THE DENTIST\") == \"Whoa, chill out!\"\n\n  test \"statement containing question mark\":\n    check hey(\"Ending with ? means a question.\") == \"Whatever.\"\n\n  test \"non-letters with question\":\n    check hey(\":) ?\") == \"Sure.\"\n\n  test \"prattling on\":\n    check hey(\"Wait! Hang on. Are you going to be OK?\") == \"Sure.\"\n\n  test \"silence\":\n    check hey(\"\") == \"Fine. Be that way!\"\n\n  test \"prolonged silence\":\n    check hey(\"          \") == \"Fine. Be that way!\"\n\n  test \"alternate silence\":\n    check hey(\"\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\") == \"Fine. Be that way!\"\n\n  test \"multiple line question\":\n    check hey(\"\\nDoes this cryogenic chamber make me look fat?\\nNo.\") == \"Whatever.\"\n\n  test \"starting with whitespace\":\n    check hey(\"         hmmmmmmm...\") == \"Whatever.\"\n\n  test \"ending with whitespace\":\n    check hey(\"Okay if like my  spacebar  quite a bit?   \") == \"Sure.\"\n\n  test \"other whitespace\":\n    check hey(\"\\n\\r \\t\") == \"Fine. Be that way!\"\n\n  test \"non-question ending with whitespace\":\n    check hey(\"This is a statement ending with whitespace      \") == \"Whatever.\"\n",
+  "source": "Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=06",
+  "authors": [
+    "sjakobi"
+  ],
+  "contributors": [
+    "amscotti",
+    "ee7"
+  ]
+}

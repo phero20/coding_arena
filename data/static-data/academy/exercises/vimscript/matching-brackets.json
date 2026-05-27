@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:matching-brackets",
+  "trackSlug": "vimscript",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "c206ca0e-4810-44c5-b519-9a0c660903a0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "\" Given a string containing brackets, determine if the brackets are balanced.\n\" \n\" Example:\n\"\n\"   :echo IsPaired(\"()[]{}\")  \n\"   1\n\"   :echo IsPaired(\"[[\")\n\"   0\n\"\nfunction! IsPaired(str) abort\n  \" your implemention goes here\nendfunction\n\n",
+  "example_solution": "function! IsPaired(str) abort\n  let l:stack = []\n  let l:pairs = {'(': ')', '[': ']', '{': '}'}\n\n  for l:char in split(a:str, '\\zs')\n    if has_key(l:pairs, l:char)\n      call add(l:stack, l:char)\n    elseif index(values(l:pairs), l:char) != -1\n      if empty(l:stack)\n          return 0\n      endif\n\n      let l:popped = remove(l:stack, -1)\n      if l:pairs[popped] !=# l:char\n        return 0\n      endif\n    endif\n  endfor\n\n  return empty(l:stack)\nendfunction\n\n",
+  "test_code": "\nExecute (paired square brackets):\n  Assert IsPaired(\"[]\")\n\nExecute (empty string):\n  Assert IsPaired(\"\")\n\nExecute (unpaired brackets):\n  Assert !IsPaired(\"[[\")\n\nExecute (wrong ordered brackets):\n  Assert !IsPaired(\"}{\")\n\nExecute (wrong closing bracket):\n  Assert !IsPaired(\"{]\")\n\nExecute (paired with whitespace):\n  Assert IsPaired(\"{ }\")\n\nExecute (partially paired brackets):\n  Assert !IsPaired(\"{[])\")\n\nExecute (simple nested brackets):\n  Assert IsPaired(\"{[]}\")\n\nExecute (several paired brackets):\n  Assert IsPaired(\"{}[]\")\n\nExecute (paired and nested brackets):\n  Assert IsPaired(\"([{}({}[])])\")\n\nExecute (unopened closing brackets):\n  Assert !IsPaired(\"{[)][]}\")\n\nExecute (unpaired and nested brackets):\n  Assert !IsPaired(\"([{])\")\n\nExecute (paired and wrong nested brackets):\n  Assert !IsPaired(\"[({]})\")\n\nExecute (paired and wrong nested brackets but innermost are correct):\n  Assert !IsPaired(\"[({}])\")\n\nExecute (paired and incomplete brackets):\n  Assert !IsPaired(\"{}[\")\n\nExecute (too many closing brackets):\n  Assert !IsPaired(\"[]]\")\n\nExecute (early unexpected brackets):\n  Assert !IsPaired(\")()\")\n\nExecute (early mismatched brackets):\n  Assert !IsPaired(\"{)()\")\n\nExecute (math expression):\n  Assert IsPaired(\"(((185 + 223.85) * 15) - 543)/2\")\n\nExecute (complex latex expression):\n  let g:value = \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\"\n  Assert IsPaired(g:value)\n\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "idris:rotational-cipher",
+  "trackSlug": "idris",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "c55543cf-9f7a-4f25-986e-f90b0e22ad11",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module RotationalCipher\n\nexport\nrotate : String -> Int -> String\nrotate text shiftKey = ?rotate_rhs\n",
+  "example_solution": "module RotationalCipher\n\nimport Data.Bits\n\nexport\nrotate : String -> Int -> String\nrotate text shiftKey = pack $ map rotateChar $ unpack text\n  where rotateLetter : Int -> Int\n        rotateLetter letter = (letter .&. 32) .|. (65 + mod ((letter .|. 32) - 97 + shiftKey) 26)\n        rotateChar : Char -> Char\n        rotateChar ch = if isAlpha ch then chr $ rotateLetter $ ord ch\n                                      else ch\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport RotationalCipher\n\ntests : List Test\ntests =\n  [ test \"rotate a by 0, same output as input\"      (assertEq (rotate \"a\" 0) \"a\")\n  , test \"rotate a by 1\"                            (assertEq (rotate \"a\" 1) \"b\")\n  , test \"rotate a by 26, same output as input\"     (assertEq (rotate \"a\" 26) \"a\")\n  , test \"rotate m by 13\"                           (assertEq (rotate \"m\" 13) \"z\")\n  , test \"rotate n by 13 with wrap around alphabet\" (assertEq (rotate \"n\" 13) \"a\")\n  , test \"rotate capital letters\"                   (assertEq (rotate \"OMG\" 5) \"TRL\")\n  , test \"rotate spaces\"                            (assertEq (rotate \"O M G\" 5) \"T R L\")\n  , test \"rotate numbers\"                           (assertEq (rotate \"Testing 1 2 3 testing\" 4) \"Xiwxmrk 1 2 3 xiwxmrk\")\n  , test \"rotate punctuation\"                       (assertEq (rotate \"Let's eat, Grandma!\" 21) \"Gzo'n zvo, Bmviyhv!\")\n  , test \"rotate all letters\"                       (assertEq (rotate \"The quick brown fox jumps over the lazy dog.\" 13) \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\")\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

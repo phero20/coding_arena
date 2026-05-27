@@ -1,0 +1,51 @@
+{
+  "id": "elixir:all-your-base",
+  "trackSlug": "elixir",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "f71d5f38-fcc9-4044-ade9-f779a8686c69",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "integers",
+    "multiple-clause-functions"
+  ],
+  "prerequisites": [
+    "atoms",
+    "tuples",
+    "integers",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "guards",
+    "cond",
+    "case",
+    "if",
+    "recursion",
+    "tail-call-recursion",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "defmodule AllYourBase do\n  @doc \"\"\"\n  Given a number in input base, represented as a sequence of digits, converts it to output base,\n  or returns an error tuple if either of the bases are less than 2\n  \"\"\"\n\n  @spec convert(list, integer, integer) :: {:ok, list} | {:error, String.t()}\n  def convert(digits, input_base, output_base) do\n  end\nend\n",
+  "example_solution": "defmodule AllYourBase do\n  @doc \"\"\"\n  Given a number in base a, represented as a sequence of digits, converts it to base b,\n  or returns nil if either of the bases are less than 2\n  \"\"\"\n\n  @spec convert(list, integer, integer) :: {:ok, list} | {:error, String.t()}\n  def convert(_, input_base, _) when input_base < 2 do\n    {:error, \"input base must be >= 2\"}\n  end\n\n  def convert(_, _, output_base) when output_base < 2 do\n    {:error, \"output base must be >= 2\"}\n  end\n\n  def convert(digits, input_base, output_base) do\n    if Enum.all?(digits, &(0 <= &1 && &1 < input_base)) do\n      {:ok, do_convert(digits, input_base, output_base)}\n    else\n      {:error, \"all digits must be >= 0 and < input base\"}\n    end\n  end\n\n  defp do_convert(digits, input_base, output_base) do\n    num = convert_to_num(digits, input_base, 0)\n\n    case num do\n      0 ->\n        [0]\n\n      num ->\n        convert_to_digits(num, output_base, [])\n        |> Enum.reverse()\n    end\n  end\n\n  defp convert_to_num([head | tail], input_base, accumulator) do\n    convert_to_num(tail, input_base, accumulator * input_base + head)\n  end\n\n  defp convert_to_num([], _input_base, accumulator) do\n    accumulator\n  end\n\n  defp convert_to_digits(num, output_base, arr) when num > 0 do\n    convert_to_digits(div(num, output_base), output_base, arr ++ [rem(num, output_base)])\n  end\n\n  defp convert_to_digits(num, _output_base, arr) when num == 0 do\n    arr\n  end\nend\n",
+  "test_code": "defmodule AllYourBaseTest do\n  use ExUnit.Case\n\n  test \"convert single bit one to decimal\" do\n    assert AllYourBase.convert([1], 2, 10) == {:ok, [1]}\n  end\n\n  @tag :pending\n  test \"convert binary to single decimal\" do\n    assert AllYourBase.convert([1, 0, 1], 2, 10) == {:ok, [5]}\n  end\n\n  @tag :pending\n  test \"convert single decimal to binary\" do\n    assert AllYourBase.convert([5], 10, 2) == {:ok, [1, 0, 1]}\n  end\n\n  @tag :pending\n  test \"convert binary to multiple decimal\" do\n    assert AllYourBase.convert([1, 0, 1, 0, 1, 0], 2, 10) == {:ok, [4, 2]}\n  end\n\n  @tag :pending\n  test \"convert decimal to binary\" do\n    assert AllYourBase.convert([4, 2], 10, 2) == {:ok, [1, 0, 1, 0, 1, 0]}\n  end\n\n  @tag :pending\n  test \"convert trinary to hexadecimal\" do\n    assert AllYourBase.convert([1, 1, 2, 0], 3, 16) == {:ok, [2, 10]}\n  end\n\n  @tag :pending\n  test \"convert hexadecimal to trinary\" do\n    assert AllYourBase.convert([2, 10], 16, 3) == {:ok, [1, 1, 2, 0]}\n  end\n\n  @tag :pending\n  test \"convert 15-bit integer\" do\n    assert AllYourBase.convert([3, 46, 60], 97, 73) == {:ok, [6, 10, 45]}\n  end\n\n  @tag :pending\n  test \"convert empty list\" do\n    assert AllYourBase.convert([], 2, 10) == {:ok, [0]}\n  end\n\n  @tag :pending\n  test \"convert single zero\" do\n    assert AllYourBase.convert([0], 10, 2) == {:ok, [0]}\n  end\n\n  @tag :pending\n  test \"convert multiple zeros\" do\n    assert AllYourBase.convert([0, 0, 0], 10, 2) == {:ok, [0]}\n  end\n\n  @tag :pending\n  test \"convert leading zeros\" do\n    assert AllYourBase.convert([0, 6, 0], 7, 10) == {:ok, [4, 2]}\n  end\n\n  @tag :pending\n  test \"convert first base is one\" do\n    assert AllYourBase.convert([0], 1, 10) == {:error, \"input base must be >= 2\"}\n  end\n\n  @tag :pending\n  test \"convert first base is zero\" do\n    assert AllYourBase.convert([], 0, 10) == {:error, \"input base must be >= 2\"}\n  end\n\n  @tag :pending\n  test \"convert first base is negative\" do\n    assert AllYourBase.convert([1], -2, 10) == {:error, \"input base must be >= 2\"}\n  end\n\n  @tag :pending\n  test \"convert negative digit\" do\n    assert AllYourBase.convert([1, -1, 1, 0, 1, 0], 2, 10) ==\n             {:error, \"all digits must be >= 0 and < input base\"}\n  end\n\n  @tag :pending\n  test \"convert invalid positive digit\" do\n    assert AllYourBase.convert([1, 2, 1, 0, 1, 0], 2, 10) ==\n             {:error, \"all digits must be >= 0 and < input base\"}\n  end\n\n  @tag :pending\n  test \"convert second base is one\" do\n    assert AllYourBase.convert([1, 0, 1, 0, 1, 0], 2, 1) == {:error, \"output base must be >= 2\"}\n  end\n\n  @tag :pending\n  test \"convert second base is zero\" do\n    assert AllYourBase.convert([7], 10, 0) == {:error, \"output base must be >= 2\"}\n  end\n\n  @tag :pending\n  test \"convert second base is negative\" do\n    assert AllYourBase.convert([1], 2, -7) == {:error, \"output base must be >= 2\"}\n  end\n\n  @tag :pending\n  test \"convert both bases are negative\" do\n    assert AllYourBase.convert([1], -2, -7) == {:error, \"input base must be >= 2\"}\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ananthamapod"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "ChristianTovar",
+    "Cohen-Carlisle",
+    "devonestes",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "ybod"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "go:game-of-life",
+  "trackSlug": "go",
+  "slug": "game-of-life",
+  "name": "Conway's Game of Life",
+  "uuid": "67228b31-fa89-4017-b9b6-71a4212cb943",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement Conway's Game of Life.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAfter each generation, the cells interact with their eight neighbors, which are cells adjacent horizontally, vertically, or diagonally.\n\nThe following rules are applied to each cell:\n\n- Any live cell with two or three live neighbors lives on.\n- Any dead cell with exactly three live neighbors becomes a live cell.\n- All other cells die or stay dead.\n\nGiven a matrix of 1s and 0s (corresponding to live and dead cells), apply the rules to each cell, and return the next generation.\n",
+  "introduction": "# Introduction\n\n[Conway's Game of Life][game-of-life] is a fascinating cellular automaton created by the British mathematician John Horton Conway in 1970.\n\nThe game consists of a two-dimensional grid of cells that can either be \"alive\" or \"dead.\"\n\nAfter each generation, the cells interact with their eight neighbors via a set of rules, which define the new generation.\n\n[game-of-life]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life\n",
+  "hints": null,
+  "starter_code": "package gameoflife\n\nfunc Tick(matrix [][]int) [][]int {\n\tpanic(\"Please implement the Tick function\")\n}\n",
+  "example_solution": "package gameoflife\n\nfunc get(matrix [][]int, x, y int) int {\n\tif x < 0 || y < 0 || y >= len(matrix) || x >= len(matrix[0]) {\n\t\treturn 0\n\t}\n\treturn matrix[y][x]\n}\n\nfunc Tick(matrix [][]int) [][]int {\n\toffsets := [][]int{\n\t\t{-1, -1}, {0, -1}, {1, -1},\n\t\t{-1, 0} /* 0,0 */, {1, 0},\n\t\t{-1, 1}, {0, 1}, {1, 1},\n\t}\n\tout := make([][]int, len(matrix))\n\tfor y := range matrix {\n\t\tout[y] = make([]int, len(matrix[0]))\n\t\tfor x := range matrix[0] {\n\t\t\tsum := 0\n\t\t\tfor _, offset := range offsets {\n\t\t\t\tsum += get(matrix, x+offset[0], y+offset[1])\n\t\t\t}\n\t\t\tif sum == 3 || (get(matrix, x, y) == 1 && sum == 2) {\n\t\t\t\tout[y][x] = 1\n\t\t\t}\n\t\t}\n\t}\n\treturn out\n}\n",
+  "test_code": "package gameoflife\n\nimport (\n\t\"slices\"\n\t\"testing\"\n)\n\nfunc TestTick(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Tick(tc.input); !slices.EqualFunc(actual, tc.expected, slices.Equal) {\n\t\t\t\tt.Fatalf(\"Tick(%v) = %v, want: %v\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkTick(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tTick(tc.input)\n\t\t}\n\t}\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life",
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

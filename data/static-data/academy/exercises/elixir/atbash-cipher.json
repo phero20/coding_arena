@@ -1,0 +1,53 @@
+{
+  "id": "elixir:atbash-cipher",
+  "trackSlug": "elixir",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "eab8a96f-74af-4e3d-8039-d1d74714f72b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "charlists"
+  ],
+  "prerequisites": [
+    "strings",
+    "charlists",
+    "regular-expressions",
+    "ranges",
+    "maps",
+    "enum",
+    "recursion"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Atbash do\n  @doc \"\"\"\n  Encode a given plaintext to the corresponding ciphertext\n\n  ## Examples\n\n  iex> Atbash.encode(\"completely insecure\")\n  \"xlnko vgvob rmhvx fiv\"\n  \"\"\"\n  @spec encode(String.t()) :: String.t()\n  def encode(plaintext) do\n  end\n\n  @spec decode(String.t()) :: String.t()\n  def decode(cipher) do\n  end\nend\n",
+  "example_solution": "defmodule Atbash do\n  @key Enum.zip(?a..?z, ?z..?a//-1) |> Enum.into(%{})\n\n  @doc \"\"\"\n  Encode a given plaintext to the corresponding ciphertext\n\n  ## Examples\n\n  iex> Atbash.encode(\"completely insecure\")\n  \"xlnko vgvob rmhvx fiv\"\n  \"\"\"\n  @spec encode(String.t()) :: String.t()\n  def encode(plaintext) do\n    plaintext |> normalize |> transpose |> chunk |> Enum.join(\" \")\n  end\n\n  @spec decode(String.t()) :: String.t()\n  def decode(cipher) do\n    cipher |> normalize |> transpose\n  end\n\n  defp normalize(input) do\n    Regex.replace(~r{\\W}, String.downcase(input), \"\")\n  end\n\n  defp transpose(text) do\n    text\n    |> String.to_charlist()\n    |> Enum.map(&convert/1)\n    |> List.to_string()\n  end\n\n  defp convert(character) do\n    Map.get(@key, character, character)\n  end\n\n  defp chunk(input) do\n    Regex.scan(~r(.{1,5}), input) |> List.flatten()\n  end\nend\n",
+  "test_code": "defmodule AtbashTest do\n  use ExUnit.Case\n\n  describe \"encode\" do\n    # @tag :pending\n    test \"yes\" do\n      assert Atbash.encode(\"yes\") == \"bvh\"\n    end\n\n    @tag :pending\n    test \"no\" do\n      assert Atbash.encode(\"no\") == \"ml\"\n    end\n\n    @tag :pending\n    test \"OMG\" do\n      assert Atbash.encode(\"OMG\") == \"lnt\"\n    end\n\n    @tag :pending\n    test \"O M G\" do\n      assert Atbash.encode(\"O M G\") == \"lnt\"\n    end\n\n    @tag :pending\n    test \"mindblowingly\" do\n      assert Atbash.encode(\"mindblowingly\") == \"nrmwy oldrm tob\"\n    end\n\n    @tag :pending\n    test \"numbers\" do\n      assert Atbash.encode(\"Testing, 1 2 3, testing.\") == \"gvhgr mt123 gvhgr mt\"\n    end\n\n    @tag :pending\n    test \"deep thought\" do\n      assert Atbash.encode(\"Truth is fiction.\") == \"gifgs rhurx grlm\"\n    end\n\n    @tag :pending\n    test \"all the letters\" do\n      plaintext = \"The quick brown fox jumps over the lazy dog.\"\n      cipher = \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n      assert Atbash.encode(plaintext) == cipher\n    end\n  end\n\n  describe \"decode\" do\n    @tag :pending\n    test \"exercism\" do\n      cipher = \"vcvix rhn\"\n      plaintext = \"exercism\"\n      assert Atbash.decode(cipher) == plaintext\n    end\n\n    @tag :pending\n    test \"a sentence\" do\n      cipher = \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"\n      plaintext = \"anobstacleisoftenasteppingstone\"\n      assert Atbash.decode(cipher) == plaintext\n    end\n\n    @tag :pending\n    test \"numbers\" do\n      cipher = \"gvhgr mt123 gvhgr mt\"\n      plaintext = \"testing123testing\"\n      assert Atbash.decode(cipher) == plaintext\n    end\n\n    @tag :pending\n    test \"all the letters\" do\n      cipher = \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n      plaintext = \"thequickbrownfoxjumpsoverthelazydog\"\n      assert Atbash.decode(cipher) == plaintext\n    end\n\n    @tag :pending\n    test \"with too many spaces\" do\n      cipher = \"vc vix    r hn\"\n      plaintext = \"exercism\"\n      assert Atbash.decode(cipher) == plaintext\n    end\n\n    @tag :pending\n    test \"with no spaces\" do\n      cipher = \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"\n      plaintext = \"anobstacleisoftenasteppingstone\"\n      assert Atbash.decode(cipher) == plaintext\n    end\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "Br1ght0ne",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "jinyeow",
+    "kytrinyx",
+    "lpil",
+    "mhinz",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

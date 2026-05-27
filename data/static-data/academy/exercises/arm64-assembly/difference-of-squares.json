@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:difference-of-squares",
+  "trackSlug": "arm64-assembly",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "88ebf02b-e19b-4058-a48b-2e1560345dd0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ".text\n.globl square_of_sum\n.globl sum_of_squares\n.globl difference_of_squares\n\nsquare_of_sum:\n        ret\n\nsum_of_squares:\n        ret\n\ndifference_of_squares:\n        ret\n",
+  "example_solution": ".text\n.globl square_of_sum\n.globl sum_of_squares\n.globl difference_of_squares\n\n/* extern uint64_t square_of_sum(uint64_t number); */\nsquare_of_sum:\n        add     x1, x0, #1\n        mul     x0, x0, x1\n        lsr     x0, x0, #1              /* number (number + 1) / 2 */\n        mul     x0, x0, x0              /* number**2 (number + 1)**2 / 4 */\n        ret\n\n/* extern uint64_t sum_of_squares(uint64_t number); */\nsum_of_squares:\n        add     x1, x0, #1\n        mul     x2, x0, x1              /* number (number + 1) */\n        add     x0, x0, x1              /* 2 * number + 1 */\n        mul     x0, x0, x2\n        mov     x1, #6\n        udiv    x0, x0, x1              /* number (number + 1) (2 * number + 1) / 6 */\n        ret\n\n/* extern uint64_t difference_of_squares(uint64_t number); */\ndifference_of_squares:\n        add     x1, x0, #1\n        add     x2, x0, x1              /* 2 * number + 1 */\n        mul     x0, x0, x1\n        lsr     x0, x0, #1              /* number (number + 1) / 2 */\n        mul     x2, x0, x2\n        mov     x1, #3\n        udiv    x2, x2, x1              /* number (number + 1) (2 * number + 1) / 6 */\n        mul     x0, x0, x0              /* number**2 (number + 1)**2 / 4 */\n        sub     x0, x0, x2\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#include <stdint.h>\n\nextern uint64_t square_of_sum(uint64_t number);\nextern uint64_t sum_of_squares(uint64_t number);\nextern uint64_t difference_of_squares(uint64_t number);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_square_of_sum_1(void) {\n    TEST_ASSERT_EQUAL_UINT64(1U, square_of_sum(1));\n}\n\nvoid test_square_of_sum_5(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(225U, square_of_sum(5));\n}\n\nvoid test_square_of_sum_100(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(25502500U, square_of_sum(100));\n}\n\nvoid test_sum_of_squares_1(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(1U, sum_of_squares(1));\n}\n\nvoid test_sum_of_squares_5(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(55U, sum_of_squares(5));\n}\n\nvoid test_sum_of_squares_100(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(338350U, sum_of_squares(100));\n}\n\nvoid test_difference_of_squares_1(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(0U, difference_of_squares(1));\n}\n\nvoid test_difference_of_squares_5(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(170U, difference_of_squares(5));\n}\n\nvoid test_difference_of_squares_100(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(25164150U, difference_of_squares(100));\n}\n\nvoid test_square_of_sum_90000(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(16402864502025000000U, square_of_sum(90000));\n}\n\nvoid test_sum_of_squares_90000(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(243004050015000U, sum_of_squares(90000));\n}\n\nvoid test_difference_of_squares_90000(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_UINT64(16402621497974985000U, difference_of_squares(90000));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_square_of_sum_1);\n    RUN_TEST(test_square_of_sum_5);\n    RUN_TEST(test_square_of_sum_100);\n    RUN_TEST(test_sum_of_squares_1);\n    RUN_TEST(test_sum_of_squares_5);\n    RUN_TEST(test_sum_of_squares_100);\n    RUN_TEST(test_difference_of_squares_1);\n    RUN_TEST(test_difference_of_squares_5);\n    RUN_TEST(test_difference_of_squares_100);\n    RUN_TEST(test_square_of_sum_90000);\n    RUN_TEST(test_sum_of_squares_90000);\n    RUN_TEST(test_difference_of_squares_90000);\n    return UNITY_END();\n}\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

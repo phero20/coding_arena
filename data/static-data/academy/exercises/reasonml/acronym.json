@@ -1,0 +1,32 @@
+{
+  "id": "reasonml:acronym",
+  "trackSlug": "reasonml",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "c6623707-e7e9-4ce9-9440-8bb87696bb73",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let abbreviate = (_) => {\n  failwith(\"TODO: implement abbreviate function\");\n};",
+  "example_solution": "let abbreviate = (input: string) : string => {\n  let firstLetter = (word: string) : string =>\n    word |> Js.String.charAt(0) |> Js.String.toUpperCase;\n\n  input\n  |> Js.String.splitByRe([%re \"/[\\\\s-]/\"])\n  |> Js.Array.map(Belt.Option.getExn)\n  |> Js.Array.map(firstLetter)\n  |> Js.Array.joinWith(\"\");\n};\n",
+  "test_code": "open Jest;\nopen Expect;\nopen Acronym;\n\ndescribe(\"Acronym\", () => {\n  test(\"basic\", () =>\n    expect(abbreviate(\"Portable Network Graphics\")) |> toEqual(\"PNG\")\n  );\n  test(\"lowercase words\", () =>\n    expect(abbreviate(\"Ruby on Rails\")) |> toEqual(\"ROR\")\n  );\n  test(\"punctuation\", () =>\n    expect(abbreviate(\"First In, First Out\")) |> toEqual(\"FIFO\")\n  );\n  test(\"all caps word\", () =>\n    expect(abbreviate(\"GNU Image Manipulation Program\")) |> toEqual(\"GIMP\")\n  );\n  test(\"punctuation without whitespace\", () =>\n    expect(abbreviate(\"Complementary metal-oxide semiconductor\")) |> toEqual(\"CMOS\")\n  );\n});\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "gabrielperales"
+  ],
+  "contributors": [
+    "benreyn",
+    "naartjie",
+    "ohana54",
+    "stevejb71",
+    "tejasbubane"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "lfe:space-age",
+  "trackSlug": "lfe",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "dfb7c4aa-dc52-4973-8c50-f5153ab51406",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "(defmodule space-age\n  (export (age-on 2)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule space-age\n  (export (age-on 2)))\n\n(defun age-on (planet seconds) (/ seconds (seconds-per-year planet)))\n\n(defun seconds-per-year\n  (['earth]   (* 365.25 24 60 60))\n  (['mercury] (seconds-per-year 0.2408467))\n  (['venus]   (seconds-per-year 0.61519726))\n  (['mars]    (seconds-per-year 1.8808158))\n  (['jupiter] (seconds-per-year 11.862615))\n  (['saturn]  (seconds-per-year 29.447498))\n  (['uranus]  (seconds-per-year 84.016846))\n  (['neptune] (seconds-per-year 164.79132))\n  ([n]        (* n (seconds-per-year 'earth))))\n",
+  "test_code": "(defmodule space-age-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(defmacro test-earth-and-planet (seconds age-on-earth planet age-on-planet)\n  `(deftest ,(list_to_atom (++ \"age-in-\" (atom_to_list planet) \"-years\"))\n     (is-equal 'true 'true)\n     (equal-float? (space-age:age-on 'earth ,seconds) ,age-on-earth)\n     (equal-float? (space-age:age-on (quote ,planet) ,seconds) ,age-on-planet)))\n\n(deftest age-in-earth-years\n  (equal-float? (space-age:age-on 'earth 1000000000) 31.69))\n\n(test-earth-and-planet 2134835688 67.65 mercury 280.88)\n\n(test-earth-and-planet 189839836 6.02 venus 9.78)\n\n(test-earth-and-planet 2329871239 73.83 mars 39.25)\n\n(test-earth-and-planet 901876382 28.58 jupiter 2.41)\n\n(test-earth-and-planet 3000000000 95.06 saturn 3.23)\n\n(test-earth-and-planet 3210123456 101.72 uranus 1.21)\n\n(test-earth-and-planet 8210123456 260.16 neptune 1.58)\n\n(defun equal-float? (x y) (is-equal y (round x 2)))\n\n(defun round (number precision)\n  (let ((p (math:pow 10 precision)))\n    (/ (round (* number p)) p)))\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "tmcgilchrist"
+  ],
+  "contributors": [
+    "adolfopa",
+    "etrepum",
+    "kytrinyx",
+    "oubiwann",
+    "yurrriq"
+  ]
+}

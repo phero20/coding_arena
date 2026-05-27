@@ -30,6 +30,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
   exitText,
   confirmSubmit,
   isArena,
+  hideRun,
 }) => {
   const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
 
@@ -47,6 +48,7 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
         isSubmitting={isSubmitting}
         hasSubmitted={hasSubmitted}
         confirmSubmit={confirmSubmit}
+        hideRun={hideRun}
         onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
         isScratchpadOpen={isScratchpadOpen}
         isArena={isArena}

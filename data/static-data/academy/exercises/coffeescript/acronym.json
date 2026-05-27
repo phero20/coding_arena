@@ -1,0 +1,26 @@
+{
+  "id": "coffeescript:acronym",
+  "trackSlug": "coffeescript",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "b52fd0d7-9473-4385-8a5b-e5c5b0d199fd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Acronym\n  @abbreviate: (phrase) ->\n\nmodule.exports = Acronym\n",
+  "example_solution": "class Acronym\n  @abbreviate: (phrase) ->\n    phrase\n      .replace \"'\", \"\"\n      .match /^[A-Z]|(?<=[^A-Z])[A-Z]|\\b[a-z]/g\n      .join \"\"\n      .toUpperCase()\n\nmodule.exports = Acronym\n",
+  "test_code": "Acronym = require './acronym'\n\ndescribe \"Acronym\", ->\n  it \"basic\", ->\n      result = Acronym.abbreviate \"Portable Network Graphics\"\n      expect(result).toEqual \"PNG\"\n\n  xit \"lowercase words\", ->\n      result = Acronym.abbreviate \"Ruby on Rails\"\n      expect(result).toEqual \"ROR\"\n\n  xit \"punctuation\", ->\n      result = Acronym.abbreviate \"First In, First Out\"\n      expect(result).toEqual \"FIFO\"\n\n  xit \"all caps word\", ->\n      result = Acronym.abbreviate \"GNU Image Manipulation Program\"\n      expect(result).toEqual \"GIMP\"\n\n  xit \"punctuation without whitespace\", ->\n      result = Acronym.abbreviate \"Complementary metal-oxide semiconductor\"\n      expect(result).toEqual \"CMOS\"\n\n  xit \"very long abbreviation\", ->\n      result = Acronym.abbreviate \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n      expect(result).toEqual \"ROTFLSHTMDCOALM\"\n\n  xit \"consecutive delimiters\", ->\n      result = Acronym.abbreviate \"Something - I made up from thin air\"\n      expect(result).toEqual \"SIMUFTA\"\n\n  xit \"apostrophes\", ->\n      result = Acronym.abbreviate \"Halley's Comet\"\n      expect(result).toEqual \"HC\"\n\n  xit \"underscore emphasis\", ->\n      result = Acronym.abbreviate \"The Road _Not_ Taken\"\n      expect(result).toEqual \"TRNT\"\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

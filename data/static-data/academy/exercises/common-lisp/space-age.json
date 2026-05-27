@@ -1,0 +1,34 @@
+{
+  "id": "common-lisp:space-age",
+  "trackSlug": "common-lisp",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "d24cf0ea-876f-4775-969b-99970425e413",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "functions",
+    "floating-point-numbers"
+  ],
+  "prerequisites": [
+    "functions",
+    "floating-point-numbers"
+  ],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "(defpackage :space-age\n  (:use :cl)\n  (:export :on-mercury\n           :on-venus\n           :on-earth\n           :on-mars\n           :on-jupiter\n           :on-saturn\n           :on-uranus\n           :on-neptune))\n\n(in-package :space-age)\n",
+  "example_solution": "(defpackage :space-age\n  (:use :common-lisp))\n\n(in-package :space-age)\n\n(defvar +earth-period+ 31557600)\n\n(defvar +planets-and-periods+\n  `((:mercury ,(* 0.2408467 +earth-period+))\n    (:venus ,(* 0.61519726 +earth-period+))\n    (:earth ,(* 1 +earth-period+))\n    (:mars ,(* 1.8808158 +earth-period+))\n    (:jupiter ,(* 11.862615 +earth-period+))\n    (:saturn ,(* 29.447498 +earth-period+))\n    (:uranus ,(* 84.016846 +earth-period+))\n    (:neptune ,(* 164.79132 +earth-period+))))\n\n(dolist (planet-info +planets-and-periods+)\n  (let ((name (first planet-info))\n        (period (second planet-info)))\n    (let ((symbol (intern (string-upcase\n                           (concatenate 'string\n                                        \"on-\"\n                                        (string name))))))\n      (setf (symbol-function symbol)\n            #'(lambda (seconds) (/ seconds period)))\n      (export symbol))))\n",
+  "test_code": ";; Ensures that space-age.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"space-age\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from space-age and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :space-age-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :space-age-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* space-age-suite)\n\n(defun rounds-to (expected actual)\n  (flet ((to-2-places (n) (/ (round (* 100 n)) 100.0)))\n    (is (= (to-2-places expected) (to-2-places actual)))))\n\n(test age-in-earth-years\n  (rounds-to 31.69 (space-age:on-earth 1000000001)))\n\n(test age-in-mercury-years\n  (let ((seconds 2134835688))\n    (rounds-to 67.65 (space-age:on-earth seconds))\n    (rounds-to 280.88 (space-age:on-mercury seconds))))\n\n(test age-in-venus-years\n  (let ((seconds 189839836))\n    (rounds-to 6.02 (space-age:on-earth seconds))\n    (rounds-to 9.78 (space-age:on-venus seconds))))\n\n(test age-on-mars\n  (let ((seconds 2329871239))\n    (rounds-to 73.83 (space-age:on-earth seconds))\n    (rounds-to 39.25 (space-age:on-mars seconds))))\n\n(test age-on-jupiter\n  (let ((seconds 901876382))\n    (rounds-to 28.58 (space-age:on-earth seconds))\n    (rounds-to 2.41 (space-age:on-jupiter seconds))))\n\n(test age-on-saturn\n  (let ((seconds 3000000000))\n    (rounds-to 95.06 (space-age:on-earth seconds))\n    (rounds-to 3.23 (space-age:on-saturn seconds))))\n\n(test age-on-uranus\n  (let ((seconds 3210123456))\n    (rounds-to 101.72 (space-age:on-earth seconds))\n    (rounds-to 1.21 (space-age:on-uranus seconds))))\n\n(test age-on-neptune\n  (let ((seconds 8210123456))\n    (rounds-to 260.16 (space-age:on-earth seconds))\n    (rounds-to 1.58 (space-age:on-neptune seconds))))\n\n(defun run-tests (&optional (test-or-suite 'space-age-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": [
+    "dnmfarrell"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "julia:grains",
+  "trackSlug": "julia",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "4cc2a5d6-e662-4d99-81d4-05d6bcd500f4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "\"\"\"Calculate the number of grains on square `square`.\"\"\"\nfunction on_square(square)\n\nend\n\n\"\"\"Calculate the total number of grains after square `square`.\"\"\"\nfunction total_after(square)\n\nend\n",
+  "example_solution": "\"\"\"Calculate the number of grains on square `square`.\"\"\"\nfunction on_square(square)\n    check_square_input(square)\n    Int128(2) ^ (square - 1)\nend\n\n\"\"\"Calculate the total number of grains after square `square`.\"\"\"\nfunction total_after(square)\n    check_square_input(square)\n    sum(map(on_square, 1:square))\nend\n\n\"\"\"Validate an arbitrary square.\"\"\"\nfunction check_square_input(square)\n    square == 0 && throw(DomainError(square, \"Square input of zero is invalid.\"))\n    square <  0 && throw(DomainError(square, \"Negative square input is invalid.\"))\n    square > 64 && throw(DomainError(square, \"Square input greater than 64 is invalid.\"))\nend\n",
+  "test_code": "using Test\n\ninclude(\"grains.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"beginning squares\" begin\n        @test on_square(1) == 1\n        @test on_square(2) == 2\n        @test on_square(3) == 4\n        @test on_square(4) == 8\n        @test on_square(16) == 32768\n        @test on_square(32) == 2147483648\n        @test total_after(1) == 1\n        @test total_after(3) == on_square(1) + on_square(2) + on_square(3)\n    end\n\n    @testset \"ending squares\" begin\n        @test total_after(32) < total_after(64)\n        @test on_square(64) == 9223372036854775808\n        @test total_after(64) == 18446744073709551615\n    end\n\n    @testset \"Invalid values\" begin\n        @testset \"Zero\" begin\n            @test_throws DomainError on_square(0)\n            @test_throws DomainError total_after(0)\n        end\n        \n        @testset \"Negative\" begin\n            @test_throws DomainError on_square(-1)\n            @test_throws DomainError total_after(-1)\n        end\n        \n        @testset \"Greater than 64\" begin\n            @test_throws DomainError on_square(65)\n            @test_throws DomainError total_after(65)\n        end\n    end\nend\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "HarrisonGrodin"
+  ],
+  "contributors": [
+    "dhpollack",
+    "SaschaMann"
+  ]
+}

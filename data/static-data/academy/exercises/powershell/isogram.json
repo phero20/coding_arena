@@ -1,0 +1,26 @@
+{
+  "id": "powershell:isogram",
+  "trackSlug": "powershell",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "96c13659-37b2-4776-901e-ba4b9cc92984",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Function Invoke-Isogram() {\n    <#\n    .SYNOPSIS\n    Determine if a word or phrase is an isogram.\n    \n    .DESCRIPTION\n    An isogram (also known as a \"nonpattern word\") is a word or phrase without a repeating letter,\n    however spaces and hyphens are allowed to appear multiple times.\n    \n    .PARAMETER Phrase\n    The phrase to check if it is an isogram.\n    \n    .EXAMPLE\n    Invoke-Isogram -Phrase \"isogram\"\n    \n    Returns: $true\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Phrase\n    )\n\n    Throw \"Please implement this function\"\n}\n",
+  "example_solution": "Function Invoke-Isogram() {\n    <#\n    .SYNOPSIS\n    Determine if a word or phrase is an isogram.\n    \n    .DESCRIPTION\n    An isogram (also known as a \"nonpattern word\") is a word or phrase without a repeating letter,\n    however spaces and hyphens are allowed to appear multiple times.\n    \n    .PARAMETER Phrase\n    The phrase to check if it is an isogram.\n    \n    .EXAMPLE\n    Invoke-Isogram -Phrase \"isogram\"\n    \n    Returns: $true\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Phrase\n    )\n\n    $Phrase = $Phrase.ToLower()\n    $Phrase = $Phrase.Replace(\" \", \"\")\n    $Phrase = $Phrase.Replace(\"-\", \"\")\n\n    $FoundLetters = @()\n    $Letters = $Phrase.ToCharArray() \n    foreach ($item in $Letters) {\n        if ($FoundLetters -contains $item) {\n            return $false\n        }\n        $FoundLetters += $item\n    }\n    return $true\n}\n",
+  "test_code": "BeforeAll {\n    . \".\\Isogram.ps1\"\n}\n\nDescribe \"IsogramTests\" {\n\tIt \"empty string\" {\n        $got = Invoke-Isogram -Phrase \"\"\n\n\t\t$got | Should -BeTrue\n\t}\n\n    It \"isogram with only lower case characters\" {\n        $got = Invoke-Isogram -Phrase \"isogram\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"word with one duplicated character\" {\n        $got = Invoke-Isogram -Phrase \"eleven\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"word with one duplicated character from the end of the alphabet\" {\n        $got = Invoke-Isogram -Phrase \"zzyzx\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"longest reported english isogram\" {\n        $got = Invoke-Isogram -Phrase \"subdermatoglyphic\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"word with duplicated character in mixed case\" {\n        $got = Invoke-Isogram -Phrase \"Alphabet\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"word with duplicated character in mixed case, lowercase first\" {\n        $got = Invoke-Isogram -Phrase \"alphAbet\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"hypothetical isogrammic word with hyphen\" {\n        $got = Invoke-Isogram -Phrase \"thumbscrew-japingly\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"hypothetical word with duplicated character following hyphen\" {\n        $got = Invoke-Isogram -Phrase \"thumbscrew-jappingly\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"isogram with duplicated hyphen\" {\n        $got = Invoke-Isogram -Phrase \"six-year-old\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"made-up name that is an isogram\" {\n        $got = Invoke-Isogram -Phrase \"Emily Jung Schwartzkopf\"\n\n        $got | Should -BeTrue\n    }\n\n    It \"duplicated character in the middle\" {\n        $got = Invoke-Isogram -Phrase \"accentor\"\n\n        $got | Should -BeFalse\n    }\n\n    It \"word with duplicated character and with two hyphens\" {\n        $got = Invoke-Isogram -Phrase \"up-to-date\"\n\n        $got | Should -BeFalse\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "meatball133"
+  ],
+  "contributors": null
+}

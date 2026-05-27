@@ -29,7 +29,7 @@ import { SolutionController } from "../../controllers/solutions/solution.control
 import { WorkspaceController } from "../../controllers/workspace/workspace.controller";
 import { ChatController } from "../../controllers/chat/chat.controller";
 import { AcademyController } from "../../controllers/academy/academy.controller";
-
+import { AcademyExecutionController } from "../../controllers/academy/academy-execution.controller";
 
 
 /**
@@ -66,4 +66,5 @@ export const controllersRegistry = {
   workspaceController: asClass(WorkspaceController).singleton(),
   chatController: asClass(ChatController).singleton(),
   academyController: asClass(AcademyController).singleton(),
+  academyExecutionController: asClass(AcademyExecutionController).singleton(),
 };

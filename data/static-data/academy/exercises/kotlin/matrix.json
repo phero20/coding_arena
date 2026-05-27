@@ -1,0 +1,30 @@
+{
+  "id": "kotlin:matrix",
+  "trackSlug": "kotlin",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "46ab876c-cde2-4fa7-8970-b250ad8ccf74",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Matrix(private val matrixAsString: String) {\n\n    fun column(colNr: Int): List<Int> {\n        TODO(\"Implement this to complete the task\")\n    }\n\n    fun row(rowNr: Int): List<Int> {\n        TODO(\"Implement this to complete the task\")\n    }\n}\n",
+  "example_solution": "class Matrix(private val matrixAsString: String) {\n\n    private val matrix: List<List<Int>> = matrixAsString\n            .split(\"\\n\")\n            .map { column ->\n                column.trim().split(Regex(\" +\"))\n                        .map { cell -> cell.toInt() }\n            }\n\n    fun column(colNr: Int): List<Int> = matrix.indices.map { matrix[it][colNr - 1] }\n\n    fun row(rowNr: Int): List<Int> = matrix[rowNr - 1]\n}\n",
+  "test_code": "import kotlin.test.Ignore\nimport kotlin.test.Test\nimport kotlin.test.assertEquals\n\nclass MatrixTest {\n\n    @Test\n    fun `extract row from one number matrix`() {\n        val matrixAsString = \"1\"\n        val rowIndex = 1\n        val expectedRow = listOf(1)\n        assertEquals(expectedRow, Matrix(matrixAsString).row(rowIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract row from matrix`() {\n        val matrixAsString = \"1 2\\n3 4\"\n        val rowIndex = 2\n        val expectedRow = listOf(3, 4)\n        assertEquals(expectedRow, Matrix(matrixAsString).row(rowIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract row from diff widths matrix`() {\n        val matrixAsString = \"1 2\\n10 20\"\n        val rowIndex = 2\n        val expectedRow = listOf(10, 20)\n        assertEquals(expectedRow, Matrix(matrixAsString).row(rowIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract row from non square matrix`() {\n        val matrixAsString = \"\"\"\n            1 2 3\n            4 5 6\n            7 8 9\n            8 7 6\n            \"\"\".trimIndent()\n        val rowIndex = 4\n        val expectedRow = listOf(8, 7, 6)\n        assertEquals(expectedRow, Matrix(matrixAsString).row(rowIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract column from one number matrix`() {\n        val matrixAsString = \"1\"\n        val columnIndex = 1\n        val expectedColumn = listOf(1)\n        assertEquals(expectedColumn, Matrix(matrixAsString).column(columnIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract column matrix`() {\n        val matrixAsString = \"\"\"\n            1 2 3\n            4 5 6\n            7 8 9\n            \"\"\".trimIndent()\n        val columnIndex = 3\n        val expectedColumn = listOf(3, 6, 9)\n        assertEquals(expectedColumn, Matrix(matrixAsString).column(columnIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract column from non square matrix`() {\n        val matrixAsString = \"\"\"\n            1 2 3 4\n            5 6 7 8\n            9 8 7 6\n            \"\"\".trimIndent()\n        val columnIndex = 4\n        val expectedColumn = listOf(4, 8, 6)\n        assertEquals(expectedColumn, Matrix(matrixAsString).column(columnIndex))\n    }\n\n    @Ignore\n    @Test\n    fun `extract column from diff widths matrix`() {\n        val matrixAsString = \"\"\"\n            89 1903   3\n            18    3   1\n             9    4 800\n            \"\"\".replace(Regex(\" +\"), \" \").trimIndent()\n        val columnIndex = 2\n        val expectedColumn = listOf(1903, 3, 4)\n        assertEquals(expectedColumn, Matrix(matrixAsString).column(columnIndex))\n    }\n}\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://turing.edu",
+  "authors": [
+    "lathspell"
+  ],
+  "contributors": [
+    "eparovyshnaya",
+    "SunCatMC",
+    "uzilan"
+  ]
+}

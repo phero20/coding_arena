@@ -1,0 +1,26 @@
+{
+  "id": "8th:hamming",
+  "trackSlug": "8th",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "ead8a049-708c-4413-b58c-9526e6f66bfb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": ": distance \\ s1 s2 -- n\n\n;\n",
+  "example_solution": ": distance \\ s1 s2 -- n\n\ts:len -rot \n\tswap\n\ts:len -rot\n\t2swap n:=\n\t!if drop drop null ;then\n\n\tnull s:/ swap null s:/\n\t0 -rot \n\t( s:= not nip if n:1+ then ) a:2each \n\t2drop\n;\n",
+  "test_code": "\"hamming.8th\" f:include\nneeds exercism/test\nwith: test\n9 tests\n\n\"empty strands\"\n    ( \"\" \"\" distance )\n    0\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"single letter identical strands\"\n    ( \"A\" \"A\" distance )\n    0\n    equal?\n\n\"long indentical strands\"\n    ( \"GGACTGAAATCTG\" \"GGACTGAAATCTG\" distance )\n    0\n    equal?\n\n\"single letter different strands\"\n    ( \"G\" \"T\" distance )\n    1\n    equal?\n\n\"long different strands\"\n    ( \"GGACGGATTCTG\" \"AGGACGGATTCT\" distance )\n    9\n    equal?\n\n\"disallow empty first strand\" \n    ( \"\" \"G\" distance )\n    null?\n\n\"disallow first strand longer\" \n    ( \"AATG\" \"AAA\" distance )\n    null?\n\n\"disallow second strand longer\" \n    ( \"ATA\" \"AGTG\" distance )\n    null?\n\n\"disallow empty second strand\" \n    ( \"G\" \"\" distance )\n    null?\n\nend-of-tests\n;with\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "axtens"
+  ],
+  "contributors": null
+}

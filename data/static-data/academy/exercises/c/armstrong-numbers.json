@@ -1,0 +1,30 @@
+{
+  "id": "c:armstrong-numbers",
+  "trackSlug": "c",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "a4658ee9-b71c-4764-9652-7ed83d46516b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"armstrong_numbers.h\"\n",
+  "example_solution": "#include \"armstrong_numbers.h\"\n\n#include <stdint.h>\n#include <math.h>\n\nstatic uint16_t get_digit_count(uint32_t candidate)\n{\n   uint16_t digit_count = 0;\n   while (candidate > 0) {\n      candidate /= 10;\n      ++digit_count;\n   }\n   return digit_count;\n}\n\nbool is_armstrong_number(int candidate)\n{\n   bool result = false;\n   if (candidate < 10) {\n      result = true;\n   } else if (candidate >= 100) {\n      uint16_t digit_count = get_digit_count(candidate);\n      int32_t sum = 0, n = candidate;\n      while (n > 0 && sum <= candidate) {\n         uint16_t r = n % 10;\n         sum += pow(r, digit_count);\n         n /= 10;\n      }\n      result = candidate == sum;\n   }\n   return result;\n}\n",
+  "test_code": "#include \"test-framework/unity.h\"\n#include \"armstrong_numbers.h\"\n\nvoid setUp(void)\n{\n}\n\nvoid tearDown(void)\n{\n}\n\nstatic void test_zero_is_an_armstrong_number(void)\n{\n   TEST_ASSERT_TRUE(is_armstrong_number(0));\n}\n\nstatic void test_single_digit_numbers_are_armstrong_numbers(void)\n{\n   TEST_IGNORE();   // delete this line to run test\n   TEST_ASSERT_TRUE(is_armstrong_number(5));\n}\n\nstatic void test_there_are_no_two_digit_armstrong_numbers(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_FALSE(is_armstrong_number(10));\n}\n\nstatic void test_three_digit_number_that_is_an_armstrong_number(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_TRUE(is_armstrong_number(153));\n}\n\nstatic void test_three_digit_number_that_is_not_an_armstrong_number(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_FALSE(is_armstrong_number(100));\n}\n\nstatic void test_four_digit_number_that_is_an_armstrong_number(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_TRUE(is_armstrong_number(9474));\n}\n\nstatic void test_four_digit_number_that_is_not_an_armstrong_number(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_FALSE(is_armstrong_number(9475));\n}\n\nstatic void test_seven_digit_number_that_is_an_armstrong_number(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_TRUE(is_armstrong_number(9926315));\n}\n\nstatic void test_seven_digit_number_that_is_not_an_armstrong_number(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_FALSE(is_armstrong_number(9926314));\n}\n\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_zero_is_an_armstrong_number);\n   RUN_TEST(test_single_digit_numbers_are_armstrong_numbers);\n   RUN_TEST(test_there_are_no_two_digit_armstrong_numbers);\n   RUN_TEST(test_three_digit_number_that_is_an_armstrong_number);\n   RUN_TEST(test_three_digit_number_that_is_not_an_armstrong_number);\n   RUN_TEST(test_four_digit_number_that_is_an_armstrong_number);\n   RUN_TEST(test_four_digit_number_that_is_not_an_armstrong_number);\n   RUN_TEST(test_seven_digit_number_that_is_an_armstrong_number);\n   RUN_TEST(test_seven_digit_number_that_is_not_an_armstrong_number);\n\n   return UNITY_END();\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "wolf99"
+  ],
+  "contributors": [
+    "computermouth",
+    "elyashiv",
+    "ryanplusplus"
+  ]
+}

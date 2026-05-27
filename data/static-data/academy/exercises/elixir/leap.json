@@ -1,0 +1,52 @@
+{
+  "id": "elixir:leap",
+  "trackSlug": "elixir",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "f231c263-61fa-4139-a1c9-a69e6986a4cd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "integers",
+    "booleans",
+    "multiple-clause-functions",
+    "guards"
+  ],
+  "prerequisites": [
+    "integers",
+    "booleans",
+    "multiple-clause-functions",
+    "guards"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "defmodule Year do\n  @doc \"\"\"\n  Returns whether 'year' is a leap year.\n\n  A leap year occurs:\n\n  on every year that is evenly divisible by 4\n    except every year that is evenly divisible by 100\n      unless the year is also evenly divisible by 400\n  \"\"\"\n  @spec leap_year?(non_neg_integer) :: boolean\n  def leap_year?(year) do\n  end\nend\n",
+  "example_solution": "defmodule Year do\n  def leap_year?(year) do\n    div4?(year) && div100?(year) == div400?(year)\n  end\n\n  defp divides?(dividend, divisor), do: rem(dividend, divisor) == 0\n  defp div4?(dividend), do: divides?(dividend, 4)\n  defp div100?(dividend), do: divides?(dividend, 100)\n  defp div400?(dividend), do: divides?(dividend, 400)\nend\n",
+  "test_code": "defmodule YearTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"year not divisible by 4 is common year\" do\n    refute Year.leap_year?(2015)\n  end\n\n  @tag :pending\n  test \"year divisible by 2, not divisible by 4 is common year\" do\n    refute Year.leap_year?(1970)\n  end\n\n  @tag :pending\n  test \"year divisible by 4, not divisible by 100 is leap year\" do\n    assert Year.leap_year?(1996)\n  end\n\n  @tag :pending\n  test \"year divisible by 4 and 5 is still a leap year\" do\n    assert Year.leap_year?(1960)\n  end\n\n  @tag :pending\n  test \"year divisible by 100, not divisible by 400 is common year\" do\n    refute Year.leap_year?(2100)\n  end\n\n  @tag :pending\n  test \"year divisible by 100 but not by 3 is still not a leap year\" do\n    refute Year.leap_year?(1900)\n  end\n\n  @tag :pending\n  test \"year divisible by 400 is leap year\" do\n    assert Year.leap_year?(2000)\n  end\n\n  @tag :pending\n  test \"year divisible by 400 but not by 125 is still a leap year\" do\n    assert Year.leap_year?(2400)\n  end\n\n  @tag :pending\n  test \"year divisible by 200, not divisible by 400 in common year\" do\n    refute Year.leap_year?(1800)\n  end\nend\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "glennular",
+    "jinyeow",
+    "korbin",
+    "kytrinyx",
+    "lpil",
+    "michalporeba",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

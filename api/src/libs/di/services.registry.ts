@@ -37,7 +37,8 @@ import { ChatService } from "../../services/chat/chat.service";
 import { DiagramResolverService } from "../../services/ai/diagram-resolver.service";
 import { GroqDiagramService } from "../../services/ai/groq-diagram.service";
 import { AcademyService } from "../../services/academy/academy.service";
-
+import { AcademyExecutionService } from "../../services/academy/academy-execution.service";
+import { AcademyAiJudgeService } from "../../services/academy/academy-ai-judge.service";
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
 import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
@@ -51,6 +52,7 @@ import { LeaderboardCache } from "../../cache/stats/leaderboard.cache";
 import { SubmissionCache } from "../../cache/submissions/submission.cache";
 import { SolutionCache } from "../../cache/solutions/solution.cache";
 import { WorkspaceCache } from "../../cache/workspace/workspace.cache";
+import { AcademyCache } from "../../cache/academy/academy.cache";
 
 /**
  * Service layer registrations.
@@ -76,6 +78,7 @@ export const servicesRegistry = {
   rawSubmissionService: asClass(SubmissionService).singleton(),
   rawSolutionService: asClass(SolutionService).singleton(),
   rawWorkspaceService: asClass(WorkspaceService).singleton(),
+  rawAcademyService: asClass(AcademyService).singleton(),
   chatService: asClass(ChatService).singleton(),
   diagramResolverService: asClass(DiagramResolverService).singleton(),
   groqDiagramService: asClass(GroqDiagramService).singleton(),
@@ -106,6 +109,7 @@ export const servicesRegistry = {
   submissionCache: asClass(SubmissionCache).singleton(),
   solutionCache: asClass(SolutionCache).singleton(),
   workspaceCache: asClass(WorkspaceCache).singleton(),
+  academyCache: asClass(AcademyCache).singleton(),
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -145,5 +149,9 @@ export const servicesRegistry = {
   solutionService: asFunction(
     ({ solutionCache }: ICradle) => solutionCache,
   ).singleton(),
-  academyService: asClass(AcademyService).singleton(),
+  academyService: asFunction(
+    ({ academyCache }: ICradle) => academyCache,
+  ).singleton(),
+  academyExecutionService: asClass(AcademyExecutionService).singleton(),
+  academyAiJudgeService: asClass(AcademyAiJudgeService).singleton(),
 };

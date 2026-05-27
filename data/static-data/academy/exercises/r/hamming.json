@@ -1,0 +1,31 @@
+{
+  "id": "r:hamming",
+  "trackSlug": "r",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "dcc7171a-6b7d-4749-a300-a7270a095486",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "# This is a stub function to take two strings\n# and calculate the hamming distance\nhamming <- function(strand1, strand2) {\n}\n",
+  "example_solution": "hamming <- function(strand1, strand2) {\n  if (nchar(strand1) != nchar(strand2)) {\n    stop(\"undefined hamming distance\")\n  }\n  strand1 <- strsplit(strand1, \"\")[[1]]\n  strand2 <- strsplit(strand2, \"\")[[1]]\n  sum(strand1 != strand2)\n}\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/hamming/canonical-data.json\n# File last updated on 2026-03-11\n\nsource(\"./hamming.R\")\nlibrary(testthat)\n\ntest_that(\"empty strands\", {\n  strand1 <- \"\"\n  strand2 <- \"\"\n  expect_equal(hamming(strand1, strand2), 0)\n})\n\ntest_that(\"single letter identical strands\", {\n  strand1 <- \"A\"\n  strand2 <- \"A\"\n  expect_equal(hamming(strand1, strand2), 0)\n})\n\ntest_that(\"single letter different strands\", {\n  strand1 <- \"G\"\n  strand2 <- \"T\"\n  expect_equal(hamming(strand1, strand2), 1)\n})\n\ntest_that(\"long identical strands\", {\n  strand1 <- \"GGACTGAAATCTG\"\n  strand2 <- \"GGACTGAAATCTG\"\n  expect_equal(hamming(strand1, strand2), 0)\n})\n\ntest_that(\"long different strands\", {\n  strand1 <- \"GGACGGATTCTG\"\n  strand2 <- \"AGGACGGATTCT\"\n  expect_equal(hamming(strand1, strand2), 9)\n})\n\ntest_that(\"disallow first strand longer\", {\n  strand1 <- \"AATG\"\n  strand2 <- \"AAA\"\n  expect_error(hamming(strand1, strand2))\n})\n\ntest_that(\"disallow second strand longer\", {\n  strand1 <- \"ATA\"\n  strand2 <- \"AGTG\"\n  expect_error(hamming(strand1, strand2))\n})\n\ntest_that(\"disallow left empty strand\", {\n  strand1 <- \"\"\n  strand2 <- \"G\"\n  expect_error(hamming(strand1, strand2))\n})\n\ntest_that(\"disallow right empty strand\", {\n  strand1 <- \"G\"\n  strand2 <- \"\"\n  expect_error(hamming(strand1, strand2))\n})\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "cmiller01"
+  ],
+  "contributors": [
+    "jonmcalder",
+    "katrinleinweber",
+    "kytrinyx",
+    "zacchaeusluke"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "8th:isogram",
+  "trackSlug": "8th",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "6d34e782-2002-4073-a935-9e50b9ac9d2e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": isogram? \\ s -- T\n\n;\n",
+  "example_solution": ": isogram? \\ s -- T\n  \\ filter out all the non-alphabeticals\n  s:uc /[A-Z]/ r:/ \n  \\ sort remaining  \n  ' s:cmp a:sort \n  \\ get count\n  dup a:len swap \n  \\ get uniq items\n  ' s:= a:uniq \\ get uniq items\n  a:len \n  \\ clean up\n  nip rot drop \n  \\ is count after sort the same as after uniq?\n  n:= \n;\n",
+  "test_code": "\"isogram.8th\" f:include\nneeds exercism/test\nwith: test\n14 tests\n\n\"empty string\"\n    ( \"\" isogram? )\n    true?\n\nSKIP-REST-OF-TESTS\n\n\"isogram with only lower case characters\"\n    ( \"isogram\" isogram? )\n    true?\n\n\"word with one duplicated character\"\n    ( \"eleven\" isogram? )\n    false?\n\n\"word with one duplicated character from the end of the alphabet\"\n    ( \"zzyzx\" isogram? )\n    false?\n\n\"longest reported english isogram\"\n    ( \"subdermatoglyphic\" isogram? )\n    true?\n\n\"word with duplicated character in mixed case\"\n    ( \"Alphabet\" isogram? )\n    false?\n\n\"word with duplicated character in mixed case, lowercase first\"\n    ( \"alphAbet\" isogram? )\n    false?\n\n\"hypothetical isogrammic word with hyphen\"\n    ( \"thumbscrew-japingly\" isogram? )\n    true?\n\n\"hypothetical word with duplicated character following hyphen\"\n    ( \"thumbscrew-jappingly\" isogram? )\n    false?\n\n\"isogram with duplicated hyphen\"\n    ( \"six-year-old\" isogram? )\n    true?\n\n\"made-up name that is an isogram\"\n    ( \"Emily Jung Schwartzkopf\" isogram? )\n    true?\n\n\"duplicated character in the middle\"\n    ( \"accentor\" isogram? )\n    false?\n\n\"same first and last characters\"\n    ( \"angola\" isogram? )\n    false?\n\n\"word with duplicated character and with two hyphens\"\n    ( \"up-to-date\" isogram? )\n    false?\n\nend-of-tests\n;with\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "axtens"
+  ],
+  "contributors": null
+}

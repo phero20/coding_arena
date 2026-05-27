@@ -1,0 +1,29 @@
+{
+  "id": "pyret:difference-of-squares",
+  "trackSlug": "pyret",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "6968b216-4478-4778-93d3-197ed849fd40",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "numbers",
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: square-of-sum, sum-of-squares, difference-of-squares end\n\nfun square-of-sum(number):\n  raise(\"please implement the square-of-sum function\")\nend\n\nfun sum-of-squares(number):\n  raise(\"please implement the sum-of-squares function\")\nend\n\nfun difference-of-squares(number):\n  raise(\"please implement the difference-of-squares function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: square-of-sum, sum-of-squares, difference-of-squares end\n\nfun square-of-sum(number):\n  sum = (number * (number + 1)) / 2\n  sum * sum\nend\n\nfun sum-of-squares(number):\n  (number * (number + 1) * ((2 * number) + 1)) / 6\nend\n\nfun difference-of-squares(number):\n  square-of-sum(number) - sum-of-squares(number)\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"difference-of-squares.arr\")\n\ncheck \"Square the sum of the numbers up to the given number -> square of sum 1\":\n  square-of-sum(1) is 1\nend\n\ncheck \"Square the sum of the numbers up to the given number -> square of sum 5\":\n  square-of-sum(5) is 225\nend\n\ncheck \"Square the sum of the numbers up to the given number -> square of sum 100\":\n  square-of-sum(100) is 25502500\nend\n\ncheck \"Sum the squares of the numbers up to the given number -> sum of squares 1\":\n  sum-of-squares(1) is 1\nend\n\ncheck \"Sum the squares of the numbers up to the given number -> sum of squares 5\":\n  sum-of-squares(5) is 55\nend\n\ncheck \"Sum the squares of the numbers up to the given number -> sum of squares 100\":\n  sum-of-squares(100) is 338350\nend\n\ncheck \"Subtract sum of squares from square of sums -> difference of squares 1\":\n  difference-of-squares(1) is 0\nend\n\ncheck \"Subtract sum of squares from square of sums -> difference of squares 5\":\n  difference-of-squares(5) is 170\nend\n\ncheck \"Subtract sum of squares from square of sums -> difference of squares 100\":\n  difference-of-squares(100) is 25164150\nend\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

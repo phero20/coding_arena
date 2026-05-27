@@ -1,0 +1,30 @@
+{
+  "id": "rust:semi-structured-logs",
+  "trackSlug": "rust",
+  "slug": "semi-structured-logs",
+  "name": "Semi Structured Logs",
+  "uuid": "1924b87a-9246-456f-8fc1-111f922a8cf3",
+  "type": "concept",
+  "status": "active",
+  "blurb": "Learn enums while building a logging utility.",
+  "difficulty": 1,
+  "concepts": [
+    "enums"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "functions"
+  ],
+  "instructions": "# Instructions\n\nIn this exercise you'll be generating semi-structured log messages.\n\n## 1. Emit semi-structured messages\n\nYou'll start with some stubbed functions and the following enum:\n\n```rust\n#[derive(Clone, PartialEq, Debug)]\npub enum LogLevel {\n    Info,\n    Warning,\n    Error,\n}\n```\n\nYour goal is to emit a log message as follows: `\"[<LEVEL>]: <MESSAGE>\"`.\nYou'll need to implement functions that correspond with log levels.\n\nFor example, the below snippet demonstrates an expected output for the `log` function.\n\n```rust\nlog(LogLevel::Error, \"Stack overflow\")\n// Returns: \"[ERROR]: Stack overflow\"\n```\n\nAnd for `info`:\n\n```rust\ninfo(\"Timezone changed\")\n// Returns: \"[INFO]: Timezone changed\"\n```\n\nHave fun!\n\n## 2. Optional further practice\n\nThere is a feature-gated test in this suite.\nFeature gates disable compilation entirely for certain sections of your program.\nThey will be covered later.\nFor now just know that there is a test which is only built and run when you use a special testing invocation:\n\n```sh\ncargo test --features add-a-variant\n```\n\nThis test is meant to show you how to add a variant to your enum.\n",
+  "introduction": "# Introduction\n\nEnums, short for enumerations, are a type that limits all possible values of some data. The possible values of an `enum` are called variants. Enums also work well with `match` and other control flow operators to help you express intent in your Rust programs.\n",
+  "hints": "# Hints\n\n## General\n\n- [Rust By Example - Enums][rbe-enums]\n- [cheats.rs - Basic Types][cheats-types]\n\n## 1. Emit semi-structured messages\n\n- `match` comes in handy when working with enums. In this case, see how you might use it when figuring how what kind of log message to generate.\n\n[rbe-enums]: https://doc.rust-lang.org/stable/rust-by-example/custom_types/enum.html#enums\n[cheats-types]: https://cheats.rs/#basic-types\n",
+  "starter_code": "// This stub file contains items that aren't used yet; feel free to remove this module attribute\n// to enable stricter warnings.\n#![allow(unused)]\n\n/// various log levels\n#[derive(Clone, PartialEq, Eq, Debug)]\npub enum LogLevel {\n    Info,\n    Warning,\n    Error,\n}\n/// primary function for emitting logs\npub fn log(level: LogLevel, message: &str) -> String {\n    todo!(\"return a message for the given log level\")\n}\npub fn info(message: &str) -> String {\n    todo!(\"return a message for info log level\")\n}\npub fn warn(message: &str) -> String {\n    todo!(\"return a message for warn log level\")\n}\npub fn error(message: &str) -> String {\n    todo!(\"return a message for error log level\")\n}\n",
+  "example_solution": "#[derive(Clone, PartialEq, Debug)]\npub enum LogLevel {\n    Info,\n    Warning,\n    Error,\n    Debug,\n}\npub fn log(level: LogLevel, message: &str) -> String {\n    match level {\n        LogLevel::Info => info(message),\n        LogLevel::Warning => warn(message),\n        LogLevel::Error => error(message),\n        LogLevel::Debug => format!(\"[DEBUG]: {message}\"),\n    }\n}\npub fn info(message: &str) -> String {\n    format!(\"[INFO]: {message}\")\n}\npub fn warn(message: &str) -> String {\n    format!(\"[WARNING]: {message}\")\n}\npub fn error(message: &str) -> String {\n    format!(\"[ERROR]: {message}\")\n}\n",
+  "test_code": "use semi_structured_logs::{LogLevel, error, info, log, warn};\n\n#[test]\nfn emits_info() {\n    assert_eq!(info(\"Timezone changed\"), \"[INFO]: Timezone changed\");\n}\n\n#[test]\n#[ignore]\nfn emits_warning() {\n    assert_eq!(warn(\"Timezone not set\"), \"[WARNING]: Timezone not set\");\n}\n\n#[test]\n#[ignore]\nfn emits_error() {\n    assert_eq!(error(\"Disk full\"), \"[ERROR]: Disk full\");\n}\n\n#[test]\n#[ignore]\nfn log_emits_info() {\n    assert_eq!(\n        log(LogLevel::Info, \"Timezone changed\"),\n        \"[INFO]: Timezone changed\"\n    );\n}\n\n#[test]\n#[ignore]\nfn log_emits_warning() {\n    assert_eq!(\n        log(LogLevel::Warning, \"Timezone not set\"),\n        \"[WARNING]: Timezone not set\"\n    );\n}\n\n#[test]\n#[ignore]\nfn log_emits_error() {\n    assert_eq!(log(LogLevel::Error, \"Disk full\"), \"[ERROR]: Disk full\");\n}\n\n#[test]\n#[cfg(feature = \"add-a-variant\")]\n#[ignore]\nfn add_a_variant() {\n    // this test won't even compile until the enum is complete, which is why it is feature-gated.\n    assert_eq!(\n        log(LogLevel::Debug, \"reached line 123\"),\n        \"[DEBUG]: reached line 123\",\n    );\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "efx"
+  ],
+  "contributors": null
+}

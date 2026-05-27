@@ -1,0 +1,38 @@
+{
+  "id": "haskell:sum-of-multiples",
+  "trackSlug": "haskell",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "e125a32e-60ca-4e59-ae35-01f3b1907ccd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "module SumOfMultiples (sumOfMultiples) where\n\nsumOfMultiples :: [Integer] -> Integer -> Integer\nsumOfMultiples factors limit = error \"You need to implement this function.\"\n",
+  "example_solution": "module SumOfMultiples (sumOfMultiples) where\n\nsumOfMultiples :: [Int] -> Int -> Int\nsumOfMultiples targets upperBound = sum (filter f [1..upperBound-1])\n  where f n = any ((==0) . mod n) (filter (/= 0) targets)\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport SumOfMultiples (sumOfMultiples)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"sumOfMultiples\" $ for_ cases test\n  where\n    test Case{..} = it description' assertion\n      where\n        description' = unwords [show factors, show limit, \"--\", description]\n        assertion   = expression `shouldBe` fromIntegral expected\n        expression  = sumOfMultiples (fromIntegral <$> factors)\n                                     (fromIntegral     limit  )\n\ndata Case = Case { factors     :: [Integer]\n                 , limit       ::  Integer\n                 , expected    ::  Integer\n                 , description ::  String\n                 }\n\ncases :: [Case]\ncases = [ Case { factors  = [3, 5]\n               , limit    = 1\n               , expected = 0\n               , description = \"no multiples within limit\"\n               }\n        , Case { factors  = [3, 5]\n               , limit    = 4\n               , expected = 3\n               , description = \"one factor has multiples within limit\"\n               }\n        , Case { factors  = [3]\n               , limit    = 7\n               , expected = 9\n               , description = \"more than one multiple within limit\"\n               }\n        , Case { factors  = [3, 5]\n               , limit    = 10\n               , expected = 23\n               , description = \"more than one factor with multiples within limit\"\n               }\n        , Case { factors  = [3, 5]\n               , limit    = 100\n               , expected = 2318\n               , description = \"each multiple is only counted once\"\n               }\n        , Case { factors  = [3, 5]\n               , limit    = 1000\n               , expected = 233168\n               , description = \"a much larger limit\"\n               }\n        , Case { factors  = [7, 13, 17]\n               , limit    = 20\n               , expected = 51\n               , description = \"three factors\"\n               }\n        , Case { factors  = [4, 6]\n               , limit    = 15\n               , expected = 30\n               , description = \"factors not relatively prime\"\n               }\n        , Case { factors  = [5, 6, 8]\n               , limit    = 150\n               , expected = 4419\n               , description = \"some pairs of factors relatively prime and some not\"\n               }\n        , Case { factors  = [5, 25]\n               , limit    = 51\n               , expected = 275\n               , description = \"one factor is a multiple of another\"\n               }\n        , Case { factors  = [43, 47]\n               , limit    = 10000\n               , expected = 2203160\n               , description = \"much larger factors\"\n               }\n        , Case { factors  = [1]\n               , limit    = 100\n               , expected = 4950\n               , description = \"all numbers are multiples of 1\"\n               }\n        , Case { factors  = []\n               , limit    = 10000\n               , expected = 0\n               , description = \"no factors means an empty sum\"\n               }\n        , Case { factors  = [0]\n               , limit    = 1\n               , expected = 0\n               , description = \"the only multiple of 0 is 0\"\n               }\n        , Case { factors  = [3, 0]\n               , limit    = 4\n               , expected = 3\n               , description = \"the factor 0 does not affect the sum of multiples of other factors\"\n               }\n        , Case { factors  = [2, 3, 5, 7, 11]\n               , limit    = 10000\n               , expected = 39614537\n               , description = \"solutions using include-exclude must extend to cardinality greater than 3\"\n               }\n        ]\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "hekrause",
+    "iHiD",
+    "julianandrews",
+    "kytrinyx",
+    "lpalma",
+    "petemcfarlane",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

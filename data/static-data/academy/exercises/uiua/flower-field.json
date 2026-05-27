@@ -1,0 +1,28 @@
+{
+  "id": "uiua:flower-field",
+  "trackSlug": "uiua",
+  "slug": "flower-field",
+  "name": "Flower Field",
+  "uuid": "f2f6cf2d-7d17-403a-a73d-c6edf5cd96be",
+  "type": "practice",
+  "status": null,
+  "blurb": "Mark all the flowers in a garden.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add flower counts to empty squares in a completed Flower Field garden.\nThe garden itself is a rectangle board composed of squares that are either empty (`' '`) or a flower (`'*'`).\n\nFor each empty square, count the number of flowers adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent flowers, leave it empty.\nOtherwise replace it with the count of adjacent flowers.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Flower Field][history] is a compassionate reimagining of the popular game Minesweeper.\nThe object of the game is to find all the flowers in the garden using numeric hints that indicate how many flowers are directly adjacent (horizontally, vertically, diagonally) to a square.\n\"Flower Field\" shipped in regional versions of Microsoft Windows in Italy, Germany, South Korea, Japan and Taiwan.\n\n[history]: https://web.archive.org/web/20020409051321fw_/http://rcm.usr.dsi.unimi.it/rcmweb/fnm/\n",
+  "hints": null,
+  "starter_code": "# Annotate a garden\n# Annotated ? Garden\nAnnotate ← |1 ⊙(⍤\"Please implement Annotate\" 0)\n",
+  "example_solution": "Neighbors ← /+≡⬚0↻♭₂-1⇡3_3¤\nCell      ← ⨬(⨬(@ |+@0)±.|@*◌)\nAnnotate  ← ≡≡Cell ⟜Neighbors =@*\n",
+  "test_code": "~ \"flower-field.ua\" ~ Annotate\n\n# No rows\nGarden   ← \"\"\nExpected ← \"\"\n⍤⤙≍ Expected Annotate Garden\n\n# No columns\nGarden ← [\n  \"\"\n]\nExpected ← [\n  \"\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# No flowers\nGarden ← [\n  \"   \"\n  \"   \"\n  \"   \"\n]\nExpected ← [\n  \"   \"\n  \"   \"\n  \"   \"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Garden full of flowers\nGarden ← [\n  \"***\"\n  \"***\"\n  \"***\"\n]\nExpected ← [\n  \"***\"\n  \"***\"\n  \"***\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Flower surrounded by spaces\nGarden ← [\n  \"   \"\n  \" * \"\n  \"   \"\n]\nExpected ← [\n  \"111\"\n  \"1*1\"\n  \"111\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Space surrounded by flowers\nGarden ← [\n  \"***\"\n  \"* *\"\n  \"***\"\n]\nExpected ← [\n  \"***\"\n  \"*8*\"\n  \"***\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Horizontal line\nGarden ← [\n  \" * * \"\n]\nExpected ← [\n  \"1*2*1\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Horizontal line, flowers at edges\nGarden ← [\n  \"*   *\"\n]\nExpected ← [\n  \"*1 1*\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Vertical line\nGarden ← [\n  \" \"\n  \"*\"\n  \" \"\n  \"*\"\n  \" \"\n]\nExpected ← [\n  \"1\"\n  \"*\"\n  \"2\"\n  \"*\"\n  \"1\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Vertical line, flowers at edges\nGarden ← [\n  \"*\"\n  \" \"\n  \" \"\n  \" \"\n  \"*\"\n]\nExpected ← [\n  \"*\"\n  \"1\"\n  \" \"\n  \"1\"\n  \"*\"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Cross\nGarden ← [\n  \"  *  \"\n  \"  *  \"\n  \"*****\"\n  \"  *  \"\n  \"  *  \"\n]\nExpected ← [\n  \" 2*2 \"\n  \"25*52\"\n  \"*****\"\n  \"25*52\"\n  \" 2*2 \"\n]\n⍤⤙≍ Expected Annotate Garden\n\n# Large garden\nGarden ← [\n  \" *  * \"\n  \"  *   \"\n  \"    * \"\n  \"   * *\"\n  \" *  * \"\n  \"      \"\n]\nExpected ← [\n  \"1*22*1\"\n  \"12*322\"\n  \" 123*2\"\n  \"112*4*\"\n  \"1*22*2\"\n  \"111111\"\n]\n⍤⤙≍ Expected Annotate Garden\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": [
+    "BNAndras"
+  ]
+}

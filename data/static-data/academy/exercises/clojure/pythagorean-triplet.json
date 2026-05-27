@@ -1,0 +1,29 @@
+{
+  "id": "clojure:pythagorean-triplet",
+  "trackSlug": "clojure",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "7a9e219b-a830-4813-8274-e4473fef29e8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "basics",
+    "numbers"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "(ns pythagorean-triplet)\n\n(defn find-pythagorean-triplets\n  \"Given an integer N, it returns all Pythagorean triplets\n  for which a + b + c = N.\"\n  [N]\n  ;; function body\n  )\n",
+  "example_solution": "(ns pythagorean-triplet)\n\n(defn find-pythagorean-triplets\n  [N]\n  (for [a (range N)\n        :let [b (/ (* N (- N (* 2 a))) (* 2 (- N a)))\n              c (- N a b)]\n        :when (and (pos-int? b)\n                   (< a b c)\n                   (= (* c c) (+ (* a a) (* b b))))]\n    [a b c]))\n",
+  "test_code": "(ns pythagorean-triplet-test\n  (:require [clojure.test :refer [deftest testing is]]\n            pythagorean-triplet))\n\n(deftest find-pythagorean-triplets_test_1\n  (testing \"triplets whose sum is 12\"\n    (is (= [[3 4 5]]\n           (pythagorean-triplet/find-pythagorean-triplets 12)))))\n\n(deftest find-pythagorean-triplets_test_2\n  (testing \"triplets whose sum is 108\"\n    (is (= [[27 36 45]]\n           (pythagorean-triplet/find-pythagorean-triplets 108)))))\n\n(deftest find-pythagorean-triplets_test_3\n  (testing \"triplets whose sum is 1000\"\n    (is (= [[200 375 425]]\n           (pythagorean-triplet/find-pythagorean-triplets 1000)))))\n\n(deftest find-pythagorean-triplets_test_4\n  (testing \"no matching triplets for 1001\"\n    (is (= []\n           (pythagorean-triplet/find-pythagorean-triplets 1001)))))\n\n(deftest find-pythagorean-triplets_test_5\n  (testing \"returns all matching triplets\"\n    (is (= [[9 40 41]\n            [15 36 39]]\n           (pythagorean-triplet/find-pythagorean-triplets 90)))))\n\n(deftest find-pythagorean-triplets_test_6\n  (testing \"several matching triplets\"\n    (is (= [[40 399 401]\n            [56 390 394]\n            [105 360 375]\n            [120 350 370]\n            [140 336 364]\n            [168 315 357]\n            [210 280 350]\n            [240 252 348]]\n           (pythagorean-triplet/find-pythagorean-triplets 840)))))\n\n(deftest find-pythagorean-triplets_test_7\n  (testing \"triplets for large number\"\n    (is (= [[1200 14375 14425]\n            [1875 14000 14125]\n            [5000 12000 13000]\n            [6000 11250 12750]\n            [7500 10000 12500]]\n           (pythagorean-triplet/find-pythagorean-triplets 30000)))))\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "tasxatzial"
+  ],
+  "contributors": null
+}

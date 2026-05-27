@@ -1,0 +1,28 @@
+{
+  "id": "tcl:satellite",
+  "trackSlug": "tcl",
+  "slug": "satellite",
+  "name": "Satellite",
+  "uuid": "a69800cb-0f2b-44cd-bb50-a6a222ba980d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Rebuild binary trees from pre-order and in-order traversals.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImagine you need to transmit a binary tree to a satellite approaching Alpha Centauri and you have limited bandwidth.\nSince the tree has no repeating items it can be uniquely represented by its [pre-order and in-order traversals][wiki].\n\nWrite the software for the satellite to rebuild the tree from the traversals.\n\nA pre-order traversal reads the value of the current node before (hence \"pre\") reading the left subtree in pre-order.\nAfterwards the right subtree is read in pre-order.\n\nAn in-order traversal reads the left subtree in-order then the current node and finally the right subtree in-order.\nSo in order from left to right.\n\nFor example the pre-order traversal of this tree is [a, i, x, f, r].\nThe in-order traversal of this tree is [i, a, f, x, r]\n\n```text\n  a\n / \\\ni   x\n   / \\\n  f   r\n```\n\nNote: the first item in the pre-order traversal is always the root.\n\n[wiki]: https://en.wikipedia.org/wiki/Tree_traversal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc treeFromTraversals {preorder inorder} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc treeFromTraversals {preorder inorder} {\n    validateTraversals $preorder $inorder\n\n    if {[llength $preorder] == 0} {\n        return {}\n    }\n\n    set rootValue [lindex $preorder 0]\n    set idx [lsearch -exact $inorder $rootValue]\n\n    set leftInorder  [lrange $inorder 0 $idx-1]\n    set rightInorder [lrange $inorder $idx+1 end]\n\n    set leftPreorder  [lrange $preorder 1 [llength $leftInorder]]\n    set rightPreorder [lrange $preorder [llength $leftInorder]+1 end]\n\n    set procname [lindex [info level 0] 0]\n    set tree [dict create]\n\n    dict set tree v $rootValue\n    dict set tree l [$procname $leftPreorder $leftInorder]\n    dict set tree r [$procname $rightPreorder $rightInorder]\n\n    return $tree\n}\n\nproc validateTraversals {preorder inorder} {\n    if {[llength $preorder] != [llength $inorder]} {\n        error \"traversals must have the same length\"\n    }\n\n    set preElems [lsort $preorder]\n    set inElems  [lsort $inorder]\n\n    if {$preElems ne $inElems} {\n        error \"traversals must contain the same elements\"\n    }\n\n    if {$preElems ne [lsort -uniq $preElems]} {\n        error \"traversals must contain unique elements\"\n    }\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n# uncomment for more verbose test results\n#configure -verbose {body error usec}\n\n############################################################\nsource \"satellite.tcl\"\n\n# a non-empty result value is a dictionary with keys:\n#   \"v\"     the root value\n#   \"l\"     the left tree\n#   \"r\"     the right tree\n\ntest satellite-1.1 \"Empty tree\" -body {\n    treeFromTraversals {} {}\n} -returnCodes ok -match dictionary -result {}\n\nskip satellite-1.2\ntest satellite-1.2 \"Tree with one item\" -body {\n    treeFromTraversals {a} {a}\n} -returnCodes ok -match dictionary -result {v a l {} r {}}\n\nskip satellite-1.3\ntest satellite-1.3 \"Tree with many items\" -body {\n    treeFromTraversals {a i x f r} {i a f x r}\n} -returnCodes ok -match dictionary -result {\n    v a\n    l {v i l {} r {}}\n    r {v x\n        l {v f l {} r {}}\n        r {v r l {} r {}}\n    }\n}\n\n\nskip satellite-2.1\ntest satellite-2.1 \"Reject traversals of different length\" -body {\n    treeFromTraversals {a b} {b a r}\n} -returnCodes error -result \"traversals must have the same length\"\n\nskip satellite-2.2\ntest satellite-2.2 \"Reject inconsistemt traversals of same length\" -body {\n    treeFromTraversals {x y z} {a b c}\n} -returnCodes error -result \"traversals must contain the same elements\"\n\nskip satellite-2.3\ntest satellite-2.3 \"Reject traversals with repeated elements\" -body {\n    treeFromTraversals {a b a} {b a a}\n} -returnCodes error -result \"traversals must contain unique elements\"\n\n\nskip sattelite-3.1\ntest sattelite-3.1 \"A degenerate binary tree\" -body {\n    treeFromTraversals {a b c d} {d c b a}\n} -returnCodes ok -match dictionary -result {\n    v a\n    l {\n        v b\n        l {\n            v c\n            l { v d l {} r {} }\n            r {}\n        }\n        r {}\n    }\n    r {}\n}\n\nskip sattelite-3.2\ntest sattelite-3.2 \"Another degenerate binary tree\" -body {\n    treeFromTraversals {a b c d} {a b c d}\n} -returnCodes ok -match dictionary -result {\n    v a\n    l {}\n    r {\n        v b\n        l {}\n        r {\n            v c\n            l {}\n            r { v d l {} r {} }\n        }\n    }\n}\n\nskip sattelite-3.3\ntest sattelite-3.3 \"Tree with many more items\" -body {\n    set preorder {a b d g h c e f i}\n    set inorder  {g d h b a e c i f}\n    treeFromTraversals $preorder $inorder\n} -returnCodes ok -match dictionary -result {\n    v a\n    l {\n        v b\n        l {\n            v d\n            l { v g l {} r {} }\n            r { v h l {} r {} }\n        }\n        r {}\n    }\n    r {\n        v c\n        l { v e l {} r {} }\n        r {\n            v f\n            l { v i l {} r {} }\n            r {}\n        }\n    }\n}\n\ncleanupTests\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

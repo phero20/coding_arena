@@ -1,0 +1,40 @@
+{
+  "id": "clojure:wordy",
+  "trackSlug": "clojure",
+  "slug": "wordy",
+  "name": "Wordy",
+  "uuid": "5528f567-2b5b-498a-b166-984b2c90f6a5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Parse and evaluate simple math word problems returning the answer as an integer.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "numbers",
+    "strings",
+    "conditionals"
+  ],
+  "prerequisites": [
+    "numbers",
+    "strings",
+    "conditionals"
+  ],
+  "instructions": "# Instructions\n\nParse and evaluate simple math word problems returning the answer as an integer.\n\n## Iteration 0 — Numbers\n\nProblems with no operations simply evaluate to the number given.\n\n> What is 5?\n\nEvaluates to 5.\n\n## Iteration 1 — Addition\n\nAdd two numbers together.\n\n> What is 5 plus 13?\n\nEvaluates to 18.\n\nHandle large numbers and negative numbers.\n\n## Iteration 2 — Subtraction, Multiplication and Division\n\nNow, perform the other three operations.\n\n> What is 7 minus 5?\n\n2\n\n> What is 6 multiplied by 4?\n\n24\n\n> What is 25 divided by 5?\n\n5\n\n## Iteration 3 — Multiple Operations\n\nHandle a set of operations, in sequence.\n\nSince these are verbal word problems, evaluate the expression from left-to-right, _ignoring the typical order of operations._\n\n> What is 5 plus 13 plus 6?\n\n24\n\n> What is 3 plus 2 multiplied by 3?\n\n15 (i.e. not 9)\n\n## Iteration 4 — Errors\n\nThe parser should reject:\n\n- Unsupported operations (\"What is 52 cubed?\")\n- Non-math questions (\"Who is the President of the United States\")\n- Word problems with invalid syntax (\"What is 1 plus plus 2?\")\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns wordy)\n\n(defn evaluate\n  \"Evaluates a simple math question.\"\n  [question]\n  ;; function body\n  )\n",
+  "example_solution": "(ns wordy\n  (:require [clojure.string :refer [join]]))\n\n(def ^:private ops {\"plus\" +\n                    \"minus\" -\n                    \"multiplied by\" *\n                    \"divided by\" /})\n\n(def ^:private tokens-pattern (re-pattern\n                               (str (join \"|\" (keys ops)) \"|-?\\\\d+|\\\\S+\")))\n\n(defn- parse-op [op-str]\n  (or (ops op-str)\n      (if (every? Character/isDigit op-str)\n        (throw (IllegalArgumentException. \"syntax error\"))\n        (throw (IllegalArgumentException. \"unknown operation\")))))\n\n(defn- parse-operand [operand-str]\n  (try\n    (Integer/parseInt operand-str)\n    (catch java.lang.NumberFormatException _ (throw (IllegalArgumentException. \"syntax error\")))))\n\n(defn evaluate [expr]\n  (if-let [[_ exprs] (re-matches #\"What is(.*)\\?\" expr)]\n    (if (empty? exprs)\n      (throw (IllegalArgumentException. \"syntax error\"))\n      (if-let [[token & tokens] (re-seq tokens-pattern exprs)]\n        (reduce (fn [acc [op x]]\n                  ((parse-op op) acc (parse-operand x)))\n                (parse-operand token) (partition-all 2 tokens))\n        (throw (IllegalArgumentException. \"unknown operation\"))))\n    (throw (IllegalArgumentException. \"syntax error\"))))\n",
+  "test_code": "(ns wordy-test\n  (:require [clojure.test :refer [deftest testing is]]\n            wordy))\n\n(deftest evaluate_test_1\n  (testing \"just a number\"\n    (is (= 5 (wordy/evaluate \"What is 5?\")))))\n\n(deftest evaluate_test_2\n  (testing \"addition\"\n    (is (= 2 (wordy/evaluate \"What is 1 plus 1?\")))))\n\n(deftest evaluate_test_3\n  (testing \"more addition\"\n    (is (= 55 (wordy/evaluate \"What is 53 plus 2?\")))))\n\n(deftest evaluate_test_4\n  (testing \"addition with negative numbers\"\n    (is (= -11 (wordy/evaluate \"What is -1 plus -10?\")))))\n\n(deftest evaluate_test_5\n  (testing \"large addition\"\n    (is (= 45801 (wordy/evaluate \"What is 123 plus 45678?\")))))\n\n(deftest evaluate_test_6\n  (testing \"subtraction\"\n    (is (= 16 (wordy/evaluate \"What is 4 minus -12?\")))))\n\n(deftest evaluate_test_7\n  (testing \"multiplication\"\n    (is (= -75 (wordy/evaluate \"What is -3 multiplied by 25?\")))))\n\n(deftest evaluate_test_8\n  (testing \"division\"\n    (is (= -11 (wordy/evaluate \"What is 33 divided by -3?\")))))\n\n(deftest evaluate_test_9\n  (testing \"multiple additions\"\n    (is (= 3 (wordy/evaluate \"What is 1 plus 1 plus 1?\")))))\n\n(deftest evaluate_test_10\n  (testing \"addition and subtraction\"\n    (is (= 8 (wordy/evaluate \"What is 1 plus 5 minus -2?\")))))\n\n(deftest evaluate_test_11\n  (testing \"multiple subtraction\"\n    (is (= 3 (wordy/evaluate \"What is 20 minus 4 minus 13?\")))))\n\n(deftest evaluate_test_12\n  (testing \"subtraction then addition\"\n    (is (= 14 (wordy/evaluate \"What is 17 minus 6 plus 3?\")))))\n\n(deftest evaluate_test_13\n  (testing \"multiple multiplication\"\n    (is (= -12 (wordy/evaluate \"What is 2 multiplied by -2 multiplied by 3?\")))))\n\n(deftest evaluate_test_14\n  (testing \"addition and multiplication\"\n    (is (= -8 (wordy/evaluate \"What is -3 plus 7 multiplied by -2?\")))))\n\n(deftest evaluate_test_15\n  (testing \"multiple division\"\n    (is (= 2 (wordy/evaluate \"What is -12 divided by 2 divided by -3?\")))))\n\n(deftest evaluate_test_16\n  (testing \"unknown operation\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^unknown operation$\" (wordy/evaluate \"What is 52 cubed?\")))))\n\n(deftest evaluate_test_17\n  (testing \"Non math question\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"Who is the President of the United States?\")))))\n\n(deftest evaluate_test_18\n  (testing \"reject problem missing an operand\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"What is 1 plus?\")))))\n\n(deftest evaluate_test_19\n  (testing \"reject problem with no operands or operators\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"What is?\")))))\n\n(deftest evaluate_test_20\n  (testing \"reject two operations in a row\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"What is 1 plus plus 2?\")))))\n\n(deftest evaluate_test_21\n  (testing \"reject two numbers in a row\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"What is 1 plus 2 1?\")))))\n\n(deftest evaluate_test_22\n  (testing \"reject postfix notation\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"What is 1 2 plus?\")))))\n\n(deftest evaluate_test_23\n  (testing \"reject prefix notation\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^syntax error$\" (wordy/evaluate \"What is plus 1 2?\")))))\n",
+  "source": "Inspired by one of the generated questions in the Extreme Startup game.",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "leetwinski"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "haus",
+    "sjwarner-bp",
+    "yurrriq",
+    "erikschierboom"
+  ]
+}

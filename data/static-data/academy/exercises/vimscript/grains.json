@@ -1,0 +1,28 @@
+{
+  "id": "vimscript:grains",
+  "trackSlug": "vimscript",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "99408193-d0ce-4c68-8cab-e680f3ed56a4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "\"\n\" Returns the number of grains (as a string) on a chessboard square given the\n\" grains on each square double from the previous square. \n\" Throws an error if the square is below 1 or above 64.\n\"\n\" Examples:\n\"\n\"   :echo Square(16)\n\"   32768\n\"\n\"   :echo Square(-1)\n\"   E605: Exception not caught: square must be between 1 and 64\n\"\nfunction! Square(number) abort\n  \" your code goes here\nendfunction\n\n\"\n\" Returns the total number of grains (as a string) for a filled chessboard\n\"\nfunction! Total() abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "\" Helper function to add two numbers represented as strings\nfunction! StringAdd(num1, num2)\n    let carry = 0\n    let result = ''\n\n    \" Pad the shorter number with leading zeros\n    let len1 = strlen(a:num1)\n    let len2 = strlen(a:num2)\n    if len1 < len2\n        let a:num1 = repeat('0', len2 - len1) . a:num1\n    elseif len2 < len1\n        let a:num2 = repeat('0', len1 - len2) . a:num2\n    endif\n\n    \" Add digits from right to left\n    for i in range(strlen(a:num1) - 1, 0, -1)\n        let sum = str2nr(a:num1[i]) + str2nr(a:num2[i]) + carry\n        let carry = sum >= 10 ? 1 : 0\n        let result = string(sum % 10) . result\n    endfor\n\n    \" Add the last carry if it exists\n    if carry > 0\n        let result = '1' . result\n    endif\n\n    return result\nendfunction\n\n\" Function to calculate grains on a specific square using string manipulation\nfunction! Square(n)\n    if a:n < 1 || a:n > 64\n        throw 'square must be between 1 and 64'\n    endif\n\n    \" Start with 1 grain on the first square\n    let grains = '1'\n    for i in range(2, a:n)\n        \" Double the grains by adding it to itself\n        let grains = StringAdd(grains, grains)\n    endfor\n\n    return grains\nendfunction\n\n\" Function to calculate the total grains on the chessboard using string manipulation\nfunction! Total()\n    let total = '0'\n\n    \" Accumulate grains for each square from 1 to 64\n    let grains = '1'\n    for i in range(1, 64)\n        let total = StringAdd(total, grains)\n        \" Double grains for the next square\n        let grains = StringAdd(grains, grains)\n    endfor\n\n    return total\nendfunction\n",
+  "test_code": "\nExecute (grains on square 1):\n  let g:square = 1\n  let g:expected = \"1\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (grains on square 2):\n  let g:square = 2\n  let g:expected = \"2\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (grains on square 3):\n  let g:square = 3\n  let g:expected = \"4\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (grains on square 4):\n  let g:square = 4\n  let g:expected = \"8\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (grains on square 16):\n  let g:square = 16\n  let g:expected = \"32768\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (grains on square 32):\n  let g:square = 32\n  let g:expected = \"2147483648\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (grains on square 64):\n  let g:square = 64\n  let g:expected = \"9223372036854775808\"\n  AssertEqual g:expected, Square(g:square)\n\nExecute (square 0 is invalid):\n  let g:square = 0\n  let g:expected = \"square must be between 1 and 64\"\n  AssertThrows call Square(g:square)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (negative square is invalid):\n  let g:square = -1\n  let g:expected = \"square must be between 1 and 64\"\n  AssertThrows call Square(g:square)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (square greater than 64 is invalid):\n  let g:square = 65\n  let g:expected = \"square must be between 1 and 64\"\n  AssertThrows call Square(g:square)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (returns the total number of grains on the board):\n  let g:expected = \"18446744073709551615\"\n  AssertEqual g:expected, Total()\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "BNAndras",
+    "KOTP",
+    "glennj"
+  ],
+  "contributors": null
+}

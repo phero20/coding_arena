@@ -1,0 +1,29 @@
+{
+  "id": "r:pascals-triangle",
+  "trackSlug": "r",
+  "slug": "pascals-triangle",
+  "name": "Pascal's Triangle",
+  "uuid": "f3e93545-7466-4635-b508-7e02517fdf06",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute Pascal's triangle up to a given number of rows.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to output the first N rows of Pascal's triangle.\n\n[Pascal's triangle][wikipedia] is a triangular array of positive integers.\n\nIn Pascal's triangle, the number of values in a row is equal to its row number (which starts at one).\nTherefore, the first row has one value, the second row has two values, and so on.\n\nThe first (topmost) row has a single value: `1`.\nSubsequent rows' values are computed by adding the numbers directly to the right and left of the current position in the previous row.\n\nIf the previous row does _not_ have a value to the left or right of the current position (which only happens for the leftmost and rightmost positions), treat that position's value as zero (effectively \"ignoring\" it in the summation).\n\n## Example\n\nLet's look at the first 5 rows of Pascal's Triangle:\n\n```text\n    1\n   1 1\n  1 2 1\n 1 3 3 1\n1 4 6 4 1\n```\n\nThe topmost row has one value, which is `1`.\n\nThe leftmost and rightmost values have only one preceding position to consider, which is the position to its right respectively to its left.\nWith the topmost value being `1`, it follows from this that all the leftmost and rightmost values are also `1`.\n\nThe other values all have two positions to consider.\nFor example, the fifth row's (`1 4 6 4 1`) middle value is `6`, as the values to its left and right in the preceding row are `3` and `3`:\n\n[wikipedia]: https://en.wikipedia.org/wiki/Pascal%27s_triangle\n",
+  "introduction": "# Introduction\n\nWith the weather being great, you're not looking forward to spending an hour in a classroom.\nAnnoyed, you enter the class room, where you notice a strangely satisfying triangle shape on the blackboard.\nWhilst waiting for your math teacher to arrive, you can't help but notice some patterns in the triangle: the outer values are all ones, each subsequent row has one more value than its previous row and the triangle is symmetrical.\nWeird!\n\nNot long after you sit down, your teacher enters the room and explains that this triangle is the famous [Pascal's triangle][wikipedia].\n\nOver the next hour, your teacher reveals some amazing things hidden in this triangle:\n\n- It can be used to compute how many ways you can pick K elements from N values.\n- It contains the Fibonacci sequence.\n- If you color odd and even numbers differently, you get a beautiful pattern called the [Sierpiński triangle][wikipedia-sierpinski-triangle].\n\nThe teacher implores you and your classmates to look up other uses, and assures you that there are lots more!\nAt that moment, the school bell rings.\nYou realize that for the past hour, you were completely absorbed in learning about Pascal's triangle.\nYou quickly grab your laptop from your bag and go outside, ready to enjoy both the sunshine _and_ the wonders of Pascal's triangle.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Pascal%27s_triangle\n[wikipedia-sierpinski-triangle]: https://en.wikipedia.org/wiki/Sierpi%C5%84ski_triangle\n",
+  "hints": null,
+  "starter_code": "pascals_triangle <- function(n) {\n\n}\n",
+  "example_solution": "pascals_triangle <- function(n) {\n\n  if (n == 0) {\n    return(list())\n  }\n  else if (n == 1) {\n    return(list(1))\n  }\n  else if (n == 2) {\n    return(list(1, c(1, 1)))\n  }\n  else if (n >= 3) {\n    triangle <- list(1, c(1, 1))\n    for (x in 3:n) {\n      row <- rep(1, x)\n      for (i in 2:(x - 1)) {\n        row[i] <- sum(triangle[[x - 1]][(i - 1):i])\n      }\n      triangle[[x]] <- row\n    }\n    return(triangle)\n  }\n  else {\n    stop(\"argument n needs to be an integer\")\n  }\n  \n}\n",
+  "test_code": "source(\"./pascals-triangle.R\")\nlibrary(testthat)\n\ntest_that(\"zero rows\", {\n  expect_equal(pascals_triangle(0), list())\n})\n\ntest_that(\"single row\", {\n  expect_equal(pascals_triangle(1), list(1))\n})\n\ntest_that(\"two rows\", {\n  expect_equal(pascals_triangle(2), list(1, c(1, 1)))\n})\n\ntest_that(\"three rows\", {\n  expect_equal(pascals_triangle(3), list(1, c(1, 1), c(1, 2, 1)))\n})\n\ntest_that(\"four rows\", {\n  expect_equal(pascals_triangle(4), list(1, c(1, 1), c(1, 2, 1), c(1, 3, 3, 1)))\n})\n\ntest_that(\"negative rows\", {\n  expect_error(pascals_triangle(-1))\n})\n\ntest_that(\"null/no rows\", {\n  expect_error(pascals_triangle(NULL))\n})\n",
+  "source": "Pascal's Triangle at Wolfram Math World",
+  "source_url": "https://www.wolframalpha.com/input/?i=Pascal%27s+triangle",
+  "authors": [
+    "jonmcalder"
+  ],
+  "contributors": [
+    "katrinleinweber",
+    "zacchaeusluke"
+  ]
+}

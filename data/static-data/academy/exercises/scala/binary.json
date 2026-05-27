@@ -1,0 +1,31 @@
+{
+  "id": "scala:binary",
+  "trackSlug": "scala",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "6cc53fdc-4423-47fe-abac-7688259b0ac5",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion. Given a binary input\nstring, your program should produce a decimal output. The\nprogram should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The *n*th number gets multiplied by 10^*(n-1)*.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "case class Binary(s: String) {\n  val toDecimal: Int = s.foldLeft[Option[Int]](Some(0)){\n    case (Some(acc), '0') => Some(acc * 2)\n    case (Some(acc), '1') => Some(acc * 2 + 1)\n    case _ => None\n  }.getOrElse(0)\n}\n\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\nclass BinaryTest extends AnyFunSuite with Matchers {\n  test(\"empty string\") {\n    Binary(\"\").toDecimal should be (0)\n  }\n\n  test(\"invalid string - all chars invalid\") {\n    pending\n    Binary(\"carrot\").toDecimal should be (0)\n  }\n\n  test(\"invalid string - leading char invalid\") {\n    pending\n    Binary(\"a1111\").toDecimal should be (0)\n  }\n\n  test(\"invalid string - trailing char invalid\") {\n    pending\n    Binary(\"1111a\").toDecimal should be (0)\n  }\n\n  test(\"invalid string - middle char invalid\") {\n    pending\n    Binary(\"0101F0\").toDecimal should be (0)\n  }\n\n  test(\"invalid string - invalid digits\") {\n    pending\n    Binary(\"22\").toDecimal should be (0)\n  }\n\n  test(\"1\") {\n    pending\n    Binary(\"1\").toDecimal should be (1)\n  }\n\n  test(\"2\") {\n    pending\n    Binary(\"10\").toDecimal should be (2)\n  }\n\n  test(\"3\") {\n    pending\n    Binary(\"11\").toDecimal should be (3)\n  }\n\n  test(\"4\") {\n    pending\n    Binary(\"100\").toDecimal should be (4)\n  }\n\n  test(\"9\") {\n    pending\n    Binary(\"1001\").toDecimal should be (9)\n  }\n\n  test(\"26\") {\n    pending\n    Binary(\"11010\").toDecimal should be (26)\n  }\n\n  test(\"Ultimate answer to everything\") {\n    pending\n    Binary(\"101010\").toDecimal should be (42)\n  }\n\n  test(\"1128\") {\n    pending\n    Binary(\"10001101000\").toDecimal should be (1128)\n  }\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "kytrinyx",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "scala:hello-world",
+  "trackSlug": "scala",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "1fadd9c3-a7c9-4355-aef9-82e0df3d45b9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object HelloWorld {\n  def hello() = \"Goodbye, Mars!\"\n}\n\n",
+  "example_solution": "object HelloWorld {\n  def hello() = \"Hello, World!\"\n}\n\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass HelloWorldTest extends AnyFunSuite with Matchers {\n\n  test(\"Say Hi!\") {\n    HelloWorld.hello() should be (\"Hello, World!\")\n  }\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "abo64",
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg",
+    "skeskali"
+  ]
+}

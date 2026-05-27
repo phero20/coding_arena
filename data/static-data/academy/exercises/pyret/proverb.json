@@ -1,0 +1,28 @@
+{
+  "id": "pyret:proverb",
+  "trackSlug": "pyret",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "18946346-e04c-4032-b3dc-4abdb6c8f5a1",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "lists"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "provide: recite end\n\nfun recite(items):\n    raise(\"please implement the recite function.\")\nend",
+  "example_solution": "provide: recite end\n\nimport lists as L\n\nfun recite(items): \n  cases (List) items:\n    | empty => items\n    | link(f, r) => \n      L.range(0, L.length(items) - 1)\n        ^ map(\n        lam(n):\n          'For want of a ' + items.get(n) + ' the ' + items.get(n + 1) + ' was lost.'\n        end, _)\n        ^ _.reverse()\n        ^ _.push('And all for the want of a ' + f + '.')\n        ^ _.reverse()\n  end\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"proverb.arr\")\n\ncheck \"zero pieces\":\n  recite([list: ]) is [list: ]\nend\n\ncheck \"one piece\":\n  input = [list: \"nail\"]\n  expected = [list: \"And all for the want of a nail.\"]\n\n  recite(input) is expected\nend\n\ncheck \"two pieces\":\n  input = [list: \"nail\", \"shoe\"]\n  expected = [list:   \"For want of a nail the shoe was lost.\", \n                      \"And all for the want of a nail.\"]\n\n  recite(input) is expected\nend\n\ncheck \"three pieces\":\n  input = [list: \"nail\", \"shoe\", \"horse\"]\n  expected = [list:   \"For want of a nail the shoe was lost.\",\n                      \"For want of a shoe the horse was lost.\",\n                      \"And all for the want of a nail.\"]\n\n  recite(input) is expected\nend\n\ncheck \"full proverb\":\n  input = [list: \"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]\n  expected = [list:   \"For want of a nail the shoe was lost.\",\n                      \"For want of a shoe the horse was lost.\",\n                      \"For want of a horse the rider was lost.\",\n                      \"For want of a rider the message was lost.\",\n                      \"For want of a message the battle was lost.\",\n                      \"For want of a battle the kingdom was lost.\",\n                      \"And all for the want of a nail.\"]\n\n  recite(input) is expected\nend\n\ncheck \"four pieces modernized\":\n  input = [list: \"pin\", \"gun\", \"soldier\", \"battle\"]\n  expected = [list:   \"For want of a pin the gun was lost.\",\n                      \"For want of a gun the soldier was lost.\",\n                      \"For want of a soldier the battle was lost.\",\n                      \"And all for the want of a pin.\"]\n\n  recite(input) is expected\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

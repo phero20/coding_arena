@@ -1,0 +1,26 @@
+{
+  "id": "arturo:run-length-encoding",
+  "trackSlug": "arturo",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "64815dad-6422-4416-b771-971e4196f076",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "encode: function [plaintext][\n    panic \"Please implement the encode function\"\n]\n\ndecode: function [ciphertext][\n    panic \"Please implement the decode function\"    \n]\n",
+  "example_solution": "encodeChunk: function[chunk][\n    switch 1 = size chunk\n        -> first chunk\n        -> (to :string size chunk) ++ first chunk\n]\n\nencode: function [plaintext][\n    join map match plaintext {/(.)\\1*/} => encodeChunk\n]\n\ndecodeChunk: function[chunk][\n    switch 1 = size chunk\n        -> last chunk\n        -> join repeat (last chunk) (to :integer (chop chunk)) \n]\n\ndecode: function [ciphertext][\n    join map match ciphertext {/(\\d*)(.)/} => decodeChunk\n]\n",
+  "test_code": "import.version:3.0.0 {unitt}! \nimport {src/run-length-encoding}!\n\ndescribe \"Run-Length Encoding\" [\n    describe \"Run-Length Encoding - Encode\" [\n        it \"encode empty string\" [\n            expects.be:'equal? @[\n                \"\"\n                encode \"\"\n            ]\n        ]\n\n        it.skip \"encode single characters only are encoded without count\" [\n            expects.be:'equal? @[\n                \"XYZ\"\n                encode \"XYZ\"\n            ]\n        ]\n\n        it.skip \"encode string with no single characters\" [\n            expects.be:'equal? @[\n                \"2A3B4C\"\n                encode \"AABBBCCCC\"\n            ]\n        ]\n\n        it.skip \"encode single characters mixed with repeated characters\" [\n            expects.be:'equal? @[\n                \"12WB12W3B24WB\"\n                encode \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"\n            ]\n        ]\n\n        it.skip \"encode multiple whitespace mixed in string\" [\n            expects.be:'equal? @[\n                \"2 hs2q q2w2 \"\n                encode \"  hsqq qww  \"\n            ]\n        ]\n\n        it.skip \"encode lowercase characters\" [\n            expects.be:'equal? @[\n                \"2a3b4c\"\n                encode \"aabbbcccc\"\n            ]\n        ]\n    ]\n\n\n    describe \"Run-Length Encoding - Decode\" [\n        it.skip \"decode empty string\" [\n            expects.be:'equal? @[\n                \"\"\n                decode \"\"\n            ]\n        ]\n\n        it.skip \"decode single characters only\" [\n            expects.be:'equal? @[\n                \"XYZ\"\n                decode \"XYZ\"\n            ]\n        ]\n\n        it.skip \"decode string with no single characters\" [\n            expects.be:'equal? @[\n                \"AABBBCCCC\"\n                decode \"2A3B4C\"\n            ]\n        ]\n\n        it.skip \"decode single characters with repeated characters\" [\n            expects.be:'equal? @[\n                \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"\n                decode \"12WB12W3B24WB\"\n            ]\n        ]\n\n        it.skip \"decode multiple whitespace mixed in string\" [\n            expects.be:'equal? @[\n                \"  hsqq qww  \"\n                decode \"2 hs2q q2w2 \"\n            ]\n        ]\n\n        it.skip \"decode lowercase string\" [\n            expects.be:'equal? @[\n                \"aabbbcccc\"\n                decode \"2a3b4c\"\n            ]\n        ]\n\n        it.skip \"encode followed by decode gives original string\" [\n            expects.be:'equal? @[\n                \"zzz ZZ  zZ\"\n                decode encode \"zzz ZZ  zZ\"\n            ]\n        ]\n    ]\n]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

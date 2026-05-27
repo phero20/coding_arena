@@ -1,0 +1,26 @@
+{
+  "id": "roc:accumulate",
+  "trackSlug": "roc",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "8e8ad2db-88c2-4cca-88df-5add42efb3dc",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [accumulate]\n\naccumulate : List a, (a -> b) -> List b\naccumulate = |list, func|\n    crash(\"Please implement 'accumulate'\")\n",
+  "example_solution": "module [accumulate]\n\naccumulate : List a, (a -> b) -> List b\naccumulate = |list, func|\n    help = |output, input|\n        when input is\n            [] -> output\n            [first, .. as rest] ->\n                List.append(output, func(first))\n                |> help(rest)\n\n    help([], list)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/accumulate/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport Accumulate exposing [accumulate]\n\n# accumulate empty\nexpect\n    result = accumulate(\n        [],\n        |x|\n            x * x,\n    )\n    result == []\n\n# accumulate squares\nexpect\n    result = accumulate(\n        [1, 2, 3],\n        |x|\n            x * x,\n    )\n    result == [1, 4, 9]\n\n# accumulate upcases\nexpect\n    result = accumulate([\"Hello\", \"world\"], to_upper)\n    result == [\"HELLO\", \"WORLD\"]\n\n# accumulate reversed strings\nexpect\n    result = accumulate([\"the\", \"quick\", \"brown\", \"fox\", \"etc\"], reverse)\n    result == [\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"]\n\n# accumulate recursively\nexpect\n    result = accumulate(\n        [\"a\", \"b\", \"c\"],\n        |x|\n            accumulate([\"1\", \"2\", \"3\"], |y| Str.concat(x, y)),\n    )\n    result == [[\"a1\", \"a2\", \"a3\"], [\"b1\", \"b2\", \"b3\"], [\"c1\", \"c2\", \"c3\"]]\n\nreverse : Str -> Str\nreverse = |str|\n    Str.to_utf8(str)\n    |> List.reverse\n    |> Str.from_utf8\n    |> Result.with_default(\"\")\n\nto_upper : Str -> Str\nto_upper = |str|\n    Str.to_utf8(str)\n    |> List.map(\n        |byte|\n            if 'a' <= byte and byte <= 'z' then\n                byte - 'a' + 'A'\n            else\n                byte,\n    )\n    |> Str.from_utf8\n    |> Result.with_default(\"\")\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "isaacvando"
+  ],
+  "contributors": null
+}

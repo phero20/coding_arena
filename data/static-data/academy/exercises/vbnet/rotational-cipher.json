@@ -1,0 +1,33 @@
+{
+  "id": "vbnet:rotational-cipher",
+  "trackSlug": "vbnet",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "bced4d03-740d-4d71-8e08-7a47f6f0d6af",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "chars",
+    "strings"
+  ],
+  "prerequisites": [
+    "chars",
+    "strings",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module RotationalCipher\n    Public Function Rotate(ByVal text As String, ByVal shiftKey As Integer) As String\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System.Linq\n\nPublic Module RotationalCipher\n    Private Const LowerCaseLetters As String = \"abcdefghijklmnopqrstuvwxyz\"\n    Private Const UpperCaseLetters As String = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\n\n    Public Function Rotate(ByVal text As String, ByVal shiftKey As Integer) As String\n        Return New String(text.[Select](Function(letter) Rotate(letter, shiftKey)).ToArray())\n    End Function\n\n    Private Function Rotate(ByVal letter As Char, ByVal shiftKey As Integer) As Char\n        If Not Char.IsLetter(letter) Then Return letter\n\n        Return Rotate(letter, shiftKey, If(Char.IsLower(letter), LowerCaseLetters, UpperCaseLetters))\n    End Function\n\n    Private Function Rotate(ByVal letter As Char, ByVal shiftKey As Integer, ByVal key As String) As Char\n        Return key((key.IndexOf(letter) + shiftKey) Mod key.Length)\n    End Function\nEnd Module\n",
+  "test_code": "Imports Xunit\n\nPublic Class RotationalCipherTests\n    <Fact>\n    Public Sub Rotate_a_by_0_same_output_as_input()\n        Assert.Equal(\"a\", Rotate(\"a\", 0))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_a_by_1()\n        Assert.Equal(\"b\", Rotate(\"a\", 1))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_a_by_26_same_output_as_input()\n        Assert.Equal(\"a\", Rotate(\"a\", 26))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_m_by_13()\n        Assert.Equal(\"z\", Rotate(\"m\", 13))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_n_by_13_with_wrap_around_alphabet()\n        Assert.Equal(\"a\", Rotate(\"n\", 13))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_capital_letters()\n        Assert.Equal(\"TRL\", Rotate(\"OMG\", 5))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_spaces()\n        Assert.Equal(\"T R L\", Rotate(\"O M G\", 5))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_numbers()\n        Assert.Equal(\"Xiwxmrk 1 2 3 xiwxmrk\", Rotate(\"Testing 1 2 3 testing\", 4))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_punctuation()\n        Assert.Equal(\"Gzo'n zvo, Bmviyhv!\", Rotate(\"Let's eat, Grandma!\", 21))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rotate_all_letters()\n        Assert.Equal(\"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\", Rotate(\"The quick brown fox jumps over the lazy dog.\", 13))\n    End Sub\nEnd Class\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "wren:flatten-array",
+  "trackSlug": "wren",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "64696046-cece-4f07-bf74-8c592c964ae2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "class Flatten {\n  static flatten(list) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}",
+  "example_solution": "class Flatten {\n  static flatten(list) {\n    return flatten_(list, [])\n  }\n  static flatten_(list, acc_) {\n    for (v in list) {\n      if (v==null) continue\n\n      // handle both List and Sequence\n      if (v is Sequence) {\n        flatten_(v, acc_)\n      } else {\n        acc_.add(v)\n      }\n    }\n    return acc_\n  }\n}",
+  "test_code": "import \"./flatten-array\" for Flatten\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"Flatten Array\") { |do, skip|\n  do.test(\"empty\") {\n    Expect.value(Flatten.flatten([]\n    )).toEqual([])\n  }\n\n  skip.test(\"no nesting\") {\n    Expect.value(Flatten.flatten([0, 1, 2]\n    )).toEqual([0, 1, 2])\n  }\n\n  skip.test(\"flattens a nested array\") {\n    Expect.value(Flatten.flatten([[[]]]\n    )).toEqual([])\n  }\n\n  skip.test(\"flattens array with just integers present\") {\n    Expect.value(Flatten.flatten([1, [2, 3, 4, 5, 6, 7], 8]\n    )).toEqual([1, 2, 3, 4, 5, 6, 7, 8])\n  }\n\n  skip.test(\"5 level nesting\") {\n    Expect.value(Flatten.flatten([0, 2, [[2, 3], 8, 100, 4, [[[50]]]], -2]\n    )).toEqual([0, 2, 2, 3, 8, 100, 4, 50, -2])\n  }\n\n  skip.test(\"6 level nesting\") {\n    Expect.value(Flatten.flatten([1, [2, [[3]], [4, [[5]]], 6, 7], 8]\n    )).toEqual([1, 2, 3, 4, 5, 6, 7, 8])\n  }\n\n  skip.test(\"null values are omitted from the final result\") {\n    Expect.value(Flatten.flatten([1, 2, null]\n    )).toEqual([1, 2])\n  }\n\n  skip.test(\"consecutive null values at the front of the array are omitted from the final result\") {\n    Expect.value(Flatten.flatten([null, null, 3]\n    )).toEqual([3])\n  }\n\n  skip.test(\"consecutive null values in the middle of the array are omitted from the final result\") {\n    Expect.value(Flatten.flatten([1, null, null, 4]\n    )).toEqual([1, 4])\n  }\n\n  skip.test(\"6 level nested array with null values\") {\n    Expect.value(Flatten.flatten([0, 2, [[2, 3], 8, [[100]], null, [[null]]], -2]\n    )).toEqual([0, 2, 2, 3, 8, 100, -2])\n  }\n\n  skip.test(\"all values in nested array are null\") {\n    Expect.value(Flatten.flatten([null, [[[null]]], null, null, [[null, null], null], null]\n    )).toEqual([])\n  }\n}\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

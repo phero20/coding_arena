@@ -1,0 +1,39 @@
+{
+  "id": "csharp:spiral-matrix",
+  "trackSlug": "csharp",
+  "slug": "spiral-matrix",
+  "name": "Spiral Matrix",
+  "uuid": "bae1f3a4-b63d-4efd-921a-133b3d5e379c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the size, return a square matrix of numbers in spiral order.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "multi-dimensional-arrays",
+    "numbers"
+  ],
+  "prerequisites": [
+    "arrays",
+    "multi-dimensional-arrays",
+    "numbers",
+    "if-statements"
+  ],
+  "instructions": "# Instructions\n\nYour task is to return a square matrix of a given size.\n\nThe matrix should be filled with natural numbers, starting from 1 in the top-left corner, increasing in an inward, clockwise spiral order, like these examples:\n\n## Examples\n\n### Spiral matrix of size 3\n\n```text\n1 2 3\n8 9 4\n7 6 5\n```\n\n### Spiral matrix of size 4\n\n```text\n 1  2  3 4\n12 13 14 5\n11 16 15 6\n10  9  8 7\n```\n",
+  "introduction": "# Introduction\n\nIn a small village near an ancient forest, there was a legend of a hidden treasure buried deep within the woods.\nDespite numerous attempts, no one had ever succeeded in finding it.\nThis was about to change, however, thanks to a young explorer named Elara.\nShe had discovered an old document containing instructions on how to locate the treasure.\nUsing these instructions, Elara was able to draw a map that revealed the path to the treasure.\n\nTo her surprise, the path followed a peculiar clockwise spiral.\nIt was no wonder no one had been able to find the treasure before!\nWith the map in hand, Elara embarks on her journey to uncover the hidden treasure.\n",
+  "hints": null,
+  "starter_code": "public class SpiralMatrix\n{\n    public static int[,] GetMatrix(int size)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public static class SpiralMatrix\n{\n    public static int[,] GetMatrix(int size)\n    {\n        var spiral = new int[size, size];\n        int numbersToPlace = size * size;\n\n        int currentSpiralValue = 1;\n        int firstPivot = 0, secondPivot = size - 1;\n\n        while (currentSpiralValue <= numbersToPlace)\n        {\n            for (int i = firstPivot; i <= secondPivot; i++)\n            {\n                spiral[firstPivot, i] = currentSpiralValue++;\n            }\n\n            for (int j = firstPivot + 1; j <= secondPivot; j++)\n            {\n                spiral[j, secondPivot] = currentSpiralValue++;\n            }\n\n            for (int i = secondPivot - 1; i >= firstPivot; i--)\n            {\n                spiral[secondPivot, i] = currentSpiralValue++;\n            }\n\n            for (int j = secondPivot - 1; j >= firstPivot + 1; j--)\n            {\n                spiral[j, firstPivot] = currentSpiralValue++;\n            }\n\n            firstPivot++;\n            secondPivot--;\n        }\n\n        return spiral;\n    }\n}\n\n",
+  "test_code": "public class SpiralMatrixTests\n{\n    [Fact]\n    public void Empty_spiral()\n    {\n        Assert.Empty(SpiralMatrix.GetMatrix(0));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Trivial_spiral()\n    {\n        int[,] expected =\n        {\n            { 1 }\n        };\n        Assert.Equal(expected, SpiralMatrix.GetMatrix(1));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Spiral_of_size_2()\n    {\n        int[,] expected =\n        {\n            { 1, 2 },\n            { 4, 3 }\n        };\n        Assert.Equal(expected, SpiralMatrix.GetMatrix(2));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Spiral_of_size_3()\n    {\n        int[,] expected =\n        {\n            { 1, 2, 3 },\n            { 8, 9, 4 },\n            { 7, 6, 5 }\n        };\n        Assert.Equal(expected, SpiralMatrix.GetMatrix(3));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Spiral_of_size_4()\n    {\n        int[,] expected =\n        {\n            { 1, 2, 3, 4 },\n            { 12, 13, 14, 5 },\n            { 11, 16, 15, 6 },\n            { 10, 9, 8, 7 }\n        };\n        Assert.Equal(expected, SpiralMatrix.GetMatrix(4));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Spiral_of_size_5()\n    {\n        int[,] expected =\n        {\n            { 1, 2, 3, 4, 5 },\n            { 16, 17, 18, 19, 6 },\n            { 15, 24, 25, 20, 7 },\n            { 14, 23, 22, 21, 8 },\n            { 13, 12, 11, 10, 9 }\n        };\n        Assert.Equal(expected, SpiralMatrix.GetMatrix(5));\n    }\n}\n",
+  "source": "Reddit r/dailyprogrammer challenge #320 [Easy] Spiral Ascension.",
+  "source_url": "https://web.archive.org/web/20230607064729/https://old.reddit.com/r/dailyprogrammer/comments/6i60lr/20170619_challenge_320_easy_spiral_ascension/",
+  "authors": [
+    "jpreese"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "j2jensen",
+    "robkeim",
+    "wolf99"
+  ]
+}

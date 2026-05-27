@@ -1,0 +1,43 @@
+{
+  "id": "go:nth-prime",
+  "trackSlug": "go",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "128e0b12-0ad2-431a-971c-ad4ab098b42d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "errors"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package nthprime\n\n// Nth returns the nth prime number. An error must be returned if the nth prime number can't be calculated ('n' is equal or less than zero)\nfunc Nth(n int) (int, error) {\n\tpanic(\"Please implement the Nth function\")\n}\n",
+  "example_solution": "package nthprime\n\nimport \"errors\"\n\nvar primes []int = []int{2}\n\nfunc Nth(n int) (int, error) {\n\tif n <= 0 {\n\t\treturn 0, errors.New(\"input must be greater than 1\")\n\t}\n\tfor i := 3; len(primes) < n; i++ {\n\t\tisPrime(i)\n\t}\n\treturn primes[n-1], nil\n}\n\nfunc isPrime(n int) {\n\tfor _, v := range primes {\n\t\tif n%v == 0 {\n\t\t\treturn\n\t\t}\n\t}\n\tprimes = append(primes, n)\n}\n",
+  "test_code": "package nthprime\n\nimport \"testing\"\n\nfunc TestNth(t *testing.T) {\n\tfor _, tc := range tests {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual, err := Nth(tc.input)\n\t\t\tswitch {\n\t\t\tcase tc.err != \"\":\n\t\t\t\tif err == nil {\n\t\t\t\t\tt.Fatalf(\"Nth(%d) expected error: %q, got: %d\", tc.input, tc.err, actual)\n\t\t\t\t}\n\t\t\tcase err != nil:\n\t\t\t\tt.Fatalf(\"Nth(%d) returned error: %v, want: %d\", tc.input, err, tc.expected)\n\t\t\tcase actual != tc.expected:\n\t\t\t\tt.Fatalf(\"Nth(%d) = %d, want: %d\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkNth(b *testing.B) {\n\tfor range b.N {\n\t\tNth(10001)\n\t}\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "tleen",
+    "MikaeelMF",
+    "eklatzer"
+  ]
+}

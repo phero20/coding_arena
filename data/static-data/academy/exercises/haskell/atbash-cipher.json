@@ -1,0 +1,38 @@
+{
+  "id": "haskell:atbash-cipher",
+  "trackSlug": "haskell",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "4b6d04f4-8cfc-4d8a-ac6e-77f3889f27c3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Atbash (decode, encode) where\n\ndecode :: String -> String\ndecode cipherText = error \"You need to implement this function.\"\n\nencode :: String -> String\nencode plainText = error \"You need to implement this function.\"\n",
+  "example_solution": "module Atbash (decode, encode) where\n\nimport Data.Char       (isAsciiLower, isDigit, toLower)\nimport Data.List.Split (chunksOf)\nimport Data.Maybe      (mapMaybe)\n\ndecode :: String -> String\ndecode = mapMaybe atbashChar\n\nencode :: String -> String\nencode = unwords . chunksOf 5 . mapMaybe atbashChar\n\natbashChar :: Char -> Maybe Char\natbashChar c\n    | isDigit c       = Just c\n    | isAsciiLower lc = Just symmetric\n    | otherwise       = Nothing\n  where\n    lc = toLower c\n    symmetric = toEnum $ fromEnum 'a'\n                       + fromEnum 'z'\n                       - fromEnum lc\n",
+  "test_code": "{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\nimport Data.String       (fromString)\n\nimport Atbash (encode, decode)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = do\n          describe \"encode\" $ for_ encodeCases $ test encode\n          describe \"decode\" $ for_ decodeCases $ test decode\n  where\n    test f Case{..} = it description $ f (fromString phrase) `shouldBe` fromString expected\n\ndata Case = Case { description :: String\n                 , phrase      :: String\n                 , expected    :: String\n                 }\n\nencodeCases :: [Case]\nencodeCases =\n    [ Case { description = \"encode yes\"\n           , phrase      = \"yes\"\n           , expected    = \"bvh\"\n           }\n    , Case { description = \"encode no\"\n           , phrase      = \"no\"\n           , expected    = \"ml\"\n           }\n    , Case { description = \"encode OMG\"\n           , phrase      = \"OMG\"\n           , expected    = \"lnt\"\n           }\n    , Case { description = \"encode spaces\"\n           , phrase      = \"O M G\"\n           , expected    = \"lnt\"\n           }\n    , Case { description = \"encode mindblowingly\"\n           , phrase      = \"mindblowingly\"\n           , expected    = \"nrmwy oldrm tob\"\n           }\n    , Case { description = \"encode numbers\"\n           , phrase      = \"Testing,1 2 3, testing.\"\n           , expected    = \"gvhgr mt123 gvhgr mt\"\n           }\n    , Case { description = \"encode deep thought\"\n           , phrase      = \"Truth is fiction.\"\n           , expected    = \"gifgs rhurx grlm\"\n           }\n    , Case { description = \"encode all the letters\"\n           , phrase      = \"The quick brown fox jumps over the lazy dog.\"\n           , expected    = \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n           }\n    ]\n\ndecodeCases :: [Case]\ndecodeCases =\n    [ Case { description = \"decode exercism\"\n           , phrase      = \"vcvix rhn\"\n           , expected    = \"exercism\"\n           }\n    , Case { description = \"decode a sentence\"\n           , phrase      = \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"\n           , expected    = \"anobstacleisoftenasteppingstone\"\n           }\n    , Case { description = \"decode numbers\"\n           , phrase      = \"gvhgr mt123 gvhgr mt\"\n           , expected    = \"testing123testing\"\n           }\n    , Case { description = \"decode all the letters\"\n           , phrase      = \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n           , expected    = \"thequickbrownfoxjumpsoverthelazydog\"\n           }\n    , Case { description = \"decode with too many spaces\"\n           , phrase      = \"vc vix    r hn\"\n           , expected    = \"exercism\"\n           }\n    , Case { description = \"decode with no spaces\"\n           , phrase      = \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"\n           , expected    = \"anobstacleisoftenasteppingstone\"\n           }\n    ]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "JavierGelatti",
+    "kytrinyx",
+    "lpalma",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "stevejb71",
+    "tejasbubane"
+  ]
+}

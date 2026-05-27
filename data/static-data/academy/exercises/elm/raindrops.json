@@ -1,0 +1,36 @@
+{
+  "id": "elm:raindrops",
+  "trackSlug": "elm",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "e3e73171-c3d1-49f7-9511-d1f4a08e7a69",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "booleans"
+  ],
+  "prerequisites": [
+    "booleans",
+    "strings",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "module Raindrops exposing (raindrops)\n\n\nraindrops : Int -> String\nraindrops number =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module Raindrops exposing (raindrops)\n\n\nraindrops : Int -> String\nraindrops number =\n    let\n        drops =\n            [ if modBy 3 number == 0 then\n                \"Pling\"\n\n              else\n                \"\"\n            , if modBy 5 number == 0 then\n                \"Plang\"\n\n              else\n                \"\"\n            , if modBy 7 number == 0 then\n                \"Plong\"\n\n              else\n                \"\"\n            ]\n\n        result =\n            String.concat drops\n    in\n    if result == \"\" then\n        String.fromInt number\n\n    else\n        result\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport Raindrops exposing (raindrops)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"Raindrops\"\n        [ test \"1\" <|\n            \\() -> Expect.equal \"1\" (raindrops 1)\n        , skip <|\n            test \"3\" <|\n                \\() -> Expect.equal \"Pling\" (raindrops 3)\n        , skip <|\n            test \"5\" <|\n                \\() -> Expect.equal \"Plang\" (raindrops 5)\n        , skip <|\n            test \"7\" <|\n                \\() -> Expect.equal \"Plong\" (raindrops 7)\n        , skip <|\n            test \"6\" <|\n                \\() -> Expect.equal \"Pling\" (raindrops 6)\n        , skip <|\n            test \"9\" <|\n                \\() -> Expect.equal \"Pling\" (raindrops 9)\n        , skip <|\n            test \"10\" <|\n                \\() -> Expect.equal \"Plang\" (raindrops 10)\n        , skip <|\n            test \"14\" <|\n                \\() -> Expect.equal \"Plong\" (raindrops 14)\n        , skip <|\n            test \"15\" <|\n                \\() -> Expect.equal \"PlingPlang\" (raindrops 15)\n        , skip <|\n            test \"21\" <|\n                \\() -> Expect.equal \"PlingPlong\" (raindrops 21)\n        , skip <|\n            test \"25\" <|\n                \\() -> Expect.equal \"Plang\" (raindrops 25)\n        , skip <|\n            test \"35\" <|\n                \\() -> Expect.equal \"PlangPlong\" (raindrops 35)\n        , skip <|\n            test \"49\" <|\n                \\() -> Expect.equal \"Plong\" (raindrops 49)\n        , skip <|\n            test \"52\" <|\n                \\() -> Expect.equal \"52\" (raindrops 52)\n        , skip <|\n            test \"105\" <|\n                \\() -> Expect.equal \"PlingPlangPlong\" (raindrops 105)\n        ]\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "nathanielknight",
+    "parkerl",
+    "tuxagon"
+  ]
+}

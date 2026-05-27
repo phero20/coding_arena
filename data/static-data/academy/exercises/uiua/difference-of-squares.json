@@ -1,0 +1,26 @@
+{
+  "id": "uiua:difference-of-squares",
+  "trackSlug": "uiua",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "f9d03fbf-7db9-45d5-90ce-38e38ebc1fdb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Calculate the square of the sums of the first N natural numbers\n# SquareOfSum ? Number\nSquareOfSum ← |1 ⊙(⍤ \"Please implement SquareOfSum\" 0)\n\n# Calculate the sum of the squares of the first N natural numbers\n# SumOfSquares ? Number\nSumOfSquares ← |1 ⊙(⍤ \"Please implement SumOfSquares\" 0)\n\n# Calculate the difference between the square of sums and sum of squares\n# DifferenceOfSquares ? Number\nDifferenceOfSquares ← |1 ⊙(⍤ \"Please implement DifferenceOfSquares\" 0)\n",
+  "example_solution": "SquareOfSum         ← |1 ⁿ2 /+ +1 ⇡\nSumOfSquares        ← |1 /+ ⁿ2 +1 ⇡\nDifferenceOfSquares ← |1 - ⊃SumOfSquares SquareOfSum\n",
+  "test_code": "~ \"difference-of-squares.ua\" ~ DifferenceOfSquares SquareOfSum SumOfSquares\n\n# square of sum 1?\n⍤⤙≍ 1 SquareOfSum 1\n\n# square of sum 5?\n⍤⤙≍ 225 SquareOfSum 5\n\n# square of sum 100?\n⍤⤙≍ 25502500 SquareOfSum 100\n\n# sum of squares 1?\n⍤⤙≍ 1 SumOfSquares 1\n\n# sum of squares 5?\n⍤⤙≍ 55 SumOfSquares 5\n\n# sum of squares 100?\n⍤⤙≍ 338350 SumOfSquares 100\n\n# difference of squares 1?\n⍤⤙≍ 0 DifferenceOfSquares 1\n\n# difference of squares 5?\n⍤⤙≍ 170 DifferenceOfSquares 5\n\n# difference of squares 100?\n⍤⤙≍ 25164150 DifferenceOfSquares 100\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

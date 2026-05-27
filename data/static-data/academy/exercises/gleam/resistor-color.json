@@ -1,0 +1,34 @@
+{
+  "id": "gleam:resistor-color",
+  "trackSlug": "gleam",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "6bc57e73-1629-4a18-b2f0-0b93ef4f3b8c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "custom-types"
+  ],
+  "prerequisites": [
+    "custom-types",
+    "case-expressions",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub type Color {\n  Black\n  Brown\n  Red\n  Orange\n  Yellow\n  Green\n  Blue\n  Violet\n  Grey\n  White\n}\n\npub fn code(color: Color) -> Int {\n  0\n}\n\npub fn colors() -> List(Color) {\n  []\n}\n",
+  "example_solution": "pub type Color {\n  Black\n  Brown\n  Red\n  Orange\n  Yellow\n  Green\n  Blue\n  Violet\n  Grey\n  White\n}\n\npub fn code(color: Color) -> Int {\n  case color {\n    Black -> 0\n    Brown -> 1\n    Red -> 2\n    Orange -> 3\n    Yellow -> 4\n    Green -> 5\n    Blue -> 6\n    Violet -> 7\n    Grey -> 8\n    White -> 9\n  }\n}\n\npub fn colors() -> List(Color) {\n  [Black, Brown, Red, Orange, Yellow, Green, Blue, Violet, Grey, White]\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport resistor_color.{\n  Black, Blue, Brown, Green, Grey, Orange, Red, Violet, White, Yellow,\n}\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn black_test() {\n  resistor_color.code(Black)\n  |> should.equal(0)\n}\n\npub fn brown_test() {\n  resistor_color.code(Brown)\n  |> should.equal(1)\n}\n\npub fn red_test() {\n  resistor_color.code(Red)\n  |> should.equal(2)\n}\n\npub fn orange_test() {\n  resistor_color.code(Orange)\n  |> should.equal(3)\n}\n\npub fn yellow_test() {\n  resistor_color.code(Yellow)\n  |> should.equal(4)\n}\n\npub fn green_test() {\n  resistor_color.code(Green)\n  |> should.equal(5)\n}\n\npub fn blue_test() {\n  resistor_color.code(Blue)\n  |> should.equal(6)\n}\n\npub fn violet_test() {\n  resistor_color.code(Violet)\n  |> should.equal(7)\n}\n\npub fn grey_test() {\n  resistor_color.code(Grey)\n  |> should.equal(8)\n}\n\npub fn white_test() {\n  resistor_color.code(White)\n  |> should.equal(9)\n}\n\npub fn colors_test() {\n  let colors = [\n    Black,\n    Brown,\n    Red,\n    Orange,\n    Yellow,\n    Green,\n    Blue,\n    Violet,\n    Grey,\n    White,\n  ]\n\n  resistor_color.colors()\n  |> should.equal(colors)\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": [
+    "itsgreggreg"
+  ]
+}

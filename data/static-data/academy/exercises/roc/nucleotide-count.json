@@ -1,0 +1,26 @@
+{
+  "id": "roc:nucleotide-count",
+  "trackSlug": "roc",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "9f07740b-eb8a-45f9-a137-e2930a224815",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [nucleotide_counts]\n\nnucleotide_counts : Str -> Result { a : U64, c : U64, g : U64, t : U64 } _\nnucleotide_counts = |input|\n    crash(\"Please implement 'nucleotide_counts'\")\n",
+  "example_solution": "module [nucleotide_counts]\n\nnucleotide_counts : Str -> Result { a : U64, c : U64, g : U64, t : U64 } _\nnucleotide_counts = |input|\n    Str.to_utf8(input)\n    |> List.walk_try(\n        { a: 0, c: 0, g: 0, t: 0 },\n        |state, elem|\n            when elem is\n                'A' -> Ok({ state & a: state.a + 1 })\n                'C' -> Ok({ state & c: state.c + 1 })\n                'G' -> Ok({ state & g: state.g + 1 })\n                'T' -> Ok({ state & t: state.t + 1 })\n                _ -> Err(InvalidNucleotide(elem)),\n    )\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/nucleotide-count/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport NucleotideCount exposing [nucleotide_counts]\n\n# empty strand\nexpect\n    result = nucleotide_counts(\"\")\n    result == Ok({ a: 0, c: 0, g: 0, t: 0 })\n\n# can count one nucleotide in single-character input\nexpect\n    result = nucleotide_counts(\"G\")\n    result == Ok({ a: 0, c: 0, g: 1, t: 0 })\n\n# strand with repeated nucleotide\nexpect\n    result = nucleotide_counts(\"GGGGGGG\")\n    result == Ok({ a: 0, c: 0, g: 7, t: 0 })\n\n# strand with multiple nucleotides\nexpect\n    result = nucleotide_counts(\"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\")\n    result == Ok({ a: 20, c: 12, g: 17, t: 21 })\n\n# strand with invalid nucleotides\nexpect\n    result = nucleotide_counts(\"AGXXACT\")\n    Result.is_err(result)\n\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "isaacvando"
+  ],
+  "contributors": null
+}

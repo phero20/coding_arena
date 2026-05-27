@@ -1,0 +1,32 @@
+{
+  "id": "common-lisp:pythagorean-triplet",
+  "trackSlug": "common-lisp",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "f7bbf16d-77d9-4d13-a20c-e60f416de764",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "arithmetic"
+  ],
+  "prerequisites": [
+    "arithmetic",
+    "multiple-values",
+    "lists"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "(defpackage :pythagorean-triplet\n  (:use :cl)\n  (:export :triplets-with-sum))\n\n(in-package :pythagorean-triplet)\n\n(defun triplets-with-sum (n))\n",
+  "example_solution": "#|\nFor each side a, so long as 0 < a < n / 3.414, the math works like this:\n\na^2 + b^2 = c^2\na + b + c = n\n\nwhere a is the shortest side\n      b is the mid-length side\n      c is the hypotenuse\n      n is the perimeter\n\nb^2 = c^2 - a^2\nb = n - a - c\n\nb^2 = c^2 - a^2\nb^2 = n^2 - 2an + a^2 - 2nc + c^2 + 2ac\n\nc^2 - a^2 = n^2 - 2an + a^2 - 2nc + c^2 + 2ac\n\nn^2 - 2an + 2a^2 - 2nc + 2ac = 0\n\n(n - a)^2 + a^2 - 2c(n - a) = 0\n\n2c(n - a) = a^2 + (n - a)^2\n\nTherefore c = (a^2 + (n - a)^2) / 2(n - a)\n\nBut we also want c to be a a whole number\n\nTherefore numerator   = a^2 + (n - a)^2\n          denominator = 2(n - a)\n\nIf numerator % denominator == 0 then c is a whole number, else go to next a\n\nGiven that c is a whole number, and we know both a and n, we can now calculate b:\n\na + b + c = n\n\nTherefore b = n - a - c\n\nCollect a, b and c into a list and go to next a\n|#\n\n(defpackage :pythagorean-triplet\n  (:use :cl)\n  (:export :triplets-with-sum))\n\n(in-package :pythagorean-triplet)\n\n(defparameter +right-isoceles-perimeter-ratio+ 3.414) ; approx 1 + 1 + 2^(1/2)\n\n(defun triplets-with-sum (n)\n  (loop for a from 1 to (floor n +right-isoceles-perimeter-ratio+) with c and modulo\n    do (multiple-value-setq (c modulo) (floor (+ (expt a 2) (expt (- n a) 2)) (* 2 (- n a))))\n    when (zerop modulo)\n    collect (list a (- n a c) c)))\n",
+  "test_code": ";; Ensures that pythagorean-triplet.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"pythagorean-triplet\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from pythagorean-triplet and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :pythagorean-triplet-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :pythagorean-triplet-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* pythagorean-triplet-suite)\n\n(test triplets-whose-sum-is-12\n    (let ((n 12))\n      (is (equal '((3 4 5)) (pythagorean-triplet:triplets-with-sum n)))))\n\n(test triplets-whose-sum-is-108\n    (let ((n 108))\n      (is (equal '((27 36 45)) (pythagorean-triplet:triplets-with-sum n)))))\n\n(test triplets-whose-sum-is-1000\n    (let ((n 1000))\n      (is (equal '((200 375 425)) (pythagorean-triplet:triplets-with-sum n)))))\n\n(test no-matching-triplets-for-1001\n    (let ((n 1001))\n      (is (equal '() (pythagorean-triplet:triplets-with-sum n)))))\n\n(test returns-all-matching-triplets\n    (let ((n 90))\n      (is (equal '((9 40 41) (15 36 39)) (pythagorean-triplet:triplets-with-sum n)))))\n\n(test several-matching-triplets\n    (let ((n 840)\n          (result '((40 399 401)\n                    (56 390 394)\n                    (105 360 375)\n                    (120 350 370)\n                    (140 336 364)\n                    (168 315 357)\n                    (210 280 350)\n                    (240 252 348))))\n      (is (equal result (pythagorean-triplet:triplets-with-sum n)))))\n\n(test triplets-for-large-number\n    (let ((n 30000)\n          (result '((1200 14375 14425)\n                    (1875 14000 14125)\n                    (5000 12000 13000)\n                    (6000 11250 12750)\n                    (7500 10000 12500))))\n      (is (equal result (pythagorean-triplet:triplets-with-sum n)))))\n\n(defun run-tests (&optional (test-or-suite 'pythagorean-triplet-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": null
+}
