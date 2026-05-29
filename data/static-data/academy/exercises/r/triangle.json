@@ -1,0 +1,29 @@
+{
+  "id": "r:triangle",
+  "trackSlug": "r",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "d3b2f968-32e2-4df7-a29a-f02ba2c7d581",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\n~~~~exercism/note\n_Degenerate triangles_ are triangles where the sum of the length of two sides is **equal** to the length of the third side, e.g. `1, 1, 2`.\nWe opted to not include tests for degenerate triangles in this exercise.\nYou may handle those situations if you wish to do so, or safely ignore them.\n~~~~\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "triangle <- function(x, y, z) {\n  \n}\n",
+  "example_solution": "triangle <- function(x, y, z) {\n  \n  checks <- c(x + y < z,\n              x + z < y,\n              y + z < x,\n              x == 0,\n              y == 0,\n              z == 0)\n  \n  if (any(checks)) {\n    stop(\"Invalid sides for triangle\")\n  }\n  \n  unique_sides <- length(unique(c(x, y, z)))\n  \n  triangle_class <- switch(unique_sides,\n                           c(\"equilateral\", \"isosceles\"),\n                           \"isosceles\",\n                           \"scalene\")\n  \n  structure(list(x = x, y = y, z = z), class = triangle_class)\n\n}\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/triangle/canonical-data.json\n# File last updated on 2026-03-14\n\nsource(\"./triangle.R\")\nlibrary(testthat)\n\n\n# equilateral triangle\n\ntest_that(\"all sides are equal\", {\n  side <- c(2, 2, 2)\n  expect_true(\"equilateral\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"any side is unequal\", {\n  side <- c(2, 3, 2)\n  expect_false(\"equilateral\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"no sides are equal\", {\n  side <- c(5, 4, 6)\n  expect_false(\"equilateral\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"all zero sides is not a triangle\", {\n  side <- c(0, 0, 0)\n  expect_error(triangle(side[1], side[2], side[3]))\n})\n\ntest_that(\"sides may be floats\", {\n  side <- c(0.5, 0.5, 0.5)\n  expect_true(\"equilateral\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\n\n# isosceles triangle\n\ntest_that(\"last two sides are equal\", {\n  side <- c(3, 4, 4)\n  expect_true(\"isosceles\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"first two sides are equal\", {\n  side <- c(4, 4, 3)\n  expect_true(\"isosceles\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"first and last sides are equal\", {\n  side <- c(4, 3, 4)\n  expect_true(\"isosceles\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"equilateral triangles are also isosceles\", {\n  side <- c(4, 4, 4)\n  expect_true(\"isosceles\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"no sides are equal\", {\n  side <- c(2, 3, 4)\n  expect_false(\"isosceles\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"first triangle inequality violation\", {\n  side <- c(1, 1, 3)\n  expect_error(triangle(side[1], side[2], side[3]))\n})\n\ntest_that(\"second triangle inequality violation\", {\n  side <- c(1, 3, 1)\n  expect_error(triangle(side[1], side[2], side[3]))\n})\n\ntest_that(\"third triangle inequality violation\", {\n  side <- c(3, 1, 1)\n  expect_error(triangle(side[1], side[2], side[3]))\n})\n\ntest_that(\"sides may be floats\", {\n  side <- c(0.5, 0.4, 0.5)\n  expect_true(\"isosceles\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\n\n# scalene triangle\n\ntest_that(\"no sides are equal\", {\n  side <- c(5, 4, 6)\n  expect_true(\"scalene\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"all sides are equal\", {\n  side <- c(4, 4, 4)\n  expect_false(\"scalene\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"first and second sides are equal\", {\n  side <- c(4, 4, 3)\n  expect_false(\"scalene\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"first and third sides are equal\", {\n  side <- c(3, 4, 3)\n  expect_false(\"scalene\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"second and third sides are equal\", {\n  side <- c(4, 3, 3)\n  expect_false(\"scalene\" %in% class(triangle(side[1], side[2], side[3])))\n})\n\ntest_that(\"may not violate triangle inequality\", {\n  side <- c(7, 3, 2)\n  expect_error(triangle(side[1], side[2], side[3]))\n})\n\ntest_that(\"sides may be floats\", {\n  side <- c(0.5, 0.4, 0.6)\n  expect_true(\"scalene\" %in% class(triangle(side[1], side[2], side[3])))\n})\n",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://www.rubykoans.com/",
+  "authors": [
+    "jonmcalder"
+  ],
+  "contributors": [
+    "katrinleinweber",
+    "zacchaeusluke"
+  ]
+}

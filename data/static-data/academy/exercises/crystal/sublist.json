@@ -1,0 +1,29 @@
+{
+  "id": "crystal:sublist",
+  "trackSlug": "crystal",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "243d683a-a2ba-4759-8a7c-61b4173a9a7e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "enum",
+    "array"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Sublist\n  enum Classification\n    Equal\n    Unequal\n    Sublist\n    Superlist\n  end\n\n  def self.classify(list1 : Array(Int32), list2 : Array(Int32)) : Classification\n    # Write your code for the 'Sublist' exercise in this file.\n  end\nend\n",
+  "example_solution": "module Sublist\n  enum Classification\n    Equal\n    Unequal\n    Sublist\n    Superlist\n  end\n\n  def self.classify(list1 : Array(Int32), list2 : Array(Int32)) : Classification\n    list1 = as_string(list1)\n    list2 = as_string(list2)\n\n    case {list1.includes?(list2), list2.includes?(list1)}\n    when {false, false}\n      Classification::Unequal\n    when {false, true}\n      Classification::Sublist\n    when {true, false}\n      Classification::Superlist\n    else\n      Classification::Equal\n    end\n  end\n\n  private def self.as_string(list : Array(Int32)) : String\n    list.map { |x| \":#{x}:\" }.join\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Sublist\" do\n  it \"empty lists\" do\n    Sublist.classify([] of Int32, [] of Int32).should eq(Sublist::Classification::Equal)\n  end\n\n  pending \"empty list within non empty list\" do\n    Sublist.classify([] of Int32, [1, 2, 3] of Int32).should eq(Sublist::Classification::Sublist)\n  end\n\n  pending \"non empty list contains empty list\" do\n    Sublist.classify([1, 2, 3] of Int32, [] of Int32).should eq(Sublist::Classification::Superlist)\n  end\n\n  pending \"list equals itself\" do\n    Sublist.classify([1, 2, 3] of Int32, [1, 2, 3] of Int32).should eq(Sublist::Classification::Equal)\n  end\n\n  pending \"different lists\" do\n    Sublist.classify([1, 2, 3] of Int32, [2, 3, 4] of Int32).should eq(Sublist::Classification::Unequal)\n  end\n\n  pending \"false start\" do\n    Sublist.classify([1, 2, 5] of Int32, [0, 1, 2, 3, 1, 2, 5, 6] of Int32).should eq(Sublist::Classification::Sublist)\n  end\n\n  pending \"consecutive\" do\n    Sublist.classify([1, 1, 2] of Int32, [0, 1, 1, 1, 2, 1, 2] of Int32).should eq(Sublist::Classification::Sublist)\n  end\n\n  pending \"sublist at start\" do\n    Sublist.classify([0, 1, 2] of Int32, [0, 1, 2, 3, 4, 5] of Int32).should eq(Sublist::Classification::Sublist)\n  end\n\n  pending \"sublist in middle\" do\n    Sublist.classify([2, 3, 4] of Int32, [0, 1, 2, 3, 4, 5] of Int32).should eq(Sublist::Classification::Sublist)\n  end\n\n  pending \"sublist at end\" do\n    Sublist.classify([3, 4, 5] of Int32, [0, 1, 2, 3, 4, 5] of Int32).should eq(Sublist::Classification::Sublist)\n  end\n\n  pending \"at start of superlist\" do\n    Sublist.classify([0, 1, 2, 3, 4, 5] of Int32, [0, 1, 2] of Int32).should eq(Sublist::Classification::Superlist)\n  end\n\n  pending \"in middle of superlist\" do\n    Sublist.classify([0, 1, 2, 3, 4, 5] of Int32, [2, 3] of Int32).should eq(Sublist::Classification::Superlist)\n  end\n\n  pending \"at end of superlist\" do\n    Sublist.classify([0, 1, 2, 3, 4, 5] of Int32, [3, 4, 5] of Int32).should eq(Sublist::Classification::Superlist)\n  end\n\n  pending \"first list missing element from second list\" do\n    Sublist.classify([1, 3] of Int32, [1, 2, 3] of Int32).should eq(Sublist::Classification::Unequal)\n  end\n\n  pending \"second list missing element from first list\" do\n    Sublist.classify([1, 2, 3] of Int32, [1, 3] of Int32).should eq(Sublist::Classification::Unequal)\n  end\n\n  pending \"first list missing additional digits from second list\" do\n    Sublist.classify([1, 2] of Int32, [1, 22] of Int32).should eq(Sublist::Classification::Unequal)\n  end\n\n  pending \"order matters to a list\" do\n    Sublist.classify([1, 2, 3] of Int32, [3, 2, 1] of Int32).should eq(Sublist::Classification::Unequal)\n  end\n\n  pending \"same digits but different numbers\" do\n    Sublist.classify([1, 0, 1] of Int32, [10, 1] of Int32).should eq(Sublist::Classification::Unequal)\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": null
+}

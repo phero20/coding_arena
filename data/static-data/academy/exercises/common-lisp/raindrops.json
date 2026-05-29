@@ -1,0 +1,34 @@
+{
+  "id": "common-lisp:raindrops",
+  "trackSlug": "common-lisp",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "b5345fcb-d4cc-4ea0-b1b9-f1b0cb92f05c",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "arithmetic"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "integers",
+    "arithmetic"
+  ],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "(defpackage :raindrops\n  (:use :cl)\n  (:export :convert))\n\n(in-package :raindrops)\n\n(defun convert (number))\n",
+  "example_solution": "(defpackage :raindrops\n  (:use :common-lisp)\n  (:export :convert))\n\n(in-package :raindrops)\n\n(defparameter *raindrops*\n  '((3 . \"Pling\")\n    (5 . \"Plang\")\n    (7 . \"Plong\"))\n  \"Frequency modulus and impact sound of raindrops.\")\n\n(defun convert (integer &optional (raindrops *raindrops*))\n  \"String of integer or raindrop sound.\"\n  (declare (type integer integer))\n  (loop\n     for (div . sound) of-type (integer . string) in raindrops\n     when (zerop (mod integer div))\n     collect sound into sounds\n     finally\n       (return\n         (if sounds\n             (format nil \"~{~A~}\" sounds)\n             (write-to-string integer)))))\n",
+  "test_code": ";; Ensures that raindrops.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"raindrops\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from raindrops and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :raindrops-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :raindrops-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* raindrops-suite)\n\n(test the-sound-for-1-is-1\n    (let ((number 1))\n      (is (string= \"1\" (raindrops:convert number)))))\n\n(test the-sound-for-3-is-pling\n    (let ((number 3))\n      (is (string= \"Pling\" (raindrops:convert number)))))\n\n(test the-sound-for-5-is-plang\n    (let ((number 5))\n      (is (string= \"Plang\" (raindrops:convert number)))))\n\n(test the-sound-for-7-is-plong\n    (let ((number 7))\n      (is (string= \"Plong\" (raindrops:convert number)))))\n\n(test the-sound-for-6-is-pling-as-it-has-a-factor-3\n    (let ((number 6))\n      (is (string= \"Pling\" (raindrops:convert number)))))\n\n(test 2-to-the-power-3-does-not-make-a-raindrop-sound-as-3-is-the-exponent-not-the-base\n    (let ((number 8))\n      (is (string= \"8\" (raindrops:convert number)))))\n\n(test the-sound-for-9-is-pling-as-it-has-a-factor-3\n    (let ((number 9))\n      (is (string= \"Pling\" (raindrops:convert number)))))\n\n(test the-sound-for-10-is-plang-as-it-has-a-factor-5\n    (let ((number 10))\n      (is (string= \"Plang\" (raindrops:convert number)))))\n\n(test the-sound-for-14-is-plong-as-it-has-a-factor-of-7\n    (let ((number 14))\n      (is (string= \"Plong\" (raindrops:convert number)))))\n\n(test the-sound-for-15-is-plingplang-as-it-has-factors-3-and-5\n    (let ((number 15))\n      (is (string= \"PlingPlang\" (raindrops:convert number)))))\n\n(test the-sound-for-21-is-plingplong-as-it-has-factors-3-and-7\n    (let ((number 21))\n      (is (string= \"PlingPlong\" (raindrops:convert number)))))\n\n(test the-sound-for-25-is-plang-as-it-has-a-factor-5\n    (let ((number 25))\n      (is (string= \"Plang\" (raindrops:convert number)))))\n\n(test the-sound-for-27-is-pling-as-it-has-a-factor-3\n    (let ((number 27))\n      (is (string= \"Pling\" (raindrops:convert number)))))\n\n(test the-sound-for-35-is-plangplong-as-it-has-factors-5-and-7\n    (let ((number 35))\n      (is (string= \"PlangPlong\" (raindrops:convert number)))))\n\n(test the-sound-for-49-is-plong-as-it-has-a-factor-7\n    (let ((number 49))\n      (is (string= \"Plong\" (raindrops:convert number)))))\n\n(test the-sound-for-52-is-52\n    (let ((number 52))\n      (is (string= \"52\" (raindrops:convert number)))))\n\n(test the-sound-for-105-is-plingplangplong-as-it-has-factors-3-5-and-7\n    (let ((number 105))\n      (is (string= \"PlingPlangPlong\" (raindrops:convert number)))))\n\n(test the-sound-for-3125-is-plang-as-it-has-a-factor-5\n    (let ((number 3125))\n      (is (string= \"Plang\" (raindrops:convert number)))))\n\n(defun run-tests (&optional (test-or-suite 'raindrops-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "canweriotnow"
+  ],
+  "contributors": [
+    "dnmfarrell"
+  ]
+}

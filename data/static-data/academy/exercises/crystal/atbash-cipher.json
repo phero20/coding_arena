@@ -1,0 +1,32 @@
+{
+  "id": "crystal:atbash-cipher",
+  "trackSlug": "crystal",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "7dc99d5e-95af-4f91-85d4-ddb4c9dbb758",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "char"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module AtbashCipher\n  # Write your code for the 'Atbash Cipher' exercise in this file.\n  def self.encode(message : String) : String\n  end\n\n  def self.decode(message : String) : String\n  end\nend\n",
+  "example_solution": "module AtbashCipher\n  extend self\n\n  PLAIN  = \"abcdefghijklmnopqrstuvwxyz\"\n  CIPHER = PLAIN.reverse\n\n  def encode(message : String) : String\n    message\n      .downcase\n      .tr(PLAIN, CIPHER)\n      .chars\n      .select(&.alphanumeric?)\n      .each_slice(5)\n      .map(&.join)\n      .join(\" \")\n  end\n\n  def decode(message : String) : String\n    message\n      .tr(CIPHER, PLAIN)\n      .chars\n      .select(&.alphanumeric?)\n      .join\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"AtbashCipher\" do\n  it \"encode yes\" do\n    AtbashCipher.encode(\"yes\").should eq(\"bvh\")\n  end\n\n  pending \"encode no\" do\n    AtbashCipher.encode(\"no\").should eq(\"ml\")\n  end\n\n  pending \"encode OMG\" do\n    AtbashCipher.encode(\"OMG\").should eq(\"lnt\")\n  end\n\n  pending \"encode spaces\" do\n    AtbashCipher.encode(\"O M G\").should eq(\"lnt\")\n  end\n\n  pending \"encode mindblowingly\" do\n    AtbashCipher.encode(\"mindblowingly\").should eq(\"nrmwy oldrm tob\")\n  end\n\n  pending \"encode numbers\" do\n    AtbashCipher.encode(\"Testing,1 2 3, testing.\").should eq(\"gvhgr mt123 gvhgr mt\")\n  end\n\n  pending \"encode deep thought\" do\n    AtbashCipher.encode(\"Truth is fiction.\").should eq(\"gifgs rhurx grlm\")\n  end\n\n  pending \"encode all the letters\" do\n    AtbashCipher.encode(\"The quick brown fox jumps over the lazy dog.\").should eq(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n  end\n\n  pending \"decode exercism\" do\n    AtbashCipher.decode(\"vcvix rhn\").should eq(\"exercism\")\n  end\n\n  pending \"decode a sentence\" do\n    AtbashCipher.decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\").should eq(\"anobstacleisoftenasteppingstone\")\n  end\n\n  pending \"decode numbers\" do\n    AtbashCipher.decode(\"gvhgr mt123 gvhgr mt\").should eq(\"testing123testing\")\n  end\n\n  pending \"decode all the letters\" do\n    AtbashCipher.decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\").should eq(\"thequickbrownfoxjumpsoverthelazydog\")\n  end\n\n  pending \"decode with too many spaces\" do\n    AtbashCipher.decode(\"vc vix    r hn\").should eq(\"exercism\")\n  end\n\n  pending \"decode with no spaces\" do\n    AtbashCipher.decode(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\").should eq(\"anobstacleisoftenasteppingstone\")\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "mhelmetag"
+  ],
+  "contributors": [
+    "amscotti",
+    "issyl0",
+    "kytrinyx"
+  ]
+}

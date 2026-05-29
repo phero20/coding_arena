@@ -1,0 +1,26 @@
+{
+  "id": "sml:reverse-string",
+  "trackSlug": "sml",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "86d5a60a-fc44-443d-bc00-5c6265e736c4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "fun reverse (value: string): string =\n  raise Fail \"'reverse' is not implemented\"\n",
+  "example_solution": "fun reverse (value: string): string =\n  let\n    fun shovel ([], rs) = rs\n      | shovel (x :: xs, rs) = shovel (xs, x :: rs)\n\n    fun list_reverse xs = shovel (xs, [])\n  in\n    String.implode (list_reverse (String.explode value))\n  end;\n",
+  "test_code": "use \"testlib.sml\";\nuse \"reverse-string.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"reverse-string\" [\n    test \"an empty string\"\n      (fn _ => reverse \"\" |> Expect.equalTo \"\"),\n\n    test \"a word\"\n      (fn _ => reverse \"robot\" |> Expect.equalTo \"tobor\"),\n\n    test \"a capitalized word\"\n      (fn _ => reverse \"Ramen\" |> Expect.equalTo \"nemaR\"),\n\n    test \"a sentence with punctuation\"\n      (fn _ => reverse \"I'm hungry!\" |> Expect.equalTo \"!yrgnuh m'I\"),\n\n    test \"a palindrome\"\n      (fn _ => reverse \"racecar\" |> Expect.equalTo \"racecar\"),\n\n    test \"an even-sized word\"\n      (fn _ => reverse \"drawer\" |> Expect.equalTo \"reward\")\n  ]\n\nval _ = Test.run testsuite\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "rainij"
+  ],
+  "contributors": null
+}

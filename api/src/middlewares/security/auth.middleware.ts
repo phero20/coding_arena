@@ -19,8 +19,15 @@ export class AuthMiddleware {
   async handle(c: Context, next: Next) {
     const authHeader = c.req.header("authorization");
 
+<<<<<<< HEAD
     if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
       throw AppError.from(ERRORS.AUTH.MISSING_TOKEN);
+=======
+    // Soft Auth: If no token is provided, just move to the next handler.
+    // The Controller's 'requireAuth' flag will handle the actual blocking if needed.
+    if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
+      return await next();
+>>>>>>> prod-deploy
     }
 
     const token = authHeader.slice("bearer ".length).trim();
@@ -51,9 +58,21 @@ export class AuthMiddleware {
       const username =
         clerkUser.username || (email ? email.split("@")[0] : `user_${clerkId}`);
 
+<<<<<<< HEAD
       user = await this.authService.ensureUser({
         clerkId,
         username,
+=======
+      const fullName = 
+        clerkUser.firstName && clerkUser.lastName 
+          ? `${clerkUser.firstName} ${clerkUser.lastName}` 
+          : clerkUser.firstName || clerkUser.lastName || null;
+
+      user = await this.authService.ensureUser({
+        clerkId,
+        username,
+        fullName,
+>>>>>>> prod-deploy
         email,
         avatarUrl: clerkUser.imageUrl,
       });

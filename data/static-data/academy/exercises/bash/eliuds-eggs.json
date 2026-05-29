@@ -1,0 +1,26 @@
+{
+  "id": "bash:eliuds-eggs",
+  "trackSlug": "bash",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "6846adfc-3c98-42be-8fe1-ad3119f95de1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\neggCount() {\n    local -i number=$1 count=0\n    while (( number > 0 )); do\n        (( count += number & 1 ))\n        (( number >>= 1 ))\n    done\n    echo \"$count\"\n}\n\neggCount \"$1\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n@test \"0 eggs\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash pop_count.sh 0\n    assert_success\n    assert_output 0\n}\n\n@test \"1 egg\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash pop_count.sh 16\n    assert_success\n    assert_output 1\n}\n\n@test \"4 eggs\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash pop_count.sh 89\n    assert_success\n    assert_output 4\n}\n\n@test \"13 eggs\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash pop_count.sh 2000000000\n    assert_success\n    assert_output 13\n}\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

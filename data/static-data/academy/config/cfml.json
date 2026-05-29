@@ -1,0 +1,554 @@
+{
+  "language": "CFML",
+  "slug": "cfml",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "CFML (ColdFusion Markup Language) is an open source and commercial (JIT) compiled dynamic and loosely typed JVM scripting language that embodies classic OO, and functional programming, making it easy to learn, fun to use. CFML brings the power and scalability of the J2EE ecosystem but without the boilerplate of Java.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4,
+    "highlightjs_language": "javascript"
+  },
+  "test_runner": {
+    "average_run_time": 11
+  },
+  "files": {
+    "solution": [
+      "%{pascal_slug}.cfc"
+    ],
+    "test": [
+      "%{pascal_slug}Test.cfc"
+    ],
+    "example": [
+      ".meta/Example.cfc"
+    ],
+    "exemplar": [
+      ".meta/Exemplar.cfc"
+    ]
+  },
+  "exercises": {
+    "practice": [
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "48751b37-fd1d-4c68-8446-424094d0a3a4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert a long phrase to its acronym."
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "acb1791a-3e69-404a-8095-8961e231b0de",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base."
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "66f4db9f-f7e8-4323-b4b5-cd6488c02fff",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a word and a list of possible anagrams, select the correct sublist."
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "a789b9ee-236b-4e5f-a93c-6e819155ef9e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East."
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "0cd629c7-20b6-4b9e-804b-edb075e3788b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Implement a binary search algorithm."
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "af621681-51c3-4725-a9fa-374a31aec3e8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited."
+      },
+      {
+        "slug": "dnd-character",
+        "name": "D&D Character",
+        "uuid": "4cfffba1-0f61-4c18-b2a2-7890c1465227",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Randomly generate Dungeons & Dragons characters."
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "85636c8c-55f6-4890-a6a6-5cbffcbbdd4c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Calculate the points scored in a single toss of a Darts game."
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "a39597c6-348c-472b-94aa-91c0a7affb87",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a letter, print a diamond starting with 'A' with the supplied letter at the widest point."
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "4d625aba-52ab-4484-9849-8d1d871ddbd9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "math"
+        ],
+        "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers."
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "1e435e36-82e7-461f-aad7-fbf51d39ba76",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation."
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "562a030c-681d-4e53-85eb-c181e73ac950",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Change the data format for scoring a game to more easily add other languages."
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "618196cb-5850-44a4-be78-807228179848",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Take a nested list and return a single list with all values except nil/null."
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "553ab53d-fc25-4dc7-89a5-1e8bc0296b20",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a moment, determine the moment that would be after a gigasecond has passed."
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "df2190dd-b14c-40e4-af46-116e62f9f0b3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles."
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "f60a2044-d773-4665-a789-d1fb4f15bd52",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Calculate the Hamming distance between two DNA strands."
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "ab04a390-0969-4a17-8081-c852b23ed88c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\"."
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "ea62f03b-9ce8-4f98-8d10-dd4e2a25eb76",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Determine if a word or phrase is an isogram."
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "85c34862-c420-4f5f-8a0c-23bf74783e94",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "math"
+        ],
+        "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n."
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "03a98e5b-03b7-45e5-a580-611ef5dab4e5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Determine whether a given year is a leap year."
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "528a0cc4-60e6-4521-82ff-237bb13e1b96",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a number determine whether or not it is valid per the Luhn formula."
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "ff75fbd5-e867-4160-aa79-e1b301a2001e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "math"
+        ],
+        "blurb": "Given a number n, determine what the nth prime is."
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "cd5fd765-2d79-4cb8-b1f0-a5891a149672",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string."
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "583e74df-e27e-48f5-9650-a3a01ed74f4c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Determine if a sentence is a pangram."
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "56535bf0-960c-4f45-a97e-fb35e237ed9b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers."
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "600c5e6f-0d5a-48e0-ae89-1048bf22a9df",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Implement a program that translates from English to Pig Latin."
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "3d94da82-fba0-48b6-be1e-529d698ecf6a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Translate RNA sequences into proteins."
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "1ca52419-bbe0-46fc-892a-56779f396b1c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other."
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "dd187969-069b-421d-996e-053d4e8bd3c8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong."
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "fd376c87-e682-4afc-b12f-446443a9b57a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert a resistor band's color to its numeric representation."
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "4a1bd9da-e0d4-445f-8b66-cde7ec4888c8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert color codes, as used on resistors, to a numeric value."
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "0a23cb23-49b5-4a0c-92fb-9f1bce63570c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert modern Arabic numbers into Roman numerals."
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "9f53f896-1390-4cc9-89fc-02212a205c40",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Reverse a given string."
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "76f652f8-bc2a-4a2e-b13b-3bfe3ebbca70",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a DNA strand, return its RNA Complement Transcription."
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run Length Encoding",
+        "uuid": "e8b3987c-387d-4aad-95ac-0452c332a326",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Implement run-length encoding and decoding."
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "8951bf1a-bd72-4090-9733-b0b6a80f541c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Detect saddle points in a matrix."
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "321a4f91-198c-4a29-85ee-c9bce4a6fff1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a word, compute the Scrabble score for that word."
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "04769d33-feb0-40c0-9b0f-dcbd48303524",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a decimal number, convert it to the appropriate sequence of events for a secret handshake."
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "efe65169-28d7-4b29-b27a-cb2e278a1c0f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years."
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "a224cd5d-4d70-43d5-9204-7ba59bc4fe3d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a natural radicand, return its square root."
+      },
+      {
+        "slug": "strain",
+        "name": "Strain",
+        "uuid": "5a1a2fa9-e8d0-4784-ba0c-c53fb8405e26",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Implement the `keep` and `discard` operation on collections."
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "9d4fd39d-ae05-431a-8d71-5b5028595487",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "math"
+        ],
+        "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number."
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "fe8349b6-9492-47cd-b4d8-c9408c95aff5",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Determine if a triangle is equilateral, isosceles, or scalene."
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two Fer",
+        "uuid": "7a64fd35-c6f0-4c0c-90c8-f72bcca77a93",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Create a sentence of the form \"One for X, one for me.\"."
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "695b56d9-1efc-4968-b581-4de94b89ef16",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a phrase, count the occurrences of each word in that phrase."
+      },
+      {
+        "slug": "markdown",
+        "name": "Markdown",
+        "uuid": "33285e71-7966-43e8-8c5b-c3c7d7b42c02",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Refactor a Markdown parser."
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "944c3e7f-e519-4cb5-922f-7eeaa06ccb25",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Write a robot simulator."
+      },
+      {
+        "slug": "list-ops",
+        "name": "List Ops",
+        "uuid": "eadcef04-da87-4bbd-8d50-89fd040854f8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Implement basic list operations."
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "4bc14953-eb7a-4c1b-a45e-b80205b4a628",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies."
+      },
+      {
+        "slug": "circular-buffer",
+        "name": "Circular Buffer",
+        "uuid": "0b6ade33-0ca0-4bfe-8b7b-d4370cb6e7f1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "blurb": "A data structure that uses a single, fixed-size buffer as if it were connected end-to-end."
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "91a2e23b-b743-4d62-9908-62454e6077b8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture."
+      }
+    ]
+  },
+  "key_features": [
+    {
+      "title": "Batteries included",
+      "content": "Be productive without installing many packages. Just about anything you need comes bundled.",
+      "icon": "productive"
+    },
+    {
+      "title": "Use the power of Java",
+      "content": "Need something extra? Drop in jars and instantiate Java objects directly.",
+      "icon": "powerful"
+    },
+    {
+      "title": "Robust template language",
+      "content": "Easy, HTML-like syntax ideal for building a wide variety of web applications.",
+      "icon": "tooling"
+    },
+    {
+      "title": "JIT compilation",
+      "content": "Compiles to byte code and is dynamically evaluated on the Java Virtual Machine.",
+      "icon": "stable"
+    },
+    {
+      "title": "Multi-paradigm",
+      "content": "Supports classical Object Oriented as well as functional programming.",
+      "icon": "multi-paradigm"
+    },
+    {
+      "title": "Built for the web",
+      "content": "Easily access databases, natively convert HTML to PDF, parse XML, spin up APIs, or write to S3.",
+      "icon": "cross-platform"
+    }
+  ],
+  "tags": [
+    "execution_mode/interpreted",
+    "paradigm/declarative",
+    "platform/web",
+    "runtime/language_specific",
+    "typing/dynamic",
+    "used_for/backends",
+    "used_for/frontends",
+    "used_for/web_development"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/cfml.svg",
+  "about_content": "# About\n\nColdFusion (CFML) is a JVM scripting language whose syntax is similar to C or JavaScript. \nIt JIT compiles to byte code that runs on the JVM but is dynamic and loosely typed, making it fast and easy to develop in. \nCF is a multi-paradigmed language, supporting classical OO and functional programming.\n\nCFML also has a built-in tag-based templating language that makes it ideal for web apps. \nIt runs in a J2EE container with many bundled libraries that make it very productive without the need to install many packages. \nCFML has native support for zip files, PDF and Excel generation, E-mails, FTP, HTTP, S3 file systems, ESAPI security libraries, JDBC drivers, JSON and REST APIs.  \n\nCFML can also leverage any Java project by dropping the jars in project and directly instantiating Java objects in your code. \nYou can learn more about basic syntax and first class data types in this guide: [Modern ColdFusion (CFML) in 100 Minutes](https://modern-cfml.ortusbooks.com/)"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "typescript:hamming",
+  "trackSlug": "typescript",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "18204e23-fca8-44dc-8d5c-abe66b87c640",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "export function compute(left: unknown, right: unknown): unknown {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function compute(left: string, right: string): number {\n  if (left.length !== right.length) {\n    throw new Error('DNA strands must be of equal length.')\n  }\n  const size = left.length\n  const leftArray = left.split('')\n  const rightArray = right.split('')\n  let count = 0\n  for (let i = 0; i < size; i += 1) {\n    if (leftArray[i] !== rightArray[i]) {\n      count += 1\n    }\n  }\n  return count\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { compute } from './hamming.ts'\n\ndescribe('Hamming', () => {\n  it('empty strands', () => {\n    expect(compute('', '')).toEqual(0)\n  })\n\n  xit('single letter identical strands', () => {\n    expect(compute('A', 'A')).toEqual(0)\n  })\n\n  xit('single letter different strands', () => {\n    expect(compute('G', 'T')).toEqual(1)\n  })\n\n  xit('long identical strands', () => {\n    expect(compute('GGACTGAAATCTG', 'GGACTGAAATCTG')).toEqual(0)\n  })\n\n  xit('long different strands', () => {\n    expect(compute('GGACGGATTCTG', 'AGGACGGATTCT')).toEqual(9)\n  })\n\n  xit('disallow first strand longer', () => {\n    expect(() => {\n      compute('AATG', 'AAA')\n    }).toThrow('DNA strands must be of equal length.')\n  })\n\n  xit('disallow second strand longer', () => {\n    expect(() => {\n      compute('ATA', 'AGTG')\n    }).toThrow('DNA strands must be of equal length.')\n  })\n\n  xit('disallow empty first strand', () => {\n    expect(() => {\n      compute('', 'G')\n    }).toThrow('DNA strands must be of equal length.')\n  })\n\n  xit('disallow empty second strand', () => {\n    expect(() => {\n      compute('G', '')\n    }).toThrow('DNA strands must be of equal length.')\n  })\n})\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "lukaszklis",
+    "SleeplessByte"
+  ]
+}

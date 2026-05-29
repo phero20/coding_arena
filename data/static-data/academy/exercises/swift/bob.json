@@ -1,0 +1,36 @@
+{
+  "id": "swift:bob",
+  "trackSlug": "swift",
+  "slug": "bob",
+  "name": "Bob",
+  "uuid": "49051b88-063a-4fa1-b920-6ca9a6f9bc60",
+  "type": "practice",
+  "status": null,
+  "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what Bob will reply to someone when they say something to him or ask him a question.\n\nBob only ever answers one of five things:\n\n- **\"Sure.\"**\n  This is his response if you ask him a question, such as \"How are you?\"\n  The convention used for questions is that it ends with a question mark.\n- **\"Whoa, chill out!\"**\n  This is his answer if you YELL AT HIM.\n  The convention used for yelling is ALL CAPITAL LETTERS.\n- **\"Calm down, I know what I'm doing!\"**\n  This is what he says if you yell a question at him.\n- **\"Fine. Be that way!\"**\n  This is how he responds to silence.\n  The convention used for silence is nothing, or various combinations of whitespace characters.\n- **\"Whatever.\"**\n  This is what he answers to anything else.\n",
+  "introduction": "# Introduction\n\nBob is a [lackadaisical][] teenager.\nHe likes to think that he's very cool.\nAnd he definitely doesn't get excited about things.\nThat wouldn't be cool.\n\nWhen people talk to him, his responses are pretty limited.\n\n[lackadaisical]: https://www.collinsdictionary.com/dictionary/english/lackadaisical\n",
+  "hints": null,
+  "starter_code": "class Bob {\n  static func response(_ message: String) -> String {\n    // Write your code for the 'Bob' exercise in this file.\n  }\n}\n",
+  "example_solution": "import Foundation\n\nclass Bob {\n  static func response(_ message: String) -> String {\n    let trimmedMessage = message.trimmingCharacters(in: .whitespacesAndNewlines)\n    let isUppercase =\n      trimmedMessage.uppercased() == trimmedMessage && trimmedMessage.lowercased() != trimmedMessage\n    if trimmedMessage.isEmpty {\n      return \"Fine. Be that way!\"\n    } else if isUppercase && trimmedMessage.last == \"?\" {\n      return \"Calm down, I know what I'm doing!\"\n    } else if isUppercase {\n      return \"Whoa, chill out!\"\n    } else if trimmedMessage.last == \"?\" {\n      return \"Sure.\"\n    } else {\n      return \"Whatever.\"\n    }\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Bob\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct BobTests {\n\n  @Test(\"stating something\")\n  func testStatingSomething() {\n    #expect(\"Whatever.\" == Bob.response(\"Tom-ay-to, tom-aaaah-to.\"))\n  }\n\n  @Test(\"shouting\", .enabled(if: RUNALL))\n  func testShouting() {\n    #expect(\"Whoa, chill out!\" == Bob.response(\"WATCH OUT!\"))\n  }\n\n  @Test(\"shouting gibberish\", .enabled(if: RUNALL))\n  func testShoutingGibberish() {\n    #expect(\"Whoa, chill out!\" == Bob.response(\"FCECDFCAAB\"))\n  }\n\n  @Test(\"asking a question\", .enabled(if: RUNALL))\n  func testAskingAQuestion() {\n    #expect(\"Sure.\" == Bob.response(\"Does this cryogenic chamber make me look fat?\"))\n  }\n\n  @Test(\"asking a numeric question\", .enabled(if: RUNALL))\n  func testAskingANumericQuestion() {\n    #expect(\"Sure.\" == Bob.response(\"You are, what, like 15?\"))\n  }\n\n  @Test(\"asking gibberish\", .enabled(if: RUNALL))\n  func testAskingGibberish() {\n    #expect(\"Sure.\" == Bob.response(\"fffbbcbeab?\"))\n  }\n\n  @Test(\"talking forcefully\", .enabled(if: RUNALL))\n  func testTalkingForcefully() {\n    #expect(\"Whatever.\" == Bob.response(\"Hi there!\"))\n  }\n\n  @Test(\"using acronyms in regular speech\", .enabled(if: RUNALL))\n  func testUsingAcronymsInRegularSpeech() {\n    #expect(\"Whatever.\" == Bob.response(\"It's OK if you don't want to go work for NASA.\"))\n  }\n\n  @Test(\"forceful question\", .enabled(if: RUNALL))\n  func testForcefulQuestion() {\n    #expect(\"Calm down, I know what I'm doing!\" == Bob.response(\"WHAT'S GOING ON?\"))\n  }\n\n  @Test(\"shouting numbers\", .enabled(if: RUNALL))\n  func testShoutingNumbers() {\n    #expect(\"Whoa, chill out!\" == Bob.response(\"1, 2, 3 GO!\"))\n  }\n\n  @Test(\"no letters\", .enabled(if: RUNALL))\n  func testNoLetters() {\n    #expect(\"Whatever.\" == Bob.response(\"1, 2, 3\"))\n  }\n\n  @Test(\"question with no letters\", .enabled(if: RUNALL))\n  func testQuestionWithNoLetters() {\n    #expect(\"Sure.\" == Bob.response(\"4?\"))\n  }\n\n  @Test(\"shouting with special characters\", .enabled(if: RUNALL))\n  func testShoutingWithSpecialCharacters() {\n    #expect(\"Whoa, chill out!\" == Bob.response(\"ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!\"))\n  }\n\n  @Test(\"shouting with no exclamation mark\", .enabled(if: RUNALL))\n  func testShoutingWithNoExclamationMark() {\n    #expect(\"Whoa, chill out!\" == Bob.response(\"I HATE THE DENTIST\"))\n  }\n\n  @Test(\"statement containing question mark\", .enabled(if: RUNALL))\n  func testStatementContainingQuestionMark() {\n    #expect(\"Whatever.\" == Bob.response(\"Ending with ? means a question.\"))\n  }\n\n  @Test(\"non-letters with question\", .enabled(if: RUNALL))\n  func testNonLettersWithQuestion() {\n    #expect(\"Sure.\" == Bob.response(\":) ?\"))\n  }\n\n  @Test(\"prattling on\", .enabled(if: RUNALL))\n  func testPrattlingOn() {\n    #expect(\"Sure.\" == Bob.response(\"Wait! Hang on. Are you going to be OK?\"))\n  }\n\n  @Test(\"silence\", .enabled(if: RUNALL))\n  func testSilence() {\n    #expect(\"Fine. Be that way!\" == Bob.response(\"\"))\n  }\n\n  @Test(\"prolonged silence\", .enabled(if: RUNALL))\n  func testProlongedSilence() {\n    #expect(\"Fine. Be that way!\" == Bob.response(\"          \"))\n  }\n\n  @Test(\"alternate silence\", .enabled(if: RUNALL))\n  func testAlternateSilence() {\n    #expect(\"Fine. Be that way!\" == Bob.response(\"\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\"))\n  }\n\n  @Test(\"starting with whitespace\", .enabled(if: RUNALL))\n  func testStartingWithWhitespace() {\n    #expect(\"Whatever.\" == Bob.response(\"         hmmmmmmm...\"))\n  }\n\n  @Test(\"ending with whitespace\", .enabled(if: RUNALL))\n  func testEndingWithWhitespace() {\n    #expect(\"Sure.\" == Bob.response(\"Okay if like my  spacebar  quite a bit?   \"))\n  }\n\n  @Test(\"other whitespace\", .enabled(if: RUNALL))\n  func testOtherWhitespace() {\n    #expect(\"Fine. Be that way!\" == Bob.response(\"\\n\\r \\t\"))\n  }\n\n  @Test(\"non-question ending with whitespace\", .enabled(if: RUNALL))\n  func testNonQuestionEndingWithWhitespace() {\n    #expect(\"Whatever.\" == Bob.response(\"This is a statement ending with whitespace      \"))\n  }\n\n  @Test(\"multiple line question\", .enabled(if: RUNALL))\n  func testMultipleLineQuestion() {\n    #expect(\"Sure.\" == Bob.response(\"\\nDoes this cryogenic chamber make\\n me look fat?\"))\n  }\n\n}\n",
+  "source": "Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=06",
+  "authors": [
+    "hankturowski"
+  ],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "jonallured",
+    "kytrinyx",
+    "lyuha",
+    "masters3d",
+    "robtimp",
+    "ThomasHaz",
+    "meatball133"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "rust:hello-world",
+  "trackSlug": "rust",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "13ec1ebe-d71b-436f-ab12-25305e814171",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "// &'static is a \"lifetime specifier\", something you'll learn more about later\npub fn hello() -> &'static str {\n    \"Goodbye, Mars!\"\n}\n",
+  "example_solution": "pub fn hello() -> &'static str {\n    \"Hello, World!\"\n}\n",
+  "test_code": "#[test]\nfn hello_world() {\n    assert_eq!(\"Hello, World!\", hello_world::hello());\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "EduardoBautista"
+  ],
+  "contributors": [
+    "ashleygwilliams",
+    "ClashTheBunny",
+    "coriolinus",
+    "cwhakes",
+    "dvoytik",
+    "EduardoBautista",
+    "efx",
+    "ErikSchierboom",
+    "hydhknn",
+    "IanWhitney",
+    "ijanos",
+    "kytrinyx",
+    "lutostag",
+    "nfiles",
+    "petertseng",
+    "regnerjr",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

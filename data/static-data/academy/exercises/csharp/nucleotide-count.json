@@ -1,0 +1,46 @@
+{
+  "id": "csharp:nucleotide-count",
+  "trackSlug": "csharp",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "caca1c6a-b998-431e-b6af-ca2d47b7708f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "dictionaries",
+    "exceptions"
+  ],
+  "prerequisites": [
+    "dictionaries",
+    "strings",
+    "chars",
+    "if-statements",
+    "foreach-loops",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public static class NucleotideCount\n{\n    public static IDictionary<char, int> Count(string sequence)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class NucleotideCount\n{\n    public static IDictionary<char, int> Count(string sequence)\n    {\n        var nucleotideCounts = new Dictionary<char, int> { { 'A', 0 }, { 'T', 0 }, { 'C', 0 }, { 'G', 0 } };\n      \n        foreach (var s in sequence)\n        {\n            if (nucleotideCounts.TryGetValue(s, out var count))\n            {\n                nucleotideCounts[s] = count + 1;\n            }\n            else\n            {\n                throw new ArgumentException();\n            }\n        }\n\n        return nucleotideCounts;\n    }\n}\n",
+  "test_code": "public class NucleotideCountTests\n{\n    [Fact]\n    public void Empty_strand()\n    {\n        var expected = new Dictionary<char, int>\n        {\n            ['A'] = 0,\n            ['C'] = 0,\n            ['G'] = 0,\n            ['T'] = 0\n        };\n        Assert.Equal(expected, NucleotideCount.Count(\"\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_count_one_nucleotide_in_single_character_input()\n    {\n        var expected = new Dictionary<char, int>\n        {\n            ['A'] = 0,\n            ['C'] = 0,\n            ['G'] = 1,\n            ['T'] = 0\n        };\n        Assert.Equal(expected, NucleotideCount.Count(\"G\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Strand_with_repeated_nucleotide()\n    {\n        var expected = new Dictionary<char, int>\n        {\n            ['A'] = 0,\n            ['C'] = 0,\n            ['G'] = 7,\n            ['T'] = 0\n        };\n        Assert.Equal(expected, NucleotideCount.Count(\"GGGGGGG\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Strand_with_multiple_nucleotides()\n    {\n        var expected = new Dictionary<char, int>\n        {\n            ['A'] = 20,\n            ['C'] = 12,\n            ['G'] = 17,\n            ['T'] = 21\n        };\n        Assert.Equal(expected, NucleotideCount.Count(\"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Strand_with_invalid_nucleotides()\n    {\n        Assert.Throws<ArgumentException>(() => NucleotideCount.Count(\"AGXXACT\"));\n    }\n}\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "bressain"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "InKahootz",
+    "j2jensen",
+    "jmbradnan",
+    "jwood803",
+    "kytrinyx",
+    "robkeim",
+    "sjakobi",
+    "wolf99"
+  ]
+}

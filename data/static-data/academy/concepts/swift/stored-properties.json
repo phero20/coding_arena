@@ -1,0 +1,6 @@
+{
+  "slug": "stored-properties",
+  "name": "Stored Properties",
+  "introduction": "# About\n\nA struct or class can define _stored properties_, which are defined and behave just like regular constants or variables and are stored as part of an instance of that struct/class.\n\n```swift\nclass GameCharacter {\n  var health = 10\n  let id = makeRandomID()\n}\n\nlet character1 = GameCharacter()\nlet character2 = GameCharacter()\n\ncharacter1.health // => 10\ncharacter2.health // => 10\n\ncharacter1.health = 25\n\ncharacter1.health // => 25\ncharacter2.health // => 10\n\n// This would trigger a compiler error due to id being a constant\n// character2.id = 2\n```",
+  "about": "# About\n\nA struct or class can define _stored properties_, which are defined and behave just like regular constants or variables and are stored as part of an instance of that struct/class.\n\n```swift\nclass GameCharacter {\n  var health = 10\n  let id = makeRandomID()\n}\n\nlet character1 = GameCharacter()\nlet character2 = GameCharacter()\n\ncharacter1.health // => 10\ncharacter2.health // => 10\n\ncharacter1.health = 25\n\ncharacter1.health // => 25\ncharacter2.health // => 10\n\n// This would trigger a compiler error due to id being a constant\n// character2.id = 2\n```"
+}

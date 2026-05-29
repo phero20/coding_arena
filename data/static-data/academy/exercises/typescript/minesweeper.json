@@ -1,0 +1,30 @@
+{
+  "id": "typescript:minesweeper",
+  "trackSlug": "typescript",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "f5b00e76-3015-444d-8012-9862990db08c",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "export function annotate(field: unknown): unknown {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "const MINE = '*'\n\nconst DELTAS = [\n  [-1, -1],\n  [-1, 0],\n  [-1, 1],\n  [1, 1],\n  [1, 0],\n  [1, -1],\n  [0, 1],\n  [0, -1],\n]\n\nexport function annotate(rows: string[]): string[] {\n  if (noDataPresent(rows)) {\n    return rows\n  }\n\n  const inputBoard = rows.map((row) => [...row])\n\n  const result = inputBoard.map((row, x) =>\n    [...row].map((cell, y) => cellToMineOrCount(cell, inputBoard, x, y))\n  )\n\n  return stringify(result as string[][])\n}\n\nfunction cellToMineOrCount(\n  cell: string,\n  inputBoard: string[][],\n  x: number,\n  y: number\n): number | '*' | ' ' {\n  if (cell === MINE) {\n    return MINE\n  }\n  return countAdjacentMines(inputBoard, x, y) || ' '\n}\n\nfunction countAdjacentMines(board: string[][], x: number, y: number): number {\n  return DELTAS.filter((d) => adjacentSquareIsOnBoard(board, x, d)).filter(\n    (d) => adjacentSquareHasMine(board, x, y, d)\n  ).length\n}\n\nfunction stringify(board: string[][]): string[] {\n  return board.map((row) => row.join(''))\n}\n\nfunction noDataPresent(rows: string[]): boolean {\n  return rows.length === 0 || rows[0].length === 0\n}\n\nfunction adjacentSquareIsOnBoard(\n  board: string[][],\n  x: number,\n  d: number[]\n): string[] {\n  return board[x + d[0]]\n}\n\nfunction adjacentSquareHasMine(\n  board: string[][],\n  x: number,\n  y: number,\n  d: number[]\n): boolean {\n  return board[x + d[0]][y + d[1]] === MINE\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { annotate } from './minesweeper.ts'\n\ndescribe('Minesweeper annotate', () => {\n  it('handles no rows', () => {\n    expect(annotate([])).toEqual([])\n  })\n\n  xit('handles no columns', () => {\n    expect(annotate([''])).toEqual([''])\n  })\n\n  xit('handles no mines', () => {\n    const input = ['   ', '   ', '   ']\n    const expected = ['   ', '   ', '   ']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles board with only mines', () => {\n    const input = ['***', '***', '***']\n    const expected = ['***', '***', '***']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles mine surrounded by spaces', () => {\n    const input = ['   ', ' * ', '   ']\n    const expected = ['111', '1*1', '111']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles space surrounded by mines', () => {\n    const input = ['***', '* *', '***']\n    const expected = ['***', '*8*', '***']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles horizontal line', () => {\n    const input = [' * * ']\n    const expected = ['1*2*1']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles horizontal line, mines at edges', () => {\n    const input = ['*   *']\n    const expected = ['*1 1*']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles vertical line', () => {\n    const input = [' ', '*', ' ', '*', ' ']\n    const expected = ['1', '*', '2', '*', '1']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles vertical line, mines at edges', () => {\n    const input = ['*', ' ', ' ', ' ', '*']\n    const expected = ['*', '1', ' ', '1', '*']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles cross', () => {\n    const input = ['  *  ', '  *  ', '*****', '  *  ', '  *  ']\n    const expected = [' 2*2 ', '25*52', '*****', '25*52', ' 2*2 ']\n    expect(annotate(input)).toEqual(expected)\n  })\n\n  xit('handles large board', () => {\n    const input = [' *  * ', '  *   ', '    * ', '   * *', ' *  * ', '      ']\n    const expected = [\n      '1*22*1',\n      '12*322',\n      ' 123*2',\n      '112*4*',\n      '1*22*2',\n      '111111',\n    ]\n    expect(annotate(input)).toEqual(expected)\n  })\n})\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "CRivasGomez"
+  ],
+  "contributors": [
+    "iignatov",
+    "masters3d",
+    "SleeplessByte"
+  ]
+}

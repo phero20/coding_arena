@@ -1,0 +1,26 @@
+{
+  "id": "r:say",
+  "trackSlug": "r",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "c87b10f2-0920-4fdc-9143-a879708b24f2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "say <- function(number) {\n}\n",
+  "example_solution": "small_n <- c(\n  'one',\n  'two',\n  'three',\n  'four',\n  'five',\n  'six',\n  'seven',\n  'eight',\n  'nine',\n  'ten',\n  'eleven',\n  'twelve',\n  'thirteen',\n  'fourteen',\n  'fifteen',\n  'sixteen',\n  'seventeen',\n  'eighteen',\n  'nineteen')\n\ntens <- c(\n  'ten',\n  'twenty',\n  'thirty',\n  'forty',\n  'fifty',\n  'sixty',\n  'seventy',\n  'eighty',\n  'ninety')\n\noom <- c('billion', 'million', 'thousand', '')\n\nsay_group <- \\(n) {\n  h <- n %/% 100\n  if (h == 0) sh <- c()\n  else sh <- c(small_n[h], 'hundred')\n  r <- n %% 100\n  if (r < 20) sh <- c(sh, small_n[r])\n  else sh <- c(sh, tens[r %/% 10])\n  last <- r %% 10\n  if (last > 0 && r >= 20) sh <- c(sh, '-', small_n[last])\n  sh\n}\n\ngroup <- \\(number) {\n  groups <- rep(0, 4)\n  for (i in 4:1) {\n    groups[i] <- number %% 1000\n    number <- number %/% 1000\n  }\n  groups\n}\n\nsay <- \\(number) {\n  if (number < 0 || number >= 1e12) stop('input out of range')\n  if (number == 0) return('zero')\n  groups <- group(number)\n  sh <- c()\n  for (i in 1:3) {\n    if (groups[i] > 0) {\n      sh <- c(sh, say_group(groups[i]), oom[i])\n    }\n  }\n  sh <- c(sh, say_group(groups[4]))\n  gsub(' - ', '-', paste(sh, collapse = ' '))\n}\n",
+  "test_code": "source(\"./say.R\")\nlibrary(testthat)\n\ntest_that(\"zero\", {\n  expect_equal(\n    say(0),\n    \"zero\")\n})\n\ntest_that(\"one\", {\n  expect_equal(\n    say(1),\n    \"one\")\n})\n\ntest_that(\"fourteen\", {\n  expect_equal(\n    say(14),\n    \"fourteen\")\n})\n\ntest_that(\"twenty\", {\n  expect_equal(\n    say(20),\n    \"twenty\")\n})\n\ntest_that(\"twenty-two\", {\n  expect_equal(\n    say(22),\n    \"twenty-two\")\n})\n\ntest_that(\"thirty\", {\n  expect_equal(\n    say(30),\n    \"thirty\")\n})\n\ntest_that(\"ninety-nine\", {\n  expect_equal(\n    say(99),\n    \"ninety-nine\")\n})\n\ntest_that(\"one hundred\", {\n  expect_equal(\n    say(100),\n    \"one hundred\")\n})\n\ntest_that(\"one hundred twenty-three\", {\n  expect_equal(\n    say(123),\n    \"one hundred twenty-three\")\n})\n\ntest_that(\"two hundred\", {\n  expect_equal(\n    say(200),\n    \"two hundred\")\n})\n\ntest_that(\"nine hundred ninety-nine\", {\n  expect_equal(\n    say(999),\n    \"nine hundred ninety-nine\")\n})\n\ntest_that(\"one thousand\", {\n  expect_equal(\n    say(1000),\n    \"one thousand\")\n})\n\ntest_that(\"one thousand two hundred thirty-four\", {\n  expect_equal(\n    say(1234),\n    \"one thousand two hundred thirty-four\")\n})\n\ntest_that(\"one million\", {\n  expect_equal(\n    say(1000000),\n    \"one million\")\n})\n\ntest_that(\"one million two thousand three hundred forty-five\", {\n  expect_equal(\n    say(1002345),\n    \"one million two thousand three hundred forty-five\")\n})\n\ntest_that(\"one billion\", {\n  expect_equal(\n    say(1000000000),\n    \"one billion\")\n})\n\ntest_that(\"a big number\", {\n  expect_equal(\n    say(987654321123),\n    \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\") # nolint\n})\n\ntest_that(\"numbers below zero are out of range\", {\n  expect_error(say(-1), \"input out of range\")\n})\n\ntest_that(\"numbers above 999,999,999,999 are out of range\", {\n  expect_error(say(1000000000000),\n    \"input out of range\")\n})\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "frequenter-at-exercism"
+  ],
+  "contributors": null
+}

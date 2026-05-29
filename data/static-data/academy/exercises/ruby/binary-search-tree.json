@@ -1,0 +1,45 @@
+{
+  "id": "ruby:binary-search-tree",
+  "trackSlug": "ruby",
+  "slug": "binary-search-tree",
+  "name": "Binary Search Tree",
+  "uuid": "0e05bfcf-17ae-4884-803a-fa1428bc1702",
+  "type": "practice",
+  "status": null,
+  "blurb": "Insert and search for numbers in a binary tree.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "instance-variables"
+  ],
+  "prerequisites": [
+    "instance-variables",
+    "numbers",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nInsert and search for numbers in a binary tree.\n\nWhen we need to represent sorted data, an array does not make a good data structure.\n\nSay we have the array `[1, 3, 4, 5]`, and we add 2 to it so it becomes `[1, 3, 4, 5, 2]`.\nNow we must sort the entire array again!\nWe can improve on this by realizing that we only need to make space for the new item `[1, nil, 3, 4, 5]`, and then adding the item in the space we added.\nBut this still requires us to shift many elements down by one.\n\nBinary Search Trees, however, can operate on sorted data much more efficiently.\n\nA binary search tree consists of a series of connected nodes.\nEach node contains a piece of data (e.g. the number 3), a variable named `left`, and a variable named `right`.\nThe `left` and `right` variables point at `nil`, or other nodes.\nSince these other nodes in turn have other nodes beneath them, we say that the left and right variables are pointing at subtrees.\nAll data in the left subtree is less than or equal to the current node's data, and all data in the right subtree is greater than the current node's data.\n\nFor example, if we had a node containing the data 4, and we added the data 2, our tree would look like this:\n\n![A graph with root node 4 and a single child node 2.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2.svg)\n\n```text\n      4\n     /\n    2\n```\n\nIf we then added 6, it would look like this:\n\n![A graph with root node 4 and two child nodes 2 and 6.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2-6.svg)\n\n```text\n      4\n     / \\\n    2   6\n```\n\nIf we then added 3, it would look like this\n\n![A graph with root node 4, two child nodes 2 and 6, and a grandchild node 3.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2-6-3.svg)\n\n```text\n       4\n     /   \\\n    2     6\n     \\\n      3\n```\n\nAnd if we then added 1, 5, and 7, it would look like this\n\n![A graph with root node 4, two child nodes 2 and 6, and four grandchild nodes 1, 3, 5 and 7.](https://assets.exercism.org/images/exercises/binary-search-tree/tree-4-2-6-1-3-5-7.svg)\n\n```text\n          4\n        /   \\\n       /     \\\n      2       6\n     / \\     / \\\n    1   3   5   7\n```\n\n## Credit\n\nThe images were created by [habere-et-dispertire][habere-et-dispertire] using [PGF/TikZ][pgf-tikz] by Till Tantau.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[pgf-tikz]: https://en.wikipedia.org/wiki/PGF/TikZ\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Binary Search Tree' exercise in this file. Make the tests in\n`binary_search_tree_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/binary-search-tree` directory.\n=end\n",
+  "example_solution": "class Bst\n  attr_reader :data, :left, :right\n  def initialize(data)\n    @data = data\n    @size = 1\n  end\n\n  def insert(value)\n    if value <= data\n      insert_left(value)\n    else\n      insert_right(value)\n    end\n\n    @size += 1\n  end\n\n  def each(&block)\n    return enum_for(:each) { @size } unless block_given?\n\n    left && left.each(&block)\n    yield data\n    right && right.each(&block)\n  end\n\n  private\n\n  def insert_left(value)\n    if left\n      left.insert(value)\n    else\n      @left = Bst.new(value)\n    end\n  end\n\n  def insert_right(value)\n    if right\n      right.insert(value)\n    else\n      @right = Bst.new(value)\n    end\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'binary_search_tree'\n\nclass BstTest < Minitest::Test\n  def test_data_is_retained\n    assert_equal 4, Bst.new(4).data\n  end\n\n  def test_inserting_less\n    skip\n    four = Bst.new 4\n    four.insert 2\n    assert_equal 4, four.data\n    assert_equal 2, four.left.data\n  end\n\n  def test_inserting_same\n    skip\n    four = Bst.new 4\n    four.insert 4\n    assert_equal 4, four.data\n    assert_equal 4, four.left.data\n  end\n\n  def test_inserting_right\n    skip\n    four = Bst.new 4\n    four.insert 5\n    assert_equal 4, four.data\n    assert_equal 5, four.right.data\n  end\n\n  def test_complex_tree\n    skip\n    four = Bst.new 4\n    four.insert 2\n    four.insert 6\n    four.insert 1\n    four.insert 3\n    four.insert 7\n    four.insert 5\n    assert_equal 4, four.data\n    assert_equal 2, four.left.data\n    assert_equal 1, four.left.left.data\n    assert_equal 3, four.left.right.data\n    assert_equal 6, four.right.data\n    assert_equal 5, four.right.left.data\n    assert_equal 7, four.right.right.data\n  end\n\n  def record_all_data(bst)\n    all_data = []\n    bst.each { |data| all_data << data }\n    all_data\n  end\n\n  def test_iterating_one_element\n    skip\n    assert_equal [4], record_all_data(Bst.new(4))\n  end\n\n  def test_iterating_over_smaller_element\n    skip\n    four = Bst.new 4\n    four.insert 2\n    assert_equal [2, 4], record_all_data(four)\n  end\n\n  def test_iterating_over_larger_element\n    skip\n    four = Bst.new 4\n    four.insert 5\n    assert_equal [4, 5], record_all_data(four)\n  end\n\n  def test_iterating_over_complex_tree\n    skip\n    four = Bst.new 4\n    four.insert 2\n    four.insert 1\n    four.insert 3\n    four.insert 6\n    four.insert 7\n    four.insert 5\n    assert_equal [1, 2, 3, 4, 5, 6, 7], record_all_data(four)\n  end\n\n  def test_each_returns_enumerator_if_no_block\n    skip\n\n    tree = Bst.new 4\n    [2, 1, 3, 6, 7, 5].each { |x| tree.insert x }\n    each_enumerator = tree.each\n\n    assert_kind_of Enumerator, each_enumerator\n\n    (1..7).each { |x| assert_equal(x, each_enumerator.next) }\n\n    assert_raises(StopIteration) { each_enumerator.next }\n  end\nend\n",
+  "source": "Josh Cheek",
+  "source_url": null,
+  "authors": [
+    "vosechu"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "kytrinyx",
+    "pendletons",
+    "remcopeereboom",
+    "Ryan1729",
+    "tryantwit"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "futhark:matrix",
+  "trackSlug": "futhark",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "213bf83a-3a6b-44c5-b145-439b262cbd3d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def row (string: []u8) (index: i32): []i32 = ???\n\ndef column (string: []u8) (index: i32): []i32 = ???\n",
+  "example_solution": "def select [n] (string: [n]u8) (required_row: i32) (required_column: i32): []i32 =\n  let (a, count, _, _, _, _) = loop (a, count, current_row, current_column, i, number) = (replicate n 0, 0, 1, 1, 0, 0) while i < n do\n    let ch = string[i]\n    in\n      if ch == ' ' then (a, count, current_row, current_column + 1, i + 1, 0)\n      else if ch == '\\n' then (a, count, current_row + 1, 1, i + 1, 0)\n      else\n        let number = 10 * number + i32.u8(ch - '0')\n        in\n          if i + 1 < n && string[i + 1] > ' ' then (a, count, current_row, current_column, i + 1, number)\n          else if current_row != required_row && current_column != required_column then (a, count, current_row, current_column, i + 1, 0)\n          else (a with [count] = number, count + 1, current_row, current_column, i + 1, 0)\n  in\n    a[0:count]\n\ndef row (string: []u8) (index: i32): []i32 =\n  select string index 0\n\ndef column (string: []u8) (index: i32): []i32 =\n  select string 0 index\n",
+  "test_code": "import \"matrix\"\n\n-- extract row from one number matrix\n-- ==\n-- entry: test_row\n-- input { \"1\" 1 }\n-- output { [1] }\n\n-- can extract row\n-- ==\n-- entry: test_row\n-- input { \"1 2\\n3 4\" 2 }\n-- output { [3, 4] }\n\n-- extract row where numbers have different widths\n-- ==\n-- entry: test_row\n-- input { \"1 2\\n10 20\" 2 }\n-- output { [10, 20] }\n\n-- can extract row from non-square matrix with no corresponding column\n-- ==\n-- entry: test_row\n-- input { \"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\" 4 }\n-- output { [8, 7, 6] }\n\n-- extract column from one number matrix\n-- ==\n-- entry: test_column\n-- input { \"1\" 1 }\n-- output { [1] }\n\n-- can extract column\n-- ==\n-- entry: test_column\n-- input { \"1 2 3\\n4 5 6\\n7 8 9\" 3 }\n-- output { [3, 6, 9] }\n\n-- can extract column from non-square matrix with no corresponding row\n-- ==\n-- entry: test_column\n-- input { \"1 2 3 4\\n5 6 7 8\\n9 8 7 6\" 4 }\n-- output { [4, 8, 6] }\n\n-- extract column where numbers have different widths\n-- ==\n-- entry: test_column\n-- input { \"89 1903 3\\n18 3 1\\n9 4 800\" 2 }\n-- output { [1903, 3, 4] }\n\nentry test_row (string: []u8) (index: i32): []i32 =\n  row string index\n\nentry test_column (string: []u8) (index: i32): []i32 =\n  column string index\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

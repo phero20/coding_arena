@@ -1,0 +1,47 @@
+{
+  "id": "java:collatz-conjecture",
+  "trackSlug": "java",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "1500d39a-c9d9-4d3a-9e77-fdc1837fc6ad",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "exceptions",
+    "if-else-statements",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "class CollatzCalculator {\n\n    int computeStepCount(int start) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}\n",
+  "example_solution": "class CollatzCalculator {\n\n    int computeStepCount(final int start) {\n        if (start <= 0) {\n            throw new IllegalArgumentException(\"Only positive integers are allowed\");\n        }\n        if (start == 1) {\n            return 0;\n        }\n        final int next;\n\n        if (start % 2 == 0) {\n            next = start / 2;\n        } else {\n            next = 3 * start + 1;\n        }\n\n        return 1 + computeStepCount(next);\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\nimport static org.assertj.core.api.Assertions.assertThatExceptionOfType;\n\npublic class CollatzCalculatorTest {\n\n    private CollatzCalculator collatzCalculator = new CollatzCalculator();\n\n    @Test\n    @DisplayName(\"zero steps for one\")\n    public void testZeroStepsRequiredWhenStartingFrom1() {\n        assertThat(collatzCalculator.computeStepCount(1)).isEqualTo(0);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"divide if even\")\n    public void testCorrectNumberOfStepsWhenAllStepsAreDivisions() {\n        assertThat(collatzCalculator.computeStepCount(16)).isEqualTo(4);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"even and odd steps\")\n    public void testCorrectNumberOfStepsWhenBothStepTypesAreNeeded() {\n        assertThat(collatzCalculator.computeStepCount(12)).isEqualTo(9);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"large number of even and odd steps\")\n    public void testAVeryLargeInput() {\n        assertThat(collatzCalculator.computeStepCount(1000000)).isEqualTo(152);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"zero is an error\")\n    public void testZeroIsConsideredInvalidInput() {\n        assertThatExceptionOfType(IllegalArgumentException.class)\n                .isThrownBy(() -> collatzCalculator.computeStepCount(0))\n                .withMessage(\"Only positive integers are allowed\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"negative value is an error\")\n    public void testNegativeIntegerIsConsideredInvalidInput() {\n        assertThatExceptionOfType(IllegalArgumentException.class)\n                .isThrownBy(() -> collatzCalculator.computeStepCount(-15))\n                .withMessage(\"Only positive integers are allowed\");\n    }\n\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "stkent"
+  ],
+  "contributors": [
+    "aadityakulkarni",
+    "FridaTveit",
+    "jackattack24",
+    "jmrunkle",
+    "kytrinyx",
+    "lemoncurry",
+    "mirkoperillo",
+    "msomji",
+    "muzimuzhi",
+    "redshirt4",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "ThomasVitale",
+    "Zaldrick"
+  ]
+}

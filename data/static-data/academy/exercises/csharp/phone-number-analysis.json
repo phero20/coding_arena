@@ -1,0 +1,33 @@
+{
+  "id": "csharp:phone-number-analysis",
+  "trackSlug": "csharp",
+  "slug": "phone-number-analysis",
+  "name": "Phone Number Analysis",
+  "uuid": "8bb88ab5-3cde-4ebd-8eef-03323ebfd700",
+  "type": "concept",
+  "status": null,
+  "blurb": "Learn about tuples by analysing phone numbers.",
+  "difficulty": null,
+  "concepts": [
+    "tuples"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nThis exercise has you analyze phone numbers.\n\nYou are asked to implement 2 features.\n\nPhone numbers passed to the routines are guaranteed to be in the form\nNNN-NNN-NNNN e.g. 212-515-9876 and non-null.\n\n## 1. Analyze a phone number\n\nYour analysis should return 3 pieces of data\n\n1. An indication of whether the number has a New York dialing code ie. 212 as the first 3 digits\n2. An indication of whether the number is fake having 555 as a prefix code in positions 5 to 7 (numbering from 1)\n3. The last 4 digits of the number.\n\nImplement the (static) method `PhoneNumber.Analyze()` to produce the phone number info.\n\n```csharp\nPhoneNumber.Analyze(\"631-555-1234\");\n// => (false, true, \"1234\")\n```\n\n## 2. Detect if a phone number has a fake prefix code (555)\n\nImplement the (static) method `PhoneNumber.IsFake()` to detect whether the phone number is fake using the phone number info produced in task 1.\n\n```csharp\nPhoneNumber.IsFake(PhoneNumbers.Analyze(\"631-555-1234\"));\n// => true\n```\n",
+  "introduction": "# Introduction\n\n## Tuples\n\nIn C#, a tuple is a data structure which organizes data, holding two or more fields\nof any type.\n\nA tuple is typically created by placing 2 or more expressions separated by commas,\nwithin a set of parentheses.\n\n```csharp\nstring boast = \"All you need to know\";\nbool success = !string.IsNullOrWhiteSpace(boast);\n(bool, int, string) triple = (success, 42, boast);\n```\n\nA tuple can be used in assignment and initialization operations, as a return value or a method argument.\n\nFields are extracted using dot syntax. By default, the first field is `Item1`,\nthe second `Item2`, etc. Non-default names are discussed below.\n\n```csharp\n// initialization\n(int, int, int) vertices = (90, 45, 45);\n\n// assignment\nvertices = (60, 60, 60);\n\n//  return value\n(bool, int) GetSameOrBigger(int num1, int num2)\n{\n    return (num1 == num2, num1 > num2 ? num1 : num2);\n}\n\n// method argument\nint Add((int, int) operands)\n{\n    return operands.Item1 + operands.Item2;\n}\n```\n\nField names `Item1` etc. do not make for readable code. The code below shows\n2 ways to name the fields of tuples. Note also, in the code below, that `var` can be used with tuples and the type inferred. This works equally well for tuples with named and unnamed fields.\n\n```csharp\n// name items in declaration\n(bool success, string message) results = (true, \"well done!\");\nbool mySuccess = results.success;\nstring myMessage = results.message;\n\n// name items in creating expression\nvar results2 = (success: true, message: \"well done!\");\nbool mySuccess2 = results2.success;\nstring myMessage2 = results2.message;\n```\n",
+  "hints": "# Hints\n\n## General\n\n- [Tuples][tuples]: shows how to define and use tuples.\n\n## 1. Analyze a phone number\n\n- Tuples are passed as a [return value][tuples-return].\n\n## 2. Detect if a phone number is fake prefix code (555)\n\n- You can extract the value of a field with the same sort of dot syntax as you employ with `struct`s or `class`s.\n\n[tuples]: https://docs.microsoft.com/en-us/dotnet/csharp/tuples\n[tuples-equality]: https://docs.microsoft.com/en-us/dotnet/csharp/tuples#equality-and-tuples\n[tuples-return]: https://docs.microsoft.com/en-us/dotnet/csharp/tuples#tuples-as-method-return-values\n",
+  "starter_code": "public static class PhoneNumber\n{\n    public static (bool IsNewYork, bool IsFake, string LocalNumber) Analyze(string phoneNumber)\n    {\n        throw new NotImplementedException($\"Please implement the (static) PhoneNumber.Analyze() method\");\n    }\n\n    public static bool IsFake((bool IsNewYork, bool IsFake, string LocalNumber) phoneNumberInfo)\n    {\n        throw new NotImplementedException($\"Please implement the (static) PhoneNumber.IsFake() method\");\n    }\n}\n",
+  "example_solution": "public static class PhoneNumber\n{\n    public static (bool IsNewYork, bool IsFake, string LocalNumber) Analyze(string phoneNumber)\n    {\n        return (phoneNumber.Substring(0, 3) == \"212\"\n            , phoneNumber.Substring(4, 3) == \"555\"\n            , phoneNumber.Substring(8, 4));\n    }\n\n    public static bool IsFake((bool IsNewYork, bool IsFake, string LocalNumber) phoneNumberInfo)\n    {\n        return phoneNumberInfo.IsFake;\n    }\n}\n",
+  "test_code": "using Exercism.Tests;\n\npublic class PhoneNumberAnalysisTests\n{\n    [Fact]\n    [Task(1)]\n    public void Analyze_non_fake_non_newyork()\n    {\n        Assert.Equal((false, false, \"1234\"), PhoneNumber.Analyze(\"631-502-1234\"));\n    }\n\n    [Fact]\n    [Task(1)]\n    public void Analyze_fake_non_newyork()\n    {\n        Assert.Equal((false, true, \"1234\"), PhoneNumber.Analyze(\"631-555-1234\"));\n    }\n\n    [Fact]\n    [Task(1)]\n    public void Analyze_non_fake_newyork()\n    {\n        Assert.Equal((true, false, \"1234\"), PhoneNumber.Analyze(\"212-502-1234\"));\n    }\n\n    [Fact]\n    [Task(1)]\n    public void Analyze_fake_newyork()\n    {\n        Assert.Equal((true, true, \"1234\"), PhoneNumber.Analyze(\"212-555-1234\"));\n    }\n\n    [Fact]\n    [Task(1)]\n    public void Analyze_fake_fake()\n    {\n        Assert.Equal((false, false, \"1234\"), PhoneNumber.Analyze(\"515-212-1234\"));\n    }\n\n    [Fact]\n    [Task(2)]\n    public void Is_Fake_fake()\n    {\n        Assert.True(PhoneNumber.IsFake(PhoneNumber.Analyze(\"212-555-1234\")));\n    }\n\n    [Fact]\n    [Task(2)]\n    public void Is_Fake_non_fake()\n    {\n        Assert.False(PhoneNumber.IsFake(PhoneNumber.Analyze(\"555-212-1234\")));\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "mikedamay"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "yzAlvin"
+  ]
+}

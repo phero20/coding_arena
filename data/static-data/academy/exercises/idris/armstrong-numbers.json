@@ -1,0 +1,26 @@
+{
+  "id": "idris:armstrong-numbers",
+  "trackSlug": "idris",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "203f8e7e-c8f7-4580-9a8f-060af08cf0d0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module ArmstrongNumbers\n\nexport\nisArmstrongNumber : Integer -> Bool\nisArmstrongNumber number = ?isArmstrongNumber_rhs\n",
+  "example_solution": "module ArmstrongNumbers\n\nimport Data.Nat\n\nexport\nisArmstrongNumber : Integer -> Bool\nisArmstrongNumber number = number == powerSum (listDigits number)\n  where listDigits : Integer -> List Integer\n        listDigits n = if n < 10 then [n] else (mod n 10) :: listDigits (div n 10)\n        powerSum : List Integer -> Integer\n        powerSum digits = cast $ sum $ map (\\digit => power (cast digit) len) digits\n          where len = length digits\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport ArmstrongNumbers\n\ntests : List Test\ntests =\n  [ test \"Zero is an Armstrong number\"                        (assert $       isArmstrongNumber 0)\n  , test \"Single-digit numbers are Armstrong numbers\"         (assert $       isArmstrongNumber 5)\n  , test \"There are no two-digit Armstrong numbers\"           (assert $ not $ isArmstrongNumber 10)\n  , test \"Three-digit number that is an Armstrong number\"     (assert $       isArmstrongNumber 153)\n  , test \"Three-digit number that is not an Armstrong number\" (assert $ not $ isArmstrongNumber 100)\n  , test \"Four-digit number that is an Armstrong number\"      (assert $       isArmstrongNumber 9474)\n  , test \"Four-digit number that is not an Armstrong number\"  (assert $ not $ isArmstrongNumber 9475)\n  , test \"Seven-digit number that is an Armstrong number\"     (assert $       isArmstrongNumber 9926315)\n  , test \"Seven-digit number that is not an Armstrong number\" (assert $ not $ isArmstrongNumber 9926314)\n  , test \"Armstrong number containing seven zeroes\"           (assert $       isArmstrongNumber 186709961001538790100634132976990)\n  , test \"The largest and last Armstrong number\"              (assert $       isArmstrongNumber 115132219018763992565095597973971522401)\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

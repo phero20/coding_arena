@@ -1,5 +1,9 @@
 import { container, type ICradle } from "../api/src/libs/awilix-container";
+<<<<<<< HEAD
 import { createLogger } from "../api/src/libs/logger";
+=======
+import { createLogger } from "../api/src/libs/utils/logger";
+>>>>>>> prod-deploy
 
 const logger = createLogger("health-check-test");
 

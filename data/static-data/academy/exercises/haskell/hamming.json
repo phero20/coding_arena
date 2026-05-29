@@ -1,0 +1,36 @@
+{
+  "id": "haskell:hamming",
+  "trackSlug": "haskell",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "30686585-eb09-4514-8b2e-c9a0d9983133",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming difference between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming Distance between two DNA strands.\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them we can see how many mistakes occurred.\nThis is known as the \"Hamming Distance\".\n\nWe read DNA using the letters C,A,G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming Distance is 7.\n\nThe Hamming Distance is useful for lots of things in science, not just biology, so it's a nice phrase to be familiar with :)\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Hamming (distance) where\n\ndistance :: String -> String -> Maybe Int\ndistance xs ys = error \"You need to implement this function.\"\n",
+  "example_solution": "module Hamming (distance) where\n\ndistance :: Integral a => String -> String -> Maybe a\ndistance (x:xs) (y:ys) = (if x /= y then (+1) else id) <$> distance xs ys\ndistance    []     []  = Just 0\ndistance     _      _  = Nothing\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Hamming (distance)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"distance\" $ for_ cases test\n  where\n\n    test Case{..} = it description assertion\n      where\n        assertion  = expression `shouldBe` fromIntegral <$> expected\n        expression = distance strand1 strand2\n\ndata Case = Case { description :: String\n                 , strand1     :: String\n                 , strand2     :: String\n                 , expected    :: Maybe Integer\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"empty strands\"\n               , strand1     = \"\"\n               , strand2     = \"\"\n               , expected    = Just 0\n               }\n        , Case { description = \"single letter identical strands\"\n               , strand1     = \"A\"\n               , strand2     = \"A\"\n               , expected    = Just 0\n               }\n        , Case { description = \"single letter different strands\"\n               , strand1     = \"G\"\n               , strand2     = \"T\"\n               , expected    = Just 1\n               }\n        , Case { description = \"long identical strands\"\n               , strand1     = \"GGACTGAAATCTG\"\n               , strand2     = \"GGACTGAAATCTG\"\n               , expected    = Just 0\n               }\n        , Case { description = \"long different strands\"\n               , strand1     = \"GGACGGATTCTG\"\n               , strand2     = \"AGGACGGATTCT\"\n               , expected    = Just 9\n               }\n        , Case { description = \"disallow first strand longer\"\n               , strand1     = \"AATG\"\n               , strand2     = \"AAA\"\n               , expected    = Nothing\n               }\n        , Case { description = \"disallow second strand longer\"\n               , strand1     = \"ATA\"\n               , strand2     = \"AGTG\"\n               , expected    = Nothing\n               }\n        , Case { description = \"disallow left empty strand\"\n               , strand1     = \"\"\n               , strand2     = \"G\"\n               , expected    = Nothing\n               }\n        , Case { description = \"disallow right empty strand\"\n               , strand1     = \"G\"\n               , strand2     = \"\"\n               , expected    = Nothing\n               }\n        ]\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "petertseng"
+  ],
+  "contributors": [
+    "chastell",
+    "iHiD",
+    "kytrinyx",
+    "lpalma",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane",
+    "tqa236"
+  ]
+}

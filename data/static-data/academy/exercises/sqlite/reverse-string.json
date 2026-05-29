@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:reverse-string",
+  "trackSlug": "sqlite",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "cf1c3ed8-167a-47e8-af1a-2cc2d8403525",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "-- Schema: CREATE TABLE \"reverse-string\" (input TEXT NOT NULL, result TEXT);\n-- Task: update the reverse-string table and set the result based on the input.\n",
+  "example_solution": "UPDATE \"reverse-string\"\nSET\n  result = (\n    WITH RECURSIVE\n      reverse_char (string, char) AS (\n        VALUES\n          (input, '')\n        UNION ALL\n        SELECT\n          SUBSTRING(string, 1, LENGTH(string) - 1),\n          SUBSTRING(string, -1)\n        FROM\n          reverse_char\n        WHERE\n          string <> ''\n      )\n    SELECT\n      GROUP_CONCAT(char, '')\n    FROM\n      reverse_char\n  );\n",
+  "test_code": "-- Create database:\n.read ./create_fixture.sql\n-- Read user student solution and save any output as markdown in user_output.md:\n.mode markdown\n.output user_output.md\n.read ./reverse-string.sql\n.output\n-- Create a clean testing environment:\n.read ./create_test_table.sql\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      input,\n      result\n    FROM\n      \"reverse-string\"\n  ) AS actual\nWHERE\n  (actual.input, actual.result) = (tests.input, tests.expected);\n\n-- Update message for failed tests to give helpful information:\nUPDATE tests\nSET\n  message = (\n    'Result for \"' || tests.input || '\"' || ' is <' || COALESCE(actual.result, 'NULL') || '> but should be <' || tests.expected || '>'\n  )\nFROM\n  (\n    SELECT\n      input,\n      result\n    FROM\n      \"reverse-string\"\n  ) AS actual\nWHERE\n  actual.input = tests.input\n  AND tests.status = 'fail';\n\n-- Save results to ./output.json (needed by the online test-runner)\n.mode json\n.once './output.json'\nSELECT\n  description,\n  status,\n  message,\n  output,\n  test_code,\n  task_id\nFROM\n  tests;\n\n-- Display test results in readable form for the student:\n.mode table\nSELECT\n  description,\n  status,\n  message\nFROM\n  tests;\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

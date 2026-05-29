@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:nth-prime",
+  "trackSlug": "fsharp",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "220cbe7e-e781-4ab9-84ec-2b89a3c97670",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "lazy-evaluation",
+    "yield"
+  ],
+  "prerequisites": [
+    "numbers",
+    "options"
+  ],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module NthPrime\n\nlet prime nth : int option = failwith \"You need to implement this function.\"",
+  "example_solution": "module NthPrime\n\nopen System\n\nlet isPrime (n: int) = \n    let r = Math.Floor(Math.Sqrt(n |> double)) |> int\n    r < 5 || Seq.init (r - 4) id |> Seq.forall (fun x -> n % (5 + x) <> 0)\n\nlet rec possiblePrimes n = \n    seq { \n        yield n - 1\n        yield n + 1\n        yield! possiblePrimes (n + 6)\n    }\n    \nlet primes = \n    seq {\n        yield 2\n        yield 3\n        yield! Seq.filter isPrime (possiblePrimes 6)\n    }\n\nlet prime nth : int option = \n    match nth with \n    | n when n < 1 -> None\n    | _ -> Some (Seq.item (nth - 1) primes)",
+  "test_code": "module NthPrimeTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen NthPrime\n\n[<Fact>]\nlet ``First prime`` () =\n    prime 1 |> should equal (Some 2)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Second prime`` () =\n    prime 2 |> should equal (Some 3)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Sixth prime`` () =\n    prime 6 |> should equal (Some 13)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Big prime`` () =\n    prime 10001 |> should equal (Some 104743)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``There is no zeroth prime`` () =\n    prime 0 |> should equal None\n\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "balazsbotond",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

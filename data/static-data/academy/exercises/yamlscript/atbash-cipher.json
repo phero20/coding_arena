@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:atbash-cipher",
+  "trackSlug": "yamlscript",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "e88753e1-3404-4bf0-beff-914cf048fc07",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn encode(phrase):\n  # Implement the 'encode' function.\n\ndefn decode(phrase):\n  # Implement the 'decode' function.\n",
+  "example_solution": "!YS-v0\n\ndefn encode(phrase):\n  phrase:lc:decode:\n    .replace(/[^a-z0-9]/)\n    .partition(5 5 '').map(join):joins\n\ndefn decode(phrase):\n  escape phrase.replace(' '):\n    zipmap (\\\\a .. \\\\z): \\\\z .. \\\\a\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'atbash-cipher.ys'\n\ntest::\n- name: Encode yes\n  code: encode(\"yes\")\n  want: bvh\n\n- name: Encode no\n  code: encode(\"no\")\n  want: ml\n\n- name: Encode omg\n  code: encode(\"OMG\")\n  want: lnt\n\n- name: Encode spaces\n  code: encode(\"O M G\")\n  want: lnt\n\n- name: Encode mindblowingly\n  code: encode(\"mindblowingly\")\n  want: nrmwy oldrm tob\n\n- name: Encode numbers\n  code: encode(\"Testing,1 2 3, testing.\")\n  want: gvhgr mt123 gvhgr mt\n\n- name: Encode deep thought\n  code: encode(\"Truth is fiction.\")\n  want: gifgs rhurx grlm\n\n- name: Encode all the letters\n  code: encode(\"The quick brown fox jumps over the lazy dog.\")\n  want: gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\n\n- name: Decode exercism\n  code: decode(\"vcvix rhn\")\n  want: exercism\n\n- name: Decode a sentence\n  code: decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\")\n  want: anobstacleisoftenasteppingstone\n\n- name: Decode numbers\n  code: decode(\"gvhgr mt123 gvhgr mt\")\n  want: testing123testing\n\n- name: Decode all the letters\n  code: decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n  want: thequickbrownfoxjumpsoverthelazydog\n\n- name: Decode with too many spaces\n  code: decode(\"vc vix    r hn\")\n  want: exercism\n\n- name: Decode with no spaces\n  code: decode(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\")\n  want: anobstacleisoftenasteppingstone\n\ndone: 14\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

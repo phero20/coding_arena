@@ -1,0 +1,26 @@
+{
+  "id": "wren:proverb",
+  "trackSlug": "wren",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "4df0877e-d97a-401a-8b73-bfa8f7cb5e4a",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Proverb {\n  static recite(strings) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class Proverb {\n  static recite(strings) {\n    var result = []\n    for (index in 0...strings.count) {\n      var line = null\n      if (index + 1 < strings.count) {\n        line = \"For want of a %(strings[index]) the %(strings[index + 1]) was lost.\"\n      } else {\n        line = \"And all for the want of a %(strings[0]).\"\n      }\n      result.add(line)\n    }\n    return result\n  }\n}\n",
+  "test_code": "import \"./proverb\" for Proverb\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"Proverb\") { |do, skip|\n  do.test(\"zero pieces\") {\n    var strings = [\n    ]\n    var expected = [\n    ]\n    Expect.value(Proverb.recite(strings)).toEqual(expected)\n  }\n\n  skip.test(\"one piece\") {\n    var strings = [\n      \"nail\",\n    ]\n    var expected = [\n      \"And all for the want of a nail.\",\n    ]\n    Expect.value(Proverb.recite(strings)).toEqual(expected)\n  }\n\n  skip.test(\"two pieces\") {\n    var strings = [\n      \"nail\",\n      \"shoe\",\n    ]\n    var expected = [\n      \"For want of a nail the shoe was lost.\",\n      \"And all for the want of a nail.\",\n    ]\n    Expect.value(Proverb.recite(strings)).toEqual(expected)\n  }\n\n  skip.test(\"three pieces\") {\n    var strings = [\n      \"nail\",\n      \"shoe\",\n      \"horse\",\n    ]\n    var expected = [\n      \"For want of a nail the shoe was lost.\",\n      \"For want of a shoe the horse was lost.\",\n      \"And all for the want of a nail.\",\n    ]\n    Expect.value(Proverb.recite(strings)).toEqual(expected)\n  }\n\n  skip.test(\"full proverb\") {\n    var strings = [\n      \"nail\",\n      \"shoe\",\n      \"horse\",\n      \"rider\",\n      \"message\",\n      \"battle\",\n      \"kingdom\",\n    ]\n    var expected = [\n      \"For want of a nail the shoe was lost.\",\n      \"For want of a shoe the horse was lost.\",\n      \"For want of a horse the rider was lost.\",\n      \"For want of a rider the message was lost.\",\n      \"For want of a message the battle was lost.\",\n      \"For want of a battle the kingdom was lost.\",\n      \"And all for the want of a nail.\",\n    ]\n    Expect.value(Proverb.recite(strings)).toEqual(expected)\n  }\n\n  skip.test(\"four pieces modernized\") {\n    var strings = [\n      \"pin\",\n      \"gun\",\n      \"soldier\",\n      \"battle\",\n    ]\n    var expected = [\n      \"For want of a pin the gun was lost.\",\n      \"For want of a gun the soldier was lost.\",\n      \"For want of a soldier the battle was lost.\",\n      \"And all for the want of a pin.\",\n    ]\n    Expect.value(Proverb.recite(strings)).toEqual(expected)\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

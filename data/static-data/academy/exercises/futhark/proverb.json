@@ -1,0 +1,26 @@
+{
+  "id": "futhark:proverb",
+  "trackSlug": "futhark",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "901faf71-670a-4a8a-b948-e7df0b8ed248",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def recite (strings: []u8): []u8 = ???\n",
+  "example_solution": "def recite (strings: []u8): []u8 =\n  if length strings == 0 then [] else\n  let offsets = loop offsets = [0] for i < length strings do\n    if strings[i] != '\\n' then offsets else\n    offsets ++ [i + 1]\n  in\n    let n = length offsets - 2\n    in\n      let result = loop result = \"\" for i < n do\n        result ++ \"For want of a \" ++ strings[offsets[i]:offsets[i + 1] - 1] ++ \" the \" ++ strings[offsets[i + 1]:offsets[i + 2] - 1] ++ \" was lost.\\n\"\n      in\n        result ++ \"And all for the want of a \" ++ strings[offsets[0]:offsets[1] - 1] ++ \".\\n\"\n",
+  "test_code": "import \"proverb\"\n\n-- zero pieces\n-- ==\n-- input { \"\" }\n-- output { \"\" }\n\n-- one piece\n-- ==\n-- input { \"nail\\n\" }\n-- output { \"And all for the want of a nail.\\n\" }\n\n-- two pieces\n-- ==\n-- input { \"nail\\nshoe\\n\" }\n-- output { \"For want of a nail the shoe was lost.\\nAnd all for the want of a nail.\\n\" }\n\n-- three pieces\n-- ==\n-- input { \"nail\\nshoe\\nhorse\\n\" }\n-- output { \"For want of a nail the shoe was lost.\\nFor want of a shoe the horse was lost.\\nAnd all for the want of a nail.\\n\" }\n\n-- full proverb\n-- ==\n-- input { \"nail\\nshoe\\nhorse\\nrider\\nmessage\\nbattle\\nkingdom\\n\" }\n-- output { \"For want of a nail the shoe was lost.\\nFor want of a shoe the horse was lost.\\nFor want of a horse the rider was lost.\\nFor want of a rider the message was lost.\\nFor want of a message the battle was lost.\\nFor want of a battle the kingdom was lost.\\nAnd all for the want of a nail.\\n\" }\n\n-- four pieces modernized\n-- ==\n-- input { \"pin\\ngun\\nsoldier\\nbattle\\n\" }\n-- output { \"For want of a pin the gun was lost.\\nFor want of a gun the soldier was lost.\\nFor want of a soldier the battle was lost.\\nAnd all for the want of a pin.\\n\" }\n\nlet main (strings: []u8): []u8 =\n  recite strings\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

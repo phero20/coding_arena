@@ -1,0 +1,41 @@
+{
+  "id": "csharp:matrix",
+  "trackSlug": "csharp",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "73509caa-9b3e-4d09-933f-364c1a7e5519",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "properties",
+    "classes",
+    "arrays"
+  ],
+  "prerequisites": [
+    "arrays",
+    "classes",
+    "numbers",
+    "properties"
+  ],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public class Matrix\n{\n    public Matrix(string input)\n    {\n    }\n\n    public int[] Row(int row)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public int[] Column(int col)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public class Matrix\n{\n    private readonly int[][] _rows;\n    private readonly int[][] _cols;\n\n    public Matrix(string input)\n    {\n        _rows = ParseRows(input);\n        _cols = ParseCols(_rows);\n    }\n\n    public int Rows => _rows.Length;\n    public int Cols => _cols.Length;\n\n    public int[] Row(int row) => _rows[row - 1];\n    public int[] Column(int col) => _cols[col - 1];\n\n    private static int[][] ParseRows(string input)\n    {\n        return input.Split('\\n')\n            .Select(ParseRow)\n            .ToArray();\n    }\n\n    private static int[] ParseRow(string row)\n    {\n        return row.Split(' ')\n            .Select(int.Parse)\n            .ToArray();\n    }\n\n    private static int[][] ParseCols(int[][] rows)\n    {\n        return Enumerable.Range(0, rows[0].Length)\n            .Select(y => ParseCol(rows, y))\n            .ToArray();\n    }\n\n    private static int[] ParseCol(int[][] rows, int y)\n    {\n        return Enumerable.Range(0, rows.Length)\n            .Select(x => rows[x][y])\n            .ToArray();\n    }\n}",
+  "test_code": "public class MatrixTests\n{\n    [Fact]\n    public void Extract_row_from_one_number_matrix()\n    {\n        var sut = new Matrix(\"1\");\n        int[] expected = [1];\n        Assert.Equal(expected, sut.Row(1));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_extract_row()\n    {\n        var sut = new Matrix(\"1 2\\n3 4\");\n        int[] expected = [3, 4];\n        Assert.Equal(expected, sut.Row(2));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Extract_row_where_numbers_have_different_widths()\n    {\n        var sut = new Matrix(\"1 2\\n10 20\");\n        int[] expected = [10, 20];\n        Assert.Equal(expected, sut.Row(2));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_extract_row_from_non_square_matrix_with_no_corresponding_column()\n    {\n        var sut = new Matrix(\"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\");\n        int[] expected = [8, 7, 6];\n        Assert.Equal(expected, sut.Row(4));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Extract_column_from_one_number_matrix()\n    {\n        var sut = new Matrix(\"1\");\n        int[] expected = [1];\n        Assert.Equal(expected, sut.Column(1));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_extract_column()\n    {\n        var sut = new Matrix(\"1 2 3\\n4 5 6\\n7 8 9\");\n        int[] expected = [3, 6, 9];\n        Assert.Equal(expected, sut.Column(3));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_extract_column_from_non_square_matrix_with_no_corresponding_row()\n    {\n        var sut = new Matrix(\"1 2 3 4\\n5 6 7 8\\n9 8 7 6\");\n        int[] expected = [4, 8, 6];\n        Assert.Equal(expected, sut.Column(4));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Extract_column_where_numbers_have_different_widths()\n    {\n        var sut = new Matrix(\"89 1903 3\\n18 3 1\\n9 4 800\");\n        int[] expected = [1903, 3, 4];\n        Assert.Equal(expected, sut.Column(2));\n    }\n}\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "j2jensen",
+    "robkeim",
+    "ShamilS",
+    "vgrigoriu",
+    "wolf99"
+  ]
+}

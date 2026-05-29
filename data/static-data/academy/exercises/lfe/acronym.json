@@ -1,0 +1,26 @@
+{
+  "id": "lfe:acronym",
+  "trackSlug": "lfe",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "d3b82743-950f-4577-ab3a-655ff3522c6b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defmodule acronym\n  (export (abbreviate 1)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule acronym\n    (export (abbreviate 1)))\n\n(defun upper (char)\n  (string:to_upper char))\n\n(defun upper? (char)\n  (=/= 'nomatch (re:run (list char) \"\\\\p{Lu}\")))\n\n(defun break?\n  ((#\\ ) 'true)\n  ((#\\-) 'true)\n  ((_) 'false))\n\n(defun abbreviate\n  (((cons c1 (cons c2 cs)))\n   (cond\n     ((and (upper? c1) (upper? c2))\n      (abbreviate (cons c1 cs)))\n     ((upper? c1)\n      (cons c1 (abbreviate (cons c2 cs))))\n     ((break? c1)\n      (abbreviate (cons (upper c2) cs)))\n     ('true\n      (abbreviate (cons c2 cs)))))\n  ((_) ()))\n",
+  "test_code": "(defmodule acronym-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(defun acronyms_test_ ()\n  (lists:map #'make-test/1 (cases)))\n\n(defun make-test\n  (((tuple description input expected))\n   (tuple description (lambda () (is-equal expected (acronym:abbreviate input))))))\n  \n(defun cases ()\n  (list\n   (tuple \"basic\" \"Portable Network Graphics\" \"PNG\")\n   (tuple \"lowercase words\" \"Ruby on Rails\" \"ROR\")\n   (tuple \"punctuation\" \"First In, First Out\" \"FIFO\")\n   (tuple \"all caps word\" \"GNU Image Manipulation Program\" \"GIMP\")\n   (tuple \"punctuation without whitespace\" \"Complementary metal-oxide semiconductor\" \"CMOS\")\n   (tuple \"very long abbreviation\" \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\" \"ROTFLSHTMDCOALM\")\n   (tuple \"consecutive delimiters\" \"Something - I made up from thin air\" \"SIMUFTA\")\n   (tuple \"apostrophes\" \"Halley's Comet\" \"HC\")\n   (tuple \"underscore emphasis\" \"The Road _Not_ Taken\" \"TRNT\")))\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "kephas"
+  ],
+  "contributors": null
+}

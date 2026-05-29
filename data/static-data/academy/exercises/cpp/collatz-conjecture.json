@@ -1,0 +1,31 @@
+{
+  "id": "cpp:collatz-conjecture",
+  "trackSlug": "cpp",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "c74f60b3-48fe-46c5-ae52-5e4b0787ba84",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "#include \"collatz_conjecture.h\"\n\nnamespace collatz_conjecture {\n\n// TODO: add your solution here\n\n}  // namespace collatz_conjecture\n",
+  "example_solution": "#include <stdexcept>\n\n#include \"collatz_conjecture.h\"\n\nint collatz_conjecture::steps(int value) {\n    if (value <= 0)\n        throw std::domain_error(\"Only positive numbers are allowed!\");\n    int step = 0;\n    while (value != 1) {\n        value = value % 2 == 0 ? value / 2 : 3 * value + 1;\n        ++step;\n    }\n    return step;\n}\n",
+  "test_code": "#include \"collatz_conjecture.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n#include <stdexcept>\n\nTEST_CASE(\"zero_steps_for_one\") { REQUIRE(0 == collatz_conjecture::steps(1)); }\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\n\nTEST_CASE(\"divide_if_even\") { REQUIRE(4 == collatz_conjecture::steps(16)); }\n\nTEST_CASE(\"even_and_odd_steps\") { REQUIRE(9 == collatz_conjecture::steps(12)); }\n\nTEST_CASE(\"large_number_of_even_and_odd_steps\") {\n    REQUIRE(152 == collatz_conjecture::steps(1000000));\n}\n\nTEST_CASE(\"zero_is_an_error\") {\n    REQUIRE_THROWS_AS(collatz_conjecture::steps(0), std::domain_error);\n}\n\nTEST_CASE(\"negative_value_is_an_error\") {\n    REQUIRE_THROWS_AS(collatz_conjecture::steps(-15), std::domain_error);\n}\n#endif\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "marvelou-s"
+  ],
+  "contributors": [
+    "elyashiv",
+    "KevinWMatthews",
+    "patricksjackson",
+    "kytrinyx"
+  ]
+}

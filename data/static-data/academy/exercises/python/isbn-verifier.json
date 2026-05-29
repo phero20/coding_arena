@@ -1,0 +1,40 @@
+{
+  "id": "python:isbn-verifier",
+  "trackSlug": "python",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "7961c852-c87a-44b0-b152-efea3ac8555c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def is_valid(isbn):\n    pass\n",
+  "example_solution": "def is_valid(isbn):\n    chars = list(isbn.replace('-', ''))\n    if chars and chars[-1] == 'X':\n        chars[-1] = '10'\n    if not len(chars) == 10 or not all(char.isdigit() for char in chars):\n        return False\n    indices = list(range(10, 0, -1))\n    return sum(int(char) * idx for char, idx in zip(chars, indices)) % 11 == 0\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/isbn-verifier/canonical-data.json\n# File last updated on 2025-12-30\n\nimport unittest\n\nfrom isbn_verifier import (\n    is_valid,\n)\n\n\nclass IsbnVerifierTest(unittest.TestCase):\n    def test_valid_isbn(self):\n        self.assertIs(is_valid(\"3-598-21508-8\"), True)\n\n    def test_invalid_isbn_check_digit(self):\n        self.assertIs(is_valid(\"3-598-21508-9\"), False)\n\n    def test_valid_isbn_with_a_check_digit_of_10(self):\n        self.assertIs(is_valid(\"3-598-21507-X\"), True)\n\n    def test_check_digit_is_a_character_other_than_x(self):\n        self.assertIs(is_valid(\"3-598-21507-A\"), False)\n\n    def test_invalid_check_digit_in_isbn_is_not_treated_as_zero(self):\n        self.assertIs(is_valid(\"4-598-21507-B\"), False)\n\n    def test_invalid_character_in_isbn_is_not_treated_as_zero(self):\n        self.assertIs(is_valid(\"3-598-P1581-X\"), False)\n\n    def test_x_is_only_valid_as_a_check_digit(self):\n        self.assertIs(is_valid(\"3-598-2X507-9\"), False)\n\n    def test_only_one_check_digit_is_allowed(self):\n        self.assertIs(is_valid(\"3-598-21508-96\"), False)\n\n    def test_x_is_not_substituted_by_the_value_10(self):\n        self.assertIs(is_valid(\"3-598-2X507-5\"), False)\n\n    def test_valid_isbn_without_separating_dashes(self):\n        self.assertIs(is_valid(\"3598215088\"), True)\n\n    def test_isbn_without_separating_dashes_and_x_as_check_digit(self):\n        self.assertIs(is_valid(\"359821507X\"), True)\n\n    def test_isbn_without_check_digit_and_dashes(self):\n        self.assertIs(is_valid(\"359821507\"), False)\n\n    def test_too_long_isbn_and_no_dashes(self):\n        self.assertIs(is_valid(\"3598215078X\"), False)\n\n    def test_too_short_isbn(self):\n        self.assertIs(is_valid(\"00\"), False)\n\n    def test_isbn_without_check_digit(self):\n        self.assertIs(is_valid(\"3-598-21507\"), False)\n\n    def test_check_digit_of_x_should_not_be_used_for_0(self):\n        self.assertIs(is_valid(\"3-598-21515-X\"), False)\n\n    def test_empty_isbn(self):\n        self.assertIs(is_valid(\"\"), False)\n\n    def test_input_is_9_characters(self):\n        self.assertIs(is_valid(\"134456729\"), False)\n\n    def test_invalid_characters_are_not_ignored_after_checking_length(self):\n        self.assertIs(is_valid(\"3132P34035\"), False)\n\n    def test_invalid_characters_are_not_ignored_before_checking_length(self):\n        self.assertIs(is_valid(\"3598P215088\"), False)\n\n    def test_input_is_too_long_but_contains_a_valid_isbn(self):\n        self.assertIs(is_valid(\"98245726788\"), False)\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "pheanex"
+  ],
+  "contributors": [
+    "BethanyG",
+    "cmccandless",
+    "Dog",
+    "thomasjpfan",
+    "tqa236",
+    "yawpitch"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "reasonml:roman-numerals",
+  "trackSlug": "reasonml",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "fb891c45-82f1-422d-ac4e-00409668d6a7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "let toRoman = (_) => {\n  failwith(\"TODO: implement toRoman function\");\n};",
+  "example_solution": "let toRoman = (n) => {\n  let rec go = (s) =>\n    fun\n    | n when n >= 1000 => go(s ++ \"M\", n - 1000)\n    | n when n >= 900 => go(s ++ \"CM\", n - 900)\n    | n when n >= 500 => go(s ++ \"D\", n - 500)\n    | n when n >= 400 => go(s ++ \"CD\", n - 400)\n    | n when n >= 100 => go(s ++ \"C\", n - 100)\n    | n when n >= 90 => go(s ++ \"XC\", n - 90)\n    | n when n >= 50 => go(s ++ \"L\", n - 50)\n    | n when n >= 40 => go(s ++ \"XL\", n - 40)\n    | n when n >= 10 => go(s ++ \"X\", n - 10)\n    | n when n == 9 => go(s ++ \"IX\", n - 9)\n    | n when n >= 5 => go(s ++ \"V\", n - 5)\n    | n when n == 4 => go(s ++ \"IV\", n - 4)\n    | n when n >= 1 => go(s ++ \"I\", n - 1)\n    | _ => s;\n  go(\"\", n);\n};\n",
+  "test_code": "open Jest;\nopen Expect;\nopen RomanNumerals;\n\ndescribe(\"RomanNumerals\", () => {\n  test(\"1 is I\", () =>\n    expect(toRoman(1)) |> toEqual(\"I\")\n  );\n  test(\"2 is II\", () =>\n    expect(toRoman(2)) |> toEqual(\"II\") \n  );\n  test(\"3 is III\", () =>\n    expect(toRoman(3)) |> toEqual(\"III\") \n  );\n  test(\"4 is IV\", () =>\n    expect(toRoman(4)) |> toEqual(\"IV\")\n  );\n  test(\"5 is V\", () =>\n    expect(toRoman(5)) |> toEqual(\"V\") \n  );\n  test(\"6 is VI\", () =>\n    expect(toRoman(6)) |> toEqual(\"VI\") \n  );\n  test(\"9 is IX\", () =>\n    expect(toRoman(9)) |> toEqual(\"IX\") \n  );\n  test(\"16 is XVI\", () =>\n    expect(toRoman(16)) |> toEqual(\"XVI\") \n  );\n  test(\"27 is XXVII\", () =>\n    expect(toRoman(27)) |> toEqual(\"XXVII\")\n  );\n  test(\"48 is XLVIII\", () =>\n    expect(toRoman(48)) |> toEqual(\"XLVIII\") \n  );\n  test(\"49 is XLIX\", () =>\n    expect(toRoman(49)) |> toEqual(\"XLIX\") \n  );\n  test(\"59 is LIX\", () =>\n    expect(toRoman(59)) |> toEqual(\"LIX\") \n  );\n  test(\"66 is LXVI\", () =>\n    expect(toRoman(66)) |> toEqual(\"LXVI\") \n  );\n  test(\"93 is XCIII\", () =>\n    expect(toRoman(93)) |> toEqual(\"XCIII\") \n  );\n  test(\"141 is CXLI\", () =>\n    expect(toRoman(141)) |> toEqual(\"CXLI\") \n  );\n  test(\"163 is CLXIII\", () =>\n    expect(toRoman(163)) |> toEqual(\"CLXIII\") \n  );\n  test(\"166 is CLXVI\", () =>\n    expect(toRoman(166)) |> toEqual(\"CLXVI\") \n  );\n  test(\"402 is CDII\", () =>\n    expect(toRoman(402)) |> toEqual(\"CDII\") \n  );\n  test(\"575 is DLXXV\", () =>\n    expect(toRoman(575)) |> toEqual(\"DLXXV\") \n  );\n  test(\"666 is DCLXVI\", () =>\n    expect(toRoman(666)) |> toEqual(\"DCLXVI\") \n  );\n  test(\"911 is CMXI\", () =>\n    expect(toRoman(911)) |> toEqual(\"CMXI\")\n  );\n  test(\"1024 is MXXIV\", () =>\n    expect(toRoman(1024)) |> toEqual(\"MXXIV\")\n  );\n  test(\"1666 is MDCLXVI\", () =>\n    expect(toRoman(1666)) |> toEqual(\"MDCLXVI\")\n  );\n  test(\"3000 is MMM\", () =>\n    expect(toRoman(3000)) |> toEqual(\"MMM\")\n  );\n  test(\"3001 is MMMI\", () =>\n    expect(toRoman(3001)) |> toEqual(\"MMMI\")\n  );\n  test(\"3888 is MMMDCCCLXXXVIII\", () =>\n    expect(toRoman(3888)) |> toEqual(\"MMMDCCCLXXXVIII\")\n  );\n  test(\"3999 is MMMCMXCIX\", () =>\n    expect(toRoman(3999)) |> toEqual(\"MMMCMXCIX\")\n  );\n});\n\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "naartjie",
+    "ohana54",
+    "tejasbubane"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "uiua:simple-cipher",
+  "trackSlug": "uiua",
+  "slug": "simple-cipher",
+  "name": "Simple Cipher",
+  "uuid": "7e0d78ab-d655-4763-93ea-bac581dadcbb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the Vigenère cipher, a simple substitution cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the [Vigenère cipher][wiki].\nThe Vigenère cipher is a simple substitution cipher.\n\n## Cipher terminology\n\nA cipher is an algorithm used to encrypt, or encode, a string.\nThe unencrypted string is called the _plaintext_ and the encrypted string is called the _ciphertext_.\nConverting plaintext to ciphertext is called _encoding_ while the reverse is called _decoding_.\n\nIn a _substitution cipher_, each plaintext letter is replaced with a ciphertext letter which is computed with the help of a _key_.\n(Note, it is possible for replacement letter to be the same as the original letter.)\n\n## Encoding details\n\nIn this cipher, the key is a series of lowercase letters, such as `\"abcd\"`.\nEach letter of the plaintext is _shifted_ or _rotated_ by a distance based on a corresponding letter in the key.\nAn `\"a\"` in the key means a shift of 0 (that is, no shift).\nA `\"b\"` in the key means a shift of 1.\nA `\"c\"` in the key means a shift of 2, and so on.\n\nThe first letter of the plaintext uses the first letter of the key, the second letter of the plaintext uses the second letter of the key and so on.\nIf you run out of letters in the key before you run out of letters in the plaintext, start over from the start of the key again.\n\nIf the key only contains one letter, such as `\"dddddd\"`, then all letters of the plaintext are shifted by the same amount (three in this example), which would make this the same as a rotational cipher or shift cipher (sometimes called a Caesar cipher).\nFor example, the plaintext `\"iamapandabear\"` would become `\"ldpdsdqgdehdu\"`.\n\nIf the key only contains the letter `\"a\"` (one or more times), the shift distance is zero and the ciphertext is the same as the plaintext.\n\nUsually the key is more complicated than that, though!\nIf the key is `\"abcd\"` then letters of the plaintext would be shifted by a distance of 0, 1, 2, and 3.\nIf the plaintext is `\"hello\"`, we need 5 shifts so the key would wrap around, giving shift distances of 0, 1, 2, 3, and 0.\nApplying those shifts to the letters of `\"hello\"` we get `\"hfnoo\"`.\n\n## Random keys\n\nIf no key is provided, generate a key which consists of at least 100 random lowercase letters from the Latin alphabet.\n\n[wiki]: https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Encode plaintext using the Caesar Cipher\n# Ciphertext ? Key Plaintext\nEncode ← |2 ⊙⋅(⍤ \"Please implement Encode\" 0)\n\n# Decode plaintext using the Caesar Cipher\n# Plaintext ? Key Ciphertext\nDecode ← |2 ⊙⋅(⍤ \"Please implement Decode\" 0)\n\n# Generate a random key for the Caesar Cipher\n# Key\nRandomKey ← |0 (⍤. \"Please implement RandomKey\" 0)\n",
+  "example_solution": "Translate! ← ⍜∩(-@a)(◿26 ^0)↯⊃(⋅△|⊙∘)↙↧◡∩⧻\nEncode     ← Translate!+\nDecode     ← Translate!-\nRandomKey  ← +@a ⌊×26 ⍥₁₀₀⚂\n",
+  "test_code": "~ \"simple-cipher.ua\" ~ Decode Encode RandomKey\n\n# Substitution cipher - Can encode\n⍤⤙≍ \"abcdefghij\" Encode \"abcdefghij\" \"aaaaaaaaaa\"\n\n# Substitution cipher - Can decode\n⍤⤙≍ \"aaaaaaaaaa\" Decode \"abcdefghij\" \"abcdefghij\"\n\n# Substitution cipher - Is reversible. I.e., if you apply decode in a encoded result, you must see the same plaintext encode parameter as a result of the decode method\nKey ← \"abcdefghij\"\n⍤⤙≍ \"abcdefghij\" Decode Key Encode \"abcdefghij\" Key\n\n# Substitution cipher - Can double shift encode\n⍤⤙≍ \"qayaeaagaciai\" Encode \"iamapandabear\" \"iamapandabear\"\n\n# Substitution cipher - Can wrap on encode\n⍤⤙≍ \"zabcdefghi\" Encode \"abcdefghij\" \"zzzzzzzzzz\"\n\n# Substitution cipher - Can wrap on decode\n⍤⤙≍ \"zzzzzzzzzz\" Decode \"abcdefghij\" \"zabcdefghi\"\n\n# Substitution cipher - Can encode messages longer than the key\n⍤⤙≍ \"iboaqcnecbfcr\" Encode \"abc\" \"iamapandabear\"\n\n# Substitution cipher - Can decode messages longer than the key\n⍤⤙≍ \"iamapandabear\" Decode \"abc\" \"iboaqcnecbfcr\"\n\n# Random key cipher - Can encode\nKey ← RandomKey()\n⍤⤙≍ ↙ 10 Key Encode Key \"aaaaaaaaaa\"\n\n# Random key cipher - Can decode\nKey ← RandomKey()\n⍤⤙≍ \"aaaaaaaaaa\" Decode ⟜(↙10) Key\n\n# Random key cipher - Is reversible. I.e., if you apply decode in a encoded result, you must see the same plaintext encode parameter as a result of the decode method\nKey ← RandomKey()\n⍤⤙≍ \"abcdefghij\" Decode Key Encode Key \"abcdefghij\"\n\n# Random key cipher - Key is made only of lowercase letters\n⍤⤙≍ 1 ±⧻♭ regex \"^[a-z]{100,}$\" RandomKey()\n",
+  "source": "Substitution Cipher at Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Substitution_cipher",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

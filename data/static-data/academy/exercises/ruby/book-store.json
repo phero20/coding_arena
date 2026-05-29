@@ -1,0 +1,43 @@
+{
+  "id": "ruby:book-store",
+  "trackSlug": "ruby",
+  "slug": "book-store",
+  "name": "Book Store",
+  "uuid": "0ec96460-08be-49a0-973a-4336f21b763c",
+  "type": "practice",
+  "status": null,
+  "blurb": "To try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts of multiple-book purchases.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [
+    "advanced-enumeration",
+    "loops",
+    "floating-point-numbers"
+  ],
+  "prerequisites": [
+    "floating-point-numbers",
+    "numbers",
+    "loops"
+  ],
+  "instructions": "# Instructions\n\nTo try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts on multiple book purchases.\n\nOne copy of any of the five books costs $8.\n\nIf, however, you buy two different books, you get a 5% discount on those two books.\n\nIf you buy 3 different books, you get a 10% discount.\n\nIf you buy 4 different books, you get a 20% discount.\n\nIf you buy all 5, you get a 25% discount.\n\nNote that if you buy four books, of which 3 are different titles, you get a 10% discount on the 3 that form part of a set, but the fourth book still costs $8.\n\nYour mission is to write code to calculate the price of any conceivable shopping basket (containing only books of the same series), giving as big a discount as possible.\n\nFor example, how much does this basket of books cost?\n\n- 2 copies of the first book\n- 2 copies of the second book\n- 2 copies of the third book\n- 1 copy of the fourth book\n- 1 copy of the fifth book\n\nOne way of grouping these 8 books is:\n\n- 1 group of 5 (1st, 2nd,3rd, 4th, 5th)\n- 1 group of 3 (1st, 2nd, 3rd)\n\nThis would give a total of:\n\n- 5 books at a 25% discount\n- 3 books at a 10% discount\n\nResulting in:\n\n- 5 × (100% - 25%) × $8 = 5 × $6.00 = $30.00, plus\n- 3 × (100% - 10%) × $8 = 3 × $7.20 = $21.60\n\nWhich equals $51.60.\n\nHowever, a different way to group these 8 books is:\n\n- 1 group of 4 books (1st, 2nd, 3rd, 4th)\n- 1 group of 4 books (1st, 2nd, 3rd, 5th)\n\nThis would give a total of:\n\n- 4 books at a 20% discount\n- 4 books at a 20% discount\n\nResulting in:\n\n- 4 × (100% - 20%) × $8 = 4 × $6.40 = $25.60, plus\n- 4 × (100% - 20%) × $8 = 4 × $6.40 = $25.60\n\nWhich equals $51.20.\n\nAnd $51.20 is the price with the biggest discount.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Book Store' exercise in this file. Make the tests in\n`book_store_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/book-store` directory.\n=end\n",
+  "example_solution": "require 'set'\n\nmodule BookStore\n\n  ONE_MINUS_DISCOUNTS = [1.0, 0.95, 0.9, 0.8, 0.75]\n  INDIVIDUAL_PRICE = 8\n\n  def self.calculate_price(basket)\n    groups = []\n\n    # Make the largest groups you can with the books\n    while (new_group = basket.uniq).any?\n      new_group.each { |book| basket.delete_at(basket.index(book)) }\n      groups << new_group.size\n    end\n\n    # Replace as many groups of size 3 & 5 as possible with groups of size 4 & 4\n    while Set[3, 5] <= Set.new(groups)\n      groups.delete_at(groups.index(3))\n      groups.delete_at(groups.index(5))\n      groups.push(4, 4)\n    end\n\n    groups.sum { |group| INDIVIDUAL_PRICE * group * ONE_MINUS_DISCOUNTS[group - 1] }\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'book_store'\n\nclass BookStoreTest < Minitest::Test\n  def test_only_a_single_book\n    # skip\n    basket = [1]\n    assert_in_delta 8.00, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_two_of_the_same_book\n    skip\n    basket = [2, 2]\n    assert_in_delta 16.00, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_empty_basket\n    skip\n    basket = []\n    assert_in_delta 0.00, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_two_different_books\n    skip\n    basket = [1, 2]\n    assert_in_delta 15.20, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_three_different_books\n    skip\n    basket = [1, 2, 3]\n    assert_in_delta 21.60, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_four_different_books\n    skip\n    basket = [1, 2, 3, 4]\n    assert_in_delta 25.60, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_five_different_books\n    skip\n    basket = [1, 2, 3, 4, 5]\n    assert_in_delta 30.00, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_two_groups_of_four_is_cheaper_than_group_of_five_plus_group_of_three\n    skip\n    basket = [1, 1, 2, 2, 3, 3, 4, 5]\n    assert_in_delta 51.20, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_two_groups_of_four_is_cheaper_than_groups_of_five_and_three\n    skip\n    basket = [1, 1, 2, 3, 4, 4, 5, 5]\n    assert_in_delta 51.20, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_group_of_four_plus_group_of_two_is_cheaper_than_two_groups_of_three\n    skip\n    basket = [1, 1, 2, 2, 3, 4]\n    assert_in_delta 40.80, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_two_each_of_first_four_books_and_one_copy_each_of_rest\n    skip\n    basket = [1, 1, 2, 2, 3, 3, 4, 4, 5]\n    assert_in_delta 55.60, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_two_copies_of_each_book\n    skip\n    basket = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]\n    assert_in_delta 60.00, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_three_copies_of_first_book_and_two_each_of_remaining\n    skip\n    basket = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 1]\n    assert_in_delta 68.00, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_three_each_of_first_two_books_and_two_each_of_remaining_books\n    skip\n    basket = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 1, 2]\n    assert_in_delta 75.20, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_four_groups_of_four_are_cheaper_than_two_groups_each_of_five_and_three\n    skip\n    basket = [1, 1, 2, 2, 3, 3, 4, 5, 1, 1, 2, 2, 3, 3, 4, 5]\n    assert_in_delta 102.40, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_check_that_groups_of_four_are_created_properly_even_when_there_are_more_groups_of_three_than_groups_of_five\n    skip\n    basket = [1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5]\n    assert_in_delta 145.60, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_one_group_of_one_and_four_is_cheaper_than_one_group_of_two_and_three\n    skip\n    basket = [1, 1, 2, 3, 4]\n    assert_in_delta 33.60, BookStore.calculate_price(basket), 0.001\n  end\n\n  def test_one_group_of_one_and_two_plus_three_groups_of_four_is_cheaper_than_one_group_of_each_size\n    skip\n    basket = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5]\n    assert_in_delta 100.00, BookStore.calculate_price(basket), 0.001\n  end\nend\n",
+  "source": "Inspired by the harry potter kata from Cyber-Dojo.",
+  "source_url": "https://cyber-dojo.org/creator/home",
+  "authors": [
+    "jgr"
+  ],
+  "contributors": [
+    "cadwallion",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "PaulT89",
+    "tryantwit",
+    "kytrinyx"
+  ]
+}

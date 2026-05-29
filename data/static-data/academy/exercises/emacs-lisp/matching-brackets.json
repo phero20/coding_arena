@@ -1,0 +1,26 @@
+{
+  "id": "emacs-lisp:matching-brackets",
+  "trackSlug": "emacs-lisp",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "c000a3e1-3488-41ba-9d4c-6f06a96bc892",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": ";;; matching-brackets.el --- Matching Brackets (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun is-paired (value)\n  (error\n   \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'matching-brackets)\n;;; matching-brackets.el ends here\n",
+  "example_solution": ";;; matching-brackets.el --- Matching Brackets (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(require 'seq)\n\n(defun is-paired (value)\n  (let ((brackets '()))\n    (and\n     (seq-every-p\n      (lambda (char)\n        (cond\n         ((= char ?\\()\n          (push ?\\) brackets))\n         ((= char ?\\[)\n          (push ?\\] brackets))\n         ((= char ?{)\n          (push ?} brackets))\n         ((= char ?\\))\n          ;; need to use equal because = doesn't accept nil\n          (if (equal (car brackets) ?\\))\n              ;; make sure return is true when brackets gets set to nil / empty list\n              (or (setq brackets (cdr brackets)) t)\n            nil))\n         ((= char ?\\])\n          (if (equal (car brackets) ?\\])\n              (or (setq brackets (cdr brackets)) t)\n            nil))\n         ((= char ?})\n          (if (equal (car brackets) ?})\n              (or (setq brackets (cdr brackets)) t)\n            nil))\n         (t\n          t)))\n      value)\n     (seq-empty-p brackets))))\n\n\n(provide 'matching-brackets)\n;;; matching-brackets.el ends here\n",
+  "test_code": ";;; matching-brackets-test.el --- Matching Brackets (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(load-file \"matching-brackets.el\")\n(declare-function is-paired \"matching-brackets.el\" (value))\n\n\n(ert-deftest paired-square-brackets ()\n  (should (is-paired \"[]\")))\n\n\n(ert-deftest empty-string ()\n  (should (is-paired \"[]\")))\n\n\n(ert-deftest unpaired-brackets ()\n  (should (not (is-paired \"[[\"))))\n\n\n(ert-deftest wrong-ordered-brackets ()\n  (should (not (is-paired \"}{\"))))\n\n\n(ert-deftest wrong-closing-bracket ()\n  (should (not (is-paired \"{]\"))))\n\n\n(ert-deftest paired-with-whitespace ()\n  (should (is-paired \"{ }\")))\n\n\n(ert-deftest partially-paired-brackets ()\n  (should (not (is-paired \"{[])\"))))\n\n\n(ert-deftest simple-nested-brackets ()\n  (should (is-paired \"{[]}\")))\n\n\n(ert-deftest several-paired-brackets ()\n  (should (is-paired \"{}[]\")))\n\n\n(ert-deftest paired-and-nested-brackets ()\n  (should (is-paired \"[{}({}[])]\")))\n\n\n(ert-deftest unopened-closing-brackets ()\n  (should (not (is-paired \"{[)][]}\"))))\n\n\n(ert-deftest unpaired-and-nested-brackets ()\n  (should (not (is-paired \"({])\"))))\n\n\n(ert-deftest paired-and-wrong-nested-brackets ()\n  (should (not (is-paired \"[({]})\"))))\n\n\n(ert-deftest\n    paired-and-wrong-nested-brackets-but-innermost-are-correct\n    ()\n  (should (not (is-paired \"[({}])\"))))\n\n\n(ert-deftest paired-and-incomplete-brackets ()\n  (should (not (is-paired \"{}[\"))))\n\n\n(ert-deftest too-many-closing-brackets ()\n  (should (not (is-paired \"[]]\"))))\n\n\n(ert-deftest early-unexpected-brackets ()\n  (should (not (is-paired \")()\"))))\n\n\n(ert-deftest early-mismatched-brackets ()\n  (should (not (is-paired \"{)()\"))))\n\n\n(ert-deftest math-expression ()\n  (should (is-paired \"(((185 + 223.85) * 15) - 543)/2\")))\n\n\n(ert-deftest complex-latex-expression ()\n  (should\n   (is-paired\n    \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\")))\n\n\n(provide 'matching-brackets-test)\n;;; matching-brackets-test.el ends here\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "fapdash"
+  ],
+  "contributors": null
+}

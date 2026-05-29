@@ -1,0 +1,26 @@
+{
+  "id": "cpp:run-length-encoding",
+  "trackSlug": "cpp",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "916fedd1-a9ed-4200-b115-cc1d1bc44aba",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"run_length_encoding.h\"\n\nnamespace run_length_encoding {\n\n// TODO: add your solution here\n\n}  // namespace run_length_encoding\n",
+  "example_solution": "#include <cstdlib>\n#include <sstream>\n\n#include \"run_length_encoding.h\"\n\nnamespace run_length_encoding {\nstd::string encode(const std::string& text) {\n    if (text.empty()) return \"\";\n\n    std::ostringstream encoded_text;\n    char last{text[0]};\n    int counter{0};\n    for (char c : text) {\n        if (last == c) {\n            counter += 1;\n        } else {\n            if (counter > 1) {\n                encoded_text << counter;\n            }\n            encoded_text << last;\n            last = c;\n            counter = 1;\n        }\n    }\n    if (counter > 1) {\n        encoded_text << counter;\n    }\n    encoded_text << last;\n\n    return encoded_text.str();\n}\n\nstd::string decode(const std::string& text) {\n    std::ostringstream decoded_text;\n    int multi = 0;\n    for (char c : text) {\n        if (c >= '0' && c <= '9') {\n            multi = multi * 10 + c - '0';\n        } else {\n            if (multi == 0) multi = 1;\n            for (int i{}; i < multi; ++i) {\n                decoded_text << c;\n            }\n            multi = 0;\n        }\n    }\n    return decoded_text.str();\n}\n}  // namespace run_length_encoding\n",
+  "test_code": "#include \"run_length_encoding.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nTEST_CASE(\"encode empty string\", \"[encode]\") {\n    REQUIRE(run_length_encoding::encode(\"\") == \"\");\n}\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"encode single characters only are encoded without count\",\n          \"[encode]\") {\n    REQUIRE(run_length_encoding::encode(\"XYZ\") == \"XYZ\");\n}\n\nTEST_CASE(\"encode string with no single characters\", \"[encode]\") {\n    REQUIRE(run_length_encoding::encode(\"AABBBCCCC\") == \"2A3B4C\");\n}\n\nTEST_CASE(\"encode single characters mixed with repeated characters\",\n          \"[encode]\") {\n    REQUIRE(run_length_encoding::encode(\n                \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\") ==\n            \"12WB12W3B24WB\");\n}\n\nTEST_CASE(\"encode multiple whitespace mixed in string\", \"[encode]\") {\n    REQUIRE(run_length_encoding::encode(\"  hsqq qww  \") == \"2 hs2q q2w2 \");\n}\n\nTEST_CASE(\"encode lowercase characters\", \"[encode]\") {\n    REQUIRE(run_length_encoding::encode(\"aabbbcccc\") == \"2a3b4c\");\n}\n\nTEST_CASE(\"decode run-length decode a string\", \"[decode]\") {\n    REQUIRE(run_length_encoding::decode(\"\") == \"\");\n}\n\nTEST_CASE(\"decode single characters only\", \"[decode]\") {\n    REQUIRE(run_length_encoding::decode(\"XYZ\") == \"XYZ\");\n}\n\nTEST_CASE(\"decode string with no single characters\", \"[decode]\") {\n    REQUIRE(run_length_encoding::decode(\"2A3B4C\") == \"AABBBCCCC\");\n}\n\nTEST_CASE(\"decode single characters with repeated characters\", \"[decode]\") {\n    REQUIRE(run_length_encoding::decode(\"12WB12W3B24WB\") ==\n            \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\");\n}\n\nTEST_CASE(\"decode multiple whitespace mixed in string\", \"[decode]\") {\n    REQUIRE(run_length_encoding::decode(\"2 hs2q q2w2 \") == \"  hsqq qww  \");\n}\n\nTEST_CASE(\"decode lowercase string\", \"[decode]\") {\n    REQUIRE(run_length_encoding::decode(\"2a3b4c\") == \"aabbbcccc\");\n}\n\nTEST_CASE(\"encode and then decode\", \"[consistency]\") {\n    REQUIRE(run_length_encoding::decode(\n                run_length_encoding::encode(\"zzz ZZ  zZ\")) == \"zzz ZZ  zZ\");\n}\n#endif\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "vaeng"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,42 @@
+{
+  "id": "rust:luhn-trait",
+  "trackSlug": "rust",
+  "slug": "luhn-trait",
+  "name": "Luhn Trait",
+  "uuid": "c32c0124-873d-45f4-9287-402aea29f129",
+  "type": "practice",
+  "status": null,
+  "blurb": "Luhn: Using a Custom Trait",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Luhn: Using a Custom Trait\n\nBefore doing this exercise you should probably do the original Luhn exercise and its successor, \"Luhn: Using the From Trait\"\n\nTo get the original Luhn exercise, run\n\n```shell\nexercism download --exercise=luhn --track=rust\n```\n\nTo get the \"Luhn: Using the From Trait\" exercise, run\n\n```shell\nexercism download --exercise=luhn-from --track=rust\n```\n\nIn the original Luhn exercise you only validated strings, but the Luhn algorithm can be applied to integers as well.\n\nIn \"Luhn: Using the From Trait\" you implemented a From trait, which also required you to create a Luhn struct.\n\nInstead of creating a Struct just to perform the validation, what if you validated the primitives (i.e, String, u8, etc.) themselves?\n\nIn this exercise you'll create and implement a custom [trait](https://doc.rust-lang.org/book/ch10-02-traits.html) that performs the validation.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub trait Luhn {\n    fn valid_luhn(&self) -> bool;\n}\n\n/// Here is the example of how to implement custom Luhn trait\n/// for the &str type. Naturally, you can implement this trait\n/// by hand for every other type presented in the test suite,\n/// but your solution will fail if a new type is presented.\n/// Perhaps there exists a better solution for this problem?\nimpl Luhn for &str {\n    fn valid_luhn(&self) -> bool {\n        todo!(\"Determine if '{self}' is a valid credit card number.\");\n    }\n}\n",
+  "example_solution": "pub trait Luhn {\n    fn valid_luhn(&self) -> bool;\n}\n\nimpl Luhn for String {\n    fn valid_luhn(&self) -> bool {\n        if self.chars().any(|c| c.is_alphabetic()) || self.chars().count() == 1 {\n            return false;\n        }\n\n        self.chars()\n            .filter_map(|c| c.to_digit(10))\n            .rev()\n            .enumerate()\n            .map(|(index, digit)| if index % 2 == 0 { digit } else { digit * 2 })\n            .map(|digit| if digit > 9 { digit - 9 } else { digit })\n            .sum::<u32>()\n            % 10\n            == 0\n    }\n}\n\nimpl Luhn for &str {\n    fn valid_luhn(&self) -> bool {\n        String::from(*self).valid_luhn()\n    }\n}\n\nimpl Luhn for u8 {\n    fn valid_luhn(&self) -> bool {\n        self.to_string().valid_luhn()\n    }\n}\n\nimpl Luhn for u16 {\n    fn valid_luhn(&self) -> bool {\n        self.to_string().valid_luhn()\n    }\n}\n\nimpl Luhn for u32 {\n    fn valid_luhn(&self) -> bool {\n        self.to_string().valid_luhn()\n    }\n}\n\nimpl Luhn for u64 {\n    fn valid_luhn(&self) -> bool {\n        self.to_string().valid_luhn()\n    }\n}\n\nimpl Luhn for usize {\n    fn valid_luhn(&self) -> bool {\n        self.to_string().valid_luhn()\n    }\n}\n",
+  "test_code": "use luhn_trait::*;\n\n#[test]\nfn you_can_validate_from_a_str() {\n    assert!(\"046 454 286\".valid_luhn());\n    assert!(!\"046 454 287\".valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn you_can_validate_from_a_string() {\n    assert!(String::from(\"046 454 286\").valid_luhn());\n    assert!(!String::from(\"046 454 287\").valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn you_can_validate_from_a_u8() {\n    assert!(240u8.valid_luhn());\n    assert!(!241u8.valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn you_can_validate_from_a_u16() {\n    let valid = 64_436u16;\n    let invalid = 64_437u16;\n    assert!(valid.valid_luhn());\n    assert!(!invalid.valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn you_can_validate_from_a_u32() {\n    let valid = 46_454_286u32;\n    let invalid = 46_454_287u32;\n    assert!(valid.valid_luhn());\n    assert!(!invalid.valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn you_can_validate_from_a_u64() {\n    let valid = 8273_1232_7352_0562u64;\n    let invalid = 8273_1232_7352_0569u64;\n    assert!(valid.valid_luhn());\n    assert!(!invalid.valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn you_can_validate_from_a_usize() {\n    let valid = 8273_1232_7352_0562usize;\n    let invalid = 8273_1232_7352_0569usize;\n    assert!(valid.valid_luhn());\n    assert!(!invalid.valid_luhn());\n}\n\n#[test]\n#[ignore]\nfn input_digit_9_is_still_correctly_converted_to_output_digit_9() {\n    assert!(\"091\".valid_luhn());\n}\n",
+  "source": "The Rust track maintainers, based on the original Luhn exercise",
+  "source_url": null,
+  "authors": [
+    "IanWhitney"
+  ],
+  "contributors": [
+    "AndrewKvalheim",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "IanWhitney",
+    "Insti",
+    "lutostag",
+    "mkantor",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

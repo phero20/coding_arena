@@ -1,0 +1,28 @@
+{
+  "id": "x86-64-assembly:two-fer",
+  "trackSlug": "x86-64-assembly",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "d0f241d3-4d99-49e3-bf90-2767cfb0c9c3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "section .text\nglobal two_fer\ntwo_fer:\n    ; Provide your implementation here\n    ; The function has type signature void two_fer(const char *name, char *buffer)\n    ; It has no return value\n    ; The first argument is of type const char*, which is the address of a read-only NUL-terminated sequence of bytes stored in memory that represents the name of a person\n    ; If no name is passed, this address has a value of 0\n    ; The second argument is of type char*, which is the address of a writable sequence of bytes stored in memory\n    ; The resulting string should be NUL-terminated and stored at the location pointed to by the address provided in the second argument.\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "example_solution": "default rel\n\nsection .rodata\none_for: db \"One for \"\none_for_len: equ $ - one_for\n\nyou: db \"you\"\nyou_len: equ $ - you\n\none_for_me: db \", one for me.\", 0\none_for_me_len: equ $ - one_for_me\n\n;\n; Create a sentence of the form \"One for X, one for me.\"\n;\n; Parameters:\n;   rdi - name\n;   rsi - buffer\n;\nsection .text\nglobal two_fer\ntwo_fer:\n    mov rax, rdi             ; Save name\n\n    mov rdi, rsi             ; Set destination to buffer\n    lea rsi, [one_for]       ; Set source\n    mov rcx, one_for_len     ; Set string length\n    rep movsb                ; Append string to buffer\n\n    test rax, rax            ; Check if name is provided\n    jne .copy_name           ; If so, append name to buffer\n\n    lea rsi, [you]           ; Set source\n    mov rcx, you_len         ; Set string length\n    rep movsb                ; Append string to buffer\n    jmp .end\n\n.copy_name:\n    mov rsi, rax             ; Set source to name\n    cmp byte [rsi], 0        ; Check if name is an empty string\n    je .end                  ; If empty, skip loop\n.loop_start:\n    movsb                    ; Append char to buffer\n    cmp byte [rsi], 0        ; See if we reached end of name\n    jne .loop_start          ; If chars remain, loop back\n\n.end:\n    lea rsi, [one_for_me]    ; Set source\n    mov rcx, one_for_me_len  ; Set string length\n    rep movsb                ; Append string to buffer\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#define BUFFER_SIZE 256\n\nextern void two_fer(const char *name, char *buffer);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_no_name_given(void) {\n    char buffer[BUFFER_SIZE];\n\n    two_fer(NULL, buffer);\n    TEST_ASSERT_EQUAL_STRING(\"One for you, one for me.\", buffer);\n}\n\nvoid test_a_name_given(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    two_fer(\"Alice\", buffer);\n    TEST_ASSERT_EQUAL_STRING(\"One for Alice, one for me.\", buffer);\n}\n\nvoid test_another_name_given(void) {\n    TEST_IGNORE();\n    char buffer[BUFFER_SIZE];\n\n    two_fer(\"Bob\", buffer);\n    TEST_ASSERT_EQUAL_STRING(\"One for Bob, one for me.\", buffer);\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_no_name_given);\n    RUN_TEST(test_a_name_given);\n    RUN_TEST(test_another_name_given);\n    return UNITY_END();\n}\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "bergjohan"
+  ],
+  "contributors": null
+}

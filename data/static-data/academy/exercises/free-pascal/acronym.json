@@ -1,0 +1,26 @@
+{
+  "id": "free-pascal:acronym",
+  "trackSlug": "free-pascal",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "64f922db-4e41-4f11-9707-fe21998c5fea",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit Acronym;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction abbreviate(const phrase: string) : string;\n\nimplementation\n\nuses SysUtils;\n\nfunction abbreviate(const phrase: string) : string;\nbegin\n\n  raise ENotImplemented.Create('Please implement your solution.'); result := phrase;\n\nend;\n\nend.\n",
+  "example_solution": "unit Acronym;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nfunction abbreviate(const phrase: string) : string;\n\nimplementation\n\nuses StrUtils, SysUtils;\n\nvar\n  temp, abbrev  :   string;\n  i     : integer;\n  words : array of string;\n\nfunction abbreviate(const phrase: string) : string;\nbegin\n\n  temp := UpperCase(DelChars(phrase, ''''));\n\n  for i := low(temp) to high(temp) do\n    begin\n      if (temp[i] < 'A') or (temp[i] > 'Z') then temp[i] := ' ';\n    end;\n\n  words  := SplitString(temp, ' ');\n  abbrev := '';\n\n  for i:= low(words) to high(words) do\n    abbrev := abbrev + Copy(words[i], 1, 1);\n\n  result := abbrev;\n\nend;\n\nend.\n",
+  "test_code": "unit TestCases;\n\n{$mode ObjFPC}{$H+}\n\ninterface\n\nuses Classes, SysUtils, FPCUnit, TestRegistry, FPCUnitTestUtils;\n\ntype\n  AcronymTest = class(TTestCase)\n  published\n    procedure basic;\n    procedure lowercase_words;\n    procedure punctuation;\n    procedure all_caps_word;\n    procedure punctuation_without_whitespace;\n    procedure very_long_abbreviation;\n    procedure consecutive_delimiters;\n    procedure apostrophes;\n    procedure underscore_emphasis;\n  end;\n\nimplementation\n\nuses Acronym;\n\n// 1e22cceb-c5e4-4562-9afe-aef07ad1eaf4\nprocedure AcronymTest.basic;\nbegin\n  TapAssertTrue(Self, 'basic', 'PNG', Acronym.abbreviate('Portable Network Graphics'));\nend;\n\n// 79ae3889-a5c0-4b01-baf0-232d31180c08\nprocedure AcronymTest.lowercase_words;\nbegin\n  TapAssertTrue(Self, 'lowercase words', 'ROR', Acronym.abbreviate('Ruby on Rails'));\nend;\n\n// ec7000a7-3931-4a17-890e-33ca2073a548\nprocedure AcronymTest.punctuation;\nbegin\n  TapAssertTrue(Self, 'punctuation', 'FIFO', Acronym.abbreviate('First In, First Out'));\nend;\n\n// 32dd261c-0c92-469a-9c5c-b192e94a63b0\nprocedure AcronymTest.all_caps_word;\nbegin\n  TapAssertTrue(Self, 'all caps word', 'GIMP', Acronym.abbreviate('GNU Image Manipulation Program'));\nend;\n\n// ae2ac9fa-a606-4d05-8244-3bcc4659c1d4\nprocedure AcronymTest.punctuation_without_whitespace;\nbegin\n  TapAssertTrue(Self, 'punctuation without whitespace', 'CMOS', Acronym.abbreviate('Complementary metal-oxide semiconductor'));\nend;\n\n// 0e4b1e7c-1a6d-48fb-81a7-bf65eb9e69f9\nprocedure AcronymTest.very_long_abbreviation;\nbegin\n  TapAssertTrue(Self, 'very long abbreviation', 'ROTFLSHTMDCOALM', Acronym.abbreviate('Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'));\nend;\n\n// 6a078f49-c68d-4b7b-89af-33a1a98c28cc\nprocedure AcronymTest.consecutive_delimiters;\nbegin\n  TapAssertTrue(Self, 'consecutive delimiters', 'SIMUFTA', Acronym.abbreviate('Something - I made up from thin air'));\nend;\n\n// 5118b4b1-4572-434c-8d57-5b762e57973e\nprocedure AcronymTest.apostrophes;\nbegin\n  TapAssertTrue(Self, 'apostrophes', 'HC', Acronym.abbreviate('Halley''s Comet'));\nend;\n\n// adc12eab-ec2d-414f-b48c-66a4fc06cdef\nprocedure AcronymTest.underscore_emphasis;\nbegin\n  TapAssertTrue(Self, 'underscore emphasis', 'TRNT', Acronym.abbreviate('The Road _Not_ Taken'));\nend;\n\ninitialization\nRegisterTest(AcronymTest);\n\nend.\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,40 @@
+{
+  "id": "javascript:luhn",
+  "trackSlug": "javascript",
+  "slug": "luhn",
+  "name": "Luhn",
+  "uuid": "28872cc9-f1ef-487f-9a79-6bf7983148bf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number determine whether or not it is valid per the Luhn formula.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "conditionals",
+    "array-transformations"
+  ],
+  "instructions": "# Instructions\n\nDetermine whether a number is valid according to the [Luhn formula][luhn].\n\nThe number will be provided as a string.\n\n## Validating a number\n\nStrings of length 1 or less are not valid.\nSpaces are allowed in the input, but they should be stripped before checking.\nAll other non-digit characters are disallowed.\n\n## Examples\n\n### Valid credit card number\n\nThe number to be checked is `4539 3195 0343 6467`.\n\nThe first step of the Luhn algorithm is to start at the end of the number and double every second digit, beginning with the second digit from the right and moving left.\n\n```text\n4539 3195 0343 6467\n↑ ↑  ↑ ↑  ↑ ↑  ↑ ↑  (double these)\n```\n\nIf the result of doubling a digit is greater than 9, we subtract 9 from that result.\nWe end up with:\n\n```text\n8569 6195 0383 3437\n```\n\nFinally, we sum all digits.\nIf the sum is evenly divisible by 10, the original number is valid.\n\n```text\n8 + 5 + 6 + 9 + 6 + 1 + 9 + 5 + 0 + 3 + 8 + 3 + 3 + 4 + 3 + 7 = 80\n```\n\n80 is evenly divisible by 10, so number `4539 3195 0343 6467` is valid!\n\n### Invalid Canadian SIN\n\nThe number to be checked is `066 123 478`.\n\nWe start at the end of the number and double every second digit, beginning with the second digit from the right and moving left.\n\n```text\n066 123 478\n ↑  ↑ ↑  ↑  (double these)\n```\n\nIf the result of doubling a digit is greater than 9, we subtract 9 from that result.\nWe end up with:\n\n```text\n036 226 458\n```\n\nWe sum the digits:\n\n```text\n0 + 3 + 6 + 2 + 2 + 6 + 4 + 5 + 8 = 36\n```\n\n36 is not evenly divisible by 10, so number `066 123 478` is not valid!\n\n[luhn]: https://en.wikipedia.org/wiki/Luhn_algorithm\n",
+  "introduction": "# Introduction\n\nAt the Global Verification Authority, you've just been entrusted with a critical assignment.\nAcross the city, from online purchases to secure logins, countless operations rely on the accuracy of numerical identifiers like credit card numbers, bank account numbers, transaction codes, and tracking IDs.\nThe Luhn algorithm is a simple checksum formula used to help identify mistyped numbers.\n\nA batch of identifiers has just arrived on your desk.\nAll of them must pass the Luhn test to ensure they're legitimate.\nIf any fail, they'll be flagged as invalid, preventing mistakes such as incorrect transactions or failed account verifications.\n\nCan you ensure this is done right? The integrity of many services depends on you.\n",
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Luhn' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const valid = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "export const valid = (number) => {\n  const trimmed = number.replace(/\\s/g, '');\n  const digits = [...trimmed];\n\n  const sum = digits\n    // convert to integers\n    .map((d) => parseInt(d, 10))\n    // double the second digits, starting from right\n    .map((d, i) => {\n      if ((i + digits.length) % 2 === 0) {\n        return d * 2;\n      }\n      return d;\n    })\n    // limit to digits less than 10\n    .map((d) => {\n      if (d > 9) {\n        return d - 9;\n      }\n      return d;\n    })\n    // sum all digits\n    .reduce((acc, d) => acc + d, 0);\n\n  return digits.length > 1 && sum % 10 === 0;\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { valid } from './luhn';\n\ndescribe('Luhn', () => {\n  test('single digit strings can not be valid', () => {\n    expect(valid('1')).toEqual(false);\n  });\n\n  xtest('a single zero is invalid', () => {\n    expect(valid('0')).toEqual(false);\n  });\n\n  xtest('a simple valid SIN that remains valid if reversed', () => {\n    expect(valid('059')).toEqual(true);\n  });\n\n  xtest('a simple valid SIN that becomes invalid if reversed', () => {\n    expect(valid('59')).toEqual(true);\n  });\n\n  xtest('a valid Canadian SIN', () => {\n    expect(valid('055 444 285')).toEqual(true);\n  });\n\n  xtest('invalid Canadian SIN', () => {\n    expect(valid('055 444 286')).toEqual(false);\n  });\n\n  xtest('invalid credit card', () => {\n    expect(valid('8273 1232 7352 0569')).toEqual(false);\n  });\n\n  xtest('invalid long number with an even remainder', () => {\n    expect(valid('1 2345 6789 1234 5678 9012')).toEqual(false);\n  });\n\n  xtest('invalid long number with a remainder divisible by 5', () => {\n    expect(valid('1 2345 6789 1234 5678 9013')).toEqual(false);\n  });\n\n  xtest('valid number with an even number of digits', () => {\n    expect(valid('095 245 88')).toEqual(true);\n  });\n\n  xtest('valid number with an odd number of spaces', () => {\n    expect(valid('234 567 891 234')).toEqual(true);\n  });\n\n  xtest('valid strings with a non-digit added at the end invalid', () => {\n    expect(valid('059a')).toEqual(false);\n  });\n\n  xtest('valid strings with punctuation included become invalid', () => {\n    expect(valid('055-444-285')).toEqual(false);\n  });\n\n  xtest('valid strings with symbols included become invalid', () => {\n    expect(valid('055# 444$ 285')).toEqual(false);\n  });\n\n  xtest('single zero with space is invalid', () => {\n    expect(valid(' 0')).toEqual(false);\n  });\n\n  xtest('more than a single zero is valid', () => {\n    expect(valid('0000 0')).toEqual(true);\n  });\n\n  xtest('input digit 9 is correctly converted to output digit 9', () => {\n    expect(valid('091')).toEqual(true);\n  });\n\n  xtest('very long input is valid', () => {\n    expect(valid('9999999999 9999999999 9999999999 9999999999')).toEqual(true);\n  });\n\n  xtest('valid luhn with an odd number of digits and non zero first digit', () => {\n    expect(valid('109')).toEqual(true);\n  });\n\n  xtest(\"using ascii value for non-doubled non-digit isn't allowed\", () => {\n    expect(valid('055b 444 285')).toEqual(false);\n  });\n\n  xtest(\"using ascii value for doubled non-digit isn't allowed\", () => {\n    expect(valid(':9')).toEqual(false);\n  });\n\n  xtest(\"non-numeric, non-space char in the middle with a sum that's divisible by 10 isn't allowed\", () => {\n    expect(valid('59%59')).toEqual(false);\n  });\n});\n",
+  "source": "The Luhn Algorithm on Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Luhn_algorithm",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "ankorGH",
+    "gabriel376",
+    "jagdish-15",
+    "ovidiu141",
+    "rchavarria",
+    "ryanplusplus",
+    "SleeplessByte",
+    "tejasbubane",
+    "xarxziux"
+  ]
+}

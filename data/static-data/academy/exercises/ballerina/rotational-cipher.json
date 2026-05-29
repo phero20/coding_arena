@@ -1,0 +1,26 @@
+{
+  "id": "ballerina:rotational-cipher",
+  "trackSlug": "ballerina",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "14c90535-2be7-438b-b3af-80fc84336e89",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Encodes the input text using the rotational cipher technique\n#\n# + text - the text to encode\n# + shiftKey - the number of positions to shift each alphabetic character\n# + return - the encoded text\nfunction rotate(string text, int shiftKey) returns string {\n    // TODO: implement this function\n}\n",
+  "example_solution": "# Encodes the input text using the rotational cipher technique\n#\n# + text - the text to encode\n# + shiftKey - the number of positions to shift each alphabetic character\n# + return - the encoded text\nfunction rotate(string text, int shiftKey) returns string {\n    string result = \"\";\n    foreach string:Char chr in text {\n        int codePoint = chr.toCodePointInt();\n        int newCodePoint = codePoint;\n\n        if codePoint >= 65 && codePoint <= 90 {\n            newCodePoint = 65 + (codePoint - 65 + shiftKey) % 26;\n        }\n        else if codePoint >= 97 && codePoint <= 122 {\n            newCodePoint = 97 + (codePoint - 97 + shiftKey) % 26;\n        }\n\n        // Checkpanic since this shouldn't return an error\n        string rotated = checkpanic string:'fromCodePointInt(newCodePoint);\n        result += rotated;\n    }\n\n    return result;\n}\n",
+  "test_code": "\nimport ballerina/test;\n\n\n@test:Config {}\nfunction testRotateABy0SameOutputAsInput() {\n    test:assertEquals(rotate(\"a\", 0), \"a\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateABy1() {\n    test:assertEquals(rotate(\"a\", 1), \"b\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateABy26SameOutputAsInput() {\n    test:assertEquals(rotate(\"a\", 26), \"a\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateMBy13() {\n    test:assertEquals(rotate(\"m\", 13), \"z\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateNBy13WithWrapAroundAlphabet() {\n    test:assertEquals(rotate(\"n\", 13), \"a\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateCapitalLetters() {\n    test:assertEquals(rotate(\"OMG\", 5), \"TRL\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateSpaces() {\n    test:assertEquals(rotate(\"O M G\", 5), \"T R L\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateNumbers() {\n    test:assertEquals(rotate(\"Testing 1 2 3 testing\", 4), \"Xiwxmrk 1 2 3 xiwxmrk\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotatePunctuation() {\n    test:assertEquals(rotate(\"Let's eat, Grandma!\", 21), \"Gzo'n zvo, Bmviyhv!\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testRotateAllLetters() {\n    string text = \"The quick brown fox jumps over the lazy dog.\";\n    int shift = 13;\n    string expected = \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\";\n    test:assertEquals(rotate(text, shift), expected);\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

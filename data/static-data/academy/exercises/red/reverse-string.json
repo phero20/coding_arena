@@ -1,0 +1,32 @@
+{
+  "id": "red:reverse-string",
+  "trackSlug": "red",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "73a4b319-a418-4c2a-941a-7bab18f7d95e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "evaluation",
+    "functions"
+  ],
+  "prerequisites": [
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Reverse string\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nreverse: function [\n\t\"Reverses a string\"\n\tinput [string!] \"String to reverse\"\n\treturn: [string!]\n] [\n\tcause-error 'user 'message [\"You need to implement this function.\"]\n]\n",
+  "example_solution": "Red [\n\tdescription: {Example \"Reverse string\" exercise solution for exercism platform}\n\tauthor: \"loziniak\"\n]\n\nred-reverse: :system/words/reverse\n\nreverse: function [\n\t\"Reverses a string\"\n\tinput [string!] \"String to reverse\"\n\treturn: [string!]\n] [\n\tred-reverse input\n]\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Reverse String\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %reverse-string.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [\n\t#[\n\t\tdescription: \"an empty string\"\n\t\tinput: #[value: \"\"]\n\t\texpected: \"\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"c3b7d806-dced-49ee-8543-933fd1719b1c\"\n\t]\n\t#[\n\t\tdescription: \"a word\"\n\t\tinput: #[value: \"robot\"]\n\t\texpected: \"tobor\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"01ebf55b-bebb-414e-9dec-06f7bb0bee3c\"\n\t]\n\t#[\n\t\tdescription: \"a capitalized word\"\n\t\tinput: #[value: \"Ramen\"]\n\t\texpected: \"nemaR\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"0f7c07e4-efd1-4aaa-a07a-90b49ce0b746\"\n\t]\n\t#[\n\t\tdescription: \"a sentence with punctuation\"\n\t\tinput: #[value: \"I'm hungry!\"]\n\t\texpected: \"!yrgnuh m'I\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"71854b9c-f200-4469-9f5c-1e8e5eff5614\"\n\t]\n\t#[\n\t\tdescription: \"a palindrome\"\n\t\tinput: #[value: \"racecar\"]\n\t\texpected: \"racecar\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"1f8ed2f3-56f3-459b-8f3e-6d8d654a1f6c\"\n\t]\n\t#[\n\t\tdescription: \"an even-sized word\"\n\t\tinput: #[value: \"drawer\"]\n\t\texpected: \"reward\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"b9e7dec1-c6df-40bd-9fa3-cd7ded010c4c\"\n\t]\n\t#[\n\t\tdescription: \"wide characters\"\n\t\tinput: #[value: \"子猫\"]\n\t\texpected: \"猫子\"\n\t\tfunction: \"reverse\"\n\t\tuuid: \"1bed0f8a-13b0-4bd3-9d59-3d0593326fa2\"\n\t]\n]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "loziniak"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:pythagorean-triplet",
+  "trackSlug": "fsharp",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "6bcde851-71ad-4985-b335-8ca67f99c22f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "generic-methods"
+  ],
+  "prerequisites": [
+    "generic-methods",
+    "numbers",
+    "tuples"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "module PythagoreanTriplet\n\nlet tripletsWithSum sum = failwith \"You need to implement this function.\"",
+  "example_solution": "module PythagoreanTriplet\n\nopen System\n\nlet tripletsWithSum sum = \n    [for x in 1 .. (sum / 3) do\n        let squareX = x*x\n        let z_plus_y = sum - x\n        for y in (x + 1) .. (sum - 1 - x) do\n            let z = sum - (x + y)\n            if (z-y) * z_plus_y = squareX then\n                    yield (x,y,z)]",
+  "test_code": "module PythagoreanTripletTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen PythagoreanTriplet\n\n[<Fact>]\nlet ``Triplets whose sum is 12`` () =\n    tripletsWithSum 12 |> should equal [(3, 4, 5)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Triplets whose sum is 108`` () =\n    tripletsWithSum 108 |> should equal [(27, 36, 45)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Triplets whose sum is 1000`` () =\n    tripletsWithSum 1000 |> should equal [(200, 375, 425)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``No matching triplets for 1001`` () =\n    tripletsWithSum 1001 |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Returns all matching triplets`` () =\n    tripletsWithSum 90 |> should equal [(9, 40, 41); (15, 36, 39)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Several matching triplets`` () =\n    tripletsWithSum 840 |> should equal [(40, 399, 401); (56, 390, 394); (105, 360, 375); (120, 350, 370); (140, 336, 364); (168, 315, 357); (210, 280, 350); (240, 252, 348)]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Triplets for large number`` () =\n    tripletsWithSum 30000 |> should equal [(1200, 14375, 14425); (1875, 14000, 14125); (5000, 12000, 13000); (6000, 11250, 12750); (7500, 10000, 12500)]\n\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "davidelettieri",
+    "jrr",
+    "lestephane",
+    "nemesv",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

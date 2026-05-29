@@ -1,0 +1,29 @@
+{
+  "id": "kotlin:crypto-square",
+  "trackSlug": "kotlin",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "2928cf06-dab8-4522-a6d8-b2a15d7d356b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object CryptoSquare {\n\n    fun ciphertext(plaintext: String): String {\n        TODO(\"Implement the function to complete the task\")\n    }\n\n}\n",
+  "example_solution": "import kotlin.math.sqrt\n\nobject CryptoSquare {\n\n    fun ciphertext(plaintext: String): String {\n        val sanitized = plaintext.filter { it.isLetterOrDigit() }.lowercase()\n        if (sanitized.isEmpty()) {\n            return \"\"\n        }\n\n        val (cols, rows) = calcSquare(sanitized.length)\n\n        return (0 until cols * rows)\n                .map { i -> (i % rows) * cols + (i / rows) }\n                .map { cursor -> if (cursor < sanitized.length) sanitized[cursor] else ' ' }\n                .joinToString(\"\")\n                .chunked(rows)\n                .joinToString(\" \")\n    }\n\n    private fun calcSquare(size: Int): Pair<Int, Int> {\n        val sq = sqrt(size.toDouble()).toInt()\n        return when {\n            sq * sq >= size -> Pair(sq, sq) // 9 => 3 * 3\n            (sq + 1) * sq >= size -> Pair(sq + 1, sq) // 54 => 8 * 7\n            else -> Pair(sq + 1, sq + 1) // 8 => 3 * 3\n        }\n    }\n}\n",
+  "test_code": "import kotlin.test.Ignore\nimport kotlin.test.Test\nimport kotlin.test.assertEquals\n\nclass CryptoSquareTest {\n\n    @Test\n    fun `empty plaintext results in empty ciphertext`() {\n        val plaintext = \"\"\n        val expectedOutput = \"\"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n\n    @Ignore\n    @Test\n    fun `letters are lower cased during encryption`() {\n        val plaintext = \"A\"\n        val expectedOutput = \"a\"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n\n    @Ignore\n    @Test\n    fun `spaces are removed during encryption`() {\n        val plaintext = \" b \"\n        val expectedOutput = \"b\"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n\n    @Ignore\n    @Test\n    fun `punctuation is removed during encryption`() {\n        val plaintext = \"@1,%!\"\n        val expectedOutput = \"1\"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n\n    @Ignore\n    @Test\n    fun `nine character plaintext results in three chunks of three characters`() {\n        val plaintext = \"This is fun!\"\n        val expectedOutput = \"tsf hiu isn\"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n\n    @Ignore\n    @Test\n    fun `eight character plaintext results in three chunks with a trailing space`() {\n        val plaintext = \"Chill out.\"\n        val expectedOutput = \"clu hlt io \"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n\n    @Ignore\n    @Test\n    fun `fifty four character plaintext results in seven chunks with trailing spaces`() {\n        val plaintext = \"If man was meant to stay on the ground, god would have given us roots.\"\n        val expectedOutput = \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n        assertEquals(expectedOutput, CryptoSquare.ciphertext(plaintext))\n    }\n}\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "lathspell"
+  ],
+  "contributors": [
+    "eparovyshnaya",
+    "uzilan"
+  ]
+}

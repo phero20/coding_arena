@@ -1,0 +1,43 @@
+{
+  "id": "fsharp:largest-series-product",
+  "trackSlug": "fsharp",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "b3643992-583b-4e7a-a970-94bc7ae6739a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "integral-numbers",
+    "math-operators"
+  ],
+  "prerequisites": [
+    "chars",
+    "for-loops",
+    "integral-numbers",
+    "math-operators",
+    "options",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "module LargestSeriesProduct\n\nlet largestProduct input seriesLength : int option = failwith \"You need to implement this function.\"",
+  "example_solution": "module LargestSeriesProduct\n\nopen System\n\nlet digits (str: string) = \n    str\n    |> Seq.map (string >> int)\n    |> Seq.toList\n\nlet slices size list = \n    let slice i = \n        list \n        |> List.skip i \n        |> List.take size\n\n    let sliceCount = List.length list + 1 - size\n\n    List.init sliceCount slice\n\nlet allDigits input =\n    input\n    |> Seq.forall Char.IsDigit\n    \nlet isInvalidCase input seriesLength =\n    let inputLenth = String.length input\n    \n    inputLenth < seriesLength \n    || inputLenth = 0 && seriesLength > 0 \n    || seriesLength < 0 \n    || not (allDigits input)\n\nlet largestProduct input seriesLength : int option = \n    match isInvalidCase input seriesLength with \n    | true -> None\n    | false ->   \n        input \n        |> digits \n        |> slices seriesLength\n        |> List.map (List.fold (*) 1)\n        |> List.max\n        |> Some",
+  "test_code": "module LargestSeriesProductTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen LargestSeriesProduct\n\n[<Fact>]\nlet ``Finds the largest product if span equals length`` () =\n    let digits = \"29\"\n    let span = 2\n    largestProduct digits span |> should equal (Some 18)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can find the largest product of 2 with numbers in order`` () =\n    let digits = \"0123456789\"\n    let span = 2\n    largestProduct digits span |> should equal (Some 72)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can find the largest product of 2`` () =\n    let digits = \"576802143\"\n    let span = 2\n    largestProduct digits span |> should equal (Some 48)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can find the largest product of 3 with numbers in order`` () =\n    let digits = \"0123456789\"\n    let span = 3\n    largestProduct digits span |> should equal (Some 504)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can find the largest product of 3`` () =\n    let digits = \"1027839564\"\n    let span = 3\n    largestProduct digits span |> should equal (Some 270)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can find the largest product of 5 with numbers in order`` () =\n    let digits = \"0123456789\"\n    let span = 5\n    largestProduct digits span |> should equal (Some 15120)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can get the largest product of a big number`` () =\n    let digits = \"73167176531330624919225119674426574742355349194934\"\n    let span = 6\n    largestProduct digits span |> should equal (Some 23520)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reports zero if the only digits are zero`` () =\n    let digits = \"0000\"\n    let span = 2\n    largestProduct digits span |> should equal (Some 0)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reports zero if all spans include zero`` () =\n    let digits = \"99099\"\n    let span = 3\n    largestProduct digits span |> should equal (Some 0)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Rejects span longer than string length`` () =\n    let digits = \"123\"\n    let span = 4\n    largestProduct digits span |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Rejects empty string and nonzero span`` () =\n    let digits = \"\"\n    let span = 1\n    largestProduct digits span |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Rejects invalid character in digits`` () =\n    let digits = \"1234a5\"\n    let span = 2\n    largestProduct digits span |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Rejects negative span`` () =\n    let digits = \"12345\"\n    let span = -1\n    largestProduct digits span |> should equal None\n\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

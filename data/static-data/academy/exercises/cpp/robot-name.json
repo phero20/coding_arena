@@ -1,0 +1,33 @@
+{
+  "id": "cpp:robot-name",
+  "trackSlug": "cpp",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "67c3cb10-b893-428a-82d0-79602aef2775",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"robot_name.h\"\n\nnamespace robot_name {\n\n// TODO: add your solution here\n\n}  // namespace robot_name\n",
+  "example_solution": "#include <iomanip>\n#include <sstream>\n#include <stdexcept>\n\n#include \"robot_name.h\"\n\nusing namespace std;\n\nnamespace robot_name {\n\nnamespace {\n\nstring next_prefix(string const &prefix) {\n    string next{prefix};\n    const string letters{\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"};\n    if (prefix[1] == letters.back()) {\n        if (prefix[0] == letters.back()) {\n            throw range_error(\"prefix combinations exhausted\");\n        }\n        next[1] = letters[0];\n        next[0] = letters[letters.find(next[0]) + 1];\n    } else {\n        next[1] = letters[letters.find(next[1]) + 1];\n    }\n    return next;\n}\n\nstring generate_name() {\n    static string prefix = \"AA\";\n    static int unit_number = 0;\n    ostringstream buff;\n    if (unit_number > 999) {\n        prefix = next_prefix(prefix);\n        unit_number = 0;\n    }\n    buff << prefix << setw(3) << setfill('0') << unit_number++;\n    return buff.str();\n}\n\n}  // namespace\n\nrobot::robot() : name_(generate_name()) {}\n\nvoid robot::reset() { name_ = generate_name(); }\n\n}  // namespace robot_name\n",
+  "test_code": "#include \"robot_name.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n#include <cctype>\n#include <string>\n#include <unordered_set>\n\nusing namespace std;\n\nnamespace {\n// Helper function to check the robot name matches the instructions.\n//\n// 2 uppercase letters followed by 3 digits.\nstatic bool validate_name(const string& name) {\n    if (name.length() != 5) return false;\n    return isupper(name[0]) && isupper(name[1]) && isdigit(name[2]) &&\n           isdigit(name[3]) && isdigit(name[4]);\n}\n}  // namespace\n\nTEST_CASE(\"has_a_name\") {\n    const robot_name::robot robot;\n\n    REQUIRE(validate_name(robot.name()));\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"name_is_the_same_each_time\") {\n    const robot_name::robot robot;\n\n    REQUIRE(robot.name() == robot.name());\n}\n\nTEST_CASE(\"different_robots_have_different_names\") {\n    const robot_name::robot robot_one;\n    const robot_name::robot robot_two;\n\n    REQUIRE(robot_one.name() != robot_two.name());\n}\n\nTEST_CASE(\"is_able_to_reset_name\") {\n    robot_name::robot robot;\n    const auto original_name = robot.name();\n\n    robot.reset();\n\n    REQUIRE(original_name != robot.name());\n}\n\nTEST_CASE(\"exhausting_digits_yields_different_names\") {\n    robot_name::robot robot;\n    unordered_set<string> names;\n    names.insert(robot.name());\n\n    for (int i = 0; i < 1000; ++i) {\n        robot.reset();\n        REQUIRE(names.count(robot.name()) == 0);\n        REQUIRE(validate_name(robot.name()));\n        names.insert(robot.name());\n    }\n}\n#endif\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "patricksjackson"
+  ]
+}

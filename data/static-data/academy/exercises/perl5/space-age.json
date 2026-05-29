@@ -1,0 +1,33 @@
+{
+  "id": "perl5:space-age",
+  "trackSlug": "perl5",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "8f6d6a60-426c-4da0-af4e-7395b2c880d3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "exceptions",
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "package SpaceAge;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<age_on_planet>;\n\nsub age_on_planet ( $planet, $seconds ) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package SpaceAge;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<age_on_planet>;\n\n# Solved by GitHub Copilot\nsub age_on_planet ( $planet, $seconds ) {\n    my %orbital_periods = (\n        Mercury => 0.2408467,\n        Venus   => 0.61519726,\n        Earth   => 1.0,\n        Mars    => 1.8808158,\n        Jupiter => 11.862615,\n        Saturn  => 29.447498,\n        Uranus  => 84.016846,\n        Neptune => 164.79132,\n    );\n\n    die \"not a planet\" unless exists $orbital_periods{$planet};\n\n    my $earth_years   = $seconds / 31557600;\n    my $age_on_planet = $earth_years / $orbital_periods{$planet};\n\n    return sprintf \"%.2f\", $age_on_planet;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse SpaceAge qw<age_on_planet>;\n\nis( # begin: 84f609af-5a91-4d68-90a3-9e32d8a5cd34\n    age_on_planet( \"Earth\", 1000000000 ),\n    31.69,\n    \"age on Earth\",\n); # end: 84f609af-5a91-4d68-90a3-9e32d8a5cd34\n\nis( # begin: ca20c4e9-6054-458c-9312-79679ffab40b\n    age_on_planet( \"Mercury\", 2134835688 ),\n    280.88,\n    \"age on Mercury\",\n); # end: ca20c4e9-6054-458c-9312-79679ffab40b\n\nis( # begin: 502c6529-fd1b-41d3-8fab-65e03082b024\n    age_on_planet( \"Venus\", 189839836 ),\n    9.78,\n    \"age on Venus\",\n); # end: 502c6529-fd1b-41d3-8fab-65e03082b024\n\nis( # begin: 9ceadf5e-a0d5-4388-9d40-2c459227ceb8\n    age_on_planet( \"Mars\", 2129871239 ),\n    35.88,\n    \"age on Mars\",\n); # end: 9ceadf5e-a0d5-4388-9d40-2c459227ceb8\n\nis( # begin: 42927dc3-fe5e-4f76-a5b5-f737fc19bcde\n    age_on_planet( \"Jupiter\", 901876382 ),\n    2.41,\n    \"age on Jupiter\",\n); # end: 42927dc3-fe5e-4f76-a5b5-f737fc19bcde\n\nis( # begin: 8469b332-7837-4ada-b27c-00ee043ebcad\n    age_on_planet( \"Saturn\", 2000000000 ),\n    2.15,\n    \"age on Saturn\",\n); # end: 8469b332-7837-4ada-b27c-00ee043ebcad\n\nis( # begin: 999354c1-76f8-4bb5-a672-f317b6436743\n    age_on_planet( \"Uranus\", 1210123456 ),\n    0.46,\n    \"age on Uranus\",\n); # end: 999354c1-76f8-4bb5-a672-f317b6436743\n\nis( # begin: 80096d30-a0d4-4449-903e-a381178355d8\n    age_on_planet( \"Neptune\", 1821023456 ),\n    0.35,\n    \"age on Neptune\",\n); # end: 80096d30-a0d4-4449-903e-a381178355d8\n\nlike( # begin: 57b96e2a-1178-40b7-b34d-f3c9c34e4bf4\n    dies( sub { age_on_planet \"Sun\", 680804807 } ),\n    qr/not a planet/,\n    \"invalid planet causes error\",\n); # end: 57b96e2a-1178-40b7-b34d-f3c9c34e4bf4\n\ndone_testing;\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

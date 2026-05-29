@@ -1,0 +1,47 @@
+{
+  "id": "clojure:anagram",
+  "trackSlug": "clojure",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "11818959-7e42-4a1d-8dfd-288cea744d66",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "vectors"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "(ns anagram)\n\n(defn anagrams-for\n  \"Returns all words from candidates that are anagrams of the given word.\"\n  [word candidates]\n  ;; function body\n)\n",
+  "example_solution": "(ns anagram\n  (:require [clojure.string :refer [lower-case]]))\n\n(defn- anagram? [w c]\n  (let [w (lower-case w)\n        c (lower-case c)]\n    (and (= (sort w) (sort c))\n         (not= w c))))\n\n(defn anagrams-for [w coll]\n  (filter (partial anagram? w) coll))\n",
+  "test_code": "(ns anagram-test\n  (:require [clojure.test :refer [deftest testing is]]\n            anagram))\n\n(deftest anagrams-for_test_1\n  (testing \"no matches\"\n    (is (= []\n           (anagram/anagrams-for \"diaper\" [\"hello\" \"world\" \"zombies\" \"pants\"])))))\n\n(deftest anagrams-for_test_2\n  (testing \"detects two anagrams\"\n    (is (= [\"lemons\" \"melons\"]\n           (anagram/anagrams-for \"solemn\" [\"lemons\" \"cherry\" \"melons\"])))))\n\n(deftest anagrams-for_test_3\n  (testing \"does not detect anagram subsets\"\n    (is (= []\n           (anagram/anagrams-for \"good\" [\"dog\" \"goody\"])))))\n\n(deftest anagrams-for_test_4\n  (testing \"detects anagram\"\n    (is (= [\"inlets\"]\n           (anagram/anagrams-for \"listen\" [\"enlists\" \"google\" \"inlets\" \"banana\"])))))\n\n(deftest anagrams-for_test_5\n  (testing \"detects three anagrams\"\n    (is (= [\"gallery\" \"regally\" \"largely\"]\n           (anagram/anagrams-for \"allergy\" [\"gallery\" \"ballerina\" \"regally\" \"clergy\" \"largely\" \"leading\"])))))\n\n(deftest anagrams-for_test_6\n  (testing \"detects multiple anagrams with different case\"\n    (is (= [\"Eons\" \"ONES\"]\n           (anagram/anagrams-for \"nose\" [\"Eons\" \"ONES\"])))))\n\n(deftest anagrams-for_test_7\n  (testing \"does not detect non-anagrams with identical checksum\"\n    (is (= []\n           (anagram/anagrams-for \"mass\" [\"last\"])))))\n\n(deftest anagrams-for_test_8\n  (testing \"detects anagrams case-insensitively\"\n    (is (= [\"Carthorse\"]\n           (anagram/anagrams-for \"Orchestra\" [\"cashregister\" \"Carthorse\" \"radishes\"])))))\n\n(deftest anagrams-for_test_9\n  (testing \"detects anagrams using case-insensitive subject\"\n    (is (= [\"carthorse\"]\n           (anagram/anagrams-for \"Orchestra\" [\"cashregister\" \"carthorse\" \"radishes\"])))))\n\n(deftest anagrams-for_test_10\n  (testing \"detects anagrams using case-insensitive possible matches\"\n    (is (= [\"Carthorse\"]\n           (anagram/anagrams-for \"orchestra\" [\"cashregister\" \"Carthorse\" \"radishes\"])))))\n\n(deftest anagrams-for_test_11\n  (testing \"does not detect an anagram if the original word is repeated\"\n    (is (= []\n           (anagram/anagrams-for \"go\" [\"goGoGO\"])))))\n\n(deftest anagrams-for_test_12\n  (testing \"anagrams must use all letters exactly once\"\n    (is (= []\n           (anagram/anagrams-for \"tapper\" [\"patter\"])))))\n\n(deftest anagrams-for_test_13\n  (testing \"words are not anagrams of themselves\"\n    (is (= []\n           (anagram/anagrams-for \"BANANA\" [\"BANANA\"])))))\n\n(deftest anagrams-for_test_14\n  (testing \"words are not anagrams of themselves even if letter case is partially different\"\n    (is (= []\n           (anagram/anagrams-for \"BANANA\" [\"Banana\"])))))\n\n(deftest anagrams-for_test_15\n  (testing \"words are not anagrams of themselves even if letter case is completely different\"\n    (is (= []\n           (anagram/anagrams-for \"BANANA\" [\"banana\"])))))\n\n(deftest anagrams-for_test_16\n  (testing \"words other than themselves can be anagrams\"\n    (is (= [\"Silent\"]\n           (anagram/anagrams-for \"LISTEN\" [\"LISTEN\" \"Silent\"])))))\n\n(deftest anagrams-for_test_17\n  (testing \"handles case of greek letters\"\n    (is (= [\"ΒΓΑ\" \"γβα\"]\n           (anagram/anagrams-for \"ΑΒΓ\" [\"ΒΓΑ\" \"ΒΓΔ\" \"γβα\" \"αβγ\"])))))\n\n(deftest anagrams-for_test_18\n  (testing \"different characters may have the same bytes\"\n    (is (= []\n           (anagram/anagrams-for \"a⬂\" [\"€a\"])))))\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "achengs",
+    "AndreaCrotti",
+    "canweriotnow",
+    "crazymykl",
+    "dkinzer",
+    "haus",
+    "henrik",
+    "jgwhite",
+    "kytrinyx",
+    "markijbema",
+    "mascip",
+    "mathias",
+    "tejasbubane",
+    "yurrriq",
+    "erikschierboom"
+  ]
+}

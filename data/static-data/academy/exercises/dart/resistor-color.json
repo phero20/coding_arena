@@ -1,0 +1,28 @@
+{
+  "id": "dart:resistor-color",
+  "trackSlug": "dart",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "b0e61aa6-5944-48b4-a91b-8960b6655e51",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class ResistorColor {\n  // Put your code here\n}\n",
+  "example_solution": "class ResistorColor {\n  final colors = [\"black\", \"brown\", \"red\", \"orange\", \"yellow\", \"green\", \"blue\", \"violet\", \"grey\", \"white\"];\n\n  int colorCode(String color) => colors.indexOf(color);\n}\n",
+  "test_code": "import 'package:resistor_color/resistor_color.dart';\nimport 'package:test/test.dart';\n\nfinal resistorColor = ResistorColor();\n\nvoid main() {\n  group('ResistorColor: resistor color tests - ', resistorColorTests);\n  group('ResistorColor: Color codes - ', colorCodes);\n}\n\nvoid resistorColorTests() {\n  test('Colors', () {\n    final result = resistorColor.colors;\n    expect(result,\n        equals(<String>['black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'grey', 'white']));\n  }, skip: false);\n}\n\nvoid colorCodes() {\n  test('Black', () {\n    final result = resistorColor.colorCode('black');\n    expect(result, equals(0));\n  }, skip: true);\n\n  test('White', () {\n    final result = resistorColor.colorCode('white');\n    expect(result, equals(9));\n  }, skip: true);\n\n  test('Orange', () {\n    final result = resistorColor.colorCode('orange');\n    expect(result, equals(3));\n  }, skip: true);\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

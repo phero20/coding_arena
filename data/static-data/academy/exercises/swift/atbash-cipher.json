@@ -1,0 +1,36 @@
+{
+  "id": "swift:atbash-cipher",
+  "trackSlug": "swift",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "c5adab05-2b19-4544-8abd-159af71196f5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import Foundation\n\nclass AtbashCipher {\n  // Write your code for the 'AtbashCipher' exercise in this file.\n  static func encode(_ phrase: String) -> String {\n  }\n\n  static func decode(_ phrase: String) -> String {\n  }\n}\n",
+  "example_solution": "import Foundation\n\nclass AtbashCipher {\n  static func encode(_ phrase: String) -> String {\n    let letters = Array(\"abcdefghijklmnopqrstuvwxyz\")\n    let input = phrase.lowercased().filter { $0.isLetter || $0.isNumber }\n    var output = \"\"\n    var count = 0\n\n    for character in input {\n      if let index = letters.firstIndex(of: character) {\n        output.append(letters[letters.count - index - 1])\n      } else {\n        output.append(character)\n      }\n\n      count += 1\n\n      if count % 5 == 0 {\n        output.append(\" \")\n      }\n    }\n\n    return output.trimmingCharacters(in: .whitespaces)\n  }\n\n  static func decode(_ phrase: String) -> String {\n    let letters = Array(\"abcdefghijklmnopqrstuvwxyz\")\n    let input = phrase.lowercased().filter { $0.isLetter || $0.isNumber }\n    var output = \"\"\n\n    for character in input {\n      if let index = letters.firstIndex(of: character) {\n        output.append(letters[letters.count - index - 1])\n      } else {\n        output.append(character)\n      }\n    }\n\n    return output\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import AtbashCipher\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct AtbashCipherTests {\n\n  @Test(\"encode yes\")\n  func testEncodeYes() {\n    #expect(\"bvh\" == AtbashCipher.encode(\"yes\"))\n  }\n\n  @Test(\"encode no\", .enabled(if: RUNALL))\n  func testEncodeNo() {\n    #expect(\"ml\" == AtbashCipher.encode(\"no\"))\n  }\n\n  @Test(\"encode OMG\", .enabled(if: RUNALL))\n  func testEncodeOmg() {\n    #expect(\"lnt\" == AtbashCipher.encode(\"OMG\"))\n  }\n\n  @Test(\"encode spaces\", .enabled(if: RUNALL))\n  func testEncodeSpaces() {\n    #expect(\"lnt\" == AtbashCipher.encode(\"O M G\"))\n  }\n\n  @Test(\"encode mindblowingly\", .enabled(if: RUNALL))\n  func testEncodeMindblowingly() {\n    #expect(\"nrmwy oldrm tob\" == AtbashCipher.encode(\"mindblowingly\"))\n  }\n\n  @Test(\"encode numbers\", .enabled(if: RUNALL))\n  func testEncodeNumbers() {\n    #expect(\"gvhgr mt123 gvhgr mt\" == AtbashCipher.encode(\"Testing,1 2 3, testing.\"))\n  }\n\n  @Test(\"encode deep thought\", .enabled(if: RUNALL))\n  func testEncodeDeepThought() {\n    #expect(\"gifgs rhurx grlm\" == AtbashCipher.encode(\"Truth is fiction.\"))\n  }\n\n  @Test(\"encode all the letters\", .enabled(if: RUNALL))\n  func testEncodeAllTheLetters() {\n    #expect(\n      \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n        == AtbashCipher.encode(\"The quick brown fox jumps over the lazy dog.\"))\n  }\n\n  @Test(\"decode exercism\")\n  func testDecodeExercism() {\n    #expect(\"exercism\" == AtbashCipher.decode(\"vcvix rhn\"))\n  }\n\n  @Test(\"decode a sentence\", .enabled(if: RUNALL))\n  func testDecodeASentence() {\n    #expect(\n      \"anobstacleisoftenasteppingstone\"\n        == AtbashCipher.decode(\"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"))\n  }\n\n  @Test(\"decode numbers\", .enabled(if: RUNALL))\n  func testDecodeNumbers() {\n    #expect(\"testing123testing\" == AtbashCipher.decode(\"gvhgr mt123 gvhgr mt\"))\n  }\n\n  @Test(\"decode all the letters\", .enabled(if: RUNALL))\n  func testDecodeAllTheLetters() {\n    #expect(\n      \"thequickbrownfoxjumpsoverthelazydog\"\n        == AtbashCipher.decode(\"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"))\n  }\n\n  @Test(\"decode with too many spaces\", .enabled(if: RUNALL))\n  func testDecodeWithTooManySpaces() {\n    #expect(\"exercism\" == AtbashCipher.decode(\"vc vix    r hn\"))\n  }\n\n  @Test(\"decode with no spaces\", .enabled(if: RUNALL))\n  func testDecodeWithNoSpaces() {\n    #expect(\n      \"anobstacleisoftenasteppingstone\" == AtbashCipher.decode(\"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"))\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "bhargavg",
+    "hankturowski",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "nickkjordan",
+    "robtimp",
+    "ThomasHaz",
+    "meatball133"
+  ]
+}

@@ -61,18 +61,36 @@ export const registerSubmissionRoutes = (
   app.get(
     "/submissions/recent",
     zValidator("query", RecentSubmissionsQuerySchema),
+<<<<<<< HEAD
     submissionController.action(submissionController.getRecentSubmissions),
+=======
+    submissionController.action(submissionController.getRecentSubmissions, {
+      requireAuth: false,
+    }),
+>>>>>>> prod-deploy
   );
 
   app.get(
     "/submissions/:submissionId",
     zValidator("param", SubmissionIdParamSchema),
+<<<<<<< HEAD
     submissionController.action(submissionController.getSubmissionStatus),
+=======
+    submissionController.action(submissionController.getSubmissionStatus, {
+      requireAuth: false,
+    }),
+>>>>>>> prod-deploy
   );
 
   app.get(
     "/submissions/problem/:problemId",
     zValidator("param", ProblemIdParamSchema),
+<<<<<<< HEAD
     submissionController.action(submissionController.getUserSubmissions),
+=======
+    submissionController.action(submissionController.getUserSubmissions, {
+      requireAuth: false,
+    }),
+>>>>>>> prod-deploy
   );
 };

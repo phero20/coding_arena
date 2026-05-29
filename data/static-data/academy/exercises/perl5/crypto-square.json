@@ -1,0 +1,31 @@
+{
+  "id": "perl5:crypto-square",
+  "trackSlug": "perl5",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "39defad0-2828-4d3e-991f-5e624c68a37e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package CryptoSquare;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<cipher>;\n\nsub cipher ($text) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package CryptoSquare;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<cipher>;\n\nsub cipher ($text) {\n\n    $text = lc($text);\n    $text =~ s/[^a-z0-9]//g;\n\n    my ( $cols, $rows ) = ( 1, 0 );\n    until ( $cols * $rows >= length($text) ) {\n        if ( $cols > $rows ) {\n            $rows++;\n        }\n        else {\n            $cols++;\n        }\n    }\n\n    $text .= ' ' x ( $cols * $rows - length($text) );\n\n    my @matrix;\n    for ( my $i = 0; $i < $cols * $rows; $i += $cols ) {\n        push @matrix, [ split //, substr( $text, $i, $cols ) ];\n    }\n\n    my $result = '';\n    for my $j ( 0 .. $cols - 1 ) {\n        $result .= ' ' if $result;\n        for my $k ( 0 .. $rows - 1 ) {\n            $result .= $matrix[$k][$j];\n        }\n    }\n\n    return $result;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse CryptoSquare qw<cipher>;\n\nis( # begin: 407c3837-9aa7-4111-ab63-ec54b58e8e9f\n    cipher(\"\"),\n    \"\",\n    \"empty plaintext results in an empty ciphertext\"\n); # end: 407c3837-9aa7-4111-ab63-ec54b58e8e9f\n\nis( # begin: aad04a25-b8bb-4304-888b-581bea8e0040\n    cipher(\"... --- ...\"),\n    \"\",\n    \"normalization results in empty plaintext\"\n); # end: aad04a25-b8bb-4304-888b-581bea8e0040\n\nis( # begin: 64131d65-6fd9-4f58-bdd8-4a2370fb481d\n    cipher(\"A\"),\n    \"a\",\n    \"Lowercase\"\n); # end: 64131d65-6fd9-4f58-bdd8-4a2370fb481d\n\nis( # begin: 63a4b0ed-1e3c-41ea-a999-f6f26ba447d6\n    cipher(\"  b \"),\n    \"b\",\n    \"Remove spaces\"\n); # end: 63a4b0ed-1e3c-41ea-a999-f6f26ba447d6\n\nis( # begin: 1b5348a1-7893-44c1-8197-42d48d18756c\n    cipher(\"\\@1,%!\"),\n    1,\n    \"Remove punctuation\"\n); # end: 1b5348a1-7893-44c1-8197-42d48d18756c\n\nis( # begin: 8574a1d3-4a08-4cec-a7c7-de93a164f41a\n    cipher(\"This is fun!\"),\n    \"tsf hiu isn\",\n    \"9 character plaintext results in 3 chunks of 3 characters\"\n); # end: 8574a1d3-4a08-4cec-a7c7-de93a164f41a\n\nis( # begin: a65d3fa1-9e09-43f9-bcec-7a672aec3eae\n    cipher(\"Chill out.\"),\n    \"clu hlt io \",\n    \"8 character plaintext results in 3 chunks, the last one with a trailing space\"\n); # end: a65d3fa1-9e09-43f9-bcec-7a672aec3eae\n\nis( # begin: fbcb0c6d-4c39-4a31-83f6-c473baa6af80\n    cipher(\"If man was meant to stay on the ground, god would have given us roots.\"),\n    \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \",\n    \"54 character plaintext results in 7 chunks, the last two with trailing spaces\"\n); # end: fbcb0c6d-4c39-4a31-83f6-c473baa6af80\n\ndone_testing;\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "alexkalderimis",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

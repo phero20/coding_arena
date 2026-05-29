@@ -1,0 +1,26 @@
+{
+  "id": "common-lisp:trinary",
+  "trackSlug": "common-lisp",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "ff3eb2c5-c7ce-4352-805c-e01d4fb85aa6",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :trinary\n  (:use :cl)\n  (:export :to-decimal))\n\n(in-package :trinary)\n\n(defun to-decimal (str))\n",
+  "example_solution": "(defpackage :trinary\n  (:use :common-lisp)\n  (:export :to-decimal))\n\n(in-package :trinary)\n\n(defun to-decimal (string)\n  \"Return the decimal value for STRING which is in trinary. If STRING\nis not a valid trinary number then return 0.\"\n  (or (ignore-errors (parse-integer string :radix 3))\n      0))\n\n;;;\n;;; Another possible implementation, if one wanted to reimplement\n;;; PARSE-INTEGER\n;;;\n;; (defun to-decimal (string)\n;;   (loop with revstr = (reverse string)\n;;      for idx below (length string) and c across revstr\n;;      for digit = (digit-char-p c 3)\n;;      if (not digit) return 0\n;;      else summing (* digit (expt 3 idx))))\n\n;;;\n;;; Another possible implementation but has a security flaw.\n;;; Ponder what would happen if STRING was\n;;; \"#.(delete-file \\\"/etc/passwd\\\")\"\n;;;\n;; (defun to-decimal (string)\n;;   (let* ((*read-base* 3)\n;;          (value (read-from-string string)))\n;;     (if (typep value 'number) value 0)))\n",
+  "test_code": ";; Ensures that trinary.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"trinary\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from trinary and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :trinary-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :trinary-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* trinary-suite)\n\n(test trinary-1-is-decimal-1 (is (equal 1 (trinary:to-decimal \"1\"))))\n\n(test trinary-2-is-decimal-2 (is (equal 2 (trinary:to-decimal \"2\"))))\n\n(test trinary-10-is-decimal-3 (is (equal 3 (trinary:to-decimal \"10\"))))\n\n(test trinary-11-is-decimal-4 (is (equal 4 (trinary:to-decimal \"11\"))))\n\n(test trinary-100-is-decimal-9 (is (equal 9 (trinary:to-decimal \"100\"))))\n\n(test trinary-112-is-decimal-14 (is (equal 14 (trinary:to-decimal \"112\"))))\n\n(test trinary-222-is-decimal-26 (is (equal 26 (trinary:to-decimal \"222\"))))\n\n(test trinary-1122000120-is-decimal-32091\n (is (equal 32091 (trinary:to-decimal \"1122000120\"))))\n\n(test invalid-input-is-decimal-0 (is (equal 0 (trinary:to-decimal \"carrot\"))))\n\n(test invalid-input-with-digits-is-decimal-0\n (is (equal 0 (trinary:to-decimal \"0a1b2c\"))))\n\n(defun run-tests (&optional (test-or-suite 'trinary-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": null
+}

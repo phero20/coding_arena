@@ -1,0 +1,47 @@
+{
+  "id": "ruby:ocr-numbers",
+  "trackSlug": "ruby",
+  "slug": "ocr-numbers",
+  "name": "OCR Numbers",
+  "uuid": "dd13bb29-589c-497d-9580-3f288f353fb2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a 3 x 4 grid of pipes, underscores, and spaces, determine which number is represented, or whether it is garbled.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "loops",
+    "conditionals",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nOptical Character Recognition or OCR is software that converts images of text into machine-readable text.\nGiven a grid of characters representing some digits, convert the grid to a string of digits.\nIf the grid has multiple rows of cells, the rows should be separated in the output with a `\",\"`.\n\n- The grid is made of one of more lines of cells.\n- Each line of the grid is made of one or more cells.\n- Each cell is three columns wide and four rows high (3x4) and represents one digit.\n- Digits are drawn using pipes (`\"|\"`), underscores (`\"_\"`), and spaces (`\" \"`).\n\n## Edge cases\n\n- If the input is not a valid size, your program should indicate there is an error.\n- If the input is the correct size, but a cell is not recognizable, your program should output a `\"?\"` for that character.\n\n## Examples\n\nThe following input (without the comments) is converted to `\"1234567890\"`.\n\n```text\n      _  _     _  _  _  _  _  _  #\n    | _| _||_||_ |_   ||_||_|| | # Decimal numbers.\n    ||_  _|  | _||_|  ||_| _||_| #\n                                 # The fourth line is always blank,\n```\n\nThe following input is converted to `\"123,456,789\"`.\n\n<!-- prettier-ignore-start -->\n\n```text\n    _  _ \n  | _| _|\n  ||_  _|\n         \n    _  _ \n|_||_ |_ \n  | _||_|\n         \n _  _  _ \n  ||_||_|\n  ||_| _|\n         \n```\n\n<!-- prettier-ignore-end -->\n",
+  "introduction": "# Introduction\n\nYour best friend Marta recently landed their dream job working with a local history museum's collections.\nKnowing of your interests in programming, they confide in you about an issue at work for an upcoming exhibit on computing history.\nA local university's math department had donated several boxes of historical printouts, but given the poor condition of the documents, the decision has been made to digitize the text.\nHowever, the university's old printer had some quirks in how text was represented, and your friend could use your help to extract the data successfully.\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Ocr Numbers' exercise in this file. Make the tests in\n`ocr_numbers_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/ocr-numbers` directory.\n=end\n",
+  "example_solution": "class OcrNumbers\n  DIGITS = {\n    ' _ | ||_|   ' => '0',\n    '     |  |   ' => '1',\n    ' _  _||_    ' => '2',\n    ' _  _| _|   ' => '3',\n    '   |_|  |   ' => '4',\n    ' _ |_  _|   ' => '5',\n    ' _ |_ |_|   ' => '6',\n    ' _   |  |   ' => '7',\n    ' _ |_||_|   ' => '8',\n    ' _ |_| _|   ' => '9'\n  }\n  DIGITS.default = '?'\n\n  def self.convert(text)\n    OcrNumbers.new(text).convert\n  end\n\n  def initialize(text)\n    @text = text\n  end\n\n  def convert\n    raise ArgumentError unless valid?\n\n    numbers.map {|lines| decode(lines) }.join(',')\n  end\n\n  private\n  attr_reader :text\n\n  def valid?\n    (rows.size % 4).zero? &&\n      (first_row_width % 3).zero? &&\n      rows[1..-1].all? {|row| row.size == first_row_width }\n  end\n\n  def decode(lines)\n    lines.map {|line| line.scan(/.../) }.\n      transpose.\n      map {|char_rows| DIGITS[char_rows.join] }.\n      join\n  end\n\n  def numbers\n    text.split(\"\\n\").each_slice(4)\n  end\n\n  def rows\n    @rows ||= text.split(\"\\n\")\n  end\n\n  def first_row_width\n    @first_row_width ||= rows.first.size\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'ocr_numbers'\n\nclass OcrNumbersTest < Minitest::Test\n  def test_recognizes_0\n    # skip\n    input = [' _ ',\n             '| |',\n             '|_|',\n             '   '].join(\"\\n\")\n    expected = '0'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_1\n    skip\n    input = ['   ',\n             '  |',\n             '  |',\n             '   '].join(\"\\n\")\n    expected = '1'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_unreadable_but_correctly_sized_inputs_return_\n    skip\n    input = ['   ',\n             '  _',\n             '  |',\n             '   '].join(\"\\n\")\n    expected = '?'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_input_with_a_number_of_lines_that_is_not_a_multiple_of_four_raises_an_error\n    skip\n    input = [' _ ',\n             '| |',\n             '   '].join(\"\\n\")\n    assert_raises(ArgumentError) do\n      OcrNumbers.convert(input)\n    end\n  end\n\n  def test_input_with_a_number_of_columns_that_is_not_a_multiple_of_three_raises_an_error\n    skip\n    input = ['    ',\n             '   |',\n             '   |',\n             '    '].join(\"\\n\")\n    assert_raises(ArgumentError) do\n      OcrNumbers.convert(input)\n    end\n  end\n\n  def test_recognizes_110101100\n    skip\n    input = ['       _     _        _  _ ',\n             '  |  || |  || |  |  || || |',\n             '  |  ||_|  ||_|  |  ||_||_|',\n             '                           '].join(\"\\n\")\n    expected = '110101100'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_garbled_numbers_in_a_string_are_replaced_with_\n    skip\n    input = ['       _     _           _ ',\n             '  |  || |  || |     || || |',\n             '  |  | _|  ||_|  |  ||_||_|',\n             '                           '].join(\"\\n\")\n    expected = '11?10?1?0'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_2\n    skip\n    input = [' _ ',\n             ' _|',\n             '|_ ',\n             '   '].join(\"\\n\")\n    expected = '2'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_3\n    skip\n    input = [' _ ',\n             ' _|',\n             ' _|',\n             '   '].join(\"\\n\")\n    expected = '3'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_4\n    skip\n    input = ['   ',\n             '|_|',\n             '  |',\n             '   '].join(\"\\n\")\n    expected = '4'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_5\n    skip\n    input = [' _ ',\n             '|_ ',\n             ' _|',\n             '   '].join(\"\\n\")\n    expected = '5'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_6\n    skip\n    input = [' _ ',\n             '|_ ',\n             '|_|',\n             '   '].join(\"\\n\")\n    expected = '6'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_7\n    skip\n    input = [' _ ',\n             '  |',\n             '  |',\n             '   '].join(\"\\n\")\n    expected = '7'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_8\n    skip\n    input = [' _ ',\n             '|_|',\n             '|_|',\n             '   '].join(\"\\n\")\n    expected = '8'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_9\n    skip\n    input = [' _ ',\n             '|_|',\n             ' _|',\n             '   '].join(\"\\n\")\n    expected = '9'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_recognizes_string_of_decimal_numbers\n    skip\n    input = ['    _  _     _  _  _  _  _  _ ',\n             '  | _| _||_||_ |_   ||_||_|| |',\n             '  ||_  _|  | _||_|  ||_| _||_|',\n             '                              '].join(\"\\n\")\n    expected = '1234567890'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\n\n  def test_numbers_separated_by_empty_lines_are_recognized_lines_are_joined_by_commas\n    skip\n    input = ['    _  _ ',\n             '  | _| _|',\n             '  ||_  _|',\n             '         ',\n             '    _  _ ',\n             '|_||_ |_ ',\n             '  | _||_|',\n             '         ',\n             ' _  _  _ ',\n             '  ||_||_|',\n             '  ||_| _|',\n             '         '].join(\"\\n\")\n    expected = '123,456,789'\n    actual = OcrNumbers.convert(input)\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Inspired by the Bank OCR kata",
+  "source_url": "https://codingdojo.org/kata/BankOCR/",
+  "authors": [
+    "vosechu"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "emcoding",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "kytrinyx",
+    "pendletons",
+    "pgaspar",
+    "tryantwit"
+  ]
+}

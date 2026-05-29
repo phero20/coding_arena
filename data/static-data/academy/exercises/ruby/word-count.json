@@ -1,0 +1,43 @@
+{
+  "id": "ruby:word-count",
+  "trackSlug": "ruby",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "e9d29769-8d4d-4159-8d6f-762db5339707",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Word Count' exercise in this file. Make the tests in\n`word_count_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/word-count` directory.\n=end\n",
+  "example_solution": "class Phrase\n  def initialize(source)\n    @source = source\n  end\n\n  def word_count\n    data = Hash.new(0)\n    each_word do |word|\n      data[word] += 1\n    end\n    data\n  end\n\n  private\n\n  attr_reader :source\n\n  def each_word\n    source.downcase.scan(/\\b[\\w']+\\b/) do |word|\n      yield word\n    end\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'word_count'\n\nclass WordCountTest < Minitest::Test\n  def test_count_one_word\n    # skip\n    actual = Phrase.new(\"word\").word_count\n    expected = { \"word\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_count_one_of_each_word\n    skip\n    actual = Phrase.new(\"one of each\").word_count\n    expected = { \"one\" => 1, \"of\" => 1, \"each\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_multiple_occurrences_of_a_word\n    skip\n    actual = Phrase.new(\"one fish two fish red fish blue fish\").word_count\n    expected = { \"one\" => 1, \"fish\" => 4, \"two\" => 1, \"red\" => 1, \"blue\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_handles_cramped_lists\n    skip\n    actual = Phrase.new(\"one,two,three\").word_count\n    expected = { \"one\" => 1, \"two\" => 1, \"three\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_handles_expanded_lists\n    skip\n    actual = Phrase.new(\"one,\ntwo,\nthree\").word_count\n    expected = { \"one\" => 1, \"two\" => 1, \"three\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_ignore_punctuation\n    skip\n    actual = Phrase.new(\"car: carpet as java: javascript!!&@$%^&\").word_count\n    expected = { \"car\" => 1, \"carpet\" => 1, \"as\" => 1, \"java\" => 1, \"javascript\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_include_numbers\n    skip\n    actual = Phrase.new(\"testing, 1, 2 testing\").word_count\n    expected = { \"testing\" => 2, \"1\" => 1, \"2\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_normalize_case\n    skip\n    actual = Phrase.new(\"go Go GO Stop stop\").word_count\n    expected = { \"go\" => 3, \"stop\" => 2 }\n    assert_equal expected, actual\n  end\n\n  def test_with_apostrophes\n    skip\n    actual = Phrase.new(\"'First: don't laugh. Then: don't cry. You're getting it.'\").word_count\n    expected = { \"first\" => 1, \"don't\" => 2, \"laugh\" => 1, \"then\" => 1, \"cry\" => 1, \"you're\" => 1, \"getting\" => 1, \"it\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_with_quotations\n    skip\n    actual = Phrase.new(\"Joe can't tell between 'large' and large.\").word_count\n    expected = { \"joe\" => 1, \"can't\" => 1, \"tell\" => 1, \"between\" => 1, \"large\" => 2, \"and\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_substrings_from_the_beginning\n    skip\n    actual = Phrase.new(\"Joe can't tell between app, apple and a.\").word_count\n    expected = { \"joe\" => 1, \"can't\" => 1, \"tell\" => 1, \"between\" => 1, \"app\" => 1, \"apple\" => 1, \"and\" => 1, \"a\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_multiple_spaces_not_detected_as_a_word\n    skip\n    actual = Phrase.new(\" multiple   whitespaces\").word_count\n    expected = { \"multiple\" => 1, \"whitespaces\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_alternating_word_separators_not_detected_as_a_word\n    skip\n    actual = Phrase.new(\",\n,one,\n ,two\n 'three'\").word_count\n    expected = { \"one\" => 1, \"two\" => 1, \"three\" => 1 }\n    assert_equal expected, actual\n  end\n\n  def test_quotation_for_word_with_apostrophe\n    skip\n    actual = Phrase.new(\"can, can't, 'can't'\").word_count\n    expected = { \"can\" => 1, \"can't\" => 2 }\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "claytonflesher",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jmay",
+    "jpotts244",
+    "kickinbahk",
+    "kotp",
+    "pvcarrera",
+    "tryantwit"
+  ]
+}

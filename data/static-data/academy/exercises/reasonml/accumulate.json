@@ -1,0 +1,32 @@
+{
+  "id": "reasonml:accumulate",
+  "trackSlug": "reasonml",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "f3025c02-fc67-4354-8e0a-a76e9c5cef4e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let accumulate = (_, _) => {\n  failwith(\"TODO: implement accumulate function\");\n};\n",
+  "example_solution": "let accumulate = (fn: 'a => 'b, input: list('a)) : list('b) =>\n  List.fold_right((elem, acc) => [fn(elem), ...acc], input, []);\n",
+  "test_code": "open Jest;\nopen Expect;\nopen Accumulate;\n\nlet square = (x: int) : int => x * x;\n\nlet reverse = (x: string) : string =>\n  x\n  |> Js.String.split(\"\")\n  |> Js.Array.reverseInPlace\n  |> Js.Array.joinWith(\"\");\n\n\n\ndescribe(\"Accumulate\", () => {\n  test(\"[] Accumulate\", () =>\n    expect(accumulate(square, [])) |> toEqual([])\n  );\n  test(\"square Accumulate\", () =>\n    expect(accumulate(square, [1, 2, 3])) |> toEqual([1, 4, 9])\n  );\n  test(\"toUpper Accumulate\", () =>\n    expect(accumulate(String.uppercase_ascii, [\"hello\", \"world\"]))\n    |> toEqual([\"HELLO\", \"WORLD\"])\n  );\n  test(\"reverse Accumulate\", () =>\n    expect(accumulate(reverse, [\"hello\", \"world\"]))\n    |> toEqual([\"olleh\", \"dlrow\"])\n  );\n});\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "gabrielperales"
+  ],
+  "contributors": [
+    "benreyn",
+    "naartjie",
+    "ohana54",
+    "stevejb71",
+    "tejasbubane"
+  ]
+}

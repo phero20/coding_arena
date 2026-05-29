@@ -1,0 +1,35 @@
+{
+  "id": "kotlin:sublist",
+  "trackSlug": "kotlin",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "ebfdf40a-1fde-4c88-aa93-95e3190f5261",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "enum class Relationship {\n\n    EQUAL, SUBLIST, SUPERLIST, UNEQUAL\n\n}\n",
+  "example_solution": "fun <T> List<T>.relationshipTo(list: List<T>): Relationship {\n    if (this == list)         return Relationship.EQUAL\n    if (this.isSublist(list)) return Relationship.SUBLIST\n    if (list.isSublist(this)) return Relationship.SUPERLIST\n\n    return Relationship.UNEQUAL\n}\n\nprivate fun <T> List<T>.isSublist(list: List<T>): Boolean {\n    val listSize = list.size\n\n    if (size > listSize) return false\n\n    val numberOfSublistCandidates = listSize - size + 1\n\n    return (0 until numberOfSublistCandidates).any { startIndex ->\n        list.subList(startIndex, startIndex + size) == this\n    }\n}\n",
+  "test_code": "import org.junit.Ignore\nimport org.junit.Test\nimport kotlin.test.assertEquals\n\nclass SublistTest {\n\n    @Test\n    fun testThatTwoEmptyListsAreConsideredEqual() {\n        assertEquals(\n                Relationship.EQUAL,\n                emptyList<String>().relationshipTo(emptyList<String>()))\n    }\n\n    @Ignore\n    @Test\n    fun testEmptyListIsSublistOfNonEmptyList() {\n        assertEquals(\n                Relationship.SUBLIST,\n                emptyList<Int>().relationshipTo(listOf(1, 2, 3)))\n    }\n\n    @Ignore\n    @Test\n    fun testNonEmptyListIsSuperlistOfEmptyList() {\n        assertEquals(\n                Relationship.SUPERLIST,\n                listOf('1', '2', '3').relationshipTo(emptyList()))\n    }\n\n    @Ignore\n    @Test\n    fun testListIsEqualToItself() {\n        val anyList = listOf(\"1\", \"2\", \"3\")\n\n        assertEquals(\n                Relationship.EQUAL,\n                anyList.relationshipTo(anyList))\n    }\n\n    @Ignore\n    @Test\n    fun testDifferentListsOfTheSameLengthAreUnequal() {\n        assertEquals(\n                Relationship.UNEQUAL,\n                listOf(1, 2, 3).relationshipTo(listOf(2, 3, 4)))\n    }\n\n    @Ignore\n    @Test\n    fun testSublistCheckDoesNotAbortAfterFalseStart() {\n        assertEquals(\n                Relationship.SUBLIST,\n                listOf('1', '2', '5').relationshipTo(listOf('0', '1', '2', '3', '1', '2', '5', '6')))\n    }\n\n    @Ignore\n    @Test\n    fun testSublistCheckHandlesExtraneousRepeatsOfFirstEntry() {\n        assertEquals(\n                Relationship.SUBLIST,\n                listOf(\"1\", \"1\", \"2\").relationshipTo(listOf(\"0\", \"1\", \"1\", \"1\", \"2\", \"1\", \"2\")))\n    }\n\n    @Ignore\n    @Test\n    fun testSublistAtStart() {\n        assertEquals(\n                Relationship.SUBLIST,\n                listOf(0, 1, 2).relationshipTo(listOf(0, 1, 2, 3, 4, 5)))\n    }\n\n    @Ignore\n    @Test\n    fun testSublistInMiddle() {\n        assertEquals(\n                Relationship.SUBLIST,\n                listOf('2', '3', '4').relationshipTo(listOf('0', '1', '2', '3', '4', '5')))\n    }\n\n    @Ignore\n    @Test\n    fun testSublistAtEnd() {\n        assertEquals(\n                Relationship.SUBLIST,\n                listOf(\"3\", \"4\", \"5\").relationshipTo(listOf(\"0\", \"1\", \"2\", \"3\", \"4\", \"5\")))\n    }\n\n    @Ignore\n    @Test\n    fun testAtStartOfSuperlist() {\n        assertEquals(\n                Relationship.SUPERLIST,\n                listOf(0, 1, 2, 3, 4, 5).relationshipTo(listOf(0, 1, 2)))\n    }\n\n    @Ignore\n    @Test\n    fun testInMiddleOfSuperlist() {\n        assertEquals(\n                Relationship.SUPERLIST,\n                listOf('0', '1', '2', '3', '4', '5').relationshipTo(listOf('2', '3')))\n    }\n\n    @Ignore\n    @Test\n    fun testAtEndOfSuperlist() {\n        assertEquals(\n                Relationship.SUPERLIST,\n                listOf(\"0\", \"1\", \"2\", \"3\", \"4\", \"5\").relationshipTo(listOf(\"3\", \"4\", \"5\")))\n    }\n\n    @Ignore\n    @Test\n    fun testFirstListMissingElementFromSecondList() {\n        assertEquals(\n                Relationship.UNEQUAL,\n                listOf(1, 3).relationshipTo(listOf(1, 2, 3)))\n    }\n\n    @Ignore\n    @Test\n    fun testSecondListMissingElementFromFirstList() {\n        assertEquals(\n                Relationship.UNEQUAL,\n                listOf('1', '2', '3').relationshipTo(listOf('1', '3')))\n    }\n\n    @Ignore\n    @Test\n    fun testThatListOrderingIsAccountedFor() {\n        assertEquals(\n                Relationship.UNEQUAL,\n                listOf(\"1\", \"2\", \"3\").relationshipTo(listOf(\"3\", \"2\", \"1\")))\n    }\n\n    @Ignore\n    @Test\n    fun testThatListsWithSameDigitsButDifferentNumbersAreUnequal() {\n        assertEquals(\n                Relationship.UNEQUAL,\n                listOf(1, 0, 1).relationshipTo(listOf(10, 1)))\n    }\n\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "stkent"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "lihofm",
+    "mdowds",
+    "sdavids13",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "uzilan"
+  ]
+}

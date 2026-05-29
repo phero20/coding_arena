@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 import type { Example, CodeSnippets } from "../../mongo/models/problem.model";
 import type { TestCase } from "../../mongo/models/problem-test.model";
+=======
+import type {
+  Example,
+  CodeSnippets,
+  FunctionSignature,
+  ClassSignature,
+  JudgingPolicy,
+} from "./problem.types";
+import type { TestCase } from "./problem.types";
+>>>>>>> prod-deploy
 
 export interface ImportedProblemPayload {
   title: string;
@@ -14,6 +25,13 @@ export interface ImportedProblemPayload {
   follow_ups?: string[];
   hints?: string[];
   code_snippets?: CodeSnippets;
+<<<<<<< HEAD
+=======
+  problem_type?: "function" | "class" | "interactive";
+  function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
+>>>>>>> prod-deploy
   solutions?: string;
   solution?: string;
 }
@@ -31,6 +49,13 @@ export interface AiGeneratedProblem {
   follow_ups: string[];
   hints: string[];
   code_snippets: CodeSnippets;
+<<<<<<< HEAD
+=======
+  problem_type: "function" | "class" | "interactive";
+  function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
+>>>>>>> prod-deploy
   solutions?: string;
 }
 

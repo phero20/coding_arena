@@ -1,0 +1,38 @@
+{
+  "id": "ruby:high-scores",
+  "trackSlug": "ruby",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "9124339c-94fb-46eb-aad2-25944214799d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "arrays",
+    "advanced-enumeration"
+  ],
+  "prerequisites": [
+    "arrays",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'High Scores' exercise in this file. Make the tests in\n`high_scores_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/high-scores` directory.\n=end\n",
+  "example_solution": "class HighScores\n  def initialize(scores)\n    @scores = scores\n  end\n\n  def scores\n    @scores\n  end\n\n  def personal_best\n    scores.max\n  end\n\n  def latest\n    scores.last\n  end\n\n  def personal_top_three\n    scores.max(3)\n  end\n\n  def latest_is_personal_best?\n    latest == personal_best\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'high_scores'\n\nclass HighScoresTest < Minitest::Test\n  def test_list_of_scores\n    # skip\n    scores = [30, 50, 20, 70]\n    assert_equal [30, 50, 20, 70], HighScores.new(scores).scores\n  end\n\n  def test_latest_score\n    skip\n    scores = [100, 0, 90, 30]\n    assert_equal 30, HighScores.new(scores).latest\n  end\n\n  def test_personal_best\n    skip\n    scores = [40, 100, 70]\n    assert_equal 100, HighScores.new(scores).personal_best\n  end\n\n  def test_top_3_scores_personal_top_three_from_a_list_of_scores\n    skip\n    scores = [10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70]\n    assert_equal [100, 90, 70], HighScores.new(scores).personal_top_three\n  end\n\n  def test_top_3_scores_personal_top_highest_to_lowest\n    skip\n    scores = [20, 10, 30]\n    assert_equal [30, 20, 10], HighScores.new(scores).personal_top_three\n  end\n\n  def test_top_3_scores_personal_top_when_there_is_a_tie\n    skip\n    scores = [40, 20, 40, 30]\n    assert_equal [40, 40, 30], HighScores.new(scores).personal_top_three\n  end\n\n  def test_top_3_scores_personal_top_when_there_are_less_than_3\n    skip\n    scores = [30, 70]\n    assert_equal [70, 30], HighScores.new(scores).personal_top_three\n  end\n\n  def test_top_3_scores_personal_top_when_there_is_only_one\n    skip\n    scores = [40]\n    assert_equal [40], HighScores.new(scores).personal_top_three\n  end\n\n  def test_top_3_scores_latest_score_after_personal_top_scores\n    skip\n    high_scores = HighScores.new([70, 50, 20, 30])\n    high_scores.personal_top_three\n    assert_equal 30, high_scores.latest\n  end\n\n  def test_top_3_scores_scores_after_personal_top_scores\n    skip\n    high_scores = HighScores.new([30, 50, 20, 70])\n    high_scores.personal_top_three\n    assert_equal [30, 50, 20, 70], high_scores.scores\n  end\n\n  def test_top_3_scores_latest_score_after_personal_best\n    skip\n    high_scores = HighScores.new([20, 70, 15, 25, 30])\n    high_scores.personal_best\n    assert_equal 30, high_scores.latest\n  end\n\n  def test_top_3_scores_scores_after_personal_best\n    skip\n    high_scores = HighScores.new([20, 70, 15, 25, 30])\n    high_scores.personal_best\n    assert_equal [20, 70, 15, 25, 30], high_scores.scores\n  end\n\n  def test_latest_score_is_not_the_personal_best\n    skip\n    scores = [100, 40, 10, 70]\n    refute HighScores.new(scores).latest_is_personal_best?\n  end\n\n  def test_latest_score_is_the_personal_best\n    skip\n    scores = [70, 40, 10, 100]\n    assert HighScores.new(scores).latest_is_personal_best?\n  end\nend\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "pgaspar"
+  ],
+  "contributors": [
+    "emcoding",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "kytrinyx"
+  ]
+}

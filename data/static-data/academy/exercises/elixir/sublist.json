@@ -1,0 +1,51 @@
+{
+  "id": "elixir:sublist",
+  "trackSlug": "elixir",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "146dd0ed-5210-4b3c-bb4b-8d0a8e832aab",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "lists"
+  ],
+  "prerequisites": [
+    "lists",
+    "cond",
+    "case",
+    "if",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "recursion"
+  ],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Sublist do\n  @doc \"\"\"\n  Returns whether the first list is a sublist or a superlist of the second list\n  and if not whether it is equal or unequal to the second list.\n  \"\"\"\n  def compare(a, b) do\n  end\nend\n",
+  "example_solution": "defmodule Sublist do\n  @doc \"\"\"\n  Returns whether the first list is a sublist or a superlist of the second list\n  and if not whether it is equal or unequal to the second list.\n  \"\"\"\n  def compare(a, b) do\n    case {length(a), length(b)} do\n      {la, lb} when la < lb ->\n        if is_sublist(a, b, la, lb), do: :sublist, else: :unequal\n\n      {la, lb} when la > lb ->\n        if is_sublist(b, a, lb, la), do: :superlist, else: :unequal\n\n      _ ->\n        if a == b, do: :equal, else: :unequal\n    end\n  end\n\n  defp is_sublist(_, _, len_a, len_b) when len_a > len_b, do: false\n  # empty is sublist of all non-empty\n  defp is_sublist([], _, _, _), do: true\n\n  defp is_sublist(a, b = [_ | t], len_a, len_b) do\n    if try_is_sublist(a, b) do\n      true\n    else\n      is_sublist(a, t, len_a, len_b - 1)\n    end\n  end\n\n  defp try_is_sublist([], _), do: true\n  defp try_is_sublist([x | at], [x | bt]), do: try_is_sublist(at, bt)\n  defp try_is_sublist(_, _), do: false\nend\n",
+  "test_code": "defmodule SublistTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"empty equals empty\" do\n    assert Sublist.compare([], []) == :equal\n  end\n\n  @tag :pending\n  test \"empty list within non empty list\" do\n    assert Sublist.compare([], [1, 2, 3]) == :sublist\n  end\n\n  @tag :pending\n  test \"non empty list contains empty list\" do\n    assert Sublist.compare([1, 2, 3], []) == :superlist\n  end\n\n  @tag :pending\n  test \"list equals itself\" do\n    assert Sublist.compare([1, 2, 3], [1, 2, 3]) == :equal\n  end\n\n  @tag :pending\n  test \"different lists\" do\n    assert Sublist.compare([1, 2, 3], [2, 3, 4]) == :unequal\n  end\n\n  @tag :pending\n  test \"comparing massive equal lists\" do\n    l = Enum.to_list(1..1_000_000)\n    assert Sublist.compare(l, l) == :equal\n  end\n\n  @tag :pending\n  test \"false start\" do\n    assert Sublist.compare([1, 2, 5], [0, 1, 2, 3, 1, 2, 5, 6]) == :sublist\n  end\n\n  @tag :pending\n  test \"consecutive\" do\n    assert Sublist.compare([1, 1, 2], [0, 1, 1, 1, 2, 1, 2]) == :sublist\n  end\n\n  @tag :pending\n  test \"sublists at start\" do\n    assert Sublist.compare([0, 1, 2], [0, 1, 2, 3, 4, 5]) == :sublist\n  end\n\n  @tag :pending\n  test \"sublists in middle\" do\n    assert Sublist.compare([2, 3, 4], [0, 1, 2, 3, 4, 5]) == :sublist\n  end\n\n  @tag :pending\n  test \"sublists at end\" do\n    assert Sublist.compare([3, 4, 5], [0, 1, 2, 3, 4, 5]) == :sublist\n  end\n\n  @tag :pending\n  test \"partially matching sublist at end\" do\n    assert Sublist.compare([1, 1, 2], [1, 1, 1, 2]) == :sublist\n  end\n\n  @tag :pending\n  test \"sublist early in huge list\" do\n    assert Sublist.compare([3, 4, 5], Enum.to_list(1..1_000_000)) == :sublist\n  end\n\n  @tag :pending\n  @tag :slow\n  test \"huge sublist not in huge list\" do\n    assert Sublist.compare(Enum.to_list(10..1_000_001), Enum.to_list(1..1_000_000)) == :unequal\n  end\n\n  @tag :pending\n  test \"at start of superlist\" do\n    assert Sublist.compare([0, 1, 2, 3, 4, 5], [0, 1, 2]) == :superlist\n  end\n\n  @tag :pending\n  test \"in middle of superlist\" do\n    assert Sublist.compare([0, 1, 2, 3, 4, 5], [2, 3]) == :superlist\n  end\n\n  @tag :pending\n  test \"at end of superlist\" do\n    assert Sublist.compare([0, 1, 2, 3, 4, 5], [3, 4, 5]) == :superlist\n  end\n\n  @tag :pending\n  test \"at end of partially matching superlist\" do\n    assert Sublist.compare([1, 1, 1, 2], [1, 1, 2]) == :superlist\n  end\n\n  @tag :pending\n  test \"superlist early in huge list\" do\n    assert Sublist.compare(Enum.to_list(1..1_000_000), [3, 4, 5]) == :superlist\n  end\n\n  @tag :pending\n  test \"first list missing element from second list\" do\n    assert Sublist.compare([1, 3], [1, 2, 3]) == :unequal\n  end\n\n  @tag :pending\n  test \"second list missing element from first list\" do\n    assert Sublist.compare([1, 2, 3], [1, 3]) == :unequal\n  end\n\n  @tag :pending\n  test \"first list missing additional digits from second list\" do\n    assert Sublist.compare([1, 2], [1, 22]) == :unequal\n  end\n\n  @tag :pending\n  test \"order matters to a list\" do\n    assert Sublist.compare([1, 2, 3], [3, 2, 1]) == :unequal\n  end\n\n  @tag :pending\n  test \"same digits but different numbers\" do\n    assert Sublist.compare([1, 0, 1], [10, 1]) == :unequal\n  end\n\n  @tag :pending\n  test \"strict equality needed\" do\n    assert Sublist.compare([1], [1.0, 2]) == :unequal\n  end\n\n  @tag :pending\n  test \"recurring values sublist\" do\n    assert Sublist.compare([1, 2, 1, 2, 3], [1, 2, 3, 1, 2, 1, 2, 3, 2, 1]) == :sublist\n  end\n\n  @tag :pending\n  test \"recurring values unequal\" do\n    assert Sublist.compare([1, 2, 1, 2, 3], [1, 2, 3, 1, 2, 3, 2, 3, 2, 1]) == :unequal\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "jason-kerney",
+    "kytrinyx",
+    "lpil",
+    "lsimoneau",
+    "MarcosX",
+    "neenjaw",
+    "parkerl",
+    "pminten",
+    "rubysolo",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

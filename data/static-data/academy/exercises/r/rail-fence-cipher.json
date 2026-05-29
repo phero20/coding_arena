@@ -1,0 +1,26 @@
+{
+  "id": "r:rail-fence-cipher",
+  "trackSlug": "r",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "e4b63b53-d6ca-4a1d-8e02-e295bd2c9c65",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "encode <- function(rails, plaintext) {\n\n}\n\ndecode <- function(rails, ciphertext) {\n\n}\n",
+  "example_solution": "encode <- function(rails, plaintext) {\n  transform(rails, plaintext, \\(i, fence) fence[i])\n}\n\ndecode <- function(rails, ciphertext) {\n  transform(rails, ciphertext, \\(i, fence) match(i, fence))\n}\n\ntransform <- function(rails, text, char_index) {\n  chars <- strsplit(text, \"\") |> unlist()\n  fence <- rail_fence(rails, length(chars))\n  indices <- sapply(seq_along(chars), \\(i) char_index(i, fence))\n  chars[indices] |> paste0(collapse = \"\")\n}\n\nrail_fence <- function(rails, num_chars) {\n  zigzag <- c(seq_len(rails), seq(rails - 1, 2))\n  rep(zigzag, length.out = num_chars) |> order()\n}\n",
+  "test_code": "source(\"./rail-fence-cipher.R\")\nlibrary(testthat)\n\ntest_that(\"Encode with two rails\", {\n  rails <- 2\n  plaintext <- \"XOXOXOXOXOXOXOXOXO\"\n  expected <- \"XXXXXXXXXOOOOOOOOO\"\n  expect_equal(encode(rails, plaintext), expected)\n})\n\ntest_that(\"Encode with three rails\", {\n  rails <- 3\n  plaintext <- \"WEAREDISCOVEREDFLEEATONCE\"\n  expected <- \"WECRLTEERDSOEEFEAOCAIVDEN\"\n  expect_equal(encode(rails, plaintext), expected)\n})\n\ntest_that(\"Encode with ending in the middle\", {\n  rails <- 4\n  plaintext <- \"EXERCISES\"\n  expected <- \"ESXIEECSR\"\n  expect_equal(encode(rails, plaintext), expected)\n})\n\ntest_that(\"Decode with three rails\", {\n  rails <- 3\n  ciphertext <- \"TEITELHDVLSNHDTISEIIEA\"\n  expected <- \"THEDEVILISINTHEDETAILS\"\n  expect_equal(decode(rails, ciphertext), expected)\n})\n\ntest_that(\"Decode with five rails\", {\n  rails <- 5\n  ciphertext <- \"EIEXMSMESAORIWSCE\"\n  expected <- \"EXERCISMISAWESOME\"\n  expect_equal(decode(rails, ciphertext), expected)\n})\n\ntest_that(\"Decode with six rails\", {\n  rails <- 6\n  ciphertext <- \"133714114238148966225439541018335470986172518171757571896261\"\n  expected <- \"112358132134558914423337761098715972584418167651094617711286\"\n  expect_equal(decode(rails, ciphertext), expected)\n})\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

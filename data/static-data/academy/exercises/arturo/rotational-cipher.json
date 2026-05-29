@@ -1,0 +1,26 @@
+{
+  "id": "arturo:rotational-cipher",
+  "trackSlug": "arturo",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "d4b3a9da-46c7-496a-bfa3-8a4bbc339889",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "rotateText: function[text shiftKey][\n    panic \"Please implement the rotateText function\"\n]\n",
+  "example_solution": "lowerA: to :integer 'a'\nupperA: to :integer 'A'\n\nshift: $[c shiftKey base][\n    to :char base + (shiftKey + (to :integer c) - base) % 26\n]\n\nrotateText: $[text shiftKey][\n    join map text [c][\n        switch lower? c -> shift c shiftKey lowerA ->\n        switch upper? c -> shift c shiftKey upperA\n                        -> c\n    ]\n]\n",
+  "test_code": "import.version:3.0.0 {unitt}! \nimport {src/rotational-cipher}!\n\ndescribe \"Rotational Cipher\" [\n    it \"rotate a by 0, same output as input\" [\n        expects.be:'equal? @[\n            \"a\"\n            rotateText \"a\" 0\n        ]\n    ]\n\n    it.skip \"rotate a by 1\" [\n        expects.be:'equal? @[\n            \"b\"\n            rotateText \"a\" 1\n        ]\n    ]\n\n    it.skip \"rotate a by 26, same output as input\" [\n        expects.be:'equal? @[\n            \"a\"\n            rotateText \"a\" 26\n        ]\n    ]\n\n    it.skip \"rotate m by 13\" [\n        expects.be:'equal? @[\n            \"z\"\n            rotateText \"m\" 13\n        ]\n    ]\n\n    it.skip \"rotate n by 13 with wrap around alphabet\" [\n        expects.be:'equal? @[\n            \"a\"\n            rotateText \"n\" 13\n        ]\n    ]\n\n    it.skip \"rotate capital letters\" [\n        expects.be:'equal? @[\n            \"TRL\"\n            rotateText \"OMG\" 5\n        ]\n    ]\n\n    it.skip \"rotate spaces\" [\n        expects.be:'equal? @[\n            \"T R L\"\n            rotateText \"O M G\" 5\n        ]\n    ]\n\n    it.skip \"rotate numbers\" [\n        expects.be:'equal? @[\n            \"Xiwxmrk 1 2 3 xiwxmrk\"\n            rotateText \"Testing 1 2 3 testing\" 4\n        ]\n    ]\n\n    it.skip \"rotate punctuation\" [\n        expects.be:'equal? @[\n            \"Gzo'n zvo, Bmviyhv!\"\n            rotateText \"Let's eat, Grandma!\" 21\n        ]\n    ]\n\n    it.skip \"rotate all letters\" [\n        expects.be:'equal? @[\n            \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n            rotateText \"The quick brown fox jumps over the lazy dog.\" 13\n        ]\n    ]\n]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

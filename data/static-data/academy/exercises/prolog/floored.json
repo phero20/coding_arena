@@ -1,0 +1,26 @@
+{
+  "id": "prolog:floored",
+  "trackSlug": "prolog",
+  "slug": "floored",
+  "name": "Floored",
+  "uuid": "b80f8356-0337-41c7-a783-2146473115eb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find out who lives on what floor",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFigure out who lives on what floor based on the following information:\n\n1. There are five floors: 1 (bottom), 2, 3, 4 and 5 (top)\n2. Each tenant lives on a different floor\n3. Amara does not live on the top floor\n4. Björn does not live on the bottom floor\n5. Cora does not live on either the top or the bottom floor\n6. Dale lives on a higher floor than Björn\n7. Emiko does not live on a floor adjacent to Cora's\n8. Cora does not live on a floor adjacent to Björn's\n",
+  "introduction": "# Introduction\n\nAmara, Björn, Cora, Dale, and Emiko reside in a five-story building.\nOccasionally, the receptionists have trouble recalling the specific floors each person lives on.\nHowever, they should be able to deduce who lives on which floor based on the snippets of information they do remember.\n",
+  "hints": null,
+  "starter_code": "floor(Name, Floor).\n    ",
+  "example_solution": ":- use_module(library(clpfd)).\n\nsolve(Solution) :-\n    Names = [amara, bjorn, cora, dale, emiko],\n    Floors = [Amara, Bjorn, Cora, Dale, Emiko],\n    Floors ins 1..5, % 1\n    all_different(Floors), %2\n    pairs_keys_values(Solution, Names, Floors),\n    Amara #< 5, %3\n    Bjorn #> 1, %4\n    Cora #> 1, Cora #< 5, %5\n    Dale #> Bjorn, %6\n    abs(Emiko - Cora) #> 1, %7\n    abs(Cora - Bjorn) #> 1, %8\n    label(Floors),\n    !.\n\nfloor(Name, Floor) :-\n    solve(Solution),\n    member(Name-Floor, Solution),\n    !.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(floored).\n\n    test(floor_amara, condition(true)) :-\n        floor(amara, Floor),\n        Floor == 3.\n\n    test(floor_bjorn, condition(pending)) :-\n        floor(bjorn, Floor),\n        Floor == 2.\n\n    test(floor_cora, condition(pending)) :-\n        floor(cora, Floor),\n        Floor == 4.\n\n    test(floor_dale, condition(pending)) :-\n        floor(dale, Floor),\n        Floor == 5.\n\n    test(floor_emiko, condition(pending)) :-\n        floor(emiko, Floor),\n        Floor == 1.\n\n:- end_tests(floored).\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

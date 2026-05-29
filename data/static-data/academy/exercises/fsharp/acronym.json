@@ -1,0 +1,41 @@
+{
+  "id": "fsharp:acronym",
+  "trackSlug": "fsharp",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "926f9309-e0bb-457a-8f1d-8fa947ed5ce7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "regular-expressions",
+    "strings"
+  ],
+  "prerequisites": [
+    "booleans",
+    "chars",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Acronym\n\nlet abbreviate phrase = failwith \"You need to implement this function.\"",
+  "example_solution": "module Acronym\n    \nopen System\nopen System.Text.RegularExpressions\n\nlet abbreviate (phrase:string) =  \n    let acronymChar = Char.ToUpperInvariant << Seq.head\n    let words = Regex.Matches(phrase, \"[A-Z]+[a-z']*|[a-z']+\")\n    let chars = [|for word in words do yield word.Value |> acronymChar|]\n    String chars",
+  "test_code": "module AcronymTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Acronym\n\n[<Fact>]\nlet ``Basic`` () =\n    abbreviate \"Portable Network Graphics\" |> should equal \"PNG\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Lowercase words`` () =\n    abbreviate \"Ruby on Rails\" |> should equal \"ROR\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Punctuation`` () =\n    abbreviate \"First In, First Out\" |> should equal \"FIFO\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``All caps word`` () =\n    abbreviate \"GNU Image Manipulation Program\" |> should equal \"GIMP\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Punctuation without whitespace`` () =\n    abbreviate \"Complementary metal-oxide semiconductor\" |> should equal \"CMOS\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Very long abbreviation`` () =\n    abbreviate \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\" |> should equal \"ROTFLSHTMDCOALM\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Consecutive delimiters`` () =\n    abbreviate \"Something - I made up from thin air\" |> should equal \"SIMUFTA\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Apostrophes`` () =\n    abbreviate \"Halley's Comet\" |> should equal \"HC\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Underscore emphasis`` () =\n    abbreviate \"The Road _Not_ Taken\" |> should equal \"TRNT\"\n\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "balazsbotond",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

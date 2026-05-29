@@ -1,0 +1,26 @@
+{
+  "id": "jq:nth-prime",
+  "trackSlug": "jq",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "b269733a-e177-4102-bd91-8a206c10f42f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"Remove this line and implement your solution\" | halt_error\n",
+  "example_solution": "# This solution uses functions that act as closures:\n# an array of known primes is passed as an argument to the\n# function, and an inner recursive function is used do\n# the work to solve the function.\n#\n# An implementation that passes arrays around as \"state\"\n# (input to the function) is much much slower.\n\n\n# input: the candidate to be tested\n# arg:   an array of known primes\n# output: boolean result\n#\ndef is_prime($primes):\n    def _is_prime:\n        . as [$idx, $limit, $candidate] |\n        if $primes[$idx] > $limit then true\n        elif $candidate % $primes[$idx] == 0 then false\n        else [$idx + 1, $limit, $candidate] | _is_prime\n        end;\n\n    [0, sqrt, .] | _is_prime;\n\n\n# input: ignored\n# arg: an array of known primes so far\n# output: the array of known primes plus the newest prime\n#\ndef next_prime($primes):\n    # this inner function takes the candidate as input\n    def _next_prime:\n        if is_prime($primes)\n        then $primes + [.]\n        else . + 2 | _next_prime\n        end;\n\n    $primes[-1] + 2 | _next_prime;\n\n\nif   $n == 0 then \"there is no zeroth prime\" | halt_error\nelif $n == 1 then 2\nelse reduce range(2; $n) as $_ ([2, 3]; next_prime(.)) | .[-1]\nend\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2022-11-02T20:59:29Z\nload bats-extra\nload bats-jq\n\n@test 'first prime' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -n -r -f nth-prime.jq --argjson n 1\n\n    assert_success\n    expected=2\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'second prime' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -n -r -f nth-prime.jq --argjson n 2\n\n    assert_success\n    expected=3\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'sixth prime' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -n -r -f nth-prime.jq --argjson n 6\n\n    assert_success\n    expected=13\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'big prime' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -n -r -f nth-prime.jq --argjson n 10001\n\n    assert_success\n    expected=104743\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'there is no zeroth prime' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -n -r -f nth-prime.jq --argjson n 0\n\n    assert_failure\n    expected='there is no zeroth prime'\n    assert_equal \"$output\" \"$expected\"\n}\n\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

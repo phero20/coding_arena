@@ -64,6 +64,11 @@ export function createSubmissionProcessor(
           status: evaluation.status,
           details: {
             tests: evaluation.tests,
+<<<<<<< HEAD
+=======
+            compileOutput: evaluation.compileOutput,
+            stderr: evaluation.stderr,
+>>>>>>> prod-deploy
             evaluatedAt: clock.nowIso(),
             evaluationDuration: executionTime,
           },
@@ -112,25 +117,42 @@ export function createSubmissionProcessor(
         executionTime,
       } as SubmissionEvaluationResult;
     } catch (error: unknown) {
+<<<<<<< HEAD
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
       const attemptNumber = job.attemptsMade || 1;
+=======
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const currentAttempt = job.attemptsMade + 1;
+>>>>>>> prod-deploy
       const maxAttempts = job.opts?.attempts || 3;
 
       tracedLogger.error(
         {
           jobId: job.id,
           error: errorMessage,
+<<<<<<< HEAD
           attempt: attemptNumber,
+=======
+          attempt: currentAttempt,
+          maxAttempts,
+>>>>>>> prod-deploy
         },
         "Submission evaluation failed",
       );
 
       // Handle final failure
+<<<<<<< HEAD
       if (attemptNumber >= maxAttempts) {
         tracedLogger.error(
           {
             attempts: attemptNumber,
+=======
+      if (currentAttempt >= maxAttempts) {
+        tracedLogger.error(
+          {
+            attempts: currentAttempt,
+>>>>>>> prod-deploy
           },
           "Max retry attempts reached, marking as SYSTEM_ERROR",
         );
@@ -142,12 +164,34 @@ export function createSubmissionProcessor(
               status: "SYSTEM_ERROR",
               details: {
                 error: errorMessage,
+<<<<<<< HEAD
                 failedAfterAttempts: attemptNumber,
+=======
+                failedAfterAttempts: currentAttempt,
+>>>>>>> prod-deploy
                 evaluatedAt: clock.nowIso(),
               },
             },
             options,
           );
+<<<<<<< HEAD
+=======
+
+          // 3.5 Also notify Match Logic on final failure if it's an arena submission
+          if (jobData.arenaMatchId) {
+            await arenaMatchService.handleMatchSubmission({
+              submissionId: jobData.submissionId,
+              matchId: jobData.arenaMatchId,
+              userId: jobData.userId,
+              clerkId: jobData.clerkId,
+              evaluation: {
+                status: "SYSTEM_ERROR",
+                tests: [],
+              },
+              traceId,
+            });
+          }
+>>>>>>> prod-deploy
         } catch (dbErr) {
           tracedLogger.error(
             {

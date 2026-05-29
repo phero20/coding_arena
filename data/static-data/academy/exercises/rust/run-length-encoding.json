@@ -1,0 +1,44 @@
+{
+  "id": "rust:run-length-encoding",
+  "trackSlug": "rust",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "4dc9b165-792a-4438-be80-df9aab6f6a9c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "char",
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn encode(source: &str) -> String {\n    todo!(\"Return the run-length encoding of {source}.\");\n}\n\npub fn decode(source: &str) -> String {\n    todo!(\"Return the run-length decoding of {source}.\");\n}\n",
+  "example_solution": "use std::cmp;\n\npub fn encode(input: &str) -> String {\n    input\n        .chars()\n        .fold(\n            (String::new(), ' ', 0, 1),\n            |(mut acc, last, last_n, pos), c| {\n                // acc = where answer is accumulated\n                // last = last character read\n                // last_n = accum count for last\n                if c == last {\n                    if pos == input.len() {\n                        // end of string\n                        acc += (last_n + 1).to_string().as_str();\n                        acc.push(c);\n                    }\n                    (acc, last, last_n + 1, pos + 1)\n                } else {\n                    if last_n > 1 {\n                        acc += last_n.to_string().as_str();\n                    }\n                    if last_n > 0 {\n                        // ignore initial last (single whitespace)\n                        acc.push(last);\n                    }\n                    if pos == input.len() {\n                        // end of string\n                        acc.push(c);\n                    }\n                    (acc, c, 1, pos + 1)\n                }\n            },\n        )\n        .0\n}\n\npub fn decode(input: &str) -> String {\n    input\n        .chars()\n        .fold((String::new(), 0), |(mut acc, last_n), c| {\n            if let Some(d) = c.to_digit(10) {\n                (acc, 10 * last_n + d)\n            } else {\n                acc += c.to_string().repeat(cmp::max(last_n, 1) as usize).as_str();\n                (acc, 0)\n            }\n        })\n        .0\n}\n",
+  "test_code": "use run_length_encoding as rle;\n\n#[test]\nfn encode_empty_string() {\n    let input = \"\";\n    let output = rle::encode(input);\n    let expected = \"\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn encode_single_characters_only_are_encoded_without_count() {\n    let input = \"XYZ\";\n    let output = rle::encode(input);\n    let expected = \"XYZ\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn encode_string_with_no_single_characters() {\n    let input = \"AABBBCCCC\";\n    let output = rle::encode(input);\n    let expected = \"2A3B4C\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn encode_single_characters_mixed_with_repeated_characters() {\n    let input = \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\";\n    let output = rle::encode(input);\n    let expected = \"12WB12W3B24WB\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn encode_multiple_whitespace_mixed_in_string() {\n    let input = \"  hsqq qww  \";\n    let output = rle::encode(input);\n    let expected = \"2 hs2q q2w2 \";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn encode_lowercase_characters() {\n    let input = \"aabbbcccc\";\n    let output = rle::encode(input);\n    let expected = \"2a3b4c\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn decode_empty_string() {\n    let input = \"\";\n    let output = rle::decode(input);\n    let expected = \"\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn decode_single_characters_only() {\n    let input = \"XYZ\";\n    let output = rle::decode(input);\n    let expected = \"XYZ\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn decode_string_with_no_single_characters() {\n    let input = \"2A3B4C\";\n    let output = rle::decode(input);\n    let expected = \"AABBBCCCC\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn decode_single_characters_with_repeated_characters() {\n    let input = \"12WB12W3B24WB\";\n    let output = rle::decode(input);\n    let expected = \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn decode_multiple_whitespace_mixed_in_string() {\n    let input = \"2 hs2q q2w2 \";\n    let output = rle::decode(input);\n    let expected = \"  hsqq qww  \";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn decode_lowercase_string() {\n    let input = \"2a3b4c\";\n    let output = rle::decode(input);\n    let expected = \"aabbbcccc\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn consistency_encode_followed_by_decode_gives_original_string() {\n    let input = \"zzz ZZ  zZ\";\n    let output = rle::decode(&rle::encode(input));\n    let expected = \"zzz ZZ  zZ\";\n    assert_eq!(output, expected);\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "divagant-martian"
+  ],
+  "contributors": [
+    "attilahorvath",
+    "AvasDream",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "lutostag",
+    "navossoc",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

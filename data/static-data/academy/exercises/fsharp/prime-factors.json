@@ -1,0 +1,39 @@
+{
+  "id": "fsharp:prime-factors",
+  "trackSlug": "fsharp",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "18652e46-6dd2-4030-84af-be0965c92991",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "integral-numbers",
+    "while-loops"
+  ],
+  "prerequisites": [
+    "integral-numbers",
+    "while-loops"
+  ],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module PrimeFactors\n\nlet factors number = failwith \"You need to implement this function.\"",
+  "example_solution": "module PrimeFactors\n\nopen System\n\nlet factors number =\n    let rec loop factors (remainder: int64) (factorToCheck: int64) =     \n            match remainder with\n            | _ when remainder <= 1L -> factors |> List.rev\n            | _ when remainder % factorToCheck = 0L \n                    -> loop (int factorToCheck :: factors) (remainder / factorToCheck |> int64) factorToCheck\n            | _ -> loop factors remainder (factorToCheck+1L)\n\n    loop [] number 2L",
+  "test_code": "module PrimeFactorsTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen PrimeFactors\n\n[<Fact>]\nlet ``No factors`` () =\n    factors 1L |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Prime number`` () =\n    factors 2L |> should equal [2]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Another prime number`` () =\n    factors 3L |> should equal [3]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Square of a prime`` () =\n    factors 9L |> should equal [3; 3]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Product of first prime`` () =\n    factors 4L |> should equal [2; 2]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Cube of a prime`` () =\n    factors 8L |> should equal [2; 2; 2]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Product of second prime`` () =\n    factors 27L |> should equal [3; 3; 3]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Product of third prime`` () =\n    factors 625L |> should equal [5; 5; 5; 5]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Product of first and second prime`` () =\n    factors 6L |> should equal [2; 3]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Product of primes and non-primes`` () =\n    factors 12L |> should equal [2; 2; 3]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Product of primes`` () =\n    factors 901255L |> should equal [5; 17; 23; 461]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Factors include a large prime`` () =\n    factors 93819012551L |> should equal [11; 9539; 894119]\n\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

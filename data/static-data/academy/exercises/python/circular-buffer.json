@@ -1,0 +1,51 @@
+{
+  "id": "python:circular-buffer",
+  "trackSlug": "python",
+  "slug": "circular-buffer",
+  "name": "Circular Buffer",
+  "uuid": "77ee3b0e-a4e9-4257-bcfc-ff2c8f1477ab",
+  "type": "practice",
+  "status": null,
+  "blurb": "A data structure that uses a single, fixed-size buffer as if it were connected end-to-end.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "class-inheritance",
+    "function-arguments",
+    "user-defined-errors"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "classes",
+    "dicts",
+    "lists",
+    "list-methods",
+    "loops",
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nA circular buffer, cyclic buffer or ring buffer is a data structure that uses a single, fixed-size buffer as if it were connected end-to-end.\n\nA circular buffer first starts empty and of some predefined length.\nFor example, this is a 7-element buffer:\n\n```text\n[ ][ ][ ][ ][ ][ ][ ]\n```\n\nAssume that a 1 is written into the middle of the buffer (exact starting location does not matter in a circular buffer):\n\n```text\n[ ][ ][ ][1][ ][ ][ ]\n```\n\nThen assume that two more elements are added — 2 & 3 — which get appended after the 1:\n\n```text\n[ ][ ][ ][1][2][3][ ]\n```\n\nIf two elements are then removed from the buffer, the oldest values inside the buffer are removed.\nThe two elements removed, in this case, are 1 & 2, leaving the buffer with just a 3:\n\n```text\n[ ][ ][ ][ ][ ][3][ ]\n```\n\nIf the buffer has 7 elements then it is completely full:\n\n```text\n[5][6][7][8][9][3][4]\n```\n\nWhen the buffer is full an error will be raised, alerting the client that further writes are blocked until a slot becomes free.\n\nWhen the buffer is full, the client can opt to overwrite the oldest data with a forced write.\nIn this case, two more elements — A & B — are added and they overwrite the 3 & 4:\n\n```text\n[5][6][7][8][9][A][B]\n```\n\n3 & 4 have been replaced by A & B making 5 now the oldest data in the buffer.\nFinally, if two elements are removed then what would be returned is 5 & 6 yielding the buffer:\n\n```text\n[ ][ ][7][8][9][A][B]\n```\n\nBecause there is space available, if the client again uses overwrite to store C & D then the space where 5 & 6 were stored previously will be used not the location of 7 & 8.\n7 is still the oldest element and the buffer is once again full.\n\n```text\n[C][D][7][8][9][A][B]\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class BufferFullException(BufferError):\n    \"\"\"Exception raised when CircularBuffer is full.\n\n    message: explanation of the error.\n\n    \"\"\"\n    def __init__(self, message):\n        pass\n\n\nclass BufferEmptyException(BufferError):\n    \"\"\"Exception raised when CircularBuffer is empty.\n\n    message: explanation of the error.\n\n    \"\"\"\n    def __init__(self, message):\n        pass\n\n\nclass CircularBuffer:\n    def __init__(self, capacity):\n        pass\n\n    def read(self):\n        pass\n\n    def write(self, data):\n        pass\n\n    def overwrite(self, data):\n        pass\n\n    def clear(self):\n        pass\n",
+  "example_solution": "class BufferFullException(BufferError):\n    \"\"\"Exception raised when CircularBuffer is full.\n\n    message: explanation of the error.\n\n    \"\"\"\n    def __init__(self, message):\n        self.message = message\n\n\nclass BufferEmptyException(BufferError):\n    \"\"\"Exception raised when CircularBuffer is empty.\n\n    message: explanation of the error.\n\n    \"\"\"\n    def __init__(self, message):\n        self.message = message\n\n\nclass CircularBuffer:\n\n    def __init__(self, capacity):\n        self.buffer = bytearray(capacity)\n        self.read_point = 0\n        self.write_point = 0\n\n    # (protected) helper method\n    def _update_buffer(self, data):\n        try:\n            self.buffer[self.write_point] = data\n        except TypeError:\n            self.buffer[self.write_point] = ord(data)\n\n    def clear(self):\n        self.buffer = bytearray(len(self.buffer))\n\n    def write(self, data):\n        if all(self.buffer):\n            raise BufferFullException('Circular buffer is full')\n        self._update_buffer(data)\n        self.write_point = (self.write_point + 1) % len(self.buffer)\n\n    def overwrite(self, data):\n        self._update_buffer(data)\n        if all(self.buffer) and self.write_point == self.read_point:\n            self.read_point = (self.read_point + 1) % len(self.buffer)\n        self.write_point = (self.write_point + 1) % len(self.buffer)\n\n    def read(self):\n        if not any(self.buffer):\n            raise BufferEmptyException('Circular buffer is empty')\n        data = chr(self.buffer[self.read_point])\n        self.buffer[self.read_point] = 0\n        self.read_point = (self.read_point + 1) % len(self.buffer)\n        return data\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/circular-buffer/canonical-data.json\n# File last updated on 2026-02-19\n\nimport unittest\n\nfrom circular_buffer import (\n    CircularBuffer,\n    BufferEmptyException,\n    BufferFullException,\n)\n\n\nclass CircularBufferTest(unittest.TestCase):\n\n    def test_reading_empty_buffer_should_fail(self):\n        buf = CircularBuffer(1)\n        with self.assertRaises(BufferError) as err:\n            buf.read()\n\n        self.assertEqual(type(err.exception), BufferEmptyException)\n        self.assertEqual(err.exception.args[0], \"Circular buffer is empty\")\n\n    def test_can_read_an_item_just_written(self):\n        buf = CircularBuffer(1)\n        buf.write(\"1\")\n        self.assertEqual(buf.read(), \"1\")\n\n    def test_each_item_may_only_be_read_once(self):\n        buf = CircularBuffer(1)\n        buf.write(\"1\")\n        self.assertEqual(buf.read(), \"1\")\n        with self.assertRaises(BufferError) as err:\n            buf.read()\n\n        self.assertEqual(type(err.exception), BufferEmptyException)\n        self.assertEqual(err.exception.args[0], \"Circular buffer is empty\")\n\n    def test_items_are_read_in_the_order_they_are_written(self):\n        buf = CircularBuffer(2)\n        buf.write(\"1\")\n        buf.write(\"2\")\n        self.assertEqual(buf.read(), \"1\")\n        self.assertEqual(buf.read(), \"2\")\n\n    def test_full_buffer_can_t_be_written_to(self):\n        buf = CircularBuffer(1)\n        buf.write(\"1\")\n        with self.assertRaises(BufferError) as err:\n            buf.write(\"2\")\n\n        self.assertEqual(type(err.exception), BufferFullException)\n        self.assertEqual(err.exception.args[0], \"Circular buffer is full\")\n\n    def test_a_read_frees_up_capacity_for_another_write(self):\n        buf = CircularBuffer(1)\n        buf.write(\"1\")\n        self.assertEqual(buf.read(), \"1\")\n        buf.write(\"2\")\n        self.assertEqual(buf.read(), \"2\")\n\n    def test_read_position_is_maintained_even_across_multiple_writes(self):\n        buf = CircularBuffer(3)\n        buf.write(\"1\")\n        buf.write(\"2\")\n        self.assertEqual(buf.read(), \"1\")\n        buf.write(\"3\")\n        self.assertEqual(buf.read(), \"2\")\n        self.assertEqual(buf.read(), \"3\")\n\n    def test_items_cleared_out_of_buffer_can_t_be_read(self):\n        buf = CircularBuffer(1)\n        buf.write(\"1\")\n        buf.clear()\n        with self.assertRaises(BufferError) as err:\n            buf.read()\n\n        self.assertEqual(type(err.exception), BufferEmptyException)\n        self.assertEqual(err.exception.args[0], \"Circular buffer is empty\")\n\n    def test_clear_frees_up_capacity_for_another_write(self):\n        buf = CircularBuffer(1)\n        buf.write(\"1\")\n        buf.clear()\n        buf.write(\"2\")\n        self.assertEqual(buf.read(), \"2\")\n\n    def test_clear_does_nothing_on_empty_buffer(self):\n        buf = CircularBuffer(1)\n        buf.clear()\n        buf.write(\"1\")\n        self.assertEqual(buf.read(), \"1\")\n\n    def test_overwrite_acts_like_write_on_non_full_buffer(self):\n        buf = CircularBuffer(2)\n        buf.write(\"1\")\n        buf.overwrite(\"2\")\n        self.assertEqual(buf.read(), \"1\")\n        self.assertEqual(buf.read(), \"2\")\n\n    def test_overwrite_replaces_the_oldest_item_on_full_buffer(self):\n        buf = CircularBuffer(2)\n        buf.write(\"1\")\n        buf.write(\"2\")\n        buf.overwrite(\"3\")\n        self.assertEqual(buf.read(), \"2\")\n        self.assertEqual(buf.read(), \"3\")\n\n    def test_overwrite_replaces_the_oldest_item_remaining_in_buffer_following_a_read(\n        self,\n    ):\n        buf = CircularBuffer(3)\n        buf.write(\"1\")\n        buf.write(\"2\")\n        buf.write(\"3\")\n        self.assertEqual(buf.read(), \"1\")\n        buf.write(\"4\")\n        buf.overwrite(\"5\")\n        self.assertEqual(buf.read(), \"3\")\n        self.assertEqual(buf.read(), \"4\")\n        self.assertEqual(buf.read(), \"5\")\n\n    def test_initial_clear_does_not_affect_wrapping_around(self):\n        buf = CircularBuffer(2)\n        buf.clear()\n        buf.write(\"1\")\n        buf.write(\"2\")\n        buf.overwrite(\"3\")\n        buf.overwrite(\"4\")\n        self.assertEqual(buf.read(), \"3\")\n        self.assertEqual(buf.read(), \"4\")\n        with self.assertRaises(BufferError) as err:\n            buf.read()\n\n        self.assertEqual(type(err.exception), BufferEmptyException)\n        self.assertEqual(err.exception.args[0], \"Circular buffer is empty\")\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Circular_buffer",
+  "authors": [
+    "behrtam"
+  ],
+  "contributors": [
+    "cmccandless",
+    "Dog",
+    "elyssonmr",
+    "ikhadykin",
+    "Mofeywalker",
+    "N-Parsons",
+    "pheanex",
+    "tqa236",
+    "yawpitch"
+  ]
+}

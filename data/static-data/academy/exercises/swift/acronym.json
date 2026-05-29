@@ -1,0 +1,36 @@
+{
+  "id": "swift:acronym",
+  "trackSlug": "swift",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "7359a818-ffa5-4ce0-be35-cc66654f9af2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "struct Acronym {\n  static func abbreviate(_ inString: String) -> String {\n    // Write your code for the 'Acronym' exercise in this file.\n  }\n}\n",
+  "example_solution": "import Foundation\n\nclass Acronym {\n    static func abbreviate(_ phrase: String) -> String {\n    let words = phrase.components(separatedBy: CharacterSet(charactersIn: \" -_\"))\n    var acronym = \"\"\n    \n    for word in words {\n        if let firstCharacter = word.first {\n            acronym.append(String(firstCharacter).uppercased())\n        }\n    }\n    \n    return acronym\n    }\n}",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Acronym\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct AcronymTests {\n\n  @Test(\"basic\")\n  func testBasic() {\n    #expect(\"PNG\" == Acronym.abbreviate(\"Portable Network Graphics\"))\n  }\n\n  @Test(\"lowercase words\", .enabled(if: RUNALL))\n  func testLowercaseWords() {\n    #expect(\"ROR\" == Acronym.abbreviate(\"Ruby on Rails\"))\n  }\n\n  @Test(\"punctuation\", .enabled(if: RUNALL))\n  func testPunctuation() {\n    #expect(\"FIFO\" == Acronym.abbreviate(\"First In, First Out\"))\n  }\n\n  @Test(\"all caps word\", .enabled(if: RUNALL))\n  func testAllCapsWord() {\n    #expect(\"GIMP\" == Acronym.abbreviate(\"GNU Image Manipulation Program\"))\n  }\n\n  @Test(\"punctuation without whitespace\", .enabled(if: RUNALL))\n  func testPunctuationWithoutWhitespace() {\n    #expect(\"CMOS\" == Acronym.abbreviate(\"Complementary metal-oxide semiconductor\"))\n  }\n\n  @Test(\"very long abbreviation\", .enabled(if: RUNALL))\n  func testVeryLongAbbreviation() {\n    #expect(\n      \"ROTFLSHTMDCOALM\"\n        == Acronym.abbreviate(\n          \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"))\n  }\n\n  @Test(\"consecutive delimiters\", .enabled(if: RUNALL))\n  func testConsecutiveDelimiters() {\n    #expect(\"SIMUFTA\" == Acronym.abbreviate(\"Something - I made up from thin air\"))\n  }\n\n  @Test(\"apostrophes\", .enabled(if: RUNALL))\n  func testApostrophes() {\n    #expect(\"HC\" == Acronym.abbreviate(\"Halley's Comet\"))\n  }\n\n  @Test(\"underscore emphasis\", .enabled(if: RUNALL))\n  func testUnderscoreEmphasis() {\n    #expect(\"TRNT\" == Acronym.abbreviate(\"The Road _Not_ Taken\"))\n  }\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "bhargavg",
+    "hankturowski",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "robtimp",
+    "samkrishna",
+    "ThomasHaz",
+    "meatball133"
+  ]
+}

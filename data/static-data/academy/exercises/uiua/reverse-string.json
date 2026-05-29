@@ -1,0 +1,26 @@
+{
+  "id": "uiua:reverse-string",
+  "trackSlug": "uiua",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "203b98f2-4e30-4b0d-96c5-e475e0ed4214",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "ReverseString ← |1 ⊙(⍤ \"Please implement ReverseString\" 0)\n",
+  "example_solution": "ReverseString ← |1 ∧⊂:\"\"\n",
+  "test_code": "~ \"reverse-string.ua\" ~ ReverseString\n\n# an empty string\n⍤⤙≍ \"\" ReverseString \"\"\n\n# a word\n⍤⤙≍ \"tobor\" ReverseString \"robot\"\n\n# a capitalized word\n⍤⤙≍ \"nemaR\" ReverseString \"Ramen\"\n\n# a sentence with punctuation\n⍤⤙≍ \"!yrgnuh m'I\" ReverseString \"I'm hungry!\"\n\n# a palindrome\n⍤⤙≍ \"racecar\" ReverseString \"racecar\"\n\n# an even-sized word\n⍤⤙≍ \"reward\" ReverseString \"drawer\"\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

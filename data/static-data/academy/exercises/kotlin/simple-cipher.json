@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:simple-cipher",
+  "trackSlug": "kotlin",
+  "slug": "simple-cipher",
+  "name": "Simple Cipher",
+  "uuid": "e23b06de-bd91-482f-9783-b0334b75b489",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a simple shift cipher like Caesar and a more secure substitution cipher.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement a simple shift cipher like Caesar and a more secure substitution cipher.\n\n## Step 1\n\n\"If he had anything confidential to say, he wrote it in cipher, that is, by so changing the order of the letters of the alphabet, that not a word could be made out.\nIf anyone wishes to decipher these, and get at their meaning, he must substitute the fourth letter of the alphabet, namely D, for A, and so with the others.\"\n—Suetonius, Life of Julius Caesar\n\nCiphers are very straight-forward algorithms that allow us to render text less readable while still allowing easy deciphering.\nThey are vulnerable to many forms of cryptanalysis, but Caesar was lucky that his enemies were not cryptanalysts.\n\nThe Caesar cipher was used for some messages from Julius Caesar that were sent afield.\nNow Caesar knew that the cipher wasn't very good, but he had one ally in that respect: almost nobody could read well.\nSo even being a couple letters off was sufficient so that people couldn't recognize the few words that they did know.\n\nYour task is to create a simple shift cipher like the Caesar cipher.\nThis image is a great example of the Caesar cipher:\n\n![Caesar cipher][img-caesar-cipher]\n\nFor example:\n\nGiving \"iamapandabear\" as input to the encode function returns the cipher \"ldpdsdqgdehdu\".\nObscure enough to keep our message secret in transit.\n\nWhen \"ldpdsdqgdehdu\" is put into the decode function it would return the original \"iamapandabear\" letting your friend read your original message.\n\n## Step 2\n\nShift ciphers quickly cease to be useful when the opposition commander figures them out.\nSo instead, let's try using a substitution cipher.\nTry amending the code to allow us to specify a key and use that for the shift distance.\n\nHere's an example:\n\nGiven the key \"aaaaaaaaaaaaaaaaaa\", encoding the string \"iamapandabear\"\nwould return the original \"iamapandabear\".\n\nGiven the key \"ddddddddddddddddd\", encoding our string \"iamapandabear\"\nwould return the obscured \"ldpdsdqgdehdu\"\n\nIn the example above, we've set a = 0 for the key value.\nSo when the plaintext is added to the key, we end up with the same message coming out.\nSo \"aaaa\" is not an ideal key.\nBut if we set the key to \"dddd\", we would get the same thing as the Caesar cipher.\n\n## Step 3\n\nThe weakest link in any cipher is the human being.\nLet's make your substitution cipher a little more fault tolerant by providing a source of randomness and ensuring that the key contains only lowercase letters.\n\nIf someone doesn't submit a key at all, generate a truly random key of at least 100 lowercase characters in length.\n\n## Extensions\n\nShift ciphers work by making the text slightly odd, but are vulnerable to frequency analysis.\nSubstitution ciphers help that, but are still very vulnerable when the key is short or if spaces are preserved.\nLater on you'll see one solution to this problem in the exercise \"crypto-square\".\n\nIf you want to go farther in this field, the questions begin to be about how we can exchange keys in a secure way.\nTake a look at [Diffie-Hellman on Wikipedia][dh] for one of the first implementations of this scheme.\n\n[img-caesar-cipher]: https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Caesar_cipher_left_shift_of_3.svg/320px-Caesar_cipher_left_shift_of_3.svg.png\n[dh]: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "data class Cipher(val todo: Nothing) {\n\n    // TODO: Implement proper constructor\n\n    fun encode(s: String): String {\n        TODO(\"Implement this function to complete the task\")\n    }\n\n    fun decode(s: String): String {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "import java.util.Random\n\ndata class Cipher(val key: String) {\n\n    constructor() : this(generateRandomKey())\n\n    init {\n        require(key.matches(Regex(\"^[a-z]+$\"))) { \"Invalid key: $key\" }\n    }\n\n    companion object {\n        val random = Random()\n        val alphabet = ('a'..'z').toList()\n\n        private fun generateRandomKey() = generateSequence { alphabet[random.nextInt(alphabet.size)] }.take(100).joinToString(\"\")\n    }\n\n    fun encode(s: String): String = s.mapIndexed { index, char ->  encodeChar(char, index)}.joinToString(\"\")\n    fun decode(s: String): String = s.mapIndexed { index, char ->  decodeChar(char, index)}.joinToString(\"\")\n\n    private fun encodeChar(character: Char, index: Int): Char {\n        var alphaIdx = alphabet.indexOf(character) + alphabet.indexOf(key[index % key.length])\n        if(alphaIdx >= alphabet.size) alphaIdx -= alphabet.size\n\n        return alphabet[alphaIdx]\n    }\n\n    private fun decodeChar(character: Char, index: Int): Char {\n        var alphaIdx = alphabet.indexOf(character) - alphabet.indexOf(key[index % key.length])\n        if(alphaIdx < 0) alphaIdx += alphabet.size\n\n        return alphabet[alphaIdx]\n    }\n}\n",
+  "test_code": "import org.junit.runner.RunWith\nimport org.junit.runners.Suite\n\n@RunWith(Suite::class)\n@Suite.SuiteClasses(\n        RandomKeyCipherTest::class,\n        IncorrectKeyCipherTest::class,\n        SubstitutionCipherTest::class\n)\nclass SimpleCipherTest {\n}\n",
+  "source": "Substitution Cipher at Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Substitution_cipher",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "lihofm",
+    "mdowds",
+    "mikegehard",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

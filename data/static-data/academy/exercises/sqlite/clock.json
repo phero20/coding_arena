@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:clock",
+  "trackSlug": "sqlite",
+  "slug": "clock",
+  "name": "Clock",
+  "uuid": "9f346edc-0b89-4616-b62c-2119325fde2a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a clock that handles times without dates.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement a clock that handles times without dates.\n\nYou should be able to add and subtract minutes to it.\n\nTwo clocks that represent the same time should be equal to each other.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-- Schema:\n-- CREATE TABLE clock (\n--   property TEXT NOT NULL,\n--   input    TEXT NOT NULL,   -- json object\n--   result   TEXT\n-- );\n--\n-- Task: update the clock table and set the result column based on the input.\n",
+  "example_solution": "UPDATE clock\nSET\n  result = STRFTIME(\n    '%H:%M',\n    TIME(\n      '00:00',\n      PRINTF('%d HOUR', JSON_EXTRACT(input, '$.hour')),\n      PRINTF('%d MINUTE', JSON_EXTRACT(input, '$.minute'))\n    )\n  )\nWHERE\n  property = 'create';\n\nUPDATE clock\nSET\n  result = STRFTIME(\n    '%H:%M',\n    TIME(\n      '00:00',\n      PRINTF('%d HOUR', JSON_EXTRACT(input, '$.hour')),\n      PRINTF('%d minute', JSON_EXTRACT(input, '$.minute')),\n      PRINTF('+%d minute', JSON_EXTRACT(input, '$.value'))\n    )\n  )\nWHERE\n  property = 'add';\n\nUPDATE clock\nSET\n  result = STRFTIME(\n    '%H:%M',\n    TIME(\n      '00:00',\n      PRINTF('%d HOUR', JSON_EXTRACT(input, '$.hour')),\n      PRINTF('%d minute', JSON_EXTRACT(input, '$.minute')),\n      PRINTF('-%d minute', JSON_EXTRACT(input, '$.value'))\n    )\n  )\nWHERE\n  property = 'subtract';\n\nUPDATE clock\nSET\n  result = TIME(\n    '00:00',\n    PRINTF('%d HOUR', JSON_EXTRACT(input, '$.clock1.hour')),\n    PRINTF(\n      '%d MINUTE',\n      JSON_EXTRACT(input, '$.clock1.minute')\n    )\n  ) = TIME(\n    '00:00',\n    PRINTF('%d HOUR', JSON_EXTRACT(input, '$.clock2.hour')),\n    PRINTF(\n      '%d MINUTE',\n      JSON_EXTRACT(input, '$.clock2.minute')\n    )\n  )\nWHERE\n  property = 'equal';\n",
+  "test_code": "-- Create database:\n.read ./create_fixture.sql\n-- Read user student solution and save any output as markdown in user_output.md:\n.mode markdown\n.output user_output.md\n.read ./clock.sql\n.output\n-- Create a clean testing environment:\n.read ./create_test_table.sql\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      property,\n      input,\n      result\n    FROM\n      clock\n  ) AS actual\nWHERE\n  (actual.property, actual.input, actual.result) = (tests.property, tests.input, tests.expected);\n\n-- Update message for failed tests to give helpful information:\nUPDATE tests\nSET\n  message = (\n    'Result for \"' || PRINTF(\n      'property=%s, input=%s',\n      tests.property,\n      tests.input\n    ) || '\"' || ' is <' || COALESCE(actual.result, 'NULL') || '> but should be <' || tests.expected || '>'\n  )\nFROM\n  (\n    SELECT\n      property,\n      input,\n      result\n    FROM\n      clock\n  ) AS actual\nWHERE\n  (actual.property, actual.input) = (tests.property, tests.input)\n  AND tests.status = 'fail';\n\n-- Save results to ./output.json (needed by the online test-runner)\n.mode json\n.once './output.json'\nSELECT\n  description,\n  status,\n  message,\n  output,\n  test_code,\n  task_id\nFROM\n  tests;\n\n-- Display test results in readable form for the student:\n.mode table\nSELECT\n  description,\n  status,\n  message\nFROM\n  tests;\n",
+  "source": "Pairing session with Erin Drummond",
+  "source_url": null,
+  "authors": [
+    "jimmytty"
+  ],
+  "contributors": null
+}

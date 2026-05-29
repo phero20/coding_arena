@@ -1,0 +1,46 @@
+{
+  "id": "javascript:simple-cipher",
+  "trackSlug": "javascript",
+  "slug": "simple-cipher",
+  "name": "Simple Cipher",
+  "uuid": "62d60b42-93bc-4de9-90d1-1ca18a847812",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the Vigenère cipher, a simple substitution cipher.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "arrays",
+    "classes",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the [Vigenère cipher][wiki].\nThe Vigenère cipher is a simple substitution cipher.\n\n## Cipher terminology\n\nA cipher is an algorithm used to encrypt, or encode, a string.\nThe unencrypted string is called the _plaintext_ and the encrypted string is called the _ciphertext_.\nConverting plaintext to ciphertext is called _encoding_ while the reverse is called _decoding_.\n\nIn a _substitution cipher_, each plaintext letter is replaced with a ciphertext letter which is computed with the help of a _key_.\n(Note, it is possible for replacement letter to be the same as the original letter.)\n\n## Encoding details\n\nIn this cipher, the key is a series of lowercase letters, such as `\"abcd\"`.\nEach letter of the plaintext is _shifted_ or _rotated_ by a distance based on a corresponding letter in the key.\nAn `\"a\"` in the key means a shift of 0 (that is, no shift).\nA `\"b\"` in the key means a shift of 1.\nA `\"c\"` in the key means a shift of 2, and so on.\n\nThe first letter of the plaintext uses the first letter of the key, the second letter of the plaintext uses the second letter of the key and so on.\nIf you run out of letters in the key before you run out of letters in the plaintext, start over from the start of the key again.\n\nIf the key only contains one letter, such as `\"dddddd\"`, then all letters of the plaintext are shifted by the same amount (three in this example), which would make this the same as a rotational cipher or shift cipher (sometimes called a Caesar cipher).\nFor example, the plaintext `\"iamapandabear\"` would become `\"ldpdsdqgdehdu\"`.\n\nIf the key only contains the letter `\"a\"` (one or more times), the shift distance is zero and the ciphertext is the same as the plaintext.\n\nUsually the key is more complicated than that, though!\nIf the key is `\"abcd\"` then letters of the plaintext would be shifted by a distance of 0, 1, 2, and 3.\nIf the plaintext is `\"hello\"`, we need 5 shifts so the key would wrap around, giving shift distances of 0, 1, 2, 3, and 0.\nApplying those shifts to the letters of `\"hello\"` we get `\"hfnoo\"`.\n\n## Random keys\n\nIf no key is provided, generate a key which consists of at least 100 random lowercase letters from the Latin alphabet.\n\n[wiki]: https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Simple Cipher' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport class Cipher {\n  constructor() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  encode() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  decode() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  get key() {\n    throw new Error('Remove this line and implement the function');\n  }\n}\n",
+  "example_solution": "const ALPHA = 'abcdefghijklmnopqrstuvwxyz';\n\nfunction generateKey() {\n  return Array(...Array(100))\n    .map(() => ALPHA[Math.floor(Math.random() * ALPHA.length)])\n    .join('');\n}\n\nconst mod = (n, m) => ((n % m) + m) % m;\n\nfunction xCode(key, inText, sign) {\n  return [...inText].reduce((outText, letter, ii) => {\n    const offset = sign * ALPHA.indexOf(key[mod(ii, key.length)]);\n    return outText + ALPHA[mod(ALPHA.indexOf(letter) + offset, ALPHA.length)];\n  }, '');\n}\n\nexport class Cipher {\n  constructor(key) {\n    if (typeof key === 'undefined') {\n      this.key = generateKey();\n    } else if (key.length === 0 || key.match(/[^a-z]/, 'g')) {\n      throw new Error('Bad key');\n    } else {\n      this.key = key;\n    }\n  }\n\n  encode(plainText) {\n    return xCode(this.key, plainText, 1);\n  }\n\n  decode(encodedText) {\n    return xCode(this.key, encodedText, -1);\n  }\n}\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { Cipher } from './simple-cipher';\n\ndescribe('Random key cipher', () => {\n  const cipher = new Cipher();\n\n  test('can encode', () => {\n    // Here we take advantage of the fact that plaintext of \"aaa...\"\n    // outputs the key. This is a critical problem with shift ciphers, some\n    // characters will always output the key verbatim.\n    expect(cipher.encode('aaaaaaaaaa')).toEqual(cipher.key.substring(0, 10));\n  });\n\n  xtest('can decode', () => {\n    expect(cipher.decode(cipher.key.substring(0, 10))).toEqual('aaaaaaaaaa');\n  });\n\n  xtest('is reversible', () => {\n    // I.e., if you apply decode in a encoded result, you must see\n    // the same plaintext encode parameter as a result of the decode method\n    const plaintext = 'abcdefghij';\n    expect(cipher.decode(cipher.encode(plaintext))).toEqual(plaintext);\n  });\n\n  xtest('key is made only of lowercase letters', () => {\n    expect(cipher.key).toMatch(/^[a-z]+$/);\n  });\n});\n\ndescribe('Substitution cipher', () => {\n  const key = 'abcdefghij';\n  const cipher = new Cipher(key);\n\n  xtest('can encode', () => {\n    expect(cipher.encode('aaaaaaaaaa')).toEqual('abcdefghij');\n  });\n\n  xtest('can decode', () => {\n    expect(cipher.decode('abcdefghij')).toEqual('aaaaaaaaaa');\n  });\n\n  xtest('is reversible', () => {\n    // I.e., if you apply decode in a encoded result, you must see\n    // the same plaintext encode parameter as a result of the decode method\n    expect(cipher.decode(cipher.encode('abcdefghij'))).toEqual('abcdefghij');\n  });\n\n  xtest('can double shift encode', () => {\n    expect(new Cipher('iamapandabear').encode('iamapandabear')).toEqual(\n      'qayaeaagaciai',\n    );\n  });\n\n  xtest('can wrap on encode', () => {\n    expect(cipher.encode('zzzzzzzzzz')).toEqual('zabcdefghi');\n  });\n\n  xtest('can wrap on decode', () => {\n    expect(cipher.decode('zabcdefghi')).toEqual('zzzzzzzzzz');\n  });\n\n  xtest('can encode messages longer than the key', () => {\n    expect(new Cipher('abc').encode('iamapandabear')).toEqual('iboaqcnecbfcr');\n  });\n\n  xtest('can decode messages longer than the key', () => {\n    expect(new Cipher('abc').decode('iboaqcnecbfcr')).toEqual('iamapandabear');\n  });\n});\n",
+  "source": "Substitution Cipher at Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Substitution_cipher",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "ankorGH",
+    "daveyarwood",
+    "hayashi-ay",
+    "marocchino",
+    "nicholejeannine",
+    "paparomeo",
+    "pawamoy",
+    "rchavarria",
+    "ryanplusplus",
+    "serixscorpio",
+    "SleeplessByte",
+    "tekerson",
+    "Vankog",
+    "xarxziux"
+  ]
+}

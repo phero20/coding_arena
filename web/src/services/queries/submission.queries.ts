@@ -5,7 +5,13 @@ import type { Submission } from "@/types/submission";
 /**
  * Fetch active submission status and results by ID.
  */
+<<<<<<< HEAD
 export async function getSubmissionStatus(submissionId: string): Promise<Submission> {
+=======
+export async function getSubmissionStatus(
+  submissionId: string,
+): Promise<Submission> {
+>>>>>>> prod-deploy
   const response = await apiClient.get<ApiResponse<Submission>>(
     `/submissions/${submissionId}`,
   );
@@ -22,7 +28,13 @@ export async function getSubmissionStatus(submissionId: string): Promise<Submiss
 /**
  * Fetch the submission history for a specific problem.
  */
+<<<<<<< HEAD
 export async function getUserSubmissions(problemId: string): Promise<Submission[]> {
+=======
+export async function getUserSubmissions(
+  problemId: string,
+): Promise<Submission[]> {
+>>>>>>> prod-deploy
   const response = await apiClient.get<ApiResponse<Submission[]>>(
     `/submissions/problem/${problemId}`,
   );

@@ -1,0 +1,26 @@
+{
+  "id": "prolog:raindrops",
+  "trackSlug": "prolog",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "6c69b71e-484c-4fac-a0e9-8051065394ab",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "convert(N, Sounds).\n",
+  "example_solution": "sound(Factor, N, Sound, Sounds) :-\n    (N mod Factor =:= 0 -> Sounds = Sound ; Sounds = \"\").\n\nconvert(N, Sounds) :-\n    sound(3, N, \"Pling\", S1),\n    sound(5, N, \"Plang\", S2),\n    sound(7, N, \"Plong\", S3),\n    string_concat(S1, S2, R1),\n    string_concat(R1, S3, R2),\n    (R2 = \"\" -> number_string(N, Sounds) ; Sounds = R2).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(raindrops).\n\n    test(the_sound_for_1_is_1, condition(true)) :-\n        convert(1, Sounds),\n        Sounds == \"1\".\n\n    test(the_sound_for_3_is_pling, condition(pending)) :-\n        convert(3, Sounds),\n        Sounds == \"Pling\".\n\n    test(the_sound_for_5_is_plang, condition(pending)) :-\n        convert(5, Sounds),\n        Sounds == \"Plang\".\n\n    test(the_sound_for_7_is_plong, condition(pending)) :-\n        convert(7, Sounds),\n        Sounds == \"Plong\".\n\n    test(the_sound_for_6_is_pling_as_it_has_a_factor_3, condition(pending)) :-\n        convert(6, Sounds),\n        Sounds == \"Pling\".\n\n    test(two_to_the_power_3_does_not_make_a_raindrop_sound_as_3_is_the_exponent_not_the_base, condition(pending)) :-\n        convert(8, Sounds),\n        Sounds == \"8\".\n\n    test(the_sound_for_9_is_pling_as_it_has_a_factor_3, condition(pending)) :-\n        convert(9, Sounds),\n        Sounds == \"Pling\".\n\n    test(the_sound_for_10_is_plang_as_it_has_a_factor_5, condition(pending)) :-\n        convert(10, Sounds),\n        Sounds == \"Plang\".\n\n    test(the_sound_for_14_is_plong_as_it_has_a_factor_of_7, condition(pending)) :-\n        convert(14, Sounds),\n        Sounds == \"Plong\".\n\n    test(the_sound_for_15_is_plingplang_as_it_has_factors_3_and_5, condition(pending)) :-\n        convert(15, Sounds),\n        Sounds == \"PlingPlang\".\n\n    test(the_sound_for_21_is_plingplong_as_it_has_factors_3_and_7, condition(pending)) :-\n        convert(21, Sounds),\n        Sounds == \"PlingPlong\".\n\n    test(the_sound_for_25_is_plang_as_it_has_a_factor_5, condition(pending)) :-\n        convert(25, Sounds),\n        Sounds == \"Plang\".\n\n    test(the_sound_for_27_is_pling_as_it_has_a_factor_3, condition(pending)) :-\n        convert(27, Sounds),\n        Sounds == \"Pling\".\n\n    test(the_sound_for_35_is_plangplong_as_it_has_factors_5_and_7, condition(pending)) :-\n        convert(35, Sounds),\n        Sounds == \"PlangPlong\".\n\n    test(the_sound_for_49_is_plong_as_it_has_a_factor_7, condition(pending)) :-\n        convert(49, Sounds),\n        Sounds == \"Plong\".\n\n    test(the_sound_for_52_is_52, condition(pending)) :-\n        convert(52, Sounds),\n        Sounds == \"52\".\n\n    test(the_sound_for_105_is_plingplangplong_as_it_has_factors_3_5_and_7, condition(pending)) :-\n        convert(105, Sounds),\n        Sounds == \"PlingPlangPlong\".\n\n    test(the_sound_for_3125_is_plang_as_it_has_a_factor_5, condition(pending)) :-\n        convert(3125, Sounds),\n        Sounds == \"Plang\".\n\n:- end_tests(raindrops).\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

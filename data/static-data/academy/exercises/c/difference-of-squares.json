@@ -1,0 +1,35 @@
+{
+  "id": "c:difference-of-squares",
+  "trackSlug": "c",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "9802cbc0-eb70-4840-b8ee-a228f1fc29ea",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"difference_of_squares.h\"\n",
+  "example_solution": "#include \"difference_of_squares.h\"\n\nunsigned int sum_of_squares(unsigned int number)\n{\n   unsigned int sum = 0;\n\n   for (unsigned int i = 0; i <= number; i++) {\n      sum += i * i;\n   }\n\n   return sum;\n}\n\nunsigned int square_of_sum(unsigned int number)\n{\n   unsigned int sum = 0;\n\n   for (unsigned int i = 0; i <= number; i++) {\n      sum += i;\n   }\n\n   return (sum * sum);\n}\n\nunsigned int difference_of_squares(unsigned int number)\n{\n   return (square_of_sum(number) - sum_of_squares(number));\n}\n",
+  "test_code": "#include \"test-framework/unity.h\"\n#include \"difference_of_squares.h\"\n\nvoid setUp(void)\n{\n}\n\nvoid tearDown(void)\n{\n}\n\nstatic void test_square_of_sum_1(void)\n{\n   TEST_ASSERT_EQUAL(1, square_of_sum(1));\n}\n\nstatic void test_square_of_sum_5(void)\n{\n   TEST_IGNORE();   // delete this line to run test\n   TEST_ASSERT_EQUAL(225, square_of_sum(5));\n}\n\nstatic void test_square_of_sum_100(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(25502500, square_of_sum(100));\n}\n\nstatic void test_sum_of_squares_1(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(1, sum_of_squares(1));\n}\n\nstatic void test_sum_of_squares_5(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(55, sum_of_squares(5));\n}\n\nstatic void test_sum_of_squares_100(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(338350, sum_of_squares(100));\n}\n\nstatic void test_difference_of_squares_1(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(0, difference_of_squares(1));\n}\n\nstatic void test_difference_of_squares_5(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(170, difference_of_squares(5));\n}\n\nstatic void test_difference_of_squares_100(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL(25164150, difference_of_squares(100));\n}\n\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_square_of_sum_1);\n   RUN_TEST(test_square_of_sum_5);\n   RUN_TEST(test_square_of_sum_100);\n   RUN_TEST(test_sum_of_squares_1);\n   RUN_TEST(test_sum_of_squares_5);\n   RUN_TEST(test_sum_of_squares_100);\n   RUN_TEST(test_difference_of_squares_1);\n   RUN_TEST(test_difference_of_squares_5);\n   RUN_TEST(test_difference_of_squares_100);\n\n   return UNITY_END();\n}\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "RealBarrettBrown"
+  ],
+  "contributors": [
+    "bcc32",
+    "Gamecock",
+    "gea-migration",
+    "h-3-0",
+    "patricksjackson",
+    "QLaille",
+    "ryanplusplus",
+    "wolf99"
+  ]
+}

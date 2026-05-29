@@ -14,6 +14,10 @@ interface QueryGuardProps<T> {
   errorTitle?: string;
   errorMessage?: string;
   onRetry?: () => void;
+<<<<<<< HEAD
+=======
+  retryText?: string;
+>>>>>>> prod-deploy
   
   emptyIcon?: LucideIcon;
   emptyTitle?: string;
@@ -36,23 +40,69 @@ export function QueryGuard<T>({
   errorTitle,
   errorMessage,
   onRetry,
+<<<<<<< HEAD
+=======
+  retryText,
+>>>>>>> prod-deploy
   emptyIcon,
   emptyTitle,
   emptyMessage,
   emptyAction,
 }: QueryGuardProps<T>) {
+<<<<<<< HEAD
   // 1. Loading Path: Render high-fidelity skeleton if provided
   if (loading) {
+=======
+  // 1. Loading Path: Render high-fidelity skeleton if we have no data yet
+  // We check for !data OR an empty array to ensure initial fetches show the skeleton, not the empty state.
+  const hasNoData = data === undefined || data === null || (Array.isArray(data) && data.length === 0);
+  
+  if (loading && hasNoData) {
+>>>>>>> prod-deploy
     return skeleton ? <>{skeleton}</> : null;
   }
 
   // 2. Error Path: Render premium themed ErrorDisplay
   if (error) {
+<<<<<<< HEAD
     return (
       <ErrorDisplay
         title={errorTitle || "System Error"}
         message={errorMessage || (error instanceof Error ? error.message : "The connection to the sector has been lost.")}
         onRetry={onRetry}
+=======
+    let displayMessage = "The connection to the server has been lost.";
+    
+    // Using require or just treating error dynamically if axios is not directly imported here. 
+    // Let's import axios at the top if needed, or just duck-type it.
+    if (errorMessage) {
+      displayMessage = errorMessage;
+    } else if (error?.isAxiosError) {
+      const data = error.response?.data;
+      if (data) {
+        if (typeof data.message === "string") displayMessage = data.message;
+        else if (data.message?.message) displayMessage = String(data.message.message);
+        else if (typeof data.error === "string") displayMessage = data.error;
+        else if (data.error?.message) displayMessage = String(data.error.message);
+        else displayMessage = error.message;
+      } else {
+        displayMessage = error.message;
+      }
+    } else if (error instanceof Error) {
+      displayMessage = error.message;
+    } else if (typeof error === "string") {
+      displayMessage = error;
+    } else if (typeof error === "object" && error !== null && "message" in error) {
+      displayMessage = String(error.message);
+    }
+
+    return (
+      <ErrorDisplay
+        title={errorTitle || "System Error"}
+        message={displayMessage}
+        onRetry={onRetry}
+        retryText={retryText}
+>>>>>>> prod-deploy
       />
     );
   }

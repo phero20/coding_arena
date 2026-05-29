@@ -1,0 +1,30 @@
+{
+  "id": "common-lisp:proverb",
+  "trackSlug": "common-lisp",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "2e88cea7-59ea-409b-87a0-93eaaf06a7ba",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "format-basics"
+  ],
+  "prerequisites": [
+    "format-basics"
+  ],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :proverb\n  (:use :cl)\n  (:export :recite))\n\n(in-package :proverb)\n\n(defun recite (strings))\n",
+  "example_solution": "(defpackage :proverb\n  (:use :cl)\n  (:export :recite))\n\n(in-package :proverb)\n\n(defun recite (strings)\n  (if strings\n    (let* ((interleaved (apply #'append (mapcar #'list strings strings)))\n           (without-ends (cdr (butlast interleaved)))\n           (proverb-bulk (format nil \"~{For want of a ~A the ~A was lost.~%~}\" without-ends)))\n      (format nil \"~AAnd all for the want of a ~A.\" proverb-bulk (car strings)))\n    \"\"))\n",
+  "test_code": ";; Ensures that proverb.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"proverb\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from proverb and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :proverb-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :proverb-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* proverb-suite)\n\n(test zero-pieces\n    (let ((strings '()))\n      (is (string= \"\" (proverb:recite strings)))))\n\n(test one-piece\n    (let ((strings '(\"nail\"))\n          (result \"And all for the want of a nail.\"))\n      (is (string= result (proverb:recite strings)))))\n\n(test two-pieces\n    (let ((strings '(\"nail\" \"shoe\"))\n          (result (format nil \"~{~A~^~%~}\" '(\"For want of a nail the shoe was lost.\"\n                                             \"And all for the want of a nail.\"))))\n      (is (string= result (proverb:recite strings)))))\n\n(test three-pieces\n    (let ((strings '(\"nail\" \"shoe\" \"horse\"))\n          (result (format nil \"~{~A~^~%~}\" '(\"For want of a nail the shoe was lost.\"\n                                             \"For want of a shoe the horse was lost.\"\n                                             \"And all for the want of a nail.\"))))\n      (is (string= result (proverb:recite strings)))))\n\n(test full-proverb\n    (let ((strings '(\"nail\" \"shoe\" \"horse\" \"rider\" \"message\" \"battle\" \"kingdom\"))\n          (result (format nil \"~{~A~^~%~}\" '(\"For want of a nail the shoe was lost.\"\n                                             \"For want of a shoe the horse was lost.\"\n                                             \"For want of a horse the rider was lost.\"\n                                             \"For want of a rider the message was lost.\"\n                                             \"For want of a message the battle was lost.\"\n                                             \"For want of a battle the kingdom was lost.\"\n                                             \"And all for the want of a nail.\"))))\n      (is (string= result (proverb:recite strings)))))\n\n(test four-pieces-modernized\n    (let ((strings '(\"pin\" \"gun\" \"soldier\" \"battle\"))\n          (result (format nil \"~{~A~^~%~}\" '(\"For want of a pin the gun was lost.\"\n                                             \"For want of a gun the soldier was lost.\"\n                                             \"For want of a soldier the battle was lost.\"\n                                             \"And all for the want of a pin.\"))))\n      (is (string= result (proverb:recite strings)))))\n\n(defun run-tests (&optional (test-or-suite 'proverb-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "roc:spiral-matrix",
+  "trackSlug": "roc",
+  "slug": "spiral-matrix",
+  "name": "Spiral Matrix",
+  "uuid": "7f8e880a-def6-463a-99b6-8864ef69177b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the size, return a square matrix of numbers in spiral order.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to return a square matrix of a given size.\n\nThe matrix should be filled with natural numbers, starting from 1 in the top-left corner, increasing in an inward, clockwise spiral order, like these examples:\n\n## Examples\n\n### Spiral matrix of size 3\n\n```text\n1 2 3\n8 9 4\n7 6 5\n```\n\n### Spiral matrix of size 4\n\n```text\n 1  2  3 4\n12 13 14 5\n11 16 15 6\n10  9  8 7\n```\n",
+  "introduction": "# Introduction\n\nIn a small village near an ancient forest, there was a legend of a hidden treasure buried deep within the woods.\nDespite numerous attempts, no one had ever succeeded in finding it.\nThis was about to change, however, thanks to a young explorer named Elara.\nShe had discovered an old document containing instructions on how to locate the treasure.\nUsing these instructions, Elara was able to draw a map that revealed the path to the treasure.\n\nTo her surprise, the path followed a peculiar clockwise spiral.\nIt was no wonder no one had been able to find the treasure before!\nWith the map in hand, Elara embarks on her journey to uncover the hidden treasure.\n",
+  "hints": null,
+  "starter_code": "module [spiral_matrix]\n\nspiral_matrix : U64 -> List (List U64)\nspiral_matrix = |size|\n    crash(\"Please implement the 'spiral_matrix' function\")\n",
+  "example_solution": "module [spiral_matrix]\n\nspiral_matrix : U64 -> List (List U64)\nspiral_matrix = |size|\n    zero_matrix = List.repeat(List.repeat(0, size), size)\n    List.range({ start: At(1), end: At((size * size)) })\n    |> List.walk(\n        { x: -1, y: 0, dx: 1, dy: 0, matrix: zero_matrix },\n        |state, index|\n            get_value = |x_i64, y_i64|\n                row = state.matrix |> List.get(Num.to_u64(y_i64)) |> Result.with_default([])\n                row |> List.get(Num.to_u64(x_i64))\n\n            (dx, dy) =\n                (nx, ny) = (state.x + state.dx, state.y + state.dy)\n                if nx < 0 or ny < 0 or get_value(nx, ny) != Ok(0) then\n                    (-state.dy, state.dx) # outside or non-zero value => turn right\n                else\n                    (state.dx, state.dy) # or else continue in the same direction\n\n            (x, y) = (state.x + dx, state.y + dy)\n            matrix =\n                state.matrix\n                |> List.update(\n                    (y |> Num.to_u64),\n                    |row|\n                        row |> List.update((x |> Num.to_u64), |_| index),\n                )\n            { x, y, dx, dy, matrix },\n    )\n    |> .matrix\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/spiral-matrix/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport SpiralMatrix exposing [spiral_matrix]\n\n# empty spiral\nexpect\n    result = spiral_matrix(0)\n    result == []\n\n# trivial spiral\nexpect\n    result = spiral_matrix(1)\n    expected = [\n        [1],\n    ]\n    result == expected\n\n# spiral of size 2\nexpect\n    result = spiral_matrix(2)\n    expected = [\n        [1, 2],\n        [4, 3],\n    ]\n    result == expected\n\n# spiral of size 3\nexpect\n    result = spiral_matrix(3)\n    expected = [\n        [1, 2, 3],\n        [8, 9, 4],\n        [7, 6, 5],\n    ]\n    result == expected\n\n# spiral of size 4\nexpect\n    result = spiral_matrix(4)\n    expected = [\n        [1, 2, 3, 4],\n        [12, 13, 14, 5],\n        [11, 16, 15, 6],\n        [10, 9, 8, 7],\n    ]\n    result == expected\n\n# spiral of size 5\nexpect\n    result = spiral_matrix(5)\n    expected = [\n        [1, 2, 3, 4, 5],\n        [16, 17, 18, 19, 6],\n        [15, 24, 25, 20, 7],\n        [14, 23, 22, 21, 8],\n        [13, 12, 11, 10, 9],\n    ]\n    result == expected\n\n",
+  "source": "Reddit r/dailyprogrammer challenge #320 [Easy] Spiral Ascension.",
+  "source_url": "https://web.archive.org/web/20230607064729/https://old.reddit.com/r/dailyprogrammer/comments/6i60lr/20170619_challenge_320_easy_spiral_ascension/",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

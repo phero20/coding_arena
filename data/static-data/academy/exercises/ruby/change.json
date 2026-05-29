@@ -1,0 +1,43 @@
+{
+  "id": "ruby:change",
+  "trackSlug": "ruby",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "dc6c3e44-1027-4d53-9653-ba06824f8bcf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "exceptions",
+    "advanced-enumeration"
+  ],
+  "prerequisites": [
+    "numbers",
+    "arrays",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Change' exercise in this file. Make the tests in\n`change_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/change` directory.\n=end\n",
+  "example_solution": "class Change\n  attr_reader :coins, :target\n\n  class NegativeTargetError < ArgumentError; end\n  class ImpossibleCombinationError < StandardError; end\n\n  def initialize(coins, target)\n    @coins  = coins.sort.reverse\n    @target = target\n    @total_change = []\n  end\n\n  def generate\n    raise NegativeTargetError if target < 0\n    return [] if target.zero?\n\n    calculate_change(coins, [], target)\n    raise ImpossibleCombinationError if total_change.none?\n\n    total_change.sort\n  end\n\n  def self.generate(coins, target)\n    new(coins, target).generate\n  end\n\n  private\n\n  attr_accessor :total_change\n\n  def calculate_change(current_coins, current_change, current_value)\n    available_coins = current_coins.reject {|d| d > current_value }\n\n    save_change(current_change) if current_value.zero?\n\n    return if has_more_coins?(current_change)\n\n    each_group(available_coins) do |coin, group|\n      calculate_change(group, current_change + [coin], current_value - coin)\n    end\n  end\n\n  def save_change(contents)\n    return if has_more_coins?(contents)\n\n    self.total_change = contents\n  end\n\n  def has_more_coins?(contents)\n    total_change.any? && (total_change.length < contents.length)\n  end\n\n  def each_group(array)\n    array.length.times do |n|\n      yield(array[n], array[n..-1])\n    end\n  end\n\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'change'\n\nclass ChangeTest < Minitest::Test\n  def test_change_for_1_cent\n    # skip\n    expected = [1]\n    assert_equal expected, Change.generate([1, 5, 10, 25], 1)\n  end\n\n  def test_single_coin_change\n    skip\n    expected = [25]\n    assert_equal expected, Change.generate([1, 5, 10, 25, 100], 25)\n  end\n\n  def test_multiple_coin_change\n    skip\n    expected = [5, 10]\n    assert_equal expected, Change.generate([1, 5, 10, 25, 100], 15)\n  end\n\n  def test_change_with_lilliputian_coins\n    skip\n    expected = [4, 4, 15]\n    assert_equal expected, Change.generate([1, 4, 15, 20, 50], 23)\n  end\n\n  def test_change_with_lower_elbonia_coins\n    skip\n    expected = [21, 21, 21]\n    assert_equal expected, Change.generate([1, 5, 10, 21, 25], 63)\n  end\n\n  def test_large_target_values\n    skip\n    expected = [2, 2, 5, 20, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100]\n    assert_equal expected, Change.generate([1, 2, 5, 10, 20, 50, 100], 999)\n  end\n\n  def test_possible_change_without_unit_coins_available\n    skip\n    expected = [2, 2, 2, 5, 10]\n    assert_equal expected, Change.generate([2, 5, 10, 20, 50], 21)\n  end\n\n  def test_another_possible_change_without_unit_coins_available\n    skip\n    expected = [4, 4, 4, 5, 5, 5]\n    assert_equal expected, Change.generate([4, 5], 27)\n  end\n\n  def test_a_greedy_approach_is_not_optimal\n    skip\n    expected = [10, 10]\n    assert_equal expected, Change.generate([1, 10, 11], 20)\n  end\n\n  def test_no_coins_make_0_change\n    skip\n    assert_empty Change.generate([1, 5, 10, 21, 25], 0)\n  end\n\n  def test_error_testing_for_change_smaller_than_the_smallest_of_coins\n    skip\n    assert_raises(Change::ImpossibleCombinationError) do\n      Change.generate([5, 10], 3)\n    end\n  end\n\n  def test_error_if_no_combination_can_add_up_to_target\n    skip\n    assert_raises(Change::ImpossibleCombinationError) do\n      Change.generate([5, 10], 94)\n    end\n  end\n\n  def test_cannot_find_negative_change_values\n    skip\n    assert_raises(Change::NegativeTargetError) do\n      Change.generate([1, 2, 5], -5)\n    end\n  end\nend\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "adimasuhid"
+  ],
+  "contributors": [
+    "cadwallion",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "njbbaer",
+    "pgaspar",
+    "tryantwit",
+    "kytrinyx"
+  ]
+}

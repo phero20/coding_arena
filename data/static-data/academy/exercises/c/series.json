@@ -1,0 +1,36 @@
+{
+  "id": "c:series",
+  "trackSlug": "c",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "40bcec79-7235-4ac6-b69f-8e3a6374188d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"series.h\"\n",
+  "example_solution": "#include <stdlib.h>\n#include <string.h>\n#include <stdio.h>\n\n#include \"series.h\"\n\nslices_t slices(char *input_text, unsigned int substring_length)\n{\n   int substring_count = strlen(input_text) - (substring_length - 1);\n   slices_t results;\n\n   memset(&results, 0, sizeof(results));\n   if ((substring_count > 0) && (substring_length > 0)) {\n      results.substring_count = substring_count;\n      results.substring = malloc(sizeof(char *) * substring_count);\n      for (int index = 0; index < substring_count; index++) {\n         results.substring[index] =\n             malloc(sizeof(char) * (substring_length + 1));\n         snprintf(results.substring[index], MAX_SERIES_RESULTS, \"%.*s\",\n                  substring_length, &input_text[index]);\n      }\n   }\n   return results;\n}\n",
+  "test_code": "#include <stdlib.h>\n#include \"test-framework/unity.h\"\n#include \"series.h\"\n\nvoid setUp(void)\n{\n}\n\nvoid tearDown(void)\n{\n}\n\n// helper routines to validate test results\nstatic void test_solution(slices_t *expected_solution,\n                          slices_t *actual_solution)\n{\n   // result count correct\n   TEST_ASSERT_EQUAL(expected_solution->substring_count,\n                     actual_solution->substring_count);\n\n   // test each substring...\n   for (unsigned int index = 0; index < expected_solution->substring_count;\n        index++) {\n      TEST_ASSERT_EQUAL_STRING(expected_solution->substring[index],\n                               actual_solution->substring[index]);\n      free(actual_solution->substring[index]);\n   }\n   if (actual_solution->substring_count) {\n      free(actual_solution->substring);\n   }\n}\n\n// Test cases\nstatic void test_slices_of_one_from_one(void)\n{\n   char *substrings[] = { \"1\" };\n   slices_t expected = { 1, &substrings[0] };\n   slices_t actual = slices(\"1\", 1);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slices_of_one_from_two(void)\n{\n   TEST_IGNORE();   // delete this line to run test\n   char *substrings[] = { \"1\", \"2\" };\n   slices_t expected = { 2, &substrings[0] };\n   slices_t actual = slices(\"12\", 1);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slices_of_two(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"35\" };\n   slices_t expected = { 1, &substrings[0] };\n   slices_t actual = slices(\"35\", 2);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slices_of_two_overlap(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"91\", \"14\", \"42\" };\n   slices_t expected = { 3, &substrings[0] };\n   slices_t actual = slices(\"9142\", 2);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slices_can_include_duplicates(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"777\", \"777\", \"777\", \"777\" };\n   slices_t expected = { 4, &substrings[0] };\n   slices_t actual = slices(\"777777\", 3);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slices_of_a_long_series(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"91849\", \"18493\", \"84939\", \"49390\",\n                          \"93904\", \"39042\", \"90424\", \"04243\" };\n   slices_t expected = { 8, &substrings[0] };\n   slices_t actual = slices(\"918493904243\", 5);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slice_length_is_too_large(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"\" };\n   slices_t expected = { 0, &substrings[0] };\n   slices_t actual = slices(\"12345\", 6);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slice_length_is_way_too_large(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"\" };\n   slices_t expected = { 0, &substrings[0] };\n   slices_t actual = slices(\"12345\", 42);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_slice_length_cannot_be_zero(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"\" };\n   slices_t expected = { 0, &substrings[0] };\n   slices_t actual = slices(\"12345\", 0);\n\n   test_solution(&expected, &actual);\n}\n\nstatic void test_empty_series_is_invalid(void)\n{\n   TEST_IGNORE();\n   char *substrings[] = { \"\" };\n   slices_t expected = { 0, &substrings[0] };\n   slices_t actual = slices(\"\", 1);\n\n   test_solution(&expected, &actual);\n}\n\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_slices_of_one_from_one);\n   RUN_TEST(test_slices_of_one_from_two);\n   RUN_TEST(test_slices_of_two);\n   RUN_TEST(test_slices_of_two_overlap);\n   RUN_TEST(test_slices_can_include_duplicates);\n   RUN_TEST(test_slices_of_a_long_series);\n   RUN_TEST(test_slice_length_is_too_large);\n   RUN_TEST(test_slice_length_is_way_too_large);\n   RUN_TEST(test_slice_length_cannot_be_zero);\n   RUN_TEST(test_empty_series_is_invalid);\n\n   return UNITY_END();\n}\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "StevenRoot"
+  ],
+  "contributors": [
+    "bcc32",
+    "chriscool",
+    "Gamecock",
+    "h-3-0",
+    "patricksjackson",
+    "QLaille",
+    "ryanplusplus",
+    "sjwarner",
+    "wolf99"
+  ]
+}

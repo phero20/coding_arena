@@ -5,12 +5,22 @@ import type {
   CreateOrUpdateProblemInput,
 } from "../../types/problems/problem.types";
 import type { ProblemDocument } from "../../mongo/models/problem.model";
+<<<<<<< HEAD
+=======
+import { db } from "../../db";
+import * as schema from "../../db/schema";
+import { eq } from "drizzle-orm";
+>>>>>>> prod-deploy
 
 // Re-export for external consumers to avoid importing from model
 export type { CreateOrUpdateProblemInput } from "../../types/problems/problem.types";
 
 export interface IProblemRepository {
   findByProblemId(problem_id: string): Promise<Problem | null>;
+<<<<<<< HEAD
+=======
+  findManyByProblemIds(problem_ids: string[]): Promise<Problem[]>;
+>>>>>>> prod-deploy
   findById(id: string): Promise<Problem | null>;
   findBySlug(slug: string): Promise<Problem | null>;
   searchByTopic(topic: string, limit?: number): Promise<Problem[]>;
@@ -19,6 +29,10 @@ export interface IProblemRepository {
     limit: number,
   ): Promise<{ problems: Problem[]; total: number }>;
   createOrUpdate(data: CreateOrUpdateProblemInput): Promise<Problem>;
+<<<<<<< HEAD
+=======
+  getUserSolvedProblems(userId: string): Promise<string[]>;
+>>>>>>> prod-deploy
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -36,6 +50,28 @@ export class ProblemRepository
     return this.toDomain(doc as any);
   }
 
+<<<<<<< HEAD
+=======
+  /**
+   * Batch fetch problems by IDs — single $in query instead of N queries.
+   * Preserves the original order of the input IDs.
+   */
+  async findManyByProblemIds(problem_ids: string[]): Promise<Problem[]> {
+    if (problem_ids.length === 0) return [];
+    const docs = await this.model
+      .find({ problem_id: { $in: problem_ids } })
+      // Projection: only fetch fields needed for list/category views
+      .select('problem_id frontend_id title difficulty problem_slug topics')
+      .lean()
+      .exec();
+    // Restore the original ordered sequence from the junction table
+    const docMap = new Map(docs.map((d: any) => [d.problem_id, d]));
+    return problem_ids
+      .map((id) => this.toDomain(docMap.get(id) as any))
+      .filter((p): p is Problem => p !== null);
+  }
+
+>>>>>>> prod-deploy
   async findBySlug(slug: string): Promise<Problem | null> {
     const doc = await this.model.findOne({ problem_slug: slug }).lean().exec();
     return this.toDomain(doc as any);
@@ -60,11 +96,20 @@ export class ProblemRepository
       this.model
         .find()
         .sort({ problem_id: 1 })
+<<<<<<< HEAD
+=======
+        .collation({ locale: "en", numericOrdering: true }) // Forces numeric sort on strings
+>>>>>>> prod-deploy
         .skip(skip)
         .limit(limit)
         .lean()
         .exec(),
+<<<<<<< HEAD
       this.model.countDocuments(),
+=======
+      // countDocuments is more reliable than estimatedDocumentCount for exact pagination
+      this.model.countDocuments({}),
+>>>>>>> prod-deploy
     ]);
 
     return {
@@ -101,4 +146,22 @@ export class ProblemRepository
     }
     return problem;
   }
+<<<<<<< HEAD
+=======
+
+  async getUserSolvedProblems(userId: string): Promise<string[]> {
+    // 1. Fetch solved problem IDs from Postgres by joining with users table
+    // to map the clerkId to the internal UUID
+    const solvedRecords = await db
+      .select({ problemId: schema.userSolvedProblems.problemId })
+      .from(schema.userSolvedProblems)
+      .innerJoin(
+        schema.users,
+        eq(schema.userSolvedProblems.userId, schema.users.id)
+      )
+      .where(eq(schema.users.clerkId, userId));
+
+    return solvedRecords.map((r) => r.problemId);
+  }
+>>>>>>> prod-deploy
 }

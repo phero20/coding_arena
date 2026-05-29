@@ -1,0 +1,31 @@
+{
+  "id": "purescript:raindrops",
+  "trackSlug": "purescript",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "f0ce38ee-402f-451d-abd0-e3dc56d5cde4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "module Raindrops\n  ( raindrops\n  ) where\n\nimport Effect.Exception.Unsafe (unsafeThrow)\n\nraindrops :: Int -> String\nraindrops = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module Raindrops\n  ( raindrops\n  ) where\n\nimport Prelude\n\nraindrops :: Int -> String\nraindrops n =\n  let\n    fn = toNoise n\n    noises =\n      fn 3 \"Pling\" <>\n      fn 5 \"Plang\" <>\n      fn 7 \"Plong\"\n  in\n    case noises of\n      \"\" -> show n\n      other -> other\n\ntoNoise :: Int -> Int -> String -> String\ntoNoise n factor noise\n  | mod n factor == 0 = noise\n  | otherwise = \"\"\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport Effect (Effect)\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Main (runTest)\nimport Test.Unit.Assert as Assert\nimport Raindrops (raindrops)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"Raindrops.raindrops\" do\n    test \"1\" do\n      Assert.equal \"1\" $ raindrops 1\n    test \"3\" do\n      Assert.equal \"Pling\" $ raindrops 3\n    test \"5\" do\n      Assert.equal \"Plang\" $ raindrops 5\n    test \"7\" do\n      Assert.equal \"Plong\" $ raindrops 7\n    test \"6\" do\n      Assert.equal \"Pling\" $ raindrops 6\n    test \"9\" do\n      Assert.equal \"Pling\" $ raindrops 9\n    test \"10\" do\n      Assert.equal \"Plang\" $ raindrops 10\n    test \"14\" do\n      Assert.equal \"Plong\" $ raindrops 14\n    test \"15\" do\n      Assert.equal \"PlingPlang\" $ raindrops 15\n    test \"21\" do\n      Assert.equal \"PlingPlong\" $ raindrops 21\n    test \"25\" do\n      Assert.equal \"Plang\" $ raindrops 25\n    test \"35\" do\n      Assert.equal \"PlangPlong\" $ raindrops 35\n    test \"49\" do\n      Assert.equal \"Plong\" $ raindrops 49\n    test \"52\" do\n      Assert.equal \"52\" $ raindrops 52\n    test \"105\" do\n      Assert.equal \"PlingPlangPlong\" $ raindrops 105\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": [
+    "colinwahl",
+    "icyrockcom",
+    "paf31",
+    "spicydonuts"
+  ]
+}

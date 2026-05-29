@@ -1,0 +1,31 @@
+{
+  "id": "swift:pangram",
+  "trackSlug": "swift",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "c4dc447b-80d5-45a0-983d-25edc34cc6cf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "import Foundation\n\nfunc isPangram(_ text: String) -> Bool {\n  // Write your code for the 'Pangram' exercise in this file.\n}\n",
+  "example_solution": "import Foundation\n\nfunc isPangram(_ text: String) -> Bool {\n  let lowercasedText = text.folding(options: .diacriticInsensitive, locale: .current).lowercased()\n\n  for letter in \"abcdefghijklmnopqrstuvwxyz\" {\n    if lowercasedText.contains(String(letter)) == false {\n      return false\n    }\n  }\n\n  return true\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Pangram\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct PangramTests {\n\n  @Test(\"empty sentence\")\n  func testEmptySentence() {\n    #expect(!isPangram(\"\"))\n  }\n\n  @Test(\"perfect lower case\", .enabled(if: RUNALL))\n  func testPerfectLowerCase() {\n    #expect(isPangram(\"abcdefghijklmnopqrstuvwxyz\"))\n  }\n\n  @Test(\"only lower case\", .enabled(if: RUNALL))\n  func testOnlyLowerCase() {\n    #expect(isPangram(\"the quick brown fox jumps over the lazy dog\"))\n  }\n\n  @Test(\"missing the letter 'x'\", .enabled(if: RUNALL))\n  func testMissingTheLetterX() {\n    #expect(!isPangram(\"a quick movement of the enemy will jeopardize five gunboats\"))\n  }\n\n  @Test(\"missing the letter 'h'\", .enabled(if: RUNALL))\n  func testMissingTheLetterH() {\n    #expect(!isPangram(\"five boxing wizards jump quickly at it\"))\n  }\n\n  @Test(\"with underscores\", .enabled(if: RUNALL))\n  func testWithUnderscores() {\n    #expect(isPangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\"))\n  }\n\n  @Test(\"with numbers\", .enabled(if: RUNALL))\n  func testWithNumbers() {\n    #expect(isPangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\"))\n  }\n\n  @Test(\"missing letters replaced by numbers\", .enabled(if: RUNALL))\n  func testMissingLettersReplacedByNumbers() {\n    #expect(!isPangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"))\n  }\n\n  @Test(\"mixed case and punctuation\", .enabled(if: RUNALL))\n  func testMixedCaseAndPunctuation() {\n    #expect(isPangram(\"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"))\n  }\n\n  @Test(\"a-m and A-M are 26 different characters but not a pangram\", .enabled(if: RUNALL))\n  func testAMAndAMAre26DifferentCharactersButNotAPangram() {\n    #expect(!isPangram(\"abcdefghijklm ABCDEFGHIJKLM\"))\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "masters3d",
+    "ThomasHaz"
+  ]
+}

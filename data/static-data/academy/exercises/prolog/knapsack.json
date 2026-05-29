@@ -1,0 +1,26 @@
+{
+  "id": "prolog:knapsack",
+  "trackSlug": "prolog",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "23501ff9-87a6-43e0-9e89-1a76beda9b88",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "maximum_value(Items, Capacity, Value).\n",
+  "example_solution": ":- use_module(library(clpfd)).\n\nmaximum_value([], Capacity, 0) :- !.\n\nmaximum_value(Items, Capacity, Value) :-\n    length(Items, N),\n    length(Amounts, N),\n    Amounts ins 0..1,\n    maplist(arg(1), Items, Weights),\n    maplist(arg(2), Items, Values),\n    sum(Amounts, #>, 0),\n    scalar_product(Weights, Amounts, #=<, Capacity),\n    scalar_product(Values, Amounts, #=, Value),\n    labeling([max(Value)], Amounts),\n    !.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(knapsack).\n\n    test(no_items, condition(true)) :-\n        maximum_value([], 100, Value),\n        Value == 0.\n\n    test(one_item_too_heavy, [fail, condition(pending)]) :-\n        Weight = 100,\n        Value = 1,\n        maximum_value([item(Weight, Value)], 10, _).\n\n    test(five_items_cannot_be_greedy_by_weight_, condition(pending)) :-\n        maximum_value(\n            [\n                item(2, 5),\n                item(2, 5),\n                item(2, 5),\n                item(2, 5),\n                item(10, 21)\n            ],\n            10,\n            Value\n        ),\n        Value == 21.\n\n    test(five_items_cannot_be_greedy_by_value_, condition(pending)) :-\n        maximum_value(\n            [\n                item(2, 20),\n                item(2, 20),\n                item(2, 20),\n                item(2, 20),\n                item(10, 50)\n            ],\n            10,\n            Value\n        ),\n        Value == 80.\n\n    test(example_knapsack, condition(pending)) :-\n        maximum_value(\n            [\n                item(5, 10),\n                item(4, 40),\n                item(6, 30),\n                item(4, 50)\n            ],\n            10,\n            Value\n        ),\n        Value == 90.\n\n    test(eight_items, condition(pending)) :-\n        maximum_value(\n            [\n                item(25, 350),\n                item(35, 400),\n                item(45, 450),\n                item(5, 20),\n                item(25, 70),\n                item(3, 8),\n                item(2, 5),\n                item(2, 5)\n            ],\n            104,\n            Value\n        ),\n        Value == 900.\n\n    test(fifteen_items, condition(pending)) :-\n        maximum_value(\n            [\n                item(70, 135),\n                item(73, 139),\n                item(77, 149),\n                item(80, 150),\n                item(82, 156),\n                item(87, 163),\n                item(90, 173),\n                item(94, 184),\n                item(98, 192),\n                item(106, 201),\n                item(110, 210),\n                item(113, 214),\n                item(115, 221),\n                item(118, 229),\n                item(120, 240)\n            ],\n            750,\n            Value\n        ),\n        Value == 1458.\n\n:- end_tests(knapsack).\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

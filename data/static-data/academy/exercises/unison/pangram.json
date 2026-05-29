@@ -1,0 +1,26 @@
+{
+  "id": "unison:pangram",
+  "trackSlug": "unison",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "aff04ad8-9a9c-47ff-a153-c768c3d0aaf0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "pangram.isPangram : Text -> Boolean\npangram.isPangram sentence = todo \"implement isPangram\"\n",
+  "example_solution": "pangram.isPangram : Text -> Boolean\npangram.isPangram sentence =\n  pangramNumber = 67108863\n  sentence\n    |> toCharList\n    |> map getPower\n    |> filter ((!==) None)\n    |> map (shiftLeft 1 << getOrElse 0)\n    |> foldLeft or 0\n    |> (==) pangramNumber\n\n\npangram.getPower : Char -> Optional Nat\npangram.getPower = cases\n  c | (c >= ?A) && (c <= ?Z) -> Some (toNat c - toNat ?A)\n  c | (c >= ?a) && (c <= ?z) -> Some (toNat c - toNat ?a)\n  _ -> None\n\n",
+  "test_code": "pangram.isPangram.tests.ex1 = verify do\n  labeled \"empty sentence\" do\n    expected = false\n    actual = isPangram \"\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex2 = verify do\n  labeled \"perfect lower case\" do\n    expected = true\n    actual = isPangram \"abcdefghijklmnopqrstuvwxyz\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex3 = verify do\n  labeled \"only lower case\" do\n    expected = true\n    actual = isPangram \"the quick brown fox jumps over the lazy dog\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex4 = verify do\n  labeled \"missing the letter 'x'\" do\n    expected = false\n    actual = isPangram \"a quick movement of the enemy will jeopardize five gunboats\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex5 = verify do\n  labeled \"missing the letter 'h'\" do\n    expected = false\n    actual = isPangram \"five boxing wizards jump quickly at it\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex6 = verify do\n  labeled \"with underscores\" do\n    expected = true\n    actual = isPangram \"the_quick_brown_fox_jumps_over_the_lazy_dog\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex7 = verify do\n  labeled \"with numbers\" do\n    expected = true\n    actual = isPangram \"the 1 quick brown fox jumps over the 2 lazy dogs\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex8 = verify do\n  labeled \"missing letters replaced by numbers\" do\n    expected = false\n    actual = isPangram \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex9 = verify do\n  labeled \"mixed case and punctuation\" do\n    expected = true\n    actual = isPangram \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\npangram.isPangram.tests.ex10 = verify do\n  labeled \"a-m and A-M are 26 different characters but not a pangram\" do\n    expected = false\n    actual = isPangram \"abcdefghijklm ABCDEFGHIJKLM\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ntest> pangram.tests = join [\n  pangram.isPangram.tests.ex1,\n  pangram.isPangram.tests.ex2,\n  pangram.isPangram.tests.ex3,\n  pangram.isPangram.tests.ex4,\n  pangram.isPangram.tests.ex5,\n  pangram.isPangram.tests.ex6,\n  pangram.isPangram.tests.ex7,\n  pangram.isPangram.tests.ex8,\n  pangram.isPangram.tests.ex9,\n  pangram.isPangram.tests.ex10\n]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "SimaDovakin"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "perl5:acronym",
+  "trackSlug": "perl5",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "79fce6b7-5af9-4ee5-bd41-743ecc00cebc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package Acronym;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<abbreviate>;\n\nsub abbreviate ($phrase) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package Acronym;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<abbreviate>;\n\nsub abbreviate ($phrase) {\n\n    # capture letters preceded by the start of the string\n    # or by a non-(letter or apostrophe)\n    my @letters = $phrase =~ /(?:^|[^'a-z])\\K([a-z])/ig;\n    return uc join \"\", @letters;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse Acronym qw<abbreviate>;\n\nis( # begin: 1e22cceb-c5e4-4562-9afe-aef07ad1eaf4\n    abbreviate(\"Portable Network Graphics\"),\n    \"PNG\",\n    \"basic\",\n); # end: 1e22cceb-c5e4-4562-9afe-aef07ad1eaf4\n\nis( # begin: 79ae3889-a5c0-4b01-baf0-232d31180c08\n    abbreviate(\"Ruby on Rails\"),\n    \"ROR\",\n    \"lowercase words\",\n); # end: 79ae3889-a5c0-4b01-baf0-232d31180c08\n\nis( # begin: ec7000a7-3931-4a17-890e-33ca2073a548\n    abbreviate(\"First In, First Out\"),\n    \"FIFO\",\n    \"punctuation\",\n); # end: ec7000a7-3931-4a17-890e-33ca2073a548\n\nis( # begin: 32dd261c-0c92-469a-9c5c-b192e94a63b0\n    abbreviate(\"GNU Image Manipulation Program\"),\n    \"GIMP\",\n    \"all caps word\",\n); # end: 32dd261c-0c92-469a-9c5c-b192e94a63b0\n\nis( # begin: ae2ac9fa-a606-4d05-8244-3bcc4659c1d4\n    abbreviate(\"Complementary metal-oxide semiconductor\"),\n    \"CMOS\",\n    \"punctuation without whitespace\",\n); # end: ae2ac9fa-a606-4d05-8244-3bcc4659c1d4\n\nis( # begin: 0e4b1e7c-1a6d-48fb-81a7-bf65eb9e69f9\n    abbreviate(\"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"),\n    \"ROTFLSHTMDCOALM\",\n    \"very long abbreviation\",\n); # end: 0e4b1e7c-1a6d-48fb-81a7-bf65eb9e69f9\n\nis( # begin: 6a078f49-c68d-4b7b-89af-33a1a98c28cc\n    abbreviate(\"Something - I made up from thin air\"),\n    \"SIMUFTA\",\n    \"consecutive delimiters\",\n); # end: 6a078f49-c68d-4b7b-89af-33a1a98c28cc\n\nis( # begin: 5118b4b1-4572-434c-8d57-5b762e57973e\n    abbreviate(\"Halley's Comet\"),\n    \"HC\",\n    \"apostrophes\",\n); # end: 5118b4b1-4572-434c-8d57-5b762e57973e\n\nis( # begin: adc12eab-ec2d-414f-b48c-66a4fc06cdef\n    abbreviate(\"The Road _Not_ Taken\"),\n    \"TRNT\",\n    \"underscore emphasis\",\n); # end: adc12eab-ec2d-414f-b48c-66a4fc06cdef\n\ndone_testing;\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "cpp:resistor-color-duo",
+  "trackSlug": "cpp",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "83ce95e9-f8af-4dbb-b96b-d94b12421d77",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"resistor_color_duo.h\"\n\nnamespace resistor_color_duo {\n\n// TODO: add your solution here\n\n}  // namespace resistor_color_duo\n",
+  "example_solution": "#include \"resistor_color_duo.h\"\n\nnamespace resistor_color_duo {\nconst std::vector<std::string> resistor_colors{\n    \"black\", \"brown\", \"red\",    \"orange\", \"yellow\",\n    \"green\", \"blue\",  \"violet\", \"grey\",   \"white\"};\n\nint color_code(const std::string& color) {\n    for (size_t i{}; i <= resistor_colors.size(); ++i) {\n        if (resistor_colors.at(i) == color) {\n            return i;\n        }\n    }\n    return -1;\n}\n\nint value(const std::vector<std::string>& colors) {\n    return color_code(colors.at(0)) * 10 + color_code(colors.at(1));\n}\n}  // namespace resistor_color_duo\n",
+  "test_code": "#include \"resistor_color_duo.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nTEST_CASE(\"Brown and black\", \"[ce11995a-5b93-4950-a5e9-93423693b2fc]\") {\n    REQUIRE(10 == resistor_color_duo::value({\"brown\", \"black\"}));\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\n\nTEST_CASE(\"Blue and grey\", \"[7bf82f7a-af23-48ba-a97d-38d59406a920]\") {\n    REQUIRE(68 == resistor_color_duo::value({\"blue\", \"grey\"}));\n}\n\nTEST_CASE(\"Yellow and violet\", \"[f1886361-fdfd-4693-acf8-46726fe24e0c]\") {\n    REQUIRE(47 == resistor_color_duo::value({\"yellow\", \"violet\"}));\n}\n\nTEST_CASE(\"White and red\", \"[b7a6cbd2-ae3c-470a-93eb-56670b305640]\") {\n    REQUIRE(92 == resistor_color_duo::value({\"white\", \"red\"}));\n}\n\nTEST_CASE(\"Orange and orange\", \"[77a8293d-2a83-4016-b1af-991acc12b9fe]\") {\n    REQUIRE(33 == resistor_color_duo::value({\"orange\", \"orange\"}));\n}\n\nTEST_CASE(\"Ignore additional colors\",\n          \"[0c4fb44f-db7c-4d03-afa8-054350f156a8]\") {\n    REQUIRE(51 == resistor_color_duo::value({\"green\", \"brown\", \"orange\"}));\n}\n\nTEST_CASE(\"Black and brown, one-digit\",\n          \"[4a8ceec5-0ab4-4904-88a4-daf953a5e818]\") {\n    REQUIRE(1 == resistor_color_duo::value({\"black\", \"brown\"}));\n}\n\n#endif\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "vaeng"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "scala:largest-series-product",
+  "trackSlug": "scala",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "7e81f24e-c892-4e45-b0bb-6c6420ba1f0e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "object Series {\n  private def digits(s: String): List[Int] = s.filter(_.isDigit).map(_.asDigit).toList\n\n  private def slices(n: Int, digits: List[Int]): List[List[Int]] =\n    digits.tails.filter(xs => xs.length >= n).map(_.take(n)).toList\n\n  def largestProduct(n: Int, s: String): Option[Int] =\n    if (n < 0)\n      None\n    else {\n      val ds = digits(s)\n      if (ds.length < s.length)\n        None\n      else {\n        slices(n, ds) match {\n          case Nil => None\n          case xs => Some(xs.map(_.product).max)\n        }\n      }\n    }\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass LargestSeriesProductTest extends AnyFunSuite with Matchers {\n\n  test(\"finds the largest product if span equals length\") {\n    Series.largestProduct(2, \"29\") should be(Some(18))\n  }\n\n  test(\"can find the largest product of 2 with numbers in order\") {\n    pending\n    Series.largestProduct(2, \"0123456789\") should be(Some(72))\n  }\n\n  test(\"can find the largest product of 2\") {\n    pending\n    Series.largestProduct(2, \"576802143\") should be(Some(48))\n  }\n\n  test(\"can find the largest product of 3 with numbers in order\") {\n    pending\n    Series.largestProduct(3, \"0123456789\") should be(Some(504))\n  }\n\n  test(\"can find the largest product of 3\") {\n    pending\n    Series.largestProduct(3, \"1027839564\") should be(Some(270))\n  }\n\n  test(\"can find the largest product of 5 with numbers in order\") {\n    pending\n    Series.largestProduct(5, \"0123456789\") should be(Some(15120))\n  }\n\n  test(\"can get the largest product of a big number\") {\n    pending\n    Series.largestProduct(\n      6,\n      \"73167176531330624919225119674426574742355349194934\") should be(\n      Some(23520))\n  }\n\n  test(\"reports zero if the only digits are zero\") {\n    pending\n    Series.largestProduct(2, \"0000\") should be(Some(0))\n  }\n\n  test(\"reports zero if all spans include zero\") {\n    pending\n    Series.largestProduct(3, \"99099\") should be(Some(0))\n  }\n\n  test(\"rejects span longer than string length\") {\n    pending\n    Series.largestProduct(4, \"123\") should be(None)\n  }\n\n  test(\"rejects empty string and nonzero span\") {\n    pending\n    Series.largestProduct(1, \"\") should be(None)\n  }\n\n  test(\"rejects invalid character in digits\") {\n    pending\n    Series.largestProduct(2, \"1234a5\") should be(None)\n  }\n\n  test(\"rejects negative span\") {\n    pending\n    Series.largestProduct(-1, \"12345\") should be(None)\n  }\n}\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "petertseng",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

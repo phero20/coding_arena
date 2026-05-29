@@ -1,0 +1,26 @@
+{
+  "id": "raku:reverse-string",
+  "trackSlug": "raku",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "cdc17b6c-ccde-4709-9bbe-a5af7a79b8ae",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "unit module ReverseString;\n\nsub reverse-string($string) is export {\n}\n",
+  "example_solution": "unit module ReverseString;\n\nsub reverse-string($string) is export {\n    $string.flip\n}\n",
+  "test_code": "#!/usr/bin/env raku\nuse Test;\nuse lib $?FILE.IO.parent(2).add('lib');\nuse ReverseString;\n\nsubtest \"an empty string\" => { # begin: c3b7d806-dced-49ee-8543-933fd1719b1c\n  cmp-ok(\n      reverse-string(\"\"),\n      \"eq\",\n      \"\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"\")),\n      \"eq\",\n      \"\",\n      \"reverse twice\",\n  );\n} # end: c3b7d806-dced-49ee-8543-933fd1719b1c\n\nsubtest \"a word\" => { # begin: 01ebf55b-bebb-414e-9dec-06f7bb0bee3c\n  cmp-ok(\n      reverse-string(\"robot\"),\n      \"eq\",\n      \"tobor\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"robot\")),\n      \"eq\",\n      \"robot\",\n      \"reverse twice\",\n  );\n} # end: 01ebf55b-bebb-414e-9dec-06f7bb0bee3c\n\nsubtest \"a capitalized word\" => { # begin: 0f7c07e4-efd1-4aaa-a07a-90b49ce0b746\n  cmp-ok(\n      reverse-string(\"Ramen\"),\n      \"eq\",\n      \"nemaR\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"Ramen\")),\n      \"eq\",\n      \"Ramen\",\n      \"reverse twice\",\n  );\n} # end: 0f7c07e4-efd1-4aaa-a07a-90b49ce0b746\n\nsubtest \"a sentence with punctuation\" => { # begin: 71854b9c-f200-4469-9f5c-1e8e5eff5614\n  cmp-ok(\n      reverse-string(\"I'm hungry!\"),\n      \"eq\",\n      \"!yrgnuh m'I\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"I'm hungry!\")),\n      \"eq\",\n      \"I'm hungry!\",\n      \"reverse twice\",\n  );\n} # end: 71854b9c-f200-4469-9f5c-1e8e5eff5614\n\nsubtest \"a palindrome\" => { # begin: 1f8ed2f3-56f3-459b-8f3e-6d8d654a1f6c\n  cmp-ok(\n      reverse-string(\"racecar\"),\n      \"eq\",\n      \"racecar\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"racecar\")),\n      \"eq\",\n      \"racecar\",\n      \"reverse twice\",\n  );\n} # end: 1f8ed2f3-56f3-459b-8f3e-6d8d654a1f6c\n\nsubtest \"an even-sized word\" => { # begin: b9e7dec1-c6df-40bd-9fa3-cd7ded010c4c\n  cmp-ok(\n      reverse-string(\"drawer\"),\n      \"eq\",\n      \"reward\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"drawer\")),\n      \"eq\",\n      \"drawer\",\n      \"reverse twice\",\n  );\n} # end: b9e7dec1-c6df-40bd-9fa3-cd7ded010c4c\n\nsubtest \"wide characters\" => { # begin: 1bed0f8a-13b0-4bd3-9d59-3d0593326fa2\n  cmp-ok(\n      reverse-string(\"子猫\"),\n      \"eq\",\n      \"猫子\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"子猫\")),\n      \"eq\",\n      \"子猫\",\n      \"reverse twice\",\n  );\n} # end: 1bed0f8a-13b0-4bd3-9d59-3d0593326fa2\n\nsubtest \"grapheme cluster with pre-combined form\" => { # begin: 93d7e1b8-f60f-4f3c-9559-4056e10d2ead\n  cmp-ok(\n      reverse-string(\"Würstchenstand\"),\n      \"eq\",\n      \"dnatsnehctsrüW\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"Würstchenstand\")),\n      \"eq\",\n      \"Würstchenstand\",\n      \"reverse twice\",\n  );\n} # end: 93d7e1b8-f60f-4f3c-9559-4056e10d2ead\n\nsubtest \"grapheme clusters\" => { # begin: 1028b2c1-6763-4459-8540-2da47ca512d9\n  cmp-ok(\n      reverse-string(\"ผู้เขียนโปรแกรม\"),\n      \"eq\",\n      \"มรกแรปโนยขีเผู้\",\n      \"reverse once\",\n  );\n  cmp-ok(\n      reverse-string(reverse-string(\"ผู้เขียนโปรแกรม\")),\n      \"eq\",\n      \"ผู้เขียนโปรแกรม\",\n      \"reverse twice\",\n  );\n} # end: 1028b2c1-6763-4459-8540-2da47ca512d9\n\ndone-testing;\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "habere-et-dispertire"
+  ],
+  "contributors": null
+}

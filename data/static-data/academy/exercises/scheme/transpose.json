@@ -1,0 +1,26 @@
+{
+  "id": "scheme:transpose",
+  "trackSlug": "scheme",
+  "slug": "transpose",
+  "name": "Transpose",
+  "uuid": "f2dc14e3-89e9-4942-80b6-6578b7a7f71b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take input text and output it transposed.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an input text output it transposed.\n\nRoughly explained, the transpose of a matrix:\n\n```text\nABC\nDEF\n```\n\nis given by:\n\n```text\nAD\nBE\nCF\n```\n\nRows become columns and columns become rows.\nSee [transpose][].\n\nIf the input has rows of different lengths, this is to be solved as follows:\n\n- Pad to the left with spaces.\n- Don't pad to the right.\n\nTherefore, transposing this matrix:\n\n```text\nABC\nDE\n```\n\nresults in:\n\n```text\nAD\nBE\nC\n```\n\nAnd transposing:\n\n```text\nAB\nDEF\n```\n\nresults in:\n\n```text\nAD\nBE\n F\n```\n\nIn general, all characters from the input should also be present in the transposed output.\nThat means that if a column in the input text contains only spaces on its bottom-most row(s), the corresponding output row should contain the spaces in its right-most column(s).\n\n[transpose]: https://en.wikipedia.org/wiki/Transpose\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (transpose matrix)\n  'implement-me!)\n\n",
+  "example_solution": "(import (rnrs))\n\n(define (transpose xs)\n  (if (null? xs)\n      '()\n      (apply map list xs)))\n\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success \"empty string\" equal? transpose '(()) '())\n     (test-success \"two characters in a row\" equal? transpose\n       '(((65 49))) '((65) (49)))\n     (test-success \"two characters in a column\" equal? transpose\n       '(((65) (49))) '((65 49)))\n     (test-success \"simple\" equal? transpose\n       '(((65 66 67) (49 50 51))) '((65 49) (66 50) (67 51)))\n     (test-success \"single line\" equal? transpose\n       '(((83 105 110 103 108 101 32 108 105 110 101 46)))\n       '((83) (105) (110) (103) (108) (101) (32) (108) (105) (110)\n          (101) (46)))\n     (test-success \"first line longer than second line\" equal? transpose\n       '(((84 104 101 32 102 111 117 114 116 104 32 108 105 110 101\n              46)\n           (84 104 101 32 102 105 102 116 104 32 108 105 110 101 46\n               32)))\n       '((84 84) (104 104) (101 101) (32 32) (102 102) (111 105) (117 102)\n          (114 116) (116 104) (104 32) (32 108) (108 105) (105 110)\n          (110 101) (101 46) (46 32)))\n     (test-success \"second line longer than first line\" equal? transpose\n       '(((84 104 101 32 102 105 114 115 116 32 108 105 110 101 46\n              32)\n           (84 104 101 32 115 101 99 111 110 100 32 108 105 110 101\n               46)))\n       '((84 84) (104 104) (101 101) (32 32) (102 115) (105 101) (114 99)\n          (115 111) (116 110) (32 100) (108 32) (105 108) (110 105)\n          (101 110) (46 101) (32 46)))\n     (test-success \"mixed line length\" equal? transpose\n       '(((84 104 101 32 108 111 110 103 101 115 116 32 108 105 110\n              101 46)\n           (65 32 108 111 110 103 32 108 105 110 101 46 32 32 32 32 32)\n           (65 32 108 111 110 103 101 114 32 108 105 110 101 46 32 32\n               32)\n           (65 32 108 105 110 101 46 32 32 32 32 32 32 32 32 32 32)))\n       '((84 65 65 65) (104 32 32 32) (101 108 108 108) (32 111 111 105)\n          (108 110 110 110) (111 103 103 101) (110 32 101 46)\n          (103 108 114 32) (101 105 32 32) (115 110 108 32)\n          (116 101 105 32) (32 46 110 32) (108 32 101 32)\n          (105 32 46 32) (110 32 32 32) (101 32 32 32) (46 32 32 32)))\n     (test-success \"square\" equal? transpose\n       '(((72 69 65 82 84)\n           (69 77 66 69 82)\n           (65 66 85 83 69)\n           (82 69 83 73 78)\n           (84 82 69 78 68)))\n       '((72 69 65 82 84)\n          (69 77 66 69 82)\n          (65 66 85 83 69)\n          (82 69 83 73 78)\n          (84 82 69 78 68)))\n     (test-success \"rectangle\" equal? transpose\n       '(((70 82 65 67 84 85 82 69)\n           (79 85 84 76 73 78 69 68)\n           (66 76 79 79 77 73 78 71)\n           (83 69 80 84 69 84 84 69)))\n       '((70 79 66 83) (82 85 76 69) (65 84 79 80) (67 76 79 84) (84 73 77 69)\n          (85 78 73 84) (82 69 78 84) (69 68 71 69)))\n     (test-success \"triangle\" equal? transpose\n       '(((84 32 32 32 32 32) (69 69 32 32 32 32) (65 65 65 32 32 32) (83 83 83 83 32 32)\n           (69 69 69 69 69 32) (82 82 82 82 82 82)))\n       '((84 69 65 83 69 82) (32 69 65 83 69 82) (32 32 65 83 69 82) (32 32 32 83 69 82)\n          (32 32 32 32 69 82) (32 32 32 32 32 82)))))\n\n(run-with-cli \"transpose.scm\" (list test-cases))\n\n",
+  "source": "Reddit r/dailyprogrammer challenge #270 [Easy].",
+  "source_url": "https://web.archive.org/web/20230630051421/https://old.reddit.com/r/dailyprogrammer/comments/4msu2x/challenge_270_easy_transpose_the_input_text/",
+  "authors": [
+    "jitwit"
+  ],
+  "contributors": null
+}

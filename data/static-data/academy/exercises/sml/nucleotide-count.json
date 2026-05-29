@@ -1,0 +1,26 @@
+{
+  "id": "sml:nucleotide-count",
+  "trackSlug": "sml",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "4ce578b2-9cfb-498b-947f-79f97abeb224",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "fun nucleotideCounts (strand: string): {a: int, c: int, g: int, t: int} =\n  raise Fail \"'nucleotideCounts' is not implemented\"\n",
+  "example_solution": "fun nucleotideCounts (strand: string): {a: int, c: int, g: int, t: int} =\n  let\n    fun recurse(a: int, c: int, g: int, t: int, nil) = {a = a, c = c, g = g, t = t}\n      | recurse(a: int, c: int, g: int, t: int, hd :: tl) =\n          case hd of\n              #\"A\" => recurse(a + 1, c, g, t, tl)\n            | #\"C\" => recurse(a, c + 1, g, t, tl)\n            | #\"G\" => recurse(a, c, g + 1, t, tl)\n            | #\"T\" => recurse(a, c, g, t + 1, tl)\n            | _ => raise Fail \"Invalid nucleotide in strand\"\n  in\n    recurse (0, 0, 0, 0, explode strand)\n  end\n",
+  "test_code": "(* version 1.0.0 *)\n\nuse \"testlib.sml\";\nuse \"nucleotide-count.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"nucleotide-count\" [\n    test \"empty strand\"\n      (fn _ => nucleotideCounts \"\" |> Expect.equalTo {a = 0, c = 0, g = 0, t = 0}),\n\n    test \"can count one nucleotide in single-character input\"\n      (fn _ => nucleotideCounts \"G\" |> Expect.equalTo {a = 0, c = 0, g = 1, t = 0}),\n\n    test \"strand with repeated nucleotide\"\n      (fn _ => nucleotideCounts \"GGGGGGG\" |> Expect.equalTo {a = 0, c = 0, g = 7, t = 0}),\n\n    test \"strand with multiple nucleotides\"\n      (fn _ => nucleotideCounts \"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\" |> Expect.equalTo {a = 20, c = 12, g = 17, t = 21}),\n\n    test \"strand with invalid nucleotides\"\n      (fn _ => (fn _ => nucleotideCounts \"AGXXACT\") |> Expect.error (Fail \"Invalid nucleotide in strand\"))\n  ]\n\nval _ = Test.run testsuite\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,32 @@
+{
+  "id": "common-lisp:triangle",
+  "trackSlug": "common-lisp",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "bd2a55e3-9874-4d2e-ad6f-4b2f8c5e2e0a",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "conditionals"
+  ],
+  "prerequisites": [
+    "conditionals"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\n~~~~exercism/note\n_Degenerate triangles_ are triangles where the sum of the length of two sides is **equal** to the length of the third side, e.g. `1, 1, 2`.\nWe opted to not include tests for degenerate triangles in this exercise.\nYou may handle those situations if you wish to do so, or safely ignore them.\n~~~~\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :triangle\n  (:use :cl)\n  (:export :triangle-type-p))\n\n(in-package :triangle)\n\n(defun triangle-type-p (type a b c)\n  \"Deterimines if a triangle (given by side lengths A, B, C) is of the given TYPE\"\n  )\n",
+  "example_solution": "(defpackage :triangle\n  (:use :cl)\n  (:export :triangle-type-p))\n\n(in-package :triangle)\n\n;; (defun triangle (a b c)\n;;   (let ((sorted (sort (list a b c) #'>)))\n;;     (if (>= (first sorted) (apply #'+ (rest sorted))) :illogical\n;;         (case (length (remove-duplicates sorted))\n;;           (1 :equilateral)\n;;           (2 :isosceles)\n;;           (3 :scalene)))))\n\n(defun triangle-type-p (type a b c)\n  \"Deterimines if a triangle (given by side lengths A, B, C) is of the given TYPE\"\n  (let ((sorted (sort (list a b c) #'>)))\n    (when (< (first sorted) (apply #'+ (rest sorted))) ; triangle-inequality\n      (let ((num-unique-lengths (length (remove-duplicates (list a b c)))))\n        (case type\n          (:equilateral (= num-unique-lengths 1))\n          (:isosceles (<= num-unique-lengths 2))\n          (:scalene (= num-unique-lengths 3)))))))\n",
+  "test_code": ";; Ensures that triangle.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"triangle\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from triangle and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :triangle-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :triangle-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* triangle-suite)\n\n(def-suite* equilateral-suite :in triangle-suite)\n\n(test all-sides-are-equal\n  (is (triangle:triangle-type-p :equilateral 2 2 2)))\n\n(test any-side-is-unequal\n  (is (not (triangle:triangle-type-p :equilateral 2 3 2))))\n\n(test no-sides-are-equal\n  (is (not (triangle:triangle-type-p :equilateral 5 4 6))))\n\n(test all-zero-sides-is-not-a-triangle\n  (is (not (triangle:triangle-type-p :equilateral 0 0 0))))\n\n(test sides-may-be-floats\n  (is (triangle:triangle-type-p :equilateral 0.5 0.5 0.5)))\n\n(def-suite* isosceles-suite :in triangle-suite)\n\n(test last-two-sides-are-equal\n  (is (triangle:triangle-type-p :isosceles 3 4 4)))\n\n(test first-two-sides-are-equal\n  (is (triangle:triangle-type-p :isosceles 4 4 3)))\n\n(test first-and-last-sides-are-equal\n  (is (triangle:triangle-type-p :isosceles 4 3 4)))\n\n(test equilateral-triangles-are-also-isosceles\n  (is (triangle:triangle-type-p :isosceles 4 4 4)))\n\n(test no-sides-are-equal\n  (is (not (triangle:triangle-type-p :isosceles 2 3 4))))\n\n(test first-triangle-inequality-violation\n  (is (not (triangle:triangle-type-p :isosceles 1 1 3))))\n\n(test second-triangle-inequality-violation\n  (is (not (triangle:triangle-type-p :isosceles 1 3 1))))\n\n(test third-triangle-inequality-violation\n  (is (not (triangle:triangle-type-p :isosceles 3 1 1))))\n\n(test sides-may-be-floats\n  (is (triangle:triangle-type-p :isosceles 0.5 0.4 0.5)))\n\n(def-suite* scalene-suite :in triangle-suite)\n\n(test no-sides-are-equal\n  (is (triangle:triangle-type-p :scalene 5 4 6)))\n\n(test all-sides-are-equal\n  (is (not (triangle:triangle-type-p :scalene 4 4 4))))\n\n(test first-and-second-sides-are-equal\n  (is (not (triangle:triangle-type-p :scalene 4 4 3))))\n\n(test first-and-third-sides-are-equal\n  (is (not (triangle:triangle-type-p :scalene 4 3 4))))\n\n(test second-and-third-sides-are-equal\n  (is (not (triangle:triangle-type-p :scalene 3 4 4))))\n\n(test may-not-violate-triangle-inequality\n  (is (not (triangle:triangle-type-p :scalene 7 3 2))))\n\n(test sides-may-be-floats\n  (is (triangle:triangle-type-p :scalene 0.5 0.4 0.6)))\n\n(defun run-tests (&optional (test-or-suite 'triangle-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://www.rubykoans.com/",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": [
+    "dnmfarrell"
+  ]
+}

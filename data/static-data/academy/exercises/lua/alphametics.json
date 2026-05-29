@@ -1,0 +1,28 @@
+{
+  "id": "lua:alphametics",
+  "trackSlug": "lua",
+  "slug": "alphametics",
+  "name": "Alphametics",
+  "uuid": "4b1c805c-e833-4f84-bf1f-931c640ade6d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an alphametics puzzle, find the correct solution.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an alphametics puzzle, find the correct solution.\n\n[Alphametics][alphametics] is a puzzle where letters in words are replaced with numbers.\n\nFor example `SEND + MORE = MONEY`:\n\n```text\n  S E N D\n  M O R E +\n-----------\nM O N E Y\n```\n\nReplacing these with valid numbers gives:\n\n```text\n  9 5 6 7\n  1 0 8 5 +\n-----------\n1 0 6 5 2\n```\n\nThis is correct because every letter is replaced by a different number and the words, translated into numbers, then make a valid sum.\n\nEach letter must represent a different digit, and the leading digit of a multi-digit number must not be zero.\n\n[alphametics]: https://en.wikipedia.org/wiki/Alphametics\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "local function solve(puzzle)\nend\n\nreturn { solve = solve }\n",
+  "example_solution": "local combinations\n\nlocal function generate_combinations(a, n, offset)\n  if n > (#a - offset) then\n    return\n  end\n\n  if n == 0 then\n    coroutine.yield({})\n    return\n  end\n\n  for v in combinations(a, n - 1, offset + 1) do\n    table.insert(v, 1, a[1 + offset])\n    coroutine.yield(v)\n  end\n\n  for v in combinations(a, n, offset + 1) do\n    coroutine.yield(v)\n  end\nend\n\nfunction combinations(a, n, offset)\n  return coroutine.wrap(function()\n    generate_combinations(a, n, offset or 0)\n  end)\nend\n\nlocal function generate_permutations(a, n)\n  if n == 0 then\n    coroutine.yield(a)\n  else\n    for i = 1, n do\n      a[n], a[i] = a[i], a[n]\n      generate_permutations(a, n - 1)\n      a[n], a[i] = a[i], a[n]\n    end\n  end\nend\n\nlocal function permutations(a)\n  return coroutine.wrap(function()\n    generate_permutations(a, #a)\n  end)\nend\n\nlocal function unique_letters(s)\n  local letter_set = {}\n  s:gsub('%a', function(l)\n    letter_set[l] = true\n  end)\n\n  local letters = {}\n  for l in pairs(letter_set) do\n    table.insert(letters, l)\n  end\n\n  return letters\nend\n\nlocal function populate_letter_map(letter_map, letters, values)\n  for i = 1, #letters do\n    letter_map[letters[i]] = values[i]\n  end\nend\n\nlocal function evaluates_true(solution)\n  return load('return ' .. solution)()\nend\n\nlocal function has_no_leading_zeros(solution)\n  return not (solution:find('^0%d+') or solution:find('%D0%d+'))\nend\n\nlocal function solve(puzzle)\n  local letters = unique_letters(puzzle)\n  local letter_map = {}\n\n  for c in combinations({ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, #letters) do\n    for p in permutations(c) do\n      populate_letter_map(letter_map, letters, p)\n      local solution = puzzle:gsub('%a', letter_map)\n      if evaluates_true(solution) and has_no_leading_zeros(solution) then\n        return letter_map\n      end\n    end\n  end\nend\n\nreturn { solve = solve }\n",
+  "test_code": "local alphametics = require('alphametics')\n\ndescribe('alphametics', function()\n  it('should solve short puzzles', function()\n    local actual = alphametics.solve('I + BB == ILL')\n    local expected = { I = 1, B = 9, L = 0 }\n    assert.same(expected, actual)\n  end)\n\n  it('should solve long puzzles', function()\n    local actual = alphametics.solve('SEND + MORE == MONEY')\n    local expected = { S = 9, E = 5, N = 6, D = 7, M = 1, O = 0, R = 8, Y = 2 }\n    assert.same(expected, actual)\n  end)\n\n  it('should solve puzzles with multiplication', function()\n    local actual = alphametics.solve('IF * DR == DORI')\n    local expected = { I = 8, F = 2, D = 3, R = 9, O = 1 }\n    assert.same(expected, actual)\n  end)\n\n  it('should solve puzzles with any boolean expression', function()\n    local actual = alphametics.solve('PI * R ^ 2 == AREA')\n    local expected = { P = 9, I = 6, R = 7, A = 4, E = 0 }\n    assert.same(expected, actual)\n  end)\nend)\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

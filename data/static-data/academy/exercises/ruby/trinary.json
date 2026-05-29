@@ -1,0 +1,36 @@
+{
+  "id": "ruby:trinary",
+  "trackSlug": "ruby",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "f6735416-4be6-4eb8-b6b9-cb61671ce25e",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Trinary' exercise in this file. Make the tests in\n`trinary_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/trinary` directory.\n=end\n",
+  "example_solution": "class Trinary\n  BASE = 3\n\n  attr_reader :digits\n  def initialize(decimal)\n    decimal = '0' unless decimal.match(/\\A[012]+\\z/)\n    @digits = decimal.reverse.chars.collect(&:to_i)\n  end\n\n  def to_decimal\n    decimal = 0\n    digits.each_with_index do |digit, index|\n      decimal += digit * BASE**index\n    end\n    decimal\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'trinary'\n\nclass TrinaryTest < Minitest::Test\n  def test_trinary_1_is_decimal_1\n    assert_equal 1, Trinary.new('1').to_decimal\n  end\n\n  def test_trinary_2_is_decimal_2\n    skip\n    assert_equal 2, Trinary.new('2').to_decimal\n  end\n\n  def test_trinary_10_is_decimal_3\n    skip\n    assert_equal 3, Trinary.new('10').to_decimal\n  end\n\n  def test_trinary_11_is_decimal_4\n    skip\n    assert_equal 4, Trinary.new('11').to_decimal\n  end\n\n  def test_trinary_100_is_decimal_9\n    skip\n    assert_equal 9, Trinary.new('100').to_decimal\n  end\n\n  def test_trinary_112_is_decimal_14\n    skip\n    assert_equal 14, Trinary.new('112').to_decimal\n  end\n\n  def test_trinary_222_is_26\n    skip\n    assert_equal 26, Trinary.new('222').to_decimal\n  end\n\n  def test_trinary_1122000120_is_32091\n    skip\n    assert_equal 32_091, Trinary.new('1122000120').to_decimal\n  end\n\n  def test_invalid_trinary_is_decimal_0\n    skip\n    assert_equal 0, Trinary.new('carrot').to_decimal\n  end\n\n  def test_invalid_trinary_with_digits_is_decimal_0\n    skip\n    assert_equal 0, Trinary.new('0a1b2c').to_decimal\n  end\n\n  def test_invalid_trinary_with_multiline_string\n    skip\n    assert_equal 0, Trinary.new(\"Invalid\\n201\\nString\").to_decimal\n  end\n\n  def test_number_out_of_range\n    skip\n    assert_equal 0, Trinary.new('4').to_decimal\n  end\nend\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "haus",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "nathanbwright",
+    "tryantwit"
+  ]
+}

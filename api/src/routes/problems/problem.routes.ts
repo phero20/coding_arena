@@ -10,6 +10,14 @@ import type { ProblemController } from "../../controllers/problems/problem.contr
 import type { AppEnv } from "../../types/infrastructure/hono.types";
 import type { AuthMiddleware } from "../../middlewares/security/auth.middleware";
 import type { AuthorizationMiddleware } from "../../middlewares/security/authorization.middleware";
+<<<<<<< HEAD
+=======
+import { z } from "zod";
+
+const UserIdParamSchema = z.object({
+  userId: z.string().min(1, "Invalid user ID format."),
+});
+>>>>>>> prod-deploy
 
 export interface ProblemRoutesDeps {
   problemController: ProblemController;
@@ -28,6 +36,10 @@ export const registerProblemRoutes = (
   // Public problem list access
   app.get(
     "/problems",
+<<<<<<< HEAD
+=======
+    zValidator("query", PaginationQuerySchema),
+>>>>>>> prod-deploy
     problemController.action(problemController.getProblems, {
       requireAuth: false,
     }),
@@ -65,4 +77,15 @@ export const registerProblemRoutes = (
       requireAuth: false,
     }),
   );
+<<<<<<< HEAD
+=======
+
+  app.get(
+    "/problems/user/:userId/solved",
+    zValidator("param", UserIdParamSchema),
+    problemController.action(problemController.getUserSolvedProblems, {
+      requireAuth: false,
+    }),
+  );
+>>>>>>> prod-deploy
 };

@@ -1,0 +1,29 @@
+{
+  "id": "x86-64-assembly:difference-of-squares",
+  "trackSlug": "x86-64-assembly",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "d050fbb3-db22-4b1a-9ae6-60bf246b1a6d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "loops",
+    "integers"
+  ],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "section .text\nglobal square_of_sum\nsquare_of_sum:\n    ; Provide your implementation here\n    ; The function has signature int square_of_sum(int number)\n    ; The return value and the argument are of type int, which is a 32-bit signed integer\n    ret\n\nglobal sum_of_squares\nsum_of_squares:\n    ; Provide your implementation here\n    ; The function has signature int sum_of_squares(int number)\n    ; The return value and the argument are of type int, which is a 32-bit signed integer\n    ret\n\nglobal difference_of_squares\ndifference_of_squares:\n    ; Provide your implementation here\n    ; The function has signature int difference_of_squares(int number)\n    ; The return value and the argument are of type int, which is a 32-bit signed integer\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "example_solution": ";\n; Find the square of the sum of the first N natural numbers.\n;\n; Parameters:\n;   rdi - number\n; Returns:\n;   rax - square of the sum\n;\nsection .text\nglobal square_of_sum\nsquare_of_sum:\n    xor eax, eax     ; Initialize sum\n\n    mov ecx, 1       ; Set current number\n.loop_start:\n    add eax, ecx     ; Add current number to sum\n    inc ecx          ; Increment current number\n    cmp ecx, edi     ; See if we reached the last number\n    jle .loop_start  ; If numbers remain, loop back\n    imul eax         ; Square the sum\n    ret\n\n;\n; Find the sum of the squares of the first N natural numbers.\n;\n; Parameters:\n;   rdi - number\n; Returns:\n;   rax - sum of the squares\n;\nglobal sum_of_squares\nsum_of_squares:\n    xor eax, eax     ; Initialize sum\n\n    mov ecx, 1       ; Set current number\n.loop_start:\n    mov edx, ecx     ; Save current number\n    imul edx, edx    ; Square it\n    add eax, edx     ; Add result to sum\n    inc ecx          ; Increment current number\n    cmp ecx, edi     ; See if we reached the last number\n    jle .loop_start  ; If numbers remain, loop back\n    ret\n\n;\n; Find the difference between the square of the sum and the sum of the squares\n; of the first N natural numbers.\n;\n; Parameters:\n;   rdi - number\n; Returns:\n;   rax - the difference between the square of the sum and the sum of the\n;         squares\n;\nglobal difference_of_squares\ndifference_of_squares:\n    push rbx      ; Save caller's rbx\n    call sum_of_squares\n    mov ebx, eax  ; Save result\n    call square_of_sum\n    sub eax, ebx  ; Calculate the difference\n    pop rbx       ; Restore caller's rbx\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "test_code": "#include \"vendor/unity.h\"\n\nextern int square_of_sum(int number);\nextern int sum_of_squares(int number);\nextern int difference_of_squares(int number);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_square_of_sum_1(void) {\n    TEST_ASSERT_EQUAL_INT(1, square_of_sum(1));\n}\n\nvoid test_square_of_sum_5(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(225, square_of_sum(5));\n}\n\nvoid test_square_of_sum_100(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(25502500, square_of_sum(100));\n}\n\nvoid test_sum_of_squares_1(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(1, sum_of_squares(1));\n}\n\nvoid test_sum_of_squares_5(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(55, sum_of_squares(5));\n}\n\nvoid test_sum_of_squares_100(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(338350, sum_of_squares(100));\n}\n\nvoid test_difference_of_squares_1(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(0, difference_of_squares(1));\n}\n\nvoid test_difference_of_squares_5(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(170, difference_of_squares(5));\n}\n\nvoid test_difference_of_squares_100(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(25164150, difference_of_squares(100));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_square_of_sum_1);\n    RUN_TEST(test_square_of_sum_5);\n    RUN_TEST(test_square_of_sum_100);\n    RUN_TEST(test_sum_of_squares_1);\n    RUN_TEST(test_sum_of_squares_5);\n    RUN_TEST(test_sum_of_squares_100);\n    RUN_TEST(test_difference_of_squares_1);\n    RUN_TEST(test_difference_of_squares_5);\n    RUN_TEST(test_difference_of_squares_100);\n    return UNITY_END();\n}\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "bergjohan"
+  ],
+  "contributors": null
+}

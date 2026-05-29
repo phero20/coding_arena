@@ -33,8 +33,37 @@ export const registerStatsRoutes = (
    */
   app.get(
     "/stats/leaderboard",
+<<<<<<< HEAD
+=======
+    (c, next) => authMiddleware.handle(c, next),
+>>>>>>> prod-deploy
     statsController.action(statsController.getLeaderboard, {
       requireAuth: false,
     }),
   );
+<<<<<<< HEAD
+=======
+
+  /**
+   * GET /stats/leaderboard/search
+   * Search for users and return their current leaderboard standings.
+   */
+  app.get(
+    "/stats/leaderboard/search",
+    statsController.action(statsController.searchLeaderboard, {
+      requireAuth: false,
+    }),
+  );
+
+  /**
+   * POST /stats/leaderboard/sync
+   * Admin-only (no auth for now) trigger to prime Redis.
+   */
+  app.post(
+    "/stats/leaderboard/sync",
+    statsController.action(statsController.syncLeaderboard, {
+      requireAuth: false,
+    }),
+  );
+>>>>>>> prod-deploy
 };

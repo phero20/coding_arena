@@ -3,11 +3,20 @@
 import { useProfileStatsQuery } from "@/hooks/queries/use-stats.queries";
 import { ProfileLayout } from "./ProfileLayout";
 import { StatsProfile } from "../stats/StatsProfile";
+<<<<<<< HEAD
 import { 
   IdentitySkeleton, 
   StatsSkeleton, 
   ActivitySkeleton,
   RecentActivitiesSkeleton
+=======
+import {
+  IdentitySkeleton,
+  StatsSkeleton,
+  ConnectLeetCodeSkeleton,
+  ActivitySkeleton,
+  RecentActivitiesSkeleton,
+>>>>>>> prod-deploy
 } from "@/components/shared/Skeletons";
 
 import { QueryGuard } from "@/components/shared/QueryGuard";
@@ -17,6 +26,7 @@ interface ProfileWrapperProps {
 }
 
 /**
+<<<<<<< HEAD
  * ProfileWrapper is a Client Component that handles the data fetching 
  * for the profile page and orchestrates the layout.
  */
@@ -26,6 +36,17 @@ export function ProfileWrapper({ username }: ProfileWrapperProps) {
   return (
     <QueryGuard
       loading={isLoading}
+=======
+ * ProfileWrapper is a Client Component that handles the data fetching
+ * for the profile page and orchestrates the layout.
+ */
+export function ProfileWrapper({ username }: ProfileWrapperProps) {
+  const { data, isLoading, isFetching, error, refetch } = useProfileStatsQuery(username);
+
+  return (
+    <QueryGuard
+      loading={isLoading || isFetching}
+>>>>>>> prod-deploy
       error={error}
       data={data}
       onRetry={refetch}
@@ -33,9 +54,18 @@ export function ProfileWrapper({ username }: ProfileWrapperProps) {
         <div className="flex flex-col lg:flex-row gap-8">
           <IdentitySkeleton />
           <div className="flex-1 space-y-8">
+<<<<<<< HEAD
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
               <StatsSkeleton />
               <StatsSkeleton />
+=======
+            <div className="space-y-3">
+              <ConnectLeetCodeSkeleton />
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                <StatsSkeleton />
+                <StatsSkeleton />
+              </div>
+>>>>>>> prod-deploy
             </div>
             <ActivitySkeleton />
             <RecentActivitiesSkeleton />
@@ -46,8 +76,13 @@ export function ProfileWrapper({ username }: ProfileWrapperProps) {
       errorMessage="The stats for this user have been lost to the sands of time."
     >
       {(profileData) => (
+<<<<<<< HEAD
         <ProfileLayout 
           username={profileData.user.username} 
+=======
+        <ProfileLayout
+          username={profileData.user.username}
+>>>>>>> prod-deploy
           fullName={profileData.user.fullName || undefined}
           avatarUrl={profileData.user.avatarUrl || undefined}
           githubUsername={profileData.user.githubUsername}

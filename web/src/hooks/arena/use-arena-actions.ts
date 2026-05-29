@@ -45,12 +45,18 @@ export function useArenaTransitions(
     const executeTransition = () => {
       if (status === "PLAYING" && !matchEnded) {
         if (!window.location.pathname.includes(`/arena/match/${roomId}`)) {
+<<<<<<< HEAD
           console.log(`[Arena Transition] Matching -> ${roomId}`);
+=======
+>>>>>>> prod-deploy
           router.push(`/arena/match/${roomId}`);
         }
       } else if (status === "FINISHED" || matchEnded) {
         if (!window.location.pathname.includes(`/results`)) {
+<<<<<<< HEAD
           console.log(`[Arena Transition] Concluding -> /arena/match/${roomId}/results`);
+=======
+>>>>>>> prod-deploy
           router.push(`/arena/match/${roomId}/results`);
         }
       }

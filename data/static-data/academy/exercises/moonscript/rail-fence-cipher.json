@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:rail-fence-cipher",
+  "trackSlug": "moonscript",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "0dfe9492-7349-456a-a4fd-afde1383c393",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "{\n  encode: (n, plaintext) ->\n    error 'Implement me'\n\n  decode: (n, ciphertext) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "rail_iter = (n) ->\n  coroutine.wrap ->\n    while true\n      coroutine.yield i for i = 1, n-1\n      coroutine.yield i for i = n, 2, -1\n\n{\n  encode: (n, plaintext) ->\n    rails = [{} for _ = 1, n]\n    next_rail = rail_iter n\n    for char in plaintext\\gmatch '.'\n      r = next_rail!\n      table.insert rails[r], char\n\n    table.concat [table.concat rail for rail in *rails]\n\n  decode: (n, ciphertext) ->\n    len = #ciphertext\n\n    -- find the length of each rail\n    cycle_length = 2*(n - 1)\n    cycles = len // cycle_length\n    lengths = [cycles * ((i == 1 or i == n) and 1 or 2) for i = 1, n]\n    -- account for the last partial cycle\n    next_rail = rail_iter n\n    for i = 1, len - cycles * cycle_length\n      lengths[next_rail!] += 1\n\n    -- extract the rails from the ciphertext\n    rails = {}\n    start = 1\n    for r = 1, n\n      chunk = ciphertext\\sub start, start + lengths[r] - 1\n      rails[r] = [c for c in chunk\\gmatch '.']\n      start += lengths[r]\n\n    next_rail = rail_iter n\n    table.concat [table.remove rails[next_rail!], 1 for _ = 1, len]\n}\n",
+  "test_code": "RailFenceCipher = require 'rail_fence_cipher'\n\ndescribe 'rail-fence-cipher:', ->\n  describe 'encode:', ->\n    it 'encode with two rails', ->\n      result = RailFenceCipher.encode 2, 'XOXOXOXOXOXOXOXOXO'\n      expected = 'XXXXXXXXXOOOOOOOOO'\n      assert.are.equal expected, result\n\n    pending 'encode with three rails', ->\n      result = RailFenceCipher.encode 3, 'WEAREDISCOVEREDFLEEATONCE'\n      expected = 'WECRLTEERDSOEEFEAOCAIVDEN'\n      assert.are.equal expected, result\n\n    pending 'encode with ending in the middle', ->\n      result = RailFenceCipher.encode 4, 'EXERCISES'\n      expected = 'ESXIEECSR'\n      assert.are.equal expected, result\n\n  describe 'decode:', ->\n    pending 'decode with three rails', ->\n      result = RailFenceCipher.decode 3, 'TEITELHDVLSNHDTISEIIEA'\n      expected = 'THEDEVILISINTHEDETAILS'\n      assert.are.equal expected, result\n\n    pending 'decode with five rails', ->\n      result = RailFenceCipher.decode 5, 'EIEXMSMESAORIWSCE'\n      expected = 'EXERCISMISAWESOME'\n      assert.are.equal expected, result\n\n    pending 'decode with six rails', ->\n      result = RailFenceCipher.decode 6, '133714114238148966225439541018335470986172518171757571896261'\n      expected = '112358132134558914423337761098715972584418167651094617711286'\n      assert.are.equal expected, result\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

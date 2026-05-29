@@ -1,0 +1,26 @@
+{
+  "id": "lean:hamming",
+  "trackSlug": "lean",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "90d5a8e5-8b82-4675-b338-425607897933",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "namespace Hamming\n\ndef distance (strand1 : String) (strand2 : String) : Option Nat :=\n  sorry --remove this line and implement the function\n\nend Hamming\n",
+  "example_solution": "namespace Hamming\n\ndef differences (list1 : List Char) (list2 : List Char) (acc : Nat) : Option Nat :=\n  match list1, list2 with\n  | [], [] => some acc\n  | [], _ => none\n  | _, [] => none\n  | (first1 :: rest1), (first2 :: rest2) => differences rest1 rest2 (acc + (if first1 == first2 then 0 else 1))\n\ndef zip (l₁ : List α) (l₂ : List β) : List (α × β) :=\n  match l₁, l₂ with\n  | [], _ => []\n  | _, [] => []\n  | (x :: xs), (y :: ys) => (x, y) :: zip xs ys\n\ndef distance (strand1 : String) (strand2 : String) : Option Nat :=\n  differences (String.toList strand1) (String.toList strand2) 0\n\nend Hamming\n",
+  "test_code": "import LeanTest\nimport Hamming\n\nopen LeanTest\n\ndef hammingTests : TestSuite :=\n  (TestSuite.empty \"Hamming\")\n  |>.addTest \"empty strands\" (do\n      return assertEqual (some 0) (Hamming.distance \"\" \"\"))\n  |>.addTest \"single letter identical strands\" (do\n      return assertEqual (some 0) (Hamming.distance \"A\" \"A\"))\n  |>.addTest \"single letter different strands\" (do\n      return assertEqual (some 1) (Hamming.distance \"G\" \"T\"))\n  |>.addTest \"long identical strands\" (do\n      return assertEqual (some 0) (Hamming.distance \"GGACTGAAATCTG\" \"GGACTGAAATCTG\"))\n  |>.addTest \"long different strands\" (do\n      return assertEqual (some 9) (Hamming.distance \"GGACGGATTCTG\" \"AGGACGGATTCT\"))\n  |>.addTest \"disallow first strand longer\" (do\n      return assertEqual none (Hamming.distance \"AATG\" \"AAA\"))\n  |>.addTest \"disallow second strand longer\" (do\n      return assertEqual none (Hamming.distance \"ATA\" \"AGTG\"))\n  |>.addTest \"disallow empty first strand\" (do\n      return assertEqual none (Hamming.distance \"\" \"G\"))\n  |>.addTest \"disallow empty second strand\" (do\n      return assertEqual none (Hamming.distance \"G\" \"\"))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [hammingTests]\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

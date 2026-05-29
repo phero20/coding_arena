@@ -1,0 +1,33 @@
+{
+  "id": "go:proverb",
+  "trackSlug": "go",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "b6d05e8f-542b-4789-9cbc-7ba132a5f03d",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "// This is a \"stub\" file.  It's a little start on your solution.\n// It's not a complete solution though; you have to write some code.\n\n// Package proverb should have a package comment that summarizes what it's about.\n// https://golang.org/doc/effective_go.html#commentary\npackage proverb\n\n// Proverb should have a comment documenting it.\nfunc Proverb(rhyme []string) []string {\n\t// Write some code here to pass the test suite.\n\t// Then remove all the stock comments.\n\t// They're here to help you get started but they only clutter a finished solution.\n\t// If you leave them in, reviewers may protest!\n\tpanic(\"Please implement the Proverb function\")\n}\n",
+  "example_solution": "// Package proverb deals with outputting the lines of a rhyme.\npackage proverb\n\nimport \"fmt\"\n\n// Proverb outputs the lines of for want of a nail\nfunc Proverb(rhyme []string) []string {\n\tif len(rhyme) == 0 {\n\t\treturn []string{}\n\t}\n\tvar r []string\n\tif len(rhyme) > 1 {\n\t\tfor i := range len(rhyme) - 1 {\n\t\t\tr = append(r, fmt.Sprintf(\"For want of a %s the %s was lost.\", rhyme[i], rhyme[i+1]))\n\t\t}\n\t}\n\tr = append(r, fmt.Sprintf(\"And all for the want of a %s.\", rhyme[0]))\n\treturn r\n}\n",
+  "test_code": "package proverb\n\nimport (\n\t\"fmt\"\n\t\"testing\"\n)\n\nfunc TestProverb(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual := Proverb(tc.input)\n\t\t\tif fmt.Sprintf(\"%q\", actual) != fmt.Sprintf(\"%q\", tc.expected) {\n\t\t\t\tt.Fatalf(\"Proverb(%#v)\\ngot: %#v\\nwant: %#v\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkProverb(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range testCases {\n\t\t\tProverb(test.input)\n\t\t}\n\t}\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "sunilgopinath"
+  ],
+  "contributors": [
+    "bitfield",
+    "ekingery",
+    "hilary",
+    "leenipper",
+    "sebito91",
+    "eklatzer"
+  ]
+}

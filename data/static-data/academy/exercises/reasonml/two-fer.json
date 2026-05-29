@@ -1,0 +1,26 @@
+{
+  "id": "reasonml:two-fer",
+  "trackSlug": "reasonml",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "a75eef3f-97c0-4cf4-b375-f2fb3fe169d9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "let twoFer = (_) => {\n  failwith(\"TODO: implement twoFer function\");\n};",
+  "example_solution": "let twoFer = (name) => {\n  switch (name) {\n  | None => \"One for you, one for me.\"\n  | Some(nameString) => \"One for \" ++ nameString ++ \", one for me.\"\n  }\n};\n",
+  "test_code": "open Jest;\n\ndescribe(\"Two Fer\", () => {\n  open Expect;\n\n  test(\"no name given\", () =>\n    expect(TwoFer.twoFer(None)) |> toEqual(\"One for you, one for me.\")\n  );\n\n  test(\"a name given\", () =>\n    expect(TwoFer.twoFer(Some(\"Alice\"))) |> toEqual(\"One for Alice, one for me.\")\n  );\n\n  test(\"another name given\", () =>\n    expect(TwoFer.twoFer(Some(\"Bob\"))) |> toEqual(\"One for Bob, one for me.\")\n  );\n\n});\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "tejasbubane"
+  ],
+  "contributors": null
+}

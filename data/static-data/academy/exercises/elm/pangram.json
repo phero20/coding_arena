@@ -1,0 +1,38 @@
+{
+  "id": "elm:pangram",
+  "trackSlug": "elm",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "a70503ba-f1f3-4583-9226-c3ada98e9500",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "booleans"
+  ],
+  "prerequisites": [
+    "booleans",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "module Pangram exposing (isPangram)\n\n\nisPangram : String -> Bool\nisPangram sentence =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module Pangram exposing (isPangram)\n\nimport String exposing (contains, fromChar, toLower)\n\n\nisPangram : String -> Bool\nisPangram sentence =\n    let\n        normalized =\n            toLower sentence\n    in\n    String.all (\\c -> contains (fromChar c) normalized) alphabet\n\n\nalphabet : String\nalphabet =\n    \"abcdefghijklmnopqrstuvwxyz\"\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport Pangram exposing (isPangram)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"Pangram\"\n        [ test \"sentence empty\" <|\n            \\() ->\n                Expect.equal False\n                    (isPangram \"\")\n        , skip <|\n            test \"pangram with only lower case\" <|\n                \\() ->\n                    Expect.equal True\n                        (isPangram \"the quick brown fox jumps over the lazy dog\")\n        , skip <|\n            test \"missing character 'x'\" <|\n                \\() ->\n                    Expect.equal False\n                        (isPangram \"a quick movement of the enemy will jeopardize five gunboats\")\n        , skip <|\n            test \"missing character 'z'\" <|\n                \\() ->\n                    Expect.equal False\n                        (isPangram \"a quick movement of the enemy will jeopardixe five gunboats\")\n        , skip <|\n            test \"another missing character 'x'\" <|\n                \\() ->\n                    Expect.equal False\n                        (isPangram \"the quick brown fish jumps over the lazy dog\")\n        , skip <|\n            test \"pangram with underscores\" <|\n                \\() ->\n                    Expect.equal True\n                        (isPangram \"the_quick_brown_fox_jumps_over_the_lazy_dog\")\n        , skip <|\n            test \"pangram with numbers\" <|\n                \\() ->\n                    Expect.equal True\n                        (isPangram \"the 1 quick brown fox jumps over the 2 lazy dogs\")\n        , skip <|\n            test \"missing letters replaced by numbers\" <|\n                \\() ->\n                    Expect.equal False\n                        (isPangram \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")\n        , skip <|\n            test \"pangram with mixed case and punctuation\" <|\n                \\() ->\n                    Expect.equal True\n                        (isPangram \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")\n        , skip <|\n            test \"pangram with non ascii characters\" <|\n                \\() ->\n                    Expect.equal True\n                        (isPangram \"Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich.\")\n        , skip <|\n            test \"a-m and A-M are 26 different characters but not a pangram\" <|\n                \\() ->\n                    Expect.equal False\n                        (isPangram \"abcdefghijklm ABCDEFGHIJKLM\")\n        ]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "bdukes",
+    "duckmole",
+    "liammccartney",
+    "nathanielknight",
+    "parkerl",
+    "tuxagon"
+  ]
+}

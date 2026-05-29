@@ -1,0 +1,42 @@
+{
+  "id": "fsharp:say",
+  "trackSlug": "fsharp",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "7af901ca-24ea-4c24-a660-99b1f4338e01",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [
+    "integral-numbers",
+    "while-loops"
+  ],
+  "prerequisites": [
+    "if-then-else-expressions",
+    "integral-numbers",
+    "options",
+    "strings",
+    "while-loops"
+  ],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "module Say\n\n// TODO: implement this module",
+  "example_solution": "module Say\n\nlet quotRem (x: int64) (y: int64) =\n    let div = x / y\n    let rem = x % y\n    (div, rem)\n\nlet bases n = \n    let values = \n        [| \"one\"\n           \"two\";\n           \"three\";\n           \"four\";\n           \"five\";\n           \"six\";\n           \"seven\";\n           \"eight\";\n           \"nine\";\n           \"ten\";\n           \"eleven\";\n           \"twelve\";\n           \"thirteen\";\n           \"fourteen\";\n           \"fifteen\";\n           \"sixteen\";\n           \"seventeen\";\n           \"eighteen\";\n           \"nineteen\" |]\n\n    Array.tryItem (n - 1) values\n                        \nlet tens n = \n    if n < 20 then bases n\n    else \n        let values = \n            [| \"twenty\"\n               \"thirty\"\n               \"forty\"\n               \"fifty\"\n               \"sixty\"\n               \"seventy\"\n               \"eighty\"\n               \"ninety\" |]\n        \n        let (count, remainder) = quotRem (int64 n) 10L\n        let countStr = Array.item ((int count) - 2)  values\n        let basesStr = Option.fold (fun _ item -> \"-\" + item) \"\" (bases (int remainder))\n        Some (countStr + basesStr)\n\nlet hundreds n = \n    if n < 100L then tens (int n)\n    else \n        let (count, remainder) = quotRem (int64 n) 100L\n        let tensStr = Option.fold (fun _ item -> \" \" + item) \"\" (tens (int remainder))\n        Option.bind (fun item -> Some (item + \" hundred\" + tensStr)) (bases (int count))\n\nlet chunk str n = Option.bind (fun item -> Some (item + \" \" + str)) (hundreds n)\n\nlet thousands = chunk \"thousand\"\n\nlet millions = chunk \"million\"\n\nlet billions = chunk \"billion\"\n\nlet parts n = \n    let (billionsCount, billionsRemainder) = quotRem n 1000000000L\n    let (millionsCount, millionsRemainder) = quotRem billionsRemainder 1000000L\n    let (thousandsCount, remainder) = quotRem millionsRemainder 1000L\n    (billionsCount, millionsCount, thousandsCount, remainder)\n    \nlet say n = \n    match n with\n    | _ when n < 0L || n>= 1000000000000L -> None\n    | 0L -> Some \"zero\"\n    | _ -> \n        let (billionsCount, millionsCount, thousandsCount, remainder) = parts n\n\n        [ billions billionsCount; \n          millions millionsCount;\n          thousands thousandsCount;\n          hundreds remainder]\n        |> List.filter Option.isSome\n        |> List.map Option.get\n        |> List.reduce (fun x y -> x + \" \" + y)\n        |> Some",
+  "test_code": "module SayTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Say\n\n[<Fact>]\nlet ``Zero`` () =\n    say 0L |> should equal (Some \"zero\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One`` () =\n    say 1L |> should equal (Some \"one\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Fourteen`` () =\n    say 14L |> should equal (Some \"fourteen\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Twenty`` () =\n    say 20L |> should equal (Some \"twenty\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Twenty-two`` () =\n    say 22L |> should equal (Some \"twenty-two\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Thirty`` () =\n    say 30L |> should equal (Some \"thirty\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Ninety-nine`` () =\n    say 99L |> should equal (Some \"ninety-nine\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One hundred`` () =\n    say 100L |> should equal (Some \"one hundred\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One hundred twenty-three`` () =\n    say 123L |> should equal (Some \"one hundred twenty-three\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two hundred`` () =\n    say 200L |> should equal (Some \"two hundred\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Nine hundred ninety-nine`` () =\n    say 999L |> should equal (Some \"nine hundred ninety-nine\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One thousand`` () =\n    say 1000L |> should equal (Some \"one thousand\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One thousand two hundred thirty-four`` () =\n    say 1234L |> should equal (Some \"one thousand two hundred thirty-four\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One million`` () =\n    say 1000000L |> should equal (Some \"one million\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One million two thousand three hundred forty-five`` () =\n    say 1002345L |> should equal (Some \"one million two thousand three hundred forty-five\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One billion`` () =\n    say 1000000000L |> should equal (Some \"one billion\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``A big number`` () =\n    say 987654321123L |> should equal (Some \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\")\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Numbers below zero are out of range`` () =\n    say -1L |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Numbers above 999,999,999,999 are out of range`` () =\n    say 1000000000000L |> should equal None\n\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "tomschluter",
+    "valentin-p",
+    "wolf99"
+  ]
+}

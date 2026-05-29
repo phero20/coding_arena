@@ -1,0 +1,29 @@
+{
+  "id": "bash:knapsack",
+  "trackSlug": "bash",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "41919408-97e3-4cc7-bc20-f5eb5d47eb99",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\n# Algorithm taken from Wikipedia:\n# https://en.wikipedia.org/wiki/Knapsack_problem\n# \n# Define m[i,w] to be the maximum value that can be attained\n# with weight less than or equal to w using items up to i\n# (first i items).\n# \n# We can define m[i,w] recursively as follows:\n# \n#     m[0,w] = 0\n#     m[i,w] = m[i−1,w] if w_{i} > w (the new item is more than the current weight limit)\n#     m[i,w] = max (m[i−1,w], m[i−1, w − w_{i}] + v_{i}) if w_{i} ⩽ w\n\n[[ -z $1 ]] && { echo \"missing max weight\" >&2; exit 1; }\ndeclare -i max_wt=$1\nshift\n\ndeclare -i n=$#\ndeclare -a weight=(0) value=(0)\nfor item; do\n    IFS=: read -r wt val <<< \"$item\"\n    weight+=(\"$wt\")\n    value+=(\"$val\")\ndone\n\ndeclare -A m    # the maximum value array\n\n# set the values for the zeroth item\nfor ((w=1; w <= max_wt; w++)); do\n    m[0,$w]=0\ndone\n\nfor ((i=1; i <= n; i++)); do\n    j=$((i-1))\n\n    for ((w=1; w <= max_wt; w++)); do \n        if (( weight[i] > w )); then\n            m[$i,$w]=${m[$j,$w]}\n        else\n            a=${m[$j,$w]}\n            b=$(( ${m[$j,$((w - weight[i]))]} + value[i] ))\n            (( a > b )) && m[$i,$w]=$a || m[$i,$w]=$b\n        fi\n    done\ndone\n\necho \"${m[$n,$max_wt]}\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.0.0.1\n# bash-specific test: Input validation\n\n# Usage: knapsack.sh max_wt [items ...]\n# where: items look like \"weight:value\"\n# example:\n#       knapsack.sh 10 5:10 4:40 6:30 4:50\n# should return:\n#       90\n#\n\n@test \"error: no arguments\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh\n    assert_failure\n}\n\n@test \"no items\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 100\n    assert_success\n    assert_output \"0\"\n}\n\n@test \"one item: too heavy\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 10 100:1\n    assert_success\n    assert_output \"0\"\n}\n\n@test \"five items (cannot be greedy by weight)\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 10 2:5 2:5 2:5 2:5 10:21\n    assert_success\n    assert_output \"21\"\n}\n\n@test \"five items (cannot be greedy by value)\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 10 2:20 2:20 2:20 2:20 10:50\n    assert_success\n    assert_output \"80\"\n}\n\n@test \"example knapsack\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 10 5:10 4:40 6:30 4:50\n    assert_success\n    assert_output \"90\"\n}\n\n@test \"8 items\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 104 25:350 35:400 45:450 5:20 25:70 3:8 2:5 2:5\n    assert_success\n    assert_output \"900\"\n}\n\n@test \"15 items\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash knapsack.sh 750 70:135 73:139 77:149 80:150 82:156 87:163 90:173 94:184 98:192 106:201 110:210 113:214 115:221 118:229 120:240\n    assert_success\n    assert_output \"1458\"\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "guygastineau",
+    "IsaacG"
+  ]
+}

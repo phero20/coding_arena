@@ -1,0 +1,26 @@
+{
+  "id": "lean:series",
+  "trackSlug": "lean",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "81dc7d4e-8195-4d92-b954-8319ed8cc086",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "namespace Series\n\ndef slices (series : String) (sliceLength : Nat) : Option (Array String) :=\n  sorry --remove this line and implement the function\n\nend Series\n",
+  "example_solution": "namespace Series\n\ndef slices (series : String) (sliceLength : Nat) : Option (Array String) :=\n  if sliceLength == 0 || sliceLength > String.length series\n  then none\n  else some ((Array.range ((String.length series) + 1 - sliceLength)).map (fun (n : Nat) => (series.drop n).take sliceLength |>.copy))\n\nend Series\n",
+  "test_code": "import LeanTest\nimport Series\n\nopen LeanTest\n\ndef seriesTests : TestSuite :=\n  (TestSuite.empty \"Series\")\n      |>.addTest \"slices of one from one\" (do\n          return assertEqual (some #[\"1\"]) (Series.slices \"1\" 1))\n      |>.addTest \"slices of one from two\" (do\n          return assertEqual (some #[\"1\", \"2\"]) (Series.slices \"12\" 1))\n      |>.addTest \"slices of two\" (do\n          return assertEqual (some #[\"35\"]) (Series.slices \"35\" 2))\n      |>.addTest \"slices of two overlap\" (do\n          return assertEqual (some #[\"91\", \"14\", \"42\"]) (Series.slices \"9142\" 2))\n      |>.addTest \"slices can include duplicates\" (do\n          return assertEqual (some #[\"777\", \"777\", \"777\", \"777\"]) (Series.slices \"777777\" 3))\n      |>.addTest \"slices of a long series\" (do\n          return assertEqual (some #[\"91849\", \"18493\", \"84939\", \"49390\", \"93904\", \"39042\", \"90424\", \"04243\"]) (Series.slices \"918493904243\" 5))\n      |>.addTest \"slice length is too large\" (do\n          return assertEqual none (Series.slices \"12345\" 6))\n      |>.addTest \"slice length is way too large\" (do\n          return assertEqual none (Series.slices \"12345\" 42))\n      |>.addTest \"slice length cannot be zero\" (do\n          return assertEqual none (Series.slices \"12345\" 0))\n      |>.addTest \"empty series is invalid\" (do\n          return assertEqual none (Series.slices \"\" 1))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [seriesTests]\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

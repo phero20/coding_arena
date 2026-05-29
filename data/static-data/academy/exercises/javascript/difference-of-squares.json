@@ -1,0 +1,38 @@
+{
+  "id": "javascript:difference-of-squares",
+  "trackSlug": "javascript",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "7dfa878c-83a6-48ef-9170-b6633d51d601",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "classes",
+    "for-loops"
+  ],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Difference Of Squares' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport class Squares {\n  constructor() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  get sumOfSquares() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  get squareOfSum() {\n    throw new Error('Remove this line and implement the function');\n  }\n\n  get difference() {\n    throw new Error('Remove this line and implement the function');\n  }\n}\n",
+  "example_solution": "export class Squares {\n  constructor(max) {\n    this.max = max;\n  }\n\n  get squareOfSum() {\n    let sum = 0;\n    for (let x = 1; x <= this.max; x += 1) {\n      sum += x;\n    }\n    return sum * sum;\n  }\n\n  get sumOfSquares() {\n    let sum = 0;\n    for (let x = 1; x <= this.max; x += 1) {\n      sum += x * x;\n    }\n    return sum;\n  }\n\n  get difference() {\n    return this.squareOfSum - this.sumOfSquares;\n  }\n}\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { Squares } from './difference-of-squares';\n\ndescribe('difference-of-squares', () => {\n  const squares1 = new Squares(1);\n  const squares5 = new Squares(5);\n  const squares100 = new Squares(100);\n\n  describe('Square the sum of the numbers up to the given number', () => {\n    test('square of sum 1', () => {\n      expect(squares1.squareOfSum).toBe(1);\n    });\n\n    xtest('square of sum 5', () => {\n      expect(squares5.squareOfSum).toBe(225);\n    });\n\n    xtest('square of sum 100', () => {\n      expect(squares100.squareOfSum).toBe(25502500);\n    });\n  });\n\n  describe('Sum the squares of the numbers up to the given number', () => {\n    xtest('sum of squares 1', () => {\n      expect(squares1.sumOfSquares).toBe(1);\n    });\n\n    xtest('sum of squares 5', () => {\n      expect(squares5.sumOfSquares).toBe(55);\n    });\n\n    xtest('sum of squares 100', () => {\n      expect(squares100.sumOfSquares).toBe(338350);\n    });\n  });\n\n  describe('Subtract sum of squares from square of sums', () => {\n    xtest('difference of squares 1', () => {\n      expect(squares1.difference).toBe(0);\n    });\n\n    xtest('difference of squares 5', () => {\n      expect(squares5.difference).toBe(170);\n    });\n\n    xtest('difference of squares 100', () => {\n      expect(squares100.difference).toBe(25164150);\n    });\n  });\n});\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "ankorGH",
+    "hayashi-ay",
+    "rchavarria",
+    "ryanplusplus",
+    "Scientifica96",
+    "SleeplessByte",
+    "tejasbubane",
+    "xarxziux"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "tcl:rotational-cipher",
+  "trackSlug": "tcl",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "c4aa1e4f-e218-40db-86d8-483a75645e02",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc rotate {text shift} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc rotate {text shift} {\n    set alphabet {A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}\n    set rotated [concat [lrange $alphabet $shift end] [lrange $alphabet 0 $shift-1]]\n\n    foreach A $alphabet \\\n            R $rotated \\\n            a [string tolower $alphabet] \\\n            r [string tolower $rotated] \\\n    {\n        lappend map  $a $r  $A $R\n    }\n\n    return [string map $map $text]\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"rotational-cipher.tcl\"\n\ntest rot-1 \"rotate a by 0, same output as input\" -body {\n    rotate \"a\" 0\n} -returnCodes ok -result \"a\"\n\nskip rot-2\ntest rot-2 \"rotate a by 1\" -body {\n    rotate \"a\" 1\n} -returnCodes ok -result \"b\"\n\nskip rot-3\ntest rot-3 \"rotate a by 26, same output as input\" -body {\n    rotate \"a\" 26\n} -returnCodes ok -result \"a\"\n\nskip rot-4\ntest rot-4 \"rotate m by 13\" -body {\n    rotate \"m\" 13\n} -returnCodes ok -result \"z\"\n\nskip rot-5\ntest rot-5 \"rotate n by 13 with wrap around alphabet\" -body {\n    rotate \"n\" 13\n} -returnCodes ok -result \"a\"\n\nskip rot-6\ntest rot-6 \"rotate capital letters\" -body {\n    rotate \"OMG\" 5\n} -returnCodes ok -result \"TRL\"\n\nskip rot-7\ntest rot-7 \"rotate spaces\" -body {\n    rotate \"O M G\" 5\n} -returnCodes ok -result \"T R L\"\n\nskip rot-8\ntest rot-8 \"rotate numbers\" -body {\n    rotate \"Testing 1 2 3 testing\" 4\n} -returnCodes ok -result \"Xiwxmrk 1 2 3 xiwxmrk\"\n\nskip rot-9\ntest rot-9 \"rotate punctuation\" -body {\n    rotate \"Let's eat, Grandma!\" 21\n} -returnCodes ok -result \"Gzo'n zvo, Bmviyhv!\"\n\nskip rot-10\ntest rot-10 \"rotate all letters\" -body {\n    rotate \"The quick brown fox jumps over the lazy dog.\" 13\n} -returnCodes ok -result \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n\ncleanupTests\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

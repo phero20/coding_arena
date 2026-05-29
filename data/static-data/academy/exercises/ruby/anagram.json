@@ -1,0 +1,50 @@
+{
+  "id": "ruby:anagram",
+  "trackSlug": "ruby",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "36df18ba-580d-4982-984e-ba50eb1f8c0b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "arrays",
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "arrays"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Anagram' exercise in this file. Make the tests in\n`anagram_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/anagram` directory.\n=end\n",
+  "example_solution": "class Anagram\n  attr_reader :subject\n  def initialize(word)\n    @subject = AnagramSubject.new(word)\n  end\n\n  def match(candidates)\n    candidates.select do |candidate|\n      subject.anagram_of? candidate\n    end\n  end\nend\n\nclass AnagramSubject\n  attr_reader :subject\n  def initialize(subject)\n    @subject = subject\n  end\n\n  def anagram_of?(word)\n    !duplicate?(word) && fingerprint == canonicalize(word)\n  end\n\n  def duplicate?(word)\n    word.downcase == subject.downcase\n  end\n\n  def canonicalize(word)\n    word.downcase.chars.sort\n  end\n\n  def fingerprint\n    @fingerprint ||= canonicalize(subject)\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'anagram'\n\nclass AnagramTest < Minitest::Test\n  def test_no_matches\n    # skip\n    detector = Anagram.new('diaper')\n    anagrams = detector.match(%w[hello world zombies pants])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_two_anagrams\n    skip\n    detector = Anagram.new('solemn')\n    anagrams = detector.match(%w[lemons cherry melons])\n    expected = %w[lemons melons]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_does_not_detect_anagram_subsets\n    skip\n    detector = Anagram.new('good')\n    anagrams = detector.match(%w[dog goody])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_anagram\n    skip\n    detector = Anagram.new('listen')\n    anagrams = detector.match(%w[enlists google inlets banana])\n    expected = %w[inlets]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_three_anagrams\n    skip\n    detector = Anagram.new('allergy')\n    anagrams = detector.match(%w[gallery ballerina regally clergy largely leading])\n    expected = %w[gallery regally largely]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_multiple_anagrams_with_different_case\n    skip\n    detector = Anagram.new('nose')\n    anagrams = detector.match(%w[Eons ONES])\n    expected = %w[Eons ONES]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_does_not_detect_non_anagrams_with_identical_checksum\n    skip\n    detector = Anagram.new('mass')\n    anagrams = detector.match(%w[last])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_anagrams_case_insensitively\n    skip\n    detector = Anagram.new('Orchestra')\n    anagrams = detector.match(%w[cashregister Carthorse radishes])\n    expected = %w[Carthorse]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_anagrams_using_case_insensitive_subject\n    skip\n    detector = Anagram.new('Orchestra')\n    anagrams = detector.match(%w[cashregister carthorse radishes])\n    expected = %w[carthorse]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_detects_anagrams_using_case_insensitive_possible_matches\n    skip\n    detector = Anagram.new('orchestra')\n    anagrams = detector.match(%w[cashregister Carthorse radishes])\n    expected = %w[Carthorse]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_does_not_detect_an_anagram_if_the_original_word_is_repeated\n    skip\n    detector = Anagram.new('go')\n    anagrams = detector.match(%w[goGoGO])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_anagrams_must_use_all_letters_exactly_once\n    skip\n    detector = Anagram.new('tapper')\n    anagrams = detector.match(%w[patter])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_words_are_not_anagrams_of_themselves\n    skip\n    detector = Anagram.new('BANANA')\n    anagrams = detector.match(%w[BANANA])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_words_are_not_anagrams_of_themselves_even_if_letter_case_is_partially_different\n    skip\n    detector = Anagram.new('BANANA')\n    anagrams = detector.match(%w[Banana])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_words_are_not_anagrams_of_themselves_even_if_letter_case_is_completely_different\n    skip\n    detector = Anagram.new('BANANA')\n    anagrams = detector.match(%w[banana])\n    expected = %w[]\n\n    assert_equal expected, anagrams\n  end\n\n  def test_words_other_than_themselves_can_be_anagrams\n    skip\n    detector = Anagram.new('LISTEN')\n    anagrams = detector.match(%w[LISTEN Silent])\n    expected = %w[Silent]\n\n    assert_equal expected, anagrams\n  end\nend\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "fredrb",
+    "henrik",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jmay",
+    "jpotts244",
+    "kotp",
+    "markijbema",
+    "martinsvalin",
+    "pgaspar",
+    "pvcarrera",
+    "sbagdat",
+    "Thrillberg",
+    "tryantwit"
+  ]
+}

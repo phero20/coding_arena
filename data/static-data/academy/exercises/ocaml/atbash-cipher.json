@@ -1,0 +1,35 @@
+{
+  "id": "ocaml:atbash-cipher",
+  "trackSlug": "ocaml",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "020aa7d8-9b4b-4348-9fea-9fbaece3ac66",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let encode ?block_size _ =\n    failwith \"'encode' is missing\"\n\nlet decode _ =\n    failwith \"'decode' is missing\"\n",
+  "example_solution": "open Base\n\nlet substitute = function\n  | 'a' .. 'z' as c ->\n    let offset = (Char.to_int c) - (Char.to_int 'a') in\n    let code = (Char.to_int 'z') - offset in\n    Char.of_int_exn code\n  | other -> other\n\nlet is_encodable = function\n  | 'a' .. 'z' | '0' .. '9' -> true\n  | _ -> false\n\nlet explode s =\n  let rec expl i l =\n    if i < 0 then\n      l\n    else\n      expl (i - 1) (s.[i] :: l)\n  in\n  expl ((String.length s) - 1) []\n\nlet implode l =\n  let character_at i = List.nth_exn l i in\n  String.init (List.length l) ~f:character_at\n\nlet rec group n l =\n  if (List.length l) <= n then\n    [l]\n  else\n    (List.take l n) :: (group n (List.drop l n))\n\nlet encode ?block_size:(block_size = 5) text =\n  let lowercase_text = String.lowercase text in\n  let characters = explode lowercase_text in\n  let filtered_characters = List.filter ~f:is_encodable characters in\n  let groups = group block_size filtered_characters in\n  let preprocessed_texts = List.map ~f:implode groups in\n  let texts = List.map ~f:(String.map ~f:substitute) preprocessed_texts in\n  String.concat ~sep:\" \" texts\n\nlet decode text =\n  let lowercase_text = String.lowercase text in\n  let characters = explode lowercase_text in\n  let filtered_characters = List.filter ~f:is_encodable characters in\n  let preprocessed_text = implode filtered_characters in\n  String.map ~f:substitute preprocessed_text\n",
+  "test_code": "open OUnit2\nopen Atbash_cipher\n\nlet ae exp got _test_ctxt = assert_equal ~printer:(fun x -> x) exp got\n\nlet encode_tests = [\n  \"encode yes\" >::\n  ae \"bvh\" (encode \"yes\");\n  \"encode no\" >::\n  ae \"ml\" (encode \"no\");\n  \"encode OMG\" >::\n  ae \"lnt\" (encode \"OMG\");\n  \"encode spaces\" >::\n  ae \"lnt\" (encode \"O M G\");\n  \"encode mindblowingly\" >::\n  ae \"nrmwy oldrm tob\" (encode \"mindblowingly\");\n  \"encode numbers\" >::\n  ae \"gvhgr mt123 gvhgr mt\" (encode \"Testing,1 2 3, testing.\");\n  \"encode deep thought\" >::\n  ae \"gifgs rhurx grlm\" (encode \"Truth is fiction.\");\n  \"encode all the letters\" >::\n  ae \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\" (encode \"The quick brown fox jumps over the lazy dog.\");\n]\n\n\nlet decode_tests = [\n  \"decode exercism\" >::\n  ae \"exercism\" (decode \"vcvix rhn\");\n  \"decode a sentence\" >::\n  ae \"anobstacleisoftenasteppingstone\" (decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\");\n  \"decode numbers\" >::\n  ae \"testing123testing\" (decode \"gvhgr mt123 gvhgr mt\");\n  \"decode all the letters\" >::\n  ae \"thequickbrownfoxjumpsoverthelazydog\" (decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\");\n  \"decode with too many spaces\" >::\n  ae \"exercism\" (decode \"vc vix    r hn\");\n  \"decode with no spaces\" >::\n  ae \"anobstacleisoftenasteppingstone\" (decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\");\n]\n\n\n\nlet different_block_size_test = [\n  \"encode mindblowingly with a different block size\" >::\n  ae \"n r m w y o l d r m t o b\" (encode ~block_size:1 \"mindblowingly\");\n]\n\nlet () =\n  run_test_tt_main (\n    \"atbash-cipher tests\" >:::\n    List.concat [encode_tests; decode_tests; different_block_size_test]\n  )\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "dvberkel"
+  ],
+  "contributors": [
+    "daveyarwood",
+    "iHiD",
+    "kytrinyx",
+    "marionebl",
+    "Peaupote",
+    "sbl",
+    "sshine",
+    "stevejb71"
+  ]
+}

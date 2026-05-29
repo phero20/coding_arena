@@ -9,10 +9,17 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+<<<<<<< HEAD
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+=======
+import { RankIndicator } from "../stats/leaderboard/RankIndicator";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CodeViewer } from "@/components/ui/code-viewer";
+>>>>>>> prod-deploy
 import { cn, formatSolveTime } from "@/lib/utils";
 import { ArenaPlayerResult } from "@/types/arena";
 import type { MatchResultsProps } from "@/types/component.types";
@@ -131,18 +138,43 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                   <React.Fragment key={player.userId}>
                     <TableRow
                       className={cn(
+<<<<<<< HEAD
                         "group cursor-pointer",
 
                         isExpanded && "border-b border-primary",
+=======
+                        "group cursor-pointer transition-colors",
+                        index === 0 && "bg-rank-1-row",
+                        index === 1 && "bg-rank-2-row",
+                        index === 2 && "bg-rank-3-row",
+                        isExpanded && "bg-muted/50",
+>>>>>>> prod-deploy
                       )}
                       onClick={() =>
                         setExpandedUser(isExpanded ? "" : player.userId)
                       }
                     >
+<<<<<<< HEAD
                       <TableCell className="pl-6 py-4">
                         <Badge className="">{index + 1}</Badge>
                       </TableCell>
                       <TableCell className="py-4">
+=======
+                      <TableCell
+                        className={cn(
+                          "pl-6 py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+                        <RankIndicator rank={index + 1} />
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          "py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+>>>>>>> prod-deploy
                         <div className="pr-4 min-w-[140px] flex items-center gap-2">
                           <Avatar className="h-8 w-8 border-2 border-background ring-1 ring-border/20">
                             <AvatarImage src={player.avatarUrl} />
@@ -150,7 +182,14 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                               {player.username?.[0]?.toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
+<<<<<<< HEAD
                           <Link href={`/u/${player.username}`} className="flex flex-col">
+=======
+                          <Link
+                            href={`/u/${player.username}`}
+                            className="flex flex-col"
+                          >
+>>>>>>> prod-deploy
                             <span className="font-bold text-sm tracking-tight truncate text-primary group-hover:underline transition-all">
                               {player.fullName || player.username}
                             </span>
@@ -162,10 +201,27 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                           </Link>
                         </div>
                       </TableCell>
+<<<<<<< HEAD
                       <TableCell className="text-center py-4 font-black text-sm tabular-nums">
                         {player.score || 0}
                       </TableCell>
                       <TableCell className="text-center py-4">
+=======
+                      <TableCell
+                        className={cn(
+                          "text-center py-4 font-black text-sm tabular-nums border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+                        {player.score || 0}
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          "text-center py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+>>>>>>> prod-deploy
                         <div className="flex flex-col items-center">
                           <span className="text-xs font-bold text-status-accepted">
                             {player.testsPassed}/{player.totalTests}
@@ -175,30 +231,59 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                           </span>
                         </div>
                       </TableCell>
+<<<<<<< HEAD
                       <TableCell className="text-center py-4">
+=======
+                      <TableCell
+                        className={cn(
+                          "text-center py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+>>>>>>> prod-deploy
                         <div className="flex flex-col items-center">
                           <span className="text-xs font-bold text-primary">
                             {formatSolveTime(player.timeTaken)}
                           </span>
                         </div>
                       </TableCell>
+<<<<<<< HEAD
                       <TableCell className="text-right py-4">
+=======
+                      <TableCell
+                        className={cn(
+                          "text-right py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+>>>>>>> prod-deploy
                         <div className="flex justify-end">
                           <VerdictBadge verdict={player.verdict} />
                         </div>
                       </TableCell>
+<<<<<<< HEAD
                       <TableCell className="text-right pr-6 py-4">
                         <Button
                           size="sm"
                          
                           disabled={!player.sourceCode}
                         >
+=======
+                      <TableCell
+                        className={cn(
+                          "text-right pr-6 py-4 border-b transition-colors",
+                          isExpanded ? "border-primary/20" : "border-border/5",
+                        )}
+                      >
+                        <Button size="sm" disabled={!player.sourceCode}>
+>>>>>>> prod-deploy
                           <Code2 className="w-3 h-3" />
                           Code
                         </Button>
                       </TableCell>
                     </TableRow>
                     {isExpanded && (
+<<<<<<< HEAD
                       <TableRow className="bg-muted hover:bg-muted">
                         <TableCell
                           colSpan={7}
@@ -240,6 +325,26 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                               </SyntaxHighlighter>
                             </div>
                           )}
+=======
+                      <TableRow className="bg-muted/20 hover:bg-muted/20 border-none">
+                        <TableCell colSpan={7} className="p-0 border-none">
+                          <div className="animate-in slide-in-from-top-2 duration-300">
+                            {!player.sourceCode ? (
+                              <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
+                                <Code2 className="size-6" />
+                                <p className="text-sm font-black ">
+                                  User has not submitted any solution.
+                                </p>
+                              </div>
+                            ) : (
+                              <CodeViewer
+                                code={player.sourceCode}
+                                language={player.languageId || "javascript"}
+                                label={`${player.languageId || "javascript"}`}
+                              />
+                            )}
+                          </div>
+>>>>>>> prod-deploy
                         </TableCell>
                       </TableRow>
                     )}
@@ -268,9 +373,27 @@ function PodiumProfile({
   const sizes = {
     sm: "size-14 md:size-20",
     md: "size-16 md:size-24",
+<<<<<<< HEAD
     lg: "size-24 md:size-32 border-primary",
   };
 
+=======
+    lg: "size-24 md:size-32",
+  };
+
+  const rankThemes = {
+    1: "bg-rank-1-badge text-rank-1 border-rank-1",
+    2: "bg-rank-2-badge text-rank-2 border-rank-2",
+    3: "bg-rank-3-badge text-rank-3 border-rank-3",
+  }[rank as 1 | 2 | 3];
+
+  const borderThemes = {
+    1: "border-[var(--rank-1)] ",
+    2: "border-[var(--rank-2)] ",
+    3: "border-[var(--rank-3)] ",
+  }[rank as 1 | 2 | 3];
+
+>>>>>>> prod-deploy
   return (
     <div
       className={cn(
@@ -284,6 +407,7 @@ function PodiumProfile({
       >
         <Avatar
           className={cn(
+<<<<<<< HEAD
             "border-4 border-card shadow-2xl transition-all group-hover:scale-105 group-hover:border-primary/50",
             sizes[size],
           )}
@@ -319,6 +443,50 @@ function PodiumProfile({
             {formatSolveTime(player.timeTaken)}
           </Badge>
         )}
+=======
+            "border-4 border-card transition-all group-hover:scale-105",
+            sizes[size],
+            borderThemes,
+          )}
+        >
+          <AvatarImage src={player.avatarUrl} />
+          <AvatarFallback className="text-lg md:text-xl font-black italic bg-muted">
+            {player.username.slice(0, 1).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <Badge
+          variant="secondary"
+          className={cn(
+            "absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1.5 text-[10px] md:text-[11px] font-black z-10 border rounded-full",
+            borderThemes,
+          )}
+        >
+          {rank}
+        </Badge>
+      </div>
+      <div className="text-center max-w-[120px] flex flex-col items-center gap-1 mt-2">
+        <Link
+          href={`/u/${player.username}`}
+          className="font-bold text-xs md:text-sm truncate w-full tracking-tight text-primary hover:underline"
+        >
+          {player.fullName || player.username}
+        </Link>
+        <div className="flex flex-col items-center gap-1">
+          {player.fullName && (
+            <p className="text-[10px] text-muted-foreground truncate w-full tracking-tight -mt-1">
+              {player.username}
+            </p>
+          )}
+          {player.timeTaken && (
+            <Badge className="flex gap-1">
+              <Clock className="size-3" />
+              <span className="text-xs font-bold tabular-nums mb-0.5">
+                {formatSolveTime(player.timeTaken)}
+              </span>
+            </Badge>
+          )}
+        </div>
+>>>>>>> prod-deploy
       </div>
     </div>
   );

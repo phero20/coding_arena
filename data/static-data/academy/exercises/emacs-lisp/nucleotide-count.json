@@ -1,0 +1,28 @@
+{
+  "id": "emacs-lisp:nucleotide-count",
+  "trackSlug": "emacs-lisp",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "aaff28dd-718b-48d4-b507-a0b9b01bb6ad",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": "# Hints\n\n## General\n\n- The expected result is an `Association List` data structure (also called `alist`), not an string, or something else. You can find more information about it in this [link](https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html). So, for the correct example, the right output would be:\n\n  ```text\n  \"GATTACA\" -> '((?A . 3) (?C . 1) (?G . 1) (?T . 2))\n  ```\n\n- The `?A` is the Emacs Lisp way to represent a character. You can find more information in the documentation: [link](https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Char-Syntax.html).\n",
+  "starter_code": ";;; nucleotide-count.el --- nucleotide-count Exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun nucleotide-count (sequence)\n (error \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'nucleotide-count)\n;;; nucleotide-count.el ends here\n",
+  "example_solution": ";;; nucleotide-count.el --- nucleotide-count Exercise (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun nucleotide-count (sequence)\n  (let ((counts (copy-alist '((?A . 0) (?C . 0) (?G . 0) (?T . 0)))))\n    (dolist (i (append sequence nil))\n      (let ((n (assoc i counts)))\n        (if n\n            (setcdr n (1+ (cdr n)))\n          (error \"Invalid nucleotide '%c'\" i))))\n    counts))\n\n\n(provide 'nucleotide-count)\n;;; nucleotide-count.el ends here\n",
+  "test_code": ";;; nucleotide-count-test.el --- Tests for nucleotide-count (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(load-file \"nucleotide-count.el\")\n(declare-function nucleotide-count \"nucleotide-count.el\" (sequence))\n\n\n(defun sort-pairs (lst fn)\n  (sort lst (lambda (a b) (funcall fn (car a) (car b)))))\n\n\n(ert-deftest empty-dna-strand-has-no-nucleotides-test ()\n  (should (equal (sort-pairs (nucleotide-count \"\") #'<)\n                 '((?A . 0) (?C . 0) (?G . 0) (?T . 0)))))\n\n\n(ert-deftest repetitive-sequence-has-only-guanine-test ()\n  (should (equal (sort-pairs (nucleotide-count \"GGGGGGGG\") #'<)\n                 '((?A . 0) (?C . 0) (?G . 8) (?T . 0)))))\n\n\n(ert-deftest count-all-nucleotides-test ()\n  (should (equal (sort-pairs (nucleotide-count \"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\") #'<)\n                 '((?A . 20) (?C . 12) (?G . 17) (?T . 21)))))\n\n\n(ert-deftest invalid-nucleotide-test ()\n  (should-error (nucleotide-count \"AGGTCCXGA\")))\n\n\n(provide 'nucleotide-count)\n;;; nucleotide-count-test.el ends here\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "cpaulbond"
+  ],
+  "contributors": [
+    "canweriotnow"
+  ]
+}

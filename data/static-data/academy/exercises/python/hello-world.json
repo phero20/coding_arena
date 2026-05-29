@@ -1,0 +1,39 @@
+{
+  "id": "python:hello-world",
+  "trackSlug": "python",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "f458c48a-4a05-4809-9168-8edd55179349",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def hello():\n    return 'Goodbye, Mars!'\n",
+  "example_solution": "def hello():\n    return 'Hello, World!'\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/hello-world/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\ntry:\n    from hello_world import (\n        hello,\n    )\n\nexcept ImportError as import_fail:\n    message = import_fail.args[0].split(\"(\", maxsplit=1)\n    item_name = import_fail.args[0].split()[3]\n\n    item_name = item_name[:-1] + \"()'\"\n\n    # pylint: disable=raise-missing-from\n    raise ImportError(\n        \"\\n\\nMISSING FUNCTION --> In your 'hello_world.py' file, we can not find or import the\"\n        f\" function named {item_name}. \\nThe tests for this first exercise expect a function that\"\n        f' returns the string \"Hello, World!\"'\n        f'\\n\\nDid you use print(\"Hello, World!\") instead?'\n    ) from None\n\n\nclass HelloWorldTest(unittest.TestCase):\n    def test_say_hi(self):\n        msg = \"\\n\\nThis test expects a return of the string 'Hello, World!' \\nDid you use print('Hello, World!') by mistake?\"\n        self.assertEqual(hello(), \"Hello, World!\", msg=msg)\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "michaelem"
+  ],
+  "contributors": [
+    "behrtam",
+    "cmccandless",
+    "Dog",
+    "hebertjulio",
+    "ikhadykin",
+    "kytrinyx",
+    "N-Parsons",
+    "NobbZ",
+    "pheanex",
+    "skeskali",
+    "Sukhj1nder",
+    "tqa236"
+  ]
+}

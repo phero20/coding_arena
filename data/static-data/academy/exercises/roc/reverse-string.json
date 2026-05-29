@@ -1,0 +1,26 @@
+{
+  "id": "roc:reverse-string",
+  "trackSlug": "roc",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "7bd2e210-08aa-45e9-8a19-f2213a22ac27",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "module [reverse]\n\nreverse : Str -> Str\nreverse = |string|\n    crash(\"Please implement the `reverse` function\")\n\n# HINT: we have added the `unicode` package to the app's header in\n#       reverse-string-test.roc, so you can use it here if you need to.\n#       For example, you could use unicode.Grapheme, just sayin'.\n",
+  "example_solution": "module [reverse, reverse_ascii]\n\nimport unicode.Grapheme\n\n## This function reverses the input string, e.g., \"café\" -> \"éfac\".\n## This implementation uses the `unicode` package from github.com/roc-lang/unicode\n## to split the input string into separate \"Extended Grapheme Clusters\". This is a\n## fancy Unicode name for characters that human beings recognize as such: each EGC\n## may actually be composed of several Unicode codepoints, e.g., the character\n## é is recognized as a single character, but it may actually be represented as two\n## Unicode codepoints (e + ´).\n## To use the `unicode` package, its URL must be added to the app's header.\n## Luckily, we've added it for you in reverse-string-test.roc. Take a look!\nreverse : Str -> Str\nreverse = |string|\n    when Grapheme.split(string) is\n        Ok(graphemes) -> graphemes |> List.reverse |> Str.join_with(\"\")\n        Err(_) -> \"Unexpected error: could not split the string into graphemes\"\n\n## This function reverses the input string, e.g., \"hello\" -> \"olleh\". It is\n## faster and simpler than the implementation above, plus it does not require an\n## external package, but it is only guaranteed to work on ASCII strings.\nreverse_ascii = |string|\n    when string |> Str.to_utf8 |> List.reverse |> Str.from_utf8 is\n        Ok(reversed) -> reversed\n        Err(_) -> \"This implementation online works on ASCII strings\"\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/reverse-string/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n    unicode: \"https://github.com/roc-lang/unicode/releases/download/0.3.0/9KKFsA4CdOz0JIOL7iBSI_2jGIXQ6TsFBXgd086idpY.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport ReverseString exposing [reverse]\n\n# an empty string\nexpect\n    result = reverse(\"\")\n    result == \"\"\n\n# a word\nexpect\n    result = reverse(\"robot\")\n    result == \"tobor\"\n\n# a capitalized word\nexpect\n    result = reverse(\"Ramen\")\n    result == \"nemaR\"\n\n# a sentence with punctuation\nexpect\n    result = reverse(\"I'm hungry!\")\n    result == \"!yrgnuh m'I\"\n\n# a palindrome\nexpect\n    result = reverse(\"racecar\")\n    result == \"racecar\"\n\n# an even-sized word\nexpect\n    result = reverse(\"drawer\")\n    result == \"reward\"\n\n# wide characters\nexpect\n    result = reverse(\"子猫\")\n    result == \"猫子\"\n\n# grapheme cluster with pre-combined form\nexpect\n    result = reverse(\"Würstchenstand\")\n    result == \"dnatsnehctsrüW\"\n\n# grapheme clusters\nexpect\n    result = reverse(\"ผู้เขียนโปรแกรม\")\n    result == \"มรกแรปโนยขีเผู้\"\n\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

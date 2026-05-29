@@ -1,0 +1,47 @@
+{
+  "id": "elixir:connect",
+  "trackSlug": "elixir",
+  "slug": "connect",
+  "name": "Connect",
+  "uuid": "c36fd67a-a370-49b7-b778-9a542e2c5a75",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the result for a game of Hex / Polygon.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "enum"
+  ],
+  "prerequisites": [
+    "lists",
+    "cond",
+    "case",
+    "if",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "guards",
+    "strings",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nCompute the result for a game of Hex / Polygon.\n\nThe abstract boardgame known as [Hex][hex] / Polygon / CON-TAC-TIX is quite simple in rules, though complex in practice.\nTwo players place stones on a parallelogram with hexagonal fields.\nThe player to connect his/her stones to the opposite side first wins.\nThe four sides of the parallelogram are divided between the two players (i.e. one player gets assigned a side and the side directly opposite it and the other player gets assigned the two other sides).\n\nYour goal is to build a program that given a simple representation of a board computes the winner (or lack thereof).\nNote that all games need not be \"fair\".\n(For example, players may have mismatched piece counts or the game's board might have a different width and height.)\n\nThe boards look like this:\n\n```text\n. O . X .\n . X X O .\n  O O O X .\n   . X O X O\n    X O O O X\n```\n\n\"Player `O`\" plays from top to bottom, \"Player `X`\" plays from left to right.\nIn the above example `O` has made a connection from left to right but nobody has won since `O` didn't connect top and bottom.\n\n[hex]: https://en.wikipedia.org/wiki/Hex_%28board_game%29\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Connect do\n  @doc \"\"\"\n  Calculates the winner (if any) of a board\n  \"\"\"\n  @spec result_for([String.t()]) :: :none | :X | :O\n  def result_for(board) do\n  end\nend\n",
+  "example_solution": "defmodule Connect do\n  @doc \"\"\"\n  Calculates the winner (if any) of a board\n  \"\"\"\n  @spec result_for([String.t()]) :: :none | :X | :O\n  def result_for(board) do\n    cond do\n      x_wins?(board) -> :X\n      o_wins?(board) -> :O\n      true -> :none\n    end\n  end\n\n  defp x_wins?(board) do\n    board\n    |> Enum.with_index()\n    |> Enum.any?(fn {row, index} ->\n      String.first(row) == \"X\" && x_wins?(board, [{index, 0}])\n    end)\n  end\n\n  defp x_wins?(board, [{_, y} | _]) when y + 1 == byte_size(hd(board)), do: true\n\n  defp x_wins?(board, history = [last_loc | _]) do\n    last_loc\n    |> locs_next_to(history)\n    |> Enum.filter(&(get_loc(board, &1) == \"X\"))\n    |> Enum.any?(&x_wins?(board, [&1 | history]))\n  end\n\n  defp o_wins?(board) do\n    board\n    |> hd\n    |> String.graphemes()\n    |> Enum.with_index()\n    |> Enum.any?(fn {spot, index} ->\n      spot == \"O\" && o_wins?(board, [{0, index}])\n    end)\n  end\n\n  defp o_wins?(board, [{x, _} | _]) when x + 1 == length(board), do: true\n\n  defp o_wins?(board, history = [last_loc | _]) do\n    last_loc\n    |> locs_next_to(history)\n    |> Enum.filter(&(get_loc(board, &1) == \"O\"))\n    |> Enum.any?(&o_wins?(board, [&1 | history]))\n  end\n\n  defp locs_next_to({x, y}, history) do\n    [\n      {x, y - 1},\n      {x, y + 1},\n      {x + 1, y},\n      {x - 1, y},\n      {x + 1, y - 1},\n      {x - 1, y + 1}\n    ]\n    |> Enum.filter(&valid_next_loc(&1, history))\n  end\n\n  defp valid_next_loc({x, y}, history) do\n    x >= 0 && y >= 0 && !({x, y} in history)\n  end\n\n  defp get_loc(board, {x, y}) do\n    row = Enum.at(board, x)\n    row && String.at(row, y)\n  end\nend\n",
+  "test_code": "defmodule ConnectTest do\n  use ExUnit.Case\n\n  def remove_spaces(rows) do\n    Enum.map(rows, &String.replace(&1, \" \", \"\"))\n  end\n\n  # @tag :pending\n  test \"an empty board has no winner\" do\n    board =\n      remove_spaces([\n        \". . . . .\",\n        \" . . . . .\",\n        \"  . . . . .\",\n        \"   . . . . .\",\n        \"    . . . . .\"\n      ])\n\n    assert Connect.result_for(board) == :none\n  end\n\n  @tag :pending\n  test \"X can win on a 1x1 board\" do\n    board = [\"X\"]\n    assert Connect.result_for(board) == :X\n  end\n\n  @tag :pending\n  test \"O can win on a 1x1 board\" do\n    board = [\"O\"]\n    assert Connect.result_for(board) == :O\n  end\n\n  @tag :pending\n  test \"only edges does not make a winner\" do\n    board =\n      remove_spaces([\n        \"O O O X\",\n        \" X . . X\",\n        \"  X . . X\",\n        \"   X O O O\"\n      ])\n\n    assert Connect.result_for(board) == :none\n  end\n\n  @tag :pending\n  test \"illegal diagonal does not make a winner\" do\n    board =\n      remove_spaces([\n        \"X O . .\",\n        \" O X X X\",\n        \"  O X O .\",\n        \"   . O X .\",\n        \"    X X O O\"\n      ])\n\n    assert Connect.result_for(board) == :none\n  end\n\n  @tag :pending\n  test \"nobody wins crossing adjacent angles\" do\n    board =\n      remove_spaces([\n        \"X . . .\",\n        \" . X O .\",\n        \"  O . X O\",\n        \"   . O . X\",\n        \"    . . O .\"\n      ])\n\n    assert Connect.result_for(board) == :none\n  end\n\n  @tag :pending\n  test \"X wins crossing from left to right\" do\n    board =\n      remove_spaces([\n        \". O . .\",\n        \" O X X X\",\n        \"  O X O .\",\n        \"   X X O X\",\n        \"    . O X .\"\n      ])\n\n    assert Connect.result_for(board) == :X\n  end\n\n  @tag :pending\n  test \"X wins with left-hand dead end fork\" do\n    board =\n      remove_spaces([\n        \". . X .\",\n        \" X X . .\",\n        \"  . X X X\",\n        \"   O O O O\"\n      ])\n\n    assert Connect.result_for(board) == :X\n  end\n\n  @tag :pending\n  test \"X wins with right-hand dead end fork\" do\n    board =\n      remove_spaces([\n        \". . X X\",\n        \" X X . .\",\n        \"  . X X .\",\n        \"   O O O O\"\n      ])\n\n    assert Connect.result_for(board) == :X\n  end\n\n  @tag :pending\n  test \"O wins crossing from top to bottom\" do\n    board =\n      remove_spaces([\n        \". O . .\",\n        \" O X X X\",\n        \"  O O O .\",\n        \"   X X O X\",\n        \"    . O X .\"\n      ])\n\n    assert Connect.result_for(board) == :O\n  end\n\n  @tag :pending\n  test \"X wins using a convoluted path\" do\n    board =\n      remove_spaces([\n        \". X X . .\",\n        \" X . X . X\",\n        \"  . X . X .\",\n        \"   . X X . .\",\n        \"    O O O O O\"\n      ])\n\n    assert Connect.result_for(board) == :X\n  end\n\n  @tag :pending\n  test \"X wins using a spiral path\" do\n    board =\n      remove_spaces([\n        \"O X X X X X X X X\",\n        \" O X O O O O O O O\",\n        \"  O X O X X X X X O\",\n        \"   O X O X O O O X O\",\n        \"    O X O X X X O X O\",\n        \"     O X O O O X O X O\",\n        \"      O X X X X X O X O\",\n        \"       O O O O O O O X O\",\n        \"        X X X X X X X X O\"\n      ])\n\n    assert Connect.result_for(board) == :X\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "dalexj"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "waiting-for-dev"
+  ]
+}

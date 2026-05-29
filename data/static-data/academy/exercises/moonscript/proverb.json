@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:proverb",
+  "trackSlug": "moonscript",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "73e82d11-af54-4470-9098-be2c8c25b621",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return (items) ->\n  error 'Implement me'\n",
+  "example_solution": "return (items) ->\n  return '' if #items == 0\n\n  forwant = (i) -> \"For want of a #{items[i]} the #{items[i + 1]} was lost.\\n\"\n  andall = -> \"And all for the want of a #{items[1]}.\\n\"\n\n  lines = [forwant i for i = 1, #items - 1]\n  table.insert lines, andall!\n  table.concat lines\n",
+  "test_code": "recite = require 'proverb'\n\ndescribe 'proverb:', ->\n  it 'zero pieces', ->\n    result = recite {}\n    expected = ''\n    assert.are.equal expected, result\n\n  pending 'one piece', ->\n    result = recite {'nail'}\n    expected = [[\nAnd all for the want of a nail.\n]]\n    assert.are.equal expected, result\n\n  pending 'two pieces', ->\n    result = recite {'nail', 'shoe'}\n    expected = [[\nFor want of a nail the shoe was lost.\nAnd all for the want of a nail.\n]]\n    assert.are.equal expected, result\n\n  pending 'three pieces', ->\n    result = recite {'nail', 'shoe', 'horse'}\n    expected = [[\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nAnd all for the want of a nail.\n]]\n    assert.are.equal expected, result\n\n  pending 'full proverb', ->\n    result = recite {'nail', 'shoe', 'horse', 'rider', 'message', 'battle', 'kingdom'}\n    expected = [[\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n]]\n    assert.are.equal expected, result\n\n  pending 'four pieces modernized', ->\n    result = recite {'pin', 'gun', 'soldier', 'battle'}\n    expected = [[\nFor want of a pin the gun was lost.\nFor want of a gun the soldier was lost.\nFor want of a soldier the battle was lost.\nAnd all for the want of a pin.\n]]\n    assert.are.equal expected, result\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

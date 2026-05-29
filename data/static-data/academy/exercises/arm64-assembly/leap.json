@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:leap",
+  "trackSlug": "arm64-assembly",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "64ff9257-ca9e-4c31-a8db-3736ff4e3284",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": ".text\n.globl leap_year\n\nleap_year:\n        ret\n",
+  "example_solution": ".text\n.globl leap_year\n\n/* extern int leap_year(int year); */\nleap_year:\n        mov     x1, #100                /* divisor */\n        udiv    x2, x0, x1              /* quotient, i.e. century */\n        msub    x3, x2, x1, x0          /* remainder, i.e. year within century */\n        tst     x3, x3                  /* check if 0 */\n        csel    x0, x2, x3, eq          /* either century, or year within century */\n        tst     x0, #3                  /* check if multiple of 4 */\n        cset    x0, eq\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\nextern int leap_year(int year);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_year_not_divisible_by_4_in_common_year(void) {\n    TEST_ASSERT_FALSE(leap_year(2015));\n}\n\nvoid test_year_divisible_by_2_not_divisible_by_4_in_common_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_FALSE(leap_year(1970));\n}\n\nvoid test_year_divisible_by_4_not_divisible_by_100_in_leap_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_TRUE(leap_year(1996));\n}\n\nvoid test_year_divisible_by_4_and_5_is_still_a_leap_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_TRUE(leap_year(1960));\n}\n\nvoid test_year_divisible_by_100_not_divisible_by_400_in_common_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_FALSE(leap_year(2100));\n}\n\nvoid test_year_divisible_by_100_but_not_by_3_is_still_not_a_leap_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_FALSE(leap_year(1900));\n}\n\nvoid test_year_divisible_by_400_is_leap_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_TRUE(leap_year(2000));\n}\n\nvoid test_year_divisible_by_400_but_not_by_125_is_still_a_leap_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_TRUE(leap_year(2400));\n}\n\nvoid test_year_divisible_by_200_not_divisible_by_400_in_common_year(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_FALSE(leap_year(1800));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_year_not_divisible_by_4_in_common_year);\n    RUN_TEST(test_year_divisible_by_2_not_divisible_by_4_in_common_year);\n    RUN_TEST(test_year_divisible_by_4_not_divisible_by_100_in_leap_year);\n    RUN_TEST(test_year_divisible_by_4_and_5_is_still_a_leap_year);\n    RUN_TEST(test_year_divisible_by_100_not_divisible_by_400_in_common_year);\n    RUN_TEST(test_year_divisible_by_100_but_not_by_3_is_still_not_a_leap_year);\n    RUN_TEST(test_year_divisible_by_400_is_leap_year);\n    RUN_TEST(test_year_divisible_by_400_but_not_by_125_is_still_a_leap_year);\n    RUN_TEST(test_year_divisible_by_200_not_divisible_by_400_in_common_year);\n    return UNITY_END();\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

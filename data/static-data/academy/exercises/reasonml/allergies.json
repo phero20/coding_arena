@@ -1,0 +1,32 @@
+{
+  "id": "reasonml:allergies",
+  "trackSlug": "reasonml",
+  "slug": "allergies",
+  "name": "Allergies",
+  "uuid": "f964d022-1466-4c76-8877-0b0dda25578b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.\n\nAn allergy test produces a single numeric score which contains the information about all the allergies the person has (that they were tested for).\n\nThe list of items (and their value) that were tested are:\n\n- eggs (1)\n- peanuts (2)\n- shellfish (4)\n- strawberries (8)\n- tomatoes (16)\n- chocolate (32)\n- pollen (64)\n- cats (128)\n\nSo if Tom is allergic to peanuts and chocolate, he gets a score of 34.\n\nNow, given just that score of 34, your program should be able to say:\n\n- Whether Tom is allergic to any one of those allergens listed above.\n- All the allergens Tom is allergic to.\n\nNote: a given score may include allergens **not** listed above (i.e. allergens that score 256, 512, 1024, etc.).\nYour program should ignore those components of the score.\nFor example, if the allergy score is 257, your program should only report the eggs (1) allergy.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let isAllergicTo = (_, _) => {\n  failwith(\"TODO: implement isAllergicTo function\");\n};\n\nlet toList = (_) => {\n  failwith(\"TODO: implement toList function\");\n};",
+  "example_solution": "open Int32;\n\nlet allergies = [|\n  \"eggs\",\n  \"peanuts\",\n  \"shellfish\",\n  \"strawberries\",\n  \"tomatoes\",\n  \"chocolate\",\n  \"pollen\",\n  \"cats\",\n|];\n\ntype score = {\n  s: int32,\n  allergy: string,\n};\n\nlet toList = (score: int) : list(string) => {\n  let inputScore = of_int(score);\n\n  allergies\n  |> Array.mapi((index, allergy) => {s: shift_left(one, index), allergy})\n  |> Array.to_list\n  |> List.filter(({s, _}) => logand(s, inputScore) != zero)\n  |> List.map(({allergy, _}) => allergy);\n};\n\nlet isAllergicTo = (allergy: string, code: int) : bool =>\n  List.mem(allergy, toList(code));\n",
+  "test_code": "open Jest;\nopen Expect;\nopen Allergies;\n\ndescribe(\"Allergies\", () =>\n  describe(\"isAllergicTo\", () => {\n    describe(\"no Allergies means not allergic\", () => {\n      test(\"peanuts\", () =>\n        expect(isAllergicTo(\"peanuts\", 0)) |> toBe(false)\n      );\n      test(\"cats\", () =>\n        expect(isAllergicTo(\"cats\", 0)) |> toBe(false)\n      );\n      test(\"strawberries\", () =>\n        expect(isAllergicTo(\"strawberries\", 0)) |> toBe(false)\n      );\n    });\n    test(\"is allergic to eggs\", () =>\n      expect(isAllergicTo(\"eggs\", 1)) |> toBe(true)\n    );\n    describe(\"has the right allergies\", () => {\n      test(\"eggs\", () =>\n        expect(isAllergicTo(\"eggs\", 5)) |> toBe(true)\n      );\n      test(\"shellfish\", () =>\n        expect(isAllergicTo(\"shellfish\", 5)) |> toBe(true)\n      );\n      test(\"strawberries\", () =>\n        expect(isAllergicTo(\"strawberries\", 5)) |> toBe(false)\n      );\n    });\n    describe(\"toList\", () => {\n      test(\"no allergies at all\", () =>\n        expect(toList(0)) |> toEqual([])\n      );\n      test(\"allergic to just peanuts\", () =>\n        expect(toList(2)) |> toEqual([\"peanuts\"])\n      );\n      test(\"allergic to everything\", () =>\n        expect(toList(255))\n        |> toEqual([\n             \"eggs\",\n             \"peanuts\",\n             \"shellfish\",\n             \"strawberries\",\n             \"tomatoes\",\n             \"chocolate\",\n             \"pollen\",\n             \"cats\",\n           ])\n      );\n      test(\"ignore non allergen score parts\", () =>\n        expect(toList(257)) |> toEqual([\"eggs\"])\n      );\n      test(\"ignore all non allergen score parts\", () =>\n        expect(toList(509))\n        |> toEqual([\n             \"eggs\",\n             \"shellfish\",\n             \"strawberries\",\n             \"tomatoes\",\n             \"chocolate\",\n             \"pollen\",\n             \"cats\",\n           ])\n      );\n    });\n  })\n);\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://turing.edu",
+  "authors": [
+    "gabrielperales"
+  ],
+  "contributors": [
+    "benreyn",
+    "naartjie",
+    "ohana54",
+    "stevejb71",
+    "tejasbubane"
+  ]
+}

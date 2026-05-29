@@ -1,0 +1,26 @@
+{
+  "id": "lua:strain",
+  "trackSlug": "lua",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "0763a8e7-ef20-43e7-86ab-b2b488493b0e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `keep` and `discard` operation on collections.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "local function keep(xs, pred)\nend\n\nlocal function discard(xs, pred)\nend\n\nreturn { keep = keep, discard = discard }\n",
+  "example_solution": "local function keep(xs, pred)\n  local acc = {}\n  for _, x in ipairs(xs) do\n    if pred(x) then\n      table.insert(acc, x)\n    end\n  end\n  return acc\nend\n\nlocal function discard(xs, pred)\n  return keep(xs, function(x)\n    return not pred(x)\n  end)\nend\n\nreturn { keep = keep, discard = discard }\n",
+  "test_code": "local keep = require('strain').keep\nlocal discard = require('strain').discard\n\n-- LuaFormatter off\ndescribe('strain', function()\n  local function always_true()\n    return true\n  end\n  local function always_false()\n    return false\n  end\n  local function is_even(x)\n    return x % 2 == 0\n  end\n  local function is_odd(x)\n    return x % 2 == 1\n  end\n  local function starts_with_z(s)\n    return string.sub(s, 1, 1) == \"z\"\n  end\n  local function contains_5(xs)\n    for _, x in ipairs(xs) do\n      if x == 5 then\n        return true\n      end\n    end\n    return false\n  end\n\n  describe('keep', function()\n    it('keep on empty list returns empty list', function()\n      assert.same({}, keep({}, always_true))\n    end)\n\n    it('keeps everything', function()\n      assert.same({ 1, 3, 5 }, keep({ 1, 3, 5 }, always_true))\n    end)\n\n    it('keeps nothing', function()\n      assert.same({}, keep({ 1, 3, 5 }, always_false))\n    end)\n\n    it('keeps first and last', function()\n      assert.same({ 1, 3 }, keep({ 1, 2, 3 }, is_odd))\n    end)\n\n    it('keeps neither first nor last', function()\n      assert.same({ 2 }, keep({ 1, 2, 3 }, is_even))\n    end)\n\n    it('keeps strings', function()\n      assert.same({ 'zebra', 'zombies', 'zealot' }, keep({ 'apple', 'zebra', 'banana', 'zombies', 'cherimoya', 'zealot' }, starts_with_z))\n    end)\n\n    it('keeps lists', function()\n      assert.same({ { 5, 5, 5 }, { 5, 1, 2 }, { 1, 5, 2 }, { 1, 2, 5 } }, keep({ { 1, 2, 3 }, { 5, 5, 5 }, { 5, 1, 2 }, { 2, 1, 2 }, { 1, 5, 2 }, { 2, 2, 1 }, { 1, 2, 5 } }, contains_5))\n    end)\n  end)\n\n  describe('discard', function()\n    it('discard on empty list returns empty list', function()\n      assert.same({}, discard({}, always_true))\n    end)\n\n    it('discards everything', function()\n      assert.same({}, discard({ 1, 3, 5 }, always_true))\n    end)\n\n    it('discards nothing', function()\n      assert.same({ 1, 3, 5 }, discard({ 1, 3, 5 }, always_false))\n    end)\n\n    it('discards first and last', function()\n      assert.same({ 2 }, discard({ 1, 2, 3 }, is_odd))\n    end)\n\n    it('discards neither first nor last', function()\n      assert.same({ 1, 3 }, discard({ 1, 2, 3 }, is_even))\n    end)\n\n    it('discards strings', function()\n      assert.same({ 'apple', 'banana', 'cherimoya' }, discard({ 'apple', 'zebra', 'banana', 'zombies', 'cherimoya', 'zealot' }, starts_with_z))\n    end)\n\n    it('discards lists', function()\n      assert.same({ { 1, 2, 3 }, { 2, 1, 2 }, { 2, 2, 1 } }, discard({ { 1, 2, 3 }, { 5, 5, 5 }, { 5, 1, 2 }, { 2, 1, 2 }, { 1, 5, 2 }, { 2, 2, 1 }, { 1, 2, 5 } }, contains_5))\n    end)\n  end)\nend)\n-- LuaFormatter on\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

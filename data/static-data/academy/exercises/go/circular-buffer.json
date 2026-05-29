@@ -1,0 +1,40 @@
+{
+  "id": "go:circular-buffer",
+  "trackSlug": "go",
+  "slug": "circular-buffer",
+  "name": "Circular Buffer",
+  "uuid": "c13edd0a-cd39-4f25-970c-c1f9e32bac2c",
+  "type": "practice",
+  "status": null,
+  "blurb": "A data structure that uses a single, fixed-size buffer as if it were connected end-to-end.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nA circular buffer, cyclic buffer or ring buffer is a data structure that uses a single, fixed-size buffer as if it were connected end-to-end.\n\nA circular buffer first starts empty and of some predefined length.\nFor example, this is a 7-element buffer:\n\n```text\n[ ][ ][ ][ ][ ][ ][ ]\n```\n\nAssume that a 1 is written into the middle of the buffer (exact starting location does not matter in a circular buffer):\n\n```text\n[ ][ ][ ][1][ ][ ][ ]\n```\n\nThen assume that two more elements are added — 2 & 3 — which get appended after the 1:\n\n```text\n[ ][ ][ ][1][2][3][ ]\n```\n\nIf two elements are then removed from the buffer, the oldest values inside the buffer are removed.\nThe two elements removed, in this case, are 1 & 2, leaving the buffer with just a 3:\n\n```text\n[ ][ ][ ][ ][ ][3][ ]\n```\n\nIf the buffer has 7 elements then it is completely full:\n\n```text\n[5][6][7][8][9][3][4]\n```\n\nWhen the buffer is full an error will be raised, alerting the client that further writes are blocked until a slot becomes free.\n\nWhen the buffer is full, the client can opt to overwrite the oldest data with a forced write.\nIn this case, two more elements — A & B — are added and they overwrite the 3 & 4:\n\n```text\n[5][6][7][8][9][A][B]\n```\n\n3 & 4 have been replaced by A & B making 5 now the oldest data in the buffer.\nFinally, if two elements are removed then what would be returned is 5 & 6 yielding the buffer:\n\n```text\n[ ][ ][7][8][9][A][B]\n```\n\nBecause there is space available, if the client again uses overwrite to store C & D then the space where 5 & 6 were stored previously will be used not the location of 7 & 8.\n7 is still the oldest element and the buffer is once again full.\n\n```text\n[C][D][7][8][9][A][B]\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package circularbuffer\n\n// Implement a circular buffer of bytes supporting both overflow-checked writes\n// and unconditional, possibly overwriting, writes.\n//\n// We chose the provided API so that Buffer implements io.ByteReader\n// and io.ByteWriter and can be used (size permitting) as a drop in\n// replacement for anything using that interface.\n\n// Define the Buffer type here.\n\nfunc NewBuffer(size int) *Buffer {\n\tpanic(\"Please implement the NewBuffer function\")\n}\n\nfunc (b *Buffer) ReadByte() (byte, error) {\n\tpanic(\"Please implement the ReadByte function\")\n}\n\nfunc (b *Buffer) WriteByte(c byte) error {\n\tpanic(\"Please implement the WriteByte function\")\n}\n\nfunc (b *Buffer) Overwrite(c byte) {\n\tpanic(\"Please implement the Overwrite function\")\n}\n\nfunc (b *Buffer) Reset() {\n\tpanic(\"Please implement the Reset function\")\n}\n",
+  "example_solution": "package circularbuffer\n\n// standard library container/ring package and \"one slot open\" technique\n// as described at WP.\n\nimport (\n\t\"container/ring\"\n\t\"errors\"\n)\n\n// Buffer implements a circular buffer supporting both overflow-checked writes\n// and unconditional, possibly overwriting, writes.\ntype Buffer struct {\n\tstart, end *ring.Ring\n}\n\n// NewBuffer constructs a new empty circular buffer.\nfunc NewBuffer(size int) *Buffer {\n\tr := ring.New(size + 1)\n\treturn &Buffer{r, r}\n}\n\n// ReadByte removes one byte from the buffer and returns it.\n// ReadByte returns an error if the buffer is empty.\nfunc (b *Buffer) ReadByte() (byte, error) {\n\tif b.start == b.end {\n\t\treturn 0, errors.New(\"buffer empty\")\n\t}\n\tc := b.start.Value.(byte)\n\tb.start = b.start.Next()\n\treturn c, nil\n}\n\n// WriteByte puts byte c in the buffer there is room.\n// WriteByte returns an error if the buffer is full.\nfunc (b *Buffer) WriteByte(c byte) error {\n\tif b.end.Next() == b.start {\n\t\treturn errors.New(\"buffer full\")\n\t}\n\tb.end.Value = c\n\tb.end = b.end.Next()\n\treturn nil\n}\n\n// Overwrite unconditionally puts byte c in the buffer.  If the buffer was\n// already full, c overwrites the oldest byte in the buffer.\nfunc (b *Buffer) Overwrite(c byte) {\n\tb.end.Value = c\n\tb.end = b.end.Next()\n\tif b.end == b.start {\n\t\tb.start = b.start.Next()\n\t}\n}\n\n// Reset puts the buffer in an empty state.\nfunc (b *Buffer) Reset() {\n\tb.start = b.end\n}\n",
+  "test_code": "package circularbuffer\n\nimport (\n\t\"fmt\"\n\t\"io\"\n\t\"strings\"\n\t\"testing\"\n)\n\n// Here is one way you can have a test case verify that the expected\n// interfaces are implemented.\n\nvar (\n\t_ io.ByteReader = new(Buffer)\n\t_ io.ByteWriter = new(Buffer)\n)\n\nfunc (tc testCase) Run(t *testing.T) {\n\tvar calls []string\n\n\tb := NewBuffer(tc.capacity)\n\tcalls = append(calls, fmt.Sprintf(\"b := NewBuffer(%d)\", tc.capacity))\n\tfor _, op := range tc.operations {\n\t\tvar got byte\n\t\tvar err error\n\t\tswitch op.name {\n\t\tcase \"ReadByte\":\n\t\t\tgot, err = b.ReadByte()\n\t\t\tcalls = append(calls, \"b.ReadByte()\")\n\t\tcase \"WriteByte\":\n\t\t\terr = b.WriteByte(op.value)\n\t\t\tcalls = append(calls, fmt.Sprintf(\"b.WriteByte(%q)\", op.value))\n\t\tcase \"Overwrite\":\n\t\t\tb.Overwrite(op.value)\n\t\t\tcalls = append(calls, fmt.Sprintf(\"b.Overwrite(%q)\", op.value))\n\t\tcase \"Reset\":\n\t\t\tb.Reset()\n\t\t\tcalls = append(calls, \"b.Reset()\")\n\t\t}\n\t\tif op.name == \"ReadByte\" || op.name == \"WriteByte\" {\n\t\t\tif op.wantErr && err != nil {\n\t\t\t\tcontinue\n\t\t\t} else if op.wantErr {\n\t\t\t\tt.Fatalf(\"calls: %s\\nexpected error for the last call but got nil\", strings.Join(calls, \"; \"))\n\t\t\t} else if err != nil {\n\t\t\t\tt.Fatalf(\"calls: %s\\ngot unexpected error, %v\", strings.Join(calls, \"; \"), err)\n\t\t\t}\n\t\t}\n\t\tif op.name == \"ReadByte\" && got != op.value {\n\t\t\tt.Fatalf(\"calls: %s\\ngot %q, want %q\", strings.Join(calls, \"; \"), got, op.value)\n\t\t}\n\t}\n}\n\nfunc TestRun(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) { tc.Run(t) })\n\t}\n}\n\nfunc BenchmarkRun(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, tc := range testCases {\n\t\t\tb := NewBuffer(tc.capacity)\n\t\t\tfor _, op := range tc.operations {\n\t\t\t\tswitch op.name {\n\t\t\t\tcase \"ReadByte\":\n\t\t\t\t\tb.ReadByte()\n\t\t\t\tcase \"WriteByte\":\n\t\t\t\t\tb.WriteByte(op.value)\n\t\t\t\tcase \"Overwrite\":\n\t\t\t\t\tb.Overwrite(op.value)\n\t\t\t\tcase \"Reset\":\n\t\t\t\t\tb.Reset()\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n\nfunc BenchmarkOverwrite(b *testing.B) {\n\tc := NewBuffer(100)\n\tb.ResetTimer()\n\tfor range b.N {\n\t\tc.Overwrite(0)\n\t}\n\tb.SetBytes(int64(b.N))\n}\n\nfunc BenchmarkWriteRead(b *testing.B) {\n\tc := NewBuffer(100)\n\tb.ResetTimer()\n\tfor range b.N {\n\t\tc.WriteByte(0)\n\t\tc.ReadByte()\n\t}\n\tb.SetBytes(int64(b.N))\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Circular_buffer",
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "dchapes",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "manavo",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "tleen"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "lfe:grade-school",
+  "trackSlug": "lfe",
+  "slug": "grade-school",
+  "name": "Grade School",
+  "uuid": "d9013304-cc50-4a56-a645-51c4a80f1c82",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given students' names along with the grade that they are in, create a roster for the school.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven students' names along with the grade they are in, create a roster for the school.\n\nIn the end, you should be able to:\n\n- Add a student's name to the roster for a grade:\n  - \"Add Jim to grade 2.\"\n  - \"OK.\"\n- Get a list of all students enrolled in a grade:\n  - \"Which students are in grade 2?\"\n  - \"We've only got Jim right now.\"\n- Get a sorted list of all students in all grades.\n  Grades should be sorted as 1, 2, 3, etc., and students within a grade should be sorted alphabetically by name.\n  - \"Who is enrolled in school right now?\"\n  - \"Let me think.\n    We have Anna, Barb, and Charlie in grade 1, Alex, Peter, and Zoe in grade 2, and Jim in grade 5.\n    So the answer is: Anna, Barb, Charlie, Alex, Peter, Zoe, and Jim.\"\n\nNote that all our students only have one name (it's a small town, what do you want?), and each student cannot be added more than once to a grade or the roster.\nIf a test attempts to add the same student more than once, your implementation should indicate that this is incorrect.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defmodule grade-school\n  (export (add 3)\n          (get 2)\n          (new 0)\n          (sort 1)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule grade-school\n  (export (add 3)\n          (get 2)\n          (new 0)\n          (sort 1)))\n\n(defun add (name grade school)\n  (case (get grade school)\n    (() (orddict:store grade `(,name) school))\n    (class (orddict:store grade (ordsets:add_element name class) school))))\n\n(defun get (grade students)\n  (case (orddict:find grade students)\n    (`#(ok ,class) class)\n    (_ ())))\n\n(defun new () ())\n\n(defun sort (school) school)\n",
+  "test_code": "(defmodule grade-school-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(deftest add-student\n  (let* ((school   (grade-school:add \"Aimee\" 2 (grade-school:new)))\n         (students (grade-school:get 2 school)))\n    (is-equal '(\"Aimee\") (lists:sort students))))\n\n(deftest add-more-students-in-same-class\n  (let* ((school   (grade-school:add \"James\" 2 (grade-school:new)))\n         (school   (grade-school:add \"Blair\" 2 school))\n         (school   (grade-school:add \"Paul\"  2 school))\n         (students (grade-school:get 2 school)))\n    (is-equal '(\"Blair\" \"James\" \"Paul\") (lists:sort students))))\n\n(deftest add-students-to-different-grades\n  (let* ((school (grade-school:add \"Chelsea\" 3 (grade-school:new)))\n         (school (grade-school:add \"Logan\"   7 school)))\n    (is-equal '(\"Chelsea\") (grade-school:get 3 school))\n    (is-equal '(\"Logan\")   (grade-school:get 7 school))))\n\n(deftest get-students-in-a-grade\n  (let* ((school   (grade-school:add \"Franklin\" 5 (grade-school:new)))\n         (school   (grade-school:add \"Bradley\"  5 school))\n         (school   (grade-school:add \"Jeff\"     1 school))\n         (students (grade-school:get 5 school)))\n    (is-equal '(\"Bradley\" \"Franklin\") (lists:sort students))))\n\n(deftest get-students-in-a-non-existent-grade\n  (is-equal () (grade-school:get 1 (grade-school:new))))\n\n(deftest sort-school\n  (let* ((school (grade-school:add \"Jennifer\"    4 (grade-school:new)))\n         (school (grade-school:add \"Kareem\"      6 school))\n         (school (grade-school:add \"Christopher\" 4 school))\n         (school (grade-school:add \"Kyle\"        3 school))\n         (sorted '(#(3 (\"Kyle\"))\n                   #(4 (\"Christopher\" \"Jennifer\"))\n                   #(6 (\"Kareem\")))))\n    (is-equal sorted (grade-school:sort school))))\n",
+  "source": "A pairing session with Phil Battos at gSchool",
+  "source_url": null,
+  "authors": [
+    "tmcgilchrist"
+  ],
+  "contributors": [
+    "adolfopa",
+    "etrepum",
+    "kytrinyx",
+    "NobbZ",
+    "yurrriq"
+  ]
+}

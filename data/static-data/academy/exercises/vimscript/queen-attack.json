@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:queen-attack",
+  "trackSlug": "vimscript",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "c728a685-1b4e-4d77-9273-6ee42ca4fb0e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "function! Queen(row, column) abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "function! Queen(row, column) abort\n    if a:row < 0\n        throw 'row not positive'\n    elseif a:column < 0\n        throw 'column not positive'\n    elseif a:row > 7\n        throw 'row not on board'\n    elseif a:column > 7\n        throw 'column not on board'\n    endif\n\n    return {'row': a:row, 'column': a:column, 'CanAttack': function('DoCanAttack')}\nendfunction\n\nfunction! DoCanAttack(other) dict\n    return self.row == a:other.row ||\n    \\ self.column == a:other.column ||\n    \\ (abs(a:other.column - self.column) == abs(a:other.row - self.row))\nendfunction\n",
+  "test_code": "\nExecute (queen with a valid position):\n  let g:row = 2\n  let g:column = 2\n  let g:queen = Queen(g:row, g:column)\n  AssertEqual v:t_dict, type(queen)\n\nExecute (queen must have positive row):\n  let g:row = -2\n  let g:column = 2\n  let g:expected = \"row not positive\"\n  AssertThrows call Queen(g:row, g:column)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (queen must have row on board):\n  let g:row = 8\n  let g:column = 4\n  let g:expected = \"row not on board\"\n  AssertThrows call Queen(g:row, g:column)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (queen must have positive column):\n  let g:row = 2\n  let g:column = -2\n  let g:expected = \"column not positive\"\n  AssertThrows call Queen(g:row, g:column)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (queen must have column on board):\n  let g:row = 4\n  let g:column = 8\n  let g:expected = \"column not on board\"\n  AssertThrows call Queen(g:row, g:column)\n  AssertEqual g:expected, g:vader_exception\n\nExecute (cannot attack):\n  let g:black_queen = Queen(6, 6)\n  let g:white_queen = Queen(2, 4)\n  let g:expected = 0\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (can attack on same row):\n  let g:black_queen = Queen(2, 6)\n  let g:white_queen = Queen(2, 4)\n  let g:expected = 1\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (can attack on same column):\n  let g:black_queen = Queen(2, 5)\n  let g:white_queen = Queen(4, 5)\n  let g:expected = 1\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (can attack on first diagonal):\n  let g:black_queen = Queen(0, 4)\n  let g:white_queen = Queen(2, 2)\n  let g:expected = 1\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (can attack on second diagonal):\n  let g:black_queen = Queen(3, 1)\n  let g:white_queen = Queen(2, 2)\n  let g:expected = 1\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (can attack on third diagonal):\n  let g:black_queen = Queen(1, 1)\n  let g:white_queen = Queen(2, 2)\n  let g:expected = 1\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (can attack on fourth diagonal):\n  let g:black_queen = Queen(0, 6)\n  let g:white_queen = Queen(1, 7)\n  let g:expected = 1\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n\nExecute (cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal):\n  let g:black_queen = Queen(2, 5)\n  let g:white_queen = Queen(4, 1)\n  let g:expected = 0\n  AssertEqual g:expected, g:black_queen.CanAttack(g:white_queen)\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

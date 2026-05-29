@@ -1,0 +1,26 @@
+{
+  "id": "ocaml:nth-prime",
+  "trackSlug": "ocaml",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "21c2449c-390a-45d4-ab27-77a036aec631",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let nth_prime _ = failwith \"'nth_prime' not implemented\"",
+  "example_solution": "let nth_prime n =\n  if n <= 0 then\n    Error \"there is no zeroth prime\"\n  else\n    let is_prime x =\n      let rec aux d =\n        d * d > x || (x mod d <> 0 && aux (d + 1))\n      in\n      aux 2\n    in\n    let rec find count candidate =\n      if count = n then Ok (candidate - 1)\n      else if is_prime candidate then\n        find (count + 1) (candidate + 1)\n      else\n        find count (candidate + 1)\n    in\n    find 0 2\n",
+  "test_code": "open OUnit2\nopen Nth_prime\n\nlet option_printer = function\n  | Error m  -> Printf.sprintf \"Error \\\"%s\\\"\" m\n  | Ok m -> Printf.sprintf \"Ok \\\"%d\\\"\" m\n\nlet ae exp got _test_ctxt = assert_equal ~printer:option_printer exp got\n\nlet tests = [\n  \"first prime\" >::\n  ae (Ok 2) (nth_prime (1));\n  \"second prime\" >::\n  ae (Ok 3) (nth_prime (2));\n  \"sixth prime\" >::\n  ae (Ok 13) (nth_prime (6));\n  \"big prime\" >::\n  ae (Ok 104743) (nth_prime (10001));\n  \"there is no zeroth prime\" >::\n  ae (Error \"there is no zeroth prime\") (nth_prime (0));\n]\n\nlet () =\n  run_test_tt_main (\"nth-prime tests\" >::: tests)\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "therealowenrees"
+  ],
+  "contributors": null
+}

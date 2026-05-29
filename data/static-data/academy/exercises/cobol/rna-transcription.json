@@ -1,0 +1,26 @@
+{
+  "id": "cobol:rna-transcription",
+  "trackSlug": "cobol",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "b6d0cbe6-baf5-4107-956e-1b854deb057a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. rna-transcription.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-COMPLEMENT PIC X(64).\n       01 WS-DNA PIC X(4) VALUE \"ACGT\".\n\n       PROCEDURE DIVISION.\n       RNA-TRANSCRIPTION.\n\n",
+  "example_solution": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. rna-transcription.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-COMPLEMENT PIC X(64).\n       01 WS-DNA PIC X(4) VALUE \"ACGT\".\n       01 WS-RNA PIC X(4) VALUE \"UGCA\".\n\n       PROCEDURE DIVISION.\n       RNA-TRANSCRIPTION.\n\n       INSPECT WS-COMPLEMENT CONVERTING WS-DNA\n       TO WS-RNA.\n       \n      *DISPLAY WS-COMPLEMENT.\n",
+  "test_code": "TestCase \"Empty\"\n\tMOVE \" \" TO WS-COMPLEMENT\n\tPERFORM RNA-TRANSCRIPTION\n\tEXPECT WS-COMPLEMENT = ' '\n\nTestCase \"RNA complement of cytosine is guanine\"\n\tMOVE \"C\" TO WS-COMPLEMENT\n\tPERFORM RNA-TRANSCRIPTION\n\tEXPECT WS-COMPLEMENT = 'G'\n\nTestCase \"RNA complement of guanine is cytosine\"\n\tMOVE \"G\" TO WS-COMPLEMENT\n\tPERFORM RNA-TRANSCRIPTION\n\tEXPECT WS-COMPLEMENT = 'C'\n\nTestCase \"RNA complement of thymine is adenine\"\n\tMOVE \"T\" TO WS-COMPLEMENT\n\tPERFORM RNA-TRANSCRIPTION\n\tEXPECT WS-COMPLEMENT = 'A'\n\nTestCase \"RNA complement of adenine is uracil\"\n\tMOVE \"A\" TO WS-COMPLEMENT\n\tPERFORM RNA-TRANSCRIPTION\n\tEXPECT WS-COMPLEMENT = 'U'\n\nTestCase \"RNA complement\"\n\tMOVE \"ACGTGGTCTTAA\" TO WS-COMPLEMENT\n\tPERFORM RNA-TRANSCRIPTION\n\tEXPECT WS-COMPLEMENT = 'UGCACCAGAAUU'\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "KTSnowy"
+  ],
+  "contributors": null
+}

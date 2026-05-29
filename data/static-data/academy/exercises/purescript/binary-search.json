@@ -1,0 +1,31 @@
+{
+  "id": "purescript:binary-search",
+  "trackSlug": "purescript",
+  "slug": "binary-search",
+  "name": "Binary Search",
+  "uuid": "0029ced5-503b-4491-a309-7f0176598dd0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a binary search algorithm.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to implement a binary search algorithm.\n\nA binary search algorithm finds an item in a list by repeatedly splitting it in half, only keeping the half which contains the item we're looking for.\nIt allows us to quickly narrow down the possible locations of our item until we find it, or until we've eliminated all possible locations.\n\n~~~~exercism/caution\nBinary search only works when a list has been sorted.\n~~~~\n\nThe algorithm looks like this:\n\n- Find the middle element of a _sorted_ list and compare it with the item we're looking for.\n- If the middle element is our item, then we're done!\n- If the middle element is greater than our item, we can eliminate that element and all the elements **after** it.\n- If the middle element is less than our item, we can eliminate that element and all the elements **before** it.\n- If every element of the list has been eliminated then the item is not in the list.\n- Otherwise, repeat the process on the part of the list that has not been eliminated.\n\nHere's an example:\n\nLet's say we're looking for the number 23 in the following sorted list: `[4, 8, 12, 16, 23, 28, 32]`.\n\n- We start by comparing 23 with the middle element, 16.\n- Since 23 is greater than 16, we can eliminate the left half of the list, leaving us with `[23, 28, 32]`.\n- We then compare 23 with the new middle element, 28.\n- Since 23 is less than 28, we can eliminate the right half of the list: `[23]`.\n- We've found our item.\n",
+  "introduction": "# Introduction\n\nYou have stumbled upon a group of mathematicians who are also singer-songwriters.\nThey have written a song for each of their favorite numbers, and, as you can imagine, they have a lot of favorite numbers (like [0][zero] or [73][seventy-three] or [6174][kaprekars-constant]).\n\nYou are curious to hear the song for your favorite number, but with so many songs to wade through, finding the right song could take a while.\nFortunately, they have organized their songs in a playlist sorted by the title — which is simply the number that the song is about.\n\nYou realize that you can use a binary search algorithm to quickly find a song given the title.\n\n[zero]: https://en.wikipedia.org/wiki/0\n[seventy-three]: https://en.wikipedia.org/wiki/73_(number)\n[kaprekars-constant]: https://en.wikipedia.org/wiki/6174_(number)\n",
+  "hints": null,
+  "starter_code": "module BinarySearch\n  ( find\n  ) where\n\nimport Prelude\nimport Data.Maybe (Maybe)\nimport Effect.Exception.Unsafe (unsafeThrow)\n\nfind :: forall a. Ord a => a -> Array a -> Maybe Int\nfind = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module BinarySearch\n  ( find\n  ) where\n\nimport Prelude\nimport Data.Array (length, (!!))\nimport Data.Maybe (Maybe(Just, Nothing))\n\nfind :: Int -> Array Int -> Maybe Int\nfind i a = go 0 (length a - 1)\n  where go l h | l > h = Nothing\n        go l h =\n          let m = l + (h - l) / 2\n          in case a !! m of\n               Nothing -> Nothing\n               Just j | j == i    -> Just m\n                      | j < i     -> go (m + 1) h\n                      | otherwise -> go l (m - 1)\n\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport Effect (Effect)\nimport Data.Maybe (Maybe(..))\nimport Test.Unit.Assert as Assert\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Main (runTest)\nimport BinarySearch (find)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"BinarySearch.find\" do\n\n    test \"finds a value in an array with one element\" $\n      Assert.equal (Just 0)\n                   (find 6 [6])\n\n    test \"finds a value in the middle of an array\" $\n      Assert.equal (Just 3)\n                   (find 6 [1,3,4,6,8,9,11])\n\n    test \"finds a value at the beginning of an array\" $\n      Assert.equal (Just 0)\n                   (find 1 [1,3,4,6,8,9,11])\n\n    test \"finds a value at the end of an array\" $\n      Assert.equal (Just 6)\n                   (find 11 [1,3,4,6,8,9,11])\n\n    test \"finds a value in an array of odd length\" $\n      Assert.equal (Just 9)\n                   (find 144 [1,3,5,8,13,21,34,55,89,144,233,377,634])\n\n    test \"finds a value in an array of even length\" $\n      Assert.equal (Just 5)\n                   (find 21 [1,3,5,8,13,21,34,55,89,144,233,377])\n\n    test \"identifies that a value is not included in the array\" $\n      Assert.equal Nothing\n                   (find 7 [1,3,4,6,8,9,11])\n\n    test \"a value smaller than the array's smallest value is not included\" $\n      Assert.equal Nothing\n                   (find 0 [1,3,4,6,8,9,11])\n\n    test \"a value larger than the array's largest value is not included\" $\n      Assert.equal Nothing\n                   (find 13 [1,3,4,6,8,9,11])\n\n    test \"nothing is included in an empty array\" $\n      Assert.equal Nothing\n                   (find 1 [])\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+  "authors": [
+    "icyrockcom"
+  ],
+  "contributors": [
+    "colinwahl",
+    "lpil",
+    "paf31",
+    "spicydonuts"
+  ]
+}

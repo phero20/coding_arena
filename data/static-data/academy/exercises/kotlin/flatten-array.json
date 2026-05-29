@@ -1,0 +1,37 @@
+{
+  "id": "kotlin:flatten-array",
+  "trackSlug": "kotlin",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "c67907b6-0d8b-4b12-9c41-6069845952a3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "object Flattener {\n    fun flatten(source: Collection<Any?>): List<Any> {\n        TODO(\"Implement the function to complete the task\")\n    }\n}\n",
+  "example_solution": "object Flattener {\n\n    fun flatten(unflattened: Collection<Any?>): List<Any> {\n        return unflattened.filterNotNull().fold(mutableListOf()) { accum, element -> accum.addFlattened(element); accum }\n    }\n\n    fun MutableCollection<Any>.addFlattened(item: Any) = if (item is Collection<*>) this.addAll(flatten(item)) else this.add(item)\n\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport kotlin.test.assertEquals\n\nclass FlattenerTest {\n\n    @Test\n    fun flatListIsUnchanged() {\n        val flatList = listOf(0, 1, 2)\n        assertEquals(listOf(0, 1, 2), Flattener.flatten(flatList))\n    }\n\n    @Ignore\n    @Test\n    fun flattens2LevelNestedList() {\n        val nestedList = listOf(1, listOf(2, 3, 4, 5, 6, 7), 8)\n        assertEquals(listOf(1, 2, 3, 4, 5, 6, 7, 8), Flattener.flatten(nestedList))\n    }\n\n    @Ignore\n    @Test\n    fun flattens5LevelNestedList() {\n        val nestedList = listOf(0, 2, listOf(listOf(2, 3), 8, 100, 4, listOf(listOf(listOf(50))), -2))\n        assertEquals(listOf(0, 2, 2, 3, 8, 100, 4, 50, -2), Flattener.flatten(nestedList))\n    }\n\n    @Ignore\n    @Test\n    fun flattens6LevelNestedList() {\n        val nestedList = listOf(1, listOf(2, listOf(listOf(3)), listOf(4, listOf(listOf(5))), 6, 7), 8)\n        assertEquals(listOf(1, 2, 3, 4, 5, 6, 7, 8), Flattener.flatten(nestedList))\n    }\n\n    @Ignore\n    @Test\n    fun flattens6LevelNestedListWithNulls() {\n        val nestedList = listOf(0, 2, listOf(listOf(2, 3), 8, listOf(listOf(100)), null, listOf(listOf(null))), -2)\n        assertEquals(listOf(0, 2, 2, 3, 8, 100, -2), Flattener.flatten(nestedList))\n    }\n\n    @Ignore\n    @Test\n    fun allNullNestedListReturnsEmptyList() {\n        val nestedList = listOf(null, listOf(listOf(listOf(null))), null, null, listOf(listOf(null, null), null), null)\n        assertEquals(emptyList<Any>(), Flattener.flatten(nestedList))\n    }\n\n    @Ignore\n    @Test\n    fun flattensHeterogenousList() {\n        val nestedList = listOf(0, 2.1, listOf(listOf(true, \"flatten\"), 'a', listOf(listOf(100)), null, listOf(listOf(null))), -2)\n        assertEquals(listOf(0, 2.1, true, \"flatten\", 'a', 100, -2), Flattener.flatten(nestedList))\n    }\n}\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

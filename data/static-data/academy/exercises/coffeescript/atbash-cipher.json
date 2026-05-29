@@ -1,0 +1,31 @@
+{
+  "id": "coffeescript:atbash-cipher",
+  "trackSlug": "coffeescript",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "a38d0644-42b5-4f01-b110-b723be1fa8a1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class AtbashCipher\n  @encode: (phrase) ->\n\n  @decode: (phrase) ->\n\nmodule.exports = AtbashCipher\n",
+  "example_solution": "class Atbash\n  @encode: (phrase) ->\n    phrase = phrase.toLowerCase().replace /[^a-z0-9]/g, ''\n    phrase = phrase.replace /[a-z]/g, (letter) ->\n      String.fromCharCode 219 - letter.charCodeAt()\n    phrase.replace(/(.{5})/g, \"$1 \").trim()\n\n\n  @decode: (phrase) ->\n    phrase = phrase.replaceAll(\" \", \"\")\n    phrase.replace /[a-z]/g, (letter) ->\n      String.fromCharCode 219 - letter.charCodeAt()\n\nmodule.exports = Atbash\n",
+  "test_code": "Atbash = require './atbash-cipher'\n\ndescribe 'Atbash', ->\n  it 'encodes yes', ->\n    expect(Atbash.encode('yes')).toBe 'bvh'\n\n  xit 'encodes no', ->\n    expect(Atbash.encode('no')).toBe 'ml'\n\n  xit 'encodes OMG', ->\n    expect(Atbash.encode('OMG')).toBe 'lnt'\n\n  xit 'encodes O M G', ->\n    expect(Atbash.encode('O M G')).toBe 'lnt'\n\n  xit 'encodes a long word', ->\n    expect(Atbash.encode('mindblowingly')).toBe 'nrmwy oldrm tob'\n\n  xit 'encodes numbers', ->\n    expect(Atbash.encode('Testing, 1 2 3, testing.')).toBe 'gvhgr mt123 gvhgr mt'\n\n  xit 'encodes sentence', ->\n    expect(Atbash.encode('Truth is fiction.')).toBe 'gifgs rhurx grlm'\n\n  xit 'encodes all the things', ->\n    expect(Atbash.encode('The quick brown fox jumps over the lazy dog.')).toBe 'gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt'\n\n  xit 'decodes exercism', ->\n    expect(Atbash.decode('vcvix rhn')).toBe 'exercism'\n\n  xit 'decodes a sentence', ->\n    expect(Atbash.decode('zmlyh gzxov rhlug vmzhg vkkrm thglm v')).toBe 'anobstacleisoftenasteppingstone'\n\n  xit 'decodes numbers', ->\n    expect(Atbash.decode('gvhgr mt123 gvhgr mt')).toBe 'testing123testing'\n\n  xit 'decodes all the letter', ->\n    expect(Atbash.decode('gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt')).toBe 'thequickbrownfoxjumpsoverthelazydog'\n\n  xit 'decodes with too many spaces', ->\n    expect(Atbash.decode('vc vix    r hn')).toBe 'exercism'\n\n  xit 'decodes with no spaces', ->\n    expect(Atbash.decode('zmlyhgzxovrhlugvmzhgvkkrmthglmv')).toBe 'anobstacleisoftenasteppingstone'\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "wvmitchell",
+    "meatball133"
+  ],
+  "contributors": [
+    "aimorris",
+    "kytrinyx",
+    "rootulp"
+  ]
+}

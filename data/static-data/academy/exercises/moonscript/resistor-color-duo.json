@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:resistor-color-duo",
+  "trackSlug": "moonscript",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "2b5c2851-8bf7-4769-919e-c91d1e9b32c8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "{\n  value: (...) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "resistor_colors = {'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'grey', 'white'}\n\ncolor_code = (color) ->\n  for i, c in ipairs resistor_colors\n    if c == color\n      return i - 1\n  return -1\n\n{\n  value: (first, second) -> 10 * color_code(first) + color_code(second)\n}\n",
+  "test_code": "ResistorColorDuo = require 'resistor_color_duo'\n\ndescribe 'resistor-color-duo:', ->\n  it 'Brown and black', ->\n    result = ResistorColorDuo.value 'brown', 'black'\n    assert.are.equal 10, result\n\n  pending 'Blue and grey', ->\n    result = ResistorColorDuo.value 'blue', 'grey'\n    assert.are.equal 68, result\n\n  pending 'Yellow and violet', ->\n    result = ResistorColorDuo.value 'yellow', 'violet'\n    assert.are.equal 47, result\n\n  pending 'White and red', ->\n    result = ResistorColorDuo.value 'white', 'red'\n    assert.are.equal 92, result\n\n  pending 'Orange and orange', ->\n    result = ResistorColorDuo.value 'orange', 'orange'\n    assert.are.equal 33, result\n\n  pending 'Ignore additional colors', ->\n    result = ResistorColorDuo.value 'green', 'brown', 'orange'\n    assert.are.equal 51, result\n\n  pending 'Black and brown, one-digit', ->\n    result = ResistorColorDuo.value 'black', 'brown'\n    assert.are.equal 1, result\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

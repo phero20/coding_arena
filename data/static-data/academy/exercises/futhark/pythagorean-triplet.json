@@ -1,0 +1,26 @@
+{
+  "id": "futhark:pythagorean-triplet",
+  "trackSlug": "futhark",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "5fbba379-44b1-445d-b2c2-7191e4706fae",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "let triplets_with_sum (n: i32): [][3]i32 = ???\n",
+  "example_solution": "let triplets_with_sum (n: i32): [][3]i32 =\n  let (_, _, result) = loop (a, b, result) = (0, n / 2, []) while a < b do\n    let a2 = a + 1\n    let numerator = n * (n - 2 * a2)\n    let denominator = 2 * (n - a2)\n    let b2 = numerator / denominator\n    in\n      if a2 >= b2 || numerator % denominator != 0 then (a2, b2, result) else\n      (a2, b2, result ++ [[a2, b2, n - a2 - b2]])\n  in\n    result\n",
+  "test_code": "import \"pythagorean_triplet\"\n\n-- triplets whose sum is 12\n-- ==\n-- input { 12 }\n-- output { [[3, 4, 5]] }\n\n-- triplets whose sum is 108\n-- ==\n-- input { 108 }\n-- output { [[27, 36, 45]] }\n\n-- triplets whose sum is 1000\n-- ==\n-- input { 1000 }\n-- output { [[200, 375, 425]] }\n\n-- no matching triplets for 1001\n-- ==\n-- input { 1001 }\n-- output { empty([0][3]i32) }\n\n-- returns all matching triplets\n-- ==\n-- input { 90 }\n-- output { [[9, 40, 41], [15, 36, 39]] }\n\n-- several matching triplets\n-- ==\n-- input { 840 }\n-- output { [[40, 399, 401], [56, 390, 394], [105, 360, 375], [120, 350, 370], [140, 336, 364], [168, 315, 357], [210, 280, 350], [240, 252, 348]] }\n\n-- triplets for large number\n-- ==\n-- input { 30000 }\n-- output { [[1200, 14375, 14425], [1875, 14000, 14125], [5000, 12000, 13000], [6000, 11250, 12750], [7500, 10000, 12500]] }\n\nlet main (n: i32): [][3]i32 =\n  triplets_with_sum n\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,48 @@
+{
+  "id": "elixir:crypto-square",
+  "trackSlug": "elixir",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "132981c5-d3cd-426a-8a93-8a72b1cd8564",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "integers",
+    "floating-point-numbers",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "strings",
+    "regular-expressions",
+    "enum",
+    "erlang-libraries"
+  ],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule CryptoSquare do\n  @doc \"\"\"\n  Encode string square methods\n  ## Examples\n\n    iex> CryptoSquare.encode(\"abcd\")\n    \"ac bd\"\n  \"\"\"\n  @spec encode(String.t()) :: String.t()\n  def encode(str) do\n  end\nend\n",
+  "example_solution": "defmodule CryptoSquare do\n  @doc \"\"\"\n  Encode string square methods\n\n  ## Examples\n\n    iex> CryptoSquare.encode(\"abcd\")\n    \"ac bd\"\n  \"\"\"\n  @spec encode(String.t()) :: String.t()\n  def encode(str), do: do_encode(normalize_string(str))\n\n  defp do_encode(\"\"), do: \"\"\n\n  defp do_encode(str) do\n    normalized = normalize_string(str)\n    section_length = normalized |> byte_size |> :math.sqrt() |> Float.ceil() |> trunc\n\n    normalized\n    |> String.graphemes()\n    |> Enum.chunk_every(section_length, section_length, List.duplicate(\" \", section_length))\n    |> Enum.zip()\n    |> Enum.map(&Tuple.to_list/1)\n    |> Enum.join(\" \")\n  end\n\n  defp normalize_string(str) do\n    str\n    |> String.downcase()\n    |> String.replace(~r/[^a-z0-9]/, \"\")\n  end\nend\n",
+  "test_code": "defmodule CryptoSquareTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"empty plaintext results in an empty ciphertext\" do\n    assert CryptoSquare.encode(\"\") == \"\"\n  end\n\n  @tag :pending\n  test \"normalization results in empty plaintext\" do\n    assert CryptoSquare.encode(\"... --- ...\") == \"\"\n  end\n\n  @tag :pending\n  test \"lowercase\" do\n    assert CryptoSquare.encode(\"A\") == \"a\"\n  end\n\n  @tag :pending\n  test \"remove spaces\" do\n    assert CryptoSquare.encode(\"  b \") == \"b\"\n  end\n\n  @tag :pending\n  test \"remove punctuation\" do\n    assert CryptoSquare.encode(\"@1,%!\") == \"1\"\n  end\n\n  @tag :pending\n  test \"9 character plaintext results in 3 chunks of 3 characters\" do\n    assert CryptoSquare.encode(\"This is fun!\") == \"tsf hiu isn\"\n  end\n\n  @tag :pending\n  test \"8 character plaintext results in 3 chunks, the last one with a trailing space\" do\n    assert CryptoSquare.encode(\"Chill out.\") == \"clu hlt io \"\n  end\n\n  @tag :pending\n  test \"54 character plaintext results in 8 chunks, the last two with trailing spaces\" do\n    msg = \"If man was meant to stay on the ground, god would have given us roots.\"\n    cipher = \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n    assert CryptoSquare.encode(msg) == cipher\n  end\nend\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "jimmbraddock"
+  ],
+  "contributors": [
+    "amencarini",
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "ggpasqualino",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "waiting-for-dev"
+  ]
+}

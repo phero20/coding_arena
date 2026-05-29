@@ -1,5 +1,6 @@
 :root {
   /* Difficulty Colors (Solid) */
+<<<<<<< HEAD
   --difficulty-easy: #10b981;    /* Emerald 500 */
   --difficulty-medium: #f59e0b;  /* Amber 500 */
   --difficulty-hard: #f43f5e;    /* Rose 500 */
@@ -9,6 +10,17 @@
   --metric-solutions: #10b981;   /* Emerald 500 */
   --metric-discuss: #f43f5e;     /* Rose 500 */
   --metric-reputation: #f59e0b;  /* Amber 500 */
+=======
+  --difficulty-easy: #01aa72; /* Emerald 500 */
+  --difficulty-medium: #f59e0b; /* Amber 500 */
+  --difficulty-hard: #f43f5e; /* Rose 500 */
+
+  /* Metric Colors (Solid) */
+  --metric-views: #3b82f6; /* Blue 500 */
+  --metric-solutions: #10b981; /* Emerald 500 */
+  --metric-discuss: #f43f5e; /* Rose 500 */
+  --metric-reputation: #f59e0b; /* Amber 500 */
+>>>>>>> prod-deploy
 
   /* Difficulty Backgrounds (10% Opacity) */
   --difficulty-easy-bg: rgba(16, 185, 129, 0.1);
@@ -20,6 +32,7 @@
   --metric-solutions-bg: rgba(16, 185, 129, 0.1);
 
   /* Submission Status Colors (Solid) */
+<<<<<<< HEAD
   --status-accepted: #10b981;      /* Emerald 500 */
   --status-wrong-answer: #f43f5e;  /* Rose 500 */
   --status-tle: #f59e0b;           /* Amber 500 */
@@ -27,6 +40,15 @@
   --status-compile-error: #f59e0b; /* Amber 500 */
   --status-system-error: #6b7280;  /* Gray 500 */
   --status-pending: #6b7280;       /* Gray 500 */
+=======
+  --status-accepted: #10b981; /* Emerald 500 */
+  --status-wrong-answer: #f43f5e; /* Rose 500 */
+  --status-tle: #f59e0b; /* Amber 500 */
+  --status-runtime-error: #f43f5e; /* Rose 500 */
+  --status-compile-error: #f59e0b; /* Amber 500 */
+  --status-system-error: #6b7280; /* Gray 500 */
+  --status-pending: #6b7280; /* Gray 500 */
+>>>>>>> prod-deploy
 
   /* Submission Status Backgrounds (10% Opacity) */
   --status-accepted-bg: rgba(16, 185, 129, 0.1);
@@ -38,6 +60,7 @@
   --status-pending-bg: rgba(107, 114, 128, 0.1);
 
   /* Rank Colors (Podium) */
+<<<<<<< HEAD
   --rank-1: #f59e0b;               /* Amber 500 - Gold */
   --rank-2: #94a3b8;               /* Slate 400 - Silver */
   --rank-3: #ea580c;               /* Orange 600 - Bronze */
@@ -91,3 +114,148 @@
 .bg-status-compile-error     { background-color: var(--status-compile-error-bg) !important; }
 .bg-status-system-error      { background-color: var(--status-system-error-bg) !important; }
 .bg-status-pending           { background-color: var(--status-pending-bg) !important; }
+=======
+  --rank-1: #eab308; /* Yellow 500 - Gold */
+  --rank-2: #94a3b8; /* Slate 400 - Silver */
+  --rank-3: #c2410c; /* Orange 700 - Bronze */
+
+  /* Rank Badge Backgrounds (10% Opacity) */
+  --rank-1-bg: rgba(234, 179, 8, 0.1);
+  --rank-2-bg: rgba(148, 163, 184, 0.1);
+  --rank-3-bg: rgba(194, 65, 12, 0.1);
+
+  /* Rank Row Backgrounds (8% Opacity) */
+  --rank-1-row-bg: rgba(234, 179, 8, 0.08);
+  --rank-2-row-bg: rgba(148, 163, 184, 0.08);
+  --rank-3-row-bg: rgba(194, 65, 12, 0.08);
+
+  /* Rank Row Hover (9% Opacity) */
+  --rank-1-row-hover: rgba(234, 179, 8, 0.10);
+  --rank-2-row-hover: rgba(148, 163, 184, 0.10);
+  --rank-3-row-hover: rgba(194, 65, 12, 0.10);
+
+  /* Rank Borders (20% Opacity) */
+  --rank-1-border: rgba(234, 179, 8, 0.2);
+  --rank-2-border: rgba(148, 163, 184, 0.2);
+  --rank-3-border: rgba(194, 65, 12, 0.2);
+}
+
+/* Utility Classes for Difficulties */
+.text-difficulty-easy {
+  color: var(--difficulty-easy) !important;
+}
+.text-difficulty-medium {
+  color: var(--difficulty-medium) !important;
+}
+.text-difficulty-hard {
+  color: var(--difficulty-hard) !important;
+}
+
+.bg-difficulty-easy {
+  background-color: var(--difficulty-easy-bg) !important;
+}
+.bg-difficulty-medium {
+  background-color: var(--difficulty-medium-bg) !important;
+}
+.bg-difficulty-hard {
+  background-color: var(--difficulty-hard-bg) !important;
+}
+
+.border-difficulty-easy {
+  border-color: rgba(16, 185, 129, 0.2) !important;
+}
+.border-difficulty-medium {
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+.border-difficulty-hard {
+  border-color: rgba(244, 63, 94, 0.2) !important;
+}
+
+/* Utility Classes for Metrics */
+.text-metric-views {
+  color: var(--metric-views) !important;
+}
+.text-metric-solutions {
+  color: var(--metric-solutions) !important;
+}
+.text-metric-discuss {
+  color: var(--metric-discuss) !important;
+}
+.text-metric-reputation {
+  color: var(--metric-reputation) !important;
+}
+
+.bg-metric-views {
+  background-color: var(--metric-views-bg) !important;
+}
+.bg-metric-solutions {
+  background-color: var(--metric-solutions-bg) !important;
+}
+
+/* Utility Classes for Submission Statuses */
+.text-status-accepted {
+  color: var(--status-accepted) !important;
+}
+.text-status-wrong-answer {
+  color: var(--status-wrong-answer) !important;
+}
+.text-status-tle {
+  color: var(--status-tle) !important;
+}
+.text-status-runtime-error {
+  color: var(--status-runtime-error) !important;
+}
+.text-status-compile-error {
+  color: var(--status-compile-error) !important;
+}
+.text-status-system-error {
+  color: var(--status-system-error) !important;
+}
+.text-status-pending {
+  color: var(--status-pending) !important;
+}
+
+.bg-status-accepted {
+  background-color: var(--status-accepted-bg) !important;
+}
+.bg-status-wrong-answer {
+  background-color: var(--status-wrong-answer-bg) !important;
+}
+.bg-status-tle {
+  background-color: var(--status-tle-bg) !important;
+}
+.bg-status-runtime-error {
+  background-color: var(--status-runtime-error-bg) !important;
+}
+.bg-status-compile-error {
+  background-color: var(--status-compile-error-bg) !important;
+}
+.bg-status-system-error {
+  background-color: var(--status-system-error-bg) !important;
+}
+.bg-status-pending {
+  background-color: var(--status-pending-bg) !important;
+}
+
+/* Rank Utility Classes */
+.text-rank-1 { color: var(--rank-1) !important; }
+.text-rank-2 { color: var(--rank-2) !important; }
+.text-rank-3 { color: var(--rank-3) !important; }
+
+.bg-rank-1-badge { background-color: var(--rank-1-bg) !important; }
+.bg-rank-2-badge { background-color: var(--rank-2-bg) !important; }
+.bg-rank-3-badge { background-color: var(--rank-3-bg) !important; }
+
+.border-rank-1 { border-color: var(--rank-1-border) !important; }
+.border-rank-2 { border-color: var(--rank-2-border) !important; }
+.border-rank-3 { border-color: var(--rank-3-border) !important; }
+
+.bg-rank-1-row { background-color: var(--rank-1-row-bg) !important; }
+.bg-rank-1-row:hover { background-color: var(--rank-1-row-hover) !important; }
+
+.bg-rank-2-row { background-color: var(--rank-2-row-bg) !important; }
+.bg-rank-2-row:hover { background-color: var(--rank-2-row-hover) !important; }
+
+.bg-rank-3-row { background-color: var(--rank-3-row-bg) !important; }
+.bg-rank-3-row:hover { background-color: var(--rank-3-row-hover) !important; }
+>>>>>>> prod-deploy

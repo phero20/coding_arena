@@ -1,0 +1,36 @@
+{
+  "id": "bash:pangram",
+  "trackSlug": "bash",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "a7e2018a-c454-4fe0-ad35-229304306648",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\ninput=$1\n#delete non-letters then lowercase, count number of unique letters\nletter_count=$(echo $input | tr -dc [:alpha:] | tr '[:upper:]' '[:lower:]' | fold -w1 | sort -u | wc -l)\n\n[[ $letter_count -eq 26 ]] && echo \"true\" && exit 0\n\necho \"false\" && exit 0\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 2.0.0.0\n\n# Check if the given string is a pangram\n\n@test \"empty sentence\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"\"\n  assert_success\n  assert_output \"false\"\n}\n\n@test \"perfect lower case\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"abcdefghijklmnopqrstuvwxyz\"\n  assert_success\n  assert_output \"true\"\n}\n\n@test \"only lower case\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"the quick brown fox jumps over the lazy dog\"\n  assert_success\n  assert_output \"true\"\n}\n\n@test \"missing the letter 'x'\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"a quick movement of the enemy will jeopardize five gunboats\"\n  assert_success\n  assert_output \"false\"\n}\n\n@test \"missing the letter 'h'\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"five boxing wizards jump quickly at it\"\n  assert_success\n  assert_output \"false\"\n}\n\n@test \"with underscores\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"the_quick_brown_fox_jumps_over_the_lazy_dog\"\n  assert_success\n  assert_output \"true\"\n}\n\n@test \"with numbers\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"the 1 quick brown fox jumps over the 2 lazy dogs\"\n  assert_success\n  assert_output \"true\"\n}\n\n@test \"missing letters replaced by numbers\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"\n  assert_success\n  assert_output \"false\"\n}\n\n@test \"mixed case and punctuation\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"\n  assert_success\n  assert_output \"true\"\n}\n\n@test \"a-m and A-M are 26 different characters but not a pangram\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash pangram.sh \"abcdefghijklm ABCDEFGHIJKLM\"\n  assert_success\n  assert_output \"false\"\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "jaggededgedjustice"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "sjwarner-bp",
+    "Smarticles101",
+    "ZapAnton"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "gleam:raindrops",
+  "trackSlug": "gleam",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "4522b139-6f0c-4172-a4fa-6a6adef33a9e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "ints",
+    "strings",
+    "case-expressions"
+  ],
+  "prerequisites": [
+    "ints",
+    "strings",
+    "case-expressions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "pub fn convert(number: Int) -> String {\n  todo\n}\n",
+  "example_solution": "import gleam/int\n\npub fn convert(number: Int) -> String {\n  let pling = case number % 3 {\n    0 -> \"Pling\"\n    _ -> \"\"\n  }\n  let plang = case number % 5 {\n    0 -> \"Plang\"\n    _ -> \"\"\n  }\n  let plong = case number % 7 {\n    0 -> \"Plong\"\n    _ -> \"\"\n  }\n  case pling <> plang <> plong {\n    \"\" -> int.to_string(number)\n    result -> result\n  }\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport raindrops\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn the_sound_for_1_is_1_test() {\n  raindrops.convert(1)\n  |> should.equal(\"1\")\n}\n\npub fn the_sound_for_3_is_pling_test() {\n  raindrops.convert(3)\n  |> should.equal(\"Pling\")\n}\n\npub fn the_sound_for_5_is_plang_test() {\n  raindrops.convert(5)\n  |> should.equal(\"Plang\")\n}\n\npub fn the_sound_for_7_is_plong_test() {\n  raindrops.convert(7)\n  |> should.equal(\"Plong\")\n}\n\npub fn the_sound_for_6_is_pling_as_it_has_a_factor_3_test() {\n  raindrops.convert(6)\n  |> should.equal(\"Pling\")\n}\n\npub fn two_to_the_power_3_does_not_make_a_raindrop_sound_as_3_is_the_exponent_not_the_base_test() {\n  raindrops.convert(8)\n  |> should.equal(\"8\")\n}\n\npub fn the_sound_for_9_is_pling_as_it_has_a_factor_3_test() {\n  raindrops.convert(9)\n  |> should.equal(\"Pling\")\n}\n\npub fn the_sound_for_10_is_plang_as_it_has_a_factor_5_test() {\n  raindrops.convert(10)\n  |> should.equal(\"Plang\")\n}\n\npub fn the_sound_for_14_is_plong_as_it_has_a_factor_of_7_test() {\n  raindrops.convert(14)\n  |> should.equal(\"Plong\")\n}\n\npub fn the_sound_for_15_is_plingplang_as_it_has_factors_3_and_5_test() {\n  raindrops.convert(15)\n  |> should.equal(\"PlingPlang\")\n}\n\npub fn the_sound_for_21_is_plingplong_as_it_has_factors_3_and_7_test() {\n  raindrops.convert(21)\n  |> should.equal(\"PlingPlong\")\n}\n\npub fn the_sound_for_25_is_plang_as_it_has_a_factor_5_test() {\n  raindrops.convert(25)\n  |> should.equal(\"Plang\")\n}\n\npub fn the_sound_for_27_is_pling_as_it_has_a_factor_3_test() {\n  raindrops.convert(27)\n  |> should.equal(\"Pling\")\n}\n\npub fn the_sound_for_35_is_plangplong_as_it_has_factors_5_and_7_test() {\n  raindrops.convert(35)\n  |> should.equal(\"PlangPlong\")\n}\n\npub fn the_sound_for_49_is_plong_as_it_has_a_factor_7_test() {\n  raindrops.convert(49)\n  |> should.equal(\"Plong\")\n}\n\npub fn the_sound_for_52_is_52_test() {\n  raindrops.convert(52)\n  |> should.equal(\"52\")\n}\n\npub fn the_sound_for_105_is_plingplangplong_as_it_has_factors_3_5_and_7_test() {\n  raindrops.convert(105)\n  |> should.equal(\"PlingPlangPlong\")\n}\n\npub fn the_sound_for_3125_is_plang_as_it_has_a_factor_5_test() {\n  raindrops.convert(3125)\n  |> should.equal(\"Plang\")\n}\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": null
+}

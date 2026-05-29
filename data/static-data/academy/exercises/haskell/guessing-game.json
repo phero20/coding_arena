@@ -1,0 +1,30 @@
+{
+  "id": "haskell:guessing-game",
+  "trackSlug": "haskell",
+  "slug": "guessing-game",
+  "name": "Guessing Game",
+  "uuid": "fb9868eb-ce4f-4e6b-aa0d-b47d3451070f",
+  "type": "concept",
+  "status": "beta",
+  "blurb": "Learn about pattern matching by implementing a simple secret number guessing game",
+  "difficulty": null,
+  "concepts": [
+    "pattern-matching-literals"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nIn this exercise, you are playing a number guessing game with a friend.\nThe rules are simple: you secretly choose a number between `1` and `100` and your friend tries to guess what number you've chosen.\nTo help your friend, you respond differently depending on how close the guess was to the number you've chosen (`42`).\nThese are the rules for the different possible inputs:\n\n- If the guess is `42`: \"Correct\"\n- If the guess is `41` or `43`: \"So close\"\n- If the guess is less than `41`: \"Too low\"\n- If the guess is greater than `43`: \"Too high\"\n\nYou have four tasks to encode the replies to the guesses.\n\n## 1. Reply to a correct guess\n\nImplement the `reply` function to reply to a correct guess:\n\n```haskell\nreply 42\n-- -> \"Correct\"\n```\n\n## 2. Reply to a close guess\n\nModify the `reply` function to reply to close guesses:\n\n```haskell\nreply 41\n-- -> \"So close\"\n```\n\n## 3. Reply to too low guesses\n\nModify the `reply` function to reply to too low guesses:\n\n```haskell\nreply 25\n-- -> \"Too low\"\n```\n\n## 4. Reply to too high guesses\n\nModify the `reply` function to reply to too high guesses:\n\n```haskell\nreply 88\n-- -> \"Too high\"\n```\n",
+  "introduction": "# Introduction\n\n## Pattern Matching Literals\n\nWhile `if/else` expressions can be used to execute conditional logic, Haskell also has a more powerful way to execute conditional logic: [pattern matching][pattern-matching].\nWith pattern matching, a value can be tested against one or more _patterns_.\nAn example of such a pattern is the _constant pattern_, which matches a value against a constant (e.g. `1` or `\"hello\"`).\n\nWhen defining functions, you can define separate function bodies for different patterns.\nThis leads to clean code that is simple and readable.\nYou can pattern match on any data type — numbers, characters, lists, tuples, etc.\n\nFor example, a trivial function that takes a whole number (`Int`) and makes it _1_ closer to _0_ could be expressed like this:\n\n```haskell\ncloserToZero :: Int -> Int\ncloserToZero 0 = 0\ncloserToZero 1 = 0\n```\n\nPattern matching starts to shine when used together with other patterns, for example the _variable pattern_:\n\n```haskell\ncloserToZero :: Int -> Int\ncloserToZero 0 = 0\ncloserToZero n = n - 1\n```\n\nThe above example treats all inputs other than _0_ the same, and would produce incorrect results for negative numbers.\nThis can be solved using conditional patterns, known as _guards_, which are expressed with the `|` symbol:\n\n```haskell\ncloserToZero :: Int -> Int\ncloserToZero n\n    | n < 0 = n + 1\n    | n > 0 = n - 1\n```\n\nIn the above examples not all possible inputs have a matching pattern.\nThe compiler will detect this and output a warning.\nThis is a very useful feature of Haskell that helps ensure all possible paths are covered to avoid run-time errors.\nIt is known as _exhaustive checking_.\nTo solve the warning, you have to handle all cases.\nWithin _guards_ you can use the expression `otherwise` as syntactic sugar for `True` to catch all remaining patterns.\n\n```haskell\ncloserToZero :: Int -> Int\ncloserToZero n\n    | n < 0 = n + 1\n    | n > 0 = n - 1\n    | otherwise = 0\n```\n\nPattern matching will test a value against each pattern from top to bottom, until it finds a matching pattern and executes the logic associated with that pattern.\n**The order of patterns matters!**\n\n[pattern-matching]: https://learnyouahaskell.github.io/syntax-in-functions#pattern-matching\n",
+  "hints": "# Hints\n\n## General\n\n- Learn You A Haskell has a nice [introduction to pattern matching in Haskell][pattern-matching].\n\n## 1. Reply to a correct guess\n\n- You can use a constant pattern to match on a specific number.\n\n## 2. Reply to a close guess\n\n- You can use a constant pattern to match on a specific number.\n\n## 3. Reply to too low guesses\n\n- You can use a combination of a variable pattern and [guards][guards].\n\n## 4. Reply to too high guesses\n\n- You can use a combination of a variable pattern and [guards][guards].\n\n\n[pattern-matching]: https://learnyouahaskell.github.io/syntax-in-functions#pattern-matching\n[guards]: https://learnyouahaskell.github.io/syntax-in-functions#guards-guards\n",
+  "starter_code": "module GuessingGame (reply) where\n\nreply :: Int -> String\nreply guess = error \"Implement this function.\"\n",
+  "example_solution": "module GuessingGame (reply) where\n\nreply :: Int -> String\nreply 41 = \"So close\"\nreply 42 = \"Correct\"\nreply 43 = \"So close\"\nreply guess\n  | guess < 41 = \"Too low\"\n  | otherwise = \"Too high\"\n",
+  "test_code": "import GuessingGame (reply)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = do\n  describe \"reply\" $ do\n    it \"1 should be 'Too low'\" $\n      reply 1 `shouldBe` \"Too low\"\n    it \"100 should be 'Too high'\" $\n      reply 100 `shouldBe` \"Too high\"\n    it \"41 should be 'So close'\" $\n      reply 41 `shouldBe` \"So close\"\n    it \"43 should be 'So close'\" $\n      reply 43 `shouldBe` \"So close\"\n    it \"42 should be 'Correct'\" $\n      reply 42 `shouldBe` \"Correct\"\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "pwadsworth"
+  ],
+  "contributors": null
+}

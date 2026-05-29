@@ -1,0 +1,26 @@
+{
+  "id": "uiua:knapsack",
+  "trackSlug": "uiua",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "87922ec1-b30a-47ea-8c37-fdeb1b86b209",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "# Calculate the maximum value of items that still fit in the knapsack\n# Value ? Items Capacity\nMaximumValue ← |2 ⊙⋅(⍤ \"Please implement MaximumValue\" 0)\n",
+  "example_solution": "MaximumValue ← |2 memo(\n  ±⧻.\n  ⨬(0◌◌\n  | ⊃⊢↘₁\n    ↥⊃(\n      ⋅MaximumValue\n    | ◡(≥(⊃(⊢|⋅⋅∘)))\n      ⨬(0◌◌\n      | +⊃(⊣|MaximumValue ⊙-⊃(⋅∘|∘|⋅⋅∘)⊢)\n      )\n    )\n  )\n)\n",
+  "test_code": "~ \"knapsack.ua\" ~ MaximumValue\n\n# no items\n⍤⤙≍ 0 MaximumValue [] 100\n\n# one item, too heavy\n⍤⤙≍ 0 MaximumValue [100_1] 10\n\n# five items (cannot be greedy by weight)\n⍤⤙≍ 21 MaximumValue [2_5 2_5 2_5 2_5 10_21] 10\n\n# five items (cannot be greedy by value)\n⍤⤙≍ 80 MaximumValue [2_20 2_20 2_20 2_20 10_50] 10\n\n# example knapsack\n⍤⤙≍ 90 MaximumValue [5_10 4_40 6_30 4_50] 10\n\n# 8 items\n⍤⤙≍ 900 MaximumValue [25_350 35_400 45_450 5_20 25_70 3_8 2_5 2_5] 104\n\n# 15 items\n⍤⤙≍ 1458 MaximumValue [70_135 73_139 77_149 80_150 82_156 87_163 90_173 94_184 98_192 106_201 110_210 113_214 115_221 118_229 120_240] 750\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

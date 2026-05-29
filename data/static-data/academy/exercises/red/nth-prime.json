@@ -1,0 +1,26 @@
+{
+  "id": "red:nth-prime",
+  "trackSlug": "red",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "2ea97355-acb9-4043-b107-964b6b7a1752",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Nth Prime\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nprime: function [\n\tnumber\n] [\n\tcause-error 'user 'message \"You need to implement prime function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Nth Prime\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nprime: function [\n\tnumber\n] [\n\tif number == 0 [\n\t\tcause-error 'user 'message \"there is no zeroth prime\"\n\t]\n\n\tif number == 1 [return 2]\n\n\n\ttally: 1\n\tcandidate: 1\n\twhile [tally < number] [\n\t\tcandidate: candidate + 2\n\t\n\t\tif prime? candidate [\n\t\t\ttally: tally + 1\n\t\t]\n\t]\n\tcandidate\n]\n\nprime?: function [\n\tnumber\n] [\n\tif number <= 1 [return false]\n\tif number == 2 [return true]\n\tif number % 2 == 0 [return false]\n\n\tprime: 3\n\twhile [prime * prime <= number] [\n\t\tif number % prime == 0 [return false]\n\t\tprime: prime + 2\n\t]\n\ttrue\n]\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Nth Prime\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %nth-prime.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"first prime\"\n    input: #[\n        number: 1\n    ]\n    expected: 2\n    function: \"prime\"\n    uuid: \"75c65189-8aef-471a-81de-0a90c728160c\"\n] #[\n    description: \"second prime\"\n    input: #[\n        number: 2\n    ]\n    expected: 3\n    function: \"prime\"\n    uuid: \"2c38804c-295f-4701-b728-56dea34fd1a0\"\n] #[\n    description: \"sixth prime\"\n    input: #[\n        number: 6\n    ]\n    expected: 13\n    function: \"prime\"\n    uuid: \"56692534-781e-4e8c-b1f9-3e82c1640259\"\n] #[\n    description: \"big prime\"\n    input: #[\n        number: 10001\n    ]\n    expected: 104743\n    function: \"prime\"\n    uuid: \"fce1e979-0edb-412d-93aa-2c744e8f50ff\"\n] #[\n    description: \"there is no zeroth prime\"\n    input: #[\n        number: 0\n    ]\n    expected: #[\n        error: \"there is no zeroth prime\"\n    ]\n    function: \"prime\"\n    uuid: \"bd0a9eae-6df7-485b-a144-80e13c7d55b2\"\n]]\n\n\nforeach c-case canonical-cases [\n\texpect-code: compose [\n\t\t(to word! c-case/function) (values-of c-case/input)\n\t]\n\tcase-code: reduce\n\t\teither all [\n\t\t\tmap? c-case/expected\n\t\t\tstring? c-case/expected/error\n\t\t] [\n\t\t\t['expect-error/message quote 'user expect-code c-case/expected/error]\n\t\t] [\n\t\t\t['expect c-case/expected expect-code]\n\t\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

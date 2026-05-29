@@ -1,0 +1,38 @@
+{
+  "id": "jq:series",
+  "trackSlug": "jq",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "824cefbf-a25d-445c-abc4-d92824006de1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "conditionals",
+    "numbers",
+    "strings",
+    "compare",
+    "variables",
+    "functions"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "numbers",
+    "strings",
+    "compare"
+  ],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"Remove this line and implement your solution\" | halt_error\n",
+  "example_solution": "def assert(cond; errmsg):\n  if (cond | not) then errmsg | halt_error(1)\n  else .\n  end;\n\n# Check all edge cases/validations.\nassert(.sliceLength != 0; \"slice length cannot be zero\") |\nassert(.sliceLength > 0; \"slice length cannot be negative\") |\nassert(.series | length > 0; \"series cannot be empty\") |\nassert(.sliceLength <= (.series | length); \"slice length cannot be greater than series length\") |\n# Actual solution.\n.series as $series |\n.sliceLength as $length |\n[range(($series | length) - $length + 1) | $series[.:. + $length]]\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2023-08-25T15:56:38Z\nload bats-extra\nload bats-jq\n\n@test 'slices of one from one' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"1\",\n  \"sliceLength\": 1\n}\nEND_INPUT\n\n    assert_success\n    expected=$(cat << 'END_EXPECTED'\n[\n  \"1\"\n]\nEND_EXPECTED\n)\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slices of one from two' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"12\",\n  \"sliceLength\": 1\n}\nEND_INPUT\n\n    assert_success\n    expected=$(cat << 'END_EXPECTED'\n[\n  \"1\",\n  \"2\"\n]\nEND_EXPECTED\n)\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slices of two' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"35\",\n  \"sliceLength\": 2\n}\nEND_INPUT\n\n    assert_success\n    expected=$(cat << 'END_EXPECTED'\n[\n  \"35\"\n]\nEND_EXPECTED\n)\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slices of two overlap' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"9142\",\n  \"sliceLength\": 2\n}\nEND_INPUT\n\n    assert_success\n    expected=$(cat << 'END_EXPECTED'\n[\n  \"91\",\n  \"14\",\n  \"42\"\n]\nEND_EXPECTED\n)\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slices can include duplicates' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"777777\",\n  \"sliceLength\": 3\n}\nEND_INPUT\n\n    assert_success\n    expected=$(cat << 'END_EXPECTED'\n[\n  \"777\",\n  \"777\",\n  \"777\",\n  \"777\"\n]\nEND_EXPECTED\n)\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slices of a long series' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"918493904243\",\n  \"sliceLength\": 5\n}\nEND_INPUT\n\n    assert_success\n    expected=$(cat << 'END_EXPECTED'\n[\n  \"91849\",\n  \"18493\",\n  \"84939\",\n  \"49390\",\n  \"93904\",\n  \"39042\",\n  \"90424\",\n  \"04243\"\n]\nEND_EXPECTED\n)\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slice length is too large' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"12345\",\n  \"sliceLength\": 6\n}\nEND_INPUT\n\n    assert_failure\n    expected='slice length cannot be greater than series length'\n\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slice length is way too large' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"12345\",\n  \"sliceLength\": 42\n}\nEND_INPUT\n\n    assert_failure\n    expected='slice length cannot be greater than series length'\n\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slice length cannot be zero' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"12345\",\n  \"sliceLength\": 0\n}\nEND_INPUT\n\n    assert_failure\n    expected='slice length cannot be zero'\n\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'slice length cannot be negative' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"123\",\n  \"sliceLength\": -1\n}\nEND_INPUT\n\n    assert_failure\n    expected='slice length cannot be negative'\n\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'empty series is invalid' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f series.jq << 'END_INPUT'\n{\n  \"series\": \"\",\n  \"sliceLength\": 1\n}\nEND_INPUT\n\n    assert_failure\n    expected='series cannot be empty'\n\n    assert_equal \"$output\" \"$expected\"\n}\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

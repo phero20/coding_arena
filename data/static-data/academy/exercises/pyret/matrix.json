@@ -1,0 +1,28 @@
+{
+  "id": "pyret:matrix",
+  "trackSlug": "pyret",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "eef61f56-6dda-4389-b348-7c27835493b8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: matrix end\n\nfun matrix(input):\n  raise(\"Please implement the matrix function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: matrix end\n\nfun matrix(input :: String):\n  process-input = lam():\n    to-number = lam(s :: String): \n      cases(Option) string-to-number(s):\n        | some(a) => a\n        | none => raise(\"invalid number\")\n      end\n    end\n\n    rows = string-split-all(input, \"\\n\")\n    rows.map(lam(r): string-split-all(r, \" \").map(to-number) end)\n  end\n  \n  {\n    method row(self, nth :: Number): self.values.get(nth - 1) end,\n    method column(self, nth :: Number):\n      n = nth - 1\n      self.values.foldl(lam(elt, acc):\n          ask:\n            | elt.length() > n then:\n              val = elt.get(n)\n              acc.push(val)\n            | otherwise:\n              acc\n          end\n        end, [list: ]).reverse()\n    end,\n    values: process-input()\n  }\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"matrix.arr\")\n\ncheck \"extract row from one number matrix\":\n  m = matrix(\"1\")\n  m.row(1) is [list: 1]\nend\n\ncheck \"can extract row\":\n  m = matrix(\"1 2\\n3 4\")\n  m.row(2) is [list: 3, 4]\nend\n\ncheck \"extract row where numbers have different widths\":\n  m = matrix(\"1 2\\n10 20\")\n  m.row(2) is [list: 10, 20]\nend\n\ncheck \"can extract row from non-square matrix with no corresponding column\":\n  m = matrix(\"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\")\n  m.row(4) is [list: 8, 7, 6]\nend\n\ncheck \"extract column from one number matrix\":\n  m = matrix(\"1\")\n  m.column(1) is [list: 1]\nend\n\ncheck \"can extract column\":\n  m = matrix(\"1 2 3\\n4 5 6\\n7 8 9\")\n  m.column(3) is [list: 3, 6, 9]\nend\n\ncheck \"can extract column from non-square matrix with no corresponding row\":\n  m = matrix(\"1 2 3 4\\n5 6 7 8\\n9 8 7 6\")\n  m.column(4) is [list: 4, 8, 6]\nend\n\ncheck \"extract column where numbers have different widths\":\n  m = matrix(\"89 1903 3\\n18 3 1\\n9 4 800\")\n  m.column(2) is [list: 1903, 3, 4]\nend\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,32 @@
+{
+  "id": "csharp:satellite",
+  "trackSlug": "csharp",
+  "slug": "satellite",
+  "name": "Satellite",
+  "uuid": "4da2ca3b-2fe5-4048-985b-95a3b24aaa36",
+  "type": "practice",
+  "status": null,
+  "blurb": "Rebuild binary trees from pre-order and in-order traversals.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "for-loops"
+  ],
+  "prerequisites": [
+    "generic-methods",
+    "chars",
+    "for-loops"
+  ],
+  "instructions": "# Instructions\n\nImagine you need to transmit a binary tree to a satellite approaching Alpha Centauri and you have limited bandwidth.\nSince the tree has no repeating items it can be uniquely represented by its [pre-order and in-order traversals][wiki].\n\nWrite the software for the satellite to rebuild the tree from the traversals.\n\nA pre-order traversal reads the value of the current node before (hence \"pre\") reading the left subtree in pre-order.\nAfterwards the right subtree is read in pre-order.\n\nAn in-order traversal reads the left subtree in-order then the current node and finally the right subtree in-order.\nSo in order from left to right.\n\nFor example the pre-order traversal of this tree is [a, i, x, f, r].\nThe in-order traversal of this tree is [i, a, f, x, r]\n\n```text\n  a\n / \\\ni   x\n   / \\\n  f   r\n```\n\nNote: the first item in the pre-order traversal is always the root.\n\n[wiki]: https://en.wikipedia.org/wiki/Tree_traversal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public record Tree(char Value, Tree? Left, Tree? Right);\n\npublic static class Satellite\n{\n    public static Tree? TreeFromTraversals(char[] preOrder, char[] inOrder)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public record Tree(char Value, Tree? Left, Tree? Right);\n\npublic static class Satellite\n{\n    public static Tree? TreeFromTraversals(char[] preOrder, char[] inOrder)\n    {\n        if (preOrder.Length != inOrder.Length) throw new ArgumentException(\"Traversals must have the same length\");\n        if (!preOrder.Order().SequenceEqual(inOrder.Order())) throw new ArgumentException(\"Traversals must be consistent\");\n        if (preOrder.Distinct().Count() != preOrder.Length) throw new ArgumentException(\"Traversals must not have repeated items\");\n\n        int preOrderIndex = 0;\n        return TreeFromTraversals(preOrder, inOrder, ref preOrderIndex, 0, preOrder.Length - 1);\n    }\n\n    private static Tree? TreeFromTraversals(char[] preOrder, char[] inOrder, ref int preOrderIndex, int left, int right)\n    {\n        if (left > right) return null;\n        \n        var preOrderValue = preOrder[preOrderIndex++];\n        var inOrderIndex = Array.IndexOf(inOrder, preOrderValue);\n        \n        return new Tree(\n            preOrderValue,\n            TreeFromTraversals(preOrder, inOrder, ref preOrderIndex, left, inOrderIndex - 1),\n            TreeFromTraversals(preOrder, inOrder, ref preOrderIndex, inOrderIndex + 1, right));\n    }\n}\n",
+  "test_code": "public class SatelliteTests\n{\n    [Fact]\n    public void Empty_tree()\n    {\n        Assert.Null(Satellite.TreeFromTraversals([], []));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Tree_with_one_item()\n    {\n        var expected = new Tree('a', null, null);\n        Assert.Equal(expected, Satellite.TreeFromTraversals(['a'], ['a']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Tree_with_many_items()\n    {\n        var expected = new Tree('a', new Tree('i', null, null), new Tree('x', new Tree('f', null, null), new Tree('r', null, null)));\n        Assert.Equal(expected, Satellite.TreeFromTraversals(['a', 'i', 'x', 'f', 'r'], ['i', 'a', 'f', 'x', 'r']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Reject_traversals_of_different_length()\n    {\n        Assert.Throws<ArgumentException>(() => Satellite.TreeFromTraversals(['a', 'b'], ['b', 'a', 'r']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Reject_inconsistent_traversals_of_same_length()\n    {\n        Assert.Throws<ArgumentException>(() => Satellite.TreeFromTraversals(['x', 'y', 'z'], ['a', 'b', 'c']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Reject_traversals_with_repeated_items()\n    {\n        Assert.Throws<ArgumentException>(() => Satellite.TreeFromTraversals(['a', 'b', 'a'], ['b', 'a', 'a']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_degenerate_binary_tree()\n    {\n        var expected = new Tree('a', new Tree('b', new Tree('c', new Tree('d', null, null), null), null), null);\n        Assert.Equal(expected, Satellite.TreeFromTraversals(['a', 'b', 'c', 'd'], ['d', 'c', 'b', 'a']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Another_degenerate_binary_tree()\n    {\n        var expected = new Tree('a', null, new Tree('b', null, new Tree('c', null, new Tree('d', null, null))));\n        Assert.Equal(expected, Satellite.TreeFromTraversals(['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'd']));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Tree_with_many_more_items()\n    {\n        var expected = new Tree('a', new Tree('b', new Tree('d', new Tree('g', null, null), new Tree('h', null, null)), null), new Tree('c', new Tree('e', null, null), new Tree('f', new Tree('i', null, null), null)));\n        Assert.Equal(expected, Satellite.TreeFromTraversals(['a', 'b', 'd', 'g', 'h', 'c', 'e', 'f', 'i'], ['g', 'd', 'h', 'b', 'a', 'e', 'c', 'i', 'f']));\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

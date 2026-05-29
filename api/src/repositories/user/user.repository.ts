@@ -13,6 +13,10 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   search(query: string, limit: number): Promise<User[]>;
+<<<<<<< HEAD
+=======
+  findAll(): Promise<User[]>;
+>>>>>>> prod-deploy
   create(user: NewUser): Promise<User>;
   update(clerkId: string, user: Partial<NewUser>): Promise<User | null>;
   deleteByClerkId(clerkId: string): Promise<boolean>;
@@ -78,6 +82,13 @@ export class UserRepository implements IUserRepository {
       .limit(limit);
   }
 
+<<<<<<< HEAD
+=======
+  async findAll(): Promise<User[]> {
+    return await db.select().from(schema.users);
+  }
+
+>>>>>>> prod-deploy
   async create(user: NewUser): Promise<User> {
     const [created] = await db.insert(schema.users).values(user).returning();
     return created;

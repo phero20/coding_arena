@@ -1,0 +1,45 @@
+{
+  "id": "python:connect",
+  "trackSlug": "python",
+  "slug": "connect",
+  "name": "Connect",
+  "uuid": "5a038ad4-65c7-4c99-9916-faebb4f39b79",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the result for a game of Hex / Polygon.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "classes",
+    "lists",
+    "loops",
+    "numbers",
+    "sets",
+    "strings",
+    "string-methods",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nCompute the result for a game of Hex / Polygon.\n\nThe abstract boardgame known as [Hex][hex] / Polygon / CON-TAC-TIX is quite simple in rules, though complex in practice.\nTwo players place stones on a parallelogram with hexagonal fields.\nThe player to connect his/her stones to the opposite side first wins.\nThe four sides of the parallelogram are divided between the two players (i.e. one player gets assigned a side and the side directly opposite it and the other player gets assigned the two other sides).\n\nYour goal is to build a program that given a simple representation of a board computes the winner (or lack thereof).\nNote that all games need not be \"fair\".\n(For example, players may have mismatched piece counts or the game's board might have a different width and height.)\n\nThe boards look like this:\n\n```text\n. O . X .\n . X X O .\n  O O O X .\n   . X O X O\n    X O O O X\n```\n\n\"Player `O`\" plays from top to bottom, \"Player `X`\" plays from left to right.\nIn the above example `O` has made a connection from left to right but nobody has won since `O` didn't connect top and bottom.\n\n[hex]: https://en.wikipedia.org/wiki/Hex_%28board_game%29\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\nclass ConnectGame:\n    def __init__(self, board):\n        pass\n\n    def get_winner(self):\n        pass\n",
+  "example_solution": "\nclass ConnectGame:\n\n    DIRECTIONS = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, -1), (-1, 1)]\n    WHITE = 'O'\n    BLACK = 'X'\n\n    def __init__(self, lines):\n        self.board = ConnectGame.make_board(lines)\n        assert len(self.board) > 0\n\n        self.width = len(self.board[0])\n        self.height = len(self.board)\n        assert self.width > 0 and self.height > 0\n\n        for line in self.board:\n            assert len(line) == self.width\n\n    def valid(self, width, height):\n        return 0 <= width < self.width and 0 <= height < self.height\n\n    @staticmethod\n    def make_board(lines):\n        return [''.join(cur_line.split()) for cur_line in lines.splitlines()]\n\n    def player_reach_dest(self, player, width, height):\n        if player == self.BLACK:\n            return width == self.width - 1\n        if player == self.WHITE:\n            return height == self.height - 1\n        return None\n\n    def walk_board(self, player, width, height, visited=None):\n        if not visited:\n            visited = []\n        if (width, height) in visited:\n            return False\n\n        if (not self.valid(width, height)) or self.board[height][width] != player:\n            return False\n\n        if self.player_reach_dest(player, width, height):\n            return True\n\n        for vector in self.DIRECTIONS:\n            if self.walk_board(player, width + vector[0], height + vector[1], visited + [(width, height)]):\n                return True\n        return None\n\n    def check_player_is_winner(self, player):\n        if player == self.BLACK:\n            for height in range(self.height):\n                if self.walk_board(player, 0, height):\n                    return True\n        if player == self.WHITE:\n            for width in range(self.width):\n                if self.walk_board(player, width, 0):\n                    return True\n        return None\n\n    def get_winner(self):\n        if self.check_player_is_winner(self.BLACK):\n            return self.BLACK\n        if self.check_player_is_winner(self.WHITE):\n            return self.WHITE\n        return ''\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/connect/canonical-data.json\n# File last updated on 2026-05-01\n\nimport unittest\n\nfrom connect import (\n    ConnectGame,\n)\n\n\nclass ConnectTest(unittest.TestCase):\n\n    def test_an_empty_board_has_no_winner(self):\n        game = ConnectGame(\n            \"\"\". . . . .\n                . . . . .\n                 . . . . .\n                  . . . . .\n                   . . . . .\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"\")\n\n    def test_x_can_win_on_a_1x1_board(self):\n        game = ConnectGame(\"\"\"X\"\"\")\n        winner = game.get_winner()\n        self.assertEqual(winner, \"X\")\n\n    def test_o_can_win_on_a_1x1_board(self):\n        game = ConnectGame(\"\"\"O\"\"\")\n        winner = game.get_winner()\n        self.assertEqual(winner, \"O\")\n\n    def test_only_edges_does_not_make_a_winner(self):\n        game = ConnectGame(\n            \"\"\"O O O X\n                X . . X\n                 X . . X\n                  X O O O\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"\")\n\n    def test_illegal_diagonal_does_not_make_a_winner(self):\n        game = ConnectGame(\n            \"\"\"X O . .\n                O X X X\n                 O X O .\n                  . O X .\n                   X X O O\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"\")\n\n    def test_nobody_wins_crossing_adjacent_angles(self):\n        game = ConnectGame(\n            \"\"\"X . . .\n                . X O .\n                 O . X O\n                  . O . X\n                   . . O .\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"\")\n\n    def test_x_wins_crossing_from_left_to_right(self):\n        game = ConnectGame(\n            \"\"\". O . .\n                O X X X\n                 O X O .\n                  X X O X\n                   . O X .\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"X\")\n\n    def test_x_wins_with_left_hand_dead_end_fork(self):\n        game = ConnectGame(\n            \"\"\". . X .\n                X X . .\n                 . X X X\n                  O O O O\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"X\")\n\n    def test_x_wins_with_right_hand_dead_end_fork(self):\n        game = ConnectGame(\n            \"\"\". . X X\n                X X . .\n                 . X X .\n                  O O O O\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"X\")\n\n    def test_o_wins_crossing_from_top_to_bottom(self):\n        game = ConnectGame(\n            \"\"\". O . .\n                O X X X\n                 O O O .\n                  X X O X\n                   . O X .\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"O\")\n\n    def test_x_wins_using_a_convoluted_path(self):\n        game = ConnectGame(\n            \"\"\". X X . .\n                X . X . X\n                 . X . X .\n                  . X X . .\n                   O O O O O\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"X\")\n\n    def test_x_wins_using_a_spiral_path(self):\n        game = ConnectGame(\n            \"\"\"O X X X X X X X X\n                O X O O O O O O O\n                 O X O X X X X X O\n                  O X O X O O O X O\n                   O X O X X X O X O\n                    O X O O O X O X O\n                     O X X X X X O X O\n                      O O O O O O O X O\n                       X X X X X X X X O\"\"\"\n        )\n        winner = game.get_winner()\n        self.assertEqual(winner, \"X\")\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "yunchih"
+  ],
+  "contributors": [
+    "cmccandless",
+    "Dog",
+    "dvermd",
+    "N-Parsons",
+    "tqa236",
+    "yawpitch"
+  ]
+}

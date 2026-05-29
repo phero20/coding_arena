@@ -1,0 +1,34 @@
+{
+  "id": "gleam:bob",
+  "trackSlug": "gleam",
+  "slug": "bob",
+  "name": "Bob",
+  "uuid": "c9f7d06c-a2fb-45c3-a320-b9a93fd88201",
+  "type": "practice",
+  "status": null,
+  "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "case-expressions",
+    "strings",
+    "bools"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine what Bob will reply to someone when they say something to him or ask him a question.\n\nBob only ever answers one of five things:\n\n- **\"Sure.\"**\n  This is his response if you ask him a question, such as \"How are you?\"\n  The convention used for questions is that it ends with a question mark.\n- **\"Whoa, chill out!\"**\n  This is his answer if you YELL AT HIM.\n  The convention used for yelling is ALL CAPITAL LETTERS.\n- **\"Calm down, I know what I'm doing!\"**\n  This is what he says if you yell a question at him.\n- **\"Fine. Be that way!\"**\n  This is how he responds to silence.\n  The convention used for silence is nothing, or various combinations of whitespace characters.\n- **\"Whatever.\"**\n  This is what he answers to anything else.\n",
+  "introduction": "# Introduction\n\nBob is a [lackadaisical][] teenager.\nHe likes to think that he's very cool.\nAnd he definitely doesn't get excited about things.\nThat wouldn't be cool.\n\nWhen people talk to him, his responses are pretty limited.\n\n[lackadaisical]: https://www.collinsdictionary.com/dictionary/english/lackadaisical\n",
+  "hints": null,
+  "starter_code": "pub fn hey(remark: String) -> String {\n  todo as \"Implement this function\"\n}\n",
+  "example_solution": "import gleam/string\n\npub fn hey(remark: String) -> String {\n  let remark = string.trim(remark)\n  let is_empty = string.is_empty(remark)\n  let is_question = string.ends_with(remark, \"?\")\n  let is_yelling =\n    string.uppercase(remark) == remark && string.lowercase(remark) != remark\n\n  case is_empty, is_yelling, is_question {\n    True, _, _ -> \"Fine. Be that way!\"\n    _, True, True -> \"Calm down, I know what I'm doing!\"\n    _, True, _ -> \"Whoa, chill out!\"\n    _, _, True -> \"Sure.\"\n    _, _, _ -> \"Whatever.\"\n  }\n}\n",
+  "test_code": "import bob\nimport exercism/should\nimport exercism/test_runner\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn stating_something_test() {\n  bob.hey(\"Tom-ay-to, tom-aaaah-to.\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn shouting_test() {\n  bob.hey(\"WATCH OUT!\")\n  |> should.equal(\"Whoa, chill out!\")\n}\n\npub fn shouting_gibberish_test() {\n  bob.hey(\"FCECDFCAAB\")\n  |> should.equal(\"Whoa, chill out!\")\n}\n\npub fn asking_a_question_test() {\n  bob.hey(\"Does this cryogenic chamber make me look fat?\")\n  |> should.equal(\"Sure.\")\n}\n\npub fn asking_a_numeric_question_test() {\n  bob.hey(\"You are, what, like 15?\")\n  |> should.equal(\"Sure.\")\n}\n\npub fn asking_gibberish_test() {\n  bob.hey(\"fffbbcbeab?\")\n  |> should.equal(\"Sure.\")\n}\n\npub fn talking_forcefully_test() {\n  bob.hey(\"Hi there!\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn using_acronyms_in_regular_speech_test() {\n  bob.hey(\"It's OK if you don't want to go work for NASA.\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn forceful_question_test() {\n  bob.hey(\"WHAT'S GOING ON?\")\n  |> should.equal(\"Calm down, I know what I'm doing!\")\n}\n\npub fn shouting_numbers_test() {\n  bob.hey(\"1, 2, 3 GO!\")\n  |> should.equal(\"Whoa, chill out!\")\n}\n\npub fn no_letters_test() {\n  bob.hey(\"1, 2, 3\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn question_with_no_letters_test() {\n  bob.hey(\"4?\")\n  |> should.equal(\"Sure.\")\n}\n\npub fn shouting_with_special_characters_test() {\n  bob.hey(\"ZOMG THE %^*@#$(*^ ZOMBIES ARE COMING!!11!!1!\")\n  |> should.equal(\"Whoa, chill out!\")\n}\n\npub fn shouting_with_no_exclamation_mark_test() {\n  bob.hey(\"I HATE THE DENTIST\")\n  |> should.equal(\"Whoa, chill out!\")\n}\n\npub fn statement_containing_question_mark_test() {\n  bob.hey(\"Ending with ? means a question.\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn non_letters_with_question_test() {\n  bob.hey(\":) ?\")\n  |> should.equal(\"Sure.\")\n}\n\npub fn prattling_on_test() {\n  bob.hey(\"Wait! Hang on. Are you going to be OK?\")\n  |> should.equal(\"Sure.\")\n}\n\npub fn silence_test() {\n  bob.hey(\"\")\n  |> should.equal(\"Fine. Be that way!\")\n}\n\npub fn prolonged_silence_test() {\n  bob.hey(\"          \")\n  |> should.equal(\"Fine. Be that way!\")\n}\n\npub fn alternate_silence_test() {\n  bob.hey(\"\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\")\n  |> should.equal(\"Fine. Be that way!\")\n}\n\npub fn multiple_line_question_test() {\n  bob.hey(\"\\nDoes this cryogenic chamber make me look fat?\\nNo.\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn starting_with_whitespace_test() {\n  bob.hey(\"         hmmmmmmm...\")\n  |> should.equal(\"Whatever.\")\n}\n\npub fn ending_with_whitespace_test() {\n  bob.hey(\"Okay if like my  spacebar  quite a bit?   \")\n  |> should.equal(\"Sure.\")\n}\n\npub fn other_whitespace_test() {\n  bob.hey(\"\\n\\r \\t\")\n  |> should.equal(\"Fine. Be that way!\")\n}\n\npub fn non_question_ending_with_whitespace_test() {\n  bob.hey(\"This is a statement ending with whitespace      \")\n  |> should.equal(\"Whatever.\")\n}\n",
+  "source": "Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=06",
+  "authors": [
+    "nono"
+  ],
+  "contributors": [
+    "lpil"
+  ]
+}

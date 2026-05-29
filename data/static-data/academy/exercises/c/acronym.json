@@ -1,0 +1,35 @@
+{
+  "id": "c:acronym",
+  "trackSlug": "c",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "1a8ba121-d2c4-4994-8c6b-610d8987346d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"acronym.h\"\n",
+  "example_solution": "#include \"acronym.h\"\n#include <ctype.h>\n#include <stdlib.h>\n#include <stdbool.h>\n\nstatic bool is_first_letter_of_word(int character, int preceding_character)\n{\n   return isalpha(character) &&\n          ((preceding_character == ' ') || (preceding_character == '-') ||\n           (preceding_character == '_'));\n}\n\nstatic int count_words(const char phrase[])\n{\n   int count = 0;\n\n   if (phrase != NULL)\n      count = 1; /* first word */\n   else\n      return count;\n\n   for (size_t i = 1; phrase[i] != '\\0'; ++i)\n      if (is_first_letter_of_word(phrase[i], phrase[i - 1]))\n         ++count; /* subsequent words */\n   return count;\n}\n\nchar *abbreviate(const char phrase[])\n{\n   char *acronym = NULL;\n\n   if (phrase == NULL || phrase[0] == '\\0')\n      return NULL; /* invalid argument */\n\n   acronym = calloc(count_words(phrase) + 1, sizeof phrase[0]);\n   if (!acronym)\n      return NULL; /* calloc failed */\n\n   acronym[0] = toupper(phrase[0]); /* first letter of first word */\n\n   for (size_t i = 1, j = 1; phrase[i] != '\\0'; ++i) {\n      if (is_first_letter_of_word(phrase[i], phrase[i - 1]))\n         acronym[j++] =\n             toupper(phrase[i]); /* first letter of subsequent words */\n   }\n   return acronym;\n}\n",
+  "test_code": "#include \"test-framework/unity.h\"\n#include \"acronym.h\"\n#include <stdlib.h>\n#include <string.h>\n\nstatic char *actual = NULL;\nvoid setUp(void)\n{\n}\n\nvoid tearDown(void)\n{\n   if (actual)\n      free(actual);\n   actual = NULL;\n}\n\nstatic void check_abbreviation(char *phrase, char *expected)\n{\n   actual = abbreviate(phrase);\n   TEST_ASSERT_EQUAL_STRING(expected, actual);\n}\n\nstatic void test_null_string(void)\n{\n   TEST_IGNORE();   // delete this line to run test\n   char *phrase = NULL;\n   char *expected = NULL;\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_empty_string(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"\";\n   char *expected = NULL;\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_basic_abbreviation(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"Portable Network Graphics\";\n   char *expected = \"PNG\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_lowercase_words(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"Ruby on Rails\";\n   char *expected = \"ROR\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_punctuation(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"First In, First Out\";\n   char *expected = \"FIFO\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_all_caps_words(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"GNU Image Manipulation Program\";\n   char *expected = \"GIMP\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_punctuation_without_whitespace(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"Complementary metal-oxide semiconductor\";\n   char *expected = \"CMOS\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_long_abbreviation(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"Rolling On The Floor Laughing So Hard \"\n                  \"That My Dogs Came Over And Licked Me\";\n   char *expected = \"ROTFLSHTMDCOALM\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_consecutive_delimiters_abbreviation(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"Something - I made up from thin air\";\n   char *expected = \"SIMUFTA\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_apostrophes(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"Halley's Comet\";\n   char *expected = \"HC\";\n   check_abbreviation(phrase, expected);\n}\n\nstatic void test_underscore_emphasis(void)\n{\n   TEST_IGNORE();\n   char *phrase = \"The Road _Not_ Taken\";\n   char *expected = \"TRNT\";\n   check_abbreviation(phrase, expected);\n}\n\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_null_string);\n   RUN_TEST(test_empty_string);\n   RUN_TEST(test_basic_abbreviation);\n   RUN_TEST(test_lowercase_words);\n   RUN_TEST(test_punctuation);\n   RUN_TEST(test_all_caps_words);\n   RUN_TEST(test_punctuation_without_whitespace);\n   RUN_TEST(test_long_abbreviation);\n   RUN_TEST(test_consecutive_delimiters_abbreviation);\n   RUN_TEST(test_apostrophes);\n   RUN_TEST(test_underscore_emphasis);\n\n   return UNITY_END();\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "wolf99"
+  ],
+  "contributors": [
+    "bcc32",
+    "Gamecock",
+    "h-3-0",
+    "kgashok",
+    "patricksjackson",
+    "QLaille",
+    "ryanplusplus",
+    "sesamemucho"
+  ]
+}

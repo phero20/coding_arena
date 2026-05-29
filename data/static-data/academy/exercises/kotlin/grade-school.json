@@ -1,0 +1,40 @@
+{
+  "id": "kotlin:grade-school",
+  "trackSlug": "kotlin",
+  "slug": "grade-school",
+  "name": "Grade School",
+  "uuid": "62eb71dd-18ba-427f-a27a-86e993b4055a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given students' names along with the grade that they are in, create a roster for the school.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven students' names along with the grade they are in, create a roster for the school.\n\nIn the end, you should be able to:\n\n- Add a student's name to the roster for a grade:\n  - \"Add Jim to grade 2.\"\n  - \"OK.\"\n- Get a list of all students enrolled in a grade:\n  - \"Which students are in grade 2?\"\n  - \"We've only got Jim right now.\"\n- Get a sorted list of all students in all grades.\n  Grades should be sorted as 1, 2, 3, etc., and students within a grade should be sorted alphabetically by name.\n  - \"Who is enrolled in school right now?\"\n  - \"Let me think.\n    We have Anna, Barb, and Charlie in grade 1, Alex, Peter, and Zoe in grade 2, and Jim in grade 5.\n    So the answer is: Anna, Barb, Charlie, Alex, Peter, Zoe, and Jim.\"\n\nNote that all our students only have one name (it's a small town, what do you want?), and each student cannot be added more than once to a grade or the roster.\nIf a test attempts to add the same student more than once, your implementation should indicate that this is incorrect.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class School {\n\n    fun add(student: String, grade: Int) {\n        TODO(\"Implement this function to complete the task\")\n    }\n\n    fun grade(grade: Int): List<String> {\n        TODO(\"Implement this function to complete the task\")\n    }\n\n    fun roster(): List<String> {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "class School {\n\n    private val database = mutableMapOf<Int, List<String>>()\n\n    fun add(student: String, grade: Int) {\n        database[grade] = (grade(grade) + student).sorted()\n    }\n\n    fun grade(grade: Int) = database[grade] ?: listOf()\n\n    fun roster() = database.toSortedMap().map { it.value }.flatten()\n\n}\n",
+  "test_code": "import org.junit.Ignore\nimport org.junit.Test\nimport kotlin.test.assertEquals\n\nclass SchoolTest {\n    @Test\n    fun `adding a student adds them to the sorted roster`() =\n        students(\"Aimee\" to 2)\n            .everyone()\n            .shouldBe(listOf(\"Aimee\"))\n\n    @Ignore\n    @Test\n    fun `adding more student adds them to the sorted roster`() =\n        students(\n            \"Blair\" to 2,\n            \"James\" to 2,\n            \"Paul\" to 2\n        )\n            .everyone()\n            .shouldBe(listOf(\"Blair\", \"James\", \"Paul\"))\n\n    @Ignore\n    @Test\n    fun `adding students to different grades adds them to the same sorted roster`() =\n        students(\n            \"Chelsea\" to 3,\n            \"Logan\" to 7\n        )\n            .everyone()\n            .shouldBe(listOf(\"Chelsea\", \"Logan\"))\n\n    @Ignore\n    @Test\n    fun `roster returns an empty list if there are no students enrolled`() =\n        students()\n            .everyone()\n            .shouldBe(listOf())\n\n    @Ignore\n    @Test\n    fun `student names with grades are displayed in the same sorted roster`() =\n        students(\n            \"Peter\" to 2,\n            \"Anna\" to 1,\n            \"Barb\" to 1,\n            \"Zoe\" to 2,\n            \"Alex\" to 2,\n            \"Jim\" to 3,\n            \"Charlie\" to 1\n        )\n            .everyone()\n            .shouldBe(listOf(\"Anna\", \"Barb\", \"Charlie\", \"Alex\", \"Peter\", \"Zoe\", \"Jim\"))\n\n    @Ignore\n    @Test\n    fun `grade returns the students in that grade in alphabetical order`() =\n        students(\n            \"Franklin\" to 5,\n            \"Bradley\" to 5,\n            \"Jeff\" to 1\n        )\n            .fromGrade(5)\n            .shouldBe(listOf(\"Bradley\", \"Franklin\"))\n\n    @Ignore\n    @Test\n    fun `grade returns an empty list if there are no students in that grade`() =\n        students()\n            .fromGrade(1)\n            .shouldBe(listOf())\n}\n\nprivate class Students(vararg students: Pair<String, Int>) {\n    private val school = School()\n\n    init {\n        students.forEach { school.add(it.first, it.second) }\n    }\n\n    fun fromGrade(grade: Int) = StudentNames(school.grade(grade))\n    fun everyone() = StudentNames(school.roster())\n}\n\nprivate class StudentNames(private val names: List<String>) {\n    fun shouldBe(names: List<String>) = assertEquals(names, this.names)\n}\n\nprivate fun students(vararg students: Pair<String, Int>) = Students(*students)\n",
+  "source": "A pairing session with Phil Battos at gSchool",
+  "source_url": null,
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "kytrinyx",
+    "lihofm",
+    "mdowds",
+    "mikegehard",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "tehbilly",
+    "uzilan"
+  ]
+}

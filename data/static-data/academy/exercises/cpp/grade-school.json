@@ -1,0 +1,37 @@
+{
+  "id": "cpp:grade-school",
+  "trackSlug": "cpp",
+  "slug": "grade-school",
+  "name": "Grade School",
+  "uuid": "a15922b1-467f-4db4-a023-0bb262333551",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given students' names along with the grade that they are in, create a roster for the school.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven students' names along with the grade they are in, create a roster for the school.\n\nIn the end, you should be able to:\n\n- Add a student's name to the roster for a grade:\n  - \"Add Jim to grade 2.\"\n  - \"OK.\"\n- Get a list of all students enrolled in a grade:\n  - \"Which students are in grade 2?\"\n  - \"We've only got Jim right now.\"\n- Get a sorted list of all students in all grades.\n  Grades should be sorted as 1, 2, 3, etc., and students within a grade should be sorted alphabetically by name.\n  - \"Who is enrolled in school right now?\"\n  - \"Let me think.\n    We have Anna, Barb, and Charlie in grade 1, Alex, Peter, and Zoe in grade 2, and Jim in grade 5.\n    So the answer is: Anna, Barb, Charlie, Alex, Peter, Zoe, and Jim.\"\n\nNote that all our students only have one name (it's a small town, what do you want?), and each student cannot be added more than once to a grade or the roster.\nIf a test attempts to add the same student more than once, your implementation should indicate that this is incorrect.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"grade_school.h\"\n\nnamespace grade_school {\n\n// TODO: add your solution here\n\n}  // namespace grade_school\n",
+  "example_solution": "#include <algorithm>\n\n#include \"grade_school.h\"\n\nusing namespace std;\n\nnamespace grade_school {\n\nvoid school::add(string const& name, int grade) {\n    vector<string>& grade_roster = roster_[grade];\n    auto it = lower_bound(grade_roster.begin(), grade_roster.end(), name);\n    grade_roster.insert(it, name);\n}\n\nvector<string> school::grade(int grade) const {\n    auto it = roster_.find(grade);\n    return (it != roster_.end()) ? it->second : vector<string>{};\n}\n\n}  // namespace grade_school\n",
+  "test_code": "#include \"grade_school.h\"\n\n#include <map>\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nusing namespace std;\n\nTEST_CASE(\"a_new_school_has_an_empty_roster\") {\n    const grade_school::school school_{};\n    REQUIRE(school_.roster().empty());\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"adding_a_student_adds_them_to_the_roster_for_the_given_grade\") {\n    grade_school::school school_;\n    school_.add(\"Aimee\", 2);\n\n    const auto actual = school_.roster();\n\n    const map<int, vector<string>> expected{{2, {\"Aimee\"}}};\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"adding_more_students_to_the_same_grade_adds_them_to_the_roster\") {\n    grade_school::school school_;\n    school_.add(\"Blair\", 2);\n    school_.add(\"James\", 2);\n    school_.add(\"Paul\", 2);\n\n    const auto actual = school_.roster();\n\n    const map<int, vector<string>> expected{{2, {\"Blair\", \"James\", \"Paul\"}}};\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"adding_students_to_different_grades_adds_them_to_the_roster\") {\n    grade_school::school school_;\n    school_.add(\"Chelsea\", 3);\n    school_.add(\"Logan\", 7);\n\n    const auto actual = school_.roster();\n\n    const map<int, vector<string>> expected{{3, {\"Chelsea\"}}, {7, {\"Logan\"}}};\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"grade_returns_the_students_in_that_grade_in_alphabetical_order\") {\n    grade_school::school school_;\n    school_.add(\"Franklin\", 5);\n    school_.add(\"Bradley\", 5);\n    school_.add(\"Jeff\", 1);\n\n    const auto actual = school_.grade(5);\n\n    const vector<string> expected{\"Bradley\", \"Franklin\"};\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\n    \"grade_returns_an_empty_array_if_there_are_no_students_in_that_grade\") {\n    const grade_school::school school_{};\n    const auto actual = school_.grade(1);\n\n    REQUIRE(actual.empty());\n}\n\nTEST_CASE(\"the_student_names_in_each_grade_in_the_roster_are_sorted\") {\n    grade_school::school school_;\n    school_.add(\"Jennifer\", 4);\n    school_.add(\"Kareem\", 6);\n    school_.add(\"Christopher\", 4);\n    school_.add(\"Kyle\", 3);\n\n    const auto actual = school_.roster();\n\n    const map<int, vector<string>> expected{\n        {3, {\"Kyle\"}}, {4, {\"Christopher\", \"Jennifer\"}}, {6, {\"Kareem\"}}};\n    REQUIRE(expected == actual);\n}\n\nTEST_CASE(\"checking_a_grade_should_not_change_the_roster\") {\n    const grade_school::school school_{};\n    school_.grade(1);\n    REQUIRE(school_.roster().empty());\n}\n\n#endif\n",
+  "source": "A pairing session with Phil Battos at gSchool",
+  "source_url": null,
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "AlexLeSang",
+    "cyborgsphinx",
+    "elyashiv",
+    "j0ran",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "objarni",
+    "patricksjackson",
+    "siebenschlaefer"
+  ]
+}

@@ -69,4 +69,14 @@ export class ProblemController extends BaseController {
       currentPage: page,
     });
   }
+<<<<<<< HEAD
+=======
+
+  async getUserSolvedProblems(
+    req: ControllerRequest<never, { userId: string }>,
+  ) {
+    const { userId } = req.params;
+    return await this.problemService.getUserSolvedProblems(userId);
+  }
+>>>>>>> prod-deploy
 }

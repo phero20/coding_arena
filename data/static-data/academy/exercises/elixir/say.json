@@ -1,0 +1,51 @@
+{
+  "id": "elixir:say",
+  "trackSlug": "elixir",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "5ecbe1c9-12e3-42b6-921a-bc2d32011930",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "guards",
+    "module-attributes-as-constants"
+  ],
+  "prerequisites": [
+    "integers",
+    "atoms",
+    "tuples",
+    "strings",
+    "multiple-clause-functions",
+    "case",
+    "guards",
+    "enum",
+    "recursion",
+    "maps",
+    "ranges",
+    "module-attributes-as-constants"
+  ],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "defmodule Say do\n  @doc \"\"\"\n  Translate a positive integer into English.\n  \"\"\"\n  @spec in_english(integer) :: {atom, String.t()}\n  def in_english(number) do\n  end\nend\n",
+  "example_solution": "defmodule Say do\n  @moduledoc \"\"\"\n  This example solution takes an integer and breaks it into chunks of 3 and\n  translates those chunks the same. The larger denominations (e.g. 'thousand')\n  are added if there are multiple chunks to translate.  Here are a few examples:\n\n  - `Say.in_english(23)` creates the chunk of `[0, 2, 3]` and invokes\n    `translate_chunk` on that to produce \"twenty-three\".\n  - `Say.in_english(1_234)` creates the chunks of `[0, 0, 1]` and `[2, 3, 4]`,\n     which `translate_chunk` will translate to \"one\" and\n     \"two hundred thirty-four\" and `translate_chunks` will combine them for\n     `one thousand two hundred thirty-four`.\n\n  Padding the chunks with leading zeroes gives us nice and even chunks of 3\n  digits to translate.\n  \"\"\"\n\n  @small_numbers ~w(\n    one two three four five six seven eight nine ten\n    eleven twelve thirteen fourteen fifteen sixteen\n    seventeen eighteen nineteen\n  )\n\n  @decades ~w(\n    twenty thirty forty fifty sixty seventy eighty ninety\n  )\n\n  @separators ~w(thousand million billion)\n\n  @doc \"\"\"\n  Translate a positive integer into English.\n  \"\"\"\n\n  @spec in_english(number) :: {atom, String.t()}\n  def in_english(number) when number < 0 or number >= 1_000_000_000_000 do\n    {:error, \"number is out of range\"}\n  end\n\n  def in_english(0), do: {:ok, \"zero\"}\n\n  def in_english(number) do\n    result =\n      Integer.digits(number)\n      |> padded_chunk(3, 0)\n      |> translate_chunks\n      |> clean_join(\" \")\n\n    {:ok, result}\n  end\n\n  @spec translate_chunks(list) :: [String.t()]\n  defp translate_chunks(chunks) do\n    translate_chunks(chunks, Enum.count(chunks))\n  end\n\n  @spec translate_chunks(list, number) :: [String.t()]\n  defp translate_chunks([chunk], 1), do: [translate_chunk(chunk)]\n\n  defp translate_chunks([[0, 0, 0] | remaining], n) do\n    translate_chunks(remaining, n - 1)\n  end\n\n  defp translate_chunks([chunk | remaining], n) do\n    chunk_in_english =\n      [\n        translate_chunk(chunk),\n        Enum.at(@separators, n - 2)\n      ]\n      |> clean_join(\" \")\n\n    [chunk_in_english | translate_chunks(remaining, n - 1)]\n  end\n\n  @spec translate_chunk([number]) :: String.t()\n  defp translate_chunk([0, 0, 0]), do: \"\"\n  defp translate_chunk([0, 0, ones]), do: ones_in_english(ones)\n\n  defp translate_chunk([0, 1, ones]) do\n    ones_in_english(ones + 10)\n  end\n\n  defp translate_chunk([0, tens, 0]), do: tens_in_english(tens)\n\n  defp translate_chunk([0, tens, ones]) do\n    [\n      tens_in_english(tens),\n      ones_in_english(ones)\n    ]\n    |> clean_join(\"-\")\n  end\n\n  defp translate_chunk([hundreds, 0, 0]) do\n    \"#{ones_in_english(hundreds)} hundred\"\n  end\n\n  defp translate_chunk([hundreds, tens, ones]) do\n    [\n      translate_chunk([hundreds, 0, 0]),\n      translate_chunk([0, tens, ones])\n    ]\n    |> clean_join(\" \")\n  end\n\n  @spec ones_in_english(number) :: String.t()\n  defp ones_in_english(index), do: Enum.at(@small_numbers, index - 1)\n\n  @spec tens_in_english(number) :: String.t()\n  defp tens_in_english(index), do: Enum.at(@decades, index - 2)\n\n  @spec clean_join([any], String.t()) :: String.t()\n  defp clean_join(collection, separator) do\n    collection\n    |> reject_blank\n    |> Enum.join(separator)\n  end\n\n  @spec reject_blank([any]) :: [any]\n  defp reject_blank(col) do\n    col\n    |> Enum.reject(&(&1 == nil || &1 == \"\"))\n  end\n\n  @spec padded_chunk([any], number, any) :: [any]\n  defp padded_chunk(list, chunk_size, pad) do\n    pad_size = pad_size(chunk_size, rem(Enum.count(list), chunk_size))\n\n    pad(list, pad, pad_size)\n    |> Enum.chunk_every(chunk_size)\n  end\n\n  @spec pad_size(number, number) :: number\n  defp pad_size(_, 0), do: 0\n  defp pad_size(total, rem), do: total - rem\n\n  @spec pad([any], any, number) :: [any]\n  defp pad(list, _, 0), do: list\n\n  defp pad(list, pad, count) do\n    [pad] ++ pad(list, pad, count - 1)\n  end\nend\n",
+  "test_code": "defmodule SayTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"zero\" do\n    assert Say.in_english(0) == {:ok, \"zero\"}\n  end\n\n  @tag :pending\n  test \"one\" do\n    assert Say.in_english(1) == {:ok, \"one\"}\n  end\n\n  @tag :pending\n  test \"fourteen\" do\n    assert Say.in_english(14) == {:ok, \"fourteen\"}\n  end\n\n  @tag :pending\n  test \"twenty\" do\n    assert Say.in_english(20) == {:ok, \"twenty\"}\n  end\n\n  @tag :pending\n  test \"twenty-two\" do\n    assert Say.in_english(22) == {:ok, \"twenty-two\"}\n  end\n\n  @tag :pending\n  test \"thirty\" do\n    assert Say.in_english(30) == {:ok, \"thirty\"}\n  end\n\n  @tag :pending\n  test \"ninety-nine\" do\n    assert Say.in_english(99) == {:ok, \"ninety-nine\"}\n  end\n\n  @tag :pending\n  test \"one hundred\" do\n    assert Say.in_english(100) == {:ok, \"one hundred\"}\n  end\n\n  @tag :pending\n  test \"one hundred twenty-three\" do\n    assert Say.in_english(123) == {:ok, \"one hundred twenty-three\"}\n  end\n\n  @tag :pending\n  test \"two hundred\" do\n    assert Say.in_english(200) == {:ok, \"two hundred\"}\n  end\n\n  @tag :pending\n  test \"nine hundred ninety-nine\" do\n    assert Say.in_english(999) == {:ok, \"nine hundred ninety-nine\"}\n  end\n\n  @tag :pending\n  test \"one thousand\" do\n    assert Say.in_english(1_000) == {:ok, \"one thousand\"}\n  end\n\n  @tag :pending\n  test \"one thousand two hundred thirty-four\" do\n    assert Say.in_english(1_234) == {:ok, \"one thousand two hundred thirty-four\"}\n  end\n\n  @tag :pending\n  test \"one million\" do\n    assert Say.in_english(1_000_000) == {:ok, \"one million\"}\n  end\n\n  @tag :pending\n  test \"one million two thousand three hundred forty-five\" do\n    assert Say.in_english(1_002_345) == {:ok, \"one million two thousand three hundred forty-five\"}\n  end\n\n  @tag :pending\n  test \"one billion\" do\n    assert Say.in_english(1_000_000_000) == {:ok, \"one billion\"}\n  end\n\n  @tag :pending\n  test \"a big number\" do\n    assert Say.in_english(987_654_321_123) ==\n             {:ok,\n              \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\"}\n  end\n\n  @tag :pending\n  test \"numbers below zero are out of range\" do\n    assert Say.in_english(-1) == {:error, \"number is out of range\"}\n  end\n\n  @tag :pending\n  test \"numbers above 999,999,999,999 are out of range\" do\n    assert Say.in_english(1_000_000_000_000) == {:error, \"number is out of range\"}\n  end\nend\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "zporter"
+  ],
+  "contributors": [
+    "aifrak",
+    "amencarini",
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "neenjaw",
+    "parkerl",
+    "sotojuan"
+  ]
+}

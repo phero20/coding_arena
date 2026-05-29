@@ -1,0 +1,28 @@
+{
+  "id": "tcl:grains",
+  "trackSlug": "tcl",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "5c5d47e9-aa71-477a-9c27-be94207cc9b1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "namespace eval grains {\n    namespace export square total\n\n    # This turns the namespace name \"grains\" into\n    # the _command_ \"grains\", with subcommands\n    # \"square\" and \"total\":\n    namespace ensemble create\n\n    proc square {square} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n\n    proc total {} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n}\n",
+  "example_solution": "namespace eval grains {\n    namespace export square total\n\n    # This turns the namespace name \"grains\" into\n    # the _command_ \"grains\", with subcommands\n    # \"square\" and \"total\":\n    namespace ensemble create\n\n    proc square {sq} {\n        if {$sq < 1 || $sq > 64} {\n            error \"square must be between 1 and 64\"\n        }\n        return [expr {1 << ($sq - 1)}]\n    }\n\n    proc total {} {\n        return [expr {(1 << 64) - 1}]\n    }\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"grains.tcl\"\n\ntest grains-1.1 \"square 1\" -body {\n    grains square 1\n} -returnCodes ok -result 1\n\nskip grains-1.2\ntest grains-1.2 \"square 2\" -body {\n    grains square 2\n} -returnCodes ok -result 2\n\nskip grains-1.3\ntest grains-1.3 \"square 3\" -body {\n    grains square 3\n} -returnCodes ok -result 4\n\nskip grains-1.4\ntest grains-1.4 \"square 4\" -body {\n    grains square 4\n} -returnCodes ok -result 8\n\nskip grains-1.5\ntest grains-1.5 \"square 16\" -body {\n    grains square 16\n} -returnCodes ok -result 32768\n\nskip grains-1.6\ntest grains-1.6 \"square 32\" -body {\n    grains square 32\n} -returnCodes ok -result 2147483648\n\nskip grains-1.7\ntest grains-1.7 \"square 64\" -body {\n    grains square 64\n} -returnCodes ok -result 9223372036854775808\n\n\nskip grains-2.1\ntest grains-2.1 \"square 0 raises an exception\" -body {\n    grains square 0\n} -returnCodes error -result \"square must be between 1 and 64\"\n\nskip grains-2.2\ntest grains-2.2 \"negative square raises an exception\" -body {\n    grains square -1\n} -returnCodes error -result \"square must be between 1 and 64\"\n\nskip grains-2.3\ntest grains-2.3 \"square greater than 64 raises an exception\" -body {\n    grains square 65\n} -returnCodes error -result \"square must be between 1 and 64\"\n\n\nskip grains-3.1\ntest grains-3.1 \"returns the total number of grains on the board\" -body {\n    grains total\n} -returnCodes ok -result 18446744073709551615\n\ncleanupTests\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

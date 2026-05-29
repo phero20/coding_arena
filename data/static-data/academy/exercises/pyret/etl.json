@@ -1,0 +1,28 @@
+{
+  "id": "pyret:etl",
+  "trackSlug": "pyret",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "a86c1654-da80-46c9-aba5-a2eec3f66262",
+  "type": "practice",
+  "status": null,
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "string-dicts"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: my-translate end\n\nfun my-translate(legacy):\n  raise(\"Please implement the my-translate function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: my-translate end\n\ninclude string-dict\n\nfun my-translate(legacy):\n  result = block:\n    var result = [mutable-string-dict:]\n    (legacy.keys().to-list()).each(lam(n): legacy.get-value(n).each(lam(letter): result.set-now(string-to-lower(letter), n) end) end)\n    result\n  end\n  result.freeze()\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"etl.arr\")\n\ninclude string-dict\n\ncheck \"single letter\":\n  my-translate([string-dict: \"1\", [list: \"A\"]]) is [string-dict: \"a\", \"1\"]\nend\n\ncheck \"single score with multiple letters\":\n  my-translate([string-dict: \"1\", [list: \"A\", \"E\", \"I\", \"O\", \"U\"]]) is [string-dict: \"a\", \"1\", \"e\", \"1\", \"i\", \"1\", \"o\", \"1\", \"u\", \"1\"]\nend\n\ncheck \"multiple scores with multiple letters\":\n  input = [string-dict: \"1\", [list: \"A\", \"E\", \"I\", \"O\", \"U\"], \"2\", [list: \"D\", \"G\"]]\n  expected = [string-dict: \"a\", \"1\", \"e\", \"1\", \"i\", \"1\", \"o\", \"1\", \"u\", \"1\", \"d\", \"2\", \"g\", \"2\"]\n  my-translate(input) is expected\nend\n\ncheck \"multiple scores with differing numbers of letters\":\n  input = [string-dict: \"1\", [list: \"A\", \"E\", \"I\", \"O\", \"U\"], \n                        \"2\", [list: \"D\", \"G\"], \n                        \"3\", [list: \"B\", \"C\", \"M\", \"P\"], \n                        \"4\", [list: \"F\", \"H\", \"V\", \"W\", \"Y\"], \n                        \"5\", [list: \"K\"], \n                        \"8\", [list: \"J\", \"X\"], \n                        \"10\", [list: \"Q\", \"Z\"]]\n  expected = [string-dict: \"a\", \"1\", \"e\", \"1\", \"i\", \"1\", \"o\", \"1\", \"u\", \"1\", \n                                  \"d\", \"2\", \"g\", \"2\", \n                                  \"b\", \"3\", \"c\", \"3\", \"m\", \"3\", \"p\", \"3\",\n                                  \"f\", \"4\", \"h\", \"4\", \"v\", \"4\", \"w\", \"4\", \"y\", \"4\",\n                                  \"k\", \"5\", \n                                  \"j\", \"8\", \"x\", \"8\", \n                                  \"q\", \"10\", \"z\", \"10\"]\n  my-translate(input) is expected\nend\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "meatball133"
+  ],
+  "contributors": null
+}

@@ -17,10 +17,18 @@ export async function getMatchStatus(matchId: string) {
 /**
  * Fetch the match history for a specific user.
  */
+<<<<<<< HEAD
 export async function getArenaHistory(userId: string) {
   console.log("arena recnet")
   const response = await apiClient.get(`/arena/u/${userId}/history`);
   return response.data.data as ArenaMatch[];
+=======
+export async function getArenaHistory(userId: string, limit: number = 10, offset: number = 0) {
+  const response = await apiClient.get(`/arena/u/${userId}/history`, {
+    params: { limit, offset }
+  });
+  return response.data.data as { matches: ArenaMatch[], pagination: { total: number, limit: number, offset: number } };
+>>>>>>> prod-deploy
 }
 
 /**

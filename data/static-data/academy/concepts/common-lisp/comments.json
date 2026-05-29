@@ -1,0 +1,6 @@
+{
+  "slug": "comments",
+  "name": "Comments",
+  "introduction": "# Introduction\n\nCommon Lisp allows the programmer to write \"comments\" that are ignored by the computer.\nSingle-line comments begin with one or more semi-colons (`;`) and, occasionally, you may see the following:\n\n```lisp\n(code...) ; => value\n```\n\nWhere the comment is being used to indicate what value is returned by Common Lisp after running the code on that line.\n\nIt is idiomatic to use a single semi-colon for a short comment at the end of a line, two for a longer comment above a section of code, three for long comment describing something such as a function and four for a comment such as a header at the top of a source file.",
+  "about": "# About\n\nSingle-line comments in Common Lisp follow a couple of conventions:\n\n```lisp\n;;;; A short title for a block of code\n;;; A longer description of a block of code\n;; Describe the code below this line\n; Describe the code before the semi-colon (;) on this line\n```\n\nAdditionally, multi-line comments are possible using `#|` and `|#`:\n\n```lisp\n#|\nThis entire block of text is a comment\nand can span several lines!\n\nHow cool is that?!\n|#\n```"
+}

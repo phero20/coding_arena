@@ -1,0 +1,54 @@
+{
+  "id": "elixir:space-age",
+  "trackSlug": "elixir",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "1d02554e-15f3-46aa-9f14-60b4049f3100",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "atoms",
+    "floating-point-numbers",
+    "module-attributes-as-constants"
+  ],
+  "prerequisites": [
+    "floating-point-numbers",
+    "atoms",
+    "tuples",
+    "multiple-clause-functions",
+    "pattern-matching",
+    "maps",
+    "module-attributes-as-constants"
+  ],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "defmodule SpaceAge do\n  @type planet ::\n          :mercury\n          | :venus\n          | :earth\n          | :mars\n          | :jupiter\n          | :saturn\n          | :uranus\n          | :neptune\n\n  @doc \"\"\"\n  Return the number of years a person that has lived for 'seconds' seconds is\n  aged on 'planet', or an error if 'planet' is not a planet.\n  \"\"\"\n  @spec age_on(planet, pos_integer) :: {:ok, float} | {:error, String.t()}\n  def age_on(planet, seconds) do\n  end\nend\n",
+  "example_solution": "defmodule SpaceAge do\n  def age_on(:earth, seconds), do: {:ok, seconds / 31_557_600.0}\n\n  def age_on(planet, seconds) do\n    with {:ok, rel} <- planet_rel_years(planet),\n         {:ok, earth} <- age_on(:earth, seconds) do\n      {:ok, earth / rel}\n    end\n  end\n\n  defp planet_rel_years(:mercury), do: {:ok, 0.2408467}\n  defp planet_rel_years(:venus), do: {:ok, 0.61519726}\n  defp planet_rel_years(:mars), do: {:ok, 1.8808158}\n  defp planet_rel_years(:jupiter), do: {:ok, 11.862615}\n  defp planet_rel_years(:saturn), do: {:ok, 29.447498}\n  defp planet_rel_years(:uranus), do: {:ok, 84.016846}\n  defp planet_rel_years(:neptune), do: {:ok, 164.79132}\n  defp planet_rel_years(_), do: {:error, \"not a planet\"}\nend\n",
+  "test_code": "defmodule SpaceAgeTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"age on Earth\" do\n    input = 1_000_000_000\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 31.69, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Mercury\" do\n    input = 2_134_835_688\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 67.65, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:mercury, input)\n    assert_in_delta 280.88, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Venus\" do\n    input = 189_839_836\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 6.02, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:venus, input)\n    assert_in_delta 9.78, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Mars\" do\n    input = 2_129_871_239\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 67.49, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:mars, input)\n    assert_in_delta 35.88, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Jupiter\" do\n    input = 901_876_382\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 28.58, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:jupiter, input)\n    assert_in_delta 2.41, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Saturn\" do\n    input = 2_000_000_000\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 63.38, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:saturn, input)\n    assert_in_delta 2.15, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Uranus\" do\n    input = 1_210_123_456\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 38.35, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:uranus, input)\n    assert_in_delta 0.46, age, 0.005\n  end\n\n  @tag :pending\n  test \"age on Neptune\" do\n    input = 1_821_023_456\n    {:ok, age} = SpaceAge.age_on(:earth, input)\n    assert_in_delta 57.70, age, 0.005\n    {:ok, age} = SpaceAge.age_on(:neptune, input)\n    assert_in_delta 0.35, age, 0.005\n  end\n\n  @tag :pending\n  test \"invalid planet causes error\" do\n    input = 680_804_807\n    assert SpaceAge.age_on(:sun, input) == {:error, \"not a planet\"}\n  end\nend\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_01.html",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "henrik",
+    "jinyeow",
+    "koriroys",
+    "kytrinyx",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "pminten",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

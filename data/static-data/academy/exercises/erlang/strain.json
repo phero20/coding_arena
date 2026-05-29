@@ -1,0 +1,36 @@
+{
+  "id": "erlang:strain",
+  "trackSlug": "erlang",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "c10bfbab-0b58-4fcb-aadc-304bd4b73cfc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `keep` and `discard` operation on collections.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "-module(strain).\n\n-export([keep/2, discard/2]).\n\nkeep(_Fn, _List) ->\n  undefined.\n\ndiscard(_Fn, _List) ->\n  undefined.\n",
+  "example_solution": "-module(example).\n\n-export([keep/2, discard/2]).\n\n-spec keep(fun((any()) -> boolean()), list(any())) -> list(any()).\nkeep(_F, []) ->\n  [];\nkeep(F, [H|T]) ->\n  case F(H) of\n    true -> [H|keep(F,T)];\n    _ -> keep(F,T)\n  end.\n\n-spec discard(fun((any()) -> boolean()), list(any())) -> list(any()).\ndiscard(F, L) ->\n  keep(fun(X) -> not(F(X)) end, L).\n",
+  "test_code": "-module(strain_tests).\n\n-include_lib(\"erl_exercism/include/exercism.hrl\").\n-include_lib(\"eunit/include/eunit.hrl\").\n\nempty_keep_test() ->\n  ?assertEqual([], strain:keep(fun(X) -> X < 10 end, [])).\n\nkeep_everything_test() ->\n  ?assertEqual([1, 2, 3], strain:keep(fun(X) -> X < 10 end, [1,2,3])).\n\nkeep_first_last_test() ->\n  ?assertEqual([1, 3], strain:keep(fun(X) -> odd(X) end, [1,2,3])).\n\nkeep_nothing_test() ->\n  ?assertEqual([], strain:keep(fun(X) -> even(X) end, [1,3,5,7])).\n\nkeep_neither_first_nor_last_test() ->\n  ?assertEqual([2], strain:keep(fun(X) -> even(X) end, [1,2,3])).\n\nkeep_strings_test() ->\n  Str = [\"apple\", \"zebra\", \"banana\", \"zombies\", \"cherimoya\", \"zealot\"],\n  ?assertEqual(\n     [\"zebra\", \"zombies\", \"zealot\"],\n     strain:keep(fun(S) -> string:sub_string(S, 1,1) =:= \"z\" end, Str)).\n\nkeep_lists_test() ->\n  List = [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]],\n  ?assertEqual(\n     [[5, 5, 5], [5, 1, 2], [1, 5, 2], [1, 2, 5]],\n     strain:keep(fun(L) -> lists:member(5, L) end, List)).\n\nempty_discard_test() ->\n  ?assertEqual([], strain:discard(fun(X) -> X < 10 end, [])).\n\ndiscard_everything_test() ->\n  ?assertEqual([], strain:discard(fun(X) -> X < 10 end, [1,2,3])).\n\ndiscard_first_and_last_test() ->\n  ?assertEqual([2], strain:discard(fun(X) -> odd(X) end, [1,2,3])).\n\ndiscard_nothing_test() ->\n  ?assertEqual([1, 3, 5, 7], strain:discard(fun(X) -> even(X) end, [1,3,5,7])).\n\ndiscard_neither_first_nor_last_test() ->\n  ?assertEqual([1, 3], strain:discard(fun(X) -> even(X) end, [1,2,3])).\n\ndiscard_strings_test() ->\n  Str = [\"apple\", \"zebra\", \"banana\", \"zombies\", \"cherimoya\", \"zealot\"],\n  ?assertEqual(\n     [\"apple\", \"banana\", \"cherimoya\"],\n     strain:discard(fun(S) -> string:sub_string(S, 1,1) =:= \"z\" end, Str)).\n\ndiscard_lists_test() ->\n  List = [[1, 2, 3], [5, 5, 5], [5, 1, 2], [2, 1, 2], [1, 5, 2], [2, 2, 1], [1, 2, 5]],\n  ?assertEqual(\n     [[1, 2, 3], [2, 1, 2], [2, 2, 1]],\n     strain:discard(fun(L) -> lists:member(5, L) end, List)).\n\nodd(N) -> N rem 2 > 0.\n\neven(N) -> N rem 2 =:= 0.\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "tmcgilchrist"
+  ],
+  "contributors": [
+    "adolfopa",
+    "ErikSchierboom",
+    "etrepum",
+    "iHiD",
+    "JordanAdams",
+    "juhlig",
+    "kytrinyx",
+    "NobbZ",
+    "xymbol"
+  ]
+}

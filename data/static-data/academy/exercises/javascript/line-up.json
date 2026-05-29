@@ -1,0 +1,32 @@
+{
+  "id": "javascript:line-up",
+  "trackSlug": "javascript",
+  "slug": "line-up",
+  "name": "Line Up",
+  "uuid": "034b31ef-331a-419d-bb62-465c05b533d8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help lining up customers at Yaʻqūb's Deli.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "numbers",
+    "strings"
+  ],
+  "prerequisites": [
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nGiven a name and a number, your task is to produce a sentence using that name and that number as an [ordinal numeral][ordinal-numeral].\nYaʻqūb expects to use numbers from 1 up to 999.\n\nRules:\n\n- Numbers ending in 1 (unless ending in 11) → `\"st\"`\n- Numbers ending in 2 (unless ending in 12) → `\"nd\"`\n- Numbers ending in 3 (unless ending in 13) → `\"rd\"`\n- All other numbers → `\"th\"`\n\nExamples:\n\n- `\"Mary\", 1` → `\"Mary, you are the 1st customer we serve today. Thank you!\"`\n- `\"John\", 12` → `\"John, you are the 12th customer we serve today. Thank you!\"`\n- `\"Dahir\", 162` → `\"Dahir, you are the 162nd customer we serve today. Thank you!\"`\n\n[ordinal-numeral]: https://en.wikipedia.org/wiki/Ordinal_numeral\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at a deli in town, slicing, weighing, and wrapping orders for a line of hungry customers that gets longer every day.\nWaiting customers are starting to lose track of who is next, so he wants numbered tickets they can use to track the order in which they arrive.\n\nTo make the customers feel special, he does not want the ticket to have only a number on it.\nThey shall get a proper English sentence with their name and number on it.\n",
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Line Up' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const format = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "const getSuffix = (number) => {\n  const lastTwoDigits = number % 100;\n  const lastDigit = number % 10;\n\n  if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {\n    return 'th';\n  }\n\n  if (lastDigit === 1) {\n    return 'st';\n  }\n\n  if (lastDigit === 2) {\n    return 'nd';\n  }\n\n  if (lastDigit === 3) {\n    return 'rd';\n  }\n\n  return 'th';\n};\n\nexport const format = (name, number) =>\n  `${name}, you are the ${number}${getSuffix(number)} customer we serve today. Thank you!`;\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { format } from './line-up';\n\ndescribe('Line Up', () => {\n  test('format smallest non-exceptional ordinal numeral 4', () => {\n    expect(format('Gianna', 4)).toBe(\n      'Gianna, you are the 4th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format greatest single digit non-exceptional ordinal numeral 9', () => {\n    expect(format('Maarten', 9)).toBe(\n      'Maarten, you are the 9th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 5', () => {\n    expect(format('Petronila', 5)).toBe(\n      'Petronila, you are the 5th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 6', () => {\n    expect(format('Attakullakulla', 6)).toBe(\n      'Attakullakulla, you are the 6th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 7', () => {\n    expect(format('Kate', 7)).toBe(\n      'Kate, you are the 7th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 8', () => {\n    expect(format('Maximiliano', 8)).toBe(\n      'Maximiliano, you are the 8th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 1', () => {\n    expect(format('Mary', 1)).toBe(\n      'Mary, you are the 1st customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 2', () => {\n    expect(format('Haruto', 2)).toBe(\n      'Haruto, you are the 2nd customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 3', () => {\n    expect(format('Henriette', 3)).toBe(\n      'Henriette, you are the 3rd customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format smallest two digit non-exceptional ordinal numeral 10', () => {\n    expect(format('Alvarez', 10)).toBe(\n      'Alvarez, you are the 10th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 11', () => {\n    expect(format('Jacqueline', 11)).toBe(\n      'Jacqueline, you are the 11th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 12', () => {\n    expect(format('Juan', 12)).toBe(\n      'Juan, you are the 12th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format non-exceptional ordinal numeral 13', () => {\n    expect(format('Patricia', 13)).toBe(\n      'Patricia, you are the 13th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 21', () => {\n    expect(format('Washi', 21)).toBe(\n      'Washi, you are the 21st customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 62', () => {\n    expect(format('Nayra', 62)).toBe(\n      'Nayra, you are the 62nd customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 100', () => {\n    expect(format('John', 100)).toBe(\n      'John, you are the 100th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 101', () => {\n    expect(format('Zeinab', 101)).toBe(\n      'Zeinab, you are the 101st customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 112', () => {\n    expect(format('Knud', 112)).toBe(\n      'Knud, you are the 112th customer we serve today. Thank you!',\n    );\n  });\n\n  xtest('format exceptional ordinal numeral 123', () => {\n    expect(format('Yma', 123)).toBe(\n      'Yma, you are the 123rd customer we serve today. Thank you!',\n    );\n  });\n});\n",
+  "source": "mk-mxp, based on previous work from Exercism contributors codedge and neenjaw",
+  "source_url": "https://forum.exercism.org/t/new-exercise-ordinal-numbers/19147",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

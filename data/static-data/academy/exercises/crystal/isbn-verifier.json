@@ -1,0 +1,31 @@
+{
+  "id": "crystal:isbn-verifier",
+  "trackSlug": "crystal",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "0b6c8c53-04ae-4969-8bc0-1f1205df3420",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "bools",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module IsbnVerifier\n  def self.valid?(isbn : String) : Bool\n    # Write your code for the 'isbn-verifier' exercise in this file.\n  end\nend\n",
+  "example_solution": "module IsbnVerifier\n  extend self\n\n  def valid?(isbn : String) : Bool\n    return false unless /\\A\\d-?\\d{3}-?\\d{5}-?[\\dX]\\z/.match(isbn)\n\n    isbn_items = isbn.chars.select { |c| c.alphanumeric? }.map_with_index do |c, i|\n      c == 'X' ? 10 : c.to_i * (10 - i)\n    end\n\n    isbn_items.sum(0) % 11 == 0\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"IsbnVerifier\" do\n  it \"valid isbn\" do\n    IsbnVerifier.valid?(\"3-598-21508-8\").should eq(true)\n  end\n\n  pending \"invalid isbn check digit\" do\n    IsbnVerifier.valid?(\"3-598-21508-9\").should eq(false)\n  end\n\n  pending \"valid isbn with a check digit of 10\" do\n    IsbnVerifier.valid?(\"3-598-21507-X\").should eq(true)\n  end\n\n  pending \"check digit is a character other than X\" do\n    IsbnVerifier.valid?(\"3-598-21507-A\").should eq(false)\n  end\n\n  pending \"invalid check digit in isbn is not treated as zero\" do\n    IsbnVerifier.valid?(\"4-598-21507-B\").should eq(false)\n  end\n\n  pending \"invalid character in isbn is not treated as zero\" do\n    IsbnVerifier.valid?(\"3-598-P1581-X\").should eq(false)\n  end\n\n  pending \"X is only valid as a check digit\" do\n    IsbnVerifier.valid?(\"3-598-2X507-9\").should eq(false)\n  end\n\n  pending \"only one check digit is allowed\" do\n    IsbnVerifier.valid?(\"3-598-21508-96\").should eq(false)\n  end\n\n  pending \"X is not substituted by the value 10\" do\n    IsbnVerifier.valid?(\"3-598-2X507-5\").should eq(false)\n  end\n\n  pending \"valid isbn without separating dashes\" do\n    IsbnVerifier.valid?(\"3598215088\").should eq(true)\n  end\n\n  pending \"isbn without separating dashes and X as check digit\" do\n    IsbnVerifier.valid?(\"359821507X\").should eq(true)\n  end\n\n  pending \"isbn without check digit and dashes\" do\n    IsbnVerifier.valid?(\"359821507\").should eq(false)\n  end\n\n  pending \"too long isbn and no dashes\" do\n    IsbnVerifier.valid?(\"3598215078X\").should eq(false)\n  end\n\n  pending \"too short isbn\" do\n    IsbnVerifier.valid?(\"00\").should eq(false)\n  end\n\n  pending \"isbn without check digit\" do\n    IsbnVerifier.valid?(\"3-598-21507\").should eq(false)\n  end\n\n  pending \"check digit of X should not be used for 0\" do\n    IsbnVerifier.valid?(\"3-598-21515-X\").should eq(false)\n  end\n\n  pending \"empty isbn\" do\n    IsbnVerifier.valid?(\"\").should eq(false)\n  end\n\n  pending \"input is 9 characters\" do\n    IsbnVerifier.valid?(\"134456729\").should eq(false)\n  end\n\n  pending \"invalid characters are not ignored after checking length\" do\n    IsbnVerifier.valid?(\"3132P34035\").should eq(false)\n  end\n\n  pending \"invalid characters are not ignored before checking length\" do\n    IsbnVerifier.valid?(\"3598P215088\").should eq(false)\n  end\n\n  pending \"input is too long but contains a valid isbn\" do\n    IsbnVerifier.valid?(\"98245726788\").should eq(false)\n  end\nend\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "issyl0"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "roc:rotational-cipher",
+  "trackSlug": "roc",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "d18a540a-36bf-4637-a810-4fe715cf0ec9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [rotate]\n\nrotate : Str, U8 -> Str\nrotate = |text, shift_key|\n    crash(\"Please implement the 'rotate' function\")\n",
+  "example_solution": "module [rotate]\n\nshift_char = |c, shift_key|\n    if c >= 'a' and c <= 'z' then\n        (c - 'a' + shift_key) % 26 + 'a'\n    else if c >= 'A' and c <= 'Z' then\n        (c - 'A' + shift_key) % 26 + 'A'\n    else\n        c\n\nrotate : Str, U8 -> Str\nrotate = |text, shift_key|\n    text\n    |> Str.to_utf8\n    |> List.map(|c| shift_char(c, shift_key))\n    |> Str.from_utf8\n    |> Result.with_default(\"Unreachable\")\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/rotational-cipher/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport RotationalCipher exposing [rotate]\n\n# rotate a by 0, same output as input\nexpect\n    result = rotate(\"a\", 0)\n    result == \"a\"\n\n# rotate a by 1\nexpect\n    result = rotate(\"a\", 1)\n    result == \"b\"\n\n# rotate a by 26, same output as input\nexpect\n    result = rotate(\"a\", 26)\n    result == \"a\"\n\n# rotate m by 13\nexpect\n    result = rotate(\"m\", 13)\n    result == \"z\"\n\n# rotate n by 13 with wrap around alphabet\nexpect\n    result = rotate(\"n\", 13)\n    result == \"a\"\n\n# rotate capital letters\nexpect\n    result = rotate(\"OMG\", 5)\n    result == \"TRL\"\n\n# rotate spaces\nexpect\n    result = rotate(\"O M G\", 5)\n    result == \"T R L\"\n\n# rotate numbers\nexpect\n    result = rotate(\"Testing 1 2 3 testing\", 4)\n    result == \"Xiwxmrk 1 2 3 xiwxmrk\"\n\n# rotate punctuation\nexpect\n    result = rotate(\"Let's eat, Grandma!\", 21)\n    result == \"Gzo'n zvo, Bmviyhv!\"\n\n# rotate all letters\nexpect\n    result = rotate(\"The quick brown fox jumps over the lazy dog.\", 13)\n    result == \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,28 @@
+{
+  "id": "tcl:diffie-hellman",
+  "trackSlug": "tcl",
+  "slug": "diffie-hellman",
+  "name": "Diffie-Hellman",
+  "uuid": "86a7b350-9929-419d-9dda-c3dd98588479",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Diffie-Hellman key exchange.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDiffie-Hellman key exchange.\n\nAlice and Bob use Diffie-Hellman key exchange to share secrets.\nThey start with prime numbers, pick private keys, generate and share public keys, and then generate a shared secret key.\n\n## Step 0\n\nThe test program supplies prime numbers p and g.\n\n## Step 1\n\nAlice picks a private key, a, greater than 1 and less than p.\nBob does the same to pick a private key b.\n\n## Step 2\n\nAlice calculates a public key A.\n\n    A = gᵃ mod p\n\nUsing the same p and g, Bob similarly calculates a public key B from his private key b.\n\n## Step 3\n\nAlice and Bob exchange public keys.\nAlice calculates secret key s.\n\n    s = Bᵃ mod p\n\nBob calculates\n\n    s = Aᵇ mod p\n\nThe calculations produce the same result!\nAlice and Bob now share secret s.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "namespace eval diffieHellman {\n    proc privateKey {p} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n\n    proc publicKey {p g private} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n\n    proc secret {p public private} {\n        throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n    }\n}\n",
+  "example_solution": "namespace eval diffieHellman {}\n\nproc diffieHellman::privateKey {p} {\n    # a random number in the range [2, p)\n    return [expr {2 + int(($p - 2) * rand())}]\n}\n\nproc diffieHellman::publicKey {p g private} {\n    return [expr {($g ** $private) % $p}]\n}\n\nproc diffieHellman::secret {p public private} {\n    return [publicKey $p $public $private]\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"diffie-hellman.tcl\"\n\ntest dh-1 \"private key is in range 1..p\" -body {\n    set result true\n    foreach p {5 7 11 13 17 19 23 29 31 37 41 43 47} {\n        set pk [diffieHellman::privateKey $p]\n        if {$pk <= 1 || $pk >= $p} {\n            set result false\n            break\n        }\n    }\n    set result\n} -returnCodes ok -match boolean -result true\n\nskip dh-2\ntest dh-2 \"private key is random\" -body {\n    # there is a slim chance this test will fail\n    set privateKeys {}\n    foreach i {1 2 3 4 5} {\n        set pk [diffieHellman::privateKey 2147483647]\n        dict set privateKeys $pk 1\n    }\n    dict size $privateKeys\n} -returnCodes ok -result 5\n\nskip dh-3\ntest dh-3 \"can calculate public key using private key\" -body {\n    set p 23\n    set g 5\n    set private 6\n    set publicKey [diffieHellman::publicKey $p $g $private]\n} -returnCodes ok -result 8\n\nskip dh-5\ntest dh-5 \"can calculate public key using aaa different privaate key\" -body {\n    set p 23\n    set g 5\n    set private 15\n    set publicKey [diffieHellman::publicKey $p $g $private]\n} -returnCodes ok -result 19\n\nskip dh-5\ntest dh-5 \"can calculate secret key using other party's public key\" -body {\n    set p 23\n    set public 19\n    set private 6\n    set secret [diffieHellman::secret $p $public $private]\n} -returnCodes ok -result 2\n\nskip dh-6\ntest dh-6 \"key exchange\" -body {\n    set p 23\n    set g 5\n    set alicePrivateKey [diffieHellman::privateKey $p]\n    set bobPrivateKey [diffieHellman::privateKey $p]\n    set alicePublicKey [diffieHellman::publicKey $p $g $alicePrivateKey]\n    set bobPublicKey [diffieHellman::publicKey $p $g $bobPrivateKey]\n    set secretA [diffieHellman::secret $p $bobPublicKey $alicePrivateKey]\n    set secretB [diffieHellman::secret $p $alicePublicKey $bobPrivateKey]\n\n    expr {$secretA == $secretB}\n} -returnCodes ok -match boolean -result true\n\ncleanupTests\n",
+  "source": "Wikipedia, 1024 bit key from www.cryptopp.com/wiki.",
+  "source_url": "https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

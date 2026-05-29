@@ -1,0 +1,28 @@
+{
+  "id": "cairo:darts",
+  "trackSlug": "cairo",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "3e5fb791-59b5-4ea6-b68f-70ed851a3308",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "control-flow"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn score(x: i64, y: i64) -> u8 {\n    panic!(\"implement `score`\")\n}\n",
+  "example_solution": "pub fn score(x: i64, y: i64) -> u8 {\n    let distance = sqrt(x * x + y * y);\n    if distance <= 1 {\n        10\n    } else if distance <= 5 {\n        5\n    } else if distance <= 10 {\n        1\n    } else {\n        0\n    }\n}\n\nfn sqrt(radicand: i64) -> i64 {\n    let mut candidate = 1;\n    if radicand > 2 {\n        while (candidate * candidate) < radicand {\n            candidate += 1;\n        };\n    }\n    candidate\n}\n",
+  "test_code": "use darts::score;\n\n#[test]\nfn missed_target() {\n    let output = score(-9, 9);\n    let expected = 0;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn on_the_outer_circle() {\n    let output = score(0, 10);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn on_the_middle_circle() {\n    let output = score(-5, 0);\n    let expected = 5;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn on_the_inner_circle() {\n    let output = score(0, -1);\n    let expected = 10;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn exactly_on_center() {\n    let output = score(0, 0);\n    let expected = 10;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn just_within_the_outer_circle() {\n    let output = score(-7, 7);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

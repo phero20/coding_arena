@@ -1,0 +1,31 @@
+{
+  "id": "sml:rna-transcription",
+  "trackSlug": "sml",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "db3e09ee-6c93-417f-b0a0-196cdccf4984",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "fun toRna (dna: string): string option =\n  raise Fail \"'toRna' is not implemented\"",
+  "example_solution": "fun toRna dna =\n  let\n    fun translate #\"G\" = SOME #\"C\"\n      | translate #\"C\" = SOME #\"G\"\n      | translate #\"T\" = SOME #\"A\"\n      | translate #\"A\" = SOME #\"U\"\n      | translate _    = NONE\n\n    fun reducer (_, NONE)     = NONE\n      | reducer (x, SOME acc) = \n          let\n            val t = translate x\n          in\n            case t of\n              NONE => NONE\n            | SOME c => SOME (c :: acc)\n          end\n  in\n    Option.map implode (foldr reducer (SOME []) (explode dna))\n  end\n",
+  "test_code": "(* version 1.0.1 *)\n\nuse \"testlib.sml\";\nuse \"rna-transcription.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"rna-transcription\" [\n    test \"RNA complement of cytosine is guanine\"\n      (fn _ => toRna (\"C\") |> Expect.equalTo (SOME \"G\")),\n\n    test \"RNA complement of guanine is cytosine\"\n      (fn _ => toRna (\"G\") |> Expect.equalTo (SOME \"C\")),\n\n    test \"RNA complement of thymine is adenine\"\n      (fn _ => toRna (\"T\") |> Expect.equalTo (SOME \"A\")),\n\n    test \"RNA complement of adenine is uracil\"\n      (fn _ => toRna (\"A\") |> Expect.equalTo (SOME \"U\")),\n\n    test \"RNA complement\"\n      (fn _ => toRna (\"ACGTGGTCTTAA\") |> Expect.equalTo (SOME \"UGCACCAGAAUU\")),\n\n    test \"correctly handles invalid input (RNA instead of DNA)\"\n      (fn _ => toRna (\"U\") |> Expect.equalTo NONE),\n\n    test \"correctly handles completely invalid DNA input\"\n      (fn _ => toRna (\"XXX\") |> Expect.equalTo NONE),\n\n    test \"correctly handles partially invalid DNA input\"\n      (fn _ => toRna (\"ACGTXXXCTTAA\") |> Expect.equalTo NONE)\n  ]\n\nval _ = Test.run testsuite",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "snahor"
+  ],
+  "contributors": [
+    "iHiD",
+    "mcmillhj-wta",
+    "sjwarner-bp",
+    "sshine"
+  ]
+}

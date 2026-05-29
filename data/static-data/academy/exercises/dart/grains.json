@@ -1,0 +1,26 @@
+{
+  "id": "dart:grains",
+  "trackSlug": "dart",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "2961341d-5c10-40e5-8f97-ad2d6848f399",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "BigInt square(final int n) {\n  // Replace the throw call and put your code here\n  throw UnimplementedError();\n}\n\nBigInt total() {\n  // Replace the throw call and put your code here\n  throw UnimplementedError();\n}\n",
+  "example_solution": "BigInt square(final int n) {\n  if (1 > n || n > 64) {\n    throw new ArgumentError(\"square must be between 1 and 64\");\n  }\n\n  return BigInt.from(2).pow(n - 1);\n}\n\nBigInt total() {\n  return BigInt.from(2).pow(64) - BigInt.from(1);\n}\n",
+  "test_code": "import 'package:grains/grains.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  group('Grains: square -', squareTests);\n  group('Grains: total - ', totalTests);\n}\n\nvoid squareTests() {\n  test('grains on square 1', () {\n    final result = square(1);\n    final expected = BigInt.from(1);\n    expect(result, equals(expected));\n  }, skip: false);\n\n  test('grains on square 2', () {\n    final result = square(2);\n    final expected = BigInt.from(2);\n    expect(result, equals(expected));\n  }, skip: true);\n\n  test('grains on square 3', () {\n    final result = square(3);\n    final expected = BigInt.from(4);\n    expect(result, equals(expected));\n  }, skip: true);\n\n  test('grains on square 4', () {\n    final result = square(4);\n    final expected = BigInt.from(8);\n    expect(result, equals(expected));\n  }, skip: true);\n\n  test('grains on square 16', () {\n    final result = square(16);\n    final expected = BigInt.from(32768);\n    expect(result, equals(expected));\n  }, skip: true);\n\n  test('grains on square 32', () {\n    final result = square(32);\n    final expected = BigInt.from(2147483648);\n    expect(result, equals(expected));\n  }, skip: true);\n\n  test('grains on square 64', () {\n    final result = square(64);\n    final expected = BigInt.parse('9223372036854775808');\n    expect(result, equals(expected));\n  }, skip: true);\n\n  test('square 0 raises an exception', () {\n    expect(\n        () => square(0),\n        throwsA(\n          isA<ArgumentError>().having((error) => error.message, 'message', 'square must be between 1 and 64'),\n        ));\n  }, skip: true);\n\n  test('negative square raises an exception', () {\n    expect(\n        () => square(-1),\n        throwsA(\n          isA<ArgumentError>().having((error) => error.message, 'message', 'square must be between 1 and 64'),\n        ));\n  }, skip: true);\n\n  test('square greater than 64 raises an exception', () {\n    expect(\n        () => square(65),\n        throwsA(\n          isA<ArgumentError>().having((error) => error.message, 'message', 'square must be between 1 and 64'),\n        ));\n  }, skip: true);\n}\n\nvoid totalTests() {\n  test('returns the total number of grains on the board', () {\n    final result = total();\n    final expected = BigInt.parse('18446744073709551615');\n    expect(result, equals(expected));\n  }, skip: true);\n}\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

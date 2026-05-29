@@ -1,0 +1,36 @@
+{
+  "id": "vbnet:bank-account",
+  "trackSlug": "vbnet",
+  "slug": "bank-account",
+  "name": "Bank Account",
+  "uuid": "1bbf5277-8fdf-411c-be19-ef19b6756246",
+  "type": "practice",
+  "status": null,
+  "blurb": "Simulate a bank account supporting opening/closing, withdraws, and deposits of money. Watch out for concurrent transactions!",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "properties",
+    "floating-point-numbers",
+    "concurrency",
+    "exceptions"
+  ],
+  "prerequisites": [
+    "floating-point-numbers",
+    "classes",
+    "properties",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to implement bank accounts supporting opening/closing, withdrawals, and deposits of money.\n\nAs bank accounts can be accessed in many different ways (internet, mobile phones, automatic charges), your bank software must allow accounts to be safely accessed from multiple threads/processes (terminology depends on your programming language) in parallel.\nFor example, there may be many deposits and withdrawals occurring in parallel; you need to ensure there are no [race conditions][wikipedia] between when you read the account balance and set the new balance.\n\nIt should be possible to close an account; operations against a closed account must fail.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Race_condition#In_software\n",
+  "introduction": "# Introduction\n\nAfter years of filling out forms and waiting, you've finally acquired your banking license.\nThis means you are now officially eligible to open your own bank, hurray!\n\nYour first priority is to get the IT systems up and running.\nAfter a day of hard work, you can already open and close accounts, as well as handle withdrawals and deposits.\n\nSince you couldn't be bothered writing tests, you invite some friends to help test the system.\nHowever, after just five minutes, one of your friends claims they've lost money!\nWhile you're confident your code is bug-free, you start looking through the logs to investigate.\n\nAh yes, just as you suspected, your friend is at fault!\nThey shared their test credentials with another friend, and together they conspired to make deposits and withdrawals from the same account _in parallel_.\nWho would do such a thing?\n\nWhile you argue that it's physically _impossible_ for someone to access their account in parallel, your friend smugly notifies you that the banking rules _require_ you to support this.\nThus, no parallel banking support, no go-live signal.\nSighing, you create a mental note to work on this tomorrow.\nThis will set your launch date back at _least_ one more day, but well...\n",
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Class BankAccount\n    Public Sub OpenMethod()\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Sub\n\n    Public Sub CloseMethod()\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Sub\n\n    Public ReadOnly Property BalanceProp As Decimal\n        Get\n            Throw New NotImplementedException(\"You need to implement this property.\")\n        End Get\n    End Property\n\n    Public Sub UpdateBalanceMethod(ByVal change As Decimal)\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Sub\nEnd Class\n",
+  "example_solution": "Imports System\n\nPublic Class BankAccount\n    Private ReadOnly _lock As Object = New Object()\n\n    Private balanceField As Decimal\n    Private isOpen As Boolean\n\n    Public Sub Open()\n        SyncLock _lock\n            isOpen = True\n        End SyncLock\n    End Sub\n\n    Public Sub Close()\n        SyncLock _lock\n            isOpen = False\n        End SyncLock\n    End Sub\n\n    Public ReadOnly Property Balance As Decimal\n        Get\n            SyncLock _lock\n                If Not isOpen Then\n                    Throw New InvalidOperationException(\"Cannot get balance on an account that isn't open\")\n                End If\n\n                Return balanceField\n            End SyncLock\n        End Get\n    End Property\n\n    Public Sub UpdateBalance(ByVal change As Decimal)\n        SyncLock _lock\n            If Not isOpen Then\n                Throw New InvalidOperationException(\"Cannot update balance on an account that isn't open\")\n            End If\n\n            balanceField += change\n        End SyncLock\n    End Sub\nEnd Class\n",
+  "test_code": "Imports System\nImports System.Collections.Generic\nImports System.Threading.Tasks\nImports Xunit\n\nPublic Class BankAccountTests\n    <Fact>\n    Public Sub Returns_empty_balance_after_opening()\n        Dim account = New BankAccount()\n        account.Open()\n\n        Assert.Equal(0D, account.Balance)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Check_basic_balance()\n        Dim account = New BankAccount()\n        account.Open()\n\n        Dim openingBalance = account.Balance\n\n        account.UpdateBalance(10D)\n        Dim updatedBalance = account.Balance\n\n        Assert.Equal(0D, openingBalance)\n        Assert.Equal(10D, updatedBalance)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Balance_can_increment_and_decrement()\n        Dim account = New BankAccount()\n        account.Open()\n        Dim openingBalance = account.Balance\n\n        account.UpdateBalance(10D)\n        Dim addedBalance = account.Balance\n\n        account.UpdateBalance(-15D)\n        Dim subtractedBalance = account.Balance\n\n        Assert.Equal(0D, openingBalance)\n        Assert.Equal(10D, addedBalance)\n        Assert.Equal(-5D, subtractedBalance)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Closed_account_throws_exception_when_checking_balance()\n        Dim account = New BankAccount()\n        account.Open()\n        account.Close()\n\n        Assert.Throws(Of InvalidOperationException)(Function() account.Balance)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Change_account_balance_from_multiple_threads()\n        Dim account = New BankAccount()\n        Dim tasks = New List(Of Task)()\n\n        Dim threads = 500\n        Dim iterations = 100\n\n        account.Open()\n        For i = 0 To threads - 1\n            tasks.Add(Task.Factory.StartNew(Sub()\n                                                For j = 0 To iterations - 1\n                                                    account.UpdateBalance(1D)\n                                                    account.UpdateBalance(-1D)\n                                                Next\n                                            End Sub))\n        Next\n        Call Task.WaitAll(tasks.ToArray())\n\n        Assert.Equal(0D, account.Balance)\n    End Sub\nEnd Class\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

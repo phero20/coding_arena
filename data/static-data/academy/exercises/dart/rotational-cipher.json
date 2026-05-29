@@ -1,0 +1,26 @@
+{
+  "id": "dart:rotational-cipher",
+  "trackSlug": "dart",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "e0023399-4123-45c4-b0a1-d7dc208bbaf9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RotationalCipher {\n  // your code here...\n}\n",
+  "example_solution": "class RotationalCipher {\n  String rotate({required String text, required int shiftKey}) {\n    return text.replaceAllMapped(RegExp(r'\\p{L}', unicode: true), (match) {\n      var letter = match[0]!.codeUnitAt(0);\n      if (65 <= letter && letter <= 90) {\n        letter = (letter - 65 + shiftKey) % 26 + 65;\n      } else if (97 <= letter && letter <= 122) {\n        letter = (letter - 97 + shiftKey) % 26 + 97;\n      }\n      return String.fromCharCode(letter);\n    });\n  }\n}\n",
+  "test_code": "import 'package:rotational_cipher/rotational_cipher.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  final cipher = RotationalCipher();\n\n  test(\"rotate a by 0, same output as input\", () {\n    final result = cipher.rotate(text: \"a\", shiftKey: 0);\n    expect(result, equals(\"a\"));\n  }, skip: false);\n\n  test(\"rotate a by 1\", () {\n    final result = cipher.rotate(text: \"a\", shiftKey: 1);\n    expect(result, equals(\"b\"));\n  }, skip: true);\n\n  test(\"rotate a by 26, same output as input\", () {\n    final result = cipher.rotate(text: \"a\", shiftKey: 26);\n    expect(result, equals(\"a\"));\n  }, skip: true);\n\n  test(\"rotate m by 13\", () {\n    final result = cipher.rotate(text: \"m\", shiftKey: 13);\n    expect(result, equals(\"z\"));\n  }, skip: true);\n\n  test(\"rotate n by 13 with wrap around alphabet\", () {\n    final result = cipher.rotate(text: \"n\", shiftKey: 13);\n    expect(result, equals(\"a\"));\n  }, skip: true);\n\n  test(\"rotate capital letters\", () {\n    final result = cipher.rotate(text: \"OMG\", shiftKey: 5);\n    expect(result, equals(\"TRL\"));\n  }, skip: true);\n\n  test(\"rotate spaces\", () {\n    final result = cipher.rotate(text: \"O M G\", shiftKey: 5);\n    expect(result, equals(\"T R L\"));\n  }, skip: true);\n\n  test(\"rotate numbers\", () {\n    final result = cipher.rotate(text: \"Testing 1 2 3 testing\", shiftKey: 4);\n    expect(result, equals(\"Xiwxmrk 1 2 3 xiwxmrk\"));\n  }, skip: true);\n\n  test(\"rotate punctuation\", () {\n    final result = cipher.rotate(text: \"Let's eat, Grandma!\", shiftKey: 21);\n    expect(result, equals(\"Gzo'n zvo, Bmviyhv!\"));\n  }, skip: true);\n\n  test(\"rotate all letters\", () {\n    final result = cipher.rotate(text: \"The quick brown fox jumps over the lazy dog.\", shiftKey: 13);\n    expect(result, equals(\"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"));\n  }, skip: true);\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:eliuds-eggs",
+  "trackSlug": "arm64-assembly",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "a37ab7a3-6757-43db-b09c-80a93fd46605",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": ".text\n.globl egg_count\n\negg_count:\n        ret\n",
+  "example_solution": ".text\n.globl egg_count\n\n/* extern int egg_count(uint64_t number); */\negg_count:\n        mov     x1, #1\n        mov     x2, x0                  /* current number */\n        ror     x3, x1, #1              /* most significant bit 1, other bits 0 */\n        mov     x0, #0                  /* egg count */\n\n.loop:\n        cmp     x2, #0\n        beq     .return\n\n        clz     x4, x2                  /* count leading zero bits */\n        ror     x5, x3, x4\n        eor     x2, x2, x5              /* clear highest bit */\n        add     x0, x0, #1              /* increment egg count */\n        b       .loop\n\n.return:\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#include <stdint.h>\n\nextern int egg_count(uint64_t number);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_0_eggs(void) {\n    TEST_ASSERT_EQUAL_INT(0, egg_count(0));\n}\n\nvoid test_1_egg(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(1, egg_count(16));\n}\n\nvoid test_4_eggs(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(4, egg_count(89));\n}\n\nvoid test_13_eggs(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(13, egg_count(2000000000));\n}\n\nvoid test_25_eggs(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(25, egg_count(6005004003002001));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_0_eggs);\n    RUN_TEST(test_1_egg);\n    RUN_TEST(test_4_eggs);\n    RUN_TEST(test_13_eggs);\n    RUN_TEST(test_25_eggs);\n    return UNITY_END();\n}\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "lean:sum-of-multiples",
+  "trackSlug": "lean",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "70018adc-082f-4982-8ecf-c97f70c7b244",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "namespace SumOfMultiples\n\ndef sum (factors : List UInt64) (limit : UInt64) : UInt64 :=\n  sorry --remove this line and implement the function\n\nend SumOfMultiples\n",
+  "example_solution": "namespace SumOfMultiples\n\ndef isMultiple (factors : List UInt64) (candidate : UInt64) : Bool :=\n  match factors with\n  | [] => false\n  | (factor :: rest) => if candidate % factor == 0 then true\n                        else isMultiple rest candidate\n\ndef sum (factors : List UInt64) (limit : UInt64) : UInt64 := Id.run do\n  let mut result := 0\n  for candidate in [1:(UInt64.toNat limit)] do\n    result := result + (if isMultiple factors (UInt64.ofNat candidate) then candidate else 0)\n  return (UInt64.ofNat result)\n\nend SumOfMultiples\n",
+  "test_code": "import LeanTest\nimport SumOfMultiples\n\nopen LeanTest\n\ndef sumOfMultiplesTests : TestSuite :=\n  (TestSuite.empty \"SumOfMultiples\")\n  |>.addTest \"no multiples within limit\" (do\n      return assertEqual 0 (SumOfMultiples.sum [3,5] 1))\n  |>.addTest \"one factor has multiples within limit\" (do\n      return assertEqual 3 (SumOfMultiples.sum [3,5] 4))\n  |>.addTest \"more than one multiple within limit\" (do\n      return assertEqual 9 (SumOfMultiples.sum [3] 7))\n  |>.addTest \"more than one factor with multiples within limit\" (do\n      return assertEqual 23 (SumOfMultiples.sum [3,5] 10))\n  |>.addTest \"each multiple is only counted once\" (do\n      return assertEqual 2318 (SumOfMultiples.sum [3,5] 100))\n  |>.addTest \"a much larger limit\" (do\n      return assertEqual 233168 (SumOfMultiples.sum [3,5] 1000))\n  |>.addTest \"three factors\" (do\n      return assertEqual 51 (SumOfMultiples.sum [7,13,17] 20))\n  |>.addTest \"factors not relatively prime\" (do\n      return assertEqual 30 (SumOfMultiples.sum [4,6] 15))\n  |>.addTest \"some pairs of factors relatively prime and some not\" (do\n      return assertEqual 4419 (SumOfMultiples.sum [5,6,8] 150))\n  |>.addTest \"one factor is a multiple of another\" (do\n      return assertEqual 275 (SumOfMultiples.sum [5,25] 51))\n  |>.addTest \"much larger factors\" (do\n      return assertEqual 2203160 (SumOfMultiples.sum [43,47] 10000))\n  |>.addTest \"all numbers are multiples of 1\" (do\n      return assertEqual 4950 (SumOfMultiples.sum [1] 100))\n  |>.addTest \"no factors means an empty sum\" (do\n      return assertEqual 0 (SumOfMultiples.sum [] 10000))\n  |>.addTest \"the only multiple of 0 is 0\" (do\n      return assertEqual 0 (SumOfMultiples.sum [0] 1))\n  |>.addTest \"the factor 0 does not affect the sum of multiples of other factors\" (do\n      return assertEqual 3 (SumOfMultiples.sum [3,0] 4))\n  |>.addTest \"solutions using include-exclude must extend to cardinality greater than 3\" (do\n      return assertEqual 39614537 (SumOfMultiples.sum [2,3,5,7,11] 10000))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [sumOfMultiplesTests]\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

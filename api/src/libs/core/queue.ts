@@ -8,6 +8,7 @@ const logger = createLogger("queue");
  * Redis connection configuration for BullMQ
  * Uses the same Redis instance as the main app
  */
+<<<<<<< HEAD
 const redisConnection = {
   host:
     new URL(config.redisUrl || "redis://localhost:6379").hostname ||
@@ -18,6 +19,18 @@ const redisConnection = {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
   enableOfflineQueue: false,
+=======
+const redisUrl = new URL(config.redisUrl || "redis://localhost:6379");
+const isSecure = redisUrl.protocol === "rediss:";
+
+const redisConnection = {
+  host: redisUrl.hostname || "localhost",
+  port: parseInt(redisUrl.port || "6379"),
+  password: redisUrl.password ? decodeURIComponent(redisUrl.password) : undefined,
+  tls: isSecure ? {} : undefined,
+  maxRetriesPerRequest: null,
+  enableReadyCheck: false,
+>>>>>>> prod-deploy
 };
 
 /**
@@ -61,6 +74,26 @@ export const arenaCleanupQueue = new Queue("arena-cleanup", {
 });
 
 /**
+<<<<<<< HEAD
+=======
+ * Contest Sync Queue
+ * - Periodically fetches contest data from CLIST
+ * - Populates PostgreSQL (Persistence) and Redis (Cache)
+ */
+export const contestSyncQueue = new Queue("contest-sync", {
+  connection: redisConnection,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: {
+      type: "exponential",
+      delay: 60000, // 1 minute
+    },
+    removeOnComplete: true,
+  },
+});
+
+/**
+>>>>>>> prod-deploy
  * Event listeners for queue monitoring
  * Using type casting to handle strict BullMQ event types
  */

@@ -1,0 +1,26 @@
+{
+  "id": "lean:say",
+  "trackSlug": "lean",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "07970f36-23e8-4ef1-9e34-4a5554d65bd7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "namespace Say\n\ndef say (number : Fin 1000000000000) : String :=\n  sorry --remove this line and implement the function\n\nend Say\n",
+  "example_solution": "namespace Say\n\ndef upToTeens : Array String := #[\n  \"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\", \"eight\", \"nine\", \"ten\",\n  \"eleven\", \"twelve\", \"thirteen\", \"fourteen\", \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"\n]\n\ndef tens : Array String := #[\n  \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\", \"eighty\", \"ninety\"\n]\n\ndef say (number : Fin 1000000000000) : String :=\n  let rec helper := fun n =>\n    if n >= 1000000000 then\n      let billion := n / 1000000000\n      let rest := n % 1000000000\n      if rest == 0 then helper billion ++ \" billion\"\n      else helper billion ++ \" billion \" ++ helper rest\n    else if n >= 1000000 then\n      let million := n / 1000000\n      let rest := n % 1000000\n      if rest == 0 then helper million ++ \" million\"\n      else helper million ++ \" million \" ++ helper rest\n    else if n >= 1000 then\n      let thousand := n / 1000\n      let rest := n % 1000\n      if rest == 0 then helper thousand ++ \" thousand\"\n      else helper thousand ++ \" thousand \" ++ helper rest\n    else if n >= 100 then\n      let hundred := n / 100\n      let rest := n % 100\n      if rest == 0 then helper hundred ++ \" hundred\"\n      else helper hundred ++ \" hundred \" ++ helper rest\n    else if n >= 20 then\n      let ten := n / 10\n      let rest := n % 10\n      if rest == 0 then tens[ten - 2]!\n      else tens[ten - 2]! ++ \"-\" ++ helper rest\n    else upToTeens[n]!\n  helper number.val\n\nend Say\n",
+  "test_code": "import LeanTest\nimport Say\n\nopen LeanTest\n\ndef sayTests : TestSuite :=\n  (TestSuite.empty \"Say\")\n  |>.addTest \"zero\" (do\n      return assertEqual \"zero\" (Say.say 0))\n  |>.addTest \"one\" (do\n      return assertEqual \"one\" (Say.say 1))\n  |>.addTest \"fourteen\" (do\n      return assertEqual \"fourteen\" (Say.say 14))\n  |>.addTest \"twenty\" (do\n      return assertEqual \"twenty\" (Say.say 20))\n  |>.addTest \"twenty-two\" (do\n      return assertEqual \"twenty-two\" (Say.say 22))\n  |>.addTest \"thirty\" (do\n      return assertEqual \"thirty\" (Say.say 30))\n  |>.addTest \"ninety-nine\" (do\n      return assertEqual \"ninety-nine\" (Say.say 99))\n  |>.addTest \"one hundred\" (do\n      return assertEqual \"one hundred\" (Say.say 100))\n  |>.addTest \"one hundred twenty-three\" (do\n      return assertEqual \"one hundred twenty-three\" (Say.say 123))\n  |>.addTest \"two hundred\" (do\n      return assertEqual \"two hundred\" (Say.say 200))\n  |>.addTest \"nine hundred ninety-nine\" (do\n      return assertEqual \"nine hundred ninety-nine\" (Say.say 999))\n  |>.addTest \"one thousand\" (do\n      return assertEqual \"one thousand\" (Say.say 1000))\n  |>.addTest \"one thousand two hundred thirty-four\" (do\n      return assertEqual \"one thousand two hundred thirty-four\" (Say.say 1234))\n  |>.addTest \"one million\" (do\n      return assertEqual \"one million\" (Say.say 1000000))\n  |>.addTest \"one million two thousand three hundred forty-five\" (do\n      return assertEqual \"one million two thousand three hundred forty-five\" (Say.say 1002345))\n  |>.addTest \"one billion\" (do\n      return assertEqual \"one billion\" (Say.say 1000000000))\n  |>.addTest \"a big number\" (do\n      return assertEqual \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\" (Say.say 987654321123))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [sayTests]\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "oxe-i"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,37 @@
+{
+  "id": "cpp:trinary",
+  "trackSlug": "cpp",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "c8246de0-29b1-4f92-8b00-b766e395ad66",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "numbers"
+  ],
+  "prerequisites": [
+    "loops"
+  ],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"trinary.h\"\n\nnamespace trinary {\n\n// TODO: add your solution here\n\n}  // namespace trinary\n",
+  "example_solution": "#include \"trinary.h\"\n\nnamespace trinary {\n\nint to_decimal(std::string const &text) {\n    int result = 0;\n    for (const char digit : text) {\n        if (digit < '0' || digit > '2') {\n            return 0;\n        }\n        result *= 3;\n        result += digit - '0';\n    }\n    return result;\n}\n\n}  // namespace trinary\n",
+  "test_code": "#include \"trinary.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nTEST_CASE(\"_1_yields_decimal_1\") { REQUIRE(1 == trinary::to_decimal(\"1\")); }\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"_2_yields_decimal_2\") { REQUIRE(2 == trinary::to_decimal(\"2\")); }\n\nTEST_CASE(\"_10_yields_decimal_3\") { REQUIRE(3 == trinary::to_decimal(\"10\")); }\n\nTEST_CASE(\"_11_yields_decimal_4\") { REQUIRE(4 == trinary::to_decimal(\"11\")); }\n\nTEST_CASE(\"_100_yields_decimal_9\") { REQUIRE(9 == trinary::to_decimal(\"100\")); }\n\nTEST_CASE(\"_112_yields_decimal_14\") {\n    REQUIRE(14 == trinary::to_decimal(\"112\"));\n}\n\nTEST_CASE(\"_222_yields_decimal_26\") {\n    REQUIRE(26 == trinary::to_decimal(\"222\"));\n}\n\nTEST_CASE(\"_1122000120_yields_decimal_32091\") {\n    REQUIRE(32091 == trinary::to_decimal(\"1122000120\"));\n}\n\nTEST_CASE(\"invalid_yields_decimal_0\") {\n    REQUIRE(0 == trinary::to_decimal(\"carrot\"));\n}\n#endif\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "patricksjackson"
+  ]
+}

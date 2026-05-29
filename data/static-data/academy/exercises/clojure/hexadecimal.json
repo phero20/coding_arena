@@ -1,0 +1,35 @@
+{
+  "id": "clojure:hexadecimal",
+  "trackSlug": "clojure",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "a4b1b39a-d942-4921-9b67-2bd913ff52a0",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000, teal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns hexadecimal)\n\n(defn hex-to-int [] ;; <- arglist goes here\n  ;; your code goes here\n)\n",
+  "example_solution": "(ns hexadecimal)\n\n(defn- char-between [start end c]\n  (let [ascii (int c)]\n    (and (>= ascii (int start)) (<= ascii (int end)))))\n\n(def is-digit (partial char-between \\0 \\9))\n(def is-a-to-f (partial char-between \\a \\f))\n\n(defn- is-hex-digit [c]\n  (or (is-digit c) (is-a-to-f c)))\n\n(defn- digit-to-int [c]\n  (cond\n    (is-digit c) (- (int c) (int \\0))\n    (is-a-to-f c) (+ (- (int c) (int \\a)) 10)\n    :else (throw (Exception. \"Character is not a hex digit\"))))\n\n(defn hex-to-int [digits]\n  (if\n   (some (complement is-hex-digit) digits) 0\n   (reduce #(+ (digit-to-int %2) (* %1 16)) 0 digits)))\n\n",
+  "test_code": "(ns hexadecimal-test\n  (:require [clojure.test :refer [deftest is]]\n            hexadecimal))\n\n(deftest hex-to-int-test\n  (is (= 1 (hexadecimal/hex-to-int \"1\")))\n  (is (= 12 (hexadecimal/hex-to-int \"c\")))\n  (is (= 16 (hexadecimal/hex-to-int \"10\")))\n  (is (= 175 (hexadecimal/hex-to-int \"af\")))\n  (is (= 256 (hexadecimal/hex-to-int \"100\")))\n  (is (= 105166 (hexadecimal/hex-to-int \"19ace\")))\n  (is (= 0 (hexadecimal/hex-to-int \"carrot\")))\n  (is (= 0 (hexadecimal/hex-to-int \"000000\")))\n  (is (= 16777215 (hexadecimal/hex-to-int \"ffffff\")))\n  (is (= 16776960 (hexadecimal/hex-to-int \"ffff00\"))))\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "geofflane"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "canweriotnow",
+    "dkinzer",
+    "haus",
+    "kytrinyx",
+    "mathias",
+    "rubysolo",
+    "yurrriq"
+  ]
+}

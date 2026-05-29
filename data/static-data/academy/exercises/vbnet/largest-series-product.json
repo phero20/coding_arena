@@ -1,0 +1,36 @@
+{
+  "id": "vbnet:largest-series-product",
+  "trackSlug": "vbnet",
+  "slug": "largest-series-product",
+  "name": "Largest Series Product",
+  "uuid": "19675f15-ff61-41e9-8610-c27edaefde04",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "integral-numbers",
+    "math-operators"
+  ],
+  "prerequisites": [
+    "integral-numbers",
+    "math-operators",
+    "strings",
+    "chars",
+    "for-loops",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to look for patterns in the long sequence of digits in the encrypted signal.\n\nThe technique you're going to use here is called the largest series product.\n\nLet's define a few terms, first.\n\n- **input**: the sequence of digits that you need to analyze\n- **series**: a sequence of adjacent digits (those that are next to each other) that is contained within the input\n- **span**: how many digits long each series is\n- **product**: what you get when you multiply numbers together\n\nLet's work through an example, with the input `\"63915\"`.\n\n- To form a series, take adjacent digits in the original input.\n- If you are working with a span of `3`, there will be three possible series:\n  - `\"639\"`\n  - `\"391\"`\n  - `\"915\"`\n- Then we need to calculate the product of each series:\n  - The product of the series `\"639\"` is 162 (`6 × 3 × 9 = 162`)\n  - The product of the series `\"391\"` is 27 (`3 × 9 × 1 = 27`)\n  - The product of the series `\"915\"` is 45 (`9 × 1 × 5 = 45`)\n- 162 is bigger than both 27 and 45, so the largest series product of `\"63915\"` is from the series `\"639\"`.\n  So the answer is **162**.\n",
+  "introduction": "# Introduction\n\nYou work for a government agency that has intercepted a series of encrypted communication signals from a group of bank robbers.\nThe signals contain a long sequence of digits.\nYour team needs to use various digital signal processing techniques to analyze the signals and identify any patterns that may indicate the planning of a heist.\n",
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module LargestSeriesProduct\n    Public Function GetLargestProduct(ByVal digits As String, ByVal span As Integer) As Long\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System\nImports System.Collections.Generic\nImports System.Linq\n\nPublic Module LargestSeriesProduct\n    Public Function GetLargestProduct(ByVal digits As String, ByVal span As Integer) As Long\n        Return GetSlices(ParseDigits(digits), span).Max(Function(l) GetProduct(l))\n    End Function\n\n    Private Function GetSlices(ByVal digits As Long(), ByVal span As Integer) As IEnumerable(Of IEnumerable(Of Long))\n        If span < 0 OrElse span > digits.Length Then\n            Throw New ArgumentException(\"Invalid span.\")\n        End If\n\n        Return Enumerable.Range(0, GetNumberOfSlices(digits, span)).[Select](Function(i) digits.Skip(i).Take(span))\n    End Function\n\n    Private Function ParseDigits(ByVal digits As String) As Long()\n        Return digits.ToCharArray().[Select](New Func(Of Char, Long)(AddressOf ParseDigit)).ToArray()\n    End Function\n\n    Private Function ParseDigit(ByVal c As Char) As Long\n        If Not Char.IsDigit(c) Then\n            Throw New ArgumentException(\"Invalid digit.\")\n        End If\n\n        Return Long.Parse(c.ToString())\n    End Function\n\n    Private Function GetProduct(ByVal numbers As IEnumerable(Of Long)) As Long\n        Return numbers.Aggregate(1L, Function(x, product) x * product)\n    End Function\n\n    Private Function GetNumberOfSlices(ByVal digits As Long(), ByVal span As Integer) As Integer\n        Return digits.Length + 1 - span\n    End Function\nEnd Module\n",
+  "test_code": "Imports System\nImports Xunit\n\nPublic Class LargestSeriesProductTests\n    <Fact>\n    Public Sub Finds_the_largest_product_if_span_equals_length()\n        Assert.Equal(18, GetLargestProduct(\"29\", 2))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_find_the_largest_product_of_2_with_numbers_in_order()\n        Assert.Equal(72, GetLargestProduct(\"0123456789\", 2))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_find_the_largest_product_of_2()\n        Assert.Equal(48, GetLargestProduct(\"576802143\", 2))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_find_the_largest_product_of_3_with_numbers_in_order()\n        Assert.Equal(504, GetLargestProduct(\"0123456789\", 3))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_find_the_largest_product_of_3()\n        Assert.Equal(270, GetLargestProduct(\"1027839564\", 3))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_find_the_largest_product_of_5_with_numbers_in_order()\n        Assert.Equal(15120, GetLargestProduct(\"0123456789\", 5))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_get_the_largest_product_of_a_big_number()\n        Assert.Equal(23520, GetLargestProduct(\"73167176531330624919225119674426574742355349194934\", 6))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Reports_zero_if_the_only_digits_are_zero()\n        Assert.Equal(0, GetLargestProduct(\"0000\", 2))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Reports_zero_if_all_spans_include_zero()\n        Assert.Equal(0, GetLargestProduct(\"99099\", 3))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rejects_span_longer_than_string_length()\n        Assert.Throws(Of ArgumentException)(Function() GetLargestProduct(\"123\", 4))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rejects_empty_string_and_nonzero_span()\n        Assert.Throws(Of ArgumentException)(Function() GetLargestProduct(\"\", 1))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rejects_invalid_character_in_digits()\n        Assert.Throws(Of ArgumentException)(Function() GetLargestProduct(\"1234a5\", 2))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Rejects_negative_span()\n        Assert.Throws(Of ArgumentException)(Function() GetLargestProduct(\"12345\", -1))\n    End Sub\nEnd Class\n",
+  "source": "A variation on Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,38 @@
+{
+  "id": "ruby:rail-fence-cipher",
+  "trackSlug": "ruby",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "64196fe5-2270-4113-a614-fbfbb6d00f2b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Rail Fence Cipher' exercise in this file. Make the tests in\n`rail_fence_cipher_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/rail-fence-cipher` directory.\n=end\n",
+  "example_solution": "class RailFenceCipher\n  def self.encode(message, rails)\n    return message if message.empty? || rails == 1\n    empty_fences = create_empty_fences_array(message, rails)\n    zig_zag_array = populate_fences_array(message, rails, empty_fences)\n    zig_zag_array.flatten.join\n  end\n\n  def self.decode(message, rails)\n    return message if message.empty? || rails == 1\n    empty = create_empty_fences_array(message, rails)\n    mark_fences = populate_fences_array('X' * message.length, rails, empty)\n    line_lengths = find_the_lengths_of_the_lines(message, rails)\n    lines = split_the_encrypted_message_by_rows(message, line_lengths)\n    result = switch_marked_cells_with_string(mark_fences, lines, empty)\n    result.transpose.flatten.join\n  end\n\n  def self.create_empty_fences_array(message, rails)\n    Array.new(rails) { Array.new(message.length) }\n  end\n\n  def self.populate_fences_array(message, rails, fences)\n    row = 0\n    row_direction = 1\n    message.length.times do |column|\n      fences[row][column] = message[column]\n      row_direction = 1 if row == 0\n      row_direction = -1 if row == (rails - 1)\n      row += row_direction\n    end\n    fences\n  end\n\n  def self.find_the_lengths_of_the_lines(message, rails)\n    line_lengths = Hash.new(0)\n    row = 0\n    row_direction = 1\n    (0..(message.length - 1)).each do\n      line_lengths[row] += 1\n      row_direction = 1 if row == 0\n      row_direction = -1 if row == (rails - 1)\n      row += row_direction\n    end\n    line_lengths\n  end\n\n  def self.split_the_encrypted_message_by_rows(message, line_lengths)\n    lines = []\n    line_lengths.each do |_row_num, line_length|\n      lines << message.slice!(0...line_length)\n    end\n    lines\n  end\n\n  def self.switch_marked_cells_with_string(mark_fences, lines, fences)\n    mark_fences.map.with_index do |row, row_number|\n      row.map.with_index do |cell, col_number|\n        if cell == 'X'\n          fences[row_number][col_number] = lines[row_number].slice!(0)\n        end\n      end\n    end\n  end\n\n  private_class_method :create_empty_fences_array,\n                       :populate_fences_array,\n                       :find_the_lengths_of_the_lines,\n                       :split_the_encrypted_message_by_rows\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'rail_fence_cipher'\n\nclass RailFenceCipherTest < Minitest::Test\n  def test_encode_with_two_rails\n    # skip\n    actual = RailFenceCipher.encode('XOXOXOXOXOXOXOXOXO', 2)\n    expected = 'XXXXXXXXXOOOOOOOOO'\n    assert_equal expected, actual\n  end\n\n  def test_encode_with_three_rails\n    skip\n    actual = RailFenceCipher.encode('WEAREDISCOVEREDFLEEATONCE', 3)\n    expected = 'WECRLTEERDSOEEFEAOCAIVDEN'\n    assert_equal expected, actual\n  end\n\n  def test_encode_with_ending_in_the_middle\n    skip\n    actual = RailFenceCipher.encode('EXERCISES', 4)\n    expected = 'ESXIEECSR'\n    assert_equal expected, actual\n  end\n\n  def test_decode_with_three_rails\n    skip\n    actual = RailFenceCipher.decode('TEITELHDVLSNHDTISEIIEA', 3)\n    expected = 'THEDEVILISINTHEDETAILS'\n    assert_equal expected, actual\n  end\n\n  def test_decode_with_five_rails\n    skip\n    actual = RailFenceCipher.decode('EIEXMSMESAORIWSCE', 5)\n    expected = 'EXERCISMISAWESOME'\n    assert_equal expected, actual\n  end\n\n  def test_decode_with_six_rails\n    skip\n    actual = RailFenceCipher.decode('133714114238148966225439541018335470986172518171757571896261', 6)\n    expected = '112358132134558914423337761098715972584418167651094617711286'\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "raysapida"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "emcoding",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "tryantwit"
+  ]
+}

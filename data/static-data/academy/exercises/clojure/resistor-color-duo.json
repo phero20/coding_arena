@@ -1,0 +1,29 @@
+{
+  "id": "clojure:resistor-color-duo",
+  "trackSlug": "clojure",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "6d127442-d181-4654-8aec-36d42f09a949",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "vectors",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns resistor-color-duo)\n\n(defn resistor-value\n  \"Returns the resistor value based on the given colors.\"\n  [colors]\n  ;; function body\n  )\n",
+  "example_solution": "(ns resistor-color-duo)\n\n(def colors [\"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\"])\n\n(defn- color-code [color] (.indexOf colors color))\n\n(defn resistor-value\n  \"Returns the resistor value based on the given colors\"\n  [[color-1 color-2]]\n  (+ (* 10 (color-code color-1)) (color-code color-2)))\n",
+  "test_code": "(ns resistor-color-duo-test\n  (:require [clojure.test :refer [deftest testing is]]\n            resistor-color-duo))\n\n(deftest resistor-value_test_1\n  (testing \"Brown and black\"\n    (is (= 10 (resistor-color-duo/resistor-value [\"brown\" \"black\"])))))\n\n(deftest resistor-value_test_2\n  (testing \"Blue and grey\"\n    (is (= 68 (resistor-color-duo/resistor-value [\"blue\" \"grey\"])))))\n\n(deftest resistor-value_test_3\n  (testing \"Yellow and violet\"\n    (is (= 47 (resistor-color-duo/resistor-value [\"yellow\" \"violet\"])))))\n\n(deftest resistor-value_test_4\n  (testing \"White and red\"\n    (is (= 92 (resistor-color-duo/resistor-value [\"white\" \"red\"])))))\n\n(deftest resistor-value_test_5\n  (testing \"Orange and orange\"\n    (is (= 33 (resistor-color-duo/resistor-value [\"orange\" \"orange\"])))))\n\n(deftest resistor-value_test_6\n  (testing \"Ignore additional colors\"\n    (is (= 51 (resistor-color-duo/resistor-value [\"green\" \"brown\" \"orange\"])))))\n\n(deftest resistor-value_test_7\n  (testing \"Black and brown, one-digit\"\n    (is (= 1 (resistor-color-duo/resistor-value [\"black\" \"brown\"])))))\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

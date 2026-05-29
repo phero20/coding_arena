@@ -1,0 +1,26 @@
+{
+  "id": "red:difference-of-squares",
+  "trackSlug": "red",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "a4945f14-2116-4d19-a632-758d7e5669bf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Difference of Squares\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nsquare-of-sum: function [\n\tnumber\n] [\n\tcause-error 'user 'message \"You need to implement square-of-sum function.\"\n]\n\nsum-of-squares: function [\n\tnumber\n] [\n\tcause-error 'user 'message \"You need to implement sum-of-squares function.\"\n]\n\ndifference-of-squares: function [\n\tnumber\n] [\n\tcause-error 'user 'message \"You need to implement difference-of-squares function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Difference of Squares\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nsquare-of-sum: function [\n\tnumber\n] [\n\tresult: 0\n\tforeach value range-inclusive number [\n\t\tresult: add result value\n\t]\n\tpower result 2\n]\n\nsum-of-squares: function [\n\tnumber\n] [\n\tresult: 0\n\tforeach value range-inclusive number  [\n\t\tresult: add result power value 2\n\t]\n\tresult\n]\n\ndifference-of-squares: function [\n\tnumber\n] [\n\tsubtract square-of-sum number sum-of-squares number\n]\n\nrange-inclusive: function [\n\tnumber\n] [\n\tcollect [repeat i number [keep i]]\n]",
+  "test_code": "Red [\n\tdescription: {Tests for \"Difference of Squares\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %difference-of-squares.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"square of sum 1\"\n    input: #[\n        number: 1\n    ]\n    expected: 1\n    function: \"square-of-sum\"\n    uuid: \"e46c542b-31fc-4506-bcae-6b62b3268537\"\n] #[\n    description: \"square of sum 5\"\n    input: #[\n        number: 5\n    ]\n    expected: 225\n    function: \"square-of-sum\"\n    uuid: \"9b3f96cb-638d-41ee-99b7-b4f9c0622948\"\n] #[\n    description: \"square of sum 100\"\n    input: #[\n        number: 100\n    ]\n    expected: 25502500\n    function: \"square-of-sum\"\n    uuid: \"54ba043f-3c35-4d43-86ff-3a41625d5e86\"\n] #[\n    description: \"sum of squares 1\"\n    input: #[\n        number: 1\n    ]\n    expected: 1\n    function: \"sum-of-squares\"\n    uuid: \"01d84507-b03e-4238-9395-dd61d03074b5\"\n] #[\n    description: \"sum of squares 5\"\n    input: #[\n        number: 5\n    ]\n    expected: 55\n    function: \"sum-of-squares\"\n    uuid: \"c93900cd-8cc2-4ca4-917b-dd3027023499\"\n] #[\n    description: \"sum of squares 100\"\n    input: #[\n        number: 100\n    ]\n    expected: 338350\n    function: \"sum-of-squares\"\n    uuid: \"94807386-73e4-4d9e-8dec-69eb135b19e4\"\n] #[\n    description: \"difference of squares 1\"\n    input: #[\n        number: 1\n    ]\n    expected: 0\n    function: \"difference-of-squares\"\n    uuid: \"44f72ae6-31a7-437f-858d-2c0837adabb6\"\n] #[\n    description: \"difference of squares 5\"\n    input: #[\n        number: 5\n    ]\n    expected: 170\n    function: \"difference-of-squares\"\n    uuid: \"005cb2bf-a0c8-46f3-ae25-924029f8b00b\"\n] #[\n    description: \"difference of squares 100\"\n    input: #[\n        number: 100\n    ]\n    expected: 25164150\n    function: \"difference-of-squares\"\n    uuid: \"b1bf19de-9a16-41c0-a62b-1f02ecc0b036\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

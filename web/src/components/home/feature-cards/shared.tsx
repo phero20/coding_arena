@@ -14,7 +14,11 @@ export function BentoCard({
   const inner = (
     <Card
       className={cn(
+<<<<<<< HEAD
         "group h-full overflow-hidden border-border/40 hover:border-border/70 transition-all duration-300 bg-card/30 backdrop-blur-sm",
+=======
+        "group h-full overflow-hidden border-border/60 hover:border-border transition-all duration-300 bg-card/30 backdrop-blur-sm ring-1 ring-border/30 shadow-[0_1px_0_hsl(var(--background)/0.6)_inset,0_0_0_1px_hsl(var(--border)/0.45),0_28px_60px_-26px_hsl(var(--foreground)/0.85),0_14px_30px_-16px_hsl(var(--foreground)/0.72)] hover:-translate-y-0.5 hover:ring-border/60 hover:shadow-[0_1px_0_hsl(var(--background)/0.72)_inset,0_0_0_1px_hsl(var(--border)/0.7),0_36px_72px_-28px_hsl(var(--foreground)/0.95),0_18px_38px_-18px_hsl(var(--foreground)/0.8)]",
+>>>>>>> prod-deploy
         href && "cursor-pointer",
         className,
       )}

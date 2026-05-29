@@ -1,0 +1,29 @@
+{
+  "id": "cfml:saddle-points",
+  "trackSlug": "cfml",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "8951bf1a-bd72-4090-9733-b0b6a80f541c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n    1  2  3  4\n  |-----------\n1 | 9  8  7  8\n2 | 5  3  2  4  <--- potential tree house at row 2, column 1, for tree with height 5\n3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the SaddlePoints exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\tfunction saddlePoints( matrix ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the SaddlePoints exercise\n*/\ncomponent {\n\n\tfunction saddlePoints( matrix ) {\n\t\tif( matrix.isEmpty() || matrix[ 1 ].isEmpty() ) {\n\t\t\treturn [];\n\t\t}\n\t\t\n\t\tvar result = [];\n\t\t// Loop over each column\n\t\tfor( var col=1; col<=3; col++ ) {\n\t\t\t\n\t\t\t// Loop over each row\n\t\t\tfor( var row=1; row<=3; row++ ) {\n\t\t\t\t\n\t\t\t\t// This value must be the biggest int he row\n\t\t\t\tif( getAt( matrix, row, col ) >= rowMax( matrix, row )\n\t\t\t\t\t// and the least in the column\n\t\t\t\t\t&& getAt( matrix, row, col ) <= colMin( matrix, col ) ){\n\t\t\t\t\t\n\t\t\t\t\t// Silly exercise uses inferior 0-based numbering!\n\t\t\t\t\tresult.append( {\n\t\t\t\t\t\trow : row-1,\n\t\t\t\t\t\tcolumn : col-1\n\t\t\t\t\t} );\n\t\t\t\t\t\n\t\t\t\t} // End check\n\t\t\t\t\n\t\t\t} // end row loop\n\t\t\t\n\t\t} // end col loop\n\t\t\n\t\treturn result;\n\t}\n\t\n\t/**\n\t* Get minimum value for a column\n\t*/\n\tprivate function colMin( matrix, col ) {\n\t\treturn [ matrix[ 1 ][ col ], matrix[ 2 ][ col ], matrix[ 3 ][ col ] ].min();\n\t}\t\n\t\n\t/**\n\t* Get maximum value for a row\n\t*/\n\tprivate function rowMax( matrix, row ) {\n\t\treturn matrix[ row ].max();\n\t}\t\n\t\n\t/**\n\t* Get a specific value from the matrix\n\t*/\n\tprivate function getAt( matrix, row, col ) {\n\t\treturn matrix[ row ][ col ];\n\t}\n\t\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'SaddlePoints' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My SaddlePoints class\", function(){\t\t\t\n\n\t\t\tit( 'Can identify single saddle point', function(){\n\t\t\t\texpect( SUT.saddlePoints( matrix=[[9, 8, 7], [5, 3, 2], [6, 6, 7]] ) ).toBe( [{\"row\":1,\"column\":0}] );\n\t\t\t});\n\n\t\t\tit( 'Can identify that empty matrix has no saddle points', function(){\n\t\t\t\texpect( SUT.saddlePoints( matrix=[[]] ) ).toBe( [] );\n\t\t\t});\n\n\t\t\tit( 'Can identify lack of saddle points when there are none', function(){\n\t\t\t\texpect( SUT.saddlePoints( matrix=[[1, 2, 3], [3, 1, 2], [2, 3, 1]] ) ).toBe( [] );\n\t\t\t});\n\n\t\t\tit( 'Can identify multiple saddle points', function(){\n\t\t\t\texpect( SUT.saddlePoints( matrix=[[4, 5, 4], [3, 5, 5], [1, 5, 4]] ) ).toBe( [{\"row\":0,\"column\":1},{\"row\":1,\"column\":1},{\"row\":2,\"column\":1}] );\n\t\t\t});\n\n\t\t\tit( 'Can identify saddle point in bottom right corner', function(){\n\t\t\t\texpect( SUT.saddlePoints( matrix=[[8, 7, 9], [6, 7, 6], [3, 2, 5]] ) ).toBe( [{\"row\":2,\"column\":2}] );\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "sjwarner-bp"
+  ]
+}

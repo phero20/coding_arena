@@ -1,0 +1,26 @@
+{
+  "id": "unison:leap",
+  "trackSlug": "unison",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "d2bbc189-f4c8-46b9-8616-a28e3d946bde",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": "# Hints\n\n## General\n\n- You may want to look at the `Nat.mod` function in the `base` standard library to accomplish this.\n- Enter `docs Nat.mod` in the UCM or navigate to read about the behavior of `Nat.mod` or navigate to [the documentation for the function online at Unison Share](https://share.unison-lang.org/@unison/code/latest/namespaces/public/base/latest/;/terms/Nat/mod)",
+  "starter_code": "leap.leap : Nat -> Boolean\nleap.leap year =\n  todo \"implement leap function\"\n",
+  "example_solution": "leap : Nat -> Boolean\nleap year =\n  isFactor a b =\n    (Nat.mod a b) === 0\n  (isFactor year 4 && (not (isFactor year 100 ) || isFactor year 400 ))\n",
+  "test_code": "leap.test.t1 = verify do\n  labeled \"leap should be false when year is not divisible by 4\" do\n    expected = false\n    actual = leap 2015\n    ensureEqual expected actual\n\nleap.test.t2 = verify do\n  labeled \"leap should be false when year is divisible by 2 not divisible by 4\" do\n    expected = false\n    actual = leap 1970\n    ensureEqual expected actual\n\nleap.test.t3 = verify do\n  labeled \"leap should be true when year is divisible by 4\" do\n    expected = true\n    actual = leap 1964\n    ensureEqual expected actual\n\nleap.test.t4 = verify do\n  labeled \"leap should be true when year divisible by 4, not divisible by 100\" do\n    expected = true\n    actual = leap 1996\n    ensureEqual expected actual\n\nleap.test.t5 = verify do\n  labeled \"leap should be true when year divisible by 4 and 5\" do\n    expected = true\n    actual = leap 1960\n    ensureEqual expected actual\n\nleap.test.t6 = verify do\n  labeled \"leap should be false when year divisible by 100, not divisible by 400\" do\n    expected = false\n    actual = leap 2100\n    ensureEqual expected actual\n\nleap.test.t7 = verify do\n  labeled \"leap should be true when year divisible by 400 and 100\" do\n    expected = true\n    actual = leap 2000\n    ensureEqual expected actual\n\nleap.test.t8 = verify do\n  labeled \"leap should be false when year divisible by 4 and 100\" do\n    expected = false\n    actual = leap 1900\n    ensureEqual expected actual\n\nleap.test.t9 = verify do\n  labeled \"leap should be false when year divisible by 200, not divisble by 400\" do\n    expected = false\n    actual = leap 1800\n    ensureEqual expected actual\n\ntest> leap.tests =\n  join [\n    leap.test.t1,\n    leap.test.t2,\n    leap.test.t3,\n    leap.test.t4,\n    leap.test.t5,\n    leap.test.t6,\n    leap.test.t7,\n    leap.test.t8,\n    leap.test.t9\n  ]\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "rlmark"
+  ],
+  "contributors": null
+}

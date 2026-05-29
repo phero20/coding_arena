@@ -1,0 +1,26 @@
+{
+  "id": "prolog:strain",
+  "trackSlug": "prolog",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "6d9d642d-ac70-4370-9369-6efcc4756f36",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `keep` and `discard` operation on collections.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "keep(Goal, Input, Filtered).\ndiscard(Goal, Input, Filtered).\n",
+  "example_solution": "keep(_, [], []) :- !.\nkeep(Goal, [X|Xs], Filtered) :-\n    keep(Goal, Xs, FilteredXs),\n    (call(Goal, X) -> Filtered = [X|FilteredXs]; Filtered = FilteredXs).\n\ndiscard(_, [], []) :- !.\ndiscard(Goal, [X|Xs], Filtered) :-\n    discard(Goal, Xs, FilteredXs),\n    (call(Goal, X) -> Filtered = FilteredXs; Filtered = [X|FilteredXs]).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(strain).\n\n    test(empty_sequence, condition(true)) :-\n        Input = [],\n        keep([X]>>(X mod 2 =:= 0), Input, Filtered),\n        Filtered == [].\n\n    test(empty_keep, condition(pending)) :-\n        Input = [2, 4, 6, 8, 10],\n        keep([X]>>(X mod 2 =:= 1), Input, Filtered),\n        Filtered == [].\n\n    test(empty_discard, condition(pending)) :-\n        Input = [2, 4, 6, 8, 10],\n        discard([X]>>(X mod 2 =:= 0), Input, Filtered),\n        Filtered == [].\n\n    test(keep_everything, condition(pending)) :-\n        Input = [2, 4, 6, 8, 10],\n        keep([X]>>(X mod 2 =:= 0), Input, Filtered),\n        Filtered == Input.\n\n    test(discard_endswith, condition(pending)) :-\n        Input = [\"dough\", \"cash\", \"plough\", \"though\", \"through\", \"enough\"],\n        discard([X]>>(string_concat(_, \"ough\", X)), Input, Filtered),\n        Filtered == [\"cash\"].\n    \n    test(keep_z, condition(pending)) :-\n        Input = [\"zebra\", \"arizona\", \"apple\", \"google\", \"mozilla\"],\n        keep([X]>>(string_chars(X, Chars), member('z', Chars)), Input, Filtered),\n        Filtered == [\"zebra\", \"arizona\", \"mozilla\"].\n    \n    test(keep_discard, condition(pending)) :-\n        Input = [\"1,2,3\", \"one\", \"almost!\", \"love\"],\n        keep([X]>>(string_length(X, Length), Length > 4), Input, Kept),\n        discard([X]>>(string_length(X, Length), Length > 4), Kept, Filtered),\n        Filtered == [].\n    \n    test(keep_plus_discard, condition(pending)) :-\n        Input = [\"1,2,3\", \"one\", \"almost!\", \"love\"],\n        keep([X]>>(string_length(X, Length), Length > 4), Input, Kept),\n        discard([X]>>(string_length(X, Length), Length > 4), Input, Discarded),\n        append(Kept, Discarded, [\"1,2,3\", \"almost!\", \"one\", \"love\"]).\n\n:- end_tests(strain).\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

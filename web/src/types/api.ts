@@ -33,6 +33,22 @@ export interface ProblemCodeSnippets {
   [language: string]: string | undefined;
 }
 
+<<<<<<< HEAD
+=======
+export interface FunctionParameter {
+  name: string;
+  type: string;
+}
+
+export interface FunctionSignature {
+  name: string;
+  return_type: string;
+  params: FunctionParameter[];
+  param_order?: string[];
+  testcase_serialization_version?: string;
+}
+
+>>>>>>> prod-deploy
 export interface Problem {
   title: string;
   problem_id: string;
@@ -46,7 +62,14 @@ export interface Problem {
   follow_ups: string[];
   hints: string[];
   code_snippets: ProblemCodeSnippets;
+<<<<<<< HEAD
   solutions?: string;
+=======
+  function_signature: FunctionSignature;
+  solutions?: string;
+  source?: string;
+  source_url?: string;
+>>>>>>> prod-deploy
   createdAt: string;
   updatedAt: string;
 }
@@ -56,8 +79,13 @@ export type ProblemDifficulty = Problem["difficulty"];
 export type ProblemTestType = "public" | "hidden" | "stress" | "ai_eval";
 
 export interface ProblemTestCase {
+<<<<<<< HEAD
   input: string;
   expected_output: string;
+=======
+  input: any; // Now supports structured JSON objects
+  expected_output: any; // Now supports structured JSON arrays/objects
+>>>>>>> prod-deploy
   timeout_ms?: number;
   memory_limit_mb?: number;
   weight?: number;
@@ -71,3 +99,38 @@ export interface ProblemTest {
   createdAt: string;
   updatedAt: string;
 }
+<<<<<<< HEAD
+=======
+
+export interface Solution {
+  id: string;
+  userId: string;
+  problemId: string;
+  title: string;
+  content: string;
+  language?: string;
+  upvotes: number;
+  downvotes: number;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    username: string;
+    avatarUrl?: string | null;
+    fullName?: string | null;
+  };
+  problemTitle?: string;
+  problemSlug?: string;
+}
+
+export interface CreateSolutionInput {
+  title: string;
+  content: string;
+  language?: string;
+  problemTitle?: string;
+  problemSlug?: string;
+}
+
+export interface VoteSolutionInput {
+  voteType: 1 | -1;
+}
+>>>>>>> prod-deploy

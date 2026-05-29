@@ -1,0 +1,28 @@
+{
+  "id": "tcl:rna-transcription",
+  "trackSlug": "tcl",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "1479aec4-6f8f-403e-ad0b-33d0b7b7891a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "proc to-rna {dna} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc to-rna {dna} {\n    return [string map {G C C G T A A U} $dna]\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"rna-transcription.tcl\"\n\ntest rna-transcription-1 \"Empty RNA sequence\" \\\n    -body {to-rna \"\"} -result \"\"\n\nskip rna-transcription-2\ntest rna-transcription-2 \"RNA complement of cytosine is guanine\" \\\n    -body {to-rna \"C\"} -result \"G\"\n\nskip rna-transcription-3\ntest rna-transcription-3 \"RNA complement of guanine is cytosine\" \\\n    -body {to-rna \"G\"} -result \"C\"\n\nskip rna-transcription-4\ntest rna-transcription-4 \"RNA complement of thymine is adenine\" \\\n    -body {to-rna \"T\"} -result \"A\"\n\nskip rna-transcription-5\ntest rna-transcription-5 \"RNA complement of adenine is uracil\" \\\n    -body {to-rna \"A\"} -result \"U\"\n\nskip rna-transcription-6\ntest rna-transcription-6 \"RNA complement\" \\\n    -body {to-rna \"ACGTGGTCTTAA\"} -result \"UGCACCAGAAUU\"\n\ncleanupTests\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "sshine"
+  ],
+  "contributors": [
+    "glennj"
+  ]
+}

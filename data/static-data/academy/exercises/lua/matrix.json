@@ -1,0 +1,28 @@
+{
+  "id": "lua:matrix",
+  "trackSlug": "lua",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "d4de8f02-ba5b-4357-8285-9cb41dc3b72e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(s)\nend\n",
+  "example_solution": "return function(s)\n  local rows = {}\n\n  for line in s:gmatch('[%d ]+') do\n    local row = {}\n    for element in line:gmatch('%d+') do\n      table.insert(row, tonumber(element))\n    end\n    table.insert(rows, row)\n  end\n\n  return {\n    row = function(which)\n      return rows[which]\n    end,\n\n    column = function(which)\n      local column = {}\n      for _, row in ipairs(rows) do\n        table.insert(column, row[which])\n      end\n      return column\n    end\n  }\nend\n",
+  "test_code": "local Matrix = require('matrix')\n\ndescribe('matrix', function()\n  it('should allow rows to be extracted', function()\n    local matrix = Matrix('1 2 3\\n4 5 6\\n7 8 9')\n    assert.same({ 1, 2, 3 }, matrix.row(1))\n    assert.same({ 4, 5, 6 }, matrix.row(2))\n    assert.same({ 7, 8, 9 }, matrix.row(3))\n  end)\n\n  it('should allow columns to be extracted', function()\n    local matrix = Matrix('1 2 3\\n4 5 6\\n7 8 9')\n    assert.same({ 1, 4, 7 }, matrix.column(1))\n    assert.same({ 2, 5, 8 }, matrix.column(2))\n    assert.same({ 3, 6, 9 }, matrix.column(3))\n  end)\n\n  it('should support values of varying sizes', function()\n    local matrix = Matrix('1 2 3\\n4 12345 6\\n7 8 9')\n    assert.same({ 4, 12345, 6 }, matrix.row(2))\n    assert.same({ 2, 12345, 8 }, matrix.column(2))\n  end)\n\n  it('should support matrices of varying sizes', function()\n    local matrix = Matrix('1 2\\n3 4\\n5 6')\n    assert.same({ 3, 4 }, matrix.row(2))\n    assert.same({ 2, 4, 6 }, matrix.column(2))\n  end)\nend)\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "powershell:rotational-cipher",
+  "trackSlug": "powershell",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "b6937bc6-9101-4d9b-a45c-e82277daa0bd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Function Invoke-RotationalCipher() {\n    <#\n    .SYNOPSIS\n    Rotate a string by a given number of places.\n\n    .DESCRIPTION\n    Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n    \n    .PARAMETER Text\n    The text to rotate    \n\n    .PARAMETER Shift\n    The number of places to shift the text\n\n    .EXAMPLE\n    Invoke-RotationalCipher -Text \"A\" -Shift 1\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Text, \n        [int]$Shift\n    )\n    \n    Throw \"Please implement this function\"\n}",
+  "example_solution": "Function Invoke-RotationalCipher() {\n    <#\n    .SYNOPSIS\n    Rotate a string by a given number of places.\n\n    .DESCRIPTION\n    Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n    \n    .PARAMETER Text\n    The text to rotate    \n\n    .PARAMETER Shift\n    The number of places to shift the text\n\n    .EXAMPLE\n    Invoke-RotationalCipher -Text \"A\" -Shift 1\n    #>\n    [CmdletBinding()]\n    Param(\n        [string]$Text, \n        [int]$Shift\n    )\n    \n    $result = \"\"\n    $Text.ToCharArray() | ForEach-Object {\n        $char = $_\n        if ($char -cmatch '^[a-z]$') {\n            $result += [char]((([int]$char) + $Shift - 97) % 26 + 97)\n        } elseif ($char -match \"[A-Z]\") {\n            $result += [char]((([int]$char) + $Shift - 65) % 26 + 65)\n        } else {\n            $result += $char\n        }\n    }\n\n    return $result\n}\n",
+  "test_code": "BeforeAll {\n    . \".\\RotationalCipher.ps1\"\n}\n\nDescribe \"RotationalCipherTests\" {\n\tIt \"rotate a by 0, same output as input\" {\n        $got = Invoke-RotationalCipher -Text \"a\" -Shift 0\n        $want = \"a\"\n\n        $got | Should -Be $want\n\t}\n\n    It \"rotate a by 1\"{\n        $got = Invoke-RotationalCipher -Text \"a\" -Shift 1\n        $want = \"b\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate a by 26, same output as input\" {\n        $got = Invoke-RotationalCipher -Text \"a\" -Shift 26\n        $want = \"a\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate m by 13\" {\n        $got = Invoke-RotationalCipher -Text \"m\" -Shift 13\n        $want = \"z\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate n by 13 with wrap around alphabet\" {\n        $got = Invoke-RotationalCipher -Text \"n\" -Shift 13\n        $want = \"a\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate capital letters\" {\n        $got = Invoke-RotationalCipher -Text \"OMG\" -Shift 5\n        $want = \"TRL\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate spaces\" {\n        $got = Invoke-RotationalCipher -Text \"O M G\" -Shift 5\n        $want = \"T R L\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate numbers\" {\n        $got = Invoke-RotationalCipher -Text \"Testing 1 2 3 testing\" -Shift 4\n        $want = \"Xiwxmrk 1 2 3 xiwxmrk\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate punctuation\" {\n        $got = Invoke-RotationalCipher -Text \"Let's eat, Grandma!\" -Shift 21\n        $want = \"Gzo'n zvo, Bmviyhv!\"\n\n        $got | Should -Be $want\n    }\n\n    It \"rotate all letters\" {\n        $got = Invoke-RotationalCipher -Text \"The quick brown fox jumps over the lazy dog.\" -Shift 13\n        $want = \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n\n        $got | Should -Be $want\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "meatball133"
+  ],
+  "contributors": null
+}

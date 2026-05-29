@@ -1,0 +1,31 @@
+{
+  "id": "objective-c:hello-world",
+  "trackSlug": "objective-c",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "da5eb908-8cdf-4f99-93f7-c2b7dcb4fb37",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#import <Foundation/Foundation.h>\n#import \"HelloWorldExample.h\"\n\n@implementation HelloWorld\n- (NSString *)hello {\n  return @\"Goodbye, Mars!\";\n}\n@end\n",
+  "example_solution": "#import <Foundation/Foundation.h>\n#import \"HelloWorldExample.h\"\n\n@implementation HelloWorld\n- (NSString *)hello {\n  return @\"Hello, World!\";\n}\n@end\n",
+  "test_code": "#import <XCTest/XCTest.h>\n\n#if __has_include(\"HelloWorldExample.h\")\n# import \"HelloWorldExample.h\"\n# else\n# import \"HelloWorld.h\"\n#endif\n\nNS_ASSUME_NONNULL_BEGIN\n\n@interface HelloWorldTest : XCTestCase\n\n@end\n\n@implementation HelloWorldTest\n\n- (void)testHello {\n    NSString *expected = @\"Hello, World!\";\n    NSString *result = [[[HelloWorld alloc] init] hello];\n    XCTAssertEqualObjects(expected, result);\n}\n\n@end\nNS_ASSUME_NONNULL_END\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "ramonh"
+  ],
+  "contributors": [
+    "chillpop",
+    "masters3d",
+    "robtimp",
+    "skeskali"
+  ]
+}

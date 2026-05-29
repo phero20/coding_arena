@@ -1,0 +1,30 @@
+{
+  "id": "red:leap",
+  "trackSlug": "red",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "a997dde7-3101-44de-bfc1-9b424a2ae4eb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "conditionals"
+  ],
+  "prerequisites": [
+    "basics"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Leap\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nleap: function [\n\tyear\n] [\n\tcause-error 'user 'message [\"You need to implement this function.\"]\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Leap\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nleap: function [\n\tyear\n] [\n\tdivisible?: func [n] [zero? year // n]\n\t\tto logic! any [all [divisible? 4 not divisible? 100] divisible? 400]\n]\n\n",
+  "test_code": "Red [\n\tdescription: {Tests for Leap Exercism exercise}\n\tauthor: \"BNAndras\"\n]\n\n#include %testlib.red\n\ntest-init/limit %leap.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"year not divisible by 4 in common year\"\n    input: #[\n        year: 2015\n    ]\n    expected: false\n    function: \"leap\"\n    uuid: \"6466b30d-519c-438e-935d-388224ab5223\"\n] #[\n    description: \"year divisible by 2, not divisible by 4 in common year\"\n    input: #[\n        year: 1970\n    ]\n    expected: false\n    function: \"leap\"\n    uuid: \"ac227e82-ee82-4a09-9eb6-4f84331ffdb0\"\n] #[\n    description: \"year divisible by 4, not divisible by 100 in leap year\"\n    input: #[\n        year: 1996\n    ]\n    expected: true\n    function: \"leap\"\n    uuid: \"4fe9b84c-8e65-489e-970b-856d60b8b78e\"\n] #[\n    description: \"year divisible by 4 and 5 is still a leap year\"\n    input: #[\n        year: 1960\n    ]\n    expected: true\n    function: \"leap\"\n    uuid: \"7fc6aed7-e63c-48f5-ae05-5fe182f60a5d\"\n] #[\n    description: \"year divisible by 100, not divisible by 400 in common year\"\n    input: #[\n        year: 2100\n    ]\n    expected: false\n    function: \"leap\"\n    uuid: \"78a7848f-9667-4192-ae53-87b30c9a02dd\"\n] #[\n    description: \"year divisible by 100 but not by 3 is still not a leap year\"\n    input: #[\n        year: 1900\n    ]\n    expected: false\n    function: \"leap\"\n    uuid: \"9d70f938-537c-40a6-ba19-f50739ce8bac\"\n] #[\n    description: \"year divisible by 400 is leap year\"\n    input: #[\n        year: 2000\n    ]\n    expected: true\n    function: \"leap\"\n    uuid: \"42ee56ad-d3e6-48f1-8e3f-c84078d916fc\"\n] #[\n    description: \"year divisible by 400 but not by 125 is still a leap year\"\n    input: #[\n        year: 2400\n    ]\n    expected: true\n    function: \"leap\"\n    uuid: \"57902c77-6fe9-40de-8302-587b5c27121e\"\n] #[\n    description: \"year divisible by 400 but not by 125 is still a leap year\"\n    input: #[\n        year: 1800\n    ]\n    expected: false\n    function: \"leap\"\n    uuid: \"c30331f6-f9f6-4881-ad38-8ca8c12520c1\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

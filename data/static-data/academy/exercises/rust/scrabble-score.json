@@ -1,0 +1,47 @@
+{
+  "id": "rust:scrabble-score",
+  "trackSlug": "rust",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "561cc4ff-5e74-4701-a7c2-c4edefa0d068",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "hashmap"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "/// Compute the Scrabble score for a word.\npub fn score(word: &str) -> u64 {\n    todo!(\"Score {word} in Scrabble.\");\n}\n",
+  "example_solution": "use std::collections::HashMap;\n\npub fn score(word: &str) -> u16 {\n    let values = dictionary();\n    word.to_lowercase()\n        .chars()\n        .map(|c| values.get(&c))\n        .fold(0, |score, v| score + v.unwrap_or(&0))\n}\n\nfn dictionary() -> HashMap<char, u16> {\n    let mut values = HashMap::new();\n    values.insert('a', 1);\n    values.insert('b', 3);\n    values.insert('c', 3);\n    values.insert('d', 2);\n    values.insert('e', 1);\n    values.insert('f', 4);\n    values.insert('g', 2);\n    values.insert('h', 4);\n    values.insert('i', 1);\n    values.insert('j', 8);\n    values.insert('k', 5);\n    values.insert('l', 1);\n    values.insert('m', 3);\n    values.insert('n', 1);\n    values.insert('o', 1);\n    values.insert('p', 3);\n    values.insert('q', 10);\n    values.insert('r', 1);\n    values.insert('s', 1);\n    values.insert('t', 1);\n    values.insert('u', 1);\n    values.insert('v', 4);\n    values.insert('w', 4);\n    values.insert('x', 8);\n    values.insert('y', 4);\n    values.insert('z', 10);\n    values\n}\n",
+  "test_code": "use scrabble_score::*;\n\n#[test]\nfn lowercase_letter() {\n    let input = \"a\";\n    let output = score(input);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn uppercase_letter() {\n    let input = \"A\";\n    let output = score(input);\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn valuable_letter() {\n    let input = \"f\";\n    let output = score(input);\n    let expected = 4;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn short_word() {\n    let input = \"at\";\n    let output = score(input);\n    let expected = 2;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn short_valuable_word() {\n    let input = \"zoo\";\n    let output = score(input);\n    let expected = 12;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn medium_word() {\n    let input = \"street\";\n    let output = score(input);\n    let expected = 6;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn medium_valuable_word() {\n    let input = \"quirky\";\n    let output = score(input);\n    let expected = 22;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn long_mixed_case_word() {\n    let input = \"OxyphenButazone\";\n    let output = score(input);\n    let expected = 41;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn english_like_word() {\n    let input = \"pinata\";\n    let output = score(input);\n    let expected = 8;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn empty_input() {\n    let input = \"\";\n    let output = score(input);\n    let expected = 0;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn entire_alphabet_available() {\n    let input = \"abcdefghijklmnopqrstuvwxyz\";\n    let output = score(input);\n    let expected = 87;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn non_english_scrabble_letters_do_not_score() {\n    let input = \"piñata\";\n    let output = score(input);\n    let expected = 7;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn german_letters_do_not_score() {\n    let input = \"STRAßE\";\n    let output = score(input);\n    let expected = 5;\n    assert_eq!(output, expected);\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "IanWhitney"
+  ],
+  "contributors": [
+    "ashleygwilliams",
+    "AvasDream",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "IanWhitney",
+    "juleskers",
+    "kotp",
+    "lutostag",
+    "mkantor",
+    "navossoc",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

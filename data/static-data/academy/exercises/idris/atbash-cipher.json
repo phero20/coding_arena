@@ -1,0 +1,26 @@
+{
+  "id": "idris:atbash-cipher",
+  "trackSlug": "idris",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "6e07b253-e13f-4441-8d59-4a6ec9f1f8bf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module AtbashCipher\n\nexport\nencode : String -> String\nencode phrase = ?encode_rhs\n\nexport\ndecode : String -> String\ndecode phrase = ?decode_rhs\n",
+  "example_solution": "module AtbashCipher\n\nimport Data.List\nimport Data.Nat\n\nencodeLetter : Char -> Char\nencodeLetter ch = if isAlpha ch then chr $ 219 - (ord (toLower ch))\n                  else ch\n\ninsertSpaces : List Char -> List Char\ninsertSpaces xs = if length xs <= 5 then xs\n                  else (take 5 xs) ++ (' ' :: (insertSpaces (drop 5 xs)))\n\nexport\nencode : String -> String\nencode = pack . insertSpaces . (map encodeLetter) . (filter isAlphaNum) . unpack\n\nexport\ndecode : String -> String\ndecode = pack . (map encodeLetter) . (filter isAlphaNum) . unpack\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport AtbashCipher\n\ntests : List Test\ntests =\n  [ test \"encode yes\"                  (assertEq (encode \"yes\") \"bvh\")\n  , test \"encode no\"                   (assertEq (encode \"no\") \"ml\")\n  , test \"encode OMG\"                  (assertEq (encode \"OMG\") \"lnt\")\n  , test \"encode spaces\"               (assertEq (encode \"O M G\") \"lnt\")\n  , test \"encode mindblowingly\"        (assertEq (encode \"mindblowingly\") \"nrmwy oldrm tob\")\n  , test \"encode numbers\"              (assertEq (encode \"Testing,1 2 3, testing.\") \"gvhgr mt123 gvhgr mt\")\n  , test \"encode deep thought\"         (assertEq (encode \"Truth is fiction.\") \"gifgs rhurx grlm\")\n  , test \"encode all the letters\"      (assertEq (encode \"The quick brown fox jumps over the lazy dog.\") \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")\n  , test \"decode exercism\"             (assertEq (decode \"vcvix rhn\") \"exercism\")\n  , test \"decode a sentence\"           (assertEq (decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\") \"anobstacleisoftenasteppingstone\")\n  , test \"decode numbers\"              (assertEq (decode \"gvhgr mt123 gvhgr mt\") \"testing123testing\")\n  , test \"decode all the letters\"      (assertEq (decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\") \"thequickbrownfoxjumpsoverthelazydog\")\n  , test \"decode with too many spaces\" (assertEq (decode \"vc vix    r hn\") \"exercism\")\n  , test \"decode with no spaces\"       (assertEq (decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\") \"anobstacleisoftenasteppingstone\")\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

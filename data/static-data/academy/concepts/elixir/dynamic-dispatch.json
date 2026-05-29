@@ -1,0 +1,6 @@
+{
+  "slug": "dynamic-dispatch",
+  "name": "Dynamic Dispatch",
+  "introduction": "# Introduction\n\nWhen Elixir resolves the function to be invoked, it uses the Module's name to perform a lookup. The lookup can be done dynamically if the Module's name is bound to a variable.\n\n```elixir\ndefmodule MyModule do\n  def message(), do: \"My message\"\nend\n\natom = MyModule\natom.message()\n# => \"My message\"\n```\n\nInternally, a Module's name is an atom. All Elixir module atoms are automatically prefixed with `Elixir.`\n\n```elixir\nis_atom(Enum)\n# => true\nEnum == Elixir.Enum\n# => true\n```",
+  "about": "# About\n\nFunctions in Elixir can be dispatched dynamically.\n\nAll module names are atoms. All Elixir module names are automatically prefixed with `Elixir.` when compiled.\n\n```elixir\nis_atom(Enum)\n# => true\nEnum == Elixir.Enum\n# => true\n```\n\nElixir can resolve a function to be invoked at run-time, using the Module's name to perform a lookup. The lookup can be done dynamically if the Module's name is bound to a variable.\n\n```elixir\ndefmodule MyModule do\n  def message(), do: \"My message\"\nend\n\natom = MyModule\natom.message()\n# => \"My message\"\n```"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "uiua:atbash-cipher",
+  "trackSlug": "uiua",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "4d5936a5-e3b1-4870-abcd-885c3c611893",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Implement the encoding process for the Atbash cipher\n# Ciphertext ? Plaintext\nEncode ← |1 ⊙(⍤ \"Please implement Encode\" 0)\n\n# Implement the decoding process for the Atbash cipher\n# Plaintext ? Ciphertext\nDecode ← |1 ⊙(⍤ \"Please implement Decode\" 0)\n",
+  "example_solution": "Letters   ← +@a⇡26\nDigits    ← +@0⇡10\nAlnum     ← ⊂Letters Digits\nReversed  ← ⊂⇌Letters Digits\nSanitize  ← ▽∊Alnum.\nGroups    ← ⊜(□∘)\\+=0◿5°⊏\nTranslate ← ⊏ ⟜Reversed ˜⨂ ⟜Alnum Sanitize ¯⌵\nEncode    ← /$\"_ _\" Groups Translate\nDecode    ← Translate Sanitize\n",
+  "test_code": "~ \"atbash-cipher.ua\" ~ Decode Encode\n\n# encode -> encode yes\n⍤⤙≍ \"bvh\" Encode \"yes\"\n\n# encode -> encode no\n⍤⤙≍ \"ml\" Encode \"no\"\n\n# encode -> encode OMG\n⍤⤙≍ \"lnt\" Encode \"OMG\"\n\n# encode -> encode spaces\n⍤⤙≍ \"lnt\" Encode \"O M G\"\n\n# encode -> encode mindblowingly\n⍤⤙≍ \"nrmwy oldrm tob\" Encode \"mindblowingly\"\n\n# encode -> encode numbers\n⍤⤙≍ \"gvhgr mt123 gvhgr mt\" Encode \"Testing,1 2 3, testing.\"\n\n# encode -> encode deep thought\n⍤⤙≍ \"gifgs rhurx grlm\" Encode \"Truth is fiction.\" # \n\n# encode -> encode all the letters\n⍤⤙≍ \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\" Encode \"The quick brown fox jumps over the lazy dog.\"\n\n# decode -> decode exercism\n⍤⤙≍ \"exercism\" Decode \"vcvix rhn\"\n\n# decode -> decode a sentence\n⍤⤙≍ \"anobstacleisoftenasteppingstone\" Decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"\n\n# decode -> decode numbers\n⍤⤙≍ \"testing123testing\" Decode \"gvhgr mt123 gvhgr mt\"\n\n# decode -> decode all the letters\n⍤⤙≍ \"thequickbrownfoxjumpsoverthelazydog\" Decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n\n# decode -> decode with too many spaces\n⍤⤙≍ \"exercism\" Decode \"vc vix    r hn\"\n\n# decode -> decode with no spaces\n⍤⤙≍ \"anobstacleisoftenasteppingstone\" Decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "glaxxie"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "wren:pythagorean-triplet",
+  "trackSlug": "wren",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "a65ab235-da29-4c87-94dd-3f6419bf8175",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "class PythagoreanTriplet {\n  static tripletsWithSum(n) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class PythagoreanTriplet {\n  static tripletsWithSum(n) {\n    var result = []\n    if (n < 2) {\n      return result\n    }\n    var a = 0\n    while (true) {\n      a = a + 1\n      var numerator = n * (n - 2 * a)\n      var denominator = 2 * (n - a)\n      var b = numerator / denominator\n      if (b < a) {\n        break\n      }\n      if (numerator % denominator != 0) {\n        continue\n      }\n      var c = n - a - b\n      result.add([a, b, c])\n    }\n    return result\n  }\n}\n",
+  "test_code": "import \"./pythagorean-triplet\" for PythagoreanTriplet\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"PythagoreanTriplet\") { |do, skip|\n  do.test(\"triplets whose sum is 12\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(12)).toEqual([\n      [3, 4, 5],\n    ])\n  }\n\n  skip.test(\"triplets whose sum is 108\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(108)).toEqual([\n      [27, 36, 45],\n    ])\n  }\n\n  skip.test(\"triplets whose sum is 1000\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(1000)).toEqual([\n      [200, 375, 425],\n    ])\n  }\n\n  skip.test(\"no matching triplets for 1001\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(1001)).toEqual([])\n  }\n\n  skip.test(\"returns all matching triplets\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(90)).toEqual([\n      [9, 40, 41],\n      [15, 36, 39],\n    ])\n  }\n\n  skip.test(\"several matching triplets\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(840)).toEqual([\n      [40, 399, 401],\n      [56, 390, 394],\n      [105, 360, 375],\n      [120, 350, 370],\n      [140, 336, 364],\n      [168, 315, 357],\n      [210, 280, 350],\n      [240, 252, 348],\n    ])\n  }\n\n  skip.test(\"triplets for large number\") {\n    Expect.value(PythagoreanTriplet.tripletsWithSum(30000)).toEqual([\n      [1200, 14375, 14425],\n      [1875, 14000, 14125],\n      [5000, 12000, 13000],\n      [6000, 11250, 12750],\n      [7500, 10000, 12500],\n    ])\n  }\n}\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

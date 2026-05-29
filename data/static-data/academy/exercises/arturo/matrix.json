@@ -1,0 +1,26 @@
+{
+  "id": "arturo:matrix",
+  "trackSlug": "arturo",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "1de866bf-2b12-4f4e-906d-03d5783e8cb8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "row: function [matrix position][\n    panic \"Please implement the row function\"\n]\n\ncolumn: function [matrix position][\n    panic \"Please implement the column function\"\n]\n",
+  "example_solution": "row: function [matrix position][\n    lines: split.lines matrix\n    map split.words lines\\[dec position] 'elt -> to :integer elt\n]\n\ncolumn: function [matrix position][\n    lines: split.lines matrix\n    map lines 'line [\n        nums: to [:integer] split.words line\n        nums\\[dec position]\n    ]   \n]\n",
+  "test_code": "import.version:3.0.0 {unitt}! \nimport {src/matrix}!\n\ndescribe \"Matrix\" [\n    describe \"Matrix - Row\" [\n        it \"extract row fron one number matrix\" [\n            expects.be:'equal? @[\n                [1]\n                row \"1\" 1\n            ]\n        ]\n\n        it.skip \"can extract row\" [\n            matrix: {\n                1 2\n                3 4\n            }\n            expects.be:'equal? @[\n                [3 4]\n                row matrix 2\n            ]\n        ]\n\n        it.skip \"extract row where numbers have different widths\" [\n            matrix: {\n                1 2\n                10 20\n            }\n            expects.be:'equal? @[\n                [10 20]\n                row matrix 2\n            ]\n        ]\n\n        it.skip \"can extract row from non-square matrix with no corresponding column\" [\n            matrix: {\n                1 2 3\n                4 5 6\n                7 8 9\n                8 7 6\n            }\n            expects.be:'equal? @[\n                [8 7 6]\n                row matrix 4\n            ]\n        ]\n    ]\n\n    describe \"Matrix - Column\" [\n        it.skip \"extract column from one number matrix\" [\n            expects.be:'equal? @[\n                [1]\n                column \"1\" 1\n            ]\n        ]\n\n        it.skip \"can extract column\" [\n            matrix: {\n                1 2 3\n                4 5 6\n                7 8 9\n            }\n            expects.be:'equal? @[\n                [3 6 9]\n                column matrix 3\n            ]\n        ]\n\n        it.skip \"can extract column from non-square matrix with no corresponding row\" [\n            matrix: {\n                1 2 3 4\n                5 6 7 8\n                9 8 7 6\n            }\n            expects.be:'equal? @[\n                [4 8 6]\n                column matrix 4\n            ]\n        ]\n\n        it.skip \"extract column where numbers have different widths\" [\n            matrix: {\n                89 1903 3\n                18 3 1\n                9 4 800\n            }\n            expects.be:'equal? @[\n                [1903 3 4]\n                column matrix 2\n            ]\n        ]\n    ]\n]\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

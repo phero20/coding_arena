@@ -1,0 +1,26 @@
+{
+  "id": "coffeescript:resistor-color-trio",
+  "trackSlug": "coffeescript",
+  "slug": "resistor-color-trio",
+  "name": "Resistor Color Trio",
+  "uuid": "643e96bc-d0b2-426b-98ef-9f12d1f50b7a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a human-readable label.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know only three things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n  To get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\n- Each band acts as a digit of a number.\n  For example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n  In this exercise, you are going to create a helpful program so that you don't have to remember the values of the bands.\n  The program will take 3 colors as input, and outputs the correct value, in ohms.\n  The color bands are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nIn Resistor Color Duo you decoded the first two colors.\nFor instance: orange-orange got the main value `33`.\nThe third color stands for how many zeros need to be added to the main value.\nThe main value plus the zeros gives us a value in ohms.\nFor the exercise it doesn't matter what ohms really are.\nFor example:\n\n- orange-orange-black would be 33 and no zeros, which becomes 33 ohms.\n- orange-orange-red would be 33 and 2 zeros, which becomes 3300 ohms.\n- orange-orange-orange would be 33 and 3 zeros, which becomes 33000 ohms.\n\n(If Math is your thing, you may want to think of the zeros as exponents of 10.\nIf Math is not your thing, go with the zeros.\nIt really is the same thing, just in plain English instead of Math lingo.)\n\nThis exercise is about translating the colors into a label:\n\n> \"... ohms\"\n\nSo an input of `\"orange\", \"orange\", \"black\"` should return:\n\n> \"33 ohms\"\n\nWhen we get to larger resistors, a [metric prefix][metric-prefix] is used to indicate a larger magnitude of ohms, such as \"kiloohms\".\nThat is similar to saying \"2 kilometers\" instead of \"2000 meters\", or \"2 kilograms\" for \"2000 grams\".\n\nFor example, an input of `\"orange\", \"orange\", \"orange\"` should return:\n\n> \"33 kiloohms\"\n\n[metric-prefix]: https://en.wikipedia.org/wiki/Metric_prefix\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class ResistorColorTrio\n  @label: (colors) ->\n\nmodule.exports = ResistorColorTrio\n",
+  "example_solution": "class ResistorColorTrio\n  @label: ([tens, ones, exp]) ->\n    value = (@colorBands.indexOf(ones) + 10 * @colorBands.indexOf(tens)) * 10 ** @colorBands.indexOf(exp)\n\n    if value < 1e3\n      \"#{value} ohms\"\n    else if value < 1e6\n      \"#{value / 1e3} kiloohms\"\n    else if value < 1e9\n      \"#{value / 1e6} megaohms\"\n    else\n      \"#{value / 1e9} gigaohms\"\n\n  @colorBands: [\n    \"black\"\n    \"brown\"\n    \"red\"\n    \"orange\"\n    \"yellow\"\n    \"green\"\n    \"blue\"\n    \"violet\"\n    \"grey\"\n    \"white\"\n  ]\n\nmodule.exports = ResistorColorTrio\n",
+  "test_code": "ResistorColorTrio = require './resistor-color-trio'\n\ndescribe 'ResistorColorTrio', ->\n  it 'Orange and orange and black', ->\n    results = ResistorColorTrio.label ['orange', 'orange', 'black']\n    expect(results).toEqual '33 ohms'\n\n  xit 'Blue and grey and brown', ->\n    results = ResistorColorTrio.label ['blue', 'grey', 'brown']\n    expect(results).toEqual '680 ohms'\n\n  xit 'Red and black and red', ->\n    results = ResistorColorTrio.label ['red', 'black', 'red']\n    expect(results).toEqual '2 kiloohms'\n\n  xit 'Green and brown and orange', ->\n    results = ResistorColorTrio.label ['green', 'brown', 'orange']\n    expect(results).toEqual '51 kiloohms'\n\n  xit 'Yellow and violet and yellow', ->\n    results = ResistorColorTrio.label ['yellow', 'violet', 'yellow']\n    expect(results).toEqual '470 kiloohms'\n\n  xit 'Blue and violet and blue', ->\n    results = ResistorColorTrio.label ['blue', 'violet', 'blue']\n    expect(results).toEqual '67 megaohms'\n\n  xit 'Minimum possible value', ->\n    results = ResistorColorTrio.label ['black', 'black', 'black']\n    expect(results).toEqual '0 ohms'\n\n  xit 'Maximum possible value', ->\n    results = ResistorColorTrio.label ['white', 'white', 'white']\n    expect(results).toEqual '99 gigaohms'\n\n  xit 'First two colors make an invalid octal number', ->\n    results = ResistorColorTrio.label ['black', 'grey', 'black']\n    expect(results).toEqual '8 ohms'\n\n  xit 'Ignore extra colors', ->\n    results = ResistorColorTrio.label ['blue', 'green', 'yellow', 'orange']\n    expect(results).toEqual '650 kiloohms'\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1549",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,44 @@
+{
+  "id": "elixir:isbn-verifier",
+  "trackSlug": "elixir",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "0fb09d01-1f8b-4654-9004-52baa057412e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "regular-expressions",
+    "ranges"
+  ],
+  "prerequisites": [
+    "strings",
+    "regular-expressions",
+    "if",
+    "cond",
+    "case",
+    "ranges",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule IsbnVerifier do\n  @doc \"\"\"\n    Checks if a string is a valid ISBN-10 identifier\n\n    ## Examples\n\n      iex> IsbnVerifier.isbn?(\"3-598-21507-X\")\n      true\n\n      iex> IsbnVerifier.isbn?(\"3-598-2K507-0\")\n      false\n\n  \"\"\"\n  @spec isbn?(String.t()) :: boolean\n  def isbn?(isbn) do\n  end\nend\n",
+  "example_solution": "defmodule IsbnVerifier do\n  @doc \"\"\"\n    Checks if a string is a valid ISBN-10 identifier\n\n    ## Examples\n\n      iex> IsbnVerifier.isbn?(\"3-598-21507-X\")\n      true\n\n      iex> IsbnVerifier.isbn?(\"3-598-2K507-0\")\n      false\n\n  \"\"\"\n  @spec isbn?(String.t()) :: boolean\n  def isbn?(isbn) do\n    if Regex.match?(~r/^(\\d-?){9}(\\d|X)$/, isbn) do\n      checksum =\n        isbn\n        |> String.replace(\"-\", \"\")\n        |> String.graphemes()\n        |> Enum.zip(10..1//-1)\n        |> Enum.map(&checksum_weighting/1)\n        |> Enum.sum()\n\n      rem(checksum, 11) == 0\n    else\n      false\n    end\n  end\n\n  defp checksum_weighting({\"X\", 1}), do: 10\n\n  defp checksum_weighting({digit, weight}) do\n    String.to_integer(digit) * weight\n  end\nend\n",
+  "test_code": "defmodule IsbnVerifierTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"valid isbn number\" do\n    assert IsbnVerifier.isbn?(\"3-598-21508-8\")\n  end\n\n  @tag :pending\n  test \"invalid isbn check digit\" do\n    refute IsbnVerifier.isbn?(\"3-598-21508-9\")\n  end\n\n  @tag :pending\n  test \"valid isbn number with a check digit of 10\" do\n    assert IsbnVerifier.isbn?(\"3-598-21507-X\")\n  end\n\n  @tag :pending\n  test \"check digit is a character other than X\" do\n    refute IsbnVerifier.isbn?(\"3-598-21507-A\")\n  end\n\n  @tag :pending\n  test \"check digit in isbn is not treated as zero\" do\n    refute IsbnVerifier.isbn?(\"4-598-21507-B\")\n  end\n\n  @tag :pending\n  test \"invalid character in isbn\" do\n    refute IsbnVerifier.isbn?(\"3-598-P1581-X\")\n  end\n\n  @tag :pending\n  test \"X is only valid as a check digit\" do\n    refute IsbnVerifier.isbn?(\"3-598-2X507-9\")\n  end\n\n  @tag :pending\n  test \"only one check digit is allowed\" do\n    refute IsbnVerifier.isbn?(\"3-598-21508-96\")\n  end\n\n  @tag :pending\n  test \"X is not substituted by the value 10\" do\n    refute IsbnVerifier.isbn?(\"3-598-2X507-5\")\n  end\n\n  @tag :pending\n  test \"valid isbn without separating dashes\" do\n    assert IsbnVerifier.isbn?(\"3598215088\")\n  end\n\n  @tag :pending\n  test \"isbn without separating dashes and X as check digit\" do\n    assert IsbnVerifier.isbn?(\"359821507X\")\n  end\n\n  @tag :pending\n  test \"isbn without check digit and dashes\" do\n    refute IsbnVerifier.isbn?(\"359821507\")\n  end\n\n  @tag :pending\n  test \"too long isbn and no dashes\" do\n    refute IsbnVerifier.isbn?(\"3598215078X\")\n  end\n\n  @tag :pending\n  test \"too short isbn\" do\n    refute IsbnVerifier.isbn?(\"00\")\n  end\n\n  @tag :pending\n  test \"isbn without check digit\" do\n    refute IsbnVerifier.isbn?(\"3-598-21507\")\n  end\n\n  @tag :pending\n  test \"too long isbn\" do\n    refute IsbnVerifier.isbn?(\"3-598-21507-XA\")\n  end\n\n  @tag :pending\n  test \"check digit of X should not be used for 0\" do\n    refute IsbnVerifier.isbn?(\"3-598-21515-X\")\n  end\n\n  @tag :pending\n  test \"input is 9 characters\" do\n    refute IsbnVerifier.isbn?(\"134456729\")\n  end\n\n  @tag :pending\n  test \"invalid characters are not ignored\" do\n    refute IsbnVerifier.isbn?(\"3132P34035\")\n  end\n\n  @tag :pending\n  test \"invalid characters are not ignored before checking length\" do\n    refute IsbnVerifier.isbn?(\"3598P215088\")\n  end\n\n  @tag :pending\n  test \"input is too long but contains a valid isbn\" do\n    refute IsbnVerifier.isbn?(\"98245726788\")\n  end\n\n  # Test cases from international ISBN to test variable dash placement\n  # Adapted from https://en.wikipedia.org/wiki/International_Standard_Book_Number#Registrant_element\n\n  @tag :pending\n  test \"Qatar\tNCCAH, Doha\" do\n    assert IsbnVerifier.isbn?(\"99921-58-10-7\")\n  end\n\n  @tag :pending\n  test \"Singapore\tWorld Scientific\" do\n    assert IsbnVerifier.isbn?(\"9971-5-0210-0\")\n  end\n\n  @tag :pending\n  test \"Greece\tSigma Publications\" do\n    assert IsbnVerifier.isbn?(\"960-425-059-0\")\n  end\n\n  @tag :pending\n  test \"Czech Republic; Slovakia\tTaita Publishers\" do\n    assert IsbnVerifier.isbn?(\"80-902734-1-6\")\n  end\n\n  @tag :pending\n  test \"Brazil\tCompanhia das Letras\" do\n    assert IsbnVerifier.isbn?(\"85-359-0277-5\")\n  end\n\n  @tag :pending\n  test \"English-speaking area\tSimon Wallenberg Press\" do\n    assert IsbnVerifier.isbn?(\"1-84356-028-3\")\n  end\n\n  @tag :pending\n  test \"English-speaking area\tScribner\" do\n    assert IsbnVerifier.isbn?(\"0-684-84328-5\")\n  end\n\n  @tag :pending\n  test \"English-speaking area\tFrederick Ungar\" do\n    assert IsbnVerifier.isbn?(\"0-8044-2957-X\")\n  end\n\n  @tag :pending\n  test \"English-speaking area\tJ. A. Allen & Co.\" do\n    assert IsbnVerifier.isbn?(\"0-85131-041-9\")\n  end\n\n  @tag :pending\n  test \"English-speaking area\tEdupedia Publications Pvt Ltd.\" do\n    assert IsbnVerifier.isbn?(\"93-86954-21-4\")\n  end\n\n  @tag :pending\n  test \"English-speaking area Willmann-Bell\" do\n    assert IsbnVerifier.isbn?(\"0-943396-04-2\")\n  end\n\n  @tag :pending\n  test \"English-speaking area\tKT Publishing\" do\n    assert IsbnVerifier.isbn?(\"0-9752298-0-X\")\n  end\nend\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "stfnsr"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "herminiotorres",
+    "neenjaw",
+    "sotojuan"
+  ]
+}

@@ -55,7 +55,10 @@ export class ArenaSocketManager {
     this.socket = new WebSocket(url.toString());
 
     this.socket.onopen = () => {
+<<<<<<< HEAD
       console.log(`[Arena Socket] Joined Room: ${this.roomId}`);
+=======
+>>>>>>> prod-deploy
       const store = useArenaStore.getState();
       store.setIsConnected(true);
       store.setSocket(this.socket);
@@ -71,10 +74,13 @@ export class ArenaSocketManager {
     };
 
     this.socket.onclose = (event) => {
+<<<<<<< HEAD
       const isClean = event.wasClean;
       console.log(
         `[Arena Socket] Closed (Clean: ${isClean}, Code: ${event.code})`,
       );
+=======
+>>>>>>> prod-deploy
       useArenaStore.getState().setIsConnected(false);
 
       // Don't reconnect if the room was intentionally left, terminated, or match ended
@@ -106,7 +112,10 @@ export class ArenaSocketManager {
   private attemptReconnect() {
     if (this.reconnectTimeout) clearTimeout(this.reconnectTimeout);
     this.reconnectTimeout = setTimeout(() => {
+<<<<<<< HEAD
       console.log("[Arena Socket] Attempting Reconnect...");
+=======
+>>>>>>> prod-deploy
       this.connect();
     }, 3000);
   }
@@ -121,7 +130,10 @@ export class ArenaSocketManager {
     // 2. Neutralize the socket BEFORE closing
     // This prevents the 'onclose' or 'onerror' handlers from firing during teardown
     if (this.socket) {
+<<<<<<< HEAD
       console.log(`[Arena Socket] Hard Teardown for room: ${this.roomId}`);
+=======
+>>>>>>> prod-deploy
       this.socket.onclose = null; 
       this.socket.onerror = null;
       this.socket.onmessage = null;

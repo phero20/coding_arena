@@ -1,0 +1,36 @@
+{
+  "id": "python:hexadecimal",
+  "trackSlug": "python",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "6b7f7b1f-c388-4f4c-b924-84535cc5e1a0",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000, teal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def hexa(hex_string):\n    pass\n",
+  "example_solution": "from functools import reduce\n\n\ndef hexa(hex_string):\n    hex_string = hex_string.lower()\n    if set(hex_string) - set('0123456789abcdef'):\n        raise ValueError('Invalid hexadecimal string')\n    digits = [ord(letter) - ord('a') + 10 if letter in 'abcdef' else ord(letter) - ord('0')\n              for letter in hex_string]\n    return reduce(lambda var_1, var_2: var_1 * 16 + var_2, digits, 0)\n",
+  "test_code": "# To avoid trivial solutions, try to solve this problem without the\n# function int(s, base=16)\n\nimport unittest\n\nfrom hexadecimal import hexa\n\n\nclass HexadecimalTest(unittest.TestCase):\n    def test_valid_hexa1(self):\n        self.assertEqual(hexa('1'), 1)\n\n    def test_valid_hexa2(self):\n        self.assertEqual(hexa('c'), 12)\n\n    def test_valid_hexa3(self):\n        self.assertEqual(hexa('10'), 16)\n\n    def test_valid_hexa4(self):\n        self.assertEqual(hexa('af'), 175)\n\n    def test_valid_hexa5(self):\n        self.assertEqual(hexa('100'), 256)\n\n    def test_valid_hexa6(self):\n        self.assertEqual(hexa('19ACE'), 105166)\n\n    def test_valid_hexa7(self):\n        self.assertEqual(hexa('000000'), 0)\n\n    def test_valid_hexa8(self):\n        self.assertEqual(hexa('ffff00'), 16776960)\n\n    def test_valid_hexa9(self):\n        self.assertEqual(hexa('00fff0'), 65520)\n\n    def test_invalid_hexa(self):\n        with self.assertRaisesWithMessage(ValueError):\n            hexa('carrot')\n\n    # Utility functions\n    def assertRaisesWithMessage(self, exception):\n        return self.assertRaisesRegex(exception, r\".+\")\n\n\nif __name__ == '__main__':\n    unittest.main()\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "behrtam",
+    "cmccandless",
+    "Dog",
+    "ikhadykin",
+    "kytrinyx",
+    "N-Parsons",
+    "pheanex",
+    "sjakobi",
+    "tqa236"
+  ]
+}

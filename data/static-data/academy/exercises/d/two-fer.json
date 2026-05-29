@@ -1,0 +1,28 @@
+{
+  "id": "d:two-fer",
+  "trackSlug": "d",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "4d9c55db-88c2-4cab-a456-f6d9844dbfdc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "module two_fer;\n\nunittest\n{\n    immutable int allTestsEnabled = 0;\n\n    // No name given\n    assert(twoFer() == \"One for you, one for me.\");\n\n    static if (allTestsEnabled)\n    {\n        // A name given\n        assert(twoFer(\"Alice\") == \"One for Alice, one for me.\");\n\n        // Another name given\n        assert(twoFer(\"Bob\") == \"One for Bob, one for me.\");\n    }\n\n}\n",
+  "example_solution": "module two_fer;\n\nimport std.format : format;\n\npure string twoFer(immutable string name = \"you\")\n{\n    return \"One for %s, one for me.\".format(name);\n}\n",
+  "test_code": "module two_fer;\n\nunittest\n{\n    immutable int allTestsEnabled = 0;\n\n    // No name given\n    assert(twoFer() == \"One for you, one for me.\");\n\n    static if (allTestsEnabled)\n    {\n        // A name given\n        assert(twoFer(\"Alice\") == \"One for Alice, one for me.\");\n\n        // Another name given\n        assert(twoFer(\"Bob\") == \"One for Bob, one for me.\");\n    }\n\n}\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "petertseng"
+  ]
+}

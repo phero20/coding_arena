@@ -1,0 +1,26 @@
+{
+  "id": "idris:pangram",
+  "trackSlug": "idris",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "13f2750f-1979-46c6-b59e-6991537e4adb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "module Pangram\n\nexport\nisPangram : String -> Bool\nisPangram sentence = ?isPangram_rhs\n",
+  "example_solution": "module Pangram\n\nimport Data.Bits\nimport Data.String\n\nexport\nisPangram : String -> Bool\nisPangram sentence = 0x3ffffff == (coverage 0 $ filter isAlpha $ unpack $ toUpper sentence)\n  where coverage : Integer -> List Char -> Integer\n        coverage seen [] = seen\n        coverage seen (x :: xs) = coverage (setBit seen $ cast $ ord x - 65) xs\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport Pangram\n\ntests : List Test\ntests =\n  [ test \"empty sentence\"                                            (assert $ not $ isPangram \"\")\n  , test \"perfect lower case\"                                        (assert $       isPangram \"abcdefghijklmnopqrstuvwxyz\")\n  , test \"only lower case\"                                           (assert $       isPangram \"the quick brown fox jumps over the lazy dog\")\n  , test \"missing the letter 'x'\"                                    (assert $ not $ isPangram \"a quick movement of the enemy will jeopardize five gunboats\")\n  , test \"missing the letter 'h'\"                                    (assert $ not $ isPangram \"five boxing wizards jump quickly at it\")\n  , test \"with underscores\"                                          (assert $       isPangram \"the_quick_brown_fox_jumps_over_the_lazy_dog\")\n  , test \"with numbers\"                                              (assert $       isPangram \"the 1 quick brown fox jumps over the 2 lazy dogs\")\n  , test \"missing letters replaced by numbers\"                       (assert $ not $ isPangram \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")\n  , test \"mixed case and punctuation\"                                (assert $       isPangram \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")\n  , test \"a-m and A-M are 26 different characters but not a pangram\" (assert $ not $ isPangram \"abcdefghijklm ABCDEFGHIJKLM\")\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

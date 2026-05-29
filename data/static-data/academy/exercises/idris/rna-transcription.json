@@ -1,0 +1,31 @@
+{
+  "id": "idris:rna-transcription",
+  "trackSlug": "idris",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "3640da6c-4f1d-483c-8990-de225fcb0b03",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "module RnaTranscription\n\nimport Data.Vect\n\n%default total\n\nnamespace DnaNucleotide\n  public export\n  data DnaNucleotide = Foo\n\nnamespace RnaNucleotide\n  public export\n  data RnaNucleotide = Bar\n\nexport\nimplementation Eq RnaNucleotide where\n  (==) x y = ?RnaNucleotideEqRhs\n\nexport\nimplementation Show RnaNucleotide where\n  show x = ?RnaNucleotideShowRhs\n\nexport\ntoRna : Vect n DnaNucleotide -> Vect n RnaNucleotide\ntoRna = ?toRna_rhs\n",
+  "example_solution": "module RnaTranscription\n\nimport Data.Vect\n\n%default total\n\nnamespace DnaNucleotide\n  public export\n  data DnaNucleotide = A | C | T | G\n\nnamespace RnaNucleotide\n  public export\n  data RnaNucleotide = A | C | G | U\n\nexport\nimplementation Eq RnaNucleotide where\n  (==) A A = True\n  (==) C C = True\n  (==) G G = True\n  (==) U U = True\n  (==) _ _ = False\n\nexport\nimplementation Show RnaNucleotide where\n  show A = \"A\"\n  show C = \"C\"\n  show G = \"G\"\n  show U = \"U\"\n\nexport\ntoRna : Vect n DnaNucleotide -> Vect n RnaNucleotide\ntoRna [] = []\ntoRna (A :: xs) = U :: toRna xs\ntoRna (C :: xs) = G :: toRna xs\ntoRna (T :: xs) = A :: toRna xs\ntoRna (G :: xs) = C :: toRna xs\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport RnaTranscription\nimport Data.Vect\n\ntests : List Test\ntests =\n  [ test \"Empty RNA sequence\"                    (assertEq (toRna []) (the (Vect 0 RnaNucleotide) []))\n  , test \"RNA complement of cytosine is guanine\" (assertEq (toRna [C]) [G])\n  , test \"RNA complement of guanine is cytosine\" (assertEq (toRna [G]) [C])\n  , test \"RNA complement of thymine is adenine\"  (assertEq (toRna [T]) [A])\n  , test \"RNA complement of adenine is uracil\"   (assertEq (toRna [A]) [U])\n  , test \"RNA complement\"                        (assertEq (toRna [A, C, G, T, G, G, T, C, T, T, A, A]) [U, G, C, A, C, C, A, G, A, A, U, U])\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "liarokapisv"
+  ],
+  "contributors": [
+    "keiravillekode",
+    "ktosiek",
+    "NobbZ",
+    "yurrriq"
+  ]
+}

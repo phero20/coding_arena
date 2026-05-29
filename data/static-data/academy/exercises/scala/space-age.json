@@ -1,0 +1,32 @@
+{
+  "id": "scala:space-age",
+  "trackSlug": "scala",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "f147966d-97ec-4479-8679-8cad942b499a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "object SpaceAge {\n  def onEarth(age: Double): Double = ???\n\n  def onVenus(age: Double): Double = ???\n\n  def onMercury(age: Double): Double = ???\n\n  def onMars(age: Double): Double = ???\n\n  def onJupiter(age: Double): Double = ???\n\n  def onSaturn(age: Double): Double = ???\n\n  def onUranus(age: Double): Double = ???\n\n  def onNeptune(age: Double): Double = ???\n}\n",
+  "example_solution": "object SpaceAge {\n  private val daysToEarthAge = 365.25\n  private val daysToMercuryAge = 87.969\n  private val daysToVenusAge = 224.701\n  private val daysToMarsAge = 686.971\n  private val daysToJupiterAge = 4332.59\n  private val daysToSaturnAge = 10759.22\n  private val daysToUranusAge = 30799.095\n  private val daysToNeptuneAge = 60190.03\n\n  private def toEarthDays(seconds: Double): Double = {\n    val minutes = seconds.toDouble / 60\n    val hours = minutes / 60\n    hours / 24\n  }\n\n  private def toPlanetAge(daysToPlanetAge: Double, seconds: Double): Double =\n    round(toEarthDays(seconds) / daysToPlanetAge)\n\n  private def round(value: Double): Double = (value * 100).round / 100.0\n\n  def onEarth(seconds: Double): Double = toPlanetAge(daysToEarthAge, seconds)\n  def onMercury(seconds: Double): Double = toPlanetAge(daysToMercuryAge, seconds)\n  def onVenus(seconds: Double): Double = toPlanetAge(daysToVenusAge, seconds)\n  def onMars(seconds: Double): Double = toPlanetAge(daysToMarsAge, seconds)\n  def onJupiter(seconds: Double): Double = toPlanetAge(daysToJupiterAge, seconds)\n  def onSaturn(seconds: Double): Double = toPlanetAge(daysToSaturnAge, seconds)\n  def onUranus(seconds: Double): Double = toPlanetAge(daysToUranusAge, seconds)\n  def onNeptune(seconds: Double): Double = toPlanetAge(daysToNeptuneAge, seconds)\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass SpaceAgeTest extends AnyFunSuite with Matchers {\n\n  test(\"age on Earth\") {\n    SpaceAge.onEarth(1000000000) should be (31.69 +- 0.01)\n  }\n\n  test(\"age on Mercury\") {\n    pending\n    SpaceAge.onMercury(2134835688) should be (280.88 +- 0.01)\n  }\n\n  test(\"age on Venus\") {\n    pending\n    SpaceAge.onVenus(189839836) should be (9.78 +- 0.01)\n  }\n\n  test(\"age on Mars\") {\n    pending\n    SpaceAge.onMars(2.329871239E9) should be (39.25 +- 0.01)\n  }\n\n  test(\"age on Jupiter\") {\n    pending\n    SpaceAge.onJupiter(901876382) should be (2.41 +- 0.01)\n  }\n\n  test(\"age on Saturn\") {\n    pending\n    SpaceAge.onSaturn(3.0E9) should be (3.23 +- 0.01)\n  }\n\n  test(\"age on Uranus\") {\n    pending\n    SpaceAge.onUranus(3.210123456E9) should be (1.21 +- 0.01)\n  }\n\n  test(\"age on Neptune\") {\n    pending\n    SpaceAge.onNeptune(8.210123456E9) should be (1.58 +- 0.01)\n  }\n}",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=01",
+  "authors": [
+    "sgrif"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "kytrinyx",
+    "ppartarr",
+    "rajeshpg",
+    "ricemery"
+  ]
+}

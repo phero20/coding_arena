@@ -1,0 +1,32 @@
+{
+  "id": "coffeescript:hello-world",
+  "trackSlug": "coffeescript",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "0d1ce0cd-f7f2-4843-82ac-b0b4d995fa16",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class HelloWorld\n  hello: -> 'Goodbye, Mars!'\n\nmodule.exports = HelloWorld\n",
+  "example_solution": "class HelloWorld\n  hello: -> 'Hello, World!'\n\nmodule.exports = HelloWorld\n",
+  "test_code": "HelloWorld = require './hello-world'\n\ndescribe 'HelloWorld', ->\n  hello_world = new HelloWorld()\n\n  it \"says 'Hello, World!'\", ->\n    result = hello_world.hello()\n    expect(result).toEqual 'Hello, World!'\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "ramonh"
+  ],
+  "contributors": [
+    "aimorris",
+    "kytrinyx",
+    "rootulp",
+    "skeskali",
+    "son1112"
+  ]
+}

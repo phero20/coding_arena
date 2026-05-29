@@ -1,0 +1,26 @@
+{
+  "id": "fortran:nth-prime",
+  "trackSlug": "fortran",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "423a13d3-8e2a-483a-8da5-50bfa76c04f4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module nth_prime\n  implicit none\ncontains\n\n  ! get nth prime\n  integer function prime(n)\n    integer, intent(in) :: n\n    prime = -1\n  end function\n\nend module\n",
+  "example_solution": "module nth_prime\n  implicit none\ncontains\n\n  ! loop from 2 to n/2. If mod(i,n)==0 this is not prime\n  logical pure function is_prime(n)\n\n    integer, intent(in) :: n\n    integer :: i\n\n    is_prime=.true.\n    do i=2,n/2\n      if ( mod(n,i)==0 ) then\n        is_prime = .false.\n        return\n      end if\n    end do\n  end function\n\n  ! get nth prime\n  integer pure function prime(n)\n    integer, intent(in) :: n\n    integer :: i,j \n    prime = -1\n    if (n<1) then\n      return\n    endif\n    j=0\n    i=1\n    do while (j<n )\n      i=i+1\n      !write(*,*)  'Prime',i,j\n      if (is_prime(i)) then\n        j=j+1\n      endif\n    end do\n    prime=i\n  end function\n\nend module\n",
+  "test_code": "program nth_prime_test_main\n   use TesterMain\n   use nth_prime\n\n   implicit none\n\n   ! Test 1: first prime\n   call assert_equal(2, prime(1), \"first prime\")\n\n   ! Test 2: second prime\n   call assert_equal(3, prime(2), \"second prime\")\n\n   ! Test 3: sixth prime\n   call assert_equal(13, prime(6), \"sixth prime\")\n\n   ! Test 4: big prime\n   call assert_equal(104743, prime(10001), \"big prime\")\n\n   ! Test 5: there is no zeroth prime\n   call assert_equal(-1, prime(0), \"there is no zeroth prime\")\n\n   call test_report()\n\nend program\n\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "pclausen"
+  ],
+  "contributors": null
+}

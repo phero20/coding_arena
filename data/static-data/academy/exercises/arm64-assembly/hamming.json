@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:hamming",
+  "trackSlug": "arm64-assembly",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "69a68463-3546-45eb-9560-d4c859422cbe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": ".equ UNEQUAL_LENGTHS, -1\n\n.text\n.globl distance\n\ndistance:\n        ret\n",
+  "example_solution": ".equ UNEQUAL_LENGTHS, -1\n\n.text\n.globl distance\n\n/* extern int distance(const char *strand1, const char *strand2); */\ndistance:\n        mov     x2, x0\n        mov     x0, #0                  /* distance */\n\n.read:\n        ldrb    w3, [x1], #1            /* load byte, with post-increment */\n        ldrb    w4, [x2], #1            /* load byte, with post-increment */\n\n        cbz     w3, .exit               /* check for null terminator */\n        cbz     w4, .exit\n\n        cmp     w3, w4\n        cinc    x0, x0, ne              /* increment distance if characters differ */\n        b       .read\n\n.exit:\n        cmp     w3, w4\n        beq     .return\n\n        mov     x0, UNEQUAL_LENGTHS\n\n.return:\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#define UNEQUAL_LENGTHS -1\n\nextern int distance(const char *strand1, const char *strand2);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_empty_strands(void) {\n    TEST_ASSERT_EQUAL_INT(0, distance(\"\", \"\"));\n}\n\nvoid test_single_letter_identical_strands(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(0, distance(\"A\", \"A\"));\n}\n\nvoid test_single_letter_different_strands(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(1, distance(\"G\", \"T\"));\n}\n\nvoid test_long_identical_strands(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(0, distance(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\"));\n}\n\nvoid test_long_different_strands(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(9, distance(\"GGACGGATTCTG\", \"AGGACGGATTCT\"));\n}\n\nvoid test_disallow_first_strand_longer(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(UNEQUAL_LENGTHS, distance(\"AATG\", \"AAA\"));\n}\n\nvoid test_disallow_second_strand_longer(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(UNEQUAL_LENGTHS, distance(\"ATA\", \"AGTG\"));\n}\n\nvoid test_disallow_empty_first_strand(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(UNEQUAL_LENGTHS, distance(\"\", \"G\"));\n}\n\nvoid test_disallow_empty_second_strand(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL_INT(UNEQUAL_LENGTHS, distance(\"G\", \"\"));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_empty_strands);\n    RUN_TEST(test_single_letter_identical_strands);\n    RUN_TEST(test_single_letter_different_strands);\n    RUN_TEST(test_long_identical_strands);\n    RUN_TEST(test_long_different_strands);\n    RUN_TEST(test_disallow_first_strand_longer);\n    RUN_TEST(test_disallow_second_strand_longer);\n    RUN_TEST(test_disallow_empty_first_strand);\n    RUN_TEST(test_disallow_empty_second_strand);\n    return UNITY_END();\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

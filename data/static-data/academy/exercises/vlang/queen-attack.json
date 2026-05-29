@@ -1,0 +1,26 @@
+{
+  "id": "vlang:queen-attack",
+  "trackSlug": "vlang",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "d229850d-421a-47bc-a8ff-df73a4c3b72b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn can_queen_attack(white string, black string) !bool {\n}\n",
+  "example_solution": "module main\n\nfn can_queen_attack(white string, black string) !bool {\n\tif !is_valid_square(white) {\n\t\treturn error('${white} is not a valid square')\n\t}\n\tif !is_valid_square(black) {\n\t\treturn error('${black} is not a valid square')\n\t}\n\n\tif white == black {\n\t\treturn error('queens on same square')\n\t}\n\tif white[0] == black[0] {\n\t\treturn true\n\t}\n\tif white[1] == black[1] {\n\t\treturn true\n\t}\n\tfile_difference := int(white[0]) - int(black[0])\n\trank_difference := int(white[1]) - int(black[1])\n\tif file_difference == rank_difference {\n\t\treturn true\n\t}\n\tif file_difference + rank_difference == 0 {\n\t\treturn true\n\t}\n\n\treturn false\n}\n\nfn is_valid_square(square string) bool {\n\tif square.len != 2 || square[0] < `a` || square[0] > `h` || square[1] < `1` || square[1] > `8` {\n\t\treturn false\n\t}\n\treturn true\n}\n",
+  "test_code": "module main\n\nfn test_valid_no_attack_1() {\n\tassert !can_queen_attack('b3', 'd7')!\n}\n\nfn test_valid_no_attack_2() {\n\tassert !can_queen_attack('a1', 'f8')!\n}\n\nfn test_same_file() {\n\tassert can_queen_attack('b4', 'b7')!\n}\n\nfn test_same_rank() {\n\tassert can_queen_attack('e4', 'b4')!\n}\n\nfn test_common_diagonal_a_f() {\n\tassert can_queen_attack('a1', 'f6')!\n}\n\nfn test_common_diagonal_a_b() {\n\tassert can_queen_attack('a6', 'b7')!\n}\n\nfn test_common_diagonal_d_f() {\n\tassert can_queen_attack('d1', 'f3')!\n}\n\nfn test_common_diagonal_f_a() {\n\tassert can_queen_attack('f1', 'a6')!\n}\n\nfn test_common_diagonal_a_h() {\n\tassert can_queen_attack('a1', 'h8')!\n}\n\nfn test_common_diagonal_a_h8() {\n\tassert can_queen_attack('a8', 'h1')!\n}\n\nfn test_same_square() {\n\tif res := can_queen_attack('b4', 'b4') {\n\t\tassert false, 'queens on same square'\n\t} else {\n\t\tassert err.msg() == 'queens on same square'\n\t}\n}\n\nfn test_off_board_b9() {\n\tif res := can_queen_attack('a8', 'b9') {\n\t\tassert false, 'b9 is not a valid square'\n\t} else {\n\t\tassert err.msg() == 'b9 is not a valid square'\n\t}\n}\n\nfn test_off_board_a0() {\n\tif res := can_queen_attack('a0', 'b1') {\n\t\tassert false, 'a0 is not a valid square'\n\t} else {\n\t\tassert err.msg() == 'a0 is not a valid square'\n\t}\n}\n\nfn test_off_board_i5() {\n\tif res := can_queen_attack('g3', 'i5') {\n\t\tassert false, 'i5 is not a valid square'\n\t} else {\n\t\tassert err.msg() == 'i5 is not a valid square'\n\t}\n}\n\nfn test_off_board_here() {\n\tif res := can_queen_attack('here', 'there') {\n\t\tassert false, 'here is not a valid square'\n\t} else {\n\t\tassert err.msg() == 'here is not a valid square'\n\t}\n}\n\nfn test_off_board_empty() {\n\tif res := can_queen_attack('', '') {\n\t\tassert false, ' is not a valid square'\n\t} else {\n\t\tassert err.msg() == ' is not a valid square'\n\t}\n}\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "1ethanhansen"
+  ],
+  "contributors": null
+}

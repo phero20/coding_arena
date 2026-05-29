@@ -1,0 +1,39 @@
+{
+  "id": "fsharp:matrix",
+  "trackSlug": "fsharp",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "632417fa-7bf7-4228-9b71-dbdd6738b223",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "classes",
+    "members"
+  ],
+  "prerequisites": [
+    "classes",
+    "members",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Matrix\n\nlet row index matrix = failwith \"You need to implement this function.\"\n\nlet column index matrix = failwith \"You need to implement this function.\"\n",
+  "example_solution": "module Matrix\n\nlet private parseRow (row: string) =\n    row.Split(' ')\n    |> Seq.map int\n    |> List.ofSeq\n\nlet private parseRows (matrix: string) =\n    matrix.Split('\\n') \n    |> Seq.map parseRow\n    |> List.ofSeq\n\nlet row index matrix = \n    matrix\n    |> parseRows\n    |> List.item (index - 1)\n\nlet column index matrix =\n    matrix\n    |> parseRows\n    |> List.map (List.item (index - 1))",
+  "test_code": "module MatrixTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Matrix\n\n[<Fact>]\nlet ``Extract row from one number matrix`` () =\n    row 1 \"1\" |> should equal [1]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can extract row`` () =\n    row 2 \"1 2\\n3 4\" |> should equal [3; 4]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Extract row where numbers have different widths`` () =\n    row 2 \"1 2\\n10 20\" |> should equal [10; 20]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can extract row from non-square matrix with no corresponding column`` () =\n    row 4 \"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\" |> should equal [8; 7; 6]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Extract column from one number matrix`` () =\n    column 1 \"1\" |> should equal [1]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can extract column`` () =\n    column 3 \"1 2 3\\n4 5 6\\n7 8 9\" |> should equal [3; 6; 9]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can extract column from non-square matrix with no corresponding row`` () =\n    column 4 \"1 2 3 4\\n5 6 7 8\\n9 8 7 6\" |> should equal [4; 8; 6]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Extract column where numbers have different widths`` () =\n    column 2 \"89 1903 3\\n18 3 1\\n9 4 800\" |> should equal [1903; 3; 4]\n\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

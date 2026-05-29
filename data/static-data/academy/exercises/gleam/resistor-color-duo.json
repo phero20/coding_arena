@@ -1,0 +1,33 @@
+{
+  "id": "gleam:resistor-color-duo",
+  "trackSlug": "gleam",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "3f38677b-80cf-4782-b1e6-02f4413c240e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "results"
+  ],
+  "prerequisites": [
+    "custom-types",
+    "case-expressions",
+    "results",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub type Color {\n  Black\n  Brown\n  Red\n  Orange\n  Yellow\n  Green\n  Blue\n  Violet\n  Grey\n  White\n}\n\npub fn value(colors: List(Color)) -> Result(Int, Nil) {\n  todo\n}\n",
+  "example_solution": "pub type Color {\n  Black\n  Brown\n  Red\n  Orange\n  Yellow\n  Green\n  Blue\n  Violet\n  Grey\n  White\n}\n\npub fn value(colors: List(Color)) -> Result(Int, Nil) {\n  case colors {\n    [color1, color2, ..] -> Ok(10 * color_code(color1) + color_code(color2))\n    _ -> Error(Nil)\n  }\n}\n\nfn color_code(color: Color) -> Int {\n  case color {\n    Black -> 0\n    Brown -> 1\n    Red -> 2\n    Orange -> 3\n    Yellow -> 4\n    Green -> 5\n    Blue -> 6\n    Violet -> 7\n    Grey -> 8\n    White -> 9\n  }\n}\n",
+  "test_code": "import exercism/test_runner\nimport resistor_color_duo.{\n  Black, Blue, Brown, Green, Grey, Orange, Red, Violet, White, Yellow,\n}\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn brown_and_black_test() {\n  let assert Ok(10) = resistor_color_duo.value([Brown, Black])\n}\n\npub fn blue_and_grey_test() {\n  let assert Ok(68) = resistor_color_duo.value([Blue, Grey])\n}\n\npub fn yellow_and_violet_test() {\n  let assert Ok(47) = resistor_color_duo.value([Yellow, Violet])\n}\n\npub fn white_and_red_test() {\n  let assert Ok(92) = resistor_color_duo.value([White, Red])\n}\n\npub fn orange_and_orange_test() {\n  let assert Ok(33) = resistor_color_duo.value([Orange, Orange])\n}\n\npub fn ignore_additional_colors_test() {\n  let assert Ok(51) = resistor_color_duo.value([Green, Brown, Orange])\n}\n\npub fn black_and_brown_one_digit_test() {\n  let assert Ok(1) = resistor_color_duo.value([Black, Brown])\n}\n\npub fn fails_if_only_one_color_is_provided_test() {\n  let assert Error(Nil) = resistor_color_duo.value([Black])\n}\n\npub fn fails_if_no_color_is_provided_test() {\n  let assert Error(Nil) = resistor_color_duo.value([])\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "natanaelsirqueira"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:robot-simulator",
+  "trackSlug": "yamlscript",
+  "slug": "robot-simulator",
+  "name": "Robot Simulator",
+  "uuid": "e1709823-93b9-4d38-88ea-cce9af07d979",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a robot simulator.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nWrite a robot simulator.\n\nA robot factory's test facility needs a program to verify robot movements.\n\nThe robots have three possible movements:\n\n- turn right\n- turn left\n- advance\n\nRobots are placed on a hypothetical infinite grid, facing a particular direction (north, east, south, or west) at a set of {x,y} coordinates,\ne.g., {3,8}, with coordinates increasing to the north and east.\n\nThe robot then receives a number of instructions, at which point the testing facility verifies the robot's new position, and in which direction it is pointing.\n\n- The letter-string \"RAALAL\" means:\n  - Turn right\n  - Advance twice\n  - Turn left\n  - Advance once\n  - Turn left yet again\n- Say a robot starts at {7, 3} facing north.\n  Then running this stream of instructions should leave it at {9, 4} facing west.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn create(position direction):\n  # Implement the 'create' function.\n\ndefn move(position direction instructions):\n  # Implement the 'move' function.\n",
+  "example_solution": "!YS-v0\n\ndirs =: qw(north east south west)\nnext =: dirs.zipmap(dirs:cycle:rest)\n\ndir =::\n  north :: \\(update _ 'y' inc)\n  east  :: \\(update _ 'x' inc)\n  south :: \\(update _ 'y' dec)\n  west  :: \\(update _ 'x' dec)\n\ndefn create(position direction): +\n  {'position' position 'direction' direction}\n\ndefn move(position direction instructions):\n  reduce _ create(position direction) instructions:\n    fn(robot command):\n      case command:\n        \\\\A: update(robot 'position'  dir(robot.direction))\n        \\\\R: update(robot 'direction' next)\n        \\\\L: update(robot 'direction' set/map-invert(next))\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'robot-simulator.ys'\n\ntest::\n- name: At origin facing north\n  code: create({\"x\" 0, \"y\" 0} \"north\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: north\n\n- name: At negative position facing south\n  code: create({\"x\" -1, \"y\" -1} \"south\")\n  want:\n    position:\n      x: -1\n      y: -1\n    direction: south\n\n- name: Changes north to east\n  code: move({\"x\" 0, \"y\" 0} \"north\" \"R\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: east\n\n- name: Changes east to south\n  code: move({\"x\" 0, \"y\" 0} \"east\" \"R\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: south\n\n- name: Changes south to west\n  code: move({\"x\" 0, \"y\" 0} \"south\" \"R\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: west\n\n- name: Changes west to north\n  code: move({\"x\" 0, \"y\" 0} \"west\" \"R\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: north\n\n- name: Changes north to west\n  code: move({\"x\" 0, \"y\" 0} \"north\" \"L\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: west\n\n- name: Changes west to south\n  code: move({\"x\" 0, \"y\" 0} \"west\" \"L\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: south\n\n- name: Changes south to east\n  code: move({\"x\" 0, \"y\" 0} \"south\" \"L\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: east\n\n- name: Changes east to north\n  code: move({\"x\" 0, \"y\" 0} \"east\" \"L\")\n  want:\n    position:\n      x: 0\n      y: 0\n    direction: north\n\n- name: Facing north increments y\n  code: move({\"x\" 0, \"y\" 0} \"north\" \"A\")\n  want:\n    position:\n      x: 0\n      y: 1\n    direction: north\n\n- name: Facing south decrements y\n  code: move({\"x\" 0, \"y\" 0} \"south\" \"A\")\n  want:\n    position:\n      x: 0\n      y: -1\n    direction: south\n\n- name: Facing east increments x\n  code: move({\"x\" 0, \"y\" 0} \"east\" \"A\")\n  want:\n    position:\n      x: 1\n      y: 0\n    direction: east\n\n- name: Facing west decrements x\n  code: move({\"x\" 0, \"y\" 0} \"west\" \"A\")\n  want:\n    position:\n      x: -1\n      y: 0\n    direction: west\n\n- name: Moving east and north from readme\n  code: move({\"x\" 7, \"y\" 3} \"north\" \"RAALAL\")\n  want:\n    position:\n      x: 9\n      y: 4\n    direction: west\n\n- name: Moving west and north\n  code: move({\"x\" 0, \"y\" 0} \"north\" \"LAAARALA\")\n  want:\n    position:\n      x: -4\n      y: 1\n    direction: west\n\n- name: Moving west and south\n  code: move({\"x\" 2, \"y\" -7} \"east\" \"RRAAAAALA\")\n  want:\n    position:\n      x: -3\n      y: -8\n    direction: south\n\n- name: Moving east and north\n  code: move({\"x\" 8, \"y\" 4} \"south\" \"LAAARRRALLLL\")\n  want:\n    position:\n      x: 11\n      y: 5\n    direction: north\n\ndone: 18\n",
+  "source": "Inspired by an interview question at a famous company.",
+  "source_url": null,
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

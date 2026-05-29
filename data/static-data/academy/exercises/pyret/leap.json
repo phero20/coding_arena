@@ -1,0 +1,29 @@
+{
+  "id": "pyret:leap",
+  "trackSlug": "pyret",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "c67175ca-9706-4aec-a45b-040a23ef25c7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "booleans",
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: leap end\n\nfun leap(year):\n  raise(\"Please implement this function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: leap end\n\nfun leap(year):\n  fun year-is-divisible-by(divisor):\n    num-equal(num-modulo(year, divisor), 0)\n  end\n\n  year-is-divisible-by(4) and (not(year-is-divisible-by(100)) or year-is-divisible-by(400))\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"leap.arr\")\n\ncheck \"year not divisible by 4 in common year\":\n  leap(2015) is false\nend\n\ncheck \"year divisible by 2, not divisible by 4 in common year\":\n  leap(1970) is false\nend\n\ncheck \"year divisible by 4, not divisible by 100 in leap year\":\n  leap(1996) is true\nend\n\ncheck \"year divisible by 4 and 5 is still a leap year\":\n  leap(1960) is true\nend\n\ncheck \"year divisible by 100, not divisible by 400 in common year\":\n  leap(2100) is false\nend\n\ncheck \"year divisible by 100 but not by 3 is still not a leap year\":\n  leap(1900) is false\nend\n\ncheck \"year divisible by 400 is leap year\":\n  leap(2000) is true\nend\n\ncheck \"year divisible by 400 but not by 125 is still a leap year\":\n  leap(2400) is true\nend\n\ncheck \"year divisible by 200, not divisible by 400 in common year\":\n  leap(1800) is false\nend\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

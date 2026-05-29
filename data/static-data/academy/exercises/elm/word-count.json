@@ -1,0 +1,41 @@
+{
+  "id": "elm:word-count",
+  "trackSlug": "elm",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "9c9507a6-8187-4ce6-b0bc-b4765effb74c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "dict",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "module WordCount exposing (wordCount)\n\nimport Dict exposing (Dict)\n\n\nwordCount : String -> Dict String Int\nwordCount sentence =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module WordCount exposing (wordCount)\n\nimport Dict exposing (Dict)\n\n\nsanitizeSentence : String -> String\nsanitizeSentence sentence =\n    String.toLower sentence\n        |> String.map\n            (\\char ->\n                if Char.isLower char || Char.isDigit char || char == '\\'' then\n                    char\n\n                else\n                    ' '\n            )\n\n\nsanitizeWord : String -> String\nsanitizeWord word =\n    if String.startsWith \"'\" word then\n        sanitizeWord (String.dropLeft 1 word)\n\n    else if String.endsWith \"'\" word then\n        sanitizeWord (String.dropRight 1 word)\n\n    else\n        word\n\n\nwordCount : String -> Dict String Int\nwordCount sentence =\n    sanitizeSentence sentence\n        |> String.words\n        |> List.map sanitizeWord\n        |> List.foldl\n            (\\word dict ->\n                Dict.update\n                    word\n                    (\\count -> Maybe.withDefault 0 count + 1 |> Just)\n                    dict\n            )\n            Dict.empty\n        |> Dict.remove \"\"\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Dict\nimport Expect\nimport Test exposing (..)\nimport WordCount exposing (wordCount)\n\n\ntests : Test\ntests =\n    describe \"Word Count\"\n        [ test \"count one word\" <|\n            \\() ->\n                Expect.equal [ ( \"word\", 1 ) ]\n                    (wordCount \"word\" |> Dict.toList)\n        , skip <|\n            test \"count one of each word\" <|\n                \\() ->\n                    Expect.equal [ ( \"each\", 1 ), ( \"of\", 1 ), ( \"one\", 1 ) ]\n                        (wordCount \"one of each\" |> Dict.toList)\n        , skip <|\n            test \"multiple occurrences of a word\" <|\n                \\() ->\n                    Expect.equal [ ( \"blue\", 1 ), ( \"fish\", 4 ), ( \"one\", 1 ), ( \"red\", 1 ), ( \"two\", 1 ) ]\n                        (wordCount \"one fish two fish red fish blue fish\" |> Dict.toList)\n        , skip <|\n            test \"handles cramped lists\" <|\n                \\() ->\n                    Expect.equal [ ( \"one\", 1 ), ( \"three\", 1 ), ( \"two\", 1 ) ]\n                        (wordCount \"one,two,three\" |> Dict.toList)\n        , skip <|\n            test \"handles expanded lists\" <|\n                \\() ->\n                    Expect.equal [ ( \"one\", 1 ), ( \"three\", 1 ), ( \"two\", 1 ) ]\n                        (wordCount \"one,\\ntwo,\\nthree\" |> Dict.toList)\n        , skip <|\n            test \"ignore punctuation\" <|\n                \\() ->\n                    Expect.equal [ ( \"as\", 1 ), ( \"car\", 1 ), ( \"carpet\", 1 ), ( \"java\", 1 ), ( \"javascript\", 1 ) ]\n                        (wordCount \"car : carpet as java : javascript!!&@$%^&\" |> Dict.toList)\n        , skip <|\n            test \"include numbers\" <|\n                \\() ->\n                    Expect.equal [ ( \"1\", 1 ), ( \"2\", 1 ), ( \"testing\", 2 ) ]\n                        (wordCount \"testing, 1, 2 testing\" |> Dict.toList)\n        , skip <|\n            test \"normalize case\" <|\n                \\() ->\n                    Expect.equal [ ( \"go\", 3 ), ( \"stop\", 2 ) ]\n                        (wordCount \"go Go GO Stop stop\" |> Dict.toList)\n        , skip <|\n            test \"with apostrophes\" <|\n                \\() ->\n                    Expect.equal [ ( \"cry\", 1 ), ( \"don't\", 2 ), ( \"first\", 1 ), ( \"getting\", 1 ), ( \"it\", 1 ), ( \"laugh\", 1 ), ( \"then\", 1 ), ( \"you're\", 1 ) ]\n                        (wordCount \"'First: don't laugh. Then: don't cry. You're getting it.'\" |> Dict.toList)\n        , skip <|\n            test \"with quotations\" <|\n                \\() ->\n                    Expect.equal [ ( \"and\", 1 ), ( \"between\", 1 ), ( \"can't\", 1 ), ( \"joe\", 1 ), ( \"large\", 2 ), ( \"tell\", 1 ) ]\n                        (wordCount \"Joe can't tell between 'large' and large.\" |> Dict.toList)\n        , skip <|\n            test \"quotation for word with apostrophe\" <|\n                \\() ->\n                    Expect.equal [ ( \"can\", 1 ), ( \"can't\", 2 ) ]\n                        (wordCount \"can, can't, 'can't'\" |> Dict.toList)\n        , skip <|\n            test \"substrings from the beginning\" <|\n                \\() ->\n                    Expect.equal [ ( \"a\", 1 ), ( \"and\", 1 ), ( \"app\", 1 ), ( \"apple\", 1 ), ( \"between\", 1 ), ( \"can't\", 1 ), ( \"joe\", 1 ), ( \"tell\", 1 ) ]\n                        (wordCount \"Joe can't tell between app, apple and a.\" |> Dict.toList)\n        , skip <|\n            test \"multiple spaces not detected as a word\" <|\n                \\() ->\n                    Expect.equal [ ( \"multiple\", 1 ), ( \"whitespaces\", 1 ) ]\n                        (wordCount \" multiple   whitespaces\" |> Dict.toList)\n        , skip <|\n            test \"alternating word separators not detected as a word\" <|\n                \\() ->\n                    Expect.equal [ ( \"one\", 1 ), ( \"three\", 1 ), ( \"two\", 1 ) ]\n                        (wordCount \",\\n,one,\\n ,two \\n 'three'\" |> Dict.toList)\n        ]\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "jiegillet",
+    "michaelkpfeifer",
+    "mpizenberg",
+    "nathanielknight",
+    "NobbZ",
+    "parkerl",
+    "rebelwarrior",
+    "tuxagon"
+  ]
+}

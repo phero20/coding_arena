@@ -1,0 +1,28 @@
+{
+  "id": "objective-c:rna-transcription",
+  "trackSlug": "objective-c",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "cdc9a509-ded9-45b8-b8b1-5903016b77ad",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "#import \"RNATranscription.h\"\n\n@implementation RNATranscription\n\n// TODO: add your solution here\n\n@end\n",
+  "example_solution": "#import \"RNATranscriptionExample.h\"\n\n@implementation RNATranscription\n\n- (NSString *)rnaFromDNAStrand:(NSString *)dnaStrand\n{\n    NSDictionary *dnaToRNADict = @{ @\"G\" : @\"C\",\n                                    @\"C\" : @\"G\",\n                                    @\"T\" : @\"A\",\n                                    @\"A\" : @\"U\" };\n\n    NSMutableString *rnaStrand = [NSMutableString stringWithString:dnaStrand];\n\n    for (NSUInteger i = 0; i < [dnaStrand length]; i++) {\n        NSRange charRange = [dnaStrand rangeOfComposedCharacterSequenceAtIndex:i];\n        NSString *dnaNucleotide = [dnaStrand substringWithRange:charRange];\n        NSString *rnaNucleotide = dnaToRNADict[dnaNucleotide];\n        if (!rnaNucleotide) return nil;\n        [rnaStrand replaceCharactersInRange:charRange withString:rnaNucleotide];\n    }\n\n    return [rnaStrand copy];\n}\n\n@end\n",
+  "test_code": "#import <XCTest/XCTest.h>\n\n#if __has_include(\"RNATranscriptionExample.h\")\n# import \"RNATranscriptionExample.h\"\n# else\n# import \"RNATranscription.h\"\n#endif\n\n@interface RNATranscriptionTest : XCTestCase\n\n@end\n\n@implementation RNATranscriptionTest\n\n- (void)test1 {\n    XCTAssertEqualObjects(@\"G\", [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"C\"]);\n}\n\n- (void)test2 {\n    XCTAssertEqualObjects(@\"C\", [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"G\"]);\n}\n\n- (void)test3 {\n    XCTAssertEqualObjects(@\"A\", [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"T\"]);\n}\n\n- (void)test4 {\n    XCTAssertEqualObjects(@\"U\", [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"A\"]);\n}\n\n- (void)test5 {\n    XCTAssertEqualObjects(@\"UGCACCAGAAUU\", [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"ACGTGGTCTTAA\"]);\n}\n\n- (void)test6 {\n    XCTAssertEqualObjects(nil, [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"U\"]);\n}\n\n- (void)test7 {\n    XCTAssertEqualObjects(nil, [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"XXX\"]);\n}\n\n- (void)test8 {\n    XCTAssertEqualObjects(nil, [[[RNATranscription alloc] init] rnaFromDNAStrand:@\"ACGTXXXCTTAA\"]);\n}\n\n@end\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "samkrishna"
+  ],
+  "contributors": [
+    "masters3d"
+  ]
+}

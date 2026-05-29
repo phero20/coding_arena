@@ -1,0 +1,43 @@
+{
+  "id": "go:variable-length-quantity",
+  "trackSlug": "go",
+  "slug": "variable-length-quantity",
+  "name": "Variable Length Quantity",
+  "uuid": "333231db-2605-438e-9eb0-d1bdc51c7419",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement variable length quantity encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement variable length quantity encoding and decoding.\n\nThe goal of this exercise is to implement [VLQ][vlq] encoding/decoding.\n\nIn short, the goal of this encoding is to encode integer values in a way that would save bytes.\nOnly the first 7 bits of each byte are significant (right-justified; sort of like an ASCII byte).\nSo, if you have a 32-bit value, you have to unpack it into a series of 7-bit bytes.\nOf course, you will have a variable number of bytes depending upon your integer.\nTo indicate which is the last byte of the series, you leave bit #7 clear.\nIn all of the preceding bytes, you set bit #7.\n\nSo, if an integer is between `0-127`, it can be represented as one byte.\nAlthough VLQ can deal with numbers of arbitrary sizes, for this exercise we will restrict ourselves to only numbers that fit in a 32-bit unsigned integer.\nHere are examples of integers as 32-bit values, and the variable length quantities that they translate to:\n\n```text\n NUMBER        VARIABLE QUANTITY\n00000000              00\n00000040              40\n0000007F              7F\n00000080             81 00\n00002000             C0 00\n00003FFF             FF 7F\n00004000           81 80 00\n00100000           C0 80 00\n001FFFFF           FF FF 7F\n00200000          81 80 80 00\n08000000          C0 80 80 00\n0FFFFFFF          FF FF FF 7F\n```\n\n[vlq]: https://en.wikipedia.org/wiki/Variable-length_quantity\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package variablelengthquantity\n\nfunc EncodeVarint(input []uint32) []byte {\n\tpanic(\"Please implement the EncodeVarint function\")\n}\n\nfunc DecodeVarint(input []byte) ([]uint32, error) {\n\tpanic(\"Please implement the DecodeVarint function\")\n}\n",
+  "example_solution": "package variablelengthquantity\n\nimport (\n\t\"errors\"\n\t\"slices\"\n)\n\nconst (\n\t// 8th bit is used to indicate if there is more to this number.\n\tmoreBit byte = 1 << 7\n\t// The lower 7 bits contain the numeric value.\n\tbyteMask byte = moreBit - 1\n)\n\n// EncodeVarint encodes intergers into bytes.\nfunc EncodeVarint(input []uint32) []byte {\n\tvar out []byte\n\t// Add one number at a time.\n\tfor _, number := range input {\n\t\tvar encoded []byte\n\t\t// Add one byte for each set of lower 7 bits. Enable the more bit.\n\t\tfor i := number; i > 0; i >>= 7 {\n\t\t\tencoded = append(encoded, moreBit|(byte(i)&byteMask))\n\t\t}\n\t\tif number == 0 {\n\t\t\tencoded = append(encoded, 0)\n\t\t}\n\t\t// The last byte should not have the more bit set.\n\t\tencoded[0] &= byteMask\n\t\tslices.Reverse(encoded)\n\t\tout = append(out, encoded...)\n\t}\n\treturn out\n}\n\n// DecodeVarint converts bytes to numbers.\nfunc DecodeVarint(input []byte) ([]uint32, error) {\n\tvar numbers []uint32\n\t// The last byte must not set the more bit.\n\tif input[len(input)-1]&moreBit != 0 {\n\t\treturn nil, errors.New(\"invalid input\")\n\t}\n\tvar number uint32\n\tfor _, val := range input {\n\t\t// Collect the bytes into one number.\n\t\tnumber = (number << 7) | uint32(byteMask&val)\n\t\t// When there is no more bytes, add the number to the return slice.\n\t\tif (moreBit & val) == 0 {\n\t\t\tnumbers = append(numbers, number)\n\t\t\tnumber = 0\n\t\t}\n\t}\n\treturn numbers, nil\n}\n",
+  "test_code": "package variablelengthquantity\n\nimport (\n\t\"bytes\"\n\t\"slices\"\n\t\"testing\"\n)\n\nfunc TestEncodeVarint(t *testing.T) {\n\tfor _, tc := range encodeTestCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := EncodeVarint(tc.input); !bytes.Equal(actual, tc.expected) {\n\t\t\t\tt.Fatalf(\"EncodeVarint(%#v)\\ngot: %#v\\nwant: %#v\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestDecodeVarint(t *testing.T) {\n\tfor _, tc := range decodeTestCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual, err := DecodeVarint(tc.input)\n\t\t\tswitch {\n\t\t\tcase tc.errorExpected:\n\t\t\t\tif err == nil {\n\t\t\t\t\tt.Fatalf(\"DecodeVarint(%#v) expected error, got: %#v\", tc.input, actual)\n\t\t\t\t}\n\t\t\tcase err != nil:\n\t\t\t\tt.Fatalf(\"DecodeVarint(%#v) returned error: %q, want: %#v\", tc.input, err, tc.expected)\n\t\t\tcase !slices.Equal(actual, tc.expected):\n\t\t\t\tt.Fatalf(\"DecodeVarint(%#v) = %#v, want: %#v\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n",
+  "source": "A poor Splice developer having to implement MIDI encoding/decoding.",
+  "source_url": "https://splice.com",
+  "authors": [
+    "mattetti"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "jbsmith7741",
+    "kytrinyx",
+    "leenipper",
+    "lfritz",
+    "Ngo-The-Trung",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "voroskoi",
+    "eklatzer"
+  ]
+}

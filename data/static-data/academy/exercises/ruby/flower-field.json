@@ -1,0 +1,44 @@
+{
+  "id": "ruby:flower-field",
+  "trackSlug": "ruby",
+  "slug": "flower-field",
+  "name": "Flower Field",
+  "uuid": "d55cb55a-9c0e-42b5-83fe-0bfec3d52f93",
+  "type": "practice",
+  "status": null,
+  "blurb": "Mark all the flowers in a garden.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "arrays",
+    "conditionals",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nYour task is to add flower counts to empty squares in a completed Flower Field garden.\nThe garden itself is a rectangle board composed of squares that are either empty (`' '`) or a flower (`'*'`).\n\nFor each empty square, count the number of flowers adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent flowers, leave it empty.\nOtherwise replace it with the count of adjacent flowers.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Flower Field][history] is a compassionate reimagining of the popular game Minesweeper.\nThe object of the game is to find all the flowers in the garden using numeric hints that indicate how many flowers are directly adjacent (horizontally, vertically, diagonally) to a square.\n\"Flower Field\" shipped in regional versions of Microsoft Windows in Italy, Germany, South Korea, Japan and Taiwan.\n\n[history]: https://web.archive.org/web/20020409051321fw_/http://rcm.usr.dsi.unimi.it/rcmweb/fnm/\n",
+  "hints": null,
+  "starter_code": "class FlowerField\n  # Implement this class.\nend\n",
+  "example_solution": "class FlowerField\n  def self.annotate(garden)\n    new(garden).annotate\n  end\n\n  attr_reader :garden\n  def initialize(garden)\n    @garden = garden\n  end\n\n  def annotate\n    (0..rows).map do |row|\n      (0..columns).map do |column|\n        notation_at(row, column)\n      end.join(\"\")\n    end\n  end\n\n  private\n\n  def notation_at(row, column)\n    if flower_coordinates.include?([row, column])\n      return \"*\"\n    end\n    flowers = surrounding_coordinates(row, column).count {|x, y|\n      flower_coordinates.include?([x, y])\n    }\n    if flowers.zero?\n      \" \"\n    else\n      flowers.to_s\n    end\n  end\n\n  def surrounding_coordinates(row, column)\n    [\n      [row-1, column-1],\n      [row-1, column],\n      [row-1, column+1],\n      [row, column-1],\n      [row, column+1],\n      [row+1, column-1],\n      [row+1, column],\n      [row+1, column+1]\n    ].reject {|x, y| invalid_coordinate(x, y)}\n  end\n\n  def invalid_coordinate(x, y)\n    x < 0 || y < 0 || x > rows || y > columns\n  end\n\n  def flower_coordinates\n    return @flower_coordinates if @flower_coordinates\n\n    @flower_coordinates = []\n    garden.each.with_index do |row, x|\n      row.chars.each.with_index do |cell, y|\n        if cell == \"*\"\n          @flower_coordinates << [x, y]\n        end\n      end\n    end\n    @flower_coordinates\n  end\n\n  def rows\n    @rows ||= garden.size-1\n  end\n\n  def columns\n    @columns ||= garden.first.size-1\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'flower_field'\n\nclass FlowerFieldTest < Minitest::Test\n  def test_no_rows\n    # skip\n    input = []\n    expected = []\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_no_columns\n    skip\n    input = [\"\"]\n    expected = [\"\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_no_flowers\n    skip\n    input = [\"   \", \"   \", \"   \"]\n    expected = [\"   \", \"   \", \"   \"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_garden_full_of_flowers\n    skip\n    input = [\"***\", \"***\", \"***\"]\n    expected = [\"***\", \"***\", \"***\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_flower_surrounded_by_spaces\n    skip\n    input = [\"   \", \" * \", \"   \"]\n    expected = [\"111\", \"1*1\", \"111\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_space_surrounded_by_flowers\n    skip\n    input = [\"***\", \"* *\", \"***\"]\n    expected = [\"***\", \"*8*\", \"***\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_horizontal_line\n    skip\n    input = [\" * * \"]\n    expected = [\"1*2*1\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_horizontal_line_flowers_at_edges\n    skip\n    input = [\"*   *\"]\n    expected = [\"*1 1*\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_vertical_line\n    skip\n    input = [\" \", \"*\", \" \", \"*\", \" \"]\n    expected = [\"1\", \"*\", \"2\", \"*\", \"1\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_vertical_line_flowers_at_edges\n    skip\n    input = [\"*\", \" \", \" \", \" \", \"*\"]\n    expected = [\"*\", \"1\", \" \", \"1\", \"*\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_cross\n    skip\n    input = [\"  *  \", \"  *  \", \"*****\", \"  *  \", \"  *  \"]\n    expected = [\" 2*2 \", \"25*52\", \"*****\", \"25*52\", \" 2*2 \"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\n\n  def test_large_garden\n    skip\n    input = [\" *  * \", \"  *   \", \"    * \", \"   * *\", \" *  * \", \"      \"]\n    expected = [\"1*22*1\", \"12*322\", \" 123*2\", \"112*4*\", \"1*22*2\", \"111111\"]\n    assert_equal expected, FlowerField.annotate(input)\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "fluxusfrequency"
+  ],
+  "contributors": [
+    "abeger",
+    "BNAndras",
+    "budmc29",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "kytrinyx",
+    "tryantwit"
+  ]
+}

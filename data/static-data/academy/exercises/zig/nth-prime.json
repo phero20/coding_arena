@@ -1,0 +1,26 @@
+{
+  "id": "zig:nth-prime",
+  "trackSlug": "zig",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "799a17cb-9f29-481b-94be-b532f46c8024",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "const std = @import(\"std\");\nconst mem = std.mem;\n\npub fn prime(allocator: mem.Allocator, number: usize) !usize {\n    _ = allocator;\n    _ = number;\n    @compileError(\"please implement the prime function\");\n}\n",
+  "example_solution": "const std = @import(\"std\");\nconst math = std.math;\nconst mem = std.mem;\n\npub fn prime(allocator: mem.Allocator, number: usize) !usize {\n    // The first two primes are 2 and 3.\n    if (number <= 2) {\n        return number + 1;\n    }\n\n    const limit = number * math.log2_int_ceil(usize, number);\n    const table = try allocator.alloc(bool, limit);\n    defer allocator.free(table);\n    @memset(table, false);\n\n    var remaining = number - 2;\n    var p: usize = 1;\n    var step: usize = 4;\n    while (true) {\n        p += step; // skip multiples of 2 and multiples of 3\n        step = 6 - step;\n        if (table[p]) {\n            continue;\n        }\n\n        remaining -= 1;\n        if (remaining == 0) {\n            return p;\n        }\n\n        var q = p * p;\n        while (q < limit) {\n            table[q] = true;\n            q += 2 * p;\n        }\n    }\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst nth_prime = @import(\"nth_prime.zig\");\n\ntest \"first prime\" {\n    const p = try nth_prime.prime(testing.allocator, 1);\n    try testing.expectEqual(2, p);\n}\n\ntest \"second prime\" {\n    const p = try nth_prime.prime(testing.allocator, 2);\n    try testing.expectEqual(3, p);\n}\n\ntest \"third prime\" {\n    const p = try nth_prime.prime(testing.allocator, 3);\n    try testing.expectEqual(5, p);\n}\n\ntest \"fourth prime\" {\n    const p = try nth_prime.prime(testing.allocator, 4);\n    try testing.expectEqual(7, p);\n}\n\ntest \"fifth prime\" {\n    const p = try nth_prime.prime(testing.allocator, 5);\n    try testing.expectEqual(11, p);\n}\n\ntest \"sixth prime\" {\n    const p = try nth_prime.prime(testing.allocator, 6);\n    try testing.expectEqual(13, p);\n}\n\ntest \"seventh prime\" {\n    const p = try nth_prime.prime(testing.allocator, 7);\n    try testing.expectEqual(17, p);\n}\n\ntest \"big prime\" {\n    const p = try nth_prime.prime(testing.allocator, 10001);\n    try testing.expectEqual(104743, p);\n}\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

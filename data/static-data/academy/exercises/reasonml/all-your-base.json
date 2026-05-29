@@ -1,0 +1,32 @@
+{
+  "id": "reasonml:all-your-base",
+  "trackSlug": "reasonml",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "364cafb4-ada0-4f9f-87f0-c6cbf603fcba",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "let rebase = (_, _, _) => {\n  failwith(\"TODO: implement rebase function\");\n};",
+  "example_solution": "let fromBase = (base: int, digits: list(int)) : option(int) => {\n  let toDecimal = (acc: option(int), digit: int) : option(int) =>\n    switch (acc) {\n    | None => None\n    | Some(n) => digit >= 0 && digit < base ? Some(n * base + digit) : None\n    };\n\n  List.fold_left(toDecimal, Some(0), digits);\n};\n\nlet rec toBase = (base: int, input: int) : list(int) =>\n  input < base ? [input] : toBase(base, input / base) @ [input mod base];\n\nlet rebase =\n    (inBase: int, digits: list(int), outBase: int)\n    : option(list(int)) => {\n  let length = List.length(digits);\n  let numZeros = digits |> List.filter(digit => digit == 0) |> List.length;\n\n  if (inBase <= 0 || outBase <= 0 || length == numZeros) {\n    None;\n  } else {\n    switch (fromBase(inBase, digits)) {\n    | Some(n) => Some(toBase(outBase, n))\n    | _ => None\n    };\n  };\n};\n",
+  "test_code": "open Jest;\nopen Expect;\nopen AllYourBase;\n\ndescribe(\"all-your-base\", () => {\n  test(\"single bit one to decimal\", () =>\n    expect(rebase(2, [1], 100)) |> toEqual(Some([1]))\n  );\n  test(\"binary to single decimal\", () =>\n    expect(rebase(2, [1, 0, 1], 10)) |> toEqual(Some([5]))\n  );\n  test(\"single decimal to binary\", () =>\n    expect(rebase(10, [5], 2)) |> toEqual(Some([1, 0, 1]))\n  );\n  test(\"binary to multiple decimal\", () =>\n    expect(rebase(2, [1, 0, 1, 0, 1, 0], 10)) |> toEqual(Some([4, 2]))\n  );\n  test(\"decimal to binary\", () =>\n    expect(rebase(10, [4, 2], 2)) |> toEqual(Some([1, 0, 1, 0, 1, 0]))\n  );\n  test(\"trinary to hexadecimal\", () =>\n    expect(rebase(3, [1, 1, 2, 0], 16)) |> toEqual(Some([2, 10]))\n  );\n  test(\"hexadecimal to trinary\", () =>\n    expect(rebase(16, [2, 10], 3)) |> toEqual(Some([1, 1, 2, 0]))\n  );\n  test(\"15-bit integer\", () =>\n    expect(rebase(97, [3, 46, 60], 73)) |> toEqual(Some([6, 10, 45]))\n  );\n  test(\"empty list\", () =>\n    expect(rebase(2, [], 10)) |> toEqual(None)\n  );\n  test(\"single zero\", () =>\n    expect(rebase(10, [0], 2)) |> toEqual(None)\n  );\n  test(\"multiple zeros\", () =>\n    expect(rebase(10, [0, 0, 0], 2)) |> toEqual(None)\n  );\n  test(\"leading zeros\", () =>\n    expect(rebase(7, [0, 6, 0], 10)) |> toEqual(Some([4, 2]))\n  );\n  test(\"first base is zero\", () =>\n    expect(rebase(0, [], 10)) |> toEqual(None)\n  );\n  test(\"first base is negative\", () =>\n    expect(rebase(-1, [], 10)) |> toEqual(None)\n  );\n  test(\"negative digit\", () =>\n    expect(rebase(2, [1, (-1), 1, 0, 1, 0], 10)) |> toEqual(None)\n  );\n  test(\"invalid positive digit\", () =>\n    expect(rebase(2, [1, 2, 1, 0, 1, 0], 10)) |> toEqual(None)\n  );\n  test(\"second base is one\", () =>\n    expect(rebase(10, [], 1)) |> toEqual(None)\n  );\n  test(\"second base is zero\", () =>\n    expect(rebase(10, [1], 0)) |> toEqual(None)\n  );\n  test(\"second base is negative\", () =>\n    expect(rebase(10, [1], -1)) |> toEqual(None)\n  );\n  test(\"both bases are negative\", () =>\n    expect(rebase(-1, [1], -1)) |> toEqual(None)\n  );\n});\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "gabrielperales"
+  ],
+  "contributors": [
+    "benreyn",
+    "naartjie",
+    "ohana54",
+    "stevejb71",
+    "tejasbubane"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:isogram",
+  "trackSlug": "kotlin",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "e5338be9-6f51-4448-9b10-20de7b1338b9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object Isogram {\n\n    fun isIsogram(input: String): Boolean {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "object Isogram {\n\n    fun isIsogram(input: String): Boolean {\n        val sanitizedInput = input.lowercase().replace(\"[.!?\\\\-\\\\s]\".toRegex(), \"\")\n        val charCounts = sanitizedInput.toList().countBy()\n        return !charCounts.any { it.value > 1 }\n    }\n\n}\n\n\nfun <T> Iterable<T>.countBy() : Map<T, Int>  = this.countBy { it }\n\nfun <T, M> Iterable<T>.countBy(transformer: (T) -> M) : Map<M, Int> {\n    val emptyMap = mapOf<M, Int>()\n    return this.fold(emptyMap) {accumulator, item ->\n        val transformedItem = transformer(item)\n\n        accumulator + Pair(transformedItem, accumulator.getOrElse(transformedItem) { 0 } + 1)\n    }\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.runner.RunWith\nimport org.junit.runners.Parameterized\nimport kotlin.test.assertEquals\n\n@RunWith(Parameterized::class)\nclass IsogramTest(val input: String, val expectedOutput: Boolean) {\n\n    companion object {\n        @JvmStatic\n        @Parameterized.Parameters(name = \"{index}: isogram({0}) = {1}\")\n        fun data() = listOf(\n                arrayOf(\"\", true),\n                arrayOf(\"isogram\", true),\n                arrayOf(\"eleven\", false),\n                arrayOf(\"zzyzx\", false),\n                arrayOf(\"subdermatoglyphic\", true),\n                arrayOf(\"Alphabet\", false),\n                arrayOf(\"alphAbet\", false),\n                arrayOf(\"thumbscrew-japingly\", true),\n                arrayOf(\"thumbscrew-jappingly\", false),\n                arrayOf(\"six-year-old\", true),\n                arrayOf(\"Emily Jung Schwartzkopf\", true),\n                arrayOf(\"accentor\", false),\n                arrayOf(\"angola\", false)\n        )\n    }\n\n    @Test\n    fun test() {\n        assertEquals(expectedOutput, Isogram.isIsogram(input))\n    }\n\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "gandrianakis"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sdavids13",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

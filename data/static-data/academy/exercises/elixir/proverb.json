@@ -1,0 +1,34 @@
+{
+  "id": "elixir:proverb",
+  "trackSlug": "elixir",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "e230f49d-e92a-4440-8e7d-733755451cf5",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "lists",
+    "strings",
+    "pattern-matching",
+    "multiple-clause-functions",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Proverb do\n  @doc \"\"\"\n  Generate a proverb from a list of strings.\n  \"\"\"\n  @spec recite(strings :: [String.t()]) :: String.t()\n  def recite(strings) do\n  end\nend\n",
+  "example_solution": "defmodule Proverb do\n  @doc \"\"\"\n  Generate a proverb from a list of strings.\n  \"\"\"\n  @spec recite(strings :: [String.t()]) :: String.t()\n  def recite([]), do: \"\"\n\n  def recite([thing]),\n    do: \"\"\"\n    And all for the want of a #{thing}.\n    \"\"\"\n\n  def recite([thing | rest] = strings) do\n    lines =\n      Enum.zip(strings, rest)\n      |> Enum.map(fn {a, b} -> \"For want of a #{a} the #{b} was lost.\" end)\n      |> Enum.join(\"\\n\")\n\n    \"\"\"\n    #{lines}\n    And all for the want of a #{thing}.\n    \"\"\"\n  end\nend\n",
+  "test_code": "defmodule ProverbTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"zero pieces\" do\n    strings = []\n    output = Proverb.recite(strings)\n    expected = \"\"\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"one piece\" do\n    strings = [\"nail\"]\n    output = Proverb.recite(strings)\n\n    expected = \"\"\"\n    And all for the want of a nail.\n    \"\"\"\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"two pieces\" do\n    strings = [\"nail\", \"shoe\"]\n    output = Proverb.recite(strings)\n\n    expected = \"\"\"\n    For want of a nail the shoe was lost.\n    And all for the want of a nail.\n    \"\"\"\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"three pieces\" do\n    strings = [\"nail\", \"shoe\", \"horse\"]\n    output = Proverb.recite(strings)\n\n    expected = \"\"\"\n    For want of a nail the shoe was lost.\n    For want of a shoe the horse was lost.\n    And all for the want of a nail.\n    \"\"\"\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"full proverb\" do\n    strings = [\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]\n    output = Proverb.recite(strings)\n\n    expected = \"\"\"\n    For want of a nail the shoe was lost.\n    For want of a shoe the horse was lost.\n    For want of a horse the rider was lost.\n    For want of a rider the message was lost.\n    For want of a message the battle was lost.\n    For want of a battle the kingdom was lost.\n    And all for the want of a nail.\n    \"\"\"\n\n    assert output == expected\n  end\n\n  @tag :pending\n  test \"four pieces modernized\" do\n    strings = [\"pin\", \"gun\", \"soldier\", \"battle\"]\n    output = Proverb.recite(strings)\n\n    expected = \"\"\"\n    For want of a pin the gun was lost.\n    For want of a gun the soldier was lost.\n    For want of a soldier the battle was lost.\n    And all for the want of a pin.\n    \"\"\"\n\n    assert output == expected\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": [
+    "angelikatyborska"
+  ]
+}

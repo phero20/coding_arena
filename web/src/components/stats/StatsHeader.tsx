@@ -25,7 +25,11 @@ export function StatsHeader({ user }: StatsHeaderProps) {
       className="relative flex flex-col md:flex-row items-center md:items-end gap-6 pb-8 border-b border-border/50"
     >
       <div className="relative group">
+<<<<<<< HEAD
         <div className="absolute -inset-1 bg-gradient-to-r from-primary to-amber-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+=======
+        <div className="absolute -inset-1  rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+>>>>>>> prod-deploy
         <Avatar className="h-32 w-32 border-4 border-background ring-2 ring-border/50 group-hover:ring-primary/50 transition-all duration-300">
           <AvatarImage src={user.avatarUrl || ""} alt={user.username} />
           <AvatarFallback className="text-3xl font-black italic bg-muted text-muted-foreground uppercase">

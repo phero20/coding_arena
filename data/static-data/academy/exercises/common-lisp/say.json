@@ -1,0 +1,30 @@
+{
+  "id": "common-lisp:say",
+  "trackSlug": "common-lisp",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "c1aff1f6-2b48-4b54-a784-c5dbe2a7a19c",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "format-basics"
+  ],
+  "prerequisites": [
+    "format-basics"
+  ],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "(defpackage :say\n  (:use :cl)\n  (:export :say))\n\n(in-package :say)\n\n(defun say (number))\n",
+  "example_solution": "(defpackage :say\n  (:use :cl)\n  (:export :say))\n\n(in-package :say)\n\n(defun say (number)\n  (when (< -1 number (expt 10 12))\n    (format nil \"~r\" number)))\n",
+  "test_code": ";; Ensures that say.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"say\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from say and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :say-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :say-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* say-suite)\n\n(test zero\n    (let ((number 0))\n      (is (string= \"zero\" (say:say number)))))\n\n(test one\n    (let ((number 1))\n      (is (string= \"one\" (say:say number)))))\n\n(test fourteen\n    (let ((number 14))\n      (is (string= \"fourteen\" (say:say number)))))\n\n(test twenty\n    (let ((number 20))\n      (is (string= \"twenty\" (say:say number)))))\n\n(test twenty-two\n    (let ((number 22))\n      (is (string= \"twenty-two\" (say:say number)))))\n\n(test thirty\n    (let ((number 30))\n      (is (string= \"thirty\" (say:say number)))))\n\n(test ninety-nine\n    (let ((number 99))\n      (is (string= \"ninety-nine\" (say:say number)))))\n\n(test one-hundred\n    (let ((number 100))\n      (is (string= \"one hundred\" (say:say number)))))\n\n(test one-hundred-twenty-three\n    (let ((number 123))\n      (is (string= \"one hundred twenty-three\" (say:say number)))))\n\n(test two-hundred\n    (let ((number 200))\n      (is (string= \"two hundred\" (say:say number)))))\n\n(test nine-hundred-ninety-nine\n    (let ((number 999))\n      (is (string= \"nine hundred ninety-nine\" (say:say number)))))\n\n(test one-thousand\n    (let ((number 1000))\n      (is (string= \"one thousand\" (say:say number)))))\n\n(test one-thousand-two-hundred-thirty-four\n    (let ((number 1234))\n      (is (string= \"one thousand two hundred thirty-four\" (say:say number)))))\n\n(test one-million\n    (let ((number 1000000))\n      (is (string= \"one million\" (say:say number)))))\n\n(test one-million-two-thousand-three-hundred-forty-five\n    (let ((number 1002345))\n      (is (string= \"one million two thousand three hundred forty-five\" (say:say number)))))\n\n(test one-billion\n    (let ((number 1000000000))\n      (is (string= \"one billion\" (say:say number)))))\n\n(test a-big-number\n    (let ((number 987654321123)\n          (result \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\"))\n      (is (string= result (say:say number)))))\n\n(test numbers-below-zero-are-out-of-range\n    (let ((number -1))\n      (is (equal NIL (say:say number)))))\n\n(test numbers-above-999999999999-are-out-of-range\n    (let ((number 1000000000000))\n      (is (equal NIL (say:say number)))))\n\n(defun run-tests (&optional (test-or-suite 'say-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": null
+}

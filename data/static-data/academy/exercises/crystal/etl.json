@@ -1,0 +1,28 @@
+{
+  "id": "crystal:etl",
+  "trackSlug": "crystal",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "47465da6-5fa7-4d4c-a0cc-9a1cd74f6610",
+  "type": "practice",
+  "status": null,
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "hash"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "module ETL\n  def self.transform(input : Hash(String, Array(String))) : Hash(String, Int32)\n    # Write your code for the 'ETL' exercise in this file.\n  end\nend\n",
+  "example_solution": "module ETL\n  extend self\n\n  def transform(input : Hash(String, Array(String))) : Hash(String, Int32)\n    input.reduce({} of String => Int32) do |acc, (key, values)|\n      values.each do |i|\n        acc[i.downcase] = key.to_i\n      end\n      acc\n    end\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Etl\" do\n  it \"single letter\" do\n    input = {\"1\" => [\"A\"]}\n    expected = {\"a\" => 1}\n    ETL.transform(input).should eq(expected)\n  end\n\n  pending \"single score with multiple letters\" do\n    input = {\"1\" => [\"A\", \"E\", \"I\", \"O\", \"U\"]}\n    expected = {\"a\" => 1, \"e\" => 1, \"i\" => 1, \"o\" => 1, \"u\" => 1}\n    ETL.transform(input).should eq(expected)\n  end\n\n  pending \"multiple scores with multiple letters\" do\n    input = {\"1\" => [\"A\", \"E\"], \"2\" => [\"D\", \"G\"]}\n    expected = {\"a\" => 1, \"d\" => 2, \"e\" => 1, \"g\" => 2}\n    ETL.transform(input).should eq(expected)\n  end\n\n  pending \"multiple scores with differing numbers of letters\" do\n    input = {\n      \"1\" => [\"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\"], \"2\" => [\"D\", \"G\"], \"3\" => [\"B\", \"C\", \"M\", \"P\"],\n      \"4\" => [\"F\", \"H\", \"V\", \"W\", \"Y\"], \"5\" => [\"K\"], \"8\" => [\"J\", \"X\"], \"10\" => [\"Q\", \"Z\"],\n    }\n    expected = {\n      \"a\" => 1, \"b\" => 3, \"c\" => 3, \"d\" => 2, \"e\" => 1, \"f\" => 4, \"g\" => 2, \"h\" => 4, \"i\" => 1, \"j\" => 8,\n      \"k\" => 5, \"l\" => 1, \"m\" => 3, \"n\" => 1, \"o\" => 1, \"p\" => 3, \"q\" => 10, \"r\" => 1, \"s\" => 1,\n      \"t\" => 1, \"u\" => 1, \"v\" => 4, \"w\" => 4, \"x\" => 8, \"y\" => 4, \"z\" => 10,\n    }\n    ETL.transform(input).should eq(expected)\n  end\nend\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": null
+}

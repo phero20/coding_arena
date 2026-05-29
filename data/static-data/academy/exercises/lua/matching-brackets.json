@@ -1,0 +1,29 @@
+{
+  "id": "lua:matching-brackets",
+  "trackSlug": "lua",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "b9e455a0-688b-4502-aed7-a45536dde5ef",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "return {\n  valid = function(s)\n  end\n}\n",
+  "example_solution": "local opening_bracket = { ['('] = true, ['['] = true, ['{'] = true }\n\nlocal closing_bracket = { [')'] = '(', [']'] = '[', ['}'] = '{' }\n\nreturn {\n  valid = function(s)\n    local history = {}\n\n    for c in s:gmatch('.') do\n      if opening_bracket[c] then\n        table.insert(history, c)\n      elseif closing_bracket[c] then\n        if history[#history] ~= closing_bracket[c] then\n          return false\n        end\n        table.remove(history, #history)\n      end\n    end\n\n    return #history == 0\n  end\n}\n",
+  "test_code": "-- canonical test data 2.0.0\nlocal brackets = require('matching-brackets')\n\ndescribe('matching-brackets', function()\n  it('should accept paired square brackets', function()\n    assert.is_true(brackets.valid('[]'))\n  end)\n\n  it('should accept empty string', function()\n    assert.is_true(brackets.valid(''))\n  end)\n\n  it('should reject unpaired brackets', function()\n    assert.is_false(brackets.valid('[['))\n  end)\n\n  it('should reject wrong ordered brackets', function()\n    assert.is_false(brackets.valid('}{'))\n  end)\n\n  it('should reject wrong closing bracket', function()\n    assert.is_false(brackets.valid('{]'))\n  end)\n\n  it('should accept paired with whitespace', function()\n    assert.is_true(brackets.valid('{ }'))\n  end)\n\n  it('should reject partially paired brackets', function()\n    assert.is_false(brackets.valid('{[])'))\n  end)\n\n  it('should accept simple nested brackets', function()\n    assert.is_true(brackets.valid('{[]}'))\n  end)\n\n  it('should accept several paired brackets', function()\n    assert.is_true(brackets.valid('{}[]'))\n  end)\n\n  it('should accept paired and nested brackets', function()\n    assert.is_true(brackets.valid('([{}({}[])])'))\n  end)\n\n  it('should reject unopened closing brackets', function()\n    assert.is_false(brackets.valid('{[)][]}'))\n  end)\n\n  it('should reject unpaired and nested brackets', function()\n    assert.is_false(brackets.valid('([{])'))\n  end)\n\n  it('should reject paired and wrong nested brackets', function()\n    assert.is_false(brackets.valid('[({]})'))\n  end)\n\n  it('should reject paired and wrong nested brackets but innermost are correct', function()\n    assert.is_false(brackets.valid('[({}])'))\n  end)\n\n  it('should reject paired and incomplete brackets', function()\n    assert.is_false(brackets.valid('{}['))\n  end)\n\n  it('should reject too many closing brackets', function()\n    assert.is_false(brackets.valid('[]]'))\n  end)\n\n  it('should reject early unexpected brackets', function()\n    assert.is_false(brackets.valid(')()'))\n  end)\n\n  it('should reject early mismatched brackets', function()\n    assert.is_false(brackets.valid('{)()'))\n  end)\n\n  it('should accept math expression', function()\n    assert.is_true(brackets.valid('(((185 + 223.85) * 15) - 543)/2'))\n  end)\n\n  it('should accept complex latex expression', function()\n    assert.is_true(brackets.valid(\n                     [[\\left(\\begin{array}{cc} \\frac{1}{3} & x\\\\ \\mathrm{e}^{x} &... x^2 \\end{array}\\right)]]))\n  end)\nend)\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti",
+    "elyashiv"
+  ]
+}

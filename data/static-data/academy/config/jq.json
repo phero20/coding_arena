@@ -1,0 +1,1038 @@
+{
+  "language": "jq",
+  "slug": "jq",
+  "active": true,
+  "status": {
+    "concept_exercises": true,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "jq is a succinct programming language for querying and manipulating JSON data",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2,
+    "highlightjs_language": "jq"
+  },
+  "test_runner": {
+    "average_run_time": 20
+  },
+  "files": {
+    "solution": [
+      "%{kebab_slug}.jq"
+    ],
+    "test": [
+      "test-%{kebab_slug}.bats"
+    ],
+    "example": [
+      ".meta/example.jq"
+    ],
+    "exemplar": [
+      ".meta/exemplar.jq"
+    ]
+  },
+  "exercises": {
+    "concept": [
+      {
+        "slug": "shopping",
+        "name": "Shopping List",
+        "uuid": "3e39a7ee-fb84-4a82-b904-d7a2c2863519",
+        "concepts": [
+          "basics"
+        ],
+        "prerequisites": [],
+        "status": "beta",
+        "blurb": "jq fundamentals"
+      },
+      {
+        "slug": "assembly-line",
+        "name": "Assembly Line",
+        "uuid": "decbf137-ed00-412d-99ce-9b963da014a5",
+        "concepts": [
+          "numbers"
+        ],
+        "prerequisites": [
+          "basics"
+        ],
+        "status": "beta",
+        "blurb": "Learn about numbers by analyzing the production of an assembly line."
+      },
+      {
+        "slug": "log-line-parser",
+        "name": "Log Line Parser",
+        "uuid": "0e972cb9-0828-4f09-895b-12ae2d9e8683",
+        "concepts": [
+          "strings"
+        ],
+        "prerequisites": [
+          "basics"
+        ],
+        "status": "beta",
+        "blurb": "Learn about strings by processing logs."
+      },
+      {
+        "slug": "bird-count",
+        "name": "Bird Count",
+        "uuid": "8d974499-a5bb-4c34-ab2b-cd34e28c66a0",
+        "concepts": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "numbers",
+          "strings"
+        ],
+        "status": "beta",
+        "blurb": "Learn about arrays by keeping track of how many birds visit your garden."
+      },
+      {
+        "slug": "high-score-board",
+        "name": "High Score Board",
+        "uuid": "f4875e43-ce46-4d91-a333-334f1aa58d11",
+        "concepts": [
+          "objects"
+        ],
+        "prerequisites": [
+          "numbers",
+          "strings"
+        ],
+        "status": "beta",
+        "blurb": "Practice jq objects by tracking high scores of an arcade game."
+      },
+      {
+        "slug": "lasagna",
+        "name": "Lasagna",
+        "uuid": "da65406b-02b8-4d7a-a12c-e90205fde8ea",
+        "concepts": [
+          "variables"
+        ],
+        "prerequisites": [
+          "arrays",
+          "objects"
+        ],
+        "status": "beta",
+        "blurb": "Demonstrating variables in jq"
+      },
+      {
+        "slug": "vehicle-purchase",
+        "name": "Vehicle Purchase",
+        "uuid": "4d74e35b-eead-4cb6-8161-cb34da0b5f2d",
+        "concepts": [
+          "compare",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "arrays",
+          "objects"
+        ],
+        "status": "beta",
+        "blurb": "Learn about comparison and conditionals while preparing for your next vehicle purchase"
+      },
+      {
+        "slug": "remote-control-car",
+        "name": "Remote Control Car",
+        "uuid": "72875873-e8cf-4d2b-88cf-bf61f70bad3b",
+        "concepts": [
+          "functions"
+        ],
+        "prerequisites": [
+          "variables"
+        ],
+        "status": "beta",
+        "blurb": "Learn about functions by playing around with a remote controlled car."
+      },
+      {
+        "slug": "grade-stats",
+        "name": "Grade Stats",
+        "uuid": "f18aa833-4fdb-4668-8511-4d027d983042",
+        "concepts": [
+          "reduce"
+        ],
+        "prerequisites": [
+          "variables"
+        ],
+        "status": "beta",
+        "blurb": "Demonstrate the reduce filter in jq"
+      },
+      {
+        "slug": "recursive-functions",
+        "name": "Recursive Functions",
+        "uuid": "3b981b48-5826-4460-8c3e-59b2c28f46f1",
+        "concepts": [
+          "recursion"
+        ],
+        "prerequisites": [
+          "functions",
+          "conditionals"
+        ],
+        "status": "beta",
+        "blurb": "Demonstrate recursive functions in jq"
+      },
+      {
+        "slug": "regular-chatbot",
+        "name": "Regular Chatbot",
+        "uuid": "a75968a8-5c37-4f20-a966-7c6e549e17fe",
+        "concepts": [
+          "regular-expressions"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "status": "beta",
+        "blurb": "Learn the basics of regular expressions in jq by helping a chatbot understand humans."
+      }
+    ],
+    "practice": [
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "371035b8-691f-4ce3-9b5d-8e3e3d01675d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\"."
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "c5a5300a-3d7e-4982-aa11-293a34c04162",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 1,
+        "blurb": "Create a sentence of the form \"One for X, one for me.\"."
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "22bacfc3-7df0-4f40-852f-a5ce44ba1ddf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert a long phrase to its acronym."
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "a2ebef87-0dac-4a23-a976-560c3d496346",
+        "practices": [
+          "strings",
+          "conditionals",
+          "regular-expressions"
+        ],
+        "prerequisites": [
+          "strings",
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited."
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "9936e3b1-1a43-4c66-927b-0c9b1d8fc67e",
+        "practices": [
+          "numbers",
+          "recursion"
+        ],
+        "prerequisites": [
+          "numbers"
+        ],
+        "difficulty": 2,
+        "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture."
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "54a8aa9d-7962-4d78-bf18-a53067fd961a",
+        "practices": [
+          "numbers",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "numbers"
+        ],
+        "difficulty": 2,
+        "blurb": "Calculate the points scored in a single toss of a Darts game."
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "25cd3a15-6a74-4af8-b845-5b22ce5c1c6f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers."
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "551a953d-0f22-4433-8131-dd5606dbc156",
+        "practices": [
+          "recursion"
+        ],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation."
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "694a6a3b-9982-4441-b482-975341fafda3",
+        "practices": [
+          "objects"
+        ],
+        "prerequisites": [
+          "objects"
+        ],
+        "difficulty": 2,
+        "blurb": "Change the data format for scoring a game to more easily add other languages."
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "39b6cd35-ab3c-4041-ad53-c1e405aa890d",
+        "practices": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "arrays"
+        ],
+        "difficulty": 2,
+        "blurb": "Take a nested list and return a single list with all values except nil/null."
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "40dfdf5a-fee6-424e-984a-998111a11c06",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given students' names along with the grade that they are in, create a roster for the school."
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "9cc9d093-5413-45c4-bb4d-047f8f955f89",
+        "practices": [
+          "strings",
+          "arrays"
+        ],
+        "prerequisites": [
+          "strings",
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "blurb": "Calculate the Hamming distance between two DNA strands."
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "7194fe45-441d-40a8-a922-0ec5e6a920b7",
+        "practices": [
+          "conditionals"
+        ],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "blurb": "Determine if a word or phrase is an isogram."
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "1b70c9ba-d777-47a9-b76c-f818183766f9",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a diagram, determine which plants each child in the kindergarten class is responsible for."
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "12820127-b3a2-47f3-9c77-1a8b13a1abde",
+        "practices": [
+          "numbers",
+          "compare"
+        ],
+        "prerequisites": [
+          "numbers"
+        ],
+        "difficulty": 2,
+        "blurb": "Determine whether a given year is a leap year."
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "19279b17-6293-4984-bb8a-5b2a301670ea",
+        "practices": [
+          "objects",
+          "reduce"
+        ],
+        "prerequisites": [
+          "objects"
+        ],
+        "difficulty": 2,
+        "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string."
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "e9ad8b55-1fcf-41ce-bc9b-675623a25734",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Determine if a sentence is a pangram."
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "77f42da8-5888-47dd-a6da-af47a2312a5e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages."
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "9245ec80-9306-43f1-b047-ab65c4f50b01",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Compute the prime factors of a given natural number."
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "159b04aa-5814-4f04-822b-be4b4c6265a8",
+        "practices": [
+          "numbers",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "numbers"
+        ],
+        "difficulty": 2,
+        "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong."
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "e84d0056-d0fe-4835-8a4c-17350b09ac49",
+        "practices": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "arrays"
+        ],
+        "difficulty": 2,
+        "blurb": "Convert a resistor band's color to its numeric representation."
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "8d085260-e109-4692-9df0-92fd0b7fef0f",
+        "practices": [
+          "arrays",
+          "numbers"
+        ],
+        "prerequisites": [
+          "arrays"
+        ],
+        "difficulty": 2,
+        "blurb": "Convert color codes, as used on resistors, to a numeric value."
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "81ce12a1-12d4-4097-ac3b-e2a3adf73af8",
+        "practices": [
+          "numbers"
+        ],
+        "prerequisites": [
+          "numbers"
+        ],
+        "difficulty": 2,
+        "blurb": "Convert color codes, as used on resistors, to a human-readable label."
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "40f24ed9-46cd-493b-9b22-4c2d438e5c0a",
+        "practices": [
+          "strings",
+          "reduce",
+          "arrays"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 2,
+        "blurb": "Reverse a given string."
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "0981a331-259d-4619-afb4-350a7e4cf538",
+        "practices": [
+          "functions",
+          "objects"
+        ],
+        "prerequisites": [
+          "functions"
+        ],
+        "difficulty": 2,
+        "blurb": "Given a DNA strand, return its RNA complement."
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "2e73b15c-41cc-4dd1-8d05-e49dd54138e7",
+        "practices": [
+          "objects"
+        ],
+        "prerequisites": [
+          "objects"
+        ],
+        "difficulty": 2,
+        "blurb": "Given a word, compute the Scrabble score for that word."
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "824cefbf-a25d-445c-abc4-d92824006de1",
+        "practices": [
+          "conditionals",
+          "numbers",
+          "strings",
+          "compare",
+          "variables",
+          "functions"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "numbers",
+          "strings",
+          "compare"
+        ],
+        "difficulty": 2,
+        "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string."
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "43045020-9319-4516-8de0-bfe66303a928",
+        "practices": [
+          "variables"
+        ],
+        "prerequisites": [
+          "variables"
+        ],
+        "difficulty": 2,
+        "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years."
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "6f43b01c-9d90-4de5-841e-0ae9b330d346",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base."
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "f4e3f2b9-f019-46f9-9515-4234b67333db",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies."
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "2c3baf0a-8a2f-4e7e-9d99-ebfb800adff9",
+        "practices": [
+          "compare",
+          "strings"
+        ],
+        "prerequisites": [
+          "compare"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a word and a list of possible anagrams, select the correct sublist."
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "d7fe3e53-7cec-4251-8f48-4c5bedc80858",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Determine if a number is an Armstrong number."
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "afbcaf63-9d1b-4b47-8461-fecaa1b53adc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East."
+      },
+      {
+        "slug": "beer-song",
+        "name": "Beer Song",
+        "uuid": "9dba8bd0-c964-4320-a2a6-2202c8f3fdfe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "status": "deprecated",
+        "blurb": "Produce the lyrics to that beloved classic, that field-trip favorite: 99 Bottles of Beer on the Wall."
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "61aa634a-744f-434e-ad68-6a6bcd079a7b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Implement a binary search algorithm."
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "13a434bf-15e0-49e4-860a-988d3a5c1238",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Produce the lyrics to the popular children's repetitive song: Ten Green Bottles."
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "a90d7d12-9380-4580-a051-223080f4bb40",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given a letter, print a diamond starting with 'A' with the supplied letter at the widest point."
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "5c308e27-f6bc-4d48-95c5-9edf4a09c440",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Generate the lyrics of the song 'I Know an Old Lady Who Swallowed a Fly'."
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "0a2d780d-a3c3-4e00-8786-71aa8a61e8c6",
+        "practices": [
+          "variables"
+        ],
+        "prerequisites": [
+          "variables"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a moment, determine the moment that would be after a gigasecond has passed."
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "856db8a5-5c45-4010-b657-cb758364dccc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n."
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "1571cd8e-1ccb-4229-87ce-a0c190416a96",
+        "practices": [
+          "strings",
+          "numbers",
+          "arrays",
+          "compare",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "compare",
+          "conditionals"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a number determine whether or not it is valid per the Luhn formula."
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "1d7ad1ec-5ab0-431c-8324-4ae66b08d1bd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Make sure the brackets and braces all match."
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "6a69721e-1b96-40bd-8334-de198b4e59f3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Calculate the date of meetups."
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "b269733a-e177-4102-bd91-8a206c10f42f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given a number n, determine what the nth prime is."
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "752f6077-e124-4eba-bbed-409df2b87509",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Compute Pascal's triangle up to a given number of rows."
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "e881f5df-0242-4cfc-85b0-efed4eaa269f",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Implement a program that translates from English to Pig Latin."
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "4749481b-67f0-450a-8938-fafeea2e5663",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Translate RNA sequences into proteins."
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "7d822c90-c81a-45bb-b7ab-1b18ed8afdef",
+        "practices": [
+          "arrays",
+          "strings"
+        ],
+        "prerequisites": [
+          "arrays"
+        ],
+        "difficulty": 5,
+        "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme."
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "bccc8be6-f70b-4134-98d3-e678d696f11c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Write a robot simulator."
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "a23b4ec0-de47-4891-b355-977c1da431c0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Convert modern Arabic numbers into Roman numerals."
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "ce6036bc-b781-40d2-8b87-e5aa551bea2b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher."
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "050989e4-5b2f-4c9b-9294-53c6396cc21d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Implement run-length encoding and decoding."
+      },
+      {
+        "slug": "satellite",
+        "name": "Satellite",
+        "uuid": "484572b2-7f11-4468-8116-f1110eb18946",
+        "practices": [
+          "recursion"
+        ],
+        "prerequisites": [
+          "recursion"
+        ],
+        "difficulty": 5,
+        "blurb": "Rebuild binary trees from pre-order and in-order traversals."
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "91a949bc-413b-481f-81f4-8d02f0e67843",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given a decimal number, convert it to the appropriate sequence of events for a secret handshake."
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "8df36e00-f4eb-4501-9282-ac1d17881c0d",
+        "practices": [
+          "reduce",
+          "arrays"
+        ],
+        "prerequisites": [
+          "reduce"
+        ],
+        "difficulty": 5,
+        "blurb": "Use the Sieve of Eratosthenes to find all the primes from 2 up to a given number."
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "f6a6dd80-371e-47ee-935b-3d3475c816a0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given the size, return a square matrix of numbers in spiral order."
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "54421d36-c2d2-4c62-910c-536b0d08ccbe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Given a natural radicand, return its square root."
+      },
+      {
+        "slug": "tournament",
+        "name": "Tournament",
+        "uuid": "abdb1eb2-3b46-4702-94bd-65fde1acd5cf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Tally the results of a small football competition."
+      },
+      {
+        "slug": "transpose",
+        "name": "Transpose",
+        "uuid": "7a739010-e4e7-4f2a-b1a1-91bb6eea7ae6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Take input text and output it transposed."
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "0d3b7d0a-bbcc-4aa2-a401-9d4c5e9af9d3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Score a single throw of dice in the game Yacht."
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "2f3d7abb-2365-44f8-a40a-abe5c6212000",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "blurb": "Mark all the flowers in a garden."
+      },
+      {
+        "slug": "forth",
+        "name": "Forth",
+        "uuid": "284ed7aa-8304-47ba-8e0f-f1dfef3607fa",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "blurb": "Implement an evaluator for a very simple subset of Forth."
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "64890036-c508-4a52-a663-0e4c874625be",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value."
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "56376780-4074-4a07-a914-2230ef96abee",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "status": "deprecated",
+        "blurb": "Add the numbers to a minesweeper board."
+      },
+      {
+        "slug": "two-bucket",
+        "name": "Two Bucket",
+        "uuid": "32f028cf-c0ba-43fb-8968-fe4ec02b5f2c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "blurb": "Given two buckets of different size, demonstrate how to measure an exact number of liters."
+      },
+      {
+        "slug": "zebra-puzzle",
+        "name": "Zebra Puzzle",
+        "uuid": "4405355c-4f23-406d-9804-973cdf058cd6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 9,
+        "blurb": "Solve the zebra puzzle."
+      }
+    ],
+    "foregone": [
+      "bank-account",
+      "circular-buffer",
+      "dnd-character",
+      "grains",
+      "grep",
+      "hangman",
+      "ledger",
+      "list-ops",
+      "markdown",
+      "paasio",
+      "parallel-letter-frequency",
+      "robot-name",
+      "tree-building",
+      "variable-length-quantity"
+    ]
+  },
+  "concepts": [
+    {
+      "uuid": "33185105-995d-48a5-ba84-53241a41ce7e",
+      "slug": "basics",
+      "name": "Basics"
+    },
+    {
+      "uuid": "466a02be-fb6e-4460-b8f8-60d51398adbf",
+      "slug": "variables",
+      "name": "Variables"
+    },
+    {
+      "uuid": "e3655c76-6f9b-4b96-9bd2-51ef26eebe35",
+      "slug": "functions",
+      "name": "Functions"
+    },
+    {
+      "uuid": "e2315ce0-b069-46f1-8bbe-806427d93b99",
+      "slug": "numbers",
+      "name": "Numbers"
+    },
+    {
+      "uuid": "0043083b-100f-4408-ba19-60cfe69bc7ab",
+      "slug": "strings",
+      "name": "Strings"
+    },
+    {
+      "uuid": "e6681982-94de-41bb-a4e6-3174aa8e6797",
+      "slug": "arrays",
+      "name": "Arrays"
+    },
+    {
+      "uuid": "5adcd50d-90fb-41b2-8ca4-c58eecd361ff",
+      "slug": "objects",
+      "name": "Objects"
+    },
+    {
+      "uuid": "2cbe3378-9cae-43a1-b6cd-fbe77380dc56",
+      "slug": "compare",
+      "name": "Compare"
+    },
+    {
+      "uuid": "5afdc5e4-0128-4e2f-a5c2-ba6e3121c672",
+      "slug": "conditionals",
+      "name": "Conditionals"
+    },
+    {
+      "uuid": "3ae02c6b-9b1d-442f-b3f3-aafc98b5d2a8",
+      "slug": "recursion",
+      "name": "Recursion"
+    },
+    {
+      "uuid": "87548899-a18f-4bcc-b2de-8e9c6b91aa6a",
+      "slug": "regular-expressions",
+      "name": "Regular Expressions"
+    },
+    {
+      "uuid": "fe26c133-f9ef-4a69-abcd-4886605aa343",
+      "slug": "reduce",
+      "name": "Reduce"
+    }
+  ],
+  "key_features": [
+    {
+      "title": "Widely used",
+      "content": "jq has become a de-facto leader for transforming JSON data.",
+      "icon": "widely-used"
+    },
+    {
+      "title": "Small and fast",
+      "content": "jq is available as a single binary with no dependencies, it's simple to install.",
+      "icon": "small"
+    },
+    {
+      "title": "Generating JSON",
+      "content": "Generate valid JSON using command-line options to avoid worrying about quoting edge cases.",
+      "icon": "safe"
+    },
+    {
+      "title": "Reporting",
+      "content": "Reporting from REST APIs: piping the output of curl into jq is a powerful addition to your toolbox.",
+      "icon": "powerful"
+    },
+    {
+      "title": "CI tooling",
+      "content": "You may already be using jq in your CI workflows: get more comfortable with jq to amplify its power.",
+      "icon": "tooling"
+    },
+    {
+      "title": "A functional language",
+      "content": "jq is a functional programming language: jq code is very concise and maintainable.",
+      "icon": "functional"
+    }
+  ],
+  "tags": [
+    "paradigm/functional",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "typing/dynamic",
+    "used_for/scripts"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/jq.svg",
+  "about_content": "# About\n\n`jq` is a tool for parsing and transforming JSON data.\n`jq` is like `sed` for JSON data -- you can use it to slice and filter and map and transform structured data with the same ease that `sed`, `awk`, `grep` and friends let you play with text.\n\n`jq` is a dynamically-typed functional programming language.\nAll values are immutable.\n\n`jq` programs are composed of pipelines of \"filters\": each filter takes a single item as input, acts on it, and outputs zero or more transformed elements.\nA \"filter\" can also be called an \"expression\".\n\nThe output(s) of an expression can be passed to another using the `|` operator.\n`expressionA | expressionB` applies `expressionA` to some input, then `expressionB` executes repeatedly for each of the outputs of `expressionA`.\n\nThe input to an expression can be referred to explicitly as `.`.\nAn expression that adds `1` to its input reads like so: `. + 1` (or `1 + .`).\n\n## `jq` (the program) versus `jq` (the language)\n\n`jq` is a program you can install as a package on a variety of operating systems,\nor build it from source (it's coded in C).\nIt has several useful [command-line options][cli-options], and is quite fast.\n\nThe `jq` program also implements a _language_ to enable arbitrarily complex manipulations of the input data.\n\nThis Exercism track will focus on the language.\nYou will see usage of the `jq` program in the tests.\n\n## Versions\n\nThis Exercism track will focus on the original implementation of `jq`, whose home is [https://jqlang.github.io/jq/][jq].\nOther implementations, such as [`gojq`][gojq], may have different syntax to what is documented here.\n\n## JSON\n\nFrom [json.org][json]:\n\n> JSON (JavaScript Object Notation) is a lightweight data-interchange format.\n> It is easy for humans to read and write.\n> It is easy for machines to parse and generate.\n> It is based on a subset of the JavaScript Programming Language Standard ECMA-262 3rd Edition - December 1999.\n> JSON is a text format that is completely language independent but uses conventions that are familiar to programmers of the C-family of languages, including C, C++, C#, Java, JavaScript, Perl, Python, and many others.\n> These properties make JSON an ideal data-interchange language.\n\nThis track is about `jq` not JSON.\nWe will assume you are familiar with [JSON syntax and data types][wiki-json].\n\n## Further reading\n\n- [`jq` home][jq]\n- [`jq` wiki][jq-wiki]\n- [Stack Overflow jq info page][so]\n\n[jq]: https://jqlang.github.io/jq/\n[jq-wiki]: https://github.com/jqlang/jq/wiki\n[so]: https://stackoverflow.com/tags/jq/info\n[json]: https://www.json.org\n[wiki-json]: https://en.wikipedia.org/wiki/JSON#Syntax\n[cli-options]: https://jqlang.github.io/jq/manual/#invoking-jq\n[gojq]: https://github.com/itchyny/gojq#gojq\n"
+}

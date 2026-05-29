@@ -1,0 +1,26 @@
+{
+  "id": "roc:binary",
+  "trackSlug": "roc",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "4188031d-ae8c-4ce5-b4e4-dd4ac14c7729",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion.\nGiven a binary input string, your program should produce a decimal output.\nThe program should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood as a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The nth number gets multiplied by 10^_(n-1)_.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [decimal]\n\ndecimal : Str -> Result U64 _\ndecimal = |binary_str|\n    crash(\"Please implement the 'decimal' function\")\n",
+  "example_solution": "module [decimal]\n\ndecimal : Str -> Result U64 [InvalidCharacter U8]\ndecimal = |binary_str|\n    binary_str\n    |> Str.to_utf8\n    |> List.map_try(\n        |char|\n            when char is\n                '0' -> Ok(0)\n                '1' -> Ok(1)\n                c -> Err(InvalidCharacter(c)),\n    )?\n    |> List.walk(\n        0,\n        |dec, bit|\n            dec * 2 + bit,\n    )\n    |> Ok\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/binary/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport Binary exposing [decimal]\n\n# binary 0 is decimal 0\nexpect\n    result = decimal(\"0\")\n    result == Ok(0)\n\n# binary 1 is decimal 1\nexpect\n    result = decimal(\"1\")\n    result == Ok(1)\n\n# binary 10 is decimal 2\nexpect\n    result = decimal(\"10\")\n    result == Ok(2)\n\n# binary 11 is decimal 3\nexpect\n    result = decimal(\"11\")\n    result == Ok(3)\n\n# binary 100 is decimal 4\nexpect\n    result = decimal(\"100\")\n    result == Ok(4)\n\n# binary 1001 is decimal 9\nexpect\n    result = decimal(\"1001\")\n    result == Ok(9)\n\n# binary 11010 is decimal 26\nexpect\n    result = decimal(\"11010\")\n    result == Ok(26)\n\n# binary 10001101000 is decimal 1128\nexpect\n    result = decimal(\"10001101000\")\n    result == Ok(1128)\n\n# binary ignores leading zeros\nexpect\n    result = decimal(\"000011111\")\n    result == Ok(31)\n\n# 2 is not a valid binary digit\nexpect\n    result = decimal(\"2\")\n    result |> Result.is_err\n\n# a number containing a non-binary digit is invalid\nexpect\n    result = decimal(\"01201\")\n    result |> Result.is_err\n\n# a number with trailing non-binary characters is invalid\nexpect\n    result = decimal(\"10nope\")\n    result |> Result.is_err\n\n# a number with leading non-binary characters is invalid\nexpect\n    result = decimal(\"nope10\")\n    result |> Result.is_err\n\n# a number with internal non-binary characters is invalid\nexpect\n    result = decimal(\"10nope10\")\n    result |> Result.is_err\n\n# a number and a word whitespace separated is invalid\nexpect\n    result = decimal(\"001 nope\")\n    result |> Result.is_err\n\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

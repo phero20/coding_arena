@@ -1,0 +1,26 @@
+{
+  "id": "idris:two-fer",
+  "trackSlug": "idris",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "2c69c975-daae-4dd6-911b-3579e0339f85",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "module TwoFer\n\nexport\ntwoFer : Maybe String -> String\ntwoFer name = ?twoFer_rhs\n",
+  "example_solution": "module TwoFer\n\nimport Data.Maybe\n\nexport\ntwoFer : Maybe String -> String\ntwoFer name = \"One for \" ++ (fromMaybe \"you\" name) ++ \", one for me.\"\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport TwoFer\n\ntests : List Test\ntests =\n  [ test \"no name given\"      (assertEq (twoFer $ Nothing) \"One for you, one for me.\")\n  , test \"a name given\"       (assertEq (twoFer $ Just \"Alice\") \"One for Alice, one for me.\")\n  , test \"another name given\" (assertEq (twoFer $ Just \"Bob\") \"One for Bob, one for me.\")\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

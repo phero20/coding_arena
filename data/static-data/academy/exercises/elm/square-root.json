@@ -1,0 +1,32 @@
+{
+  "id": "elm:square-root",
+  "trackSlug": "elm",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "8960514f-17af-4009-b334-d6bfc4722c80",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "recursion"
+  ],
+  "prerequisites": [
+    "basics-2",
+    "recursion",
+    "pattern-matching"
+  ],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "module SquareRoot exposing (squareRoot)\n\n\nsquareRoot : Int -> Int\nsquareRoot radicand =\n    Debug.todo \"Please implement squareRoot\"\n",
+  "example_solution": "module SquareRoot exposing (squareRoot)\n\n\nsquareRoot : Int -> Int\nsquareRoot radicand =\n    case radicand of\n        1 ->\n            1\n\n        _ ->\n            let\n                improveGuess : Float -> Float\n                improveGuess guess =\n                    let\n                        nextGuess =\n                            (guess + toFloat radicand / guess) / 2\n                    in\n                    if abs (guess - nextGuess) < 0.0001 then\n                        nextGuess\n\n                    else\n                        improveGuess nextGuess\n\n                initialGuess =\n                    toFloat radicand / 2\n            in\n            initialGuess\n                |> improveGuess\n                |> round\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport SquareRoot\nimport Test exposing (Test, describe, skip, test)\n\n\ntests : Test\ntests =\n    describe \"SquareRoot\"\n        [ test \"root of 1\" <|\n            \\() ->\n                SquareRoot.squareRoot 1\n                    |> Expect.equal 1\n        , skip <|\n            test \"root of 4\" <|\n                \\() ->\n                    SquareRoot.squareRoot 4\n                        |> Expect.equal 2\n        , skip <|\n            test \"root of 25\" <|\n                \\() ->\n                    SquareRoot.squareRoot 25\n                        |> Expect.equal 5\n        , skip <|\n            test \"root of 81\" <|\n                \\() ->\n                    SquareRoot.squareRoot 81\n                        |> Expect.equal 9\n        , skip <|\n            test \"root of 196\" <|\n                \\() ->\n                    SquareRoot.squareRoot 196\n                        |> Expect.equal 14\n        , skip <|\n            test \"root of 65025\" <|\n                \\() ->\n                    SquareRoot.squareRoot 65025\n                        |> Expect.equal 255\n        ]\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

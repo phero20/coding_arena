@@ -1,0 +1,30 @@
+{
+  "id": "perl5:hexadecimal",
+  "trackSlug": "perl5",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "742bccfd-20f9-44f1-8935-e84384807088",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package Hexadecimal;\n\nuse strict;\nuse warnings;\n\nsub new {\n    my ( $class, $hexadecimal ) = @_;\n\n    return undef;\n}\n\nsub to_decimal {\n    my $self = shift;\n\n    return undef;\n}\n\n__PACKAGE__;\n",
+  "example_solution": "package Hexadecimal;\n\nuse strict;\nuse warnings;\n\nmy %_HEXTRA = qw(\n    a 10\n    b 11\n    c 12\n    d 13\n    e 14\n    f 15\n);\n\nsub new {\n    my ( $class, $hexadecimal ) = @_;\n    my $self = bless { hexadecimal => $hexadecimal } => $class;\n\n    return $self;\n}\n\nsub to_decimal {\n    my $self = shift;\n\n    return 0 if $self->{hexadecimal} =~ m/[^0-9a-f]/;\n\n    my $decimal = 0;\n    my $index   = length $self->{hexadecimal};\n\n    foreach my $hexa ( split // => $self->{hexadecimal} ) {\n        $hexa = $_HEXTRA{$hexa} if exists $_HEXTRA{$hexa};\n        $decimal += $hexa * 16** --$index;\n    }\n\n    return $decimal;\n}\n\n__PACKAGE__;\n",
+  "test_code": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\n\nuse Test2::Bundle::More;\nuse FindBin qw($Bin);\nuse lib $Bin, \"$Bin/local/lib/perl5\";\n\nmy @cases = (\n    {   hex     => '1',\n        decimal => 1,\n    },\n    {   hex     => 'c',\n        decimal => 12,\n    },\n    {   hex     => '10',\n        decimal => 16,\n    },\n    {   hex     => 'af',\n        decimal => 175,\n    },\n    {   hex     => '100',\n        decimal => 256,\n    },\n    {   hex     => '19ace',\n        decimal => 105166,\n    },\n    {   hex     => 'carrot',\n        decimal => 0,\n    },\n    {   hex     => '000000',\n        decimal => 0,\n    },\n    {   hex     => 'ffffff',\n        decimal => 16777215,\n    },\n    {   hex     => 'ffff00',\n        decimal => 16776960,\n    },\n);\n\nmy $module = 'Hexadecimal';\n\nplan 4 + @cases;\n\nok -e \"$Bin/$module.pm\", \"Missing $module.pm\"\n    or BAIL_OUT \"You need to create file: $module.pm\";\neval \"use $module\";\n\nok !$@, \"Cannot load $module\"\n    or BAIL_OUT \"Cannot load $module. Does it compile? Does it end with 1;?\";\ncan_ok $module, \"new\"\n    or BAIL_OUT \"Missing package $module; or missing sub new()\";\ncan_ok $module, \"to_decimal\"\n    or BAIL_OUT \"Missing package $module; or missing sub to_decimal()\";\n\nforeach my $c (@cases) {\n    my $hex = $module->new( $c->{hex} );\n    is $hex->to_decimal, $c->{decimal}, \"convert $c->{hex} to $c->{decimal}\";\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

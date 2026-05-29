@@ -22,6 +22,7 @@ export interface ExecutionTestResult {
   status: ExecutionVerdict;
   rawStatus: ExecutionStatus;
   time: string | null;
+<<<<<<< HEAD
   memory?: number;
 }
 
@@ -29,6 +30,21 @@ export interface RunSubmissionResponse {
   submissionId: string;
   overallStatus: string;
   tests: ExecutionTestResult[];
+=======
+  memory?: number | null;
+}
+
+export interface RunSubmissionResponse {
+  submissionId?: string;
+  overallStatus: ExecutionVerdict;
+  tests: ExecutionTestResult[];
+  compileOutput?: string;
+  stderr?: string;
+  driverVerdict?: string;
+  parserWarnings?: string[];
+  suspicion?: { score: number; reasons: string[]; aiAuditTriggered: boolean };
+  aiAudit?: { overallStatus: ExecutionVerdict; disagreedWithDriver: boolean };
+>>>>>>> prod-deploy
 }
 
 export interface RunSubmissionPayload {
@@ -48,7 +64,21 @@ export interface Submission {
   status: ExecutionVerdict | "PENDING";
   time?: number;
   memory?: number;
+<<<<<<< HEAD
   details?: any;
+=======
+  details?: {
+    tests?: ExecutionTestResult[];
+    compileOutput?: string;
+    stderr?: string;
+    evaluatedAt?: string;
+    evaluationDuration?: number;
+    driverVerdict?: string;
+    parserWarnings?: string[];
+    suspicion?: { score: number; reasons: string[]; aiAuditTriggered: boolean };
+    aiAudit?: { overallStatus: ExecutionVerdict; disagreedWithDriver: boolean };
+  };
+>>>>>>> prod-deploy
   createdAt: string;
   updatedAt: string;
 }

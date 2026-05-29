@@ -1,0 +1,29 @@
+{
+  "id": "c:reverse-string",
+  "trackSlug": "c",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "a540d3d9-3c8b-46f5-a150-983308e02289",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "#include \"reverse_string.h\"\n",
+  "example_solution": "#include \"reverse_string.h\"\n#include <stdlib.h>\n#include <string.h>\n\nchar *reverse(const char *value)\n{\n   size_t value_len = strlen(value);\n   char *result = malloc(value_len + 1);\n   char *dest = result + value_len;\n\n   *dest = '\\0';\n   while (*value) {\n      --dest;\n      *dest = *value;\n      ++value;\n   }\n\n   return result;\n}\n",
+  "test_code": "#include \"test-framework/unity.h\"\n#include \"reverse_string.h\"\n#include <stdlib.h>\n#include <string.h>\n\nvoid setUp(void)\n{\n}\n\nvoid tearDown(void)\n{\n}\n\nstatic void test_reverse(char *phrase, char *expected)\n{\n   char *actual = reverse(phrase);\n\n   TEST_ASSERT_EQUAL_STRING(expected, actual);\n\n   free(actual);\n}\n\nstatic void test_an_empty_string(void)\n{\n   test_reverse(\"\", \"\");\n}\n\nstatic void test_a_word(void)\n{\n   test_reverse(\"robot\", \"tobor\");\n}\n\nstatic void test_a_capitalized_word(void)\n{\n   test_reverse(\"Ramen\", \"nemaR\");\n}\n\nstatic void test_a_sentence_with_punctuation(void)\n{\n   test_reverse(\"I'm hungry!\", \"!yrgnuh m'I\");\n}\n\nstatic void test_a_palindrome(void)\n{\n   test_reverse(\"racecar\", \"racecar\");\n}\n\nstatic void test_an_even_sized_word(void)\n{\n   test_reverse(\"drawer\", \"reward\");\n}\n\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_an_empty_string);\n   RUN_TEST(test_a_word);\n   RUN_TEST(test_a_capitalized_word);\n   RUN_TEST(test_a_sentence_with_punctuation);\n   RUN_TEST(test_a_palindrome);\n   RUN_TEST(test_an_even_sized_word);\n\n   return UNITY_END();\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": [
+    "jagdish-15",
+    "wolf99"
+  ]
+}

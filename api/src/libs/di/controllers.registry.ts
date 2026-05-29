@@ -23,7 +23,18 @@ import { FollowController } from "../../controllers/user/follow.controller";
 import { ProfileController } from "../../controllers/user/profile.controller";
 import { UserController } from "../../controllers/user/user.controller";
 import { CompilerController } from "../../controllers/compiler/compiler.controller";
+<<<<<<< HEAD
 
+=======
+import { ContestController } from "../../controllers/contest/contest.controller";
+import { TaxonomyController } from "../../controllers/taxonomy/taxonomy.controller";
+import { SolutionController } from "../../controllers/solutions/solution.controller";
+import { WorkspaceController } from "../../controllers/workspace/workspace.controller";
+import { ChatController } from "../../controllers/chat/chat.controller";
+import { AcademyController } from "../../controllers/academy/academy.controller";
+import { AcademyExecutionController } from "../../controllers/academy/academy-execution.controller";
+import { SystemDesignController } from "../../controllers/system-design/system-design.controller";
+>>>>>>> prod-deploy
 
 /**
  * Controller and Middleware layer registrations.
@@ -53,4 +64,15 @@ export const controllersRegistry = {
   profileController: asClass(ProfileController).singleton(),
   userController: asClass(UserController).singleton(),
   compilerController: asClass(CompilerController).singleton(),
+<<<<<<< HEAD
+=======
+  contestController: asClass(ContestController).singleton(),
+  taxonomyController: asClass(TaxonomyController).singleton(),
+  solutionController: asClass(SolutionController).singleton(),
+  workspaceController: asClass(WorkspaceController).singleton(),
+  chatController: asClass(ChatController).singleton(),
+  academyController: asClass(AcademyController).singleton(),
+  academyExecutionController: asClass(AcademyExecutionController).singleton(),
+  systemDesignController: asClass(SystemDesignController).singleton(),
+>>>>>>> prod-deploy
 };

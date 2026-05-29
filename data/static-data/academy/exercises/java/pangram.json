@@ -1,0 +1,47 @@
+{
+  "id": "java:pangram",
+  "trackSlug": "java",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "133b0f84-bdc7-4508-a0a1-5732a7db81ef",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "chars"
+  ],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "public class PangramChecker {\n\n    public boolean isPangram(String input) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}\n",
+  "example_solution": "import java.util.Arrays;\nimport java.util.stream.Collectors;\n\npublic class PangramChecker {\n    private static final int alphaLength = 26;\n\n    public boolean isPangram(String input) {\n        return Arrays.stream(input.replaceAll(\"[^a-zA-Z]\", \"\")\n                .toLowerCase()\n                .split(\"\"))\n                .collect(Collectors.toSet())\n                .size() == alphaLength;\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class PangramCheckerTest {\n\n    private PangramChecker pangramChecker;\n\n    @BeforeEach\n    public void setup() {\n        pangramChecker = new PangramChecker();\n    }\n\n    @Test\n    @DisplayName(\"empty sentence\")\n    public void emptySentenceIsNotPangram() {\n        assertThat(pangramChecker.isPangram(\"\")).isFalse();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"perfect lower case\")\n    public void perfectLowerCasePhraseIsPangram() {\n        assertThat(pangramChecker.isPangram(\"abcdefghijklmnopqrstuvwxyz\")).isTrue();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"only lower case\")\n    public void phraseWithOnlyLowerCaseIsPangram() {\n        assertThat(pangramChecker.isPangram(\"the quick brown fox jumps over the lazy dog\")).isTrue();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"missing the letter 'x'\")\n    public void phraseMissingCharacterXIsNotPangram() {\n        assertThat(pangramChecker.isPangram(\"a quick movement of the enemy will jeopardize five gunboats\")).isFalse();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"missing the letter 'h'\")\n    public void phraseMissingCharacterHIsNotPangram() {\n        assertThat(pangramChecker.isPangram(\"five boxing wizards jump quickly at it\")).isFalse();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"with underscores\")\n    public void phraseWithUnderscoresIsPangram() {\n        assertThat(pangramChecker.isPangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\")).isTrue();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"with numbers\")\n    public void phraseWithNumbersIsPangram() {\n        assertThat(pangramChecker.isPangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\")).isTrue();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"missing letters replaced by numbers\")\n    public void phraseWithMissingLettersReplacedByNumbersIsNotPangram() {\n        assertThat(pangramChecker.isPangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")).isFalse();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"mixed case and punctuation\")\n    public void phraseWithMixedCaseAndPunctuationIsPangram() {\n        assertThat(pangramChecker.isPangram(\"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")).isTrue();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"case insensitive\")\n    public void caseInsensitivePhraseIsNotPangram() {\n        assertThat(pangramChecker.isPangram(\"abcdefghijklm ABCDEFGHIJKLM\")).isFalse();\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "barisozcanli",
+    "FridaTveit",
+    "IpshitaC",
+    "javaeeeee",
+    "jmrunkle",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "michaelspets",
+    "morrme",
+    "msomji",
+    "muzimuzhi",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "stkent",
+    "Zaldrick"
+  ]
+}

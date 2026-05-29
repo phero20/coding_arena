@@ -1,0 +1,30 @@
+{
+  "id": "julia:pangram",
+  "trackSlug": "julia",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "4bc9a4f8-fc4d-4e6b-a93c-07069bbc5bc9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "\"\"\"\n    ispangram(input)\n\nReturn `true` if `input` contains every alphabetic character (case insensitive).\n\n\"\"\"\nfunction ispangram(input)\n\nend\n\n",
+  "example_solution": "ispangram(input::AbstractString) = length(Set(collect((m.match for m = eachmatch(r\"[a-z]\", lowercase(input)))))) == 26\n",
+  "test_code": "using Test\n\ninclude(\"pangram.jl\")\n\n@testset verbose = true \"tests\" begin\n    @testset \"empty sentence\" begin\n        @test !ispangram(\"\")\n    end\n            \n    @testset \"perfect lower case\" begin\n        @test ispangram(\"abcdefghijklmnopqrstuvwxyz\")\n    end\n\n    @testset \"pangram with only lower case\" begin\n        @test ispangram(\"the quick brown fox jumps over the lazy dog\")\n    end\n            \n    @testset \"missing character 'x'\" begin\n        @test !ispangram(\"a quick movement of the enemy will jeopardize five gunboats\")\n    end\n            \n    @testset \"another missing character 'x'\" begin\n        @test !ispangram(\"the quick brown fish jumps over the lazy dog\")\n    end\n\n    @testset \"missing character 'h'\" begin\n        @test !ispangram(\"five boxing wizards jump quickly at it\")\n    end\n            \n    @testset \"pangram with underscores\" begin\n        @test ispangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\")\n    end\n            \n    @testset \"pangram with numbers\" begin\n        @test ispangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\")\n    end\n            \n    @testset \"missing letters replaced by numbers\" begin\n        @test !ispangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")\n    end\n            \n    @testset \"pangram with mixed case and punctuation\" begin\n        @test ispangram(\"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")\n    end\n            \n    @testset \"upper and lower case versions of the same character should not be counted separately\" begin\n        @test !ispangram(\"the quick brown fox jumped over the lazy FOX\")\n    end\n\n    @testset \"a-m and A-M are 26 different letters but not a pangram\" begin\n        @test !ispangram(\"abcdefghijklm ABCDEFGHIJKLM\")\n    end\n\n    @testset \"pangram with more than 26 letters (if case sensitive)\" begin\n        @test ispangram(\"the 1 quick brown fox jumps Over the 2 lazy dogs\")\n    end\n\n    @testset \"An Arabic pangram is not an English pangram\" begin\n        @test !ispangram(\"The scholar and poet Al Farāhīdi wrote this Arabic pangram: صِف خَلقَ خَودِ كَمِثلِ الشَمسِ إِذ بَزَغَت — يَحظى الضَجيعُ بِها نَجلاءَ مِعطارِ\")\n    end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "andrej-makarov-skrt"
+  ],
+  "contributors": [
+    "cmcaine",
+    "SaschaMann",
+    "Wikunia"
+  ]
+}

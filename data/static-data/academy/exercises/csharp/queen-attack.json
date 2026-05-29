@@ -1,0 +1,41 @@
+{
+  "id": "csharp:queen-attack",
+  "trackSlug": "csharp",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "5c56211a-ae1e-4836-80b5-f22f5801b7a2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "constructors",
+    "math-operators"
+  ],
+  "prerequisites": [
+    "classes",
+    "constructors",
+    "booleans",
+    "if-statements",
+    "math-operators",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public class Queen\n{\n    public Queen(int row, int column)\n    {\n        Row = row;\n        Column = column;\n    }\n\n    public int Row { get; }\n    public int Column { get; }\n}\n\npublic static class QueenAttack\n{\n    public static bool CanAttack(Queen white, Queen black)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public static Queen Create(int row, int column)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public class Queen\n{\n    public Queen(int row, int column)\n    {\n        Row = row;\n        Column = column;\n    }\n\n    public int Row { get; }\n    public int Column { get; }\n}\n\npublic static class QueenAttack\n{\n    public static bool CanAttack(Queen white, Queen black)\n    {\n        if (white.Row == black.Row && white.Column == black.Column)\n        {\n            throw new ArgumentException(\"The queens cannot be positioned at the same place.\");\n        }\n\n        return black.Row == white.Row ||\n               black.Column == white.Column ||\n               Math.Abs(black.Row - white.Row) == Math.Abs(black.Column - white.Column);\n    }\n\n    public static Queen Create(int row, int column)\n    {\n        const int MIN_VALUE = 0;\n        const int MAX_VALUE = 7;\n\n        if (row < MIN_VALUE || column < MIN_VALUE || row > MAX_VALUE || column > MAX_VALUE)\n        {\n            throw new ArgumentOutOfRangeException(\"invalid queen position\");\n        }\n\n        return new Queen(row, column);\n    }\n}",
+  "test_code": "public class QueenAttackTests\n{\n    [Fact]\n    public void Queen_with_a_valid_position()\n    {\n        var queen = QueenAttack.Create(2, 2);\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Queen_must_have_positive_row()\n    {\n        Assert.Throws<ArgumentOutOfRangeException>(() => QueenAttack.Create(-2, 2));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Queen_must_have_row_on_board()\n    {\n        Assert.Throws<ArgumentOutOfRangeException>(() => QueenAttack.Create(8, 4));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Queen_must_have_positive_column()\n    {\n        Assert.Throws<ArgumentOutOfRangeException>(() => QueenAttack.Create(2, -2));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Queen_must_have_column_on_board()\n    {\n        Assert.Throws<ArgumentOutOfRangeException>(() => QueenAttack.Create(4, 8));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Cannot_attack()\n    {\n        var whiteQueen = QueenAttack.Create(2, 4);\n        var blackQueen = QueenAttack.Create(6, 6);\n        Assert.False(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_attack_on_same_row()\n    {\n        var whiteQueen = QueenAttack.Create(2, 4);\n        var blackQueen = QueenAttack.Create(2, 6);\n        Assert.True(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_attack_on_same_column()\n    {\n        var whiteQueen = QueenAttack.Create(4, 5);\n        var blackQueen = QueenAttack.Create(2, 5);\n        Assert.True(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_attack_on_first_diagonal()\n    {\n        var whiteQueen = QueenAttack.Create(2, 2);\n        var blackQueen = QueenAttack.Create(0, 4);\n        Assert.True(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_attack_on_second_diagonal()\n    {\n        var whiteQueen = QueenAttack.Create(2, 2);\n        var blackQueen = QueenAttack.Create(3, 1);\n        Assert.True(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_attack_on_third_diagonal()\n    {\n        var whiteQueen = QueenAttack.Create(2, 2);\n        var blackQueen = QueenAttack.Create(1, 1);\n        Assert.True(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Can_attack_on_fourth_diagonal()\n    {\n        var whiteQueen = QueenAttack.Create(1, 7);\n        var blackQueen = QueenAttack.Create(0, 6);\n        Assert.True(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Cannot_attack_if_falling_diagonals_are_only_the_same_when_reflected_across_the_longest_falling_diagonal()\n    {\n        var whiteQueen = QueenAttack.Create(4, 1);\n        var blackQueen = QueenAttack.Create(2, 5);\n        Assert.False(QueenAttack.CanAttack(whiteQueen, blackQueen));\n    }\n}\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "bmeverett",
+    "j2jensen",
+    "robkeim",
+    "wolf99"
+  ]
+}

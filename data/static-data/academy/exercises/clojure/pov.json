@@ -1,0 +1,36 @@
+{
+  "id": "clojure:pov",
+  "trackSlug": "clojure",
+  "slug": "pov",
+  "name": "POV",
+  "uuid": "ca557f64-9e2d-4ab0-8788-4133764ef703",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reparent a graph on a selected node.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "vectors"
+  ],
+  "instructions": "# Instructions\n\nReparent a tree on a selected node.\n\nA [tree][wiki-tree] is a special type of [graph][wiki-graph] where all nodes are connected but there are no cycles.\nThat means, there is exactly one path to get from one node to another for any pair of nodes.\n\nThis exercise is all about re-orientating a tree to see things from a different point of view.\nFor example family trees are usually presented from the ancestor's perspective:\n\n```text\n    +------0------+\n    |      |      |\n  +-1-+  +-2-+  +-3-+\n  |   |  |   |  |   |\n  4   5  6   7  8   9\n```\n\nBut there is no inherent direction in a tree.\nThe same information can be presented from the perspective of any other node in the tree, by pulling it up to the root and dragging its relationships along with it.\nSo the same tree from 6's perspective would look like:\n\n```text\n        6\n        |\n  +-----2-----+\n  |           |\n  7     +-----0-----+\n        |           |\n      +-1-+       +-3-+\n      |   |       |   |\n      4   5       8   9\n```\n\nThis lets us more simply describe the paths between two nodes.\nSo for example the path from 6-9 (which in the first tree goes up to the root and then down to a different leaf node) can be seen to follow the path 6-2-0-3-9.\n\nThis exercise involves taking an input tree and re-orientating it from the point of view of one of the nodes.\n\n[wiki-graph]: https://en.wikipedia.org/wiki/Tree_(graph_theory)\n[wiki-tree]: https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns pov)\n\n(defn of [] ;; <- arglist goes here\n      ;; your code goes here\n)\n\n(defn path-from-to [] ;; <- arglist goes here\n  ;; your code goes here\n)\n",
+  "example_solution": "(ns pov\n  (:require [clojure.zip :as zip]))\n\n(defn- remove-child\n  \"Remove a child from a node\"\n  [parent child]\n  (filter #(not= child %) parent))\n\n(defn- reparent\n  \"Take a node, and make it the parent of its parent\"\n  [loc]\n  (let [current (zip/node loc)\n        parent (zip/up loc)\n        belonged-to (when parent\n                      (-> parent\n                          (zip/edit remove-child current)\n                          reparent\n                          list))]\n    (vec (concat current belonged-to))))\n\n(defn- find-node\n  \"Find the node whose identifier matches the given value\"\n  [v tree]\n  (loop [loc (-> tree zip/vector-zip zip/next)]\n    (cond (= v (zip/node loc)) (zip/up loc)\n          (zip/end? loc) nil\n          :else (recur (zip/next loc)))))\n\n(defn of\n  \"Find a node by its identifier and raise to the root\"\n  [s tree]\n  (when-let [loc (find-node s tree)]\n    (reparent loc)))\n\n(defn path-from-to\n  \"Find a path from src node to dest node\"\n  [src dest graph]\n  (when-let [loc (find-node dest (of src graph))]\n    (let [dest-node (zip/node loc)\n          path (concat (zip/path loc) [dest-node])]\n      (map first path))))\n\n",
+  "test_code": "(ns pov-test\n  (:require [clojure.test :refer [deftest is]]\n            pov))\n\n;;; Inputs.\n\n(def singleton [:x])\n\n(def simple-tree [:parent [:sibling] [:x]])\n\n(def large-flat\n  [:parent [:sib-a]\n   [:sib-b]\n   [:x]\n   [:sib-c]\n   [:sib-d]])\n\n(def deeply-nested\n  [:level-0\n   [:level-1\n    [:level-2\n     [:level-3\n      [:level-4\n       [:x]]]]]])\n\n(def cousins\n  [:grand-parent\n   [:parent\n    [:sib-1]\n    [:x]\n    [:sib-2]]\n   [:uncle\n    [:cousin-1]\n    [:cousin-2]]])\n\n(def target-with-children\n  [:grand-parent\n   [:parent\n    [:x\n     [:child-1]\n     [:child-2]]\n    [:sibling\n     [:nephew]\n     [:niece]]]\n   [:aunt\n    [:cousin-1\n     [:2nd-cousin-1]\n     [:2nd-cousin-2]]\n    [:cousin-2\n     [:2nd-cousin-3]\n     [:2nd-cousin-4]]]])\n\n;;; Expected results.\n\n(def simple-pulled [:x [:parent [:sibling]]])\n\n(def flat-pulled\n  [:x [:parent\n       [:sib-a]\n       [:sib-b]\n       [:sib-c]\n       [:sib-d]]])\n\n(def nested-pulled\n  [:x\n   [:level-4\n    [:level-3\n     [:level-2\n      [:level-1\n       [:level-0]]]]]])\n\n(def cousins-pulled\n  [:x\n   [:parent\n    [:sib-1]\n    [:sib-2]\n    [:grand-parent\n     [:uncle\n      [:cousin-1]\n      [:cousin-2]]]]])\n\n(def with-kids-pulled\n  [:x\n   [:child-1]\n   [:child-2]\n   [:parent\n    [:sibling\n     [:nephew]\n     [:niece]]\n    [:grand-parent\n     [:aunt\n      [:cousin-1\n       [:2nd-cousin-1]\n       [:2nd-cousin-2]]\n      [:cousin-2\n       [:2nd-cousin-3]\n       [:2nd-cousin-4]]]]]])\n\n(deftest singletons\n  (is (= singleton\n         (pov/of :x singleton))))\n\n(deftest simple-trees\n  (is (= simple-pulled\n         (pov/of :x simple-tree))))\n\n(deftest nested-trees\n  (is (= nested-pulled\n         (pov/of :x deeply-nested))))\n\n(deftest extract-node-from-siblings\n  (is (= flat-pulled\n         (pov/of :x large-flat))))\n\n(deftest moderate-trees\n  (is (= cousins-pulled\n         (pov/of :x cousins))))\n\n(deftest complex-trees\n  (is (= with-kids-pulled\n         (pov/of :x target-with-children))))\n\n(deftest not-found-cannot-reparent\n  (is (nil? (pov/of :not-found! target-with-children))))\n\n(deftest not-found-input-empty\n  (is (nil? (pov/of :x []))))\n\n(deftest not-found-input-nil\n  (is (nil? (pov/of :x nil))))\n\n(deftest path-from-target-to-parent\n  (is (= [:x :parent]\n         (pov/path-from-to :x :parent simple-tree))))\n\n(deftest path-from-target-to-sibling\n  (is (= [:x :parent :sib-c]\n         (pov/path-from-to :x :sib-c large-flat))))\n\n(deftest path-from-x-to-2nd-cousin-1\n  (is (= [:x :parent :grand-parent :aunt :cousin-1 :2nd-cousin-1]\n         (pov/path-from-to :x :2nd-cousin-1 target-with-children))))\n\n(deftest no-path\n  (is (nil? (pov/path-from-to :x :not-there! cousins))))\n",
+  "source": "Adaptation of exercise from 4clojure",
+  "source_url": "https://github.com/oxalorg/4ever-clojure",
+  "authors": [
+    "alexkalderimis"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "canweriotnow",
+    "haus",
+    "kytrinyx",
+    "sjwarner-bp",
+    "yurrriq"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "fsharp:grains",
+  "trackSlug": "fsharp",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "e3751098-5a15-4350-bf5d-507583de3386",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "integral-numbers",
+    "math-operators",
+    "result"
+  ],
+  "prerequisites": [
+    "for-loops",
+    "if-then-else-expressions",
+    "integral-numbers",
+    "math-operators",
+    "result"
+  ],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "module Grains\n\nlet square (n: int): Result<uint64,string> = failwith \"You need to implement this function.\"\nlet total: Result<uint64,string> = failwith \"You need to implement this function.\"",
+  "example_solution": "module Grains\n\nopen System.Numerics\n\nlet square (n:int) = \n    if n <= 0 || n > 64 then \n        Error \"square must be between 1 and 64\"\n    else\n        Ok (2I ** (n - 1) |> uint64)\n\nlet total = \n    [1..64] \n    |> List.map square\n    |> List.reduce (fun x y -> match x, y with Ok a, Ok b -> Ok (a + b) | _ -> Error \"Invalid input\")",
+  "test_code": "module GrainsTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Grains\n\n[<Fact>]\nlet ``Grains on square 1`` () =\n    let expected: Result<uint64,string> = Ok 1UL\n    square 1 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grains on square 2`` () =\n    let expected: Result<uint64,string> = Ok 2UL\n    square 2 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grains on square 3`` () =\n    let expected: Result<uint64,string> = Ok 4UL\n    square 3 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grains on square 4`` () =\n    let expected: Result<uint64,string> = Ok 8UL\n    square 4 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grains on square 16`` () =\n    let expected: Result<uint64,string> = Ok 32768UL\n    square 16 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grains on square 32`` () =\n    let expected: Result<uint64,string> = Ok 2147483648UL\n    square 32 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grains on square 64`` () =\n    let expected: Result<uint64,string> = Ok 9223372036854775808UL\n    square 64 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Square 0 is invalid`` () =\n    let expected: Result<uint64,string> = Error \"square must be between 1 and 64\"\n    square 0 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Negative square is invalid`` () =\n    let expected: Result<uint64,string> = Error \"square must be between 1 and 64\"\n    square -1 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Square greater than 64 is invalid`` () =\n    let expected: Result<uint64,string> = Error \"square must be between 1 and 64\"\n    square 65 |> should equal expected\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Returns the total number of grains on the board`` () =\n    let expected: Result<uint64,string> = Ok 18446744073709551615UL\n    total |> should equal expected\n\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "jwood803"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "MaritimeMartin",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

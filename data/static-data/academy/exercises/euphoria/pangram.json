@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:pangram",
+  "trackSlug": "euphoria",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "c09f1c56-d265-4710-a177-95ea8cb721b4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "-- public function is_pangram(sequence sentence)",
+  "example_solution": "include std/text.e\n\npublic function is_pangram(sequence sentence)\n    sentence = upper(sentence)\n    for letter = 'A' to 'Z' do\n        if not find(letter, sentence) then\n            return 0\n        end if\n    end for\n    return 1\nend function\n\n",
+  "test_code": "include std/unittest.e \n\ninclude pangram.ex \n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"empty sentence\", 0, is_pangram(\"\"))\ntest_equal(\"perfect lower case\", 1, is_pangram(\"abcdefghijklmnopqrstuvwxyz\"))\ntest_equal(\"only lower case\", 1, is_pangram(\"the quick brown fox jumps over the lazy dog\"))\ntest_equal(\"missing the letter 'x'\", 0, is_pangram(\"a quick movement of the enemy will jeopardize five gunboats\"))\ntest_equal(\"missing the letter 'h'\", 0, is_pangram(\"five boxing wizards jump quickly at it\"))\ntest_equal(\"with underscores\", 1, is_pangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\"))\ntest_equal(\"with numbers\", 1, is_pangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\"))\ntest_equal(\"missing letters replaced by numbers\", 0, is_pangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"))\ntest_equal(\"mixed case and punctuation\", 1, is_pangram(\"Five quacking Zephyrs jolt my wax bed.\"))\ntest_equal(\"case insensitive\", 0, is_pangram(\"the quick brown fox jumps over with lazy FX\"))\ntest_equal(\"a-m and A-M are 26 different characters but not a pangram\", 0, is_pangram(\"abcdefghijklm ABCDEFGHIJKLM\"))\n\ntest_report() \n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "axtens"
+  ],
+  "contributors": null
+}

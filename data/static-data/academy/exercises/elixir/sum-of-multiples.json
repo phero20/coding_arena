@@ -1,0 +1,50 @@
+{
+  "id": "elixir:sum-of-multiples",
+  "trackSlug": "elixir",
+  "slug": "sum-of-multiples",
+  "name": "Sum of Multiples",
+  "uuid": "5b8eece1-845f-4a5a-8a2f-fe2bf66f5e57",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "enum",
+    "ranges"
+  ],
+  "prerequisites": [
+    "enum",
+    "ranges"
+  ],
+  "instructions": "# Instructions\n\nYour task is to write the code that calculates the energy points that get awarded to players when they complete a level.\n\nThe points awarded depend on two things:\n\n- The level (a number) that the player completed.\n- The base value of each magical item collected by the player during that level.\n\nThe energy points are awarded according to the following rules:\n\n1. For each magical item, take the base value and find all the multiples of that value that are less than the level number.\n2. Combine the sets of numbers.\n3. Remove any duplicates.\n4. Calculate the sum of all the numbers that are left.\n\nLet's look at an example:\n\n**The player completed level 20 and found two magical items with base values of 3 and 5.**\n\nTo calculate the energy points earned by the player, we need to find all the unique multiples of these base values that are less than level 20.\n\n- Multiples of 3 less than 20: `{3, 6, 9, 12, 15, 18}`\n- Multiples of 5 less than 20: `{5, 10, 15}`\n- Combine the sets and remove duplicates: `{3, 5, 6, 9, 10, 12, 15, 18}`\n- Sum the unique multiples: `3 + 5 + 6 + 9 + 10 + 12 + 15 + 18 = 78`\n- Therefore, the player earns **78** energy points for completing level 20 and finding the two magical items with base values of 3 and 5.\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online, fantasy-survival game.\n\nWhen a player finishes a level, they are awarded energy points.\nThe amount of energy awarded depends on which magical items the player found while exploring that level.\n",
+  "hints": null,
+  "starter_code": "defmodule SumOfMultiples do\n  @doc \"\"\"\n  Adds up all numbers from 1 to a given end number that are multiples of the factors provided.\n  \"\"\"\n  @spec to(non_neg_integer, [non_neg_integer]) :: non_neg_integer\n  def to(limit, factors) do\n  end\nend\n",
+  "example_solution": "defmodule SumOfMultiples do\n  @doc \"\"\"\n  Adds up all numbers from 1 to a given end number that are multiples of the factors provided.\n  \"\"\"\n  @spec to(non_neg_integer, [non_neg_integer]) :: non_neg_integer\n  def to(limit, factors) do\n    Enum.reduce(1..(limit - 1), 0, fn n, acc ->\n      if Enum.any?(factors, &(&1 != 0 && rem(n, &1) == 0)), do: acc + n, else: acc\n    end)\n  end\nend\n",
+  "test_code": "defmodule SumOfMultiplesTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"no multiples within limit\" do\n    assert SumOfMultiples.to(1, [3, 5]) == 0\n  end\n\n  @tag :pending\n  test \"one factor has multiples within limit\" do\n    assert SumOfMultiples.to(4, [3, 5]) == 3\n  end\n\n  @tag :pending\n  test \"more than one multiple within limit0\" do\n    assert SumOfMultiples.to(7, [3]) == 9\n  end\n\n  @tag :pending\n  test \"more than one factor with multiples within limit\" do\n    assert SumOfMultiples.to(10, [3, 5]) == 23\n  end\n\n  @tag :pending\n  test \"each multiple is only counted once\" do\n    assert SumOfMultiples.to(100, [3, 5]) == 2318\n  end\n\n  @tag :pending\n  test \"a much larger limit\" do\n    assert SumOfMultiples.to(1000, [3, 5]) == 233_168\n  end\n\n  @tag :pending\n  test \"three factors\" do\n    multiples = [7, 13, 17]\n    assert SumOfMultiples.to(20, multiples) == 51\n  end\n\n  @tag :pending\n  test \"factors not relatively prime\" do\n    multiples = [4, 6]\n    assert SumOfMultiples.to(15, multiples) == 30\n  end\n\n  @tag :pending\n  test \"some pairs of factors relatively prime and some not\" do\n    multiples = [5, 6, 8]\n    assert SumOfMultiples.to(150, multiples) == 4419\n  end\n\n  @tag :pending\n  test \"one factor is a multiple of another\" do\n    multiples = [5, 25]\n    assert SumOfMultiples.to(51, multiples) == 275\n  end\n\n  @tag :pending\n  test \"much larger factors\" do\n    multiples = [43, 47]\n    assert SumOfMultiples.to(10000, multiples) == 2_203_160\n  end\n\n  @tag :pending\n  test \"all numbers are multiples of 1\" do\n    multiples = [1]\n    assert SumOfMultiples.to(100, multiples) == 4950\n  end\n\n  @tag :pending\n  test \"no factors means an empty sum\" do\n    multiples = []\n    assert SumOfMultiples.to(10000, multiples) == 0\n  end\n\n  @tag :pending\n  test \"the only multiple of 0 is 0\" do\n    multiples = [0]\n    assert SumOfMultiples.to(1, multiples) == 0\n  end\n\n  @tag :pending\n  test \"the factor 0 does not affect the sum of multiples of other factors\" do\n    multiples = [3, 0]\n    assert SumOfMultiples.to(4, multiples) == 3\n  end\n\n  @tag :pending\n  test \"solutions using include-exclude must extend to cardinality greater than 3\" do\n    multiples = [2, 3, 5, 7, 11]\n    assert SumOfMultiples.to(10000, multiples) == 39_614_537\n  end\nend\n",
+  "source": "A variation on Problem 1 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=1",
+  "authors": [
+    "petehuang"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "CoderDennis",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "elasticdog",
+    "jinyeow",
+    "krishandley",
+    "kytrinyx",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "rubysolo",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

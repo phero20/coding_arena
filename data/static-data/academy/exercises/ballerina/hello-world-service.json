@@ -1,0 +1,29 @@
+{
+  "id": "ballerina:hello-world-service",
+  "trackSlug": "ballerina",
+  "slug": "hello-world-service",
+  "name": "Hello World Service",
+  "uuid": "fceb7721-3d30-4aac-b4dd-573b601f6e1e",
+  "type": "practice",
+  "status": "active",
+  "blurb": "The classical introductory exercise. Just create an HTTP service to say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise but in an HTTP service.\n\n## Objectives\n\n- Modify the provided code so that it returns the string \"Hello, World!\".\n- The service should respond to a GET HTTP request at the path \"/greeting\".\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import ballerina/http;\n\n// Implement an HTTP service listening on port 9090 with the root path \"/\"\nservice {\n\n    // Add a GET resource called \"greeting\" that returns the \"Hello, World!\" message\n    resource {\n\n    }\n}\n",
+  "example_solution": "import ballerina/http;\n\nservice / on new http:Listener(9090) {\n\n    // This function responds with `string` value `Hello, World!` to HTTP GET requests.\n    resource function get greeting() returns string {\n        return \"Hello, World!\";\n    }\n}\n",
+  "test_code": "import ballerina/http;\nimport ballerina/test;\n\n@test:Config\nfunction testFunc() returns error? {\n    final http:Client httpEndpoint = check new (\"http://localhost:9090\");\n    string expectedResponse = \"Hello, World!\";\n\n    // Send a GET request to the specified endpoint\n    string response = check httpEndpoint->/greeting;\n    test:assertEquals(response, expectedResponse);\n}\n",
+  "source": "This is an exercise to introduce users to the Ballerina Service interface",
+  "source_url": "https://ballerina.io/learn/by-example/hello-world-service/",
+  "authors": [],
+  "contributors": [
+    "vordimous",
+    "kasun04",
+    "ldclakmal",
+    "Manuri"
+  ]
+}

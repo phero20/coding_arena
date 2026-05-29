@@ -1,0 +1,29 @@
+{
+  "id": "gleam:hello-world",
+  "trackSlug": "gleam",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "40e473b4-74a2-4513-8b3e-e3b42841624f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn hello() {\n  \"Goodbye, Mars!\"\n}\n",
+  "example_solution": "pub fn hello() {\n  \"Hello, World!\"\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport hello_world\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn say_hi_test() {\n  hello_world.hello()\n  |> should.equal(\"Hello, World!\")\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": [
+    "ggpasqualino",
+    "itsgreggreg"
+  ]
+}

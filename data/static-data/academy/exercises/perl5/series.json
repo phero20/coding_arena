@@ -1,0 +1,34 @@
+{
+  "id": "perl5:series",
+  "trackSlug": "perl5",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "35e90496-58a6-48be-ad55-14e3a145bd5c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "booleans-and-conditionals",
+    "exceptions",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package Series;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<slices>;\n\nsub slices ( $series, $slice_length ) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package Series;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<slices>;\n\n# Solution by GitHub Copilot\nsub slices ( $series, $slice_length ) {\n    die \"slice length cannot be zero\"\n        if $slice_length == 0;\n\n    die \"slice length cannot be negative\"\n        if $slice_length < 0;\n\n    die \"series cannot be empty\"\n        if length $series == 0;\n\n    die \"slice length cannot be greater than series length\"\n        if $slice_length > length $series;\n\n    my @slices;\n    for ( my $i = 0; $i <= length($series) - $slice_length; $i++ ) {\n        push @slices, substr( $series, $i, $slice_length );\n    }\n\n    return \\@slices;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse Series qw<slices>;\n\nis( # begin: 7ae7a46a-d992-4c2a-9c15-a112d125ebad\n    slices( \"1\", 1 ),\n    [\"1\"],\n    \"slices of one from one\",\n); # end: 7ae7a46a-d992-4c2a-9c15-a112d125ebad\n\nis( # begin: 3143b71d-f6a5-4221-aeae-619f906244d2\n    slices( \"12\", 1 ),\n    [ \"1\", \"2\" ],\n    \"slices of one from two\",\n); # end: 3143b71d-f6a5-4221-aeae-619f906244d2\n\nis( # begin: dbb68ff5-76c5-4ccd-895a-93dbec6d5805\n    slices( \"35\", 2 ),\n    [\"35\"],\n    \"slices of two\",\n); # end: dbb68ff5-76c5-4ccd-895a-93dbec6d5805\n\nis( # begin: 19bbea47-c987-4e11-a7d1-e103442adf86\n    slices( \"9142\", 2 ),\n    [ \"91\", \"14\", \"42\" ],\n    \"slices of two overlap\",\n); # end: 19bbea47-c987-4e11-a7d1-e103442adf86\n\nis( # begin: 8e17148d-ba0a-4007-a07f-d7f87015d84c\n    slices( \"777777\", 3 ),\n    [ \"777\", \"777\", \"777\", \"777\" ],\n    \"slices can include duplicates\",\n); # end: 8e17148d-ba0a-4007-a07f-d7f87015d84c\n\nis( # begin: bd5b085e-f612-4f81-97a8-6314258278b0\n    slices( \"918493904243\", 5 ),\n    [ \"91849\", \"18493\", \"84939\", \"49390\", \"93904\", \"39042\", \"90424\", \"04243\" ],\n    \"slices of a long series\",\n); # end: bd5b085e-f612-4f81-97a8-6314258278b0\n\nlike( # begin: 6d235d85-46cf-4fae-9955-14b6efef27cd\n    dies( sub { slices \"12345\", 6 } ),\n    qr/slice length cannot be greater than series length/,\n    \"slice length is too large\",\n); # end: 6d235d85-46cf-4fae-9955-14b6efef27cd\n\nlike( # begin: d7957455-346d-4e47-8e4b-87ed1564c6d7\n    dies( sub { slices \"12345\", 42 } ),\n    qr/slice length cannot be greater than series length/,\n    \"slice length is way too large\",\n); # end: d7957455-346d-4e47-8e4b-87ed1564c6d7\n\nlike( # begin: d34004ad-8765-4c09-8ba1-ada8ce776806\n    dies( sub { slices \"12345\", 0 } ),\n    qr/slice length cannot be zero/,\n    \"slice length cannot be zero\",\n); # end: d34004ad-8765-4c09-8ba1-ada8ce776806\n\nlike( # begin: 10ab822d-8410-470a-a85d-23fbeb549e54\n    dies( sub { slices \"123\", -1 } ),\n    qr/slice length cannot be negative/,\n    \"slice length cannot be negative\",\n); # end: 10ab822d-8410-470a-a85d-23fbeb549e54\n\nlike( # begin: c7ed0812-0e4b-4bf3-99c4-28cbbfc246a2\n    dies( sub { slices \"\", 1 } ),\n    qr/series cannot be empty/,\n    \"empty series is invalid\",\n); # end: c7ed0812-0e4b-4bf3-99c4-28cbbfc246a2\n\ndone_testing;\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "autark"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

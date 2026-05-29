@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:rotational-cipher",
+  "trackSlug": "vimscript",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "90700a38-160f-41aa-a196-aa24e4ec13b9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\n\"\n\" Encrypts the passed text using a simple shift cipher \n\" and the supplied shiftKey between 0 and 26.\n\" Non-alphabetic characters are kept as-is.\n\"\n\" Example:\n\"\n\"   :echo Rotate('Testing 1 2 3 testing')\n\"   Xiwxmrk 1 2 3 xiwxmrk\n\"\nfunction! Rotate(shiftKey, text) abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "\nfunction! Rotate(shiftKey, text) abort\n  let l:encrypted = ''\n  for l:char in split(a:text, '\\zs')\n    let l:codepoint = char2nr(l:char)\n    if s:InRange(l:codepoint, s:lcaseStart, s:lcaseStop)\n      let l:codepoint = s:lcaseStart + s:FindOffset(l:codepoint, s:lcaseStart, a:shiftKey)\n      let l:char = nr2char(l:codepoint)\n    elseif s:InRange(l:codepoint, s:upCaseStart, s:upCaseStop)\n      let l:codepoint = s:upCaseStart + s:FindOffset(l:codepoint, s:upCaseStart, a:shiftKey)\n      let l:char = nr2char(l:codepoint)\n    endif\n\n    let l:encrypted .= l:char\n  endfor\n\n  return l:encrypted\nendfunction\n\nlet s:lcaseStart = 97\nlet s:lcaseStop = 122\nlet s:upCaseStart = 65\nlet s:upCaseStop = 90\n\nfunction! s:InRange(elem, start, stop) abort\n  return a:elem >= a:start && a:elem <= a:stop\nendfunction\n\nfunction! s:FindOffset(position, start, shift) abort\n  return (a:position - a:start + a:shift) % 26\nendfunction\n",
+  "test_code": "\nExecute (rotate a by 0, same output as input):\n  let g:shiftKey = 0\n  let g:text = \"a\"\n  let g:expected = \"a\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate a by 1):\n  let g:shiftKey = 1\n  let g:text = \"a\"\n  let g:expected = \"b\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate a by 26, same output as input):\n  let g:shiftKey = 26\n  let g:text = \"a\"\n  let g:expected = \"a\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate m by 13):\n  let g:shiftKey = 13\n  let g:text = \"m\"\n  let g:expected = \"z\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate n by 13 with wrap around alphabet):\n  let g:shiftKey = 13\n  let g:text = \"n\"\n  let g:expected = \"a\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate capital letters):\n  let g:shiftKey = 5\n  let g:text = \"OMG\"\n  let g:expected = \"TRL\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate spaces):\n  let g:shiftKey = 5\n  let g:text = \"O M G\"\n  let g:expected = \"T R L\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate numbers):\n  let g:shiftKey = 4\n  let g:text = \"Testing 1 2 3 testing\"\n  let g:expected = \"Xiwxmrk 1 2 3 xiwxmrk\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate punctuation):\n  let g:shiftKey = 21\n  let g:text = \"Let's eat, Grandma!\"\n  let g:expected = \"Gzo'n zvo, Bmviyhv!\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n\nExecute (rotate all letters):\n  let g:shiftKey = 13\n  let g:text = \"The quick brown fox jumps over the lazy dog.\"\n  let g:expected = \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n  AssertEqual g:expected, Rotate(g:shiftKey, g:text)\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

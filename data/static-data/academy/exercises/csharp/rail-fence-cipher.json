@@ -1,0 +1,37 @@
+{
+  "id": "csharp:rail-fence-cipher",
+  "trackSlug": "csharp",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "e338fed5-f850-4922-88b2-7e9ec0eb7299",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [
+    "constructors"
+  ],
+  "prerequisites": [
+    "classes",
+    "constructors",
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public class RailFenceCipher\n{\n    public RailFenceCipher(int rails)\n    {\n    }\n\n    public string Encode(string input)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public string Decode(string input)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public class RailFenceCipher\n{\n    private readonly int _rails;\n    private readonly int _size;\n\n    public RailFenceCipher(int rails)\n    {\n        _rails = rails;\n        _size = rails * 2 - 2;\n    }\n\n    public string Encode(string input)\n    {\n        return input\n            .Select((c, i) => Tuple.Create(Track(i), c))\n            .GroupBy(x => x.Item1)\n            .Select(x => new string(x.Select(y => y.Item2).ToArray()))\n            .Aggregate(\"\", (acc, x) => acc + x);\n    }\n\n    public string Decode(string input)\n    {\n        return Enumerable.Range(0, input.Length)\n            .GroupBy(Track)\n            .SelectMany(x => x)\n            .Zip(input, Tuple.Create)\n            .OrderBy(x => x.Item1)\n            .Aggregate(\"\", (s, tuple) => s + tuple.Item2);\n    }\n\n    private int Track(int index)\n    {\n        if (IsCorrect(index))\n        {\n            return 0;\n        }\n\n        if (IsCorrect(index - _rails + 1))\n        {\n            return _rails - 1;\n        }\n\n        return Enumerable.Range(1, _rails - 1).First(i => IsCorrect(index - i) || IsCorrect(index - _size + i));\n    }\n\n    private bool IsCorrect(int index) => index % _size == 0;\n}",
+  "test_code": "public class RailFenceCipherTests\n{\n    [Fact]\n    public void Encode_with_two_rails()\n    {\n        var msg = \"XOXOXOXOXOXOXOXOXO\";\n        var sut = new RailFenceCipher(2);\n        var expected = \"XXXXXXXXXOOOOOOOOO\";\n        Assert.Equal(expected, sut.Encode(msg));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Encode_with_three_rails()\n    {\n        var msg = \"WEAREDISCOVEREDFLEEATONCE\";\n        var sut = new RailFenceCipher(3);\n        var expected = \"WECRLTEERDSOEEFEAOCAIVDEN\";\n        Assert.Equal(expected, sut.Encode(msg));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Encode_with_ending_in_the_middle()\n    {\n        var msg = \"EXERCISES\";\n        var sut = new RailFenceCipher(4);\n        var expected = \"ESXIEECSR\";\n        Assert.Equal(expected, sut.Encode(msg));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Decode_with_three_rails()\n    {\n        var msg = \"TEITELHDVLSNHDTISEIIEA\";\n        var sut = new RailFenceCipher(3);\n        var expected = \"THEDEVILISINTHEDETAILS\";\n        Assert.Equal(expected, sut.Decode(msg));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Decode_with_five_rails()\n    {\n        var msg = \"EIEXMSMESAORIWSCE\";\n        var sut = new RailFenceCipher(5);\n        var expected = \"EXERCISMISAWESOME\";\n        Assert.Equal(expected, sut.Decode(msg));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Decode_with_six_rails()\n    {\n        var msg = \"133714114238148966225439541018335470986172518171757571896261\";\n        var sut = new RailFenceCipher(6);\n        var expected = \"112358132134558914423337761098715972584418167651094617711286\";\n        Assert.Equal(expected, sut.Decode(msg));\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "j2jensen",
+    "robkeim",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:hello-world",
+  "trackSlug": "sqlite",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "f3bab368-b048-42d0-984a-8b9102d56cb6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "INSERT INTO\n  hello_world (greeting)\nVALUES\n  ('Goodbye, Mars!');\n",
+  "example_solution": "INSERT INTO\n  hello_world (greeting)\nVALUES\n  ('Hello, World!');\n",
+  "test_code": "-- Setup test table and read in student solution:\n.read ./test_setup.sql\n-- Test cases:\nINSERT INTO\n  tests (name, uuid, expected)\nVALUES\n  (\n    'Say Hi!',\n    'af9ffe10-dc13-42d8-a742-e7bdafac449d',\n    'Hello, World!'\n  );\n\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      greeting\n    FROM\n      hello_world\n  ) AS actual\nWHERE\n  actual.greeting = tests.expected;\n\n-- Write results and debug info:\n.read ./test_reporter.sql\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "vaeng"
+  ],
+  "contributors": null
+}

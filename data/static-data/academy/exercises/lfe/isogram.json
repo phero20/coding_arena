@@ -1,0 +1,26 @@
+{
+  "id": "lfe:isogram",
+  "trackSlug": "lfe",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "32f84294-b162-41f6-af08-41634ef7427d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defmodule isogram\n  (export (isogram? 1)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule isogram\n  (export (isogram? 1)))\n\n(defun isogram? (phrase)\n  (let* ((lowered (string:to_lower phrase))\n         (chars (re:replace lowered\n                            \"[^a-z]\"\n                            \"\"\n                            '(#(return list) global)))\n         (uniques (lists:usort chars)))\n    (=:= (length chars) (length uniques))))\n",
+  "test_code": "(defmodule isogram-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(deftest empty-string\n  (is (isogram:isogram? \"\")))\n\n(deftest isogram-with-only-lower-case-characters\n  (is (isogram:isogram? \"isogram\")))\n\n(deftest word-with-one-duplicate-character\n  (is-not (isogram:isogram? \"eleven\")))\n\n(deftest word-with-one-duplicated-character-from-the-end-of-the-alphabet\n  (is-not (isogram:isogram? \"zzyzx\")))\n\n(deftest longest-reported-english-isogram\n  (is (isogram:isogram? \"subdermatoglyphic\")))\n\n(deftest word-with-duplicated-character-in-mixed-case\n  (is-not (isogram:isogram? \"Alphabet\")))\n\n(deftest word-with-duplicate-character-in-mixed-case-lowercase-first\n  (is-not (isogram:isogram? \"alphAbet\")))\n\n(deftest hypothetical-isogrammic-word-with-hyphen\n  (is (isogram:isogram? \"thumbscrew-japingly\")))\n\n(deftest hypothetical-isogrammic-word-with-duplicated-character-following-hyphen\n  (is-not (isogram:isogram? \"thumbscrew-jappingly\")))\n\n(deftest isogram-with-duplicated-hyphen\n  (is (isogram:isogram? \"six-year-old\")))\n\n(deftest made-up-name-that-is-an-isogram\n  (is (isogram:isogram? \"Emily Jung Schwartzkopf\")))\n\n(deftest duplicated-character-in-the-middle\n  (is-not (isogram:isogram? \"accentor\")))\n\n(deftest same-first-and-last-characters\n  (is-not (isogram:isogram? \"angola\")))\n\n(deftest word-with-duplicated-character-and-with-two-hyphens\n  (is-not (isogram:isogram? \"up-to-date\")))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

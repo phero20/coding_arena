@@ -8,6 +8,16 @@ import { ArenaMatchRepository } from "../../repositories/arena/arena-match.repos
 import { ArenaSubmissionRepository } from "../../repositories/arena/arena-submission.repository";
 import { StatsRepository } from "../../repositories/stats/stats.repository";
 import { FollowRepository } from "../../repositories/user/follow.repository";
+<<<<<<< HEAD
+=======
+import { ContestRepository } from "../../repositories/contest/contest.repository";
+import { TaxonomyRepository } from "../../repositories/taxonomy/taxonomy.repository";
+import { SolutionRepository } from "../../repositories/solutions/solution.repository";
+import { WorkspaceRepository } from "../../repositories/workspace/workspace.repository";
+import { ChatRepository } from "../../repositories/chat/chat.repository";
+import { AcademyRepository } from "../../repositories/academy/academy.repository";
+import { SystemDesignRepository } from "../../repositories/system-design/system-design.repository";
+>>>>>>> prod-deploy
 
 /**
  * Repository layer registrations.
@@ -23,4 +33,16 @@ export const repositoriesRegistry = {
   arenaSubmissionRepository: asClass(ArenaSubmissionRepository).singleton(),
   statsRepository: asClass(StatsRepository).singleton(),
   followRepository: asClass(FollowRepository).singleton(),
+<<<<<<< HEAD
 };
+=======
+  contestRepository: asClass(ContestRepository).singleton(),
+  taxonomyRepository: asClass(TaxonomyRepository).singleton(),
+  solutionRepository: asClass(SolutionRepository).singleton(),
+  workspaceRepository: asClass(WorkspaceRepository).singleton(),
+  chatRepository: asClass(ChatRepository).singleton(),
+  academyRepository: asClass(AcademyRepository).singleton(),
+  systemDesignRepository: asClass(SystemDesignRepository).singleton(),
+};
+
+>>>>>>> prod-deploy

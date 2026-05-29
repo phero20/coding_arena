@@ -1,0 +1,30 @@
+{
+  "id": "reasonml:pangram",
+  "trackSlug": "reasonml",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "dddf877a-a8d4-45d7-8543-882c08bad2e8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "let isPangram = (_) => {\n  failwith(\"TODO: implement isPangram function\");\n};\n",
+  "example_solution": "exception Finished(int);\n\nlet rec stringFold = (s: string, init: 'a, step: ('a, char) => 'a): 'a => {\n  switch(String.length(s)) {\n    | 0 => init;\n    | _ => {\n      let tail = String.sub(s, 1, String.length(s) - 1);\n      let next = step(init, s.[0]);\n      stringFold(tail, next, step);\n    }\n  }\n};\n\nlet isUppercaseAlpha = (ch) => Char.code(ch) >= 65 && Char.code(ch) <= 90;\n\nlet isPangram = (s: string) => {\n  let alphabetBits = 1 lsl 26 - 1;\n  let updateBits = (b, ch) => {\n    let updated = {\n      let ch = Char.uppercase_ascii(ch);\n      if (isUppercaseAlpha(ch)) {\n        b lor 1 lsl (Char.code(ch) - Char.code('A'));\n      } else {\n        b;\n      };\n    };\n    if (updated == alphabetBits) {\n      raise(Finished(alphabetBits));\n    } else {\n      updated;\n    };\n  };\n  try (stringFold(s, 0, updateBits) == alphabetBits) {\n  | Finished(bitSet) => bitSet == alphabetBits\n  };\n};\n",
+  "test_code": "open Jest;\nopen Expect;\nopen Pangram;\n\ndescribe(\"Pangram\", () => {\n  test(\"sentence empty\", () =>\n    expect(isPangram(\"\")) |> toEqual(false) \n  );\n  test(\"recognizes a perfect lower case pangram\", () =>\n    expect(isPangram(\"abcdefghijklmnopqrstuvwxyz\")) |> toEqual(true) \n  );\n  test(\"pangram with only lower case\", () =>\n    expect(isPangram(\"the quick brown fox jumps over the lazy dog\")) |> toEqual(true) \n  );\n  test(\"missing character 'x'\", () =>\n    expect(isPangram(\"a quick movement of the enemy will jeopardize five gunboats\")) |> toEqual(false) \n  );\n  test(\"another missing character, e.g. 'h'\", () =>\n    expect(isPangram(\"five boxing wizards jump quickly at it\")) |> toEqual(false) \n  );\n  test(\"pangram with underscores\", () =>\n    expect(isPangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\")) |> toEqual(true) \n  );\n  test(\"pangram with numbers\", () =>\n    expect(isPangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\")) |> toEqual(true) \n  );\n  test(\"missing letters replaced by numbers\", () =>\n    expect(isPangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")) |> toEqual(false) \n  );\n  test(\"pangram with mixed case and punctuation\", () =>\n    expect(isPangram(\"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")) |> toEqual(true) \n  );\n  test(\"upper and lower case versions of the same character should not be counted separately\", () =>\n    expect(isPangram(\"the quick brown fox jumps over with lazy FX\")) |> toEqual(false) \n  );\n});",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "naartjie",
+    "ohana54",
+    "tejasbubane"
+  ]
+}

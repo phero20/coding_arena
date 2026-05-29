@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:dominoes",
+  "trackSlug": "fsharp",
+  "slug": "dominoes",
+  "name": "Dominoes",
+  "uuid": "f09d34d3-f12c-4c9a-9083-68172478278e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make a chain of dominoes.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "lazy-evaluation"
+  ],
+  "prerequisites": [
+    "booleans",
+    "lists",
+    "numbers",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nMake a chain of dominoes.\n\nCompute a way to order a given set of domino stones so that they form a correct domino chain.\nIn the chain, the dots on one half of a stone must match the dots on the neighboring half of an adjacent stone.\nAdditionally, the dots on the halves of the stones without neighbors (the first and last stone) must match each other.\n\nFor example given the stones `[2|1]`, `[2|3]` and `[1|3]` you should compute something\nlike `[1|2] [2|3] [3|1]` or `[3|2] [2|1] [1|3]` or `[1|3] [3|2] [2|1]` etc, where the first and last numbers are the same.\n\nFor stones `[1|2]`, `[4|1]` and `[2|3]` the resulting chain is not valid: `[4|1] [1|2] [2|3]`'s first and last numbers are not the same.\n4 != 3\n\nSome test cases may use duplicate stones in a chain solution, assume that multiple Domino sets are being used.\n",
+  "introduction": "# Introduction\n\nIn Toyland, the trains are always busy delivering treasures across the city, from shiny marbles to rare building blocks.\nThe tracks they run on are made of colorful domino-shaped pieces, each marked with two numbers.\nFor the trains to move, the dominoes must form a perfect chain where the numbers match.\n\nToday, an urgent delivery of rare toys is on hold.\nYou've been handed a set of track pieces to inspect.\nIf they can form a continuous chain, the train will be on its way, bringing smiles across Toyland.\nIf not, the set will be discarded, and another will be tried.\n\nThe toys are counting on you to solve this puzzle.\nWill the dominoes connect the tracks and send the train rolling, or will the set be left behind?\n",
+  "hints": null,
+  "starter_code": "module Dominoes\n    \nlet rec canChain input = failwith \"You need to implement this function.\"",
+  "example_solution": "module Dominoes\n\nlet rotate xs =\n    let length = xs |> List.length\n    let perm n = xs |> List.permute (fun index -> (index + n) % length) \n    [1 .. length] |> List.rev |> List.map perm\n\nlet chainPair (x, y) list = \n    match list with    \n    | (x', y')::xs when y = x' -> (x, y')::xs |> Some\n    | (x', y')::xs when y = y' -> (x, x')::xs |> Some\n    | _ -> None\n    \nlet rec canChain input = \n    match input with\n    | [] -> true\n    | (x, y)::[] -> x = y\n    | x::xs -> rotate xs |> List.choose (chainPair x) |> List.exists canChain",
+  "test_code": "module DominoesTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Dominoes\n\n[<Fact>]\nlet ``Empty input = empty output`` () =\n    let dominoes = []\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Singleton input = singleton output`` () =\n    let dominoes = [(1, 1)]\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Singleton that can't be chained`` () =\n    let dominoes = [(1, 2)]\n    canChain dominoes |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Three elements`` () =\n    let dominoes = [(1, 2); (3, 1); (2, 3)]\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can reverse dominoes`` () =\n    let dominoes = [(1, 2); (1, 3); (2, 3)]\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Can't be chained`` () =\n    let dominoes = [(1, 2); (4, 1); (2, 3)]\n    canChain dominoes |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disconnected - simple`` () =\n    let dominoes = [(1, 1); (2, 2)]\n    canChain dominoes |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disconnected - double loop`` () =\n    let dominoes = [(1, 2); (2, 1); (3, 4); (4, 3)]\n    canChain dominoes |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disconnected - single isolated`` () =\n    let dominoes = [(1, 2); (2, 3); (3, 1); (4, 4)]\n    canChain dominoes |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Need backtrack`` () =\n    let dominoes = [(1, 2); (2, 3); (3, 1); (2, 4); (2, 4)]\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Separate loops`` () =\n    let dominoes = [(1, 2); (2, 3); (3, 1); (1, 1); (2, 2); (3, 3)]\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Nine elements`` () =\n    let dominoes = [(1, 2); (5, 3); (3, 1); (1, 2); (2, 4); (1, 6); (2, 3); (3, 4); (5, 6)]\n    canChain dominoes |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Separate three-domino loops`` () =\n    let dominoes = [(1, 2); (2, 3); (3, 1); (4, 5); (5, 6); (6, 4)]\n    canChain dominoes |> should equal false\n\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

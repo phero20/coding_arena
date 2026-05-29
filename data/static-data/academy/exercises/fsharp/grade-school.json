@@ -1,0 +1,44 @@
+{
+  "id": "fsharp:grade-school",
+  "trackSlug": "fsharp",
+  "slug": "grade-school",
+  "name": "Grade School",
+  "uuid": "cf058dc8-db6f-4034-ac5b-22f1d8d0decc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given students' names along with the grade that they are in, create a roster for the school.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "ordering"
+  ],
+  "prerequisites": [
+    "lists",
+    "numbers",
+    "ordering",
+    "strings",
+    "tuples"
+  ],
+  "instructions": "# Instructions\n\nGiven students' names along with the grade they are in, create a roster for the school.\n\nIn the end, you should be able to:\n\n- Add a student's name to the roster for a grade:\n  - \"Add Jim to grade 2.\"\n  - \"OK.\"\n- Get a list of all students enrolled in a grade:\n  - \"Which students are in grade 2?\"\n  - \"We've only got Jim right now.\"\n- Get a sorted list of all students in all grades.\n  Grades should be sorted as 1, 2, 3, etc., and students within a grade should be sorted alphabetically by name.\n  - \"Who is enrolled in school right now?\"\n  - \"Let me think.\n    We have Anna, Barb, and Charlie in grade 1, Alex, Peter, and Zoe in grade 2, and Jim in grade 5.\n    So the answer is: Anna, Barb, Charlie, Alex, Peter, Zoe, and Jim.\"\n\nNote that all our students only have one name (it's a small town, what do you want?), and each student cannot be added more than once to a grade or the roster.\nIf a test attempts to add the same student more than once, your implementation should indicate that this is incorrect.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module GradeSchool\n\ntype School = Map<int, string list>\n\nlet empty: School = failwith \"You need to implement this function.\"\n\nlet add (student: string) (grade: int) (school: School): School = failwith \"You need to implement this function.\"\n\nlet roster (school: School): string list = failwith \"You need to implement this function.\"\n\nlet grade (number: int) (school: School): string list = failwith \"You need to implement this function.\"\n",
+  "example_solution": "module GradeSchool\n\ntype School = Map<int, string list>\nlet empty = Map.empty<int, string list>\n\nlet add student grade school =\n    if school |> Map.values |> List.concat |> List.contains student then\n        school\n    else\n        match Map.tryFind grade school with\n        | Some existing -> Map.add grade (student :: existing |> List.sort) school\n        | None -> Map.add grade [student] school\n\nlet roster school =\n    school\n    |> Map.toList\n    |> List.sortBy fst\n    |> List.map snd\n    |> List.fold (fun finalList listItem -> finalList @ (List.sort listItem)) []\n\nlet grade number school = \n    match Map.tryFind number school with\n    | Some students -> students\n    | None -> []",
+  "test_code": "module GradeSchoolTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen GradeSchool\n\n[<Fact>]\nlet ``Roster is empty when no student is added`` () =\n    let school = empty\n    roster school |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Student is added to the roster`` () =\n    let school = \n        empty\n        |> add \"Aimee\" 2\n    roster school |> should equal [\"Aimee\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple students in the same grade are added to the roster`` () =\n    let school = \n        empty\n        |> add \"Blair\" 2\n        |> add \"James\" 2\n        |> add \"Paul\" 2\n    roster school |> should equal [\"Blair\"; \"James\"; \"Paul\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Student not added to same grade in the roster more than once`` () =\n    let school = \n        empty\n        |> add \"Blair\" 2\n        |> add \"James\" 2\n        |> add \"James\" 2\n        |> add \"Paul\" 2\n    roster school |> should equal [\"Blair\"; \"James\"; \"Paul\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Students in multiple grades are added to the roster`` () =\n    let school = \n        empty\n        |> add \"Chelsea\" 3\n        |> add \"Logan\" 7\n    roster school |> should equal [\"Chelsea\"; \"Logan\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Student not added to multiple grades in the roster`` () =\n    let school = \n        empty\n        |> add \"Blair\" 2\n        |> add \"James\" 2\n        |> add \"James\" 3\n        |> add \"Paul\" 3\n    roster school |> should equal [\"Blair\"; \"James\"; \"Paul\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Students are sorted by grades in the roster`` () =\n    let school = \n        empty\n        |> add \"Jim\" 3\n        |> add \"Peter\" 2\n        |> add \"Anna\" 1\n    roster school |> should equal [\"Anna\"; \"Peter\"; \"Jim\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Students are sorted by name in the roster`` () =\n    let school = \n        empty\n        |> add \"Peter\" 2\n        |> add \"Zoe\" 2\n        |> add \"Alex\" 2\n    roster school |> should equal [\"Alex\"; \"Peter\"; \"Zoe\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Students are sorted by grades and then by name in the roster`` () =\n    let school = \n        empty\n        |> add \"Peter\" 2\n        |> add \"Anna\" 1\n        |> add \"Barb\" 1\n        |> add \"Zoe\" 2\n        |> add \"Alex\" 2\n        |> add \"Jim\" 3\n        |> add \"Charlie\" 1\n    roster school |> should equal [\"Anna\"; \"Barb\"; \"Charlie\"; \"Alex\"; \"Peter\"; \"Zoe\"; \"Jim\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grade is empty if no students in the roster`` () =\n    let school = empty\n    grade 1 school |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Grade is empty if no students in that grade`` () =\n    let school = \n        empty\n        |> add \"Peter\" 2\n        |> add \"Zoe\" 2\n        |> add \"Alex\" 2\n        |> add \"Jim\" 3\n    grade 1 school |> should be Empty\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Student not added to same grade more than once`` () =\n    let school = \n        empty\n        |> add \"Blair\" 2\n        |> add \"James\" 2\n        |> add \"James\" 2\n        |> add \"Paul\" 2\n    grade 2 school |> should equal [\"Blair\"; \"James\"; \"Paul\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Student not added to multiple grades`` () =\n    let school = \n        empty\n        |> add \"Blair\" 2\n        |> add \"James\" 2\n        |> add \"James\" 3\n        |> add \"Paul\" 3\n    grade 2 school |> should equal [\"Blair\"; \"James\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Student not added to other grade for multiple grades`` () =\n    let school = \n        empty\n        |> add \"Blair\" 2\n        |> add \"James\" 2\n        |> add \"James\" 3\n        |> add \"Paul\" 3\n    grade 3 school |> should equal [\"Paul\"]\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Students are sorted by name in a grade`` () =\n    let school = \n        empty\n        |> add \"Franklin\" 5\n        |> add \"Bradley\" 5\n        |> add \"Jeff\" 1\n    grade 5 school |> should equal [\"Bradley\"; \"Franklin\"]\n\n",
+  "source": "A pairing session with Phil Battos at gSchool",
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jbtule",
+    "jrr",
+    "lestephane",
+    "MaritimeMartin",
+    "NobbZ",
+    "robkeim",
+    "valentin-p",
+    "wolf99",
+    "x-kej"
+  ]
+}

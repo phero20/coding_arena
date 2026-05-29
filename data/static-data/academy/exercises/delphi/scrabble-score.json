@@ -1,0 +1,28 @@
+{
+  "id": "delphi:scrabble-score",
+  "trackSlug": "delphi",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "90ec6341-080d-41cf-bb08-4a4c9357b10e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "unit uScrabbleScore;\n\ninterface\n\nuses\n  System.Generics.Collections;\n\ntype\n  TScrabble = class\n  private\n    const\n      FValues : array ['A' .. 'Z'] of integer =\n        (1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10);\n  public\n    class function Score(AInp : string) : integer;\n  end;\n\nimplementation\n\nuses\n  System.SysUtils;\n\nclass function TScrabble.Score(AInp: string): integer;\nvar\n  C: char;\nbegin\n  Result := 0;\n  for C in AInp.ToUpperInvariant do\n    Result := Result + FValues[C];\nend;\n\nend.\n",
+  "test_code": "unit uScrabbleScoreTests;\n\ninterface\nuses\n  DUnitX.TestFramework, uScrabbleScore;\n\nconst\n  CanonicalVersion = '1.1.0.1';\n\ntype\n\n  [TestFixture]\n  TScrabbleScoreTest = class(TObject)\n  public\n    [Test]\n//    [Ignore('Comment the \"[Ignore]\" statement to run the test')]\n    procedure lowercase_letter;\n\n    [Test]\n    [Ignore]\n    procedure uppercase_letter;\n\n    [Test]\n    [Ignore]\n    procedure valuable_letter;\n\n    [Test]\n    [Ignore]\n    procedure short_word;\n\n    [Test]\n    [Ignore]\n    procedure short_valuable_word;\n\n    [Test]\n    [Ignore]\n    procedure medium_word;\n\n    [Test]\n    [Ignore]\n    procedure medium_valuable_word;\n\n    [Test]\n    [Ignore]\n    procedure long_mixed_case_word;\n\n    [Test]\n    [Ignore]\n    procedure english_like_word;\n\n    [Test]\n    [Ignore]\n    procedure empty_input;\n\n    [Test]\n    [Ignore]\n    procedure entire_alphabet_available;\n  end;\n\nimplementation\n\nprocedure TScrabbleScoreTest.empty_input;\nbegin\n  Assert.AreEqual(0, TScrabble.Score(''));\nend;\n\nprocedure TScrabbleScoreTest.english_like_word;\nbegin\n  Assert.AreEqual(8, TScrabble.Score('pinata'));\nend;\n\nprocedure TScrabbleScoreTest.entire_alphabet_available;\nbegin\n  Assert.AreEqual(87, TScrabble.Score('abcdefghijklmnopqrstuvwxyz'));\nend;\n\nprocedure TScrabbleScoreTest.long_mixed_case_word;\nbegin\n  Assert.AreEqual(41, TScrabble.Score('OxyphenButazone'));\nend;\n\nprocedure TScrabbleScoreTest.lowercase_letter;\nbegin\n  Assert.AreEqual(1, TScrabble.Score('a'));\nend;\n\nprocedure TScrabbleScoreTest.medium_valuable_word;\nbegin\n  Assert.AreEqual(22, TScrabble.Score('quirky'));\nend;\n\nprocedure TScrabbleScoreTest.medium_word;\nbegin\n  Assert.AreEqual(6, TScrabble.Score('street'));\nend;\n\nprocedure TScrabbleScoreTest.short_valuable_word;\nbegin\n  Assert.AreEqual(12, TScrabble.Score('zoo'));\nend;\n\nprocedure TScrabbleScoreTest.short_word;\nbegin\n  Assert.AreEqual(2, TScrabble.Score('at'));\nend;\n\nprocedure TScrabbleScoreTest.uppercase_letter;\nbegin\n  Assert.AreEqual(1, TScrabble.Score('A'));\nend;\n\nprocedure TScrabbleScoreTest.valuable_letter;\nbegin\n  Assert.AreEqual(4, TScrabble.Score('f'));\nend;\n\ninitialization\n  TDUnitX.RegisterTestFixture(TScrabbleScoreTest);\nend.\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "filiptoskovic"
+  ],
+  "contributors": [
+    "rpottsoh"
+  ]
+}

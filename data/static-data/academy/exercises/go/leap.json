@@ -1,0 +1,46 @@
+{
+  "id": "go:leap",
+  "trackSlug": "go",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "fee57b09-2b67-4483-a2e5-3dfec0568b15",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "basics"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "// This is a \"stub\" file.  It's a little start on your solution.\n// It's not a complete solution though; you have to write some code.\n\n// Package leap should have a package comment that summarizes what it's about.\n// https://golang.org/doc/effective_go.html#commentary\npackage leap\n\n// IsLeapYear should have a comment documenting it.\nfunc IsLeapYear(year int) bool {\n\t// Write some code here to pass the test suite.\n\t// Then remove all the stock comments.\n\t// They're here to help you get started but they only clutter a finished solution.\n\t// If you leave them in, reviewers may protest!\n\tpanic(\"Please implement the IsLeapYear function\")\n}\n",
+  "example_solution": "package leap\n\nfunc IsLeapYear(i int) bool {\n\treturn i%4 == 0 && i%100 != 0 || i%400 == 0\n}\n",
+  "test_code": "package leap\n\nimport \"testing\"\n\nfunc TestLeapYears(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual := IsLeapYear(tc.year)\n\t\t\tif actual != tc.expected {\n\t\t\t\tt.Fatalf(\"IsLeapYear(%d) = %t, want %t\", tc.year, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\n// Benchmark 400 years interval to get fair weighting of different years.\nfunc Benchmark400(b *testing.B) {\n\tfor range b.N {\n\t\tfor y := 1600; y < 2000; y++ {\n\t\t\tIsLeapYear(y)\n\t\t}\n\t}\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "da-edra",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "k4rtik",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "soniakeys",
+    "tleen",
+    "tompao",
+    "zabawaba99",
+    "eklatzer"
+  ]
+}

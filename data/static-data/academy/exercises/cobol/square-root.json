@@ -1,0 +1,26 @@
+{
+  "id": "cobol:square-root",
+  "trackSlug": "cobol",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "b431c3bf-046c-46d2-b4c2-3bbf24227a12",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. square-root.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-NUMBER PIC 9(32).\n       01 WS-SQRT PIC 9(32).\n\n       PROCEDURE DIVISION.\n       SQUARE-ROOT.\n",
+  "example_solution": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. square-root.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-NUMBER PIC 9(32).\n       01 WS-SQRT PIC 9(32).\n\n       PROCEDURE DIVISION.\n       SQUARE-ROOT.\n         COMPUTE WS-SQRT = WS-NUMBER ** 0.5. \n",
+  "test_code": "TESTSUITE 'Tests for Square Root'\n\nBEFORE-EACH\n\tMOVE 0 TO WS-SQRT\nEND-BEFORE\n\nTestCase \"root of 1\"\n\tMOVE 1 TO WS-NUMBER\n\tPERFORM SQUARE-ROOT\n\tEXPECT WS-SQRT = 1\n\nTestCase \"root of 4\"\n\tMOVE 4 TO WS-NUMBER\n\tPERFORM SQUARE-ROOT\n\tEXPECT WS-SQRT = 2\n\nTestCase \"root of 25\"\n\tMOVE 25 TO WS-NUMBER\n\tPERFORM SQUARE-ROOT\n\tEXPECT WS-SQRT = 5\n\nTestCase \"root of 81\"\n\tMOVE 81 TO WS-NUMBER\n\tPERFORM SQUARE-ROOT\n\tEXPECT WS-SQRT = 9\n\nTestCase \"root of 196\"\n\tMOVE 196 TO WS-NUMBER\n\tPERFORM SQUARE-ROOT\n\tEXPECT WS-SQRT = 14\n\nTestCase \"root of 65025\"\n\tMOVE 65025 TO WS-NUMBER\n\tPERFORM SQUARE-ROOT\n\tEXPECT WS-SQRT = 255\n\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "KTSnowy"
+  ],
+  "contributors": null
+}

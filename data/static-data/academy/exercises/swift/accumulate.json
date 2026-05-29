@@ -1,0 +1,36 @@
+{
+  "id": "swift:accumulate",
+  "trackSlug": "swift",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "cb5bc145-8249-4b3b-bcb3-b8d7805f2a14",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//Solution goes in Sources\n",
+  "example_solution": "extension Array {\n    func accumulate<S>(_ yield: (Element) -> S) -> [S] {\n        var result: [S] = [S]()\n        for item in self {\n            result.append(yield(item))\n        }\n        return result\n    }\n}\n",
+  "test_code": "import XCTest\n@testable import Accumulate\n\nprivate extension String {\n    var length: Int { return self.count }\n\n    func reverse() -> String {\n        var result: String = \"\"\n        for char in self {\n            result = \"\\(char)\\(result)\"\n        }\n        return result\n    }\n}\n\nprivate extension XCTest {\n    func XCTAssertEqualMultiArray(_ aArray1: [[String]], _ aArray2: [[String]]) {\n        XCTAssertEqual(Array(aArray1.joined()), Array(aArray2.joined()))\n    }\n}\n\nclass AccumulateTests: XCTestCase {\n    func testEmptyAccumulation() {\n        let input = [Int]()\n        func square(_ input: Int) -> Int {\n            return input * input\n        }\n        let result = input.accumulate(square)\n\n        XCTAssertTrue(result.isEmpty)\n    }\n\n    func testAccumulateSquares() {\n        let input = [1, 2, 3, 4]\n        let expected = [1, 4, 9, 16]\n        func square(_ input: Int) -> Int {\n            return input * input\n        }\n        let result = input.accumulate(square)\n\n        XCTAssertEqual(expected, result)\n    }\n\n    func testAccumulateUpcases() {\n        let input = [\"hello\", \"world\"]\n        let expected = [\"HELLO\", \"WORLD\"]\n        func toUpper(_ input: String) -> String {\n            return input.uppercased()\n        }\n        let result = input.accumulate(toUpper)\n\n        XCTAssertEqual(expected, result)\n\n    }\n\n    func testAccumulateReversedStrings() {\n        let input =    [\"the\", \"quick\", \"brown\", \"fox\", \"etc\"]\n        let expected = [\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"]\n        func reverse(_ input: String) -> String {\n            return input.reverse()\n        }\n        let result = input.accumulate(reverse)\n\n        XCTAssertEqual(expected, result)\n    }\n\n    func testAccumulateRecursively() {\n        let input =   [\"a\", \"b\", \"c\"]\n        let expected = [\n            [\"a1\", \"a2\", \"a3\"],\n            [\"b1\", \"b2\", \"b3\"],\n            [\"c1\", \"c2\", \"c3\"]\n        ]\n        func recurse(_ input: String) -> [String] {\n            func appendTo(_ innerInput: String) -> String {\n                return input+innerInput\n            }\n            let result = [\"1\", \"2\", \"3\"].accumulate(appendTo)\n            return result\n        }\n        let result = input.accumulate(recurse)\n\n        XCTAssertEqualMultiArray(expected, result)\n    }\n}\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "ahalls"
+  ],
+  "contributors": [
+    "bhargavg",
+    "hankturowski",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "masters3d",
+    "nickkjordan",
+    "robtimp",
+    "ThomasHaz"
+  ]
+}

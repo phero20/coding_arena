@@ -1,0 +1,26 @@
+{
+  "id": "futhark:collatz-conjecture",
+  "trackSlug": "futhark",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "84147404-fa0a-43e7-9df1-81a9e21e2c81",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "def steps (number: i32): i32 = ???\n",
+  "example_solution": "def steps (n: i32): i32 =\n  assert (n > 0)\n    (let (_, steps) = loop (n, steps) = (n, 0) while n != 1 do\n       (if (n %% 2 == 0) then n // 2 else n * 3 + 1, steps + 1)\n     in steps)",
+  "test_code": "import \"collatz_conjecture\"\n\n-- zero steps for one\n-- ==\n-- input { 1 }\n-- output { 0 }\n\n-- divide if even\n-- ==\n-- input { 16 }\n-- output { 4 }\n\n-- even and odd steps\n-- ==\n-- input { 12 }\n-- output { 9 }\n\n-- large number of even and odd steps\n-- ==\n-- input { 1000000 }\n-- output { 152 }\n\n-- zero is an error\n-- ==\n-- input { 0 }\n-- error: Error*\n\n-- negative value is an error\n-- ==\n-- input { -15 }\n-- error: Error*\n\nlet main (number: i32): i32 =\n  steps number\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,28 @@
+{
+  "id": "tcl:matrix",
+  "trackSlug": "tcl",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "32ad6c64-82ae-434e-83e1-1cf11eecc3cc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc matrixFrom {inputString} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n\nproc row {matrix n} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n\nproc column {matrix n} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "oo::class create Matrix {\n    variable rows\n\n    constructor {inputString} {\n        set rows [lmap line [split $inputString \\n] {split $line}]\n    }\n\n    method row {n} {\n        return [lindex $rows $n-1]\n    }\n\n    method column {n} {\n        return [lmap row $rows {lindex $row $n-1}]\n    }\n}\n\nproc matrixFrom {inputString} {\n    Matrix new $inputString\n}\n\nproc row {matrix n} {\n    $matrix row $n\n}\n\nproc column {matrix n} {\n    $matrix column $n\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"matrix.tcl\"\n\n# row tests\ntest matrix-1.1 \"extract row from one number matrix\" -body {\n    set matrix [matrixFrom \"1\"]\n    row $matrix 1\n} -returnCodes ok -result {1}\n\nskip matrix-1.2\ntest matrix-1.2 \"can extract row\" -body {\n    set matrix [matrixFrom \"1 2\\n3 4\"] \n    row $matrix 2\n} -returnCodes ok -result {3 4}\n\nskip matrix-1.3\ntest matrix-1.3 \"extract row where numbers have different widths\" -body {\n    set matrix [matrixFrom \"1 2\\n10 20\"]   \n    row $matrix 2\n} -returnCodes ok -result {10 20}\n\nskip matrix-1.4\ntest matrix-1.4 \"can extract row from non-square matrix\" -body {\n    set matrix [matrixFrom \"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\"]   \n    row $matrix 3\n} -returnCodes ok -result {7 8 9}\n\nskip matrix-1.5\ntest matrix-1.5 \"can extract row from non-square matrix with no corresponding column\" -body {\n    set matrix [matrixFrom \"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\"]   \n    row $matrix 4\n} -returnCodes ok -result {8 7 6}\n\n\n# column tests\nskip matrix-2.1\ntest matrix-2.1 \"extract column from one number matrix\" -body {\n    set matrix [matrixFrom \"1\"]    \n    column $matrix 1\n} -returnCodes ok -result {1}\n\nskip matrix-2.2\ntest matrix-2.2 \"can extract column\" -body {\n    set matrix [matrixFrom \"1 2 3\\n4 5 6\\n7 8 9\"]  \n    column $matrix 3\n} -returnCodes ok -result {3 6 9}\n\nskip matrix-2.3\ntest matrix-2.3 \"can extract column from non-square matrix\" -body {\n    set matrix [matrixFrom \"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\"]   \n    column $matrix 3\n} -returnCodes ok -result {3 6 9 6}\n\nskip matrix-2.4\ntest matrix-2.4 \"can extract column from non-square matrix with no corresponding row\" -body {\n    set matrix [matrixFrom \"1 2 3 4\\n5 6 7 8\\n9 8 7 6\"]\n    column $matrix 4\n} -returnCodes ok -result {4 8 6}\n\nskip matrix-2.5\ntest matrix-2.5 \"extract column where numbers have different widths\" -body {\n    set matrix [matrixFrom \"89 1903 3\\n18 3 1\\n9 4 800\"]   \n    column $matrix 2\n} -returnCodes ok -result {1903 3 4}\n\n\ncleanupTests\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

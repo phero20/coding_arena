@@ -1,0 +1,42 @@
+{
+  "id": "fsharp:hamming",
+  "trackSlug": "fsharp",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "1dadf8c0-b15c-413f-987e-187d043910f0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "collection-processing"
+  ],
+  "prerequisites": [
+    "for-loops",
+    "if-then-else-expressions",
+    "numbers",
+    "options",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "module Hamming\n\nlet distance (strand1: string) (strand2: string): int option = failwith \"You need to implement this function.\"",
+  "example_solution": "module Hamming\n\nlet distance (strand1:string) (strand2:string) = \n    if (strand1.Length <> strand2.Length) then\n        None\n    else\n        Array.zip (strand1.ToCharArray()) (strand2.ToCharArray()) \n        |> Array.filter (fun (c1, c2) -> c1 <> c2) \n        |> Array.length\n        |> Some",
+  "test_code": "module HammingTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Hamming\n\n[<Fact>]\nlet ``Empty strands`` () =\n    distance \"\" \"\" |> should equal (Some 0)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Single letter identical strands`` () =\n    distance \"A\" \"A\" |> should equal (Some 0)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Single letter different strands`` () =\n    distance \"G\" \"T\" |> should equal (Some 1)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Long identical strands`` () =\n    distance \"GGACTGAAATCTG\" \"GGACTGAAATCTG\" |> should equal (Some 0)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Long different strands`` () =\n    distance \"GGACGGATTCTG\" \"AGGACGGATTCT\" |> should equal (Some 9)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disallow first strand longer`` () =\n    distance \"AATG\" \"AAA\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disallow second strand longer`` () =\n    distance \"ATA\" \"AGTG\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disallow empty first strand`` () =\n    distance \"\" \"G\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Disallow empty second strand`` () =\n    distance \"G\" \"\" |> should equal None\n\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99",
+    "aage"
+  ]
+}

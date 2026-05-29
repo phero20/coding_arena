@@ -1,0 +1,34 @@
+{
+  "id": "cpp:scrabble-score",
+  "trackSlug": "cpp",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "54a0753e-c161-4dfd-a7b0-02dc7a923d82",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "#include \"scrabble_score.h\"\n\nnamespace scrabble_score {\n\n// TODO: add your solution here\n\n}  // namespace scrabble_score\n",
+  "example_solution": "#include <cctype>\n\n#include \"scrabble_score.h\"\n\nnamespace scrabble_score {\n\nnamespace {\nconst int letter_scores[26] = {\n    1,   // A\n    3,   // B\n    3,   // C\n    2,   // D\n    1,   // E\n    4,   // F\n    2,   // G\n    4,   // H\n    1,   // I\n    8,   // J\n    5,   // K\n    1,   // L\n    3,   // M\n    1,   // N\n    1,   // O\n    3,   // P\n    10,  // Q\n    1,   // R\n    1,   // S\n    1,   // T\n    1,   // U\n    4,   // V\n    4,   // W\n    8,   // X\n    4,   // Y\n    10   // Z\n};\n\n}\n\nint score(const std::string &word) {\n    int result = 0;\n    for (const char c : word) {\n        if (std::isalpha(c)) {\n            result += letter_scores[std::tolower(c) - 'a'];\n        }\n    }\n    return result;\n}\n\n}  // namespace scrabble_score\n",
+  "test_code": "#include \"scrabble_score.h\"\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nTEST_CASE(\"scores_an_empty_word_as_zero\") {\n    REQUIRE(0 == scrabble_score::score(\"\"));\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\nTEST_CASE(\"scores_a_very_short_word\") {\n    REQUIRE(1 == scrabble_score::score(\"a\"));\n}\n\nTEST_CASE(\"scores_the_word_by_the_number_of_letters\") {\n    REQUIRE(6 == scrabble_score::score(\"street\"));\n}\n\nTEST_CASE(\"scores_more_complicated_words_with_more\") {\n    REQUIRE(22 == scrabble_score::score(\"quirky\"));\n}\n\nTEST_CASE(\"scores_case_insensitive_words\") {\n    REQUIRE(41 == scrabble_score::score(\"OXYPHENBUTAZONE\"));\n}\n\nTEST_CASE(\"scores_z_word\") { REQUIRE(12 == scrabble_score::score(\"zoo\")); }\n#endif\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "drewbs",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "patricksjackson"
+  ]
+}

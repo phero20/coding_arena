@@ -1,0 +1,28 @@
+{
+  "id": "crystal:minesweeper",
+  "trackSlug": "crystal",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "b6825bf9-df41-4b00-8d70-04c64fb95fa5",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "class Minesweeper\n  # Write your code for the 'Minesweeper' exercise in this file.\nend\n",
+  "example_solution": "class Minesweeper\n  property input\n\n  def initialize(@input : Array(String))\n  end\n\n  def annotate : Array(String)\n    input.map_with_index do |row, row_index|\n      row.chars.map_with_index do |cell, col_index|\n        cell == ' ' ? count_mines(input, row_index, col_index) : cell\n      end.join\n    end\n  end\n\n  private def count_mines(input, row_index, col_index) : String\n    count = 0\n    (row_index - 1..row_index + 1).each do |row|\n      (col_index - 1..col_index + 1).each do |col|\n        if row < 0 || col < 0 || row >= input.size || col >= input[0].size\n          next\n        end\n        count += 1 if input[row][col] == '*'\n      end\n    end\n    count == 0 ? \" \" : count.to_s\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Minesweeper\" do\n  it \"no rows\" do\n    minesweeper = Minesweeper.new([] of String)\n    minesweeper.annotate.should eq([] of String)\n  end\n\n  pending \"no columns\" do\n    minesweeper = Minesweeper.new([\"\"] of String)\n    minesweeper.annotate.should eq([\"\"])\n  end\n\n  pending \"no mines\" do\n    minesweeper = Minesweeper.new([\"   \", \"   \", \"   \"] of String)\n    minesweeper.annotate.should eq([\"   \", \"   \", \"   \"])\n  end\n\n  pending \"minefield with only mines\" do\n    minesweeper = Minesweeper.new([\"***\", \"***\", \"***\"] of String)\n    minesweeper.annotate.should eq([\"***\", \"***\", \"***\"])\n  end\n\n  pending \"mine surrounded by spaces\" do\n    minesweeper = Minesweeper.new([\"   \", \" * \", \"   \"] of String)\n    minesweeper.annotate.should eq([\"111\", \"1*1\", \"111\"])\n  end\n\n  pending \"space surrounded by mines\" do\n    minesweeper = Minesweeper.new([\"***\", \"* *\", \"***\"] of String)\n    minesweeper.annotate.should eq([\"***\", \"*8*\", \"***\"])\n  end\n\n  pending \"horizontal line\" do\n    minesweeper = Minesweeper.new([\" * * \"] of String)\n    minesweeper.annotate.should eq([\"1*2*1\"])\n  end\n\n  pending \"horizontal line, mines at edges\" do\n    minesweeper = Minesweeper.new([\"*   *\"] of String)\n    minesweeper.annotate.should eq([\"*1 1*\"])\n  end\n\n  pending \"vertical line\" do\n    minesweeper = Minesweeper.new([\" \", \"*\", \" \", \"*\", \" \"] of String)\n    minesweeper.annotate.should eq([\"1\", \"*\", \"2\", \"*\", \"1\"])\n  end\n\n  pending \"vertical line, mines at edges\" do\n    minesweeper = Minesweeper.new([\"*\", \" \", \" \", \" \", \"*\"] of String)\n    minesweeper.annotate.should eq([\"*\", \"1\", \" \", \"1\", \"*\"])\n  end\n\n  pending \"cross\" do\n    minesweeper = Minesweeper.new([\"  *  \", \"  *  \", \"*****\", \"  *  \", \"  *  \"] of String)\n    minesweeper.annotate.should eq([\" 2*2 \", \"25*52\", \"*****\", \"25*52\", \" 2*2 \"])\n  end\n\n  pending \"large minefield\" do\n    minesweeper = Minesweeper.new([\" *  * \", \"  *   \", \"    * \", \"   * *\", \" *  * \", \"      \"] of String)\n    minesweeper.annotate.should eq([\"1*22*1\", \"12*322\", \" 123*2\", \"112*4*\", \"1*22*2\", \"111111\"])\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "meatball133"
+  ],
+  "contributors": [
+    "ryanplusplus"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "lua:nth-prime",
+  "trackSlug": "lua",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "b8880be4-02e7-4911-b049-927c028ed8e0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(n)\nend\n",
+  "example_solution": "return function(n)\n  assert(n > 0, 'n must be positive')\n\n  local primes = {}\n\n  local function is_prime(n)\n    for _, p in ipairs(primes) do\n      if n % p == 0 then\n        return false\n      end\n      if p ^ 2 > n then\n        return true\n      end\n    end\n    return true\n  end\n\n  for i = 2, math.huge do\n    if is_prime(i) then\n      table.insert(primes, i)\n    end\n    if #primes == n then\n      return primes[#primes]\n    end\n  end\nend\n",
+  "test_code": "local nth = require('nth-prime')\n\ndescribe('nth-prime', function()\n  local function benchmark(f)\n    local start = os.clock()\n    f()\n    return os.clock() - start\n  end\n\n  it('should give 2 as the first prime', function()\n    assert.equal(2, nth(1))\n  end)\n\n  it('should give 3 as the second prime', function()\n    assert.equal(3, nth(2))\n  end)\n\n  it('should be able to calculate the nth prime for small n', function()\n    assert.equal(13, nth(6))\n  end)\n\n  it('should be efficient for large n', function()\n    local execution_time = benchmark(function()\n      nth(10001)\n    end)\n\n    assert(execution_time < 1, 'should take less than a second to execute')\n  end)\n\n  it('should be able to calculate the nth prime for large n', function()\n    assert.equal(104743, nth(10001))\n  end)\n\n  it('should raise an error for n <= 0', function()\n    assert.has_error(function()\n      nth(0)\n    end)\n\n    assert.has_error(function()\n      nth(-1)\n    end)\n  end)\nend)\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

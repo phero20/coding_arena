@@ -1,0 +1,26 @@
+{
+  "id": "emacs-lisp:rotational-cipher",
+  "trackSlug": "emacs-lisp",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "4faa2bae-ecda-4c16-9f6d-148793117995",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; rotational-cipher.el --- Rotational Cipher (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun rotate (text shift-key)\n  (error\n   \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'rotational-cipher)\n;;; rotational-cipher.el ends here\n",
+  "example_solution": ";;; rotational-cipher.el --- Rotational Cipher (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(defconst shift-max 26)\n\n(defun rotate (text shift-key)\n  (let ((normalized-shift-key (mod shift-key shift-max)))\n    (concat\n     (mapcar\n      (lambda (char)\n        (cond\n         ((<= ?A char ?Z)\n          (+ (mod (+ (- char ?A) normalized-shift-key) shift-max) ?A))\n         ((<= ?a char ?z)\n          (+ (mod (+ (- char ?a) normalized-shift-key) shift-max) ?a))\n         (t\n          char)))\n      text))))\n\n\n(provide 'rotational-cipher)\n;;; rotational-cipher.el ends here\n",
+  "test_code": ";;; rotational-cipher-test.el --- Rotational Cipher (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(load-file \"rotational-cipher.el\")\n(declare-function rotate \"rotational-cipher.el\" (text shift-key))\n\n\n(ert-deftest rotate-a-by-0-same-output-as-input ()\n  (should (string= (rotate \"a\" 0) \"a\")))\n\n\n(ert-deftest rotate-a-by-1 ()\n  (should (string= (rotate \"a\" 1) \"b\")))\n\n\n(ert-deftest rotate-a-by-26-same-output-as-input ()\n  (should (string= (rotate \"a\" 26) \"a\")))\n\n\n(ert-deftest rotate-m-by-13 ()\n  (should (string= (rotate \"m\" 13) \"z\")))\n\n\n(ert-deftest rotate-n-by-13-with-wrap-around-alphabet ()\n  (should (string= (rotate \"n\" 13) \"a\")))\n\n\n(ert-deftest rotate-capital-letters ()\n  (should (string= (rotate \"OMG\" 5) \"TRL\")))\n\n\n(ert-deftest rotate-spaces ()\n  (should (string= (rotate \"O M G\" 5) \"T R L\")))\n\n\n(ert-deftest rotate-numbers ()\n  (should\n   (string=\n    (rotate \"Testing 1 2 3 testing\" 4) \"Xiwxmrk 1 2 3 xiwxmrk\")))\n\n\n(ert-deftest rotate-punctuation ()\n  (should\n   (string= (rotate \"Let's eat, Grandma!\" 21) \"Gzo'n zvo, Bmviyhv!\")))\n\n\n(ert-deftest rotate-all-letters ()\n  (should\n   (string=\n    (rotate\n     \"The quick brown fox jumps over the lazy dog.\" 13)\n    \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\")))\n\n\n(provide 'rotational-cipher-test)\n;;; rotational-cipher-test.el ends here\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "fapdash"
+  ],
+  "contributors": null
+}

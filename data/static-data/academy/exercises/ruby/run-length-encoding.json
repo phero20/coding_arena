@@ -1,0 +1,43 @@
+{
+  "id": "ruby:run-length-encoding",
+  "trackSlug": "ruby",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "9d6a8c89-41c1-4c4e-b24c-476ba0dfa5f9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "conditionals",
+    "enumeration",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Run Length Encoding' exercise in this file. Make the tests in\n`run_length_encoding_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/run-length-encoding` directory.\n=end\n",
+  "example_solution": "class RunLengthEncoding\n  def self.encode(str)\n    str.chars.chunk { |char| char }.each_with_object(+'') do |chunk, out|\n      out << encoded(chunk)\n    end\n  end\n\n  def self.decode(str)\n    str.scan(/(\\d+)?(\\D)/).each_with_object(+'') do |captures, out|\n      out << decoded(captures)\n    end\n  end\n\n  # private\n\n  def self.encoded(chunk)\n    char = chunk.first\n    times = chunk.last.count\n    return char if times == 1\n    \"#{times}#{char}\"\n  end\n  private_class_method :encoded\n\n  def self.decoded(captures)\n    times = (captures.first || 1).to_i\n    char = captures.last\n    char * times\n  end\n  private_class_method :decoded\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'run_length_encoding'\n\nclass RunLengthEncodingTest < Minitest::Test\n  def test_encode_empty_string\n    # skip\n    actual = RunLengthEncoding.encode('')\n    expected = ''\n    assert_equal expected, actual\n  end\n\n  def test_encode_single_characters_only_are_encoded_without_count\n    skip\n    actual = RunLengthEncoding.encode('XYZ')\n    expected = 'XYZ'\n    assert_equal expected, actual\n  end\n\n  def test_encode_string_with_no_single_characters\n    skip\n    actual = RunLengthEncoding.encode('AABBBCCCC')\n    expected = '2A3B4C'\n    assert_equal expected, actual\n  end\n\n  def test_encode_single_characters_mixed_with_repeated_characters\n    skip\n    actual = RunLengthEncoding.encode('WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB')\n    expected = '12WB12W3B24WB'\n    assert_equal expected, actual\n  end\n\n  def test_encode_multiple_whitespace_mixed_in_string\n    skip\n    actual = RunLengthEncoding.encode('  hsqq qww  ')\n    expected = '2 hs2q q2w2 '\n    assert_equal expected, actual\n  end\n\n  def test_encode_lowercase_characters\n    skip\n    actual = RunLengthEncoding.encode('aabbbcccc')\n    expected = '2a3b4c'\n    assert_equal expected, actual\n  end\n\n  def test_decode_empty_string\n    skip\n    actual = RunLengthEncoding.decode('')\n    expected = ''\n    assert_equal expected, actual\n  end\n\n  def test_decode_single_characters_only\n    skip\n    actual = RunLengthEncoding.decode('XYZ')\n    expected = 'XYZ'\n    assert_equal expected, actual\n  end\n\n  def test_decode_string_with_no_single_characters\n    skip\n    actual = RunLengthEncoding.decode('2A3B4C')\n    expected = 'AABBBCCCC'\n    assert_equal expected, actual\n  end\n\n  def test_decode_single_characters_with_repeated_characters\n    skip\n    actual = RunLengthEncoding.decode('12WB12W3B24WB')\n    expected = 'WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB'\n    assert_equal expected, actual\n  end\n\n  def test_decode_multiple_whitespace_mixed_in_string\n    skip\n    actual = RunLengthEncoding.decode('2 hs2q q2w2 ')\n    expected = '  hsqq qww  '\n    assert_equal expected, actual\n  end\n\n  def test_decode_lowercase_string\n    skip\n    actual = RunLengthEncoding.decode('2a3b4c')\n    expected = 'aabbbcccc'\n    assert_equal expected, actual\n  end\n\n  def test_consistency_encode_followed_by_decode_gives_original_string\n    skip\n    actual = RunLengthEncoding.decode(RunLengthEncoding.encode('zzz ZZ  zZ'))\n    expected = 'zzz ZZ  zZ'\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "Cohen-Carlisle"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "kytrinyx",
+    "tryantwit"
+  ]
+}

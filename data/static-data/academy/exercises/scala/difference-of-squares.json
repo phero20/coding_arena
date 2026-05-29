@@ -1,0 +1,31 @@
+{
+  "id": "scala:difference-of-squares",
+  "trackSlug": "scala",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "1fe9f43a-7774-4fbd-864b-eff7749ebbc6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object DifferenceOfSquares {\n\n  def sumOfSquares(n: Int): Int = ???\n\n  def squareOfSum(n: Int): Int = ???\n\n  def differenceOfSquares(n: Int): Int = ???\n}\n",
+  "example_solution": "import scala.math.pow\n\nobject DifferenceOfSquares {\n\n  def sumOfSquares(n: Int): Int = n * (n + 1) * (2 * n + 1) / 6\n\n  def squareOfSum(n: Int): Int = pow((n * (n + 1) / 2), 2).toInt\n\n  def differenceOfSquares(n: Int): Int = squareOfSum(n) - sumOfSquares(n)\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.2.0 */\nclass DifferenceOfSquaresTest extends AnyFunSuite with Matchers {\n\n  test(\"square of sum 1\") {\n    DifferenceOfSquares.squareOfSum(1) should be (1)\n  }\n\n  test(\"square of sum 5\") {\n    pending\n    DifferenceOfSquares.squareOfSum(5) should be (225)\n  }\n\n  test(\"square of sum 100\") {\n    pending\n    DifferenceOfSquares.squareOfSum(100) should be (25502500)\n  }\n\n  test(\"sum of squares 1\") {\n    pending\n    DifferenceOfSquares.sumOfSquares(1) should be (1)\n  }\n\n  test(\"sum of squares 5\") {\n    pending\n    DifferenceOfSquares.sumOfSquares(5) should be (55)\n  }\n\n  test(\"sum of squares 100\") {\n    pending\n    DifferenceOfSquares.sumOfSquares(100) should be (338350)\n  }\n\n  test(\"difference of squares 1\") {\n    pending\n    DifferenceOfSquares.differenceOfSquares(1) should be (0)\n  }\n\n  test(\"difference of squares 5\") {\n    pending\n    DifferenceOfSquares.differenceOfSquares(5) should be (170)\n  }\n\n  test(\"difference of squares 100\") {\n    pending\n    DifferenceOfSquares.differenceOfSquares(100) should be (25164150)\n  }\n}",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "abo64",
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

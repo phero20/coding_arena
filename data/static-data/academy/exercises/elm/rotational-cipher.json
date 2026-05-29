@@ -1,0 +1,30 @@
+{
+  "id": "elm:rotational-cipher",
+  "trackSlug": "elm",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "dd371b3e-666c-4015-a618-df53ad94014d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "comparison",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module RotationalCipher exposing (rotate)\n\n\nrotate : String -> Int -> String\nrotate text shiftKey =\n    Debug.todo \"Please implement rotate\"\n",
+  "example_solution": "module RotationalCipher exposing (rotate)\n\nimport Char\n\n\nrotate : String -> Int -> String\nrotate text shiftKey =\n    text\n        |> String.toList\n        |> List.map (shiftChar shiftKey)\n        |> String.fromList\n\n\nshiftChar : Int -> Char -> Char\nshiftChar shiftKey char =\n    let\n        shift refCode =\n            (Char.toCode char - refCode)\n                |> (+) shiftKey\n                |> modBy 26\n                |> (+) refCode\n                |> Char.fromCode\n    in\n    if 'a' <= char && char <= 'z' then\n        shift (Char.toCode 'a')\n\n    else if 'A' <= char && char <= 'Z' then\n        shift (Char.toCode 'A')\n\n    else\n        char\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport RotationalCipher\nimport Test exposing (Test, describe, skip, test)\n\n\ntests : Test\ntests =\n    describe \"RotationalCipher\"\n        [ -- skip <|\n          test \"rotate a by 0, same output as input\" <|\n            \\() ->\n                RotationalCipher.rotate \"a\" 0\n                    |> Expect.equal \"a\"\n        , skip <|\n            test \"rotate a by 1\" <|\n                \\() ->\n                    RotationalCipher.rotate \"a\" 1\n                        |> Expect.equal \"b\"\n        , skip <|\n            test \"rotate a by 26, same output as input\" <|\n                \\() ->\n                    RotationalCipher.rotate \"a\" 26\n                        |> Expect.equal \"a\"\n        , skip <|\n            test \"rotate m by 13\" <|\n                \\() ->\n                    RotationalCipher.rotate \"m\" 13\n                        |> Expect.equal \"z\"\n        , skip <|\n            test \"rotate n by 13 with wrap around alphabet\" <|\n                \\() ->\n                    RotationalCipher.rotate \"n\" 13\n                        |> Expect.equal \"a\"\n        , skip <|\n            test \"rotate capital letters\" <|\n                \\() ->\n                    RotationalCipher.rotate \"OMG\" 5\n                        |> Expect.equal \"TRL\"\n        , skip <|\n            test \"rotate spaces\" <|\n                \\() ->\n                    RotationalCipher.rotate \"O M G\" 5\n                        |> Expect.equal \"T R L\"\n        , skip <|\n            test \"rotate numbers\" <|\n                \\() ->\n                    RotationalCipher.rotate \"Testing 1 2 3 testing\" 4\n                        |> Expect.equal \"Xiwxmrk 1 2 3 xiwxmrk\"\n        , skip <|\n            test \"rotate punctuation\" <|\n                \\() ->\n                    RotationalCipher.rotate \"Let's eat, Grandma!\" 21\n                        |> Expect.equal \"Gzo'n zvo, Bmviyhv!\"\n        , skip <|\n            test \"rotate all letters\" <|\n                \\() ->\n                    RotationalCipher.rotate \"The quick brown fox jumps over the lazy dog.\" 13\n                        |> Expect.equal \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n        ]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": null
+}

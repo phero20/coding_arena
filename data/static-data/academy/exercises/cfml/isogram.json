@@ -1,0 +1,28 @@
+{
+  "id": "cfml:isogram",
+  "trackSlug": "cfml",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "ea62f03b-9ce8-4f98-8d10-dd4e2a25eb76",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the Isogram exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\tfunction isIsogram( input ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the Isogram exercise\n*/\ncomponent {\n\n\tfunction isIsogram( input ) {\n\t\t// Only look at alphabit chars\n\t\tvar cleanedInput = input.reReplaceNoCase( '[^a-z]', '', 'all' );\n\t\tvar chars = {};\n\t\t\n\t\t// Loop over characters\n\t\tcleanedInput\n\t\t\t.listToArray( '' )\n\t\t\t.each( function( char ) {\n\t\t\t\t// And mark distinct list of them\n\t\t\t\tchars[ char ] = true;\n\t\t\t} );\n\t\t\n\t\t// If the number of chars in the input is the same as the distinct list\n\t\treturn cleanedInput.len() == chars.count();\n\t}\n\t\t\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'Isogram' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My Isogram class\", function(){\t\t\t\n\n\t\t\tdescribe( 'Check if the given string is an isogram', function(){\n\n\t\t\t\tit( 'empty string', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='' ) ).toBeTrue();\n\t\t\t\t});\n\n\t\t\t\tit( 'isogram with only lower case characters', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='isogram' ) ).toBeTrue();\n\t\t\t\t});\n\n\t\t\t\tit( 'word with one duplicated character', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='eleven' ) ).toBeFalse();\n\t\t\t\t});\n\n\t\t\t\tit( 'longest reported english isogram', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='subdermatoglyphic' ) ).toBeTrue();\n\t\t\t\t});\n\n\t\t\t\tit( 'word with duplicated character in mixed case', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='Alphabet' ) ).toBeFalse();\n\t\t\t\t});\n\n\t\t\t\tit( 'hypothetical isogrammic word with hyphen', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='thumbscrew-japingly' ) ).toBeTrue();\n\t\t\t\t});\n\n\t\t\t\tit( 'isogram with duplicated hyphen', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='six-year-old' ) ).toBeTrue();\n\t\t\t\t});\n\n\t\t\t\tit( 'made-up name that is an isogram', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='Emily Jung Schwartzkopf' ) ).toBeTrue();\n\t\t\t\t});\n\n\t\t\t\tit( 'duplicated character in the middle', function(){\n\t\t\t\t\texpect( SUT.isIsogram( input='accentor' ) ).toBeFalse();\n\t\t\t\t});\n\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

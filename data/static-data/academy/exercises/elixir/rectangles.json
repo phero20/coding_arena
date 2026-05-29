@@ -1,0 +1,36 @@
+{
+  "id": "elixir:rectangles",
+  "trackSlug": "elixir",
+  "slug": "rectangles",
+  "name": "Rectangles",
+  "uuid": "bc7f9ea3-4e67-406a-91fe-807859fb9c7f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the rectangles in an ASCII diagram.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "list-comprehensions"
+  ],
+  "prerequisites": [
+    "tuples",
+    "maps",
+    "strings",
+    "charlists",
+    "list-comprehensions",
+    "enum",
+    "ranges"
+  ],
+  "instructions": "# Instructions\n\nCount the rectangles in an ASCII diagram like the one below.\n\n```text\n   +--+\n  ++  |\n+-++--+\n|  |  |\n+--+--+\n```\n\nThe above diagram contains these 6 rectangles:\n\n```text\n\n\n+-----+\n|     |\n+-----+\n```\n\n```text\n   +--+\n   |  |\n   |  |\n   |  |\n   +--+\n```\n\n```text\n   +--+\n   |  |\n   +--+\n\n\n```\n\n```text\n\n\n   +--+\n   |  |\n   +--+\n```\n\n```text\n\n\n+--+\n|  |\n+--+\n```\n\n```text\n\n  ++\n  ++\n\n\n```\n\nYou may assume that the input is always a proper rectangle (i.e. the length of every line equals the length of the first line).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Rectangles do\n  @doc \"\"\"\n  Count the number of ASCII rectangles.\n  \"\"\"\n  @spec count(input :: String.t()) :: integer\n  def count(input) do\n  end\nend\n",
+  "example_solution": "defmodule Rectangles do\n  @doc \"\"\"\n  Count the number of ASCII rectangles.\n  \"\"\"\n  @spec count(input :: String.t()) :: integer\n  def count(input) do\n    input =\n      input\n      |> String.split(\"\\n\")\n      |> Enum.map(&to_charlist/1)\n\n    coord =\n      for {row, r} <- Enum.with_index(input),\n          {char, c} <- Enum.with_index(row),\n          char != ?\\s,\n          into: %{},\n          do: {{r, c}, char}\n\n    corners =\n      coord\n      |> Enum.filter(fn {_pos, char} -> char == ?+ end)\n      |> Enum.map(fn {pos, _char} -> pos end)\n\n    for {r1, c1} <- corners,\n        {r2, c2} <- corners,\n        r1 < r2 and c1 < c2,\n        coord[{r1, c2}] == ?+ and coord[{r2, c1}] == ?+,\n        connected?(coord, {r1, c1}, {r2, c2}) do\n      :ok\n    end\n    |> length\n  end\n\n  defp connected?(coord, {r1, c1}, {r2, c2}) do\n    Enum.all?([\n      connected?(coord, r1, r2, column: c1),\n      connected?(coord, r1, r2, column: c2),\n      connected?(coord, c1, c2, row: r1),\n      connected?(coord, c1, c2, row: r2)\n    ])\n  end\n\n  defp connected?(coord, r1, r2, column: c),\n    do: Enum.all?(r1..r2, fn r -> coord[{r, c}] in ~c\"+|\" end)\n\n  defp connected?(coord, c1, c2, row: r),\n    do: Enum.all?(c1..c2, fn c -> coord[{r, c}] in ~c\"+-\" end)\nend\n",
+  "test_code": "defmodule RectanglesTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"no rows\" do\n    input = \"\"\n\n    assert Rectangles.count(input) == 0\n  end\n\n  @tag :pending\n  test \"no columns\" do\n    input = \"\"\"\n    \"\"\"\n\n    assert Rectangles.count(input) == 0\n  end\n\n  @tag :pending\n  test \"no rectangles\" do\n    input = \"\"\"\n    \\s\n    \"\"\"\n\n    assert Rectangles.count(input) == 0\n  end\n\n  @tag :pending\n  test \"one rectangle\" do\n    input = \"\"\"\n    +-+\n    | |\n    +-+\n    \"\"\"\n\n    assert Rectangles.count(input) == 1\n  end\n\n  @tag :pending\n  test \"two rectangles without shared parts\" do\n    input = \"\"\"\n      +-+\n      | |\n    +-+-+\n    | | \\s\n    +-+ \\s\n    \"\"\"\n\n    assert Rectangles.count(input) == 2\n  end\n\n  @tag :pending\n  test \"five rectangles with shared parts\" do\n    input = \"\"\"\n      +-+\n      | |\n    +-+-+\n    | | |\n    +-+-+\n    \"\"\"\n\n    assert Rectangles.count(input) == 5\n  end\n\n  @tag :pending\n  test \"rectangle of height 1 is counted\" do\n    input = \"\"\"\n    +--+\n    +--+\n    \"\"\"\n\n    assert Rectangles.count(input) == 1\n  end\n\n  @tag :pending\n  test \"rectangle of width 1 is counted\" do\n    input = \"\"\"\n    ++\n    ||\n    ++\n    \"\"\"\n\n    assert Rectangles.count(input) == 1\n  end\n\n  @tag :pending\n  test \"1x1 square is counted\" do\n    input = \"\"\"\n    ++\n    ++\n    \"\"\"\n\n    assert Rectangles.count(input) == 1\n  end\n\n  @tag :pending\n  test \"only complete rectangles are counted\" do\n    input = \"\"\"\n      +-+\n        |\n    +-+-+\n    | | -\n    +-+-+\n    \"\"\"\n\n    assert Rectangles.count(input) == 1\n  end\n\n  @tag :pending\n  test \"rectangles can be of different sizes\" do\n    input = \"\"\"\n    +------+----+\n    |      |    |\n    +---+--+    |\n    |   |       |\n    +---+-------+\n    \"\"\"\n\n    assert Rectangles.count(input) == 3\n  end\n\n  @tag :pending\n  test \"corner is required for a rectangle to be complete\" do\n    input = \"\"\"\n    +------+----+\n    |      |    |\n    +------+    |\n    |   |       |\n    +---+-------+\n    \"\"\"\n\n    assert Rectangles.count(input) == 2\n  end\n\n  @tag :pending\n  test \"large input with many rectangles\" do\n    input = \"\"\"\n    +---+--+----+\n    |   +--+----+\n    +---+--+    |\n    |   +--+----+\n    +---+--+--+-+\n    +---+--+--+-+\n    +------+  | |\n              +-+\n    \"\"\"\n\n    assert Rectangles.count(input) == 60\n  end\n\n  @tag :pending\n  test \"rectangles must have four sides\" do\n    input = \"\"\"\n    +-+ +-+\n    | | | |\n    +-+-+-+\n      | | \\s\n    +-+-+-+\n    | | | |\n    +-+ +-+\n    \"\"\"\n\n    assert Rectangles.count(input) == 5\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "jiegillet"
+  ],
+  "contributors": null
+}

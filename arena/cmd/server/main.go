@@ -55,6 +55,23 @@ func main() {
 	go arenaHub.Run()
 	go arenaHub.ListenForUpdates(context.Background())
 
+<<<<<<< HEAD
+=======
+	// Start Redis Background Monitor
+	go func() {
+		ticker := time.NewTicker(30 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+			err := redisClient.Ping(ctx).Err()
+			cancel()
+			if err != nil {
+				slog.Error("⚠️ Redis background health check failed", "error", err)
+			}
+		}
+	}()
+
+>>>>>>> prod-deploy
 	app := fiber.New(fiber.Config{
 		AppName:         "Coding Arena WebSocket Server",
 		ReadBufferSize:  8192,
@@ -95,6 +112,23 @@ func main() {
 		})
 	})
 
+<<<<<<< HEAD
+=======
+	// Connection Metrics
+	app.Get("/metrics", func(c *fiber.Ctx) error {
+		// 1. Get WebSocket Hub Stats
+		hubMetrics := arenaHub.GetMetrics()
+
+		// 2. Get Redis Stats (Memory & Clients)
+		redisInfo := redisClient.Info(c.Context(), "memory", "clients").Val()
+
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"websocket": hubMetrics,
+			"redis":     redisInfo,
+		})
+	})
+
+>>>>>>> prod-deploy
 	// WebSocket Upgrade Middleware
 	app.Use("/arena/ws", func(c *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(c) {

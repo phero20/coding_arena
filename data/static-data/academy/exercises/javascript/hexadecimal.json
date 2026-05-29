@@ -1,0 +1,33 @@
+{
+  "id": "javascript:hexadecimal",
+  "trackSlug": "javascript",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "8ed2c9fe-a13f-4313-abf9-125f351c85c9",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Hexadecimal' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const toDecimal = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "export const toDecimal = (hex) => {\n  const hexCharacters = [...hex];\n\n  for (let i = 0; i < hexCharacters.length; i += 1) {\n    if (/[^0-9a-fA-F]/.exec(hexCharacters[i])) {\n      return 0;\n    }\n  }\n\n  return parseInt(hex, 16);\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { toDecimal } from './hexadecimal';\n\ndescribe('Hexadecimal', () => {\n  test('hex 1 is decimal 1', () => {\n    const hex = toDecimal('1');\n    expect(hex).toEqual(1);\n  });\n\n  xtest('hex c is decimal 12', () => {\n    const hex = toDecimal('c');\n    expect(hex).toEqual(12);\n  });\n\n  xtest('hex 10 is decimal 16', () => {\n    const hex = toDecimal('10');\n    expect(hex).toEqual(16);\n  });\n\n  xtest('hex af is decimal 175', () => {\n    const hex = toDecimal('af');\n    expect(hex).toEqual(175);\n  });\n\n  xtest('hex 100 is decimal 256', () => {\n    const hex = toDecimal('100');\n    expect(hex).toEqual(256);\n  });\n\n  xtest('hex 19ace is decimal 105166', () => {\n    const hex = toDecimal('19ace');\n    expect(hex).toEqual(105166);\n  });\n\n  xtest('invalid hex is decimal 0', () => {\n    const hex = toDecimal('carrot');\n    expect(hex).toEqual(0);\n  });\n\n  xtest('hexadecimal value for HTML/CSS black color', () => {\n    const hex = toDecimal('000000');\n    expect(hex).toEqual(0);\n  });\n\n  xtest('hexadecimal value for HTML/CSS white color', () => {\n    const hex = toDecimal('ffffff');\n    expect(hex).toEqual(16777215);\n  });\n\n  xtest('hexadecimal value for HTML/CSS yellow color', () => {\n    const hex = toDecimal('ffff00');\n    expect(hex).toEqual(16776960);\n  });\n});\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "ankorGH",
+    "rchavarria",
+    "ryanplusplus",
+    "SleeplessByte",
+    "smb26",
+    "xarxziux"
+  ]
+}

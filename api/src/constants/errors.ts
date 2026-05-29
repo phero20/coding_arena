@@ -36,5 +36,14 @@ export const ERRORS = {
     TOO_MANY_REQUESTS: { message: "Too many requests. Please try again later.", code: "TOO_MANY_REQUESTS" },
     BAD_REQUEST: { message: "Invalid request parameters.", code: "BAD_REQUEST" },
     MISSING_PARAMETER: { message: "Missing required parameter", code: "BAD_REQUEST" },
+<<<<<<< HEAD
   }
+=======
+  },
+  TAXONOMY: {
+    CATEGORY_NOT_FOUND: { message: "Category not found", code: "NOT_FOUND" },
+    CATEGORY_SLUG_CONFLICT: { message: "A category with this slug already exists", code: "CONFLICT" },
+    PROBLEM_MAPPING_NOT_FOUND: { message: "Problem mapping not found", code: "NOT_FOUND" },
+  },
+>>>>>>> prod-deploy
 } as const;

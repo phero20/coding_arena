@@ -32,6 +32,11 @@ export interface EvaluationResultData {
   tests?: TestCaseResult[];
   testsPassed?: number;
   totalTests?: number;
+<<<<<<< HEAD
+=======
+  compileOutput?: string;
+  stderr?: string;
+>>>>>>> prod-deploy
   error?: string;
 }
 

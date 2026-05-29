@@ -1,0 +1,28 @@
+{
+  "id": "nim:difference-of-squares",
+  "trackSlug": "nim",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "aaeadc9c-d92d-4d5a-a601-e7836f59dd9f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc squareOfSum*(n: int): int =\n  discard\n\nproc sumOfSquares*(n: int): int =\n  discard\n\nproc difference*(n: int): int =\n  discard\n",
+  "example_solution": "func squareOfSum*(n: int): int =\n  result = n * (n + 1) div 2\n  result *= result\n\nfunc sumOfSquares*(n: int): int =\n  (n * (n + 1) * ((2 * n) + 1)) div 6\n\nfunc difference*(n: int): int =\n  squareOfSum(n) - sumOfSquares(n)\n",
+  "test_code": "import unittest\nimport difference_of_squares\n\nsuite \"Difference of Squares\":\n  test \"square of sum 1\":\n    check squareOfSum(1) == 1\n\n  test \"square of sum 5\":\n    check squareOfSum(5) == 225\n\n  test \"square of sum 100\":\n    check squareOfSum(100) == 25_502_500\n\n  test \"sum of squares 1\":\n    check sumOfSquares(1) == 1\n\n  test \"sum of squares 5\":\n    check sumOfSquares(5) == 55\n\n  test \"sum of squares 100\":\n    check sumOfSquares(100) == 338_350\n\n  test \"difference of squares 1\":\n    check difference(1) == 0\n\n  test \"difference of squares 5\":\n    check difference(5) == 170\n\n  test \"difference of squares 100\":\n    check difference(100) == 25_164_150\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "clementi"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

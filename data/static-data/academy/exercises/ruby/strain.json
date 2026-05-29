@@ -1,0 +1,35 @@
+{
+  "id": "ruby:strain",
+  "trackSlug": "ruby",
+  "slug": "strain",
+  "name": "Strain",
+  "uuid": "ac0966a9-822b-45be-91d9-36f6706ea76f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `keep` and `discard` operation on collections. Given a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `keep` and `discard` operation on collections.\nGiven a collection and a predicate on the collection's elements, `keep` returns a new collection containing those elements where the predicate is true, while `discard` returns a new collection containing those elements where the predicate is false.\n\nFor example, given the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the predicate:\n\n- is the number even?\n\nThen your keep operation should produce:\n\n- 2, 4\n\nWhile your discard operation should produce:\n\n- 1, 3, 5\n\nNote that the union of keep and discard is all the elements.\n\nThe functions may be called `keep` and `discard`, or they may need different names in order to not clash with existing functions or concepts in your language.\n\n## Restrictions\n\nKeep your hands off that filter/reject/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Strain' exercise in this file. Make the tests in\n`strain_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/strain` directory.\n=end\n",
+  "example_solution": "class Array\n  def keep\n    kept = []\n    each { |e| kept << e if yield(e) }\n    kept\n  end\n\n  def discard\n    discarded = []\n    each { |e| discarded << e unless yield(e) }\n    discarded\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'strain'\n\nclass ArrayTest < Minitest::Test\n  def test_empty_keep\n    assert_empty([].keep { |e| e < 10 })\n  end\n\n  def test_keep_everything\n    skip\n    assert_equal [1, 2, 3], ([1, 2, 3].keep { |e| e < 10 })\n  end\n\n  def test_keep_first_and_last\n    skip\n    assert_equal [1, 3], [1, 2, 3].keep(&:odd?)\n  end\n\n  def test_keep_neither_first_nor_last\n    skip\n    assert_equal [2, 4], [1, 2, 3, 4, 5].keep(&:even?)\n  end\n\n  def test_keep_strings\n    skip\n    words = %w[apple zebra banana zombies cherimoya zelot]\n    result = words.keep { |word| word.start_with?('z') }\n    assert_equal %w[zebra zombies zelot], result\n  end\n\n  def test_keep_arrays\n    skip\n    rows = [\n      [1, 2, 3],\n      [5, 5, 5],\n      [5, 1, 2],\n      [2, 1, 2],\n      [1, 5, 2],\n      [2, 2, 1],\n      [1, 2, 5]\n    ]\n    result = rows.keep { |row| row.include?(5) }\n    assert_equal [[5, 5, 5], [5, 1, 2], [1, 5, 2], [1, 2, 5]], result\n  end\n\n  def test_empty_discard\n    skip\n    assert_empty([].discard { |e| e < 10 })\n  end\n\n  def test_discard_nothing\n    skip\n    assert_equal [1, 2, 3], ([1, 2, 3].discard { |e| e > 10 })\n  end\n\n  def test_discard_first_and_last\n    skip\n    assert_equal [2], [1, 2, 3].discard(&:odd?)\n  end\n\n  def test_discard_neither_first_nor_last\n    skip\n    assert_equal [1, 3, 5], [1, 2, 3, 4, 5].discard(&:even?)\n  end\n\n  def test_discard_strings\n    skip\n    words = %w[apple zebra banana zombies cherimoya zelot]\n    result = words.discard { |word| word.start_with?('z') }\n    assert_equal %w[apple banana cherimoya], result\n  end\n\n  def test_discard_arrays\n    skip\n    rows = [\n      [1, 2, 3],\n      [5, 5, 5],\n      [5, 1, 2],\n      [2, 1, 2],\n      [1, 5, 2],\n      [2, 2, 1],\n      [1, 2, 5]\n    ]\n    result = rows.discard { |row| row.include?(5) }\n    assert_equal [[1, 2, 3], [2, 1, 2], [2, 2, 1]], result\n  end\nend\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "pendletons",
+    "tryantwit"
+  ]
+}

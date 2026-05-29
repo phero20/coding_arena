@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:crypto-square",
+  "trackSlug": "moonscript",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "7e4ad5c7-fe53-4f7b-ac20-8f4c03799194",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "{\n  encode: (plaintext) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "pad = (str, width) -> string.format \"%-#{width}s\", str\n\njoin = table.concat\n\nencode = (text) ->\n  clean = text\\gsub('[^%a%d]', '')\\lower!\n  return '' if clean == ''\n  len = math.ceil math.sqrt #clean\n\n  segments = {}\n  for i = 1, #clean, len\n    table.insert segments, clean\\sub(i, i + len - 1)\n\n  -- pad the last segment\n  segments[#segments] = pad segments[#segments], len\n\n  transposed = [join [s\\sub(i,i) for s in *segments] for i = 1, len]\n  join transposed, \" \"\n\n\n{ :encode }\n",
+  "test_code": "import encode from require 'crypto_square'\n\ndescribe 'crypto-square:', ->\n  it 'empty plaintext results in an empty ciphertext', ->\n    result = encode ''\n    expected = ''\n    assert.are.equal expected, result\n\n  pending 'normalization results in empty plaintext', ->\n    result = encode '... --- ...'\n    expected = ''\n    assert.are.equal expected, result\n\n  pending 'Lowercase', ->\n    result = encode 'A'\n    expected = 'a'\n    assert.are.equal expected, result\n\n  pending 'Remove spaces', ->\n    result = encode '  b '\n    expected = 'b'\n    assert.are.equal expected, result\n\n  pending 'Remove punctuation', ->\n    result = encode '@1,%!'\n    expected = '1'\n    assert.are.equal expected, result\n\n  pending '9 character plaintext results in 3 chunks of 3 characters', ->\n    result = encode 'This is fun!'\n    expected = 'tsf hiu isn'\n    assert.are.equal expected, result\n\n  pending '8 character plaintext results in 3 chunks, the last one with a trailing space', ->\n    result = encode 'Chill out.'\n    expected = 'clu hlt io '\n    assert.are.equal expected, result\n\n  pending '54 character plaintext results in 8 chunks, the last two with trailing spaces', ->\n    result = encode 'If man was meant to stay on the ground, god would have given us roots.'\n    expected = 'imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau '\n    assert.are.equal expected, result\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

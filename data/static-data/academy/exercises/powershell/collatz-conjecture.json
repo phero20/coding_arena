@@ -1,0 +1,26 @@
+{
+  "id": "powershell:collatz-conjecture",
+  "trackSlug": "powershell",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "39447c38-8509-45fb-9070-3ff6be50c0d5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "Function Invoke-CollatzConjecture() {\n    <#\n    .SYNOPSIS\n    Calculate the number of steps to reach 1 using the Collatz conjecture.\n\n    .DESCRIPTION\n    Take any positive integer n. If n is even, divide n by 2 to get n / 2. If n is odd, multiply n by 3 and add 1 to get 3n + 1. Repeat the process indefinitely. The conjecture states that no matter which number you start with, you will always reach 1 eventually.\n\n    .PARAMETER Number\n    The number to perform the Collatz Conjecture function on.\n\n    .EXAMPLE\n    Invoke-CollatzConjecture -Number 12\n    #>\n    [CmdletBinding()]\n    Param(\n        [Int64]$Number\n    )\n\n    Throw \"Please implement this function\"\n}\n",
+  "example_solution": "Function Invoke-CollatzConjecture() {\n    <#\n    .SYNOPSIS\n    Calculate the number of steps to reach 1 using the Collatz conjecture.\n\n    .DESCRIPTION\n    Take any positive integer n. If n is even, divide n by 2 to get n / 2. If n is odd, multiply n by 3 and add 1 to get 3n + 1. Repeat the process indefinitely. The conjecture states that no matter which number you start with, you will always reach 1 eventually.\n\n    .PARAMETER Number\n    The number to perform the Collatz Conjecture function on.\n\n    .EXAMPLE\n    Invoke-CollatzConjecture -Number 12\n    #>\n    [CmdletBinding()]\n    Param(\n        [Int64]$Number\n    )\n\n    if($Number -le 0) {\n        throw \"error: Only positive numbers are allowed\"\n    }\n\n    $Counter = 0 \n\n    while ($Number -ne 1) {\n        if ($Number % 2 -eq 0) {\n            $Number /= 2\n        } else {\n            $Number = 3 * $Number + 1\n        }\n\n        $Counter++\n    }\n\n    $Counter\n}\n",
+  "test_code": "BeforeAll {\n    . \"./CollatzConjecture.ps1\"\n}\n\nDescribe \"Test Invoke-CollatzConjecture.ps1\" {\n    Context \"Passing Tests\" {\n\n        It \"zero steps for one\" {\n            $got = Invoke-CollatzConjecture -Number 1\n            $want = 0\n    \n            $got | Should -BeExactly $want\n        }\n    \n        It \"divide if even\" {\n            $got = Invoke-CollatzConjecture -Number 16\n            $want = 4\n    \n            $got | Should -BeExactly $want\n        }\n    \n        It \"even and odd steps\" {\n            $got = Invoke-CollatzConjecture -Number 12\n            $want = 9\n    \n            $got | Should -BeExactly $want\n        }\n        \n        It \"large number of even and odd steps\" {\n            $got = Invoke-CollatzConjecture -Number 1000000\n            $want = 152\n    \n            $got | Should -BeExactly $want\n        }\n    }\n    \n    Context \"Invalid Inputs\" {\n        It \"zero is an error\" {\n            { Invoke-CollatzConjecture -Number 0 } | Should -Throw \"*error: Only positive numbers are allowed*\"\n        }\n    \n        It \"negative value is an error\" {\n            { Invoke-CollatzConjecture -Number -15 } | Should -Throw \"*error: Only positive numbers are allowed*\"\n        }\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "Kryo"
+  ],
+  "contributors": null
+}

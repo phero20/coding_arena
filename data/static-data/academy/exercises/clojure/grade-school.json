@@ -1,0 +1,41 @@
+{
+  "id": "clojure:grade-school",
+  "trackSlug": "clojure",
+  "slug": "grade-school",
+  "name": "Grade School",
+  "uuid": "a48ff289-baf0-4b13-a5aa-78f6ee91571b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given students' names along with the grade that they are in, create a roster for the school.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nGiven students' names along with the grade they are in, create a roster for the school.\n\nIn the end, you should be able to:\n\n- Add a student's name to the roster for a grade:\n  - \"Add Jim to grade 2.\"\n  - \"OK.\"\n- Get a list of all students enrolled in a grade:\n  - \"Which students are in grade 2?\"\n  - \"We've only got Jim right now.\"\n- Get a sorted list of all students in all grades.\n  Grades should be sorted as 1, 2, 3, etc., and students within a grade should be sorted alphabetically by name.\n  - \"Who is enrolled in school right now?\"\n  - \"Let me think.\n    We have Anna, Barb, and Charlie in grade 1, Alex, Peter, and Zoe in grade 2, and Jim in grade 5.\n    So the answer is: Anna, Barb, Charlie, Alex, Peter, Zoe, and Jim.\"\n\nNote that all our students only have one name (it's a small town, what do you want?), and each student cannot be added more than once to a grade or the roster.\nIf a test attempts to add the same student more than once, your implementation should indicate that this is incorrect.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns grade-school)\n\n(defn grade [school grade]  ;; <- arglist goes here\n    ;; your code goes here\n)\n\n(defn add [school name grade]  ;; <- arglist goes here\n    ;; your code goes here\n)\n\n(defn sorted [school]  ;; <- arglist goes here\n    ;; your code goes here\n)\n",
+  "example_solution": "(ns grade-school)\n\n(defn grade\n  \"show the roster for a specific grade\"\n  [db grade-level]\n  (db grade-level []))\n\n(defn add\n  \"add student to roster for grade\"\n  [db student grade-level]\n  (let [roster (grade db grade-level)]\n    (assoc db grade-level (conj roster student))))\n\n(defn sorted\n  \"show the sorted roster for each grade\"\n  [db]\n  (into (sorted-map)\n        (for [[grade-level roster] db]\n          [grade-level (sort roster)])))\n",
+  "test_code": "(ns grade-school-test\n  (:require [clojure.test :refer [deftest is]]\n            grade-school))\n\n(def db {})\n\n(deftest add-student\n  (is (= {2 [\"Aimee\"]} (grade-school/add db \"Aimee\" 2))))\n\n(deftest add-more-students-in-same-class\n  (is (= {2 [\"James\", \"Blair\", \"Paul\"]}\n         (-> db\n             (grade-school/add \"James\" 2)\n             (grade-school/add \"Blair\" 2)\n             (grade-school/add \"Paul\" 2)))))\n\n(deftest add-students-to-different-grades\n  (is (= {3 [\"Chelsea\"] 7 [\"Logan\"]}\n         (-> db\n             (grade-school/add \"Chelsea\" 3)\n             (grade-school/add \"Logan\" 7)))))\n\n(deftest get-students-in-a-grade\n  (is (= [\"Franklin\", \"Bradley\"]\n         (-> db\n             (grade-school/add \"Franklin\" 5)\n             (grade-school/add \"Bradley\" 5)\n             (grade-school/add \"Jeff\" 1)\n             (grade-school/grade 5)))))\n\n(deftest get-students-in-a-non-existent-grade\n  (is (= [] (grade-school/grade db 1))))\n\n(deftest sorted-grade-school\n  (is (= (sorted-map 3 [\"Kyle\"]\n                     4 [\"Christopher\" \"Jennifer\"]\n                     6 [\"Kareem\"])\n         (-> db\n             (grade-school/add \"Jennifer\" 4)\n             (grade-school/add \"Kareem\" 6)\n             (grade-school/add \"Christopher\" 4)\n             (grade-school/add \"Kyle\" 3)\n             (grade-school/sorted)))))\n\n(deftest sorted-grade_school-keys-sorted\n  (is (= [3 4 6]\n         (-> db\n             (grade-school/add \"Jennifer\" 4)\n             (grade-school/add \"Kareem\" 6)\n             (grade-school/add \"Christopher\" 4)\n             (grade-school/add \"Kyle\" 3)\n             (grade-school/sorted)\n             (keys)))))\n",
+  "source": "A pairing session with Phil Battos at gSchool",
+  "source_url": null,
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "7enderhead",
+    "AndreaCrotti",
+    "canweriotnow",
+    "dkinzer",
+    "haus",
+    "jgwhite",
+    "kytrinyx",
+    "mathias",
+    "sjwarner-bp",
+    "thomchop",
+    "yurrriq"
+  ]
+}

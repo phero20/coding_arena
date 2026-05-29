@@ -7,12 +7,21 @@ import { ProblemService } from "../../services/problems/problem.service";
 import { ProblemTestService } from "../../services/problems/problem-test.service";
 import { SubmissionService } from "../../services/submissions/submission.service";
 import { GroqLlmService } from "../../services/ai/groq-llm.service";
+<<<<<<< HEAD
+=======
+import { GeminiLlmService } from "../../services/ai/gemini-llm.service";
+>>>>>>> prod-deploy
 import { SystemClockService } from "../../services/common/clock.service";
 import { AiProblemService } from "../../services/problems/ai-problem.service";
 import { ArenaService } from "../../services/arena/arena.service";
 import { ArenaMatchService } from "../../services/arena/arena-match.service";
 import { MatchValidatorService } from "../../services/arena/match-validator.service";
 import { AiCodeJudgeService } from "../../services/judge/ai-code-judge.service";
+<<<<<<< HEAD
+=======
+import { AiVerdictAuditService } from "../../services/judge/ai-verdict-audit.service";
+import { DriverJudgeExecutionService } from "../../services/judge/driver-judge-execution.service";
+>>>>>>> prod-deploy
 import { Judge0Service } from "../../services/judge/judge0.service";
 import { WandboxService } from "../../services/judge/wandbox.service";
 import { CompilerService } from "../../services/compiler/compiler.service";
@@ -24,15 +33,42 @@ import { StatsSubmissionService } from "../../services/stats/stats-submission.se
 import { StatsService } from "../../services/stats/stats.service";
 import { FollowService } from "../../services/user/follow.service";
 import { UserService } from "../../services/user/user.service";
+<<<<<<< HEAD
 
+=======
+import { ClistService } from "../../services/contest/clist.service";
+import { ContestService } from "../../services/contest/contest.service";
+import { LeetCodeService } from "../../services/stats/leetcode.service";
+import { TaxonomyService } from "../../services/taxonomy/taxonomy.service";
+import { SolutionService } from "../../services/solutions/solution.service";
+import { WorkspaceService } from "../../services/workspace/workspace.service";
+import { ChatService } from "../../services/chat/chat.service";
+import { DiagramResolverService } from "../../services/ai/diagram-resolver.service";
+import { GroqDiagramService } from "../../services/ai/groq-diagram.service";
+import { AcademyService } from "../../services/academy/academy.service";
+import { AcademyExecutionService } from "../../services/academy/academy-execution.service";
+import { AcademyAiJudgeService } from "../../services/academy/academy-ai-judge.service";
+import { SystemDesignService } from "../../services/system-design/system-design.service";
+>>>>>>> prod-deploy
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
 import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
 import { AiJudgeCache } from "../../cache/judge/ai-judge.cache";
 import { UserStatsCache } from "../../cache/user/user-stats.cache";
 import { ArenaMatchCache } from "../../cache/arena/arena-match.cache";
+<<<<<<< HEAD
 
 
+=======
+import { ContestCache } from "../../cache/contest/contest.cache";
+import { LeetCodeCache } from "../../cache/user/leetcode.cache";
+import { TaxonomyCache } from "../../cache/taxonomy/taxonomy.cache";
+import { LeaderboardCache } from "../../cache/stats/leaderboard.cache";
+import { SubmissionCache } from "../../cache/submissions/submission.cache";
+import { SolutionCache } from "../../cache/solutions/solution.cache";
+import { WorkspaceCache } from "../../cache/workspace/workspace.cache";
+import { AcademyCache } from "../../cache/academy/academy.cache";
+>>>>>>> prod-deploy
 
 /**
  * Service layer registrations.
@@ -41,11 +77,19 @@ import { ArenaMatchCache } from "../../cache/arena/arena-match.cache";
 export const servicesRegistry = {
   clockService: asClass(SystemClockService).singleton(),
   authService: asClass(AuthService).singleton(),
+<<<<<<< HEAD
   submissionService: asClass(SubmissionService).singleton(),
   groqLlmService: asClass(GroqLlmService).singleton(),
 
   // Legacy Alias
   llm: asFunction(({ groqLlmService }: ICradle) => groqLlmService).singleton(),
+=======
+  groqLlmService: asClass(GroqLlmService).singleton(),
+  geminiLlmService: asClass(GeminiLlmService).singleton(),
+
+  // Gemini is now the primary LLM for high accuracy
+  llm: asFunction(({ geminiLlmService }: ICradle) => geminiLlmService).singleton(),
+>>>>>>> prod-deploy
 
   // Raw services for cache decoration
   rawProblemService: asClass(ProblemService).singleton(),
@@ -53,10 +97,22 @@ export const servicesRegistry = {
   rawAiCodeJudgeService: asClass(AiCodeJudgeService).singleton(),
   rawStatsService: asClass(StatsService).singleton(),
   rawArenaMatchService: asClass(ArenaMatchService).singleton(),
+<<<<<<< HEAD
 
 
 
   // arenaMatchService: asClass(ArenaMatchService).singleton(), -> Moved to function below
+=======
+  rawLeetCodeService: asClass(LeetCodeService).singleton(),
+  rawTaxonomyService: asClass(TaxonomyService).singleton(),
+  rawSubmissionService: asClass(SubmissionService).singleton(),
+  rawSolutionService: asClass(SolutionService).singleton(),
+  rawWorkspaceService: asClass(WorkspaceService).singleton(),
+  rawAcademyService: asClass(AcademyService).singleton(),
+  chatService: asClass(ChatService).singleton(),
+  diagramResolverService: asClass(DiagramResolverService).singleton(),
+  groqDiagramService: asClass(GroqDiagramService).singleton(),
+>>>>>>> prod-deploy
 
   arenaService: asClass(ArenaService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
@@ -64,6 +120,11 @@ export const servicesRegistry = {
   matchDomainEngine: asClass(MatchDomainEngine).singleton(),
   matchBroadcaster: asClass(MatchBroadcasterService).singleton(),
   executionService: asClass(ExecutionService).singleton(),
+<<<<<<< HEAD
+=======
+  aiVerdictAuditService: asClass(AiVerdictAuditService).singleton(),
+  driverJudgeExecutionService: asClass(DriverJudgeExecutionService).singleton(),
+>>>>>>> prod-deploy
   judge0Service: asClass(Judge0Service).singleton(),
   wandboxService: asClass(WandboxService).singleton(),
   compilerService: asClass(CompilerService).singleton(),
@@ -75,8 +136,19 @@ export const servicesRegistry = {
   aiJudgeCache: asClass(AiJudgeCache).singleton(),
   userStatsCache: asClass(UserStatsCache).singleton(),
   arenaMatchCache: asClass(ArenaMatchCache).singleton(),
+<<<<<<< HEAD
 
 
+=======
+  contestCache: asClass(ContestCache).singleton(),
+  leetcodeCache: asClass(LeetCodeCache).singleton(),
+  taxonomyCache: asClass(TaxonomyCache).singleton(),
+  leaderboardCache: asClass(LeaderboardCache).singleton(),
+  submissionCache: asClass(SubmissionCache).singleton(),
+  solutionCache: asClass(SolutionCache).singleton(),
+  workspaceCache: asClass(WorkspaceCache).singleton(),
+  academyCache: asClass(AcademyCache).singleton(),
+>>>>>>> prod-deploy
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -92,11 +164,42 @@ export const servicesRegistry = {
   statsService: asFunction(
     ({ userStatsCache }: ICradle) => userStatsCache,
   ).singleton(),
+<<<<<<< HEAD
+=======
+  leetcodeService: asFunction(
+    ({ leetcodeCache }: ICradle) => leetcodeCache,
+  ).singleton(),
+>>>>>>> prod-deploy
   followService: asClass(FollowService).singleton(),
   arenaMatchService: asFunction(
     ({ arenaMatchCache }: ICradle) => arenaMatchCache,
   ).singleton(),
 
+<<<<<<< HEAD
 
   userService: asClass(UserService).singleton(),
+=======
+  userService: asClass(UserService).singleton(),
+  clistService: asClass(ClistService).singleton(),
+  contestService: asClass(ContestService).singleton(),
+  workspaceService: asFunction(
+    ({ workspaceCache }: ICradle) => workspaceCache,
+  ).singleton(),
+  
+  taxonomyService: asFunction(
+    ({ taxonomyCache }: ICradle) => taxonomyCache,
+  ).singleton(),
+  submissionService: asFunction(
+    ({ submissionCache }: ICradle) => submissionCache,
+  ).singleton(),
+  solutionService: asFunction(
+    ({ solutionCache }: ICradle) => solutionCache,
+  ).singleton(),
+  academyService: asFunction(
+    ({ academyCache }: ICradle) => academyCache,
+  ).singleton(),
+  academyExecutionService: asClass(AcademyExecutionService).singleton(),
+  academyAiJudgeService: asClass(AcademyAiJudgeService).singleton(),
+  systemDesignService: asClass(SystemDesignService).singleton(),
+>>>>>>> prod-deploy
 };

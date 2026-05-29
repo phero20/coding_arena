@@ -1,0 +1,41 @@
+{
+  "id": "fsharp:wordy",
+  "trackSlug": "fsharp",
+  "slug": "wordy",
+  "name": "Wordy",
+  "uuid": "c721b3f2-4afc-4a30-bad5-77bd002c2819",
+  "type": "practice",
+  "status": null,
+  "blurb": "Parse and evaluate simple math word problems returning the answer as an integer.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "regular-expressions",
+    "switch-statements"
+  ],
+  "prerequisites": [
+    "numbers",
+    "options",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nParse and evaluate simple math word problems returning the answer as an integer.\n\n## Iteration 0 — Numbers\n\nProblems with no operations simply evaluate to the number given.\n\n> What is 5?\n\nEvaluates to 5.\n\n## Iteration 1 — Addition\n\nAdd two numbers together.\n\n> What is 5 plus 13?\n\nEvaluates to 18.\n\nHandle large numbers and negative numbers.\n\n## Iteration 2 — Subtraction, Multiplication and Division\n\nNow, perform the other three operations.\n\n> What is 7 minus 5?\n\n2\n\n> What is 6 multiplied by 4?\n\n24\n\n> What is 25 divided by 5?\n\n5\n\n## Iteration 3 — Multiple Operations\n\nHandle a set of operations, in sequence.\n\nSince these are verbal word problems, evaluate the expression from left-to-right, _ignoring the typical order of operations._\n\n> What is 5 plus 13 plus 6?\n\n24\n\n> What is 3 plus 2 multiplied by 3?\n\n15 (i.e. not 9)\n\n## Iteration 4 — Errors\n\nThe parser should reject:\n\n- Unsupported operations (\"What is 52 cubed?\")\n- Non-math questions (\"Who is the President of the United States\")\n- Word problems with invalid syntax (\"What is 1 plus plus 2?\")\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Wordy\n\nlet answer question = failwith \"You need to implement this function.\"",
+  "example_solution": "module Wordy\n\nopen System.Text.RegularExpressions\n\nlet private equationRegex = Regex(@\"^What is (?<left>-?\\d+)(?<operations> (?<operand>plus|minus|multiplied by|divided by) (?<right>-?\\d+))*\\?$\", RegexOptions.Compiled)\n\nlet private applyOperand left operand right =\n    match operand with\n    | \"plus\" -> left + right\n    | \"minus\" -> left - right\n    | \"multiplied by\" -> left * right\n    | \"divided by\" -> left / right\n    | _ -> failwith \"Unknown operand\"\n\nlet private solve (parsedQuestion: Match): int =\n    let initial = int parsedQuestion.Groups.[\"left\"].Value\n    [0 .. parsedQuestion.Groups.[\"operations\"].Captures.Count - 1]\n    |> List.fold (fun acc i -> applyOperand acc (parsedQuestion.Groups.[\"operand\"].Captures.[i].Value) (int parsedQuestion.Groups.[\"right\"].Captures.[i].Value)) initial \n\nlet private parse (question: string): Match option =\n    match equationRegex.Match question with\n    | m when m.Success -> Some m\n    | _ -> None\n\nlet answer (question: string): int option =  \n    question \n    |> parse \n    |> Option.map solve",
+  "test_code": "module WordyTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Wordy\n\n[<Fact>]\nlet ``Just a number`` () =\n    answer \"What is 5?\" |> should equal (Some 5)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Just a zero`` () =\n    answer \"What is 0?\" |> should equal (Some 0)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Just a negative number`` () =\n    answer \"What is -123?\" |> should equal (Some -123)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Addition`` () =\n    answer \"What is 1 plus 1?\" |> should equal (Some 2)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Addition with a left hand zero`` () =\n    answer \"What is 0 plus 2?\" |> should equal (Some 2)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Addition with a right hand zero`` () =\n    answer \"What is 3 plus 0?\" |> should equal (Some 3)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``More addition`` () =\n    answer \"What is 53 plus 2?\" |> should equal (Some 55)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Addition with negative numbers`` () =\n    answer \"What is -1 plus -10?\" |> should equal (Some -11)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Large addition`` () =\n    answer \"What is 123 plus 45678?\" |> should equal (Some 45801)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Subtraction`` () =\n    answer \"What is 4 minus -12?\" |> should equal (Some 16)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiplication`` () =\n    answer \"What is -3 multiplied by 25?\" |> should equal (Some -75)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Division`` () =\n    answer \"What is 33 divided by -3?\" |> should equal (Some -11)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple additions`` () =\n    answer \"What is 1 plus 1 plus 1?\" |> should equal (Some 3)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Addition and subtraction`` () =\n    answer \"What is 1 plus 5 minus -2?\" |> should equal (Some 8)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple subtraction`` () =\n    answer \"What is 20 minus 4 minus 13?\" |> should equal (Some 3)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Subtraction then addition`` () =\n    answer \"What is 17 minus 6 plus 3?\" |> should equal (Some 14)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple multiplication`` () =\n    answer \"What is 2 multiplied by -2 multiplied by 3?\" |> should equal (Some -12)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Addition and multiplication`` () =\n    answer \"What is -3 plus 7 multiplied by -2?\" |> should equal (Some -8)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Multiple division`` () =\n    answer \"What is -12 divided by 2 divided by -3?\" |> should equal (Some 2)\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Unknown operation`` () =\n    answer \"What is 52 cubed?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Non math question`` () =\n    answer \"Who is the President of the United States?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reject problem missing an operand`` () =\n    answer \"What is 1 plus?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reject problem with no operands or operators`` () =\n    answer \"What is?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reject two operations in a row`` () =\n    answer \"What is 1 plus plus 2?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reject two numbers in a row`` () =\n    answer \"What is 1 plus 2 1?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reject postfix notation`` () =\n    answer \"What is 1 2 plus?\" |> should equal None\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Reject prefix notation`` () =\n    answer \"What is plus 1 2?\" |> should equal None\n\n",
+  "source": "Inspired by one of the generated questions in the Extreme Startup game.",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "nemesv",
+    "rmunn",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "futhark:all-your-base",
+  "trackSlug": "futhark",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "8e88bcf3-a492-4a09-8c3c-33718446ec1a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "def rebase (input_base: i32) (digits: []i32) (output_base: i32): []i32 = ???\n",
+  "example_solution": "def unify (input_base: i32) (digits: []i32): i32 =\n  let n = loop n = 0 for digit in digits do\n    assert (digit >= 0 && digit < input_base) (n * input_base + digit)\n  in\n    n\n\ndef separate (output_base: i32) (number: i32): []i32 =\n  if number == 0 then [0] else\n  let (_, a, i) = loop (n, a, i) = (number, replicate 32 0, 32) while n > 0 do\n    (n / output_base, a with [i - 1] = n % output_base, i - 1)\n  in\n    a[i:]\n\ndef rebase (input_base: i32) (digits: []i32) (output_base: i32): []i32 =\n  assert (input_base >= 2 && output_base >= 2) digits\n  |> unify input_base\n  |> separate output_base\n",
+  "test_code": "import \"all_your_base\"\n\n-- single bit one to decimal\n-- ==\n-- input { 2 [1] 10 }\n-- output { [1] }\n\n-- binary to single decimal\n-- ==\n-- input { 2 [1, 0, 1] 10 }\n-- output { [5] }\n\n-- single decimal to binary\n-- ==\n-- input { 10 [5] 2 }\n-- output { [1, 0, 1] }\n\n-- binary to multiple decimal\n-- ==\n-- input { 2 [1, 0, 1, 0, 1, 0] 10 }\n-- output { [4, 2] }\n\n-- decimal to binary\n-- ==\n-- input { 10 [4, 2] 2 }\n-- output { [1, 0, 1, 0, 1, 0] }\n\n-- trinary to hexadecimal\n-- ==\n-- input { 3 [1, 1, 2, 0] 16 }\n-- output { [2, 10] }\n\n-- hexadecimal to trinary\n-- ==\n-- input { 16 [2, 10] 3 }\n-- output { [1, 1, 2, 0] }\n\n-- 15-bit integer\n-- ==\n-- input { 97 [3, 46, 60] 73 }\n-- output { [6, 10, 45] }\n\n-- empty list\n-- ==\n-- input { 2 empty([0]i32) 10 }\n-- output { [0] }\n\n-- single zero\n-- ==\n-- input { 10 [0] 2 }\n-- output { [0] }\n\n-- multiple zeros\n-- ==\n-- input { 10 [0, 0, 0] 2 }\n-- output { [0] }\n\n-- leading zeros\n-- ==\n-- input { 7 [0, 6, 0] 10 }\n-- output { [4, 2] }\n\n-- input base is one\n-- ==\n-- input { 1 [0] 10 }\n-- error: Error*\n\n-- input base is zero\n-- ==\n-- input { 0 empty([0]i32) 10 }\n-- error: Error*\n\n-- input base is negative\n-- ==\n-- input { -2 [1] 10 }\n-- error: Error*\n\n-- negative digit\n-- ==\n-- input { 2 [1, -1, 1, 0, 1, 0] 10 }\n-- error: Error*\n\n-- invalid positive digit\n-- ==\n-- input { 2 [1, 2, 1, 0, 1, 0] 10 }\n-- error: Error*\n\n-- output base is one\n-- ==\n-- input { 2 [1, 0, 1, 0, 1, 0] 1 }\n-- error: Error*\n\n-- output base is zero\n-- ==\n-- input { 10 [7] 0 }\n-- error: Error*\n\n-- output base is negative\n-- ==\n-- input { 2 [1] -7 }\n-- error: Error*\n\n-- both bases are negative\n-- ==\n-- input { -2 [1] -7 }\n-- error: Error*\n\ndef main (input_base: i32) (digits: []i32) (output_base: i32): []i32 =\n  rebase input_base digits output_base\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

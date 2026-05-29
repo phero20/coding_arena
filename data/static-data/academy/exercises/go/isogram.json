@@ -1,0 +1,41 @@
+{
+  "id": "go:isogram",
+  "trackSlug": "go",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "c2064df8-cce5-4f03-9d85-0818b4e34112",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package isogram\n\nfunc IsIsogram(word string) bool {\n\tpanic(\"Please implement the IsIsogram function\")\n}\n",
+  "example_solution": "package isogram\n\nimport \"strings\"\n\nfunc IsIsogram(word string) bool {\n\tlowerWord := strings.ToLower(word)\n\tfor i, r := range lowerWord {\n\t\tif r != ' ' && r != '-' && i < strings.LastIndex(lowerWord, string(r)) {\n\t\t\treturn false\n\t\t}\n\t}\n\treturn true\n}\n",
+  "test_code": "package isogram\n\nimport \"testing\"\n\nfunc TestIsIsogram(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := IsIsogram(tc.input); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"IsIsogram(%q) = %t, want: %t\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkIsIsogram(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, c := range testCases {\n\t\t\tIsIsogram(c.input)\n\t\t}\n\t}\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "erizocosmico"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "da-edra",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "strangeman",
+    "tleen",
+    "eklatzer"
+  ]
+}

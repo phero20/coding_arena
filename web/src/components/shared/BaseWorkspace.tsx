@@ -8,7 +8,12 @@ import {
 } from "@/components/ui/resizable";
 import type { Problem } from "@/types/api";
 import type { BaseWorkspaceProps } from "@/types/component.types";
+<<<<<<< HEAD
 import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
+=======
+import { WorkspaceHeader, Scratchpad } from "@/components/workspace-shared";
+import { useState } from "react";
+>>>>>>> prod-deploy
 
 /**
  * Industrial-Standard Base Workspace Component.
@@ -28,7 +33,15 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
   hasSubmitted,
   exitText,
   confirmSubmit,
+<<<<<<< HEAD
 }) => {
+=======
+  isArena,
+  hideRun,
+}) => {
+  const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
+
+>>>>>>> prod-deploy
   return (
     <div className="h-screen w-full bg-background flex flex-col">
       <WorkspaceHeader
@@ -43,6 +56,19 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
         isSubmitting={isSubmitting}
         hasSubmitted={hasSubmitted}
         confirmSubmit={confirmSubmit}
+<<<<<<< HEAD
+=======
+        hideRun={hideRun}
+        onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
+        isScratchpadOpen={isScratchpadOpen}
+        isArena={isArena}
+      />
+
+      <Scratchpad
+        isOpen={isScratchpadOpen}
+        onClose={() => setIsScratchpadOpen(false)}
+        problem={problem}
+>>>>>>> prod-deploy
       />
 
       {/* Desktop: standard resizable two-panel split */}
@@ -52,7 +78,11 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
           className="h-full w-full items-stretch"
         >
           <ResizablePanel
+<<<<<<< HEAD
             defaultSize={42}
+=======
+            defaultSize={40}
+>>>>>>> prod-deploy
             minSize={25}
             className="bg-card/30 backdrop-blur-md border-r border-border/40"
           >
@@ -64,7 +94,11 @@ export const BaseWorkspace: React.FC<BaseWorkspaceProps> = ({
             className="bg-border/20 hover:bg-primary/50 transition-colors"
           />
 
+<<<<<<< HEAD
           <ResizablePanel defaultSize={58} minSize={30}>
+=======
+          <ResizablePanel defaultSize={60} minSize={30}>
+>>>>>>> prod-deploy
             {editorSlot}
           </ResizablePanel>
         </ResizablePanelGroup>

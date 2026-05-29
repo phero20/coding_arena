@@ -1,0 +1,30 @@
+{
+  "id": "reasonml:minesweeper",
+  "trackSlug": "reasonml",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "a98cd43d-a575-429b-bb33-00748b5ef2c4",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "let annotate = (_) => {\n  failwith(\"TODO: implement annotate function\");\n};",
+  "example_solution": "let hasMine(b: array(string), width: int, x: int, y: int): bool = {\n  if(x < 0 || x >= width || y < 0 || y >= Array.length(b)) {\n    false\n  } else {\n    b[y].[x] == '*'\n  }\n};\n\nlet countMinesAroundCell(hasMine: (int, int) => bool, x: int, y: int): int = {\n  let count = ref(0);\n  for(dx in -1 to 1) {\n    for(dy in -1 to 1) {\n      if(dx != 0 || dy != 0) {\n        if(hasMine(x + dx, y + dy)) {\n          count := count^ + 1;\n        }\n      }\n    }\n  };\n  count^\n};\n\nlet annotate = (b) => {\n  let height = Array.length(b);\n  if (height == 0) {\n      [||];\n  } else {\n    let width = String.length(b[0]);\n    let makeRow = (y) => {\n      let makeCell = (x) => {\n        let hasMine = hasMine(b, width);\n        if(hasMine(x, y)) {\n          '*';\n        } else {\n          let mines = countMinesAroundCell(hasMine, x, y);\n          if(mines == 0) {\n            ' '\n          } else {\n            string_of_int(mines).[0];\n          }\n        }\n      };\n      String.init(width, makeCell);\n    };\n    Array.init(height, makeRow);\n  };\n};\n",
+  "test_code": "open Jest;\n\ndescribe(\"Minesweeper\", () => {\n  open Expect;\n\n  test(\"no rows\", () =>\n    expect(Minesweeper.annotate([||])) |> toEqual([||])\n  );\n  test(\"no columns\", () =>\n    expect(Minesweeper.annotate([|\"\"|])) |> toEqual([|\"\"|])\n  );\n  test(\"no mines\", () => {\n    let input = [|\"   \", \n                  \"   \", \n                  \"   \"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(input)\n  });\n  test(\"board with only mines\", () => {\n    let input = [|\"***\", \n                  \"***\", \n                  \"***\"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(input)\n  });\n  test(\"mine surrounded by spaces\", () => {\n    let input = [|\"   \", \n                  \" * \", \n                  \"   \"|];\n    let annot = [|\"111\", \n                  \"1*1\", \n                  \"111\"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(annot)\n  });\n  test(\"space surrounded by mines\", () => {\n    let input = [|\"***\", \n                  \"* *\", \n                  \"***\"|];\n    let annot = [|\"***\", \n                  \"*8*\", \n                  \"***\"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(annot)\n  });\n  test(\"horizontal line\", () =>\n    expect(Minesweeper.annotate([|\" * * \"|])) |> toEqual([|\"1*2*1\"|])\n  );\n  test(\"vertical line\", () => {\n    let input = [|\" \", \n                  \"*\", \n                  \" \",\n                  \"*\", \n                  \" \"|];\n    let annot = [|\"1\", \n                  \"*\", \n                  \"2\",\n                  \"*\", \n                  \"1\"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(annot)\n  });\n  test(\"vertical line, mine at edges\", () => {\n    let input = [|\"*\", \n                  \" \", \n                  \" \",\n                  \" \", \n                  \"*\"|];\n    let annot = [|\"*\", \n                  \"1\", \n                  \" \",\n                  \"1\", \n                  \"*\"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(annot)\n  });\n  test(\"cross\", () => {\n    let input = [|\"  *  \",\n                  \"  *  \",\n                  \"*****\",\n                  \"  *  \",\n                  \"  *  \"|] \n    let annot = [|\" 2*2 \",\n                  \"25*52\",\n                  \"*****\",\n                  \"25*52\",\n                  \" 2*2 \"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(annot)\n  });\n  test(\"large board\", () => {\n    let input = [|\" *  * \",\n                  \"  *   \",\n                  \"    * \",\n                  \"   * *\",\n                  \" *  * \",\n                  \"      \"|] \n    let annot = [|\"1*22*1\",\n                  \"12*322\",\n                  \" 123*2\",\n                  \"112*4*\",\n                  \"1*22*2\",\n                  \"111111\"|];\n    expect(Minesweeper.annotate(input)) |> toEqual(annot)\n  });\n});\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "naartjie",
+    "ohana54",
+    "tejasbubane"
+  ]
+}

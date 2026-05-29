@@ -1,0 +1,29 @@
+{
+  "id": "ruby:microwave",
+  "trackSlug": "ruby",
+  "slug": "microwave",
+  "name": "Microwave",
+  "uuid": "34e715a6-4d22-4b74-a26a-409283ac419c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert the buttons entered on the microwave panel to their timer equivalent",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert the buttons entered on the microwave panel to their timer equivalent.\n\nDigital microwave timers fill from the right. So if you press 1,0,0, the microwave reads this as \"1:00\" or 1 minute and 0 seconds. \nIf you press 132, the microwave reads this as \"1:32\", or 1 minute and 32 seconds.\nMicrowave timers are also smart enough to know that when you press \"90\", you mean 90 seconds, or \"1:30\". \n\nWe want to have a \"smart display\" that will convert this to the lowest form of minutes and seconds, rather than leaving it as 90 seconds.\n\nBuild a class that accepts buttons entered and converts them to the proper display panel time, converting whatever is entered to the lowest form of minutes and seconds.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Microwave' exercise in this file. Make the tests in\n`microwave_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/microwave` directory.\n=end\n",
+  "example_solution": "class Microwave\n  attr_reader :minutes, :seconds\n\n  def initialize(digits)\n    @minutes, @seconds = digits.divmod(100)\n    if @seconds >= 60\n      @seconds -= 60\n      @minutes += 1\n    end\n  end\n\n  def timer\n    '%02<minutes>i:%02<seconds>i' % {minutes: minutes, seconds: seconds}\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'microwave'\n\nclass MicrowaveTest < Minitest::Test\n  def test_one_second\n    assert_equal '00:01', Microwave.new(1).timer\n  end\n\n  def test_fifty_nine_seconds\n    assert_equal '00:59', Microwave.new(59).timer\n  end\n\n  def test_sixty_seconds\n    assert_equal '01:00', Microwave.new(60).timer\n  end\n\n  def test_one_minute\n    assert_equal '01:00', Microwave.new(100).timer\n  end\n\n  def test_ninety_seconds\n    assert_equal '01:30', Microwave.new(90).timer\n  end\n\n  def test_one_minute_and_one_second\n    assert_equal '01:01', Microwave.new(101).timer\n  end\n\n  def test_sixty_one_seconds\n    assert_equal '01:01', Microwave.new(61).timer\n  end\n\n  def test_one_minute_and_fifty_nine_seconds\n    assert_equal '01:59', Microwave.new(159).timer\n  end\n\n  def test_two_minutes\n    assert_equal '02:00', Microwave.new(200).timer\n  end\n\n  def test_over_ten_minutes\n    assert_equal '10:01', Microwave.new(1001).timer\n  end\n\n  def test_minute_overflow_adds_to_input_minutes\n    assert_equal '03:12', Microwave.new(272).timer\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "gatorjuice"
+  ],
+  "contributors": [
+    "aleksandrilyin",
+    "petertseng"
+  ]
+}

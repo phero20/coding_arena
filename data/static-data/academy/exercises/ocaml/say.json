@@ -1,0 +1,35 @@
+{
+  "id": "ocaml:say",
+  "trackSlug": "ocaml",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "2efe0bf3-cb17-4135-ae95-d7b5b7b61f7f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "let in_english _ =\n      failwith \"'in_english' is missing\"\n",
+  "example_solution": "open Base\n\nlet rec in_english_impl = let open Int64 in function\n  | 0L -> \"zero\"\n  | 1L -> \"one\"\n  | 2L -> \"two\"\n  | 3L -> \"three\"\n  | 4L -> \"four\"\n  | 5L -> \"five\"\n  | 6L -> \"six\"\n  | 7L -> \"seven\"\n  | 8L -> \"eight\"\n  | 9L -> \"nine\"\n  | 10L -> \"ten\"\n  | 11L -> \"eleven\"\n  | 12L -> \"twelve\"\n  | 13L -> \"thirteen\"\n  | 14L -> \"fourteen\"\n  | 15L -> \"fifteen\"\n  | 16L -> \"sixteen\"\n  | 17L -> \"seventeen\"\n  | 18L -> \"eighteen\"\n  | 19L -> \"nineteen\"\n  | 20L -> \"twenty\"\n  | 30L -> \"thirty\"\n  | 40L -> \"forty\"\n  | 50L -> \"fifty\"\n  | 60L -> \"sixty\"\n  | 70L -> \"seventy\"\n  | 80L -> \"eighty\"\n  | 90L -> \"ninety\"\n  | n when n <= 99L ->\n     in_english_impl (10L * (n / 10L)) ^ \"-\" ^ in_english_impl (n % 10L)\n  | n when n <= 999L ->\n     in_english_impl (n / 100L) ^ \" hundred\" ^\n       let rem = n % 100L in\n       if rem = 0L then \"\" else \" \" ^ in_english_impl rem\n  | n when n <= 999_999L ->\n     in_english_impl (n / 1_000L) ^ \" thousand\" ^\n       let rem = n % 1_000L in\n       if rem = 0L then \"\" else \" \" ^ in_english_impl rem\n  | n when n <= 999_999_999L ->\n     in_english_impl (n / 1_000_000L) ^ \" million\" ^\n       let rem = n % 1_000_000L in\n       if rem = 0L then \"\" else \" \" ^ in_english_impl rem\n  | n ->\n     in_english_impl (n / 1_000_000_000L) ^ \" billion\" ^\n       let rem = n % 1_000_000_000L in\n       if rem = 0L then \"\" else \" \" ^ in_english_impl rem\n\nlet in_english n =\n  if Int64.(n < 0L || n >= 1_000_000_000_000L) then \n    Error \"input out of range\" \n  else \n    Ok (in_english_impl n)",
+  "test_code": "open Base\nopen OUnit2\nopen Say\n\nlet printer = function\n  | Error m -> m |> Printf.sprintf \"Error \\\"%s\\\"\"\n  | Ok v -> v |> Printf.sprintf \"Ok %s\"\n\nlet ae exp got _ctx = assert_equal ~printer exp got\n\nlet tests = [\n  \"zero\" >::\n  ae (Ok \"zero\") (in_english 0L);\n  \"one\" >::\n  ae (Ok \"one\") (in_english 1L);\n  \"fourteen\" >::\n  ae (Ok \"fourteen\") (in_english 14L);\n  \"twenty\" >::\n  ae (Ok \"twenty\") (in_english 20L);\n  \"twenty-two\" >::\n  ae (Ok \"twenty-two\") (in_english 22L);\n  \"thirty\" >::\n  ae (Ok \"thirty\") (in_english 30L);\n  \"ninety-nine\" >::\n  ae (Ok \"ninety-nine\") (in_english 99L);\n  \"one hundred\" >::\n  ae (Ok \"one hundred\") (in_english 100L);\n  \"one hundred twenty-three\" >::\n  ae (Ok \"one hundred twenty-three\") (in_english 123L);\n  \"two hundred\" >::\n  ae (Ok \"two hundred\") (in_english 200L);\n  \"nine hundred ninety-nine\" >::\n  ae (Ok \"nine hundred ninety-nine\") (in_english 999L);\n  \"one thousand\" >::\n  ae (Ok \"one thousand\") (in_english 1000L);\n  \"one thousand two hundred thirty-four\" >::\n  ae (Ok \"one thousand two hundred thirty-four\") (in_english 1234L);\n  \"one million\" >::\n  ae (Ok \"one million\") (in_english 1000000L);\n  \"one million two thousand three hundred forty-five\" >::\n  ae (Ok \"one million two thousand three hundred forty-five\") (in_english 1002345L);\n  \"one billion\" >::\n  ae (Ok \"one billion\") (in_english 1000000000L);\n  \"a big number\" >::\n  ae (Ok \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\") (in_english 987654321123L);\n  \"numbers below zero are out of range\" >::\n  ae (Error \"input out of range\") (in_english (-1L));\n  \"numbers above 999,999,999,999 are out of range\" >::\n  ae (Error \"input out of range\") (in_english 1000000000000L);\n  \"all numbers from 1 to 10_000 can be spelt\">::(fun _ ->\n      assert_bool \"range test\" (Sequence.range 0 10_000\n                                |> Sequence.map ~f:(fun n -> Int64.of_int n |> in_english)\n                                |> Sequence.filter ~f:Result.is_error\n                                |> Sequence.is_empty));\n]\n\nlet () =\n  run_test_tt_main (\"say tests\" >::: tests)\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "daveyarwood",
+    "dvberkel",
+    "iHiD",
+    "kytrinyx",
+    "marionebl",
+    "Peaupote",
+    "sbl",
+    "sshine"
+  ]
+}

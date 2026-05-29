@@ -22,6 +22,7 @@ func NewAuthMiddleware(pemPublicKey string) (*AuthMiddleware, error) {
 		return &AuthMiddleware{}, nil // Bypass or handle error based on local dev needs
 	}
 
+<<<<<<< HEAD
 	// Unescape literal \n strings back into real newlines to survive Render/Docker env parsing
 	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\n", "\n")
 	pemPublicKey = strings.TrimSpace(pemPublicKey)
@@ -29,6 +30,31 @@ func NewAuthMiddleware(pemPublicKey string) (*AuthMiddleware, error) {
 	block, _ := pem.Decode([]byte(pemPublicKey))
 	if block == nil {
 		return nil, errors.New("failed to parse PEM block containing the public key")
+=======
+	// Unescape and clean the key to survive PaaS environment variable mangling
+	pemPublicKey = strings.ReplaceAll(pemPublicKey, "\\n", "\n")
+	pemPublicKey = strings.TrimSpace(pemPublicKey)
+	pemPublicKey = strings.Trim(pemPublicKey, "\"'") // Strip both " and '
+
+	// AUTO-REPAIR: If headers are missing (starts with Base64 MII...), wrap it automatically
+	if !strings.HasPrefix(pemPublicKey, "-----BEGIN") {
+		slog.Warn("CLERK_PEM_PUBLIC_KEY missing headers. Attempting to auto-wrap in PEM format.")
+		pemPublicKey = "-----BEGIN PUBLIC KEY-----\n" + pemPublicKey + "\n-----END PUBLIC KEY-----"
+	}
+
+	block, _ := pem.Decode([]byte(pemPublicKey))
+	if block == nil {
+		// This provides enough info to debug in Render logs without exposing the whole key
+		start := ""
+		if len(pemPublicKey) > 10 {
+			start = pemPublicKey[:10]
+		}
+		end := ""
+		if len(pemPublicKey) > 10 {
+			end = pemPublicKey[len(pemPublicKey)-10:]
+		}
+		return nil, fmt.Errorf("failed to parse PEM block: length=%d, start=%q, end=%q", len(pemPublicKey), start, end)
+>>>>>>> prod-deploy
 	}
 
 	pub, err := x509.ParsePKIXPublicKey(block.Bytes)

@@ -1,0 +1,34 @@
+{
+  "id": "crystal:roman-numerals",
+  "trackSlug": "crystal",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "45a2591a-493d-4bab-be64-847243b4554b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "struct",
+    "hash",
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "struct Int\n  # Write your code for the 'RomanNumerals' exercise in this file.\nend\n",
+  "example_solution": "struct Int\n  NUMERALS = {\n    \"M\" => 1000, \"CM\" => 900, \"D\" => 500, \"CD\" => 400, \"C\" => 100, \"XC\" => 90,\n    \"L\" => 50, \"XL\" => 40, \"X\" => 10, \"IX\" => 9, \"V\" => 5, \"IV\" => 4, \"I\" => 1,\n  }\n\n  def to_roman\n    number = self\n    String.build do |roman|\n      NUMERALS.each do |key, value|\n        if number >= value\n          count, number = number.divmod(value)\n          roman << (key * count)\n        end\n      end\n    end\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"RomanNumerals\" do\n  it \"1 is I\" do\n    1.to_roman.should eq(\"I\")\n  end\n\n  pending \"2 is II\" do\n    2.to_roman.should eq(\"II\")\n  end\n\n  pending \"3 is III\" do\n    3.to_roman.should eq(\"III\")\n  end\n\n  pending \"4 is IV\" do\n    4.to_roman.should eq(\"IV\")\n  end\n\n  pending \"5 is V\" do\n    5.to_roman.should eq(\"V\")\n  end\n\n  pending \"6 is VI\" do\n    6.to_roman.should eq(\"VI\")\n  end\n\n  pending \"9 is IX\" do\n    9.to_roman.should eq(\"IX\")\n  end\n\n  pending \"16 is XVI\" do\n    16.to_roman.should eq(\"XVI\")\n  end\n\n  pending \"27 is XXVII\" do\n    27.to_roman.should eq(\"XXVII\")\n  end\n\n  pending \"48 is XLVIII\" do\n    48.to_roman.should eq(\"XLVIII\")\n  end\n\n  pending \"49 is XLIX\" do\n    49.to_roman.should eq(\"XLIX\")\n  end\n\n  pending \"59 is LIX\" do\n    59.to_roman.should eq(\"LIX\")\n  end\n\n  pending \"66 is LXVI\" do\n    66.to_roman.should eq(\"LXVI\")\n  end\n\n  pending \"93 is XCIII\" do\n    93.to_roman.should eq(\"XCIII\")\n  end\n\n  pending \"141 is CXLI\" do\n    141.to_roman.should eq(\"CXLI\")\n  end\n\n  pending \"163 is CLXIII\" do\n    163.to_roman.should eq(\"CLXIII\")\n  end\n\n  pending \"166 is CLXVI\" do\n    166.to_roman.should eq(\"CLXVI\")\n  end\n\n  pending \"402 is CDII\" do\n    402.to_roman.should eq(\"CDII\")\n  end\n\n  pending \"575 is DLXXV\" do\n    575.to_roman.should eq(\"DLXXV\")\n  end\n\n  pending \"666 is DCLXVI\" do\n    666.to_roman.should eq(\"DCLXVI\")\n  end\n\n  pending \"911 is CMXI\" do\n    911.to_roman.should eq(\"CMXI\")\n  end\n\n  pending \"1024 is MXXIV\" do\n    1024.to_roman.should eq(\"MXXIV\")\n  end\n\n  pending \"1666 is MDCLXVI\" do\n    1666.to_roman.should eq(\"MDCLXVI\")\n  end\n\n  pending \"3000 is MMM\" do\n    3000.to_roman.should eq(\"MMM\")\n  end\n\n  pending \"3001 is MMMI\" do\n    3001.to_roman.should eq(\"MMMI\")\n  end\n\n  pending \"3888 is MMMDCCCLXXXVIII\" do\n    3888.to_roman.should eq(\"MMMDCCCLXXXVIII\")\n  end\n\n  pending \"3999 is MMMCMXCIX\" do\n    3999.to_roman.should eq(\"MMMCMXCIX\")\n  end\nend\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "elorest"
+  ],
+  "contributors": [
+    "amscotti",
+    "issyl0",
+    "mhelmetag"
+  ]
+}

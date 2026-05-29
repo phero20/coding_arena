@@ -1,0 +1,26 @@
+{
+  "id": "uiua:robot-name",
+  "trackSlug": "uiua",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "d5215b24-89a9-40c0-a397-d2d4b74d6544",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Generate a random name for a robot\n# Name\nGenerateName ← |0 (⍤. \"Please implement GenerateName\" 0)\n",
+  "example_solution": "RandomLetters ← (+ ⍥₂⚂₂₆ @A)\nRandomDigits  ← (+ ⍥₃⚂₁₀ @0)\nGenerateName  ← (⊂ RandomLetters RandomDigits)\n",
+  "test_code": "~ \"robot-name.ua\" ~ GenerateName\n\n# Name has correct format\n⍤⤙≍ 1 ±⧻♭ regex \"^[A-Z]{2}\\\\d{3}$\" GenerateName()\n\n# Name is generated randomly\n⍤⤙≍ 25 ⧻◴ ⍥₂₅GenerateName\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

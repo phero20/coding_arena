@@ -23,6 +23,65 @@ const CodeSnippetsSchema = new mongoose.Schema(
   { _id: false, strict: false },
 );
 
+<<<<<<< HEAD
+=======
+const FunctionParameterSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    type: { type: String, required: true },
+  },
+  { _id: false },
+);
+
+const FunctionSignatureSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    return_type: { type: String, required: true },
+    params: { type: [FunctionParameterSchema], default: [] },
+    param_order: { type: [String], default: undefined },
+    testcase_serialization_version: { type: String, default: undefined },
+  },
+  { _id: false },
+);
+
+const MethodSignatureSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    return_type: { type: String, required: true },
+    params: { type: [FunctionParameterSchema], default: [] },
+  },
+  { _id: false },
+);
+
+const ClassSignatureSchema = new mongoose.Schema(
+  {
+    class_name: { type: String, required: true },
+    constructor_params: { type: [FunctionParameterSchema], default: [] },
+    methods: { type: [MethodSignatureSchema], default: [] },
+  },
+  { _id: false },
+);
+
+const JudgingPolicySchema = new mongoose.Schema(
+  {
+    comparator_mode: {
+      type: String,
+      enum: ["strict", "problem_specific"],
+      default: "strict",
+    },
+    multi_answer: { type: Boolean, default: false },
+    validation_policy: { type: String },
+    output_order: {
+      type: String,
+      enum: ["strict", "any_order"],
+      default: "strict",
+    },
+    audit_hints: { type: [String], default: [] },
+  },
+  { _id: false },
+);
+
+>>>>>>> prod-deploy
 const ProblemSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -41,6 +100,17 @@ const ProblemSchema = new mongoose.Schema(
     follow_ups: { type: [String], default: [] },
     hints: { type: [String], default: [] },
     code_snippets: { type: CodeSnippetsSchema, default: {} },
+<<<<<<< HEAD
+=======
+    problem_type: {
+      type: String,
+      enum: ["function", "class", "interactive"],
+      default: "function",
+    },
+    function_signature: { type: FunctionSignatureSchema },
+    class_signature: { type: ClassSignatureSchema },
+    judging_policy: { type: JudgingPolicySchema, default: undefined },
+>>>>>>> prod-deploy
     solutions: { type: String },
   },
   {

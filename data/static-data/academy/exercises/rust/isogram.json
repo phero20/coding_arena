@@ -1,0 +1,41 @@
+{
+  "id": "rust:isogram",
+  "trackSlug": "rust",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "d141ec66-a161-4c3d-832b-439699bf0d4c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "char",
+    "iterators",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn check(candidate: &str) -> bool {\n    todo!(\"Is {candidate} an isogram?\");\n}\n",
+  "example_solution": "pub fn check(word: &str) -> bool {\n    // Filter all non-Alphabetic character out and collect them in a new String\n    let normalized_string: String = word\n        .to_lowercase()\n        .chars()\n        .filter(|c| c.is_alphabetic())\n        .collect();\n\n    /* Find the char element from back and front and compare the index.\n    If it is the same unique char the index will be the same.*/\n    let is_unique = |x: char, word: &str| word.find(x).unwrap() == word.rfind(x).unwrap();\n\n    // Length should be the same if it is a isogram\n    normalized_string.len()\n        == normalized_string\n            .chars()\n            .filter(|&x| is_unique(x, normalized_string.as_str()))\n            .count()\n}\n",
+  "test_code": "use isogram::*;\n\n#[test]\nfn empty_string() {\n    assert!(check(\"\"));\n}\n\n#[test]\n#[ignore]\nfn isogram_with_only_lower_case_characters() {\n    assert!(check(\"isogram\"));\n}\n\n#[test]\n#[ignore]\nfn word_with_one_duplicated_character() {\n    assert!(!check(\"eleven\"));\n}\n\n#[test]\n#[ignore]\nfn word_with_one_duplicated_character_from_the_end_of_the_alphabet() {\n    assert!(!check(\"zzyzx\"));\n}\n\n#[test]\n#[ignore]\nfn longest_reported_english_isogram() {\n    assert!(check(\"subdermatoglyphic\"));\n}\n\n#[test]\n#[ignore]\nfn word_with_duplicated_character_in_mixed_case() {\n    assert!(!check(\"Alphabet\"));\n}\n\n#[test]\n#[ignore]\nfn word_with_duplicated_character_in_mixed_case_lowercase_first() {\n    assert!(!check(\"alphAbet\"));\n}\n\n#[test]\n#[ignore]\nfn hypothetical_isogrammic_word_with_hyphen() {\n    assert!(check(\"thumbscrew-japingly\"));\n}\n\n#[test]\n#[ignore]\nfn hypothetical_word_with_duplicated_character_following_hyphen() {\n    assert!(!check(\"thumbscrew-jappingly\"));\n}\n\n#[test]\n#[ignore]\nfn isogram_with_duplicated_hyphen() {\n    assert!(check(\"six-year-old\"));\n}\n\n#[test]\n#[ignore]\nfn made_up_name_that_is_an_isogram() {\n    assert!(check(\"Emily Jung Schwartzkopf\"));\n}\n\n#[test]\n#[ignore]\nfn duplicated_character_in_the_middle() {\n    assert!(!check(\"accentor\"));\n}\n\n#[test]\n#[ignore]\nfn same_first_and_last_characters() {\n    assert!(!check(\"angola\"));\n}\n\n#[test]\n#[ignore]\nfn word_with_duplicated_character_and_with_two_hyphens() {\n    assert!(!check(\"up-to-date\"));\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "hekrause"
+  ],
+  "contributors": [
+    "AvasDream",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

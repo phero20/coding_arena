@@ -1,0 +1,26 @@
+{
+  "id": "sqlite:two-fer",
+  "trackSlug": "sqlite",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "c69f301c-126d-4f88-b301-626499f56a7c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "-- Schema: CREATE TABLE \"twofer\" (\"input\" TEXT, \"response\" TEXT);\n-- Task: update the twofer table and set the response based on the input.\n",
+  "example_solution": "UPDATE twofer\nSET\n  response = 'One for ' || CASE\n    WHEN input = '' THEN 'you'\n    ELSE input\n  END || ', one for me.';\n",
+  "test_code": "-- Setup test table and read in student solution:\n.read ./test_setup.sql\n-- Test cases:\nINSERT INTO\n  tests (name, uuid, input, expected)\nVALUES\n  (\n    'no name given',\n    '1cf3e15a-a3d7-4a87-aeb3-ba1b43bc8dce',\n    '',\n    'One for you, one for me.'\n  ),\n  (\n    'a name given',\n    'b4c6dbb8-b4fb-42c2-bafd-10785abe7709',\n    'Alice',\n    'One for Alice, one for me.'\n  ),\n  (\n    'another name given',\n    '3549048d-1a6e-4653-9a79-b0bda163e8d5',\n    'Bob',\n    'One for Bob, one for me.'\n  );\n\n-- Comparison of user input and the tests updates the status for each test:\nUPDATE tests\nSET\n  status = 'pass'\nFROM\n  (\n    SELECT\n      input,\n      response\n    FROM\n      twofer\n  ) AS actual\nWHERE\n  (actual.input, actual.response) = (tests.input, tests.expected);\n\n-- Write results and debug info:\n.read ./test_reporter.sql\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

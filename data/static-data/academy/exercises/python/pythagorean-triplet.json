@@ -1,0 +1,54 @@
+{
+  "id": "python:pythagorean-triplet",
+  "trackSlug": "python",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "7b53865e-a981-46e0-8e47-6f8e1f3854b3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "sets"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "lists",
+    "list-methods",
+    "loops",
+    "numbers",
+    "sets"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "def triplets_with_sum(number):\n    pass\n",
+  "example_solution": "from math import sqrt, ceil, gcd\n\n\ndef triplets_in_range(start, end):\n    for limit in range(4, end + 1, 4):\n        for x_pos, y_pos, z_pos in primitive_triplets(limit):\n            alpha = x_pos\n            beta = y_pos\n            gamma = z_pos\n\n            while alpha < start:\n                alpha = alpha + x_pos\n                beta = beta + y_pos\n                gamma = gamma + z_pos\n\n            while gamma <= end:\n                yield [alpha, beta, gamma]\n\n                alpha = alpha + x_pos\n                beta = beta + y_pos\n                gamma = gamma + z_pos\n\n\ndef euclidian_coprimes(limit):\n    mean = limit // 2\n    for idx in range(1, int(ceil(sqrt(mean)))):\n        if mean % idx == 0:\n            member = mean // idx\n            if (member - idx) % 2 == 1 and gcd(member, idx) == 1:\n                yield member, idx\n\n\ndef primitive_triplets(limit):\n    \"\"\"See Euclid's formula\n    (https://en.wikipedia.org/wiki/Pythagorean_triple#Generating_a_triple)\n    for more information\n    \"\"\"\n    for member_1, member_2 in euclidian_coprimes(limit):\n        calc_1 = member_1 ** 2\n        calc_2 = member_2 ** 2\n\n        alpha = calc_1 - calc_2\n        beta = 2 * member_1 * member_2\n        gamma = calc_1 + calc_2\n\n        if alpha > beta:\n            alpha, beta = beta, alpha\n\n        yield alpha, beta, gamma\n\n\ndef triplets_with_sum(number):\n    return [\n        triplet for triplet\n        in triplets_in_range(1, number // 2)\n        if sum(triplet) == number\n        ]\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/pythagorean-triplet/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom pythagorean_triplet import (\n    triplets_with_sum,\n)\n\n\nclass PythagoreanTripletTest(unittest.TestCase):\n    def test_triplets_whose_sum_is_12(self):\n        self.assertCountEqual(triplets_with_sum(12), [[3, 4, 5]])\n\n    def test_triplets_whose_sum_is_108(self):\n        self.assertCountEqual(triplets_with_sum(108), [[27, 36, 45]])\n\n    def test_triplets_whose_sum_is_1000(self):\n        self.assertCountEqual(triplets_with_sum(1000), [[200, 375, 425]])\n\n    def test_no_matching_triplets_for_1001(self):\n        self.assertCountEqual(triplets_with_sum(1001), [])\n\n    def test_returns_all_matching_triplets(self):\n        self.assertCountEqual(triplets_with_sum(90), [[9, 40, 41], [15, 36, 39]])\n\n    def test_several_matching_triplets(self):\n        self.assertCountEqual(\n            triplets_with_sum(840),\n            [\n                [40, 399, 401],\n                [56, 390, 394],\n                [105, 360, 375],\n                [120, 350, 370],\n                [140, 336, 364],\n                [168, 315, 357],\n                [210, 280, 350],\n                [240, 252, 348],\n            ],\n        )\n\n    def test_triplets_for_large_number(self):\n        self.assertCountEqual(\n            triplets_with_sum(30000),\n            [\n                [1200, 14375, 14425],\n                [1875, 14000, 14125],\n                [5000, 12000, 13000],\n                [6000, 11250, 12750],\n                [7500, 10000, 12500],\n            ],\n        )\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "betegelse"
+  ],
+  "contributors": [
+    "behrtam",
+    "BethanyG",
+    "cmccandless",
+    "Dog",
+    "ikhadykin",
+    "kytrinyx",
+    "morganpartee",
+    "N-Parsons",
+    "olufotebig",
+    "omer-g",
+    "parinporecha",
+    "pheanex",
+    "rootulp",
+    "sjakobi",
+    "tqa236",
+    "yawpitch"
+  ]
+}

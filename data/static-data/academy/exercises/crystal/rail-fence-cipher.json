@@ -1,0 +1,29 @@
+{
+  "id": "crystal:rail-fence-cipher",
+  "trackSlug": "crystal",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "07e94755-9641-48cc-a6ce-2eb7d5bf039b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "ranges",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module RailFenceCipher\n  # Write your code for the 'Rail Fence Cipher' exercise in this file.\n\n  def self.encode(rail_count, plaintext)\n  end\n\n  def self.decode(rail_count, ciphertext)\n  end\nend\n",
+  "example_solution": "module RailFenceCipher\n  def self.encode(rail_count, plaintext)\n    ciphertext = Array.new(plaintext.size, ' ')\n    correspondences(rail_count, plaintext.size).each_with_index do |p, c|\n      ciphertext[c] = plaintext[p]\n    end\n    ciphertext.join\n  end\n\n  def self.decode(rail_count, ciphertext)\n    plaintext = Array.new(ciphertext.size, ' ')\n    correspondences(rail_count, ciphertext.size).each_with_index do |p, c|\n      plaintext[p] = ciphertext[c]\n    end\n    plaintext.join\n  end\n\n  private def self.correspondences(rail_count, length)\n    lines = (0...rail_count).map { [] of Int32 }\n    sequence = rail_sequence(rail_count)\n    (0...length).each { |c| lines[sequence.next.as(Int32)].push c }\n    lines.flatten\n  end\n\n  private def self.rail_sequence(rail_count)\n    up = (0...rail_count)\n    down = up.skip(1).reverse.skip(1)\n    (up.to_a + down.to_a).cycle\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"RailFenceCipher\" do\n  describe \"encode\" do\n    it \"encode with two rails\" do\n      RailFenceCipher.encode(2, \"XOXOXOXOXOXOXOXOXO\")\n        .should eq \"XXXXXXXXXOOOOOOOOO\"\n    end\n\n    pending \"encode with three rails\" do\n      RailFenceCipher.encode(3, \"WEAREDISCOVEREDFLEEATONCE\")\n        .should eq \"WECRLTEERDSOEEFEAOCAIVDEN\"\n    end\n\n    pending \"encode with ending in the middle\" do\n      RailFenceCipher.encode(4, \"EXERCISES\")\n        .should eq \"ESXIEECSR\"\n    end\n  end\n\n  describe \"decode\" do\n    pending \"decode with three rails\" do\n      RailFenceCipher.decode(3, \"TEITELHDVLSNHDTISEIIEA\")\n        .should eq \"THEDEVILISINTHEDETAILS\"\n    end\n\n    pending \"decode with five rails\" do\n      RailFenceCipher.decode(5, \"EIEXMSMESAORIWSCE\")\n        .should eq \"EXERCISMISAWESOME\"\n    end\n\n    pending \"decode with six rails\" do\n      RailFenceCipher.decode(6, \"133714114238148966225439541018335470986172518171757571896261\")\n        .should eq \"112358132134558914423337761098715972584418167651094617711286\"\n    end\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": null
+}

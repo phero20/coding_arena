@@ -1,0 +1,42 @@
+{
+  "id": "ruby:nth-prime",
+  "trackSlug": "ruby",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "16baef71-6234-4928-a2d4-a19eb8e110b8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Nth Prime' exercise in this file. Make the tests in\n`nth_prime_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/nth-prime` directory.\n=end\n",
+  "example_solution": "class Prime\n  def self.nth(n)\n    if n < 1\n      message = 'There is no such thing. Be reasonable.'\n      fail ArgumentError.new(message)\n    end\n\n    primes = 0\n    i = 1\n    while primes < n\n      i += 1\n      primes += 1 if self.prime?(i)\n    end\n    i\n  end\n\n  def self.prime?(n)\n    return false if n == 1\n    return true if n == 2\n    (2..Math.sqrt(n).ceil).each do |i|\n      return false if n % i == 0\n    end\n    return true\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'nth_prime'\n\nclass NthPrimeTest < Minitest::Test\n  def test_first_prime\n    # skip\n    actual = Prime.nth(1)\n    expected = 2\n    assert_equal expected, actual\n  end\n\n  def test_second_prime\n    skip\n    actual = Prime.nth(2)\n    expected = 3\n    assert_equal expected, actual\n  end\n\n  def test_sixth_prime\n    skip\n    actual = Prime.nth(6)\n    expected = 13\n    assert_equal expected, actual\n  end\n\n  def test_big_prime\n    skip\n    actual = Prime.nth(10_001)\n    expected = 104_743\n    assert_equal expected, actual\n  end\n\n  def test_there_is_no_zeroth_prime\n    skip\n    assert_raises(ArgumentError) do\n      Prime.nth(0)\n    end\n  end\nend\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "bernardoamc",
+    "budmc29",
+    "cadwallion",
+    "clettenberg",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "pendletons",
+    "tryantwit"
+  ]
+}

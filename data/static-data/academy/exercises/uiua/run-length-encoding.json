@@ -1,0 +1,26 @@
+{
+  "id": "uiua:run-length-encoding",
+  "trackSlug": "uiua",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "d83ea09c-39f9-4e00-9a74-3f1d3be262ac",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 9,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Encode a string using run-length encoding\n# Ciphertext ? Plaintext\nEncode ← |1 ⊙(⍤ \"Please implement Encode\" 0)\n\n# Decode a string encoded with run-length encoding\n# Plaintext ? Ciphertext\nDecode ← |1 ⊙(⍤ \"Please implement Decode\" 0)\n",
+  "example_solution": "EncodeRun  ← |1 ⊂⊃(⨬(\"\"|°⋕)>1.⧻|⊢)\nEncodeRuns ← |1 ⍜(-@\\0|⊜□.)\nEncode     ← |1 /$\"__\" ⍚(EncodeRun) EncodeRuns\n\nIsDigit   ← |1 ×⊃(≥@0|≤@9)\nUpdateRun ← |2 + ⊙(×10) -@0\nDecodeRun ← 0 ⊂: ▽ ⨬(1|∘)±. :\nDecode    ← |1 ◌ ∧(⨬(DecodeRun|UpdateRun) IsDigit.) ⊙(0 \"\")\n",
+  "test_code": "~ \"run-length-encoding.ua\" ~ Decode Encode\n\n# Encode empty string\n⍤⤙≍ \"\" Encode \"\"\n\n# Encode single characters only are encoded without count\n⍤⤙≍ \"XYZ\" Encode \"XYZ\"\n\n# Encode string with no single characters\n⍤⤙≍ \"2A3B4C\" Encode \"AABBBCCCC\"\n\n# Encode single characters mixed with repeated characters\n⍤⤙≍ \"12WB12W3B24WB\" Encode \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"\n\n# Encode multiple whitespace mixed in string\n⍤⤙≍ \"2 hs2q q2w2 \" Encode \"  hsqq qww  \"\n\n# Encode lowercase characters\n⍤⤙≍ \"2a3b4c\" Encode \"aabbbcccc\"\n\n# Decode empty string\n⍤⤙≍ \"\" Decode \"\"\n\n# Decode single characters only\n⍤⤙≍ \"XYZ\" Decode \"XYZ\"\n\n# Decode string with no single characters\n⍤⤙≍ \"AABBBCCCC\" Decode \"2A3B4C\"\n\n# Decode single characters with repeated characters\n⍤⤙≍ \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\" Decode \"12WB12W3B24WB\"\n\n# Decode multiple whitespace mixed in string\n⍤⤙≍ \"  hsqq qww  \" Decode \"2 hs2q q2w2 \"\n\n# Decode lowercase string\n⍤⤙≍ \"aabbbcccc\" Decode \"2a3b4c\"\n\n# Encode followed by decode gives original string\n⍤⤙≍ \"zzz ZZ  zZ\" Decode Encode \"zzz ZZ  zZ\"\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

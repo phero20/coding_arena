@@ -1,0 +1,34 @@
+{
+  "id": "powershell:hamming",
+  "trackSlug": "powershell",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "f55b2158-a8f0-4593-b44a-6e750ebac0a5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "function Get-HammingDifference([string]$strand1, [string]$strand2) {\n    <#\n    .SYNOPSIS\n    Calculate the Hamming difference between two DNA strands.\n    \n    .DESCRIPTION\n    By counting the number of differences between two homologous DNA strands\n    taken from different genomes with a common ancestor, we get a measure of\n    the minimum number of point mutations that could have occurred on the\n    evolutionary path between the two strands.\n\n    This is called the 'Hamming distance'.\n\n    It is found by comparing two DNA strands and counting how many of the\n    nucleotides are different from their equivalent in the other string.\n    \n    .PARAMETER strand1\n    The first DNA strand\n    \n    .PARAMETER strand2\n    The second DNA strand\n    \n    .EXAMPLE\n    Get-HammingDifference -strand1 \"GAGCCTACTAACGGGAT\" -strand2 \"CATCGTAATGACGGCCT\"\n    \n    This will return a difference of 7.\n    #>\n    \n    Throw \"Please implement this function\"\n}\n",
+  "example_solution": "function Get-HammingDifference([string]$strand1, [string]$strand2) {\n    <#\n    .SYNOPSIS\n    Calculate the Hamming difference between two DNA strands.\n    \n    .DESCRIPTION\n    By counting the number of differences between two homologous DNA strands\n    taken from different genomes with a common ancestor, we get a measure of\n    the minimum number of point mutations that could have occurred on the\n    evolutionary path between the two strands.\n\n    This is called the 'Hamming distance'.\n\n    It is found by comparing two DNA strands and counting how many of the\n    nucleotides are different from their equivalent in the other string.\n    \n    .PARAMETER strand1\n    The first DNA strand\n    \n    .PARAMETER strand2\n    The second DNA strand\n    \n    .EXAMPLE\n    Get-HammingDifference -strand1 \"GAGCCTACTAACGGGAT\" -strand2 \"CATCGTAATGACGGCCT\"\n\n    This will return a difference of 7.\n    #>\n\n    if ( $strand1.length -ne $strand2.length) {\n        Throw \"strands must be of equal length.\"\n    }\n    $first = [char[]][string]$strand1\n    $second = [char[]][string]$strand2\n    $result = 0\n    for ($i=0; $i -lt $first.length; $i++) {\n        if ( $first[$i] -ne $second[$i] ) {\n            $result += 1\n        }\n    }\n    return $result\n}\n",
+  "test_code": "BeforeAll {\n    . \"./HammingDifference.ps1\"\n}\n\nDescribe \"Get-Hamming Test cases\" {\n    Context \"Passing Tests\" {\n        It \"empty strands\" {\n            Get-HammingDifference '' '' | Should -Be 0\n        }\n        \n        It \"single letter identical strands\" {\n            Get-HammingDifference 'A' 'A' | Should -Be 0\n        }\n\n        It \"single letter different strands\" {\n            Get-HammingDifference 'G' 'T' | Should -Be 1\n        }\n\n        It \"long identical strands\" {\n            Get-HammingDifference \"GGACTGAAATCTG\" \"GGACTGAAATCTG\" | Should -Be 0\n        }\n\n        It \"long different strands\" {\n            Get-HammingDifference \"GGACGGATTCTG\" \"AGGACGGATTCT\" | Should -Be 9\n        }\n    }\n\n    Context \"Invalid Inputs\" {\n        It \"disallow first strand longer\" {\n            { Get-HammingDifference \"AATG\" \"AAA\" } | Should -Throw \"*strands must be of equal length.*\"\n        }\n\n        It \"disallow second strand longer\" {\n            { Get-HammingDifference \"ATA\" \"AGTG\" } | Should -Throw \"*strands must be of equal length.*\"\n        }\n\n        It \"disallow left empty strand\" {\n            { Get-HammingDifference \"\" \"G\" } | Should -Throw \"*strands must be of equal length.*\"\n        }\n\n        It \"disallow right empty strand\" {\n            { Get-HammingDifference \"G\" \"\" } | Should -Throw \"*strands must be of equal length.*\"\n        }\n    }\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "spuder"
+  ],
+  "contributors": [
+    "cmccandless",
+    "daveyarwood",
+    "gyssels",
+    "kchenery",
+    "kytrinyx",
+    "sjwarner",
+    "meatball133"
+  ]
+}

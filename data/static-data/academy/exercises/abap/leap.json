@@ -1,0 +1,26 @@
+{
+  "id": "abap:leap",
+  "trackSlug": "abap",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "ed451561-a84a-4b44-a3c9-9a0d9378667c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "CLASS zcl_leap DEFINITION PUBLIC.\n  PUBLIC SECTION.\n    METHODS leap\n      IMPORTING\n        year          TYPE i\n      RETURNING\n        VALUE(result) TYPE abap_bool.\nENDCLASS.\n\nCLASS zcl_leap IMPLEMENTATION.\n\n  METHOD leap.\n* add solution here\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "example_solution": "CLASS zcl_leap DEFINITION PUBLIC.\n  PUBLIC SECTION.\n    METHODS leap\n      IMPORTING\n        year         TYPE i\n      RETURNING\n        VALUE(result) TYPE abap_bool.\nENDCLASS.\n\nCLASS zcl_leap IMPLEMENTATION.\n\n  METHOD leap.\n    IF year MOD 4 = 0 AND year MOD 100 <> 0.\n      result = abap_true.\n    ELSEIF year MOD 400 = 0.\n      result = abap_true.\n    ELSE.\n      result = abap_false.\n    ENDIF.\n  ENDMETHOD.\n\nENDCLASS.",
+  "test_code": "CLASS ltcl_leap DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT FINAL.\n\n  PRIVATE SECTION.\n    DATA cut TYPE REF TO zcl_leap.\n    METHODS setup.\n    METHODS test_2015 FOR TESTING.\n    METHODS test_1970 FOR TESTING.\n    METHODS test_1996 FOR TESTING.\n    METHODS test_1960 FOR TESTING.\n    METHODS test_2100 FOR TESTING.\n    METHODS test_1900 FOR TESTING.\n    METHODS test_2000 FOR TESTING.\n    METHODS test_2400 FOR TESTING.\n    METHODS test_1800 FOR TESTING.\n\nENDCLASS.\n\nCLASS ltcl_leap IMPLEMENTATION.\n\n  METHOD setup.\n    cut = NEW zcl_leap( ).\n  ENDMETHOD.\n\n  METHOD test_2015.\n* year not divisible by 4 in common year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 2015 )\n      exp = abap_false ).\n  ENDMETHOD.\n\n  METHOD test_1970.\n* year divisible by 2, not divisible by 4 in common year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 1970 )\n      exp = abap_false ).\n  ENDMETHOD.\n\n  METHOD test_1996.\n* year divisible by 4, not divisible by 100 in leap year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 1996 )\n      exp = abap_true ).\n  ENDMETHOD.\n\n  METHOD test_1960.\n* year divisible by 4 and 5 is still a leap year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 1960 )\n      exp = abap_true ).\n  ENDMETHOD.\n\n  METHOD test_2100.\n* year divisible by 100, not divisible by 400 in common year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 2100 )\n      exp = abap_false ).\n  ENDMETHOD.\n\n  METHOD test_1900.\n* year divisible by 100 but not by 3 is still not a leap year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 1900 )\n      exp = abap_false ).\n  ENDMETHOD.\n\n  METHOD test_2000.\n* year divisible by 400 is leap year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 2000 )\n      exp = abap_true ).\n  ENDMETHOD.\n\n  METHOD test_2400.\n* year divisible by 400 but not by 125 is still a leap year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 2400 )\n      exp = abap_true ).\n  ENDMETHOD.\n\n  METHOD test_1800.\n* year divisible by 200, not divisible by 400 in common year\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->leap( 1800 )\n      exp = abap_false ).\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "larshp"
+  ],
+  "contributors": null
+}

@@ -4,8 +4,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState, type ReactNode } from "react";
 import { AuthInitializer } from "./auth-initializer";
+<<<<<<< HEAD
 import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import { FullPageOverlay } from "./shared/StatusState";
+=======
+>>>>>>> prod-deploy
 import { ArenaSocketProvider } from "./providers/ArenaSocketProvider";
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -25,6 +28,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+<<<<<<< HEAD
       <ClerkLoading>
         <FullPageOverlay message="Authenticating session..." />
       </ClerkLoading>
@@ -35,6 +39,12 @@ export function Providers({ children }: { children: ReactNode }) {
           {children}
         </ArenaSocketProvider>
       </ClerkLoaded>
+=======
+      <AuthInitializer />
+      <ArenaSocketProvider>
+        {children}
+      </ArenaSocketProvider>
+>>>>>>> prod-deploy
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

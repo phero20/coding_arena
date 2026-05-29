@@ -1,0 +1,43 @@
+{
+  "id": "ruby:circular-buffer",
+  "trackSlug": "ruby",
+  "slug": "circular-buffer",
+  "name": "Circular Buffer",
+  "uuid": "f3419fe3-a5f5-4bc9-bc40-49f450b8981e",
+  "type": "practice",
+  "status": null,
+  "blurb": "A data structure that uses a single, fixed-size buffer as if it were connected end-to-end.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "exceptions"
+  ],
+  "prerequisites": [
+    "numbers",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nA circular buffer, cyclic buffer or ring buffer is a data structure that uses a single, fixed-size buffer as if it were connected end-to-end.\n\nA circular buffer first starts empty and of some predefined length.\nFor example, this is a 7-element buffer:\n\n```text\n[ ][ ][ ][ ][ ][ ][ ]\n```\n\nAssume that a 1 is written into the middle of the buffer (exact starting location does not matter in a circular buffer):\n\n```text\n[ ][ ][ ][1][ ][ ][ ]\n```\n\nThen assume that two more elements are added — 2 & 3 — which get appended after the 1:\n\n```text\n[ ][ ][ ][1][2][3][ ]\n```\n\nIf two elements are then removed from the buffer, the oldest values inside the buffer are removed.\nThe two elements removed, in this case, are 1 & 2, leaving the buffer with just a 3:\n\n```text\n[ ][ ][ ][ ][ ][3][ ]\n```\n\nIf the buffer has 7 elements then it is completely full:\n\n```text\n[5][6][7][8][9][3][4]\n```\n\nWhen the buffer is full an error will be raised, alerting the client that further writes are blocked until a slot becomes free.\n\nWhen the buffer is full, the client can opt to overwrite the oldest data with a forced write.\nIn this case, two more elements — A & B — are added and they overwrite the 3 & 4:\n\n```text\n[5][6][7][8][9][A][B]\n```\n\n3 & 4 have been replaced by A & B making 5 now the oldest data in the buffer.\nFinally, if two elements are removed then what would be returned is 5 & 6 yielding the buffer:\n\n```text\n[ ][ ][7][8][9][A][B]\n```\n\nBecause there is space available, if the client again uses overwrite to store C & D then the space where 5 & 6 were stored previously will be used not the location of 7 & 8.\n7 is still the oldest element and the buffer is once again full.\n\n```text\n[C][D][7][8][9][A][B]\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Circular Buffer' exercise in this file. Make the tests in\n`circular_buffer_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/circular-buffer` directory.\n=end\n",
+  "example_solution": "class CircularBuffer\n  def initialize(capacity)\n    @capacity = capacity\n    @write_point = @read_point = 0\n    @buffer = Array.new(capacity, nil)\n  end\n\n  def write(data)\n    update_buffer(data) do\n      fail BufferFullException if full?\n      @buffer[@write_point] = data\n    end\n  end\n\n  def write!(data)\n    update_buffer(data) do\n      @buffer[@write_point] = data\n      if overwriting?\n        update_read_point\n      end\n    end\n  end\n\n  def read\n    fail BufferEmptyException if empty?\n    data = @buffer[@read_point]\n    @buffer[@read_point] = nil\n    update_read_point\n    data\n  end\n\n  def clear\n    @buffer = Array.new(@capacity)\n  end\n\n  private\n\n  def update_buffer(item)\n    return if item.nil?\n    yield if block_given?\n    update_write_point\n  end\n\n  def update_read_point\n    @read_point = (@read_point + 1) % @capacity\n  end\n\n  def update_write_point\n    @write_point = (@write_point + 1) % @capacity\n  end\n\n  def overwriting?\n    (full? && @write_point == @read_point)\n  end\n\n  def empty?\n    @buffer.compact.empty?\n  end\n\n  def full?\n    @buffer.all?\n  end\n\n  class BufferFullException < Exception; end\n\n  class BufferEmptyException < Exception; end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'circular_buffer'\n\nclass CircularBufferTest < Minitest::Test\n  def test_reading_empty_buffer_should_fail\n    # skip\n    buffer = CircularBuffer.new(1)\n    assert_raises(CircularBuffer::BufferEmptyException) { buffer.read }\n  end\n\n  def test_can_read_an_item_just_written\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.write('1')\n    assert_equal '1', buffer.read\n  end\n\n  def test_each_item_may_only_be_read_once\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.write('1')\n    assert_equal '1', buffer.read\n    assert_raises(CircularBuffer::BufferEmptyException) { buffer.read }\n  end\n\n  def test_items_are_read_in_the_order_they_are_written\n    skip\n    buffer = CircularBuffer.new(2)\n    buffer.write('1')\n    buffer.write('2')\n    assert_equal '1', buffer.read\n    assert_equal '2', buffer.read\n  end\n\n  def test_full_buffer_cant_be_written_to\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.write('1')\n    assert_raises(CircularBuffer::BufferFullException) { buffer.write('2') }\n  end\n\n  def test_a_read_frees_up_capacity_for_another_write\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.write('1')\n    assert_equal '1', buffer.read\n    buffer.write('2')\n    assert_equal '2', buffer.read\n  end\n\n  def test_read_position_is_maintained_even_across_multiple_writes\n    skip\n    buffer = CircularBuffer.new(3)\n    buffer.write('1')\n    buffer.write('2')\n    assert_equal '1', buffer.read\n    buffer.write('3')\n    assert_equal '2', buffer.read\n    assert_equal '3', buffer.read\n  end\n\n  def test_items_cleared_out_of_buffer_cant_be_read\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.write('1')\n    buffer.clear\n    assert_raises(CircularBuffer::BufferEmptyException) { buffer.read }\n  end\n\n  def test_clear_frees_up_capacity_for_another_write\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.write('1')\n    buffer.clear\n    buffer.write('2')\n    assert_equal '2', buffer.read\n  end\n\n  def test_clear_does_nothing_on_empty_buffer\n    skip\n    buffer = CircularBuffer.new(1)\n    buffer.clear\n    buffer.write('1')\n    assert_equal '1', buffer.read\n  end\n\n  def test_overwrite_acts_like_write_on_non_full_buffer\n    skip\n    buffer = CircularBuffer.new(2)\n    buffer.write('1')\n    buffer.write!('2')\n    assert_equal '1', buffer.read\n    assert_equal '2', buffer.read\n  end\n\n  def test_overwrite_replaces_the_oldest_item_on_full_buffer\n    skip\n    buffer = CircularBuffer.new(2)\n    buffer.write('1')\n    buffer.write('2')\n    buffer.write!('3')\n    assert_equal '2', buffer.read\n    assert_equal '3', buffer.read\n  end\n\n  def test_overwrite_replaces_the_oldest_item_remaining_in_buffer_following_a_read\n    skip\n    buffer = CircularBuffer.new(3)\n    buffer.write('1')\n    buffer.write('2')\n    buffer.write('3')\n    assert_equal '1', buffer.read\n    buffer.write('4')\n    buffer.write!('5')\n    assert_equal '3', buffer.read\n    assert_equal '4', buffer.read\n    assert_equal '5', buffer.read\n  end\n\n  def test_initial_clear_does_not_affect_wrapping_around\n    skip\n    buffer = CircularBuffer.new(2)\n    buffer.clear\n    buffer.write('1')\n    buffer.write('2')\n    buffer.write!('3')\n    buffer.write!('4')\n    assert_equal '3', buffer.read\n    assert_equal '4', buffer.read\n    assert_raises(CircularBuffer::BufferEmptyException) { buffer.read }\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Circular_buffer",
+  "authors": [
+    "anthonygreen"
+  ],
+  "contributors": [
+    "budmc29",
+    "dalexj",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "julianandrews",
+    "kotp",
+    "kytrinyx",
+    "pendletons",
+    "tryantwit"
+  ]
+}

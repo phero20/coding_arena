@@ -1,0 +1,29 @@
+{
+  "id": "pyret:hamming",
+  "trackSlug": "pyret",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "731dcc09-a78c-4da4-a6c7-47bb0b6720f2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "comparisons",
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: distance end\n\nfun distance(first-strand, second-strand):\n  raise(\"Please implement the distance function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: distance end\n\nimport lists as L\n\nfun distance(first-strand, second-strand):\n  ask:\n    | string-length(first-strand) <> string-length(second-strand) then:\n      raise(\"Strands must be of equal length.\")\n    | (first-strand == \"\") and (second-strand <> \"\") then:\n      raise(\"Strands must be of equal length.\")\n    | (first-strand <> \"\") and (second-strand == \"\") then:\n      raise(\"Strands must be of equal length.\")\n    | otherwise:\n      L.fold2(\n        lam(acc, elt1, elt2):\n          ask:\n            | elt1 <> elt2 then:\n              acc + 1\n            | otherwise:\n              acc\n          end\n        end,\n        0,\n        string-explode(first-strand),\n        string-explode(second-strand))\n  end\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"hamming.arr\")\n\ncheck \"empty strands\":\n  distance(\"\", \"\") is 0\nend\n\ncheck \"single letter identical strands\":\n  distance(\"A\", \"A\") is 0\nend\n\ncheck \"single letter different strands\":\n  distance(\"G\", \"T\") is 1\nend\n\ncheck \"long identical strands\":\n  distance(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\") is 0\nend\n\ncheck \"long different strands\":\n  distance(\"GGACGGATTCTG\", \"AGGACGGATTCT\") is 9\nend\n\ncheck \"disallow first strand longer\":\n  distance(\"AATG\", \"AAA\") raises \"Strands must be of equal length.\"\nend\n\ncheck \"disallow second strand longer\":\n  distance(\"ATA\", \"AGTG\") raises \"Strands must be of equal length.\"\nend\n\ncheck \"disallow empty first strand\":\n  distance(\"\", \"G\") raises \"Strands must be of equal length.\"\nend\n\ncheck \"disallow empty second strand\":\n  distance(\"G\", \"\") raises \"Strands must be of equal length.\"\nend\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

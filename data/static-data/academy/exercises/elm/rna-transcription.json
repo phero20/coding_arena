@@ -1,0 +1,37 @@
+{
+  "id": "elm:rna-transcription",
+  "trackSlug": "elm",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "3af96d19-87d7-4d8b-aecb-f63122815501",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "result"
+  ],
+  "prerequisites": [
+    "strings",
+    "result"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "module RnaTranscription exposing (toRNA)\n\n\ntoRNA : String -> Result String String\ntoRNA dna =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module RnaTranscription exposing (toRNA)\n\n\ncreateErrorMessage : Char -> String\ncreateErrorMessage invalidNucleotide =\n    [ \"'\", String.fromChar invalidNucleotide, \"' is not a valid nucleotide\" ]\n        |> String.concat\n\n\ntoRNA : String -> Result String String\ntoRNA dna =\n    dna\n        |> String.toList\n        |> List.map toRNANucleotide\n        |> resultExtraCombine\n        |> Result.map (List.map String.fromChar)\n        |> Result.map String.concat\n        |> Result.mapError createErrorMessage\n\n\n\n-- Copied from elm-result-extra\n\n\nresultExtraCombine : List (Result x a) -> Result x (List a)\nresultExtraCombine =\n    List.foldr (Result.map2 (::)) (Ok [])\n\n\ntoRNANucleotide : Char -> Result Char Char\ntoRNANucleotide nuc =\n    case nuc of\n        'C' ->\n            Ok 'G'\n\n        'G' ->\n            Ok 'C'\n\n        'A' ->\n            Ok 'U'\n\n        'T' ->\n            Ok 'A'\n\n        _ ->\n            Err nuc\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport RnaTranscription exposing (toRNA)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"RNATranscription\"\n        [ test \"complement of cytosine is guanine\" <|\n            \\() -> Expect.equal (Ok \"G\") (toRNA \"C\")\n        , skip <|\n            test \"complement of guanine is cytosine\" <|\n                \\() -> Expect.equal (Ok \"C\") (toRNA \"G\")\n        , skip <|\n            test \"complement of thymine is adenine\" <|\n                \\() -> Expect.equal (Ok \"A\") (toRNA \"T\")\n        , skip <|\n            test \"complement of adenine is uracil\" <|\n                \\() -> Expect.equal (Ok \"U\") (toRNA \"A\")\n        , skip <|\n            test \"complement\" <|\n                \\() -> Expect.equal (Ok \"UGCACCAGAAUU\") (toRNA \"ACGTGGTCTTAA\")\n        , skip <|\n            test \"input \\\"INVALID\\\" should produce an error\" <|\n                \\() ->\n                    toRNA \"INVALID\"\n                        |> Expect.err\n                        |> Expect.onFail \"expected an error message output. For example `Err \\\"Invalid input\\\"`\"\n        ]\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "nathanielknight",
+    "nhawkes",
+    "parkerl",
+    "tuxagon"
+  ]
+}

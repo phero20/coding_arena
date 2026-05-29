@@ -1,0 +1,26 @@
+{
+  "id": "raku:difference-of-squares",
+  "trackSlug": "raku",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "8173b8cb-e2a7-4ecf-9ee8-868db1c06b0c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "unit module DifferenceOfSquares;\n\nsub square-of-sum ($number) is export {\n}\n\nsub sum-of-squares ($number) is export {\n}\n\nsub difference-of-squares ($number) is export {\n}\n",
+  "example_solution": "unit module DifferenceOfSquares;\n\nsub square-of-sum ($number) is export {\n    (1..$number).sum²;\n}\n\nsub sum-of-squares ($number) is export {\n    (1..$number).map(*²).sum;\n}\n\nsub difference-of-squares ($number) is export {\n    square-of-sum($number) - sum-of-squares($number);\n}\n",
+  "test_code": "#!/usr/bin/env raku\nuse Test;\nuse lib $?FILE.IO.parent(2).add('lib');\nuse DifferenceOfSquares;\n\ncmp-ok( # begin: e46c542b-31fc-4506-bcae-6b62b3268537\n    square-of-sum(1),\n    \"==\",\n    1,\n    \"Square the sum of the numbers up to the given number: square of sum 1\",\n); # end: e46c542b-31fc-4506-bcae-6b62b3268537\n\ncmp-ok( # begin: 9b3f96cb-638d-41ee-99b7-b4f9c0622948\n    square-of-sum(5),\n    \"==\",\n    225,\n    \"Square the sum of the numbers up to the given number: square of sum 5\",\n); # end: 9b3f96cb-638d-41ee-99b7-b4f9c0622948\n\ncmp-ok( # begin: 54ba043f-3c35-4d43-86ff-3a41625d5e86\n    square-of-sum(100),\n    \"==\",\n    25502500,\n    \"Square the sum of the numbers up to the given number: square of sum 100\",\n); # end: 54ba043f-3c35-4d43-86ff-3a41625d5e86\n\ncmp-ok( # begin: 01d84507-b03e-4238-9395-dd61d03074b5\n    sum-of-squares(1),\n    \"==\",\n    1,\n    \"Sum the squares of the numbers up to the given number: sum of squares 1\",\n); # end: 01d84507-b03e-4238-9395-dd61d03074b5\n\ncmp-ok( # begin: c93900cd-8cc2-4ca4-917b-dd3027023499\n    sum-of-squares(5),\n    \"==\",\n    55,\n    \"Sum the squares of the numbers up to the given number: sum of squares 5\",\n); # end: c93900cd-8cc2-4ca4-917b-dd3027023499\n\ncmp-ok( # begin: 94807386-73e4-4d9e-8dec-69eb135b19e4\n    sum-of-squares(100),\n    \"==\",\n    338350,\n    \"Sum the squares of the numbers up to the given number: sum of squares 100\",\n); # end: 94807386-73e4-4d9e-8dec-69eb135b19e4\n\ncmp-ok( # begin: 44f72ae6-31a7-437f-858d-2c0837adabb6\n    difference-of-squares(1),\n    \"==\",\n    0,\n    \"Subtract sum of squares from square of sums: difference of squares 1\",\n); # end: 44f72ae6-31a7-437f-858d-2c0837adabb6\n\ncmp-ok( # begin: 005cb2bf-a0c8-46f3-ae25-924029f8b00b\n    difference-of-squares(5),\n    \"==\",\n    170,\n    \"Subtract sum of squares from square of sums: difference of squares 5\",\n); # end: 005cb2bf-a0c8-46f3-ae25-924029f8b00b\n\ncmp-ok( # begin: b1bf19de-9a16-41c0-a62b-1f02ecc0b036\n    difference-of-squares(100),\n    \"==\",\n    25164150,\n    \"Subtract sum of squares from square of sums: difference of squares 100\",\n); # end: b1bf19de-9a16-41c0-a62b-1f02ecc0b036\n\ndone-testing;\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "m-dango"
+  ],
+  "contributors": null
+}

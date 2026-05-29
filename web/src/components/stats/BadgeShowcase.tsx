@@ -3,7 +3,11 @@
 import { motion } from "framer-motion";
 import { type UserStats } from "@/types/stats";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
 import { Trophy } from "lucide-react";
+=======
+import { Code2, Trophy } from "lucide-react";
+>>>>>>> prod-deploy
 import { Card } from "@/components/ui/card";
 
 interface BadgeShowcaseProps {
@@ -59,7 +63,11 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
   return (
     <Card
       className={cn(
+<<<<<<< HEAD
         "flex flex-row items-center justify-center gap-12 p-3 pr-0",
+=======
+        "flex flex-row items-center justify-center gap-12 p-3 py-4",
+>>>>>>> prod-deploy
         className,
       )}
     >
@@ -71,12 +79,19 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
             cx={size / 2}
             cy={size / 2}
             r={radius}
+<<<<<<< HEAD
             stroke="currentColor"
+=======
+            stroke="var(--difficulty-easy)"
+>>>>>>> prod-deploy
             strokeWidth={strokeWidth}
             fill="transparent"
             strokeDasharray={`${arcLength} ${circumference}`}
             strokeOpacity={0.1}
+<<<<<<< HEAD
             className="text-muted/10"
+=======
+>>>>>>> prod-deploy
             strokeLinecap="round"
           />
 
@@ -169,10 +184,19 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
 
         {/* Base Status Label */}
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+<<<<<<< HEAD
           <p className="text-[9px] text-muted-foreground uppercase whitespace-nowrap">
             <span className="text-foreground font-semibold mr-1">4</span>{" "}
             Attempting
           </p>
+=======
+          <div className="flex items-center gap-0.5 whitespace-nowrap  transition-colors  ">
+            <Code2 size={12} className="text-difficulty-medium" />
+            <p className="text-[9px] text-muted-foreground group-hover/card:text-difficulty-medium uppercase font-bold tracking-widest leading-none translate-y-[1.5px]">
+              SlaveCode
+            </p>
+          </div>
+>>>>>>> prod-deploy
         </div>
       </div>
 

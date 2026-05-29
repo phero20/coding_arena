@@ -1,0 +1,26 @@
+{
+  "id": "dart:run-length-encoding",
+  "trackSlug": "dart",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "9c53981f-b75e-4782-be4a-3b13e1d40fb3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RunLengthEncoder {\n  // Put your code here\n}\n",
+  "example_solution": "class RunLengthEncoder {\n  String encode(String plaintext) {\n    return plaintext.replaceAllMapped(\n        RegExp(r'(.)\\1+'), (Match m) => m[0]!.length.toString() + m[1]!);\n  }\n\n  String decode(String ciphertext) {\n    return ciphertext.replaceAllMapped(\n        RegExp(r'(\\d+)(.)'), (Match m) => m[2]! * int.parse(m[1]!));\n  }\n}\n",
+  "test_code": "import 'package:run_length_encoding/run_length_encoding.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  final rle = RunLengthEncoder();\n\n  group('Encoding', () {\n    test('empty string', () {\n      final encoded = rle.encode(\"\");\n      expect(encoded, equals(\"\"));\n    }, skip: false);\n\n    test('single characters only are encoded without count', () {\n      final encoded = rle.encode(\"XYZ\");\n      expect(encoded, equals(\"XYZ\"));\n    }, skip: true);\n\n    test('string with no single characters', () {\n      final encoded = rle.encode(\"AABBBCCCC\");\n      expect(encoded, equals(\"2A3B4C\"));\n    }, skip: true);\n\n    test('single characters mixed with repeated characters', () {\n      final encoded = rle.encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\");\n      expect(encoded, equals(\"12WB12W3B24WB\"));\n    }, skip: true);\n\n    test('multiple whitespace mixed in string', () {\n      final encoded = rle.encode(\"  hsqq qww  \");\n      expect(encoded, equals(\"2 hs2q q2w2 \"));\n    }, skip: true);\n\n    test('lowercase characters', () {\n      final encoded = rle.encode(\"aabbbcccc\");\n      expect(encoded, equals(\"2a3b4c\"));\n    }, skip: true);\n  });\n\n  group('Decoding', () {\n    test('empty string', () {\n      final decoded = rle.decode(\"\");\n      expect(decoded, equals(\"\"));\n    }, skip: true);\n\n    test('single characters only', () {\n      final decoded = rle.decode(\"XYZ\");\n      expect(decoded, equals(\"XYZ\"));\n    }, skip: true);\n\n    test('string with no single characters', () {\n      final decoded = rle.decode(\"2A3B4C\");\n      expect(decoded, equals(\"AABBBCCCC\"));\n    }, skip: true);\n\n    test('single characters with repeated characters', () {\n      final decoded = rle.decode(\"12WB12W3B24WB\");\n      expect(decoded, equals(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"));\n    }, skip: true);\n\n    test('multiple whitespace mixed in string', () {\n      final decoded = rle.decode(\"2 hs2q q2w2 \");\n      expect(decoded, equals(\"  hsqq qww  \"));\n    }, skip: true);\n\n    test('lowercase string', () {\n      final decoded = rle.decode(\"2a3b4c\");\n      expect(decoded, equals(\"aabbbcccc\"));\n    }, skip: true);\n  });\n\n  group('Encode then Decode', () {\n    test('encode followed by decode gives original string', () {\n      final input = \"zzz ZZ  zZ\";\n      expect(rle.decode(rle.encode(input)), equals(input));\n    }, skip: true);\n  });\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

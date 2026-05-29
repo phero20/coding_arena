@@ -1,0 +1,29 @@
+{
+  "id": "purescript:rna-transcription",
+  "trackSlug": "purescript",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "b7648fa5-1aff-477c-973c-079245060d73",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "module RnaTranscription\n  ( toRNA\n  ) where\n\nimport Data.Maybe (Maybe)\nimport Effect.Exception.Unsafe (unsafeThrow)\n\ntoRNA :: String -> Maybe String\ntoRNA = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module RnaTranscription\n  ( toRNA\n  ) where\n\nimport Prelude\nimport Data.Maybe (Maybe(..))\nimport Data.String.CodeUnits (fromCharArray, toCharArray)\nimport Data.Traversable (traverse)\n\ntoRNA :: String -> Maybe String\ntoRNA dna = fromCharArray <$> traverse complement (toCharArray dna)\n\ncomplement :: Char -> Maybe Char\ncomplement 'C' = Just 'G'\ncomplement 'G' = Just 'C'\ncomplement 'A' = Just 'U'\ncomplement 'T' = Just 'A'\ncomplement _ = Nothing\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport Effect (Effect)\nimport Data.Maybe (Maybe(..))\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Assert as Assert\nimport Test.Unit.Main (runTest)\nimport RnaTranscription (toRNA)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites =\n  suite \"RnaTranscription.toRNA\" do\n    test \"RNA complement of cytosine is guanine\" $\n      Assert.equal (Just \"G\") (toRNA \"C\")\n\n    test \"RNA complement of guanine is cytosine\" $\n      Assert.equal (Just \"C\") (toRNA \"G\")\n\n    test \"RNA complement of thymine is adenine\" $\n      Assert.equal (Just \"A\") (toRNA \"T\")\n\n    test \"RNA complement of adenine is uracil\" $\n      Assert.equal (Just \"U\") (toRNA \"A\")\n\n    test \"RNA complement\" $\n      Assert.equal (Just \"UGCACCAGAAUU\") (toRNA \"ACGTGGTCTTAA\")\n\n    test \"correctly handles invalid input (RNA instead of DNA)\" $\n      Assert.equal Nothing (toRNA \"U\")\n\n    test \"correctly handles completely invalid DNA input\" $\n      Assert.equal Nothing (toRNA \"XXX\")\n\n    test \"correctly handles partially invalid DNA input\" $\n      Assert.equal Nothing (toRNA \"ACGTXXXCTTAA\")\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "houli"
+  ],
+  "contributors": [
+    "colinwahl",
+    "spicydonuts"
+  ]
+}

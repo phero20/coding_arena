@@ -1,0 +1,26 @@
+{
+  "id": "sml:knapsack",
+  "trackSlug": "sml",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "4aaa8cbf-a48e-475a-a986-bd2cc3468e67",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "fun maximumValue (items: {value: int, weight: int} list, maximumWeight: int): int =\n  raise Fail \"'maximumValue' is not implemented\"",
+  "example_solution": "fun itemMaxValue(i: {value: int, weight: int}, prevValues, cap) =\n  let \n    val valueWithout = List.nth(prevValues, cap) \n  in\n    if (#weight i > cap) then\n      valueWithout\n    else\n      let \n        val valueWith = List.nth(prevValues, cap - #weight i) + #value i \n      in\n        Int.max(valueWith, valueWithout)\n      end\n  end;\n\nfun nextValues(i: {value: int, weight: int}, prevValues, cap, acc) : int list = \n  if cap < 0 then \n    acc\n  else\n    let\n      val itemValue = itemMaxValue(i, prevValues, cap)\n    in\n      nextValues(i, prevValues, cap - 1, itemValue::acc)\n    end;\n\nfun calculateValues([], values) = values\n  | calculateValues((i :: next), values) = \n      let\n        val valuesForNext = nextValues(i, values, (List.length values) - 1, [])\n      in\n        calculateValues(next, valuesForNext)\n      end;\n\nfun maximumValue([], _) = 0 \n  | maximumValue(items, maximumWeight): int =\n      let \n        val size : int = maximumWeight + 1 \n        val initial : int list = List.tabulate(size, fn _ => 0)\n      in\n        List.last(calculateValues(items, initial))\n      end;",
+  "test_code": "use \"testlib.sml\";\nuse \"knapsack.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"knapsack\" [\n    test \"no items\"\n      (fn _ => maximumValue ([], 100) |> Expect.equalTo 0),\n\n    test \"one item, too heavy\"\n      (fn _ => maximumValue ([{weight = 100, value = 1}], 10) |> Expect.equalTo 0),\n\n    test \"five items (cannot be greedy by weight)\"\n      (fn _ => maximumValue ([{weight = 2, value = 5}, {weight = 2, value = 5}, {weight = 2, value = 5}, {weight = 2, value = 5}, {weight = 10, value = 21}], 10) |> Expect.equalTo 21),\n\n    test \"five items (cannot be greedy by value)\"\n      (fn _ => maximumValue ([{weight = 2, value = 20}, {weight = 2, value = 20}, {weight = 2, value = 20}, {weight = 2, value = 20}, {weight = 10, value = 50}], 10) |> Expect.equalTo 80),\n\n    test \"example knapsack\"\n      (fn _ => maximumValue ([{weight = 5, value = 10}, {weight = 4, value = 40}, {weight = 6, value = 30}, {weight = 4, value = 50}], 10) |> Expect.equalTo 90),\n\n    test \"8 items\"\n      (fn _ => maximumValue ([{weight = 25, value = 350}, {weight = 35, value = 400}, {weight = 45, value = 450}, {weight = 5, value = 20}, {weight = 25, value = 70}, {weight = 3, value = 8}, {weight = 2, value = 5}, {weight = 2, value = 5}], 104) |> Expect.equalTo 900),\n\n    test \"15 items\"\n      (fn _ => maximumValue ([{weight = 70, value = 135}, {weight = 73, value = 139}, {weight = 77, value = 149}, {weight = 80, value = 150}, {weight = 82, value = 156}, {weight = 87, value = 163}, {weight = 90, value = 173}, {weight = 94, value = 184}, {weight = 98, value = 192}, {weight = 106, value = 201}, {weight = 110, value = 210}, {weight = 113, value = 214}, {weight = 115, value = 221}, {weight = 118, value = 229}, {weight = 120, value = 240}], 750) |> Expect.equalTo 1458)\n  ]\n\nval _ = Test.run testsuite",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "kahgoh"
+  ],
+  "contributors": null
+}

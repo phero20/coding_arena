@@ -1,0 +1,26 @@
+{
+  "id": "arm64-assembly:resistor-color-duo",
+  "trackSlug": "arm64-assembly",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "951a3e60-ce1d-4c08-b812-cd4198ed6fe1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ".text\n.globl value\n\nvalue:\n        ret\n",
+  "example_solution": ".data\nblack:  .string \"black\"\nbrown:  .string \"brown\"\nred:    .string \"red\"\norange: .string \"orange\"\nyellow: .string \"yellow\"\ngreen:  .string \"green\"\nblue:   .string \"blue\"\nviolet: .string \"violet\"\ngrey:   .string \"grey\"\nwhite:  .string \"white\"\n\ncolor_array:\n        .dword black\n        .dword brown\n        .dword red\n        .dword orange\n        .dword yellow\n        .dword green\n        .dword blue\n        .dword violet\n        .dword grey\n        .dword white\n        .dword 0                        /* Sentinel value to indicate end of array */\n\n.text\n.globl value\n\ncolor_code:\n        adrp    x1, color_array\n        add     x1, x1, :lo12:color_array\n        mov     x2, x1\n\n.next:\n        mov     x3, x0\n        ldr     x4, [x2], #8            /* load pointer, post-increment */\n\n.compare:\n        ldrb    w5, [x3], #1            /* load character, post-increment */\n        ldrb    w6, [x4], #1            /* load character, post-increment */\n        cmp     w5, w6\n        bne     .next\n\n        cbnz    w5, .compare\n\n        sub     x2, x2, #8\n        sub     x0, x2, x1\n        lsr     x0, x0, #3\n        ret\n\n/* extern int value(const char **colors); */\nvalue:\n        mov     x8, x0\n        mov     x9, lr                 /* preserve return address */\n        mov     x10, #10\n        ldr     x0, [x8], #8           /* load address of first color */\n        bl      color_code\n        mov     x11, x0\n        ldr     x0, [x8]               /* load address of second color */\n        bl      color_code\n        madd    x0, x10, x11, x0\n        mov     lr, x9\n        ret\n",
+  "test_code": "#include \"vendor/unity.h\"\n\n#include <stddef.h>\n\nextern int value(const char **colors);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_brown_and_black(void) {\n    const char *colors[] = {\"brown\", \"black\", NULL};\n    TEST_ASSERT_EQUAL_INT(10, value(colors));\n}\n\nvoid test_blue_and_grey(void) {\n    TEST_IGNORE();\n    const char *colors[] = {\"blue\", \"grey\", NULL};\n    TEST_ASSERT_EQUAL_INT(68, value(colors));\n}\n\nvoid test_yellow_and_violet(void) {\n    TEST_IGNORE();\n    const char *colors[] = {\"yellow\", \"violet\", NULL};\n    TEST_ASSERT_EQUAL_INT(47, value(colors));\n}\n\nvoid test_white_and_red(void) {\n    TEST_IGNORE();\n    const char *colors[] = {\"white\", \"red\", NULL};\n    TEST_ASSERT_EQUAL_INT(92, value(colors));\n}\n\nvoid test_orange_and_orange(void) {\n    TEST_IGNORE();\n    const char *colors[] = {\"orange\", \"orange\", NULL};\n    TEST_ASSERT_EQUAL_INT(33, value(colors));\n}\n\nvoid test_ignore_additional_colors(void) {\n    TEST_IGNORE();\n    const char *colors[] = {\"green\", \"brown\", \"orange\", NULL};\n    TEST_ASSERT_EQUAL_INT(51, value(colors));\n}\n\nvoid test_black_and_brown_onedigit(void) {\n    TEST_IGNORE();\n    const char *colors[] = {\"black\", \"brown\", NULL};\n    TEST_ASSERT_EQUAL_INT(1, value(colors));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_brown_and_black);\n    RUN_TEST(test_blue_and_grey);\n    RUN_TEST(test_yellow_and_violet);\n    RUN_TEST(test_white_and_red);\n    RUN_TEST(test_orange_and_orange);\n    RUN_TEST(test_ignore_additional_colors);\n    RUN_TEST(test_black_and_brown_onedigit);\n    return UNITY_END();\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

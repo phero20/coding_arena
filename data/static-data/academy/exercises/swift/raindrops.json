@@ -1,0 +1,34 @@
+{
+  "id": "swift:raindrops",
+  "trackSlug": "swift",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "60b3b28e-06cb-4a5e-b458-380b6f542ed0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "func raindrops(_ number: Int) -> String {\n  // Write your code for the 'Raindrops' exercise in this file.\n}\n",
+  "example_solution": "func raindrops(_ number: Int) -> String {\n  let result = (number % 3, number % 5, number % 7)\n  switch result {\n  case (0, 0, 0): return \"PlingPlangPlong\"\n  case (_, 0, 0): return \"PlangPlong\"\n  case (0, _, 0): return \"PlingPlong\"\n  case (0, 0, _): return \"PlingPlang\"\n  case (_, _, 0): return \"Plong\"\n  case (_, 0, _): return \"Plang\"\n  case (0, _, _): return \"Pling\"\n  default: return \"\\(number)\"\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Raindrops\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct RaindropsTests {\n\n  @Test(\"the sound for 1 is 1\")\n  func testTheSoundFor1Is1() {\n    #expect(raindrops(1) == \"1\")\n  }\n\n  @Test(\"the sound for 3 is Pling\", .enabled(if: RUNALL))\n  func testTheSoundFor3IsPling() {\n    #expect(raindrops(3) == \"Pling\")\n  }\n\n  @Test(\"the sound for 5 is Plang\", .enabled(if: RUNALL))\n  func testTheSoundFor5IsPlang() {\n    #expect(raindrops(5) == \"Plang\")\n  }\n\n  @Test(\"the sound for 7 is Plong\", .enabled(if: RUNALL))\n  func testTheSoundFor7IsPlong() {\n    #expect(raindrops(7) == \"Plong\")\n  }\n\n  @Test(\"the sound for 6 is Pling as it has a factor 3\", .enabled(if: RUNALL))\n  func testTheSoundFor6IsPlingAsItHasAFactor3() {\n    #expect(raindrops(6) == \"Pling\")\n  }\n\n  @Test(\n    \"2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base\",\n    .enabled(if: RUNALL))\n  func test2ToThePower3DoesNotMakeARaindropSoundAs3IsTheExponentNotTheBase() {\n    #expect(raindrops(8) == \"8\")\n  }\n\n  @Test(\"the sound for 9 is Pling as it has a factor 3\", .enabled(if: RUNALL))\n  func testTheSoundFor9IsPlingAsItHasAFactor3() {\n    #expect(raindrops(9) == \"Pling\")\n  }\n\n  @Test(\"the sound for 10 is Plang as it has a factor 5\", .enabled(if: RUNALL))\n  func testTheSoundFor10IsPlangAsItHasAFactor5() {\n    #expect(raindrops(10) == \"Plang\")\n  }\n\n  @Test(\"the sound for 14 is Plong as it has a factor of 7\", .enabled(if: RUNALL))\n  func testTheSoundFor14IsPlongAsItHasAFactorOf7() {\n    #expect(raindrops(14) == \"Plong\")\n  }\n\n  @Test(\"the sound for 15 is PlingPlang as it has factors 3 and 5\", .enabled(if: RUNALL))\n  func testTheSoundFor15IsPlingplangAsItHasFactors3And5() {\n    #expect(raindrops(15) == \"PlingPlang\")\n  }\n\n  @Test(\"the sound for 21 is PlingPlong as it has factors 3 and 7\", .enabled(if: RUNALL))\n  func testTheSoundFor21IsPlingplongAsItHasFactors3And7() {\n    #expect(raindrops(21) == \"PlingPlong\")\n  }\n\n  @Test(\"the sound for 25 is Plang as it has a factor 5\", .enabled(if: RUNALL))\n  func testTheSoundFor25IsPlangAsItHasAFactor5() {\n    #expect(raindrops(25) == \"Plang\")\n  }\n\n  @Test(\"the sound for 27 is Pling as it has a factor 3\", .enabled(if: RUNALL))\n  func testTheSoundFor27IsPlingAsItHasAFactor3() {\n    #expect(raindrops(27) == \"Pling\")\n  }\n\n  @Test(\"the sound for 35 is PlangPlong as it has factors 5 and 7\", .enabled(if: RUNALL))\n  func testTheSoundFor35IsPlangplongAsItHasFactors5And7() {\n    #expect(raindrops(35) == \"PlangPlong\")\n  }\n\n  @Test(\"the sound for 49 is Plong as it has a factor 7\", .enabled(if: RUNALL))\n  func testTheSoundFor49IsPlongAsItHasAFactor7() {\n    #expect(raindrops(49) == \"Plong\")\n  }\n\n  @Test(\"the sound for 52 is 52\", .enabled(if: RUNALL))\n  func testTheSoundFor52Is52() {\n    #expect(raindrops(52) == \"52\")\n  }\n\n  @Test(\"the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7\", .enabled(if: RUNALL))\n  func testTheSoundFor105IsPlingplangplongAsItHasFactors35And7() {\n    #expect(raindrops(105) == \"PlingPlangPlong\")\n  }\n\n  @Test(\"the sound for 3125 is Plang as it has a factor 5\", .enabled(if: RUNALL))\n  func testTheSoundFor3125IsPlangAsItHasAFactor5() {\n    #expect(raindrops(3125) == \"Plang\")\n  }\n}\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "masters3d"
+  ],
+  "contributors": [
+    "bhargavg",
+    "hankturowski",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "nickkjordan",
+    "ThomasHaz"
+  ]
+}

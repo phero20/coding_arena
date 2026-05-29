@@ -1,0 +1,40 @@
+{
+  "id": "csharp:isogram",
+  "trackSlug": "csharp",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "4b7b65be-f777-4f64-94a0-4f9832f17a52",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "chars",
+    "strings",
+    "sets"
+  ],
+  "prerequisites": [
+    "chars",
+    "strings",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public static class Isogram\n{\n    public static bool IsIsogram(string word)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public static class Isogram\n{\n    public static bool IsIsogram(string word)\n    {\n        var letters = new HashSet<char>();\n\n        foreach (var c in word.ToLowerInvariant())\n        {\n            if (Char.IsLetter(c) && !letters.Add(c))\n            {\n                return false;\n            }\n        }\n\n        return true;\n    }\n}",
+  "test_code": "public class IsogramTests\n{\n    [Fact]\n    public void Empty_string()\n    {\n        Assert.True(Isogram.IsIsogram(\"\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Isogram_with_only_lower_case_characters()\n    {\n        Assert.True(Isogram.IsIsogram(\"isogram\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Word_with_one_duplicated_character()\n    {\n        Assert.False(Isogram.IsIsogram(\"eleven\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Word_with_one_duplicated_character_from_the_end_of_the_alphabet()\n    {\n        Assert.False(Isogram.IsIsogram(\"zzyzx\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Longest_reported_english_isogram()\n    {\n        Assert.True(Isogram.IsIsogram(\"subdermatoglyphic\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Word_with_duplicated_character_in_mixed_case()\n    {\n        Assert.False(Isogram.IsIsogram(\"Alphabet\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Word_with_duplicated_character_in_mixed_case_lowercase_first()\n    {\n        Assert.False(Isogram.IsIsogram(\"alphAbet\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hypothetical_isogrammic_word_with_hyphen()\n    {\n        Assert.True(Isogram.IsIsogram(\"thumbscrew-japingly\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hypothetical_word_with_duplicated_character_following_hyphen()\n    {\n        Assert.False(Isogram.IsIsogram(\"thumbscrew-jappingly\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Isogram_with_duplicated_hyphen()\n    {\n        Assert.True(Isogram.IsIsogram(\"six-year-old\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Made_up_name_that_is_an_isogram()\n    {\n        Assert.True(Isogram.IsIsogram(\"Emily Jung Schwartzkopf\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Duplicated_character_in_the_middle()\n    {\n        Assert.False(Isogram.IsIsogram(\"accentor\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Same_first_and_last_characters()\n    {\n        Assert.False(Isogram.IsIsogram(\"angola\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Word_with_duplicated_character_and_with_two_hyphens()\n    {\n        Assert.False(Isogram.IsIsogram(\"up-to-date\"));\n    }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "robkeim"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "j2jensen",
+    "vgrigoriu",
+    "wolf99",
+    "yvincent"
+  ]
+}

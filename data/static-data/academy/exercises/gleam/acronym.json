@@ -1,0 +1,30 @@
+{
+  "id": "gleam:acronym",
+  "trackSlug": "gleam",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "21946b94-c304-4a10-a6b6-b9fd5bbe9966",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "labelled-arguments",
+    "lists",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn abbreviate(phrase phrase: String) -> String {\n  todo\n}\n",
+  "example_solution": "import gleam/list\nimport gleam/regexp\nimport gleam/string\n\npub fn abbreviate(phrase phrase: String) -> String {\n  let assert Ok(re) = regexp.from_string(\"[ +\\\\-/;_]+\")\n  regexp.split(with: re, content: phrase)\n  |> list.fold(\"\", fn(acc, val) {\n    let assert Ok(letter) =\n      val\n      |> string.capitalise\n      |> string.first\n    acc <> letter\n  })\n}\n",
+  "test_code": "import acronym\nimport exercism/should\nimport exercism/test_runner\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn basic_test() {\n  acronym.abbreviate(phrase: \"Portable Network Graphics\")\n  |> should.equal(\"PNG\")\n}\n\npub fn lowercase_words_test() {\n  acronym.abbreviate(phrase: \"Ruby on Rails\")\n  |> should.equal(\"ROR\")\n}\n\npub fn punctuation_test() {\n  acronym.abbreviate(phrase: \"First In, First Out\")\n  |> should.equal(\"FIFO\")\n}\n\npub fn all_caps_word_test() {\n  acronym.abbreviate(phrase: \"GNU Image Manipulation Program\")\n  |> should.equal(\"GIMP\")\n}\n\npub fn punctuation_without_whitespace_test() {\n  acronym.abbreviate(phrase: \"Complementary metal-oxide semiconductor\")\n  |> should.equal(\"CMOS\")\n}\n\npub fn very_long_abbreviation_test() {\n  acronym.abbreviate(\n    phrase: \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\",\n  )\n  |> should.equal(\"ROTFLSHTMDCOALM\")\n}\n\npub fn consecutive_delimiters_test() {\n  acronym.abbreviate(phrase: \"Something - I made up from thin air\")\n  |> should.equal(\"SIMUFTA\")\n}\n\npub fn apostrophes_test() {\n  acronym.abbreviate(phrase: \"Halley's Comet\")\n  |> should.equal(\"HC\")\n}\n\npub fn underscore_emphasis_test() {\n  acronym.abbreviate(phrase: \"The Road _Not_ Taken\")\n  |> should.equal(\"TRNT\")\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "suraj-mandal"
+  ],
+  "contributors": null
+}

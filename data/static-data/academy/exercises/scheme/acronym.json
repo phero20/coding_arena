@@ -1,0 +1,26 @@
+{
+  "id": "scheme:acronym",
+  "trackSlug": "scheme",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "72567f88-e651-4537-99dc-e53760ed2ff1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (acronym test)\n  'implement-me!)\n",
+  "example_solution": "(use-modules (ice-9 regex))\n\n(define (acronym text)\n  (apply (compose string-upcase string-append)\n         (map (lambda (ss)\n                (string-take (match:substring ss) 1))\n              (list-matches \"[[:alpha:]|']+\" text))))\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success \"basic\" equal? acronym\n      '(\"Portable Network Graphics\") \"PNG\")\n     (test-success \"lowercase words\" equal? acronym\n       '(\"Ruby on Rails\") \"ROR\")\n     (test-success \"punctuation\" equal? acronym\n       '(\"First In, First Out\") \"FIFO\")\n     (test-success \"all caps word\" equal? acronym\n       '(\"GNU Image Manipulation Program\") \"GIMP\")\n     (test-success \"colon\" equal? acronym\n       '(\"PHP: Hypertext Preprocessor\") \"PHP\")\n     (test-success \"punctuation without whitespace\" equal? acronym\n       '(\"Complementary metal-oxide semiconductor\") \"CMOS\")\n     (test-success \"very long abbreviation\" equal? acronym\n       '(\"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\")\n       \"ROTFLSHTMDCOALM\")\n     (test-success \"consecutive delimiters\" equal? acronym\n       '(\"Something - I made up from thin air\") \"SIMUFTA\")\n     (test-success \"apostrophes\" equal? acronym\n       '(\"Halley's Comet\") \"HC\")\n     (test-success \"underscore emphasis\" equal? acronym\n       '(\"The Road _Not_ Taken\") \"TRNT\")))\n\n(run-with-cli \"acronym.scm\" (list test-cases))\n\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "tongkiat"
+  ],
+  "contributors": null
+}

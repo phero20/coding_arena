@@ -1,0 +1,26 @@
+{
+  "id": "racket:minesweeper",
+  "trackSlug": "racket",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "a7bd6275-b624-4c09-9040-4b57afe1c4b6",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide annotate)\n\n(define (annotate minefield)\n  (error \"Please implement 'annotate'\"))\n",
+  "example_solution": "#lang racket\n\n(provide annotate)\n\n(define (bomb-at loc row)\n  (cond [(null? row) 0]\n\t[(negative? loc) 0]\n\t[(>= loc (string-length row)) 0]\n\t[else (let ([c (string-ref row loc)])\n\t\t(if (char=? c #\\*) 1 0))]))\n    \n\n(define (bombs-around loc row)\n  (+ (bomb-at (sub1 loc) row) (bomb-at loc row) (bomb-at (add1 loc) row)))\n\n(define (make-annotated-row top middle bottom)\n  (list->string\n    (for/list ([c (in-string middle)]\n\t       [i (in-range (string-length middle))])\n      (if (char=? c #\\space)\n\t(let ([b (+ (bombs-around i top)\n\t\t    (bombs-around i middle)\n\t\t    (bombs-around i bottom))])\n\t  (if (zero? b) #\\space (integer->char (+ b (char->integer #\\0)))))\n\tc))))\n\n(define (following-row i field)\n  (if (>= (add1 i) (length field)) '() (list-ref field (add1 i))))\n\n(define (annotate minefield)\n  (for/fold ([out '()]\n\t     [top '()]\n\t     [middle (following-row -1 minefield)]\n\t     [bottom (following-row 0 minefield)]\n\t     #:result (reverse out))\n            ([i (in-inclusive-range 1 (length minefield))])\n     (values (cons (make-annotated-row top middle bottom) out)\n\t     middle bottom (following-row i minefield))))\n",
+  "test_code": "#lang racket/base\n\n(require \"minesweeper.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui))\n\n(module+ test\n  (define suite\n    (test-suite\n      \"minesweeper tests\"\n      (test-equal? \"no rows\"\n         (annotate '())\n         '())\n\n      (test-equal? \"no columns\"\n        (annotate '(\"\"))\n        '(\"\"))\n\n      (test-equal? \"no mines\"\n        (annotate\n          '(\"   \"\n            \"   \"\n            \"   \"))\n        '(\"   \"\n          \"   \"\n          \"   \"))\n\n      (test-equal? \"minefield with only mines\"\n        (annotate\n          '(\"***\"\n            \"***\"\n            \"***\"))\n        '(\"***\"\n          \"***\"\n          \"***\"))\n\n      (test-equal? \"mine surrounded by spaces\"\n        (annotate\n          '(\"   \"\n            \" * \"\n            \"   \"))\n        '(\"111\"\n          \"1*1\"\n          \"111\"))\n\n      (test-equal? \"space surrounded by mines\"\n        (annotate\n          '(\"***\"\n            \"* *\"\n            \"***\"))\n        '(\"***\"\n          \"*8*\"\n          \"***\"))\n\n      (test-equal? \"horizontal line\"\n        (annotate '(\" * * \"))\n        '(\"1*2*1\"))\n\n      (test-equal? \"horizontal line, mines at edges\"\n        (annotate '(\"*   *\"))\n        '(\"*1 1*\"))\n\n      (test-equal? \"vertical line\"\n        (annotate\n          '(\" \"\n            \"*\"\n            \" \"\n            \"*\"\n            \" \"))\n        '(\"1\"\n          \"*\"\n          \"2\"\n          \"*\"\n          \"1\"))\n\n      (test-equal? \"vertical line, mines at edges\"\n        (annotate\n          '(\"*\"\n            \" \"\n            \" \"\n            \" \"\n            \"*\"))\n        '(\"*\"\n          \"1\"\n          \" \"\n          \"1\"\n          \"*\"))\n\n      (test-equal? \"cross\"\n        (annotate\n          '(\"  *  \"\n            \"  *  \"\n            \"*****\"\n            \"  *  \"\n            \"  *  \"))\n        '(\" 2*2 \"\n          \"25*52\"\n          \"*****\"\n          \"25*52\"\n          \" 2*2 \"))\n \n      (test-equal? \"large minefield\"\n        (annotate\n          '(\" *  * \"\n            \"  *   \"\n            \"    * \"\n            \"   * *\"\n            \" *  * \"\n            \"      \"))\n        '(\"1*22*1\"\n          \"12*322\"\n          \" 123*2\"\n          \"112*4*\"\n          \"1*22*2\"\n          \"111111\"))))\n\n  (run-tests suite))\n\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "blakelewis"
+  ],
+  "contributors": null
+}

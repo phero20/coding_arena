@@ -1,0 +1,33 @@
+{
+  "id": "coffeescript:triangle",
+  "trackSlug": "coffeescript",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "42292f42-ccfe-4103-a6f3-a057bca32c49",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\n~~~~exercism/note\n_Degenerate triangles_ are triangles where the sum of the length of two sides is **equal** to the length of the third side, e.g. `1, 1, 2`.\nWe opted to not include tests for degenerate triangles in this exercise.\nYou may handle those situations if you wish to do so, or safely ignore them.\n~~~~\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Triangle\n  constructor: (args) ->\n\n  equilateral: ->\n\n  isosceles: ->\n\n  scalene: ->\n\nmodule.exports = Triangle\n",
+  "example_solution": "class Triangle\n\n  constructor: (args...) ->\n    @sides = args\n\n  equilateral: ->\n    (new Set(@sides)).size is 1 and @validTraingle() and @sides[0] isnt 0\n\n  isosceles: ->\n    (new Set(@sides)).size <= 2 and @validTraingle()\n\n  scalene: ->\n    (new Set(@sides)).size is 3 and @validTraingle()\n\n  validTraingle: ->\n    @sides[0] + @sides[1] >= @sides[2] and @sides[1] + @sides[2] >= @sides[0] and @sides[0] + @sides[2] >= @sides[1]\n\nmodule.exports = Triangle\n",
+  "test_code": "Triangle = require './triangle'\n\ndescribe 'Triangle', ->\n  describe 'equilateral', ->\n    it 'all sides are equal', ->\n      triangle = new Triangle(2, 2, 2)\n      expect(triangle.equilateral()).toEqual true\n\n    xit 'any side is unequal', ->\n      triangle = new Triangle(2, 3, 2)\n      expect(triangle.equilateral()).toEqual false\n\n    xit 'no sides are equal', ->\n      triangle = new Triangle(5, 4, 6)\n      expect(triangle.equilateral()).toEqual false\n\n    xit 'all zero sides is not a triangle', ->\n      triangle = new Triangle(0, 0, 0)\n      expect(triangle.equilateral()).toEqual false\n\n    xit 'sides may be floats', ->\n      triangle = new Triangle(0.5, 0.5, 0.5)\n      expect(triangle.equilateral()).toEqual true\n\n  describe 'isosceles', ->\n    xit 'last two sides are equal', ->\n      triangle = new Triangle(3, 4, 4)\n      expect(triangle.isosceles()).toEqual true\n\n    xit 'first two sides are equal', ->\n      triangle = new Triangle(4, 4, 3)\n      expect(triangle.isosceles()).toEqual true\n\n    xit 'first and last sides are equal', ->\n      triangle = new Triangle(4, 3, 4)\n      expect(triangle.isosceles()).toEqual true\n\n    xit 'equilateral triangles are also isosceles', ->\n      triangle = new Triangle(4, 4, 4)\n      expect(triangle.isosceles()).toEqual true\n\n    xit 'no sides are equal', ->\n      triangle = new Triangle(2, 3, 4)\n      expect(triangle.isosceles()).toEqual false\n\n    xit 'first triangle inequality violation', ->\n      triangle = new Triangle(1, 1, 3)\n      expect(triangle.isosceles()).toEqual false\n\n    xit 'second triangle inequality violation', ->\n      triangle = new Triangle(1, 3, 1)\n      expect(triangle.isosceles()).toEqual false\n\n    xit 'third triangle inequality violation', ->\n      triangle = new Triangle(3, 1, 1)\n      expect(triangle.isosceles()).toEqual false\n\n    xit 'sides may be floats', ->\n      triangle = new Triangle(0.5, 0.4, 0.5)\n      expect(triangle.isosceles()).toEqual true\n\n  describe 'scalene', ->\n    xit 'no sides are equal', ->\n      triangle = new Triangle(5, 4, 6)\n      expect(triangle.scalene()).toEqual true\n\n    xit 'all sides are equal', ->\n      triangle = new Triangle(4, 4, 4)\n      expect(triangle.scalene()).toEqual false\n\n    xit 'first and second sides are equal', ->\n      triangle = new Triangle(4, 4, 3)\n      expect(triangle.scalene()).toEqual false\n\n    xit 'first and third sides are equal', ->\n      triangle = new Triangle(3, 4, 3)\n      expect(triangle.scalene()).toEqual false\n\n    xit 'second and third  sides are equal', ->\n      triangle = new Triangle(4, 3, 3)\n      expect(triangle.scalene()).toEqual false\n\n    xit 'may not violate triangle inequality', ->\n      triangle = new Triangle(7, 3, 2)\n      expect(triangle.scalene()).toEqual false\n\n    xit 'sides may be floats', ->\n      triangle = new Triangle(0.5, 0.4, 0.6)\n      expect(triangle.scalene()).toEqual true",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://www.rubykoans.com/",
+  "authors": [
+    "wvmitchell",
+    "meatball133"
+  ],
+  "contributors": [
+    "aimorris",
+    "alxndr",
+    "kytrinyx",
+    "rootulp",
+    "zvkemp"
+  ]
+}

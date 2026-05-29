@@ -1,0 +1,46 @@
+{
+  "id": "python:acronym",
+  "trackSlug": "python",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "038c7f7f-02f6-496f-9e16-9372621cc4cd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "regular-expressions"
+  ],
+  "prerequisites": [
+    "basics",
+    "loops",
+    "strings",
+    "string-methods"
+  ],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def abbreviate(words):\n    pass\n",
+  "example_solution": "import re\n\n\ndef abbreviate(words):\n    regex = \"[A-Z]+['a-z]*|['a-z]+\"\n    return ''.join(word[0].upper() for word in re.findall(regex, words))\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/acronym/canonical-data.json\n# File last updated on 2026-02-19\n\nimport unittest\n\nfrom acronym import (\n    abbreviate,\n)\n\n\nclass AcronymTest(unittest.TestCase):\n\n    def test_basic(self):\n        self.assertEqual(abbreviate(\"Portable Network Graphics\"), \"PNG\")\n\n    def test_lowercase_words(self):\n        self.assertEqual(abbreviate(\"Ruby on Rails\"), \"ROR\")\n\n    def test_punctuation(self):\n        self.assertEqual(abbreviate(\"First In, First Out\"), \"FIFO\")\n\n    def test_all_caps_word(self):\n        self.assertEqual(abbreviate(\"GNU Image Manipulation Program\"), \"GIMP\")\n\n    def test_punctuation_without_whitespace(self):\n        self.assertEqual(abbreviate(\"Complementary metal-oxide semiconductor\"), \"CMOS\")\n\n    def test_very_long_abbreviation(self):\n        self.assertEqual(\n            abbreviate(\n                \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n            ),\n            \"ROTFLSHTMDCOALM\",\n        )\n\n    def test_consecutive_delimiters(self):\n        self.assertEqual(abbreviate(\"Something - I made up from thin air\"), \"SIMUFTA\")\n\n    def test_apostrophes(self):\n        self.assertEqual(abbreviate(\"Halley's Comet\"), \"HC\")\n\n    def test_underscore_emphasis(self):\n        self.assertEqual(abbreviate(\"The Road _Not_ Taken\"), \"TRNT\")\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "rootulp"
+  ],
+  "contributors": [
+    "AnAccountForReportingBugs",
+    "behrtam",
+    "cmccandless",
+    "Dog",
+    "GascaK",
+    "ikhadykin",
+    "N-Parsons",
+    "omer-g",
+    "pheanex",
+    "sjwarner-bp",
+    "thomasjpfan",
+    "tqa236"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "uiua:say",
+  "trackSlug": "uiua",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "2eceb43d-9510-4307-a8de-c33378263834",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "# Spell out a number in English\n# English ? Number\nSay ← |1 ⊙(⍤\"Please implement Say\" 0)\n",
+  "example_solution": "ZeroToNineteen ← {\"zero\" \"one\" \"two\" \"three\" \"four\" \"five\" \"six\" \"seven\" \"eight\" \"nine\" \"ten\" \"eleven\" \"twelve\" \"thirteen\" \"fourteen\" \"fifteen\" \"sixteen\" \"seventeen\" \"eighteen\" \"nineteen\"}\nTens           ← {\"\" \"ten\" \"twenty\" \"thirty\" \"forty\" \"fifty\" \"sixty\" \"seventy\" \"eighty\" \"ninety\"}\n\nSayUnit! ← (\n  ⊃(⊸±⋅◿|˜$\"_ _\"⊙(^0⌊÷))\n  ⨬(◌|˜$\"_ _\"^0)\n)\n\nSay ← |1 (\n  ⍤\"input out of range\"×⊸⊃(≥0|<1000000000000)\n  ⊸(⊗1≥1000000000_1000000_1000_100_20_0)\n  ⨬(SayUnit!Say \"billion\" 1000000000\n  | SayUnit!Say \"million\" 1000000\n  | SayUnit!Say \"thousand\" 1000\n  | SayUnit!Say \"hundred\" 100\n  | ⊃(◿10|°□˜⊡Tens⌊÷10)\n    ⨬(⋅|˜$\"_-_\"Say)⊸±\n  | °□˜⊡ZeroToNineteen\n  )\n)\n",
+  "test_code": "~ \"say.ua\" ~ Say\n\n# Zero\n⍤⤙≍ \"zero\" Say 0\n\n# One\n⍤⤙≍ \"one\" Say 1\n\n# Fourteen\n⍤⤙≍ \"fourteen\" Say 14\n\n# Twenty\n⍤⤙≍ \"twenty\" Say 20\n\n# Twenty-two\n⍤⤙≍ \"twenty-two\" Say 22\n\n# Thirty\n⍤⤙≍ \"thirty\" Say 30\n\n# Ninety-nine\n⍤⤙≍ \"ninety-nine\" Say 99\n\n# One hundred\n⍤⤙≍ \"one hundred\" Say 100\n\n# One hundred twenty-three\n⍤⤙≍ \"one hundred twenty-three\" Say 123\n\n# Two hundred\n⍤⤙≍ \"two hundred\" Say 200\n\n# Nine hundred ninety-nine\n⍤⤙≍ \"nine hundred ninety-nine\" Say 999\n\n# One thousand\n⍤⤙≍ \"one thousand\" Say 1000\n\n# One thousand two hundred thirty-four\n⍤⤙≍ \"one thousand two hundred thirty-four\" Say 1234\n\n# One million\n⍤⤙≍ \"one million\" Say 1000000\n\n# One million two thousand three hundred forty-five\n⍤⤙≍ \"one million two thousand three hundred forty-five\" Say 1002345\n\n# One billion\n⍤⤙≍ \"one billion\" Say 1000000000\n\n# A big number\n⍤⤙≍ \"nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three\" Say 987654321123\n\n# Numbers below zero are out of range\n⍤⤙≍ \"input out of range\" ⍣(Say ¯1|∘)\n\n# Numbers above 999,999,999,999 are out of range\n⍤⤙≍ \"input out of range\" ⍣(Say 1000000000000|∘)\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,34 @@
+{
+  "id": "ocaml:rectangles",
+  "trackSlug": "ocaml",
+  "slug": "rectangles",
+  "name": "Rectangles",
+  "uuid": "1b491d7e-40db-4782-a8bb-7cb3746588f5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the rectangles in an ASCII diagram.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCount the rectangles in an ASCII diagram like the one below.\n\n```text\n   +--+\n  ++  |\n+-++--+\n|  |  |\n+--+--+\n```\n\nThe above diagram contains these 6 rectangles:\n\n```text\n\n\n+-----+\n|     |\n+-----+\n```\n\n```text\n   +--+\n   |  |\n   |  |\n   |  |\n   +--+\n```\n\n```text\n   +--+\n   |  |\n   +--+\n\n\n```\n\n```text\n\n\n   +--+\n   |  |\n   +--+\n```\n\n```text\n\n\n+--+\n|  |\n+--+\n```\n\n```text\n\n  ++\n  ++\n\n\n```\n\nYou may assume that the input is always a proper rectangle (i.e. the length of every line equals the length of the first line).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let count_rectangles _ =\n    failwith \"'count_rectangles' is missing\"\n",
+  "example_solution": "type position = Start | UpperSide | RightSide | LowerSide | LeftSide\n\nlet count_rectangles pic =\n  let maxY = Array.length pic in\n  let maxX = if maxY > 0 then String.length pic.(0) else 0 in\n  let rec go x y xStart yStart pos = \n    let on_side_fn dx dy next_pos () = \n      go (x+dx) (y+dy) xStart yStart next_pos in\n    let on_corner_fn dx1 dy1 dx2 dy2 next_pos () = \n      go (x+dx1) (y+dy1) xStart yStart next_pos + go (x+dx2) (y+dy2) xStart yStart pos in\n    let progress side_ch on_side on_corner = \n      try\n        match pic.(y).[x] with\n        | c when c = side_ch -> on_side ()\n        | '+' -> on_corner ()\n        | _ -> 0\n      with Invalid_argument _ -> 0 in\n    match pos with\n    | Start -> \n        if y = maxY then 0\n        else if x = maxX then go 0 (y+1) 0 (y+1) Start\n        else (match pic.(y).[x] with\n        | '+' -> go (x+1) y x y UpperSide + go (x+1) y x y Start\n        | _ -> go (x+1) y (x+1) y Start \n        )\n    | UpperSide -> progress '-' (on_side_fn 1 0 UpperSide)    (on_corner_fn 0 1 1 0 RightSide)\n    | RightSide -> progress '|' (on_side_fn 0 1 RightSide)    (on_corner_fn (-1) 0 0 1 LowerSide)\n    | LowerSide -> progress '-' (on_side_fn (-1) 0 LowerSide) (on_corner_fn 0 (-1) (-1) 0 LeftSide)\n    | LeftSide ->  progress '|' (on_side_fn 0 (-1) LeftSide)  (fun () -> if x = xStart && y = yStart then 1 else go x (y-1) xStart yStart LeftSide)\n  in go 0 0 0 0 Start",
+  "test_code": "open OUnit2\nopen Rectangles\n\nlet ae exp got _test_ctxt = assert_equal exp got ~printer:string_of_int\n\nlet tests = [\n  \"no rows\" >::\n  ae 0 (count_rectangles [||]);\n  \"no columns\" >::\n  ae 0 (count_rectangles [|\"\"|]);\n  \"no rectangles\" >::\n  ae 0 (count_rectangles [|\" \"|]);\n  \"one rectangle\" >::\n  ae 1 (count_rectangles [|\n      \"+-+\";\n      \"| |\";\n      \"+-+\";\n    |]);\n  \"two rectangles without shared parts\" >::\n  ae 2 (count_rectangles [|\n      \"  +-+\";\n      \"  | |\";\n      \"+-+-+\";\n      \"| |  \";\n      \"+-+  \";\n    |]);\n  \"five rectangles with shared parts\" >::\n  ae 5 (count_rectangles [|\n      \"  +-+\";\n      \"  | |\";\n      \"+-+-+\";\n      \"| | |\";\n      \"+-+-+\";\n    |]);\n  \"rectangle of height 1 is counted\" >::\n  ae 1 (count_rectangles [|\n      \"+--+\";\n      \"+--+\";\n    |]);\n  \"rectangle of width 1 is counted\" >::\n  ae 1 (count_rectangles [|\n      \"++\";\n      \"||\";\n      \"++\";\n    |]);\n  \"1x1 square is counted\" >::\n  ae 1 (count_rectangles [|\n      \"++\";\n      \"++\";\n    |]);\n  \"only complete rectangles are counted\" >::\n  ae 1 (count_rectangles [|\n      \"  +-+\";\n      \"    |\";\n      \"+-+-+\";\n      \"| | -\";\n      \"+-+-+\";\n    |]);\n  \"rectangles can be of different sizes\" >::\n  ae 3 (count_rectangles [|\n      \"+------+----+\";\n      \"|      |    |\";\n      \"+---+--+    |\";\n      \"|   |       |\";\n      \"+---+-------+\";\n    |]);\n  \"corner is required for a rectangle to be complete\" >::\n  ae 2 (count_rectangles [|\n      \"+------+----+\";\n      \"|      |    |\";\n      \"+------+    |\";\n      \"|   |       |\";\n      \"+---+-------+\";\n    |]);\n  \"large input with many rectangles\" >::\n  ae 60 (count_rectangles [|\n      \"+---+--+----+\";\n      \"|   +--+----+\";\n      \"+---+--+    |\";\n      \"|   +--+----+\";\n      \"+---+--+--+-+\";\n      \"+---+--+--+-+\";\n      \"+------+  | |\";\n      \"          +-+\";\n    |]);\n  \"rectangles must have four sides\" >::\n  ae 5 (count_rectangles [|\n      \"+-+ +-+\";\n      \"| | | |\";\n      \"+-+-+-+\";\n      \"  | |  \";\n      \"+-+-+-+\";\n      \"| | | |\";\n      \"+-+ +-+\";\n    |]);\n]\n\nlet () =\n  run_test_tt_main (\"rectangles tests\" >::: tests)\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "daveyarwood",
+    "iHiD",
+    "kytrinyx",
+    "marionebl",
+    "Peaupote",
+    "sbl",
+    "sshine"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "objective-c:flatten-array",
+  "trackSlug": "objective-c",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "af3bce9f-954a-4f46-97a0-9236436e3f08",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "#import \"FlattenArray.h\"\n\n@implementation FlattenArray\n\n// TODO: add your solution here\n\n@end\n",
+  "example_solution": "#import \"FlattenArrayExample.h\"\nstatic NSMutableArray *resultArray;\nstatic NSNull *nullValue;\n\n@implementation FlattenArrayExample\n\n+ (NSArray *)flattenArray:(NSArray *)list{\n    resultArray = [NSMutableArray array];\n    nullValue = [NSNull null];\n    \n    for (int i = 0; i < list.count; i++) {\n        if ([list[i] isKindOfClass:[NSArray class]]) {\n            [FlattenArrayExample extractValuesFromArray:list[i]];\n        } else if (list[i] != nullValue) {\n            [resultArray addObject:list[i]];\n        }\n    }\n    \n    return resultArray;\n}\n\n\n+ (void)extractValuesFromArray:(NSArray*)array{\n    for (int i = 0; i < array.count; i++) {\n        if ([array[i] isKindOfClass:[NSArray class]]) {\n            [FlattenArrayExample extractValuesFromArray:array[i]];\n        } else if (array[i] != nullValue) {\n            [resultArray addObject:array[i]];\n        }\n    }\n    \n}\n\n\n@end\n",
+  "test_code": "#import <XCTest/XCTest.h>\n\n#if __has_include(\"FlattenArrayExample.h\")\n# import \"FlattenArrayExample.h\"\n# else\n# import \"FlattenArray.h\"\n#endif\n\n@interface FlattenArrayTest : XCTestCase\n\n@end\n\nstatic NSNull *nullValue;\n\n@implementation FlattenArrayTest\n\n- (void)setUp {\n    nullValue = [NSNull null];\n}\n\n- (void)testFlattenArrayWithJustIntegers {\n    NSArray *inputArray = @[@1, @[@2, @3, @4, @5, @6, @7], @8];\n    NSArray *expected = @[@1, @2, @3, @4, @5, @6, @7, @8];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n\n- (void)testFiveLevelNesting {\n    NSArray *inputArray = @[@0, @2, @[@[@2, @3], @8, @100, @4, @[@[@50]]], @-2];\n    NSArray *expected = @[@0, @2, @2, @3, @8, @100, @4, @50, @-2];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n\n- (void)testSixLevelNesting {\n    NSArray *inputArray = @[@1, @[@2, @[@[@3]], @[@4, @[@[@5]]], @6, @7], @8];\n    NSArray *expected = @[@1, @2, @3, @4, @5, @6, @7, @8];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n\n- (void)testSixLevelNestingWithNullValues {\n    NSArray *inputArray = @[@0, @2, @[@[@2, @3], @8, @[@[@100]], nullValue, @[@[nullValue]]], @-2];\n    NSArray *expected = @[@0, @2, @2, @3, @8, @100, @-2];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n\n- (void)testAllValuesInNestedListAreNull {\n    NSArray *inputArray = @[nullValue, @[@[@[@[nullValue]]]], nullValue, nullValue, @[@[nullValue, nullValue], nullValue], nullValue];\n    NSArray *expected = @[];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n\n- (void)testFiveLevelDeepNestedListWithDoubleValuesAndNullValues {\n    NSArray *inputArray = @[@0.085, @2.8844557, @[@[@2.00005, @3.13], @8.4, @100, @4.8, @[@[@[nullValue]]]], @-2.5];\n    NSArray *expected = @[@0.085, @2.8844557, @2.00005, @3.13, @8.4, @100, @4.8, @-2.5];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n\n- (void)testSixLevelDeepNestedListWithStringsAndNullValues {\n    NSArray *inputArray = @[@\"Zero\", @\"two\", @[@[@[@\"Two\", @\"three\"]], @\"eight\", @[@[@\"One Hundred\"]], nullValue, @[@[nullValue]]], @\"minus two\"];\n    NSArray *expected = @[@\"Zero\", @\"two\", @\"Two\", @\"three\", @\"eight\", @\"One Hundred\", @\"minus two\"];\n    XCTAssertEqualObjects(expected, [FlattenArrayExample flattenArray:inputArray]);\n}\n@end\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "AlwynC"
+  ],
+  "contributors": [
+    "masters3d",
+    "robtimp"
+  ]
+}

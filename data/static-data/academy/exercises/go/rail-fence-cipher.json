@@ -1,0 +1,33 @@
+{
+  "id": "go:rail-fence-cipher",
+  "trackSlug": "go",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "bafd87ad-1dc5-4bbe-b853-ed330c3f155a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package railfencecipher\n\nfunc Encode(message string, rails int) string {\n\tpanic(\"Please implement the Encode function\")\n}\n\nfunc Decode(message string, rails int) string {\n\tpanic(\"Please implement the Decode function\")\n}\n",
+  "example_solution": "package railfencecipher\n\nimport (\n\t\"sort\"\n)\n\ntype pair struct {\n\tindex, value int\n\tletter       byte\n}\n\nfunc pattern(rails, size int) []pair {\n\tvar pairs []pair\n\tv, direction := 0, 1\n\tfor i := range size {\n\t\tpairs = append(pairs, pair{index: i, value: v})\n\t\tv += direction\n\t\tif v == 0 {\n\t\t\tdirection = 1\n\t\t} else if v == rails-1 {\n\t\t\tdirection = -1\n\t\t}\n\t}\n\treturn pairs\n}\n\nfunc sortedPattern(rails, size int) []pair {\n\tfence := pattern(rails, size)\n\tsort.Slice(fence, func(i, j int) bool {\n\t\tf1, f2 := fence[i], fence[j]\n\t\treturn f1.value < f2.value || (f1.value == f2.value && f1.index < f2.index)\n\t})\n\treturn fence\n}\n\n// Encode encodes given message with given rails\nfunc Encode(msg string, rails int) string {\n\tfence := sortedPattern(rails, len(msg))\n\tvar encoded []byte\n\tfor _, p := range fence {\n\t\tencoded = append(encoded, msg[p.index])\n\t}\n\treturn string(encoded)\n}\n\n// Decode decodes given message with given rails\nfunc Decode(msg string, rails int) string {\n\tfence := sortedPattern(rails, len(msg))\n\tfor i := range msg {\n\t\tfence[i].letter = msg[i]\n\t}\n\tsort.Slice(fence, func(i, j int) bool { return fence[i].index < fence[j].index })\n\tvar decoded []byte\n\tfor _, p := range fence {\n\t\tdecoded = append(decoded, p.letter)\n\t}\n\treturn string(decoded)\n}\n",
+  "test_code": "package railfencecipher\n\nimport \"testing\"\n\nfunc TestEncode(t *testing.T) {\n\tfor _, tc := range encodeTests {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Encode(tc.message, tc.rails); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Encode(%q, %d)\\ngot: %q\\nwant: %q\", tc.message, tc.rails, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestDecode(t *testing.T) {\n\tfor _, tc := range decodeTests {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tif actual := Decode(tc.message, tc.rails); actual != tc.expected {\n\t\t\t\tt.Fatalf(\"Decode(%q, %d)\\ngot: %q\\nwant: %q\", tc.message, tc.rails, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkEncode(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range encodeTests {\n\t\t\tEncode(test.message, test.rails)\n\t\t}\n\t}\n}\n\nfunc BenchmarkDecode(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range decodeTests {\n\t\t\tDecode(test.message, test.rails)\n\t\t}\n\t}\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "ferhatelmas"
+  ],
+  "contributors": [
+    "bitfield",
+    "ekingery",
+    "hilary",
+    "leenipper",
+    "sebito91",
+    "eklatzer"
+  ]
+}

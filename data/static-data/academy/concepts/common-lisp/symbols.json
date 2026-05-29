@@ -1,0 +1,6 @@
+{
+  "slug": "symbols",
+  "name": "Symbols",
+  "introduction": "# Introduction\n\nSymbols in Common Lisp are special values that can point to other values or, in the case of _keywords_, themselves.\nWhen symbols are evaluated by Lisp, they are replaced with the values they point to:\n\n```lisp\nfoo  ; => <whatever-foo-points-to>\n:foo ; => :FOO\n```\n\nNote that keywords are denoted by a leading colon (`:`).\n\nQuoting – the addition of `'` before an S-expression – tells Lisp to not evaluate that expression.\nBy quoting `'foo` in our `defun` example, we avoided Lisp attempting to look up (and failing to find) whatever `FOO` was supposed to point to, instead, returning the value `FOO` itself.\nIf `FOO` has not been defined anywhere in our program:\n\n```lisp\nfoo  ; => <ERROR! Lisp doesn't know what foo points to!>\n'foo ; => FOO\n```\n\nFor now, you can consider this just as a way to return symbols from a function, but we will revisit quoting and further explore its implications in future concept exercises.",
+  "about": "# Reference\n\n```lisp\n;; Returning a symbol from a `defun`\n(defun gimme-foo () 'foo)\n(gimme-foo) ; => FOO\n\n;; The same, but as a keyword\n(defun gimme-bar () :bar)\n(gimme-bar) ; => :BAR\n```"
+}

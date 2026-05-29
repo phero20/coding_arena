@@ -1,5 +1,9 @@
 import { Worker } from "bullmq";
+<<<<<<< HEAD
 import { config } from "../../configs/env";
+=======
+import { arenaCleanupQueue } from "../../libs/core/queue";
+>>>>>>> prod-deploy
 import { container } from "../../libs/awilix-container";
 import { createLogger } from "../../libs/utils/logger";
 import { registerShutdownHandler } from "../../libs/core/resilience";
@@ -9,6 +13,12 @@ const logger = createLogger("arena-cleanup-worker");
 /**
  * Arena Cleanup Worker
  * Responsible for delayed Redis environment purges after match completion.
+<<<<<<< HEAD
+=======
+ * 
+ * Uses shared queue connection for consistent pooling across clustered workers.
+ * Concurrency: 5 allows 5 parallel cleanups (safe for Redis memory)
+>>>>>>> prod-deploy
  */
 const cleanupWorker = new Worker(
   "arena-cleanup",
@@ -31,6 +41,7 @@ const cleanupWorker = new Worker(
     }
   },
   {
+<<<<<<< HEAD
     connection: {
       host:
         new URL(config.redisUrl || "redis://localhost:6379").hostname ||
@@ -39,6 +50,9 @@ const cleanupWorker = new Worker(
         new URL(config.redisUrl || "redis://localhost:6379").port || "6379",
       ),
     },
+=======
+    connection: arenaCleanupQueue.opts.connection,
+>>>>>>> prod-deploy
     concurrency: 5,
   },
 );

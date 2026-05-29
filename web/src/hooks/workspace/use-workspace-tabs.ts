@@ -16,8 +16,21 @@ export interface WorkspaceTab {
   icon: LucideIcon;
 }
 
+<<<<<<< HEAD
 export function useWorkspaceTabs(mode: "practice" | "arena") {
   const tabs = useMemo(() => {
+=======
+export function useWorkspaceTabs(mode: "practice" | "arena" | "exercise") {
+  const tabs = useMemo(() => {
+    if (mode === "exercise") {
+      return [
+        { id: "description", label: "Description", icon: BookOpen },
+        { id: "hints", label: "Hints", icon: HelpCircle },
+        { id: "solutions", label: "Solutions", icon: CheckCircle2 },
+      ];
+    }
+
+>>>>>>> prod-deploy
     const baseTabs: WorkspaceTab[] = [
       { id: "description", label: "Description", icon: BookOpen },
       { id: "hints", label: "Hints", icon: HelpCircle },

@@ -1,0 +1,53 @@
+{
+  "id": "elixir:nucleotide-count",
+  "trackSlug": "elixir",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "7404e885-747a-46fc-be0c-c53f4b0e162f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "charlists"
+  ],
+  "prerequisites": [
+    "charlists",
+    "maps",
+    "enum"
+  ],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule NucleotideCount do\n  @nucleotides [?A, ?C, ?G, ?T]\n\n  @doc \"\"\"\n  Counts individual nucleotides in a DNA strand.\n\n  ## Examples\n\n  iex> NucleotideCount.count(~c\"AATAA\", ?A)\n  4\n\n  iex> NucleotideCount.count(~c\"AATAA\", ?T)\n  1\n  \"\"\"\n  @spec count(charlist(), char()) :: non_neg_integer()\n  def count(strand, nucleotide) do\n  end\n\n  @doc \"\"\"\n  Returns a summary of counts by nucleotide.\n\n  ## Examples\n\n  iex> NucleotideCount.histogram(~c\"AATAA\")\n  %{?A => 4, ?T => 1, ?C => 0, ?G => 0}\n  \"\"\"\n  @spec histogram(charlist()) :: map()\n  def histogram(strand) do\n  end\nend\n",
+  "example_solution": "defmodule NucleotideCount do\n  @nucleotides [?A, ?C, ?G, ?T]\n\n  @doc \"\"\"\n  Counts individual nucleotides in a DNA strand.\n\n  ## Examples\n\n  iex> NucleotideCount.count(~c\"AATAA\", ?A)\n  4\n\n  iex> NucleotideCount.count(~c\"AATAA\", ?T)\n  1\n  \"\"\"\n  @spec count(charlist(), char()) :: non_neg_integer()\n  def count(strand, nucleotide) when nucleotide in @nucleotides do\n    Enum.count(strand, &(&1 == nucleotide))\n  end\n\n  @doc \"\"\"\n  Returns a summary of counts by nucleotide.\n\n  ## Examples\n\n  iex> NucleotideCount.histogram(~c\"AATAA\")\n  %{?A => 4, ?T => 1, ?C => 0, ?G => 0}\n  \"\"\"\n  @spec histogram(charlist()) :: map()\n  def histogram(strand) do\n    Enum.into(@nucleotides, %{}, &{&1, count(strand, &1)})\n  end\nend\n",
+  "test_code": "defmodule NucleotideCountTest do\n  use ExUnit.Case\n\n  describe \"count\" do\n    # @tag :pending\n    test \"empty dna string has no adenine\" do\n      assert NucleotideCount.count(~c\"\", ?A) == 0\n    end\n\n    @tag :pending\n    test \"one nucleotide\" do\n      assert NucleotideCount.count(~c\"G\", ?G) == 1\n    end\n\n    @tag :pending\n    test \"repetitive cytosine gets counted\" do\n      assert NucleotideCount.count(~c\"CCCCC\", ?C) == 5\n    end\n\n    @tag :pending\n    test \"counts only thymine\" do\n      assert NucleotideCount.count(~c\"GGGGGTAACCCGG\", ?T) == 1\n    end\n  end\n\n  describe \"histogram\" do\n    @tag :pending\n    test \"empty dna string has no nucleotides\" do\n      expected = %{?A => 0, ?T => 0, ?C => 0, ?G => 0}\n      assert NucleotideCount.histogram(~c\"\") == expected\n    end\n\n    @tag :pending\n    test \"one nucleotide\" do\n      expected = %{?A => 0, ?T => 0, ?C => 0, ?G => 1}\n      assert NucleotideCount.histogram(~c\"G\") == expected\n    end\n\n    @tag :pending\n    test \"repetitive sequence has only guanine\" do\n      expected = %{?A => 0, ?T => 0, ?C => 0, ?G => 8}\n      assert NucleotideCount.histogram(~c\"GGGGGGGG\") == expected\n    end\n\n    @tag :pending\n    test \"counts all nucleotides\" do\n      s = ~c\"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"\n      expected = %{?A => 20, ?T => 21, ?C => 12, ?G => 17}\n      assert NucleotideCount.histogram(s) == expected\n    end\n  end\nend\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "rubysolo"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "dalexj",
+    "dantswain",
+    "devonestes",
+    "henrik",
+    "jinyeow",
+    "kytrinyx",
+    "leikind",
+    "lpil",
+    "MarcosX",
+    "neenjaw",
+    "nimser",
+    "parkerl",
+    "rud",
+    "sotojuan",
+    "Teapane",
+    "toriejw",
+    "waiting-for-dev"
+  ]
+}

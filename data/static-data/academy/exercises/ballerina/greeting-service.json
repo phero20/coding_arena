@@ -1,0 +1,32 @@
+{
+  "id": "ballerina:greeting-service",
+  "trackSlug": "ballerina",
+  "slug": "greeting-service",
+  "name": "Greeting Service",
+  "uuid": "000f851f-08ad-4e44-9ede-ccc817221076",
+  "type": "practice",
+  "status": "active",
+  "blurb": "Make an HTTP service to say \"Hello\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nHTTP payloads can be mapped to basic types. This exercise needs you to say hello to whoever is calling.\n\n## Objectives\n\n- Modify the provided code.\n- Return the string `Hello,` with the string sent to the endpoint.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import ballerina/http;\n\nservice on new http:Listener(9090) {\n    resource function post greeting() returns string|error {\n        // Extract payload content and append it with the content of the greeting message.\n        // The greeting message should be in the following format:\n        // \"Hello, <payload>!\"\n    }\n}\n",
+  "example_solution": "import ballerina/http;\n\nservice on new http:Listener(9090) {\n    resource function post greeting(@http:Payload string payload) returns string|error {\n        // return the greeting with appending the payload\n        return string `Hello, ${payload}!`;\n    }\n}\n",
+  "test_code": "import ballerina/http;\nimport ballerina/test;\n\n@test:Config\nfunction testFunc() returns error? {\n    http:Client httpEndpoint = check new (\"http://localhost:9090\");\n    string payload = \"Ballerina\";\n    string response = check httpEndpoint->post(\"/greeting\", payload);\n    test:assertEquals(response, string `Hello, ${payload}!`);\n}\n",
+  "source": "This is an exercise to introduce user to Ballerina REST services",
+  "source_url": "https://ballerina.io/learn/by-example/http-basic-rest-service/",
+  "authors": [],
+  "contributors": [
+    "hemikak",
+    "kasun04",
+    "lafernando",
+    "ldclakmal",
+    "vinok88",
+    "vordimous",
+    "ThisaruGuruge"
+  ]
+}

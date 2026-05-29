@@ -1,0 +1,39 @@
+{
+  "id": "ruby:list-ops",
+  "trackSlug": "ruby",
+  "slug": "list-ops",
+  "name": "List Ops",
+  "uuid": "f62e8acb-8370-46e1-ad7f-a6a2644f8602",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement basic list operations.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "arrays"
+  ],
+  "prerequisites": [
+    "arrays"
+  ],
+  "instructions": "# Instructions\n\nImplement basic list operations.\n\nIn functional languages list operations like `length`, `map`, and `reduce` are very common.\nImplement a series of basic list operations, without using existing functions.\n\nThe precise number and names of the operations to be implemented will be track dependent to avoid conflicts with existing names, but the general operations you will implement include:\n\n- `append` (_given two lists, add all items in the second list to the end of the first list_);\n- `concatenate` (_given a series of lists, combine all items in all lists into one flattened list_);\n- `filter` (_given a predicate and a list, return the list of all items for which `predicate(item)` is True_);\n- `length` (_given a list, return the total number of items within it_);\n- `map` (_given a function and a list, return the list of the results of applying `function(item)` on all items_);\n- `foldl` (_given a function, a list, and initial accumulator, fold (reduce) each item into the accumulator from the left_);\n- `foldr` (_given a function, a list, and an initial accumulator, fold (reduce) each item into the accumulator from the right_);\n- `reverse` (_given a list, return a list with all the original items, but in reversed order_).\n\nNote, the ordering in which arguments are passed to the fold functions (`foldl`, `foldr`) is significant.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'List Ops' exercise in this file. Make the tests in\n`list_ops_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/list-ops` directory.\n=end\n",
+  "example_solution": "class ListOps\n  ## Do not use the functions map, concat, count, length, etc.\n  ## and other built in ruby methods to solve  these\n  ##\n  def self.arrays(arr)\n    counter = 0\n    arr.each do\n      counter += 1\n    end\n    counter\n  end\n\n  def self.reverser(arr)\n    answer = []\n    until arr.empty?\n      answer << arr.pop\n    end\n    answer\n  end\n\n  def self.concatter(arr1, arr2)\n    answer = []\n    arr1.each do |element|\n      answer << element\n    end\n    arr2.each do |element|\n      answer << element\n    end\n    answer\n  end\n\n  def self.mapper(arr)\n    answer = []\n    arr.each do |element|\n      answer << yield(element) if block_given?\n    end\n    answer\n  end\n\n  def self.filterer(arr)\n    answer = []\n    arr.each do |element|\n      answer << element if block_given? && yield(element)\n    end\n    answer\n  end\n\n  def self.sum_reducer(arr)\n    total = 0\n    arr.each do |element|\n      total += element\n    end\n    total\n  end\n\n  def self.factorial_reducer(arr)\n    total = 1\n    arr.each do |element|\n        total = total * element\n    end\n    total\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'list_ops'\n\nclass ListOpsTest < Minitest::Test\n  def test_count_empty\n    assert_equal 0, ListOps.arrays([])\n  end\n\n  def test_count_normal\n    skip\n    assert_equal 5, ListOps.arrays(Array.new(5))\n  end\n\n  def test_count_gigantic\n    skip\n    assert_equal 1_000_000, ListOps.arrays(Array.new(1_000_000))\n  end\n\n  def test_reverse_empty\n    skip\n    assert_empty ListOps.reverser([])\n  end\n\n  def test_reverse_normal\n    skip\n    assert_equal [5, 4, 3, 2, 1], ListOps.reverser([1, 2, 3, 4, 5])\n  end\n\n  def test_reverse_gigantic\n    skip\n    expected = (1..1_000_000).to_a.reverse\n    assert_equal expected, ListOps.reverser((1..1_000_000).to_a)\n  end\n\n  def test_concat_empty\n    skip\n    assert_empty ListOps.concatter([], [])\n  end\n\n  def test_concat_normal\n    skip\n    assert_equal [12, 34, 56, 78], ListOps.concatter([12, 34], [56, 78])\n  end\n\n  def test_concat_gigantic\n    skip\n    input1 = (1..1_000_000).to_a\n    input2 = (1_000_001..2_000_000).to_a\n    assert_equal (1..2_000_000).to_a, ListOps.concatter(input1, input2)\n  end\n\n  def test_mapper_empty\n    skip\n    assert_empty ListOps.mapper([])\n  end\n\n  def test_mapper_normal\n    skip\n    assert_equal [2, 3, 4, 5, 6], ListOps.mapper([1, 2, 3, 4, 5]) { |n| n + 1 }\n  end\n\n  def test_mapper_gigantic\n    skip\n    result = ListOps.mapper((1..1_000_000).to_a) { |n| n + 1 }\n    assert_equal (2..1_000_001).to_a, result\n  end\n\n  def test_filterer_empty\n    skip\n    assert_empty ListOps.filterer([])\n  end\n\n  def test_filterer_normal\n    skip\n    result = ListOps.filterer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], &:odd?)\n    assert_equal [1, 3, 5, 7, 9], result\n  end\n\n  def test_filterer_gigantic\n    skip\n    result = ListOps.filterer((1..10_000).to_a, &:even?)\n    assert_equal (1..10_000).to_a.select(&:even?), result\n  end\n\n  def test_sum_reducer_empty\n    skip\n    assert_equal 0, ListOps.sum_reducer([])\n  end\n\n  def test_sum_reducer_normal\n    skip\n    assert_equal 55, ListOps.sum_reducer([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n  end\n\n  def test_factorial_reducer_empty\n    skip\n    assert_equal 1, ListOps.factorial_reducer([])\n  end\n\n  def test_factorial_reducer_normal\n    skip\n    input = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n    assert_equal 3_628_800, ListOps.factorial_reducer(input)\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "rhoprhh"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "srabuini",
+    "tryantwit"
+  ]
+}

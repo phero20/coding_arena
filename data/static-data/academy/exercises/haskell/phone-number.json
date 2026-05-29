@@ -1,0 +1,41 @@
+{
+  "id": "haskell:phone-number",
+  "trackSlug": "haskell",
+  "slug": "phone-number",
+  "name": "Phone Number",
+  "uuid": "fd372449-0f01-4b2c-b42d-b56ede6f58fe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nClean up user-entered phone numbers so that they can be sent SMS messages.\n\nThe **North American Numbering Plan (NANP)** is a telephone numbering system used by many countries in North America like the United States, Canada or Bermuda.\nAll NANP-countries share the same international country code: `1`.\n\nNANP numbers are ten-digit numbers consisting of a three-digit Numbering Plan Area code, commonly known as _area code_, followed by a seven-digit local number.\nThe first three digits of the local number represent the _exchange code_, followed by the unique four-digit number which is the _subscriber number_.\n\nThe format is usually represented as\n\n```text\nNXX NXX-XXXX\n```\n\nwhere `N` is any digit from 2 through 9 and `X` is any digit from 0 through 9.\n\nSometimes they also have the country code (represented as `1` or `+1`) prefixed.\n\nYour task is to clean up differently formatted telephone numbers by removing punctuation and the country code if present.\n\nFor example, the inputs\n\n- `+1 (613)-995-0253`\n- `613-995-0253`\n- `1 613 995 0253`\n- `613.995.0253`\n\nshould all produce the output\n\n`6139950253`\n\n**Note:** As this exercise only deals with telephone numbers used in NANP-countries, only 1 is considered a valid country code.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Phone (number) where\n\nnumber :: String -> Maybe String\nnumber xs = error \"You need to implement this function.\"\n",
+  "example_solution": "module Phone (number) where\nimport Data.Char (isDigit)\n\nnumber :: String -> Maybe String\nnumber input = clean input >>= check\n\ncheck :: String -> Maybe String\ncheck ('0':_) = Nothing\ncheck ('1':_) = Nothing\ncheck (_:_:_:'0':_) = Nothing\ncheck (_:_:_:'1':_) = Nothing\ncheck s = Just s\n\nclean :: String -> Maybe String\nclean input\n  | len == 10 = Just digits\n  | len == 11 && head digits == '1' = Just $ tail digits\n  | otherwise = Nothing\n  where digits = filter isDigit input\n        len = length digits\n",
+  "test_code": "{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport Phone (number)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"number\" $ for_ cases test\n  where\n    test Case{..} = it description $ number input `shouldBe` expected\n\ndata Case = Case { description ::       String\n                 , input       ::       String\n                 , expected    :: Maybe String\n                 }\n\ncases :: [Case]\ncases =\n    [ Case { description = \"cleans the number\"\n           , input       = \"(223) 456-7890\"\n           , expected    = Just \"2234567890\"\n           }\n    , Case { description = \"cleans numbers with dots\"\n           , input       = \"223.456.7890\"\n           , expected    = Just \"2234567890\"\n           }\n    , Case { description = \"cleans numbers with multiple spaces\"\n           , input       = \"223 456   7890   \"\n           , expected    = Just \"2234567890\"\n           }\n    , Case { description = \"invalid when 9 digits\"\n           , input       = \"123456789\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid when 11 digits does not start with a 1\"\n           , input       = \"22234567890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"valid when 11 digits and starting with 1\"\n           , input       = \"12234567890\"\n           , expected    = Just \"2234567890\"\n           }\n    , Case { description = \"valid when 11 digits and starting with 1 even with punctuation\"\n           , input       = \"+1 (223) 456-7890\"\n           , expected    = Just \"2234567890\"\n           }\n    , Case { description = \"invalid when more than 11 digits\"\n           , input       = \"321234567890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if area code starts with 0 on valid 11-digit number\"\n           , input       = \"1 (023) 456-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if area code starts with 1 on valid 11-digit number\"\n           , input       = \"1 (123) 456-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if exchange code starts with 0 on valid 11-digit number\"\n           , input       = \"1 (223) 056-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if exchange code starts with 1 on valid 11-digit number\"\n           , input       = \"1 (223) 156-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid with letters\"\n           , input       = \"523-abc-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid with punctuations\"\n           , input       = \"523-@:!-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if area code starts with 0\"\n           , input       = \"(023) 456-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if area code starts with 1\"\n           , input       = \"(123) 456-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if exchange code starts with 0\"\n           , input       = \"(223) 056-7890\"\n           , expected    = Nothing\n           }\n    , Case { description = \"invalid if exchange code starts with 1\"\n           , input       = \"(223) 156-7890\"\n           , expected    = Nothing\n           }\n    ]\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://turing.edu",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "bxt",
+    "iHiD",
+    "kytrinyx",
+    "lpalma",
+    "mjhoy",
+    "navossoc",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "samjonester",
+    "sshine",
+    "Stargator",
+    "tejasbubane",
+    "towynlin"
+  ]
+}

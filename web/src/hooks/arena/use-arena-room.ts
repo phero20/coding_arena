@@ -50,7 +50,10 @@ export function useArenaRoom(roomId: string) {
     const isNewRoom = !validatedStoreRoom || validatedStoreRoom.roomId !== roomId;
     
     if (isNewRoom) {
+<<<<<<< HEAD
       console.log(`[Arena Hydration] Initializing store from API: ${roomId}`);
+=======
+>>>>>>> prod-deploy
       setRoom(roomMetadata);
     }
 
@@ -61,7 +64,10 @@ export function useArenaRoom(roomId: string) {
     const currentMId = useArenaStore.getState().matchId;
     
     if (mId && mId !== currentMId) {
+<<<<<<< HEAD
        console.log(`[Arena Hydration] Synchronizing Match Identity: ${mId}`);
+=======
+>>>>>>> prod-deploy
        useArenaStore.getState().setMatchId(mId);
     }
   }, [roomMetadata, roomId, validatedStoreRoom, setRoom]);

@@ -1,0 +1,1661 @@
+{
+  "language": "x86-64 Assembly",
+  "slug": "x86-64-assembly",
+  "active": true,
+  "status": {
+    "concept_exercises": true,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "x86-64 assembly is a low-level programming language, typically used in boot loaders, device drivers, and operating system kernels.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4,
+    "highlightjs_language": "x86asm"
+  },
+  "test_runner": {
+    "average_run_time": 1
+  },
+  "files": {
+    "solution": [
+      "%{snake_slug}.asm"
+    ],
+    "test": [
+      "%{snake_slug}_test.c"
+    ],
+    "example": [
+      ".meta/example.asm"
+    ],
+    "exemplar": [
+      ".meta/exemplar.asm"
+    ]
+  },
+  "exercises": {
+    "concept": [
+      {
+        "slug": "lasagna",
+        "name": "Lasagna",
+        "uuid": "0e1dd0cf-cdd7-48a9-861e-7253b5d3cabd",
+        "concepts": [
+          "basics"
+        ],
+        "prerequisites": [],
+        "status": "beta",
+        "blurb": "Learn about the basics of x86-64 assembly by following a lasagna recipe."
+      },
+      {
+        "slug": "inventory-management",
+        "name": "Inventory Management",
+        "uuid": "75e4cce4-02a4-4499-805b-db536692fad7",
+        "concepts": [
+          "integers"
+        ],
+        "prerequisites": [
+          "basics"
+        ],
+        "status": "beta",
+        "blurb": "Learn about integers by managing transport of products for a local store."
+      },
+      {
+        "slug": "black-jack",
+        "name": "Black Jack",
+        "uuid": "f83599e1-0b88-4ff7-8a37-174f87242871",
+        "concepts": [
+          "conditionals"
+        ],
+        "prerequisites": [
+          "basics"
+        ],
+        "status": "beta",
+        "blurb": "Learn about comparisons by implementing some Black Jack judging rules."
+      },
+      {
+        "slug": "color-palette",
+        "name": "Color Palette",
+        "uuid": "19bd0665-58af-43d5-89c0-644a3b675151",
+        "concepts": [
+          "memory"
+        ],
+        "prerequisites": [
+          "basics"
+        ],
+        "status": "beta",
+        "blurb": "Learn about declaring, accessing and modifying initialized data by mixing colors."
+      },
+      {
+        "slug": "bird-watcher",
+        "name": "Bird Watcher",
+        "uuid": "5553e4d5-271a-40c1-a897-b35edfb93266",
+        "concepts": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "memory"
+        ],
+        "status": "beta",
+        "blurb": "Save and update counts for birds in your garden using arrays."
+      },
+      {
+        "slug": "secrets",
+        "name": "Secrets",
+        "uuid": "2912e1e6-3933-4fa2-b383-b474087df9e6",
+        "concepts": [
+          "bit-manipulation"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "integers"
+        ],
+        "status": "beta",
+        "blurb": "Learn about bit manipulation by writing the software for an encryption device."
+      },
+      {
+        "slug": "mixed-juices",
+        "name": "Mixed Juices",
+        "uuid": "05c5f731-d331-4504-be40-0280f6fe2b73",
+        "concepts": [
+          "loops"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "arrays"
+        ],
+        "status": "beta",
+        "blurb": "Help your friend Li Mei run her juice bar with your knowledge of loops."
+      },
+      {
+        "slug": "poetry-club-door-policy",
+        "name": "Poetry Club Door Policy",
+        "uuid": "3a67ea55-af33-4757-95ca-677e2fa817c2",
+        "concepts": [
+          "strings"
+        ],
+        "prerequisites": [
+          "arrays",
+          "loops"
+        ],
+        "status": "beta",
+        "blurb": "Learn about strings using poems to get into the poetry club."
+      },
+      {
+        "slug": "freelancer-rates",
+        "name": "Freelancer Rates",
+        "uuid": "9c447606-406d-42ed-9e58-04220d5352ae",
+        "concepts": [
+          "floating-point-numbers"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "integers",
+          "memory"
+        ],
+        "status": "beta",
+        "blurb": "Learn about floating-point numbers by helping a freelancer communicate with a project manager about billing."
+      },
+      {
+        "slug": "lost-and-found",
+        "name": "Lost and Found",
+        "uuid": "6cb5ea0c-4145-44a4-93f0-0c3605d573e0",
+        "concepts": [
+          "stack"
+        ],
+        "prerequisites": [
+          "strings",
+          "integers"
+        ],
+        "status": "beta",
+        "blurb": "Learn about the call stack by organizing items for a lost-and-found office."
+      },
+      {
+        "slug": "currency-exchange",
+        "name": "Currency Exchange",
+        "uuid": "f065c0f2-3a27-49df-b3c2-144312e935f3",
+        "concepts": [
+          "interfacing-with-c-types"
+        ],
+        "prerequisites": [
+          "stack",
+          "strings",
+          "integers",
+          "floating-point-numbers"
+        ],
+        "status": "beta",
+        "blurb": "Learn how to interface with C types by solving Chandler's currency exchange conundrums."
+      },
+      {
+        "slug": "need-for-speed",
+        "name": "Need For Speed",
+        "uuid": "d789a288-f727-4162-87c7-fad609ed9cf9",
+        "concepts": [
+          "interfacing-with-c-structs"
+        ],
+        "prerequisites": [
+          "bit-manipulation",
+          "floating-point-numbers",
+          "stack",
+          "interfacing-with-c-types"
+        ],
+        "status": "beta",
+        "blurb": "Learn about how to interface with C structs in x86-64 assembly code by racing remote controlled cars."
+      },
+      {
+        "slug": "pipers-pie",
+        "name": "Piper's Pie",
+        "uuid": "43bbc65f-da88-44ac-90c8-5fc8e55a32c8",
+        "concepts": [
+          "recursion"
+        ],
+        "prerequisites": [
+          "loops",
+          "stack",
+          "floating-point-numbers"
+        ],
+        "status": "beta",
+        "blurb": "Learn about recursion in x86-64 assembly."
+      }
+    ],
+    "practice": [
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "e0a4dc83-dd93-40b0-b365-01581b57f66c",
+        "practices": [],
+        "prerequisites": [
+          "loops",
+          "integers"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "conditionals",
+          "loops",
+          "integers",
+          "math"
+        ],
+        "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture."
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "98887d08-92b7-4559-8133-4c05453bfe14",
+        "practices": [],
+        "prerequisites": [
+          "floating-point-numbers"
+        ],
+        "difficulty": 1,
+        "blurb": "Calculate the points scored in a single toss of a Darts game."
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "d050fbb3-db22-4b1a-9ae6-60bf246b1a6d",
+        "practices": [],
+        "prerequisites": [
+          "loops",
+          "integers"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "integers",
+          "loops",
+          "math"
+        ],
+        "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers."
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "edfc05bc-1458-4047-8d64-eea38e155f20",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ],
+        "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\"."
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "669b6523-0dfe-4ccc-b16e-51ee6a8e7e0b",
+        "practices": [],
+        "prerequisites": [
+          "conditionals",
+          "integers"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "conditionals",
+          "integers"
+        ],
+        "blurb": "Determine whether a given year is a leap year."
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "799bdac9-e905-4fbd-aa55-94dc1154dc5e",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "strings"
+        ],
+        "blurb": "Reverse a given string."
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "9520ca3d-926a-4cc3-949c-9d99dd9009bf",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "strings",
+          "transforming"
+        ],
+        "blurb": "Given a DNA strand, return its RNA complement."
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "c6377959-f8fb-4df4-97c0-f48915076144",
+        "practices": [],
+        "prerequisites": [
+          "arrays",
+          "floating-point-numbers"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "floating_point_numbers"
+        ],
+        "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years."
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "8dcd4afd-7ef8-4bd1-85e1-b070357c970a",
+        "practices": [],
+        "prerequisites": [
+          "integers",
+          "loops"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "conditionals",
+          "loops",
+          "integers",
+          "math"
+        ],
+        "blurb": "Given a natural radicand, return its square root."
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "1284e091-163a-454d-9123-413e4050b671",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "floats",
+          "math",
+          "structs"
+        ],
+        "blurb": "Determine if a triangle is equilateral, isosceles, or scalene."
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two-Fer",
+        "uuid": "d0f241d3-4d99-49e3-bf90-2767cfb0c9c3",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 1,
+        "topics": [
+          "optional_values",
+          "strings"
+        ],
+        "blurb": "Create a sentence of the form \"One for X, one for me.\"."
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "a4a24a15-f553-4d98-9fde-7e579897f6d3",
+        "practices": [],
+        "prerequisites": [
+          "integers",
+          "bit-manipulation",
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "topics": [
+          "integers"
+        ],
+        "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles."
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "c7177570-056f-4024-9022-9b0fcc37f246",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 2,
+        "topics": [
+          "filtering",
+          "strings"
+        ],
+        "blurb": "Calculate the Hamming distance between two DNA strands."
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "808128e8-d23c-40d6-a642-dd3eec3c13cc",
+        "practices": [],
+        "prerequisites": [
+          "loops"
+        ],
+        "difficulty": 2,
+        "blurb": "Manage a player's High Score list."
+      },
+      {
+        "slug": "line-up",
+        "name": "Line Up",
+        "uuid": "4977e343-fe8b-40ed-949e-3c912f018e39",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 2,
+        "blurb": "Help lining up customers at Yaʻqūb's Deli."
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "068f3bc2-48cc-46af-9e1e-5a664cc8025a",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 2,
+        "topics": [
+          "strings"
+        ],
+        "blurb": "Determine if a sentence is a pangram."
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "360852bf-c2f0-4fba-990a-49813fd069c1",
+        "practices": [],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "topics": [
+          "conditionals"
+        ],
+        "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other."
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "cf6d015d-40f6-4afe-8d0b-ca4c9e32b0cc",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 3,
+        "topics": [
+          "bitwise_operations",
+          "filtering"
+        ],
+        "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies."
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "63ea6d20-2a4c-4784-946c-05e582184a10",
+        "practices": [],
+        "prerequisites": [
+          "loops"
+        ],
+        "difficulty": 3,
+        "topics": [
+          "arrays",
+          "searching"
+        ],
+        "blurb": "Implement a binary search algorithm."
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "6d8927ca-2aaa-4af4-bb38-c307b2105e41",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited."
+      },
+      {
+        "slug": "clock",
+        "name": "Clock",
+        "uuid": "fd260924-8975-4651-8aa6-a5246cda5a2c",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 3,
+        "blurb": "Implement a clock that handles times without dates."
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "36bd6f23-9c8e-4ccf-a145-38a707a5481f",
+        "practices": [],
+        "prerequisites": [
+          "bit-manipulation",
+          "loops"
+        ],
+        "difficulty": 3,
+        "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation."
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "c397e4b3-d1cf-40a3-9829-c2268a875e40",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 3,
+        "blurb": "Change the data format for scoring a game to more easily add other languages."
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "015bc461-1d31-4d2f-a914-d6294f27592d",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 3,
+        "topics": [
+          "filtering",
+          "strings"
+        ],
+        "blurb": "Determine if a word or phrase is an isogram."
+      },
+      {
+        "slug": "micro-blog",
+        "name": "Micro Blog",
+        "uuid": "8211f366-ff44-40cf-989b-53a427505353",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "blurb": "Given an input string, truncate it to 5 characters."
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "2ef7f926-e6f1-4828-94ed-5aee5930987a",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "topics": [
+          "arrays",
+          "strings"
+        ],
+        "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string."
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "39e8a36c-bbcb-4b47-ae05-f376f74fa4a8",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "topics": [
+          "arrays"
+        ],
+        "blurb": "Convert a resistor band's color to its numeric representation."
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "d2a983d7-3e9a-43fd-a916-23d51401c68e",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "topics": [
+          "arrays"
+        ],
+        "blurb": "Convert color codes, as used on resistors, to a numeric value."
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "bfabb02a-74ef-4fe1-8a2c-70f7556ebb15",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "blurb": "Convert color codes, as used on resistors, to a human-readable label."
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "1ddc9312-b16f-41fe-91c2-a1181d32fb15",
+        "practices": [],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 3,
+        "blurb": "Given a word, compute the Scrabble score for that word."
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "bdd1677b-3faa-4456-8431-9362a5a2ee6e",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "blurb": "Given a decimal number, convert it to the appropriate sequence of events for a secret handshake."
+      },
+      {
+        "slug": "series",
+        "name": "Series",
+        "uuid": "994402ae-2240-4280-9963-f1eed9722149",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string."
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "9876f5db-d23c-49c0-bf99-c24f4efe5622",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 3,
+        "blurb": "Write a function to determine if a list is a sublist of another list."
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "3cd968cd-02cd-42d5-a74b-088f757af86d",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "conditionals",
+          "loops",
+          "strings"
+        ],
+        "blurb": "Convert a long phrase to its acronym."
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "eea4cfcc-b823-474a-8653-91449e3a65ca",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Given a word and a list of possible anagrams, select the correct sublist."
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "756465b7-40e9-4295-8f2c-7108cdef5ace",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "loops"
+        ],
+        "blurb": "Determine if a number is an Armstrong number."
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "dd05684a-90d4-44f6-915f-eea8843bb7b0",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Produce the lyrics to the popular children's repetitive song: Ten Green Bottles."
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "a865c970-54ae-4e33-bd0f-1ce147afa048",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Implement the classic method for composing secret messages called a square code."
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "c809298c-863b-41a9-971e-da08bc798976",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Given a letter, print a diamond starting with 'A' with the supplied letter at the widest point."
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "f8f770a3-a47b-4404-ae7f-a94af4d8d87f",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "loops",
+          "strings"
+        ],
+        "blurb": "Check if a given string is a valid ISBN-10 number."
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "65644c94-ae7d-46a8-86a5-d7b607e79810",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Given a diagram, determine which plants each child in the kindergarten class is responsible for."
+      },
+      {
+        "slug": "linked-list",
+        "name": "Linked List",
+        "uuid": "b79e66ed-54b3-43da-a4ce-884d81447ce5",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "functions",
+          "pointers",
+          "structs"
+        ],
+        "blurb": "Implement a doubly linked list."
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "0c830b67-80b8-447a-a86d-22775e7d5ce4",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix."
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "5d6e344e-7ed6-4476-82f6-02be41266e39",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages."
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "fc9bb707-337c-4cf4-ba7d-7569a71958c0",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Compute the prime factors of a given natural number."
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "2d598782-0c71-486e-8bea-7fe03f934f9f",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "conditionals",
+          "loops",
+          "strings",
+          "arrays"
+        ],
+        "blurb": "Translate RNA sequences into proteins."
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "0a8efe4e-87f1-4e97-82cd-90ecf30c6091",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme."
+      },
+      {
+        "slug": "rail-fence-cipher",
+        "name": "Rail Fence Cipher",
+        "uuid": "5f2fdcae-5b19-40bf-8752-e48a4a8c4bf7",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Implement encoding and decoding for the rail fence cipher."
+      },
+      {
+        "slug": "robot-name",
+        "name": "Robot Name",
+        "uuid": "50e4fc90-9441-4b20-ac83-78ce9bb2bb58",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Manage robot factory settings."
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "ccb59c8d-e02d-420d-ae92-df36737b9ff8",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 4,
+        "blurb": "Write a robot simulator."
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "beb08d3f-7379-421d-9538-f3731c5ad68b",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "conditionals",
+          "integers",
+          "loops",
+          "strings"
+        ],
+        "blurb": "Convert modern Arabic numbers into Roman numerals."
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "c7cf1766-11e5-47b0-9d01-8eff62218131",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "topics": [
+          "algorithms",
+          "strings",
+          "transforming"
+        ],
+        "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher."
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "9cee8cc8-24b5-4f97-a2c0-b5b81e650029",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 4,
+        "blurb": "Detect saddle points in a matrix."
+      },
+      {
+        "slug": "simple-linked-list",
+        "name": "Simple Linked List",
+        "uuid": "3440c320-08e0-4ac3-93c2-efb7c3c60803",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 4,
+        "blurb": "Write a simple linked list implementation that uses Elements and a List."
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "ce06cacb-ec4e-46f2-a1b7-f496f0db097f",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number."
+      },
+      {
+        "slug": "twelve-days",
+        "name": "Twelve Days",
+        "uuid": "404a8125-db44-48b3-b981-49a368815001",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 4,
+        "blurb": "Output the lyrics to 'The Twelve Days of Christmas'."
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "aca8a985-7097-4548-b88e-6d6f822ae916",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 4,
+        "blurb": "Given a phrase, count the occurrences of each word in that phrase."
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "b485ea56-fb92-4a23-b966-a9214523ba0b",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East."
+      },
+      {
+        "slug": "binary-search-tree",
+        "name": "Binary Search Tree",
+        "uuid": "964eb38f-226e-4b24-a7de-a6072394bca7",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 5,
+        "blurb": "Insert and search for numbers in a binary tree."
+      },
+      {
+        "slug": "circular-buffer",
+        "name": "Circular Buffer",
+        "uuid": "ebd57eb1-ea95-4ee6-8e91-bd4853acbee3",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "A data structure that uses a single, fixed-size buffer as if it were connected end-to-end."
+      },
+      {
+        "slug": "complex-numbers",
+        "name": "Complex Numbers",
+        "uuid": "297841a7-396b-4fdd-bff0-2e16b6c1635a",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 5,
+        "blurb": "Implement complex numbers."
+      },
+      {
+        "slug": "custom-set",
+        "name": "Custom Set",
+        "uuid": "d7270e9a-7d0f-45fa-bee2-ca7f6d6ea46b",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Create a custom set type."
+      },
+      {
+        "slug": "dnd-character",
+        "name": "D&D Character",
+        "uuid": "197f8f30-145e-4223-b057-dac995302339",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 5,
+        "blurb": "Randomly generate Dungeons & Dragons characters."
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "bafd78a7-f13b-4de2-a688-92e19cb8d7f7",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 5,
+        "blurb": "Take a nested list and return a single list with all values except nil/null."
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "d0a8097d-759f-4785-83bc-aa00fec0c365",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a moment, determine the moment that would be after a gigasecond has passed."
+      },
+      {
+        "slug": "house",
+        "name": "House",
+        "uuid": "a7819b9e-647e-473f-b76a-4954282f13d4",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Output the nursery rhyme 'This is the House that Jack Built'."
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "2f2357ab-1729-4c29-9b28-d0d29b866c95",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n."
+      },
+      {
+        "slug": "list-ops",
+        "name": "List Ops",
+        "uuid": "784f7a0c-bf28-4b99-be6a-cafc3efbca3d",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "topics": [
+          "arrays",
+          "functions",
+          "loops"
+        ],
+        "blurb": "Implement basic list operations."
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "6e3f6c68-e290-4b1d-9ad8-2ed0c66be41a",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "topics": [
+          "parsing",
+          "strings"
+        ],
+        "blurb": "Make sure the brackets and braces all match."
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "68fe9b99-a203-42f8-bb2c-758689cbfccd",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a number n, determine what the nth prime is."
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "9f3e26d6-a2c0-42fe-84b4-3c60e805471a",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers."
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "a7a94ca3-03cc-48e4-9933-817eeb29254b",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "topics": [
+          "conditionals",
+          "integers",
+          "strings"
+        ],
+        "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong."
+      },
+      {
+        "slug": "rational-numbers",
+        "name": "Rational Numbers",
+        "uuid": "523c3ddc-d61a-4323-b788-5ad0259ac847",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 5,
+        "blurb": "Implement rational numbers."
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "06de39e4-dddc-4375-921c-9b3862fd58ee",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Implement run-length encoding and decoding."
+      },
+      {
+        "slug": "save-the-cow",
+        "name": "Save the Cow",
+        "uuid": "ac814b61-e2e2-4d19-8965-6e34b7a4e049",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 5,
+        "blurb": "Implement a word-guessing game."
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "6cc147ff-65cb-417d-9883-6b7cf910e828",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Use the Sieve of Eratosthenes to find all the primes from 2 up to a given number."
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "752b0790-40ff-4333-9b1a-a9d4df50f7ec",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Given the size, return a square matrix of numbers in spiral order."
+      },
+      {
+        "slug": "split-second-stopwatch",
+        "name": "Split-Second Stopwatch",
+        "uuid": "f5d3d785-1286-45a4-b29c-63b63aee9633",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Keep track of time through a digital stopwatch."
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "dfb8f9b9-3080-4c7e-b259-5fff1df959d9",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 5,
+        "blurb": "Score a single throw of dice in the game Yacht."
+      },
+      {
+        "slug": "camicia",
+        "name": "Camicia",
+        "uuid": "fdadc7cd-34bd-49d2-89d4-95c883437519",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 6,
+        "blurb": "Simulate the card game and determine whether the match ends or enters an infinite loop."
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "5d4da9ec-5b46-4609-b942-6be556884ef3",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Generate the lyrics of the song 'I Know an Old Lady Who Swallowed a Fly'."
+      },
+      {
+        "slug": "intergalactic-transmission",
+        "name": "Intergalactic Transmission",
+        "uuid": "c24ff280-84fe-4d70-a0ef-94748da57d40",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Add parity bits to a message for transmission"
+      },
+      {
+        "slug": "killer-sudoku-helper",
+        "name": "Killer Sudoku Helper",
+        "uuid": "f4f22719-c15b-4853-8b9e-15d34f5750fd",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Write a tool that makes it easier to solve Killer Sudokus"
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "0dd26cf2-d613-4a03-93a3-49d2960d2154",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Given a number determine whether or not it is valid per the Luhn formula."
+      },
+      {
+        "slug": "ocr-numbers",
+        "name": "OCR Numbers",
+        "uuid": "2b9c5389-b97e-414e-bdca-a6be784d36e9",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Given a 3 x 4 grid of pipes, underscores, and spaces, determine which number is represented, or whether it is garbled."
+      },
+      {
+        "slug": "palindrome-products",
+        "name": "Palindrome Products",
+        "uuid": "6e758deb-1a32-413c-bdcd-e1bfba6f70f8",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 6,
+        "blurb": "Detect palindrome products in a given range."
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "474fd108-ed25-4e1a-8f11-ffd29ce3abb9",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Compute Pascal's triangle up to a given number of rows."
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "e49e6d68-fa96-4a2d-b560-9af0ca7fccb1",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Implement a program that translates from English to Pig Latin."
+      },
+      {
+        "slug": "pythagorean-triplet",
+        "name": "Pythagorean Triplet",
+        "uuid": "d44ac8b3-4f0a-41ab-a830-79b2161fa157",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N."
+      },
+      {
+        "slug": "variable-length-quantity",
+        "name": "Variable Length Quantity",
+        "uuid": "e116007e-15ec-40f6-b549-f48d5f852cc6",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 6,
+        "blurb": "Implement variable length quantity encoding and decoding."
+      },
+      {
+        "slug": "affine-cipher",
+        "name": "Affine Cipher",
+        "uuid": "08480307-7d42-49ed-b6b7-2080bba8894e",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Create an implementation of the Affine cipher, an ancient encryption algorithm from the Middle East."
+      },
+      {
+        "slug": "baffling-birthdays",
+        "name": "Baffling Birthdays",
+        "uuid": "28d1203e-e12a-49be-aba1-0571f54b3e39",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 7,
+        "blurb": "Estimate the birthday paradox's probabilities."
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "bb250fb5-0d8a-49d2-bcce-6fd107117c16",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Mark all the flowers in a garden."
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "5f717115-0688-424d-959f-33f5c83e44cb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "status": "deprecated",
+        "blurb": "Add the numbers to a minesweeper board."
+      },
+      {
+        "slug": "prism",
+        "name": "Prism",
+        "uuid": "987dd0af-5f92-4d97-af70-9f4d659154cd",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 7,
+        "blurb": "Calculate the path of a laser through refractive prisms."
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "56fbd855-0e23-4380-a5ce-1a6996250497",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English."
+      },
+      {
+        "slug": "state-of-tic-tac-toe",
+        "name": "State of Tic-Tac-Toe",
+        "uuid": "768258f0-5b87-4582-a47c-8b1a836c2219",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Determine the game state of a match of Tic-Tac-Toe."
+      },
+      {
+        "slug": "tournament",
+        "name": "Tournament",
+        "uuid": "7d7c977e-82bc-4f7a-bcca-46726d40f7c4",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Tally the results of a small football competition."
+      },
+      {
+        "slug": "transpose",
+        "name": "Transpose",
+        "uuid": "be4a96f9-ab59-4e1d-b41f-669961cfff95",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Take input text and output it transposed."
+      },
+      {
+        "slug": "wordy",
+        "name": "Wordy",
+        "uuid": "3ad797ff-f65a-4e93-9ec1-21f8350e2382",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 7,
+        "blurb": "Parse and evaluate simple math word problems returning the answer as an integer."
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "02d07b3b-86a2-404f-9d95-170602315a35",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 8,
+        "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base."
+      },
+      {
+        "slug": "book-store",
+        "name": "Book Store",
+        "uuid": "799fcb2c-939a-4e7d-b8df-c815acc545c7",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 8,
+        "blurb": "To try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts of multiple-book purchases."
+      },
+      {
+        "slug": "change",
+        "name": "Change",
+        "uuid": "93cfe2a0-bea5-4c1f-8c04-898e05340e58",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 8,
+        "blurb": "Correctly determine change to be given using the least number of coins."
+      },
+      {
+        "slug": "dominoes",
+        "name": "Dominoes",
+        "uuid": "19cf1050-af02-4071-be87-18947026321e",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 8,
+        "blurb": "Make a chain of dominoes."
+      },
+      {
+        "slug": "game-of-life",
+        "name": "Conway's Game of Life",
+        "uuid": "c4b9b208-1284-406d-86d5-eb5c3b0128ae",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 8,
+        "blurb": "Implement Conway's Game of Life."
+      },
+      {
+        "slug": "two-bucket",
+        "name": "Two Bucket",
+        "uuid": "63d0e6bb-073d-49ff-ba24-c4dbf6e39399",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 8,
+        "blurb": "Given two buckets of different size, demonstrate how to measure an exact number of liters."
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "2ef39cbc-801b-437e-96ec-71f3439388e4",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-structs"
+        ],
+        "difficulty": 9,
+        "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value."
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "7e3d7660-d795-4d33-971a-6f20721436dc",
+        "practices": [],
+        "prerequisites": [
+          "interfacing-with-c-types"
+        ],
+        "difficulty": 9,
+        "blurb": "Calculate the date of meetups."
+      }
+    ],
+    "foregone": [
+      "bank-account",
+      "grep",
+      "lens-person",
+      "parallel-letter-frequency"
+    ]
+  },
+  "concepts": [
+    {
+      "uuid": "96a9995c-c428-4759-b995-05da80f14f02",
+      "slug": "basics",
+      "name": "Basics"
+    },
+    {
+      "uuid": "0e3aeff1-0e97-4026-9ae7-adfcddc9ec67",
+      "slug": "integers",
+      "name": "Integers"
+    },
+    {
+      "uuid": "547b8cd0-93c7-433c-affa-c9d594cbc147",
+      "slug": "bit-manipulation",
+      "name": "Bit Manipulation"
+    },
+    {
+      "uuid": "77aab0bc-d875-45e7-ad3d-3d7b4fe3eb57",
+      "slug": "memory",
+      "name": "Memory"
+    },
+    {
+      "uuid": "45461e90-425c-4e6d-8946-6f16637fcd81",
+      "slug": "stack",
+      "name": "Stack"
+    },
+    {
+      "uuid": "9638c682-a41e-4bad-8513-d65bf1d11690",
+      "slug": "strings",
+      "name": "Strings"
+    },
+    {
+      "uuid": "262275b7-76d1-4da6-95b9-477a1cff6144",
+      "slug": "conditionals",
+      "name": "Conditionals"
+    },
+    {
+      "uuid": "f4e513b5-c9ef-4d65-8c32-e047252ce11c",
+      "slug": "loops",
+      "name": "Loops"
+    },
+    {
+      "uuid": "f0052d59-7dea-4771-a3df-18f753110a6f",
+      "slug": "recursion",
+      "name": "Recursion"
+    },
+    {
+      "uuid": "31e1bb65-3220-41ae-a37c-c95ccec02dfd",
+      "slug": "floating-point-numbers",
+      "name": "Floating-Point Numbers"
+    },
+    {
+      "uuid": "82534a88-9404-4024-8d9b-9a5d6d23dae4",
+      "slug": "arrays",
+      "name": "Arrays"
+    },
+    {
+      "uuid": "22534a38-5f99-4fb6-a9a8-7602773782b9",
+      "slug": "interfacing-with-c-types",
+      "name": "Interfacing with the C language: Primitive Types, Enums, Pointers and Arrays"
+    },
+    {
+      "uuid": "a3bd6c29-2ba1-4def-ae11-7b5a7daade38",
+      "slug": "interfacing-with-c-structs",
+      "name": "Interfacing with the C language: Structs"
+    }
+  ],
+  "key_features": [
+    {
+      "title": "Widely Used",
+      "content": "x86-64 has been the dominant instruction set for personal computer CPUs since 2010.",
+      "icon": "widely-used"
+    },
+    {
+      "title": "Fast",
+      "content": "As an assembly language, x86-64 cannot be beaten in pure execution speed.",
+      "icon": "fast"
+    },
+    {
+      "title": "Cross-platform",
+      "content": "x86-64 has been adopted by AMD, Intel and VIA for their CPUs.",
+      "icon": "cross-platform"
+    },
+    {
+      "title": "Stable",
+      "content": "With an enormous install base relying on stability, changes since introduction have been minimal.",
+      "icon": "stable"
+    },
+    {
+      "title": "Powerful",
+      "content": "x86-64 powers the most capable desktop CPUs in the world.",
+      "icon": "powerful"
+    },
+    {
+      "title": "Detailed documentation",
+      "content": "Given its wide-spread and critical application, x86-64 has been exactingly documented.",
+      "icon": "documentation"
+    }
+  ],
+  "tags": [
+    "execution_mode/compiled",
+    "paradigm/imperative",
+    "paradigm/procedural",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "runtime/standalone_executable",
+    "typing/static",
+    "typing/weak",
+    "used_for/embedded_systems"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/x86-64-assembly.svg",
+  "about_content": "# About\n\nx86-64 assembly is the programming language for the 64-bit version of the x86\ninstruction set. It is based on the original 8086 instruction set from 1978.\n\nAssembly language is different from high-level languages like C# and Java.\nThere are no variables, objects, or loops. Instead, you'll have to deal with\nregisters, memory addresses, and jumps.\n\nLearning assembly can be intimidating at first, but it will give you a better\nunderstanding in how your computer works. It might even improve your\nprogramming skills in higher level languages.\n"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "roc:difference-of-squares",
+  "trackSlug": "roc",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "f7d9119b-776c-41d6-9602-21c55be71574",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [square_of_sum, sum_of_squares, difference_of_squares]\n\nsquare_of_sum : U64 -> U64\nsquare_of_sum = |number|\n    crash(\"Please implement the `square_of_sum` function\")\n\nsum_of_squares : U64 -> U64\nsum_of_squares = |number|\n    crash(\"Please implement the `sum_of_squares` function\")\n\ndifference_of_squares : U64 -> U64\ndifference_of_squares = |number|\n    crash(\"Please implement the `difference_of_squares` function\")\n",
+  "example_solution": "module [square_of_sum, sum_of_squares, difference_of_squares]\n\nsum : U64 -> U64\nsum = |number|\n    number * (number + 1) // 2\n\nsquare_of_sum : U64 -> U64\nsquare_of_sum = |number|\n    s = sum(number)\n    s * s\n\nsum_of_squares : U64 -> U64\nsum_of_squares = |number|\n    s = sum(number)\n    s * (2 * number + 1) // 3\n\ndifference_of_squares : U64 -> U64\ndifference_of_squares = |number|\n    (square_of_sum(number)) - (sum_of_squares(number))\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/difference-of-squares/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport DifferenceOfSquares exposing [square_of_sum, sum_of_squares, difference_of_squares]\n\n##\n## Square the sum of the numbers up to the given number\n##\n\n# square of sum 1\nexpect\n    result = square_of_sum(1)\n    result == 1\n\n# square of sum 5\nexpect\n    result = square_of_sum(5)\n    result == 225\n\n# square of sum 100\nexpect\n    result = square_of_sum(100)\n    result == 25502500\n\n##\n## Sum the squares of the numbers up to the given number\n##\n\n# sum of squares 1\nexpect\n    result = sum_of_squares(1)\n    result == 1\n\n# sum of squares 5\nexpect\n    result = sum_of_squares(5)\n    result == 55\n\n# sum of squares 100\nexpect\n    result = sum_of_squares(100)\n    result == 338350\n\n##\n## Subtract sum of squares from square of sums\n##\n\n# difference of squares 1\nexpect\n    result = difference_of_squares(1)\n    result == 0\n\n# difference of squares 5\nexpect\n    result = difference_of_squares(5)\n    result == 170\n\n# difference of squares 100\nexpect\n    result = difference_of_squares(100)\n    result == 25164150\n\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

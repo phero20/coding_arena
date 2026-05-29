@@ -1,0 +1,30 @@
+{
+  "id": "dart:hamming",
+  "trackSlug": "dart",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "91c8033d-f40c-4a90-9ec9-7081f6eba8d2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "class Hamming {\n  // Put your code here\n}\n",
+  "example_solution": "class Hamming {\n  int distance(String a, String b) {\n    if (a.length != b.length) {\n      throw ArgumentError('strands must be of equal length');\n    }\n\n    int diff = 0;\n\n    for (int i = 0; i < a.length; i++) {\n      if (a[i] != b[i]) {\n        diff++;\n      }\n    }\n\n    return diff;\n  }\n}\n",
+  "test_code": "import 'package:hamming/hamming.dart';\nimport 'package:test/test.dart';\n\nvoid main() {\n  final hamming = Hamming();\n\n  final mustEqual = predicate((Error e) => e is ArgumentError && e.message == 'strands must be of equal length',\n      'an ArgumentError with the message \"strands must be of equal length\"');\n\n  group('Hamming', () {\n    test('empty strands', () {\n      final result = hamming.distance('', '');\n      expect(result, equals(0));\n    }, skip: false);\n\n    test('single letter identical strands', () {\n      final result = hamming.distance('A', 'A');\n      expect(result, equals(0));\n    }, skip: true);\n\n    test('single letter different strands', () {\n      final result = hamming.distance('G', 'T');\n      expect(result, equals(1));\n    }, skip: true);\n\n    test('long identical strands', () {\n      final result = hamming.distance('GGACTGAAATCTG', 'GGACTGAAATCTG');\n      expect(result, equals(0));\n    }, skip: true);\n\n    test('long different strands', () {\n      final result = hamming.distance('GGACGGATTCTG', 'AGGACGGATTCT');\n      expect(result, equals(9));\n    }, skip: true);\n\n    test('disallow first strand longer', () {\n      expect(() => hamming.distance('AATG', 'AAA'), throwsA(mustEqual));\n    }, skip: true);\n\n    test('disallow second strand longer', () {\n      expect(() => hamming.distance('ATA', 'AGTG'), throwsA(mustEqual));\n    }, skip: true);\n\n    test('disallow empty first strand', () {\n      expect(() => hamming.distance('', 'G'), throwsA(mustEqual));\n    }, skip: true);\n\n    test('disallow empty second strand', () {\n      expect(() => hamming.distance('G', ''), throwsA(mustEqual));\n    }, skip: true);\n  });\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "SuperPaintman"
+  ],
+  "contributors": [
+    "jerold",
+    "Stargator",
+    "kytrinyx"
+  ]
+}

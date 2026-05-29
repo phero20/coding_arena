@@ -1,0 +1,31 @@
+{
+  "id": "lfe:anagram",
+  "trackSlug": "lfe",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "9bc1f720-ccd0-449f-99a7-1790b30690f1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "(defmodule anagram\n  (export (find 2)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule anagram\n  (export (find 2)))\n\n(defun find (word candidates)\n  (let ((normed-word (normalize word)))\n    (lists:filter\n      (lambda (candidate) (anagram? normed-word (normalize candidate)))\n      candidates)))\n\n(defun anagram?\n  ([`#(,word-lowered ,word-sorted) `#(,candidate-lowered ,candidate-sorted)]\n   (when (andalso (=/= word-lowered candidate-lowered)\n                  (=:= word-sorted  candidate-sorted)))\n   'true)\n  ([_ _]\n   'false))\n\n(defun normalize (str)\n  (let* ((bin (erlang:list_to_binary str))\n         (cleaned (unicode:characters_to_list bin))\n         (lowered (string:to_lower cleaned)))\n    `#(,lowered ,(lists:sort lowered))))\n",
+  "test_code": "(defmodule anagram-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(deftest no-matches\n  (is-equal '()\n            (anagram:find \"diaper\" '(\"hello\" \"world\" \"zombies\" \"pants\"))))\n\n(deftest detects-two-anagrams\n  (is-equal '(\"lemons\" \"melons\")\n            (anagram:find \"solemn\" '(\"lemons\" \"cherry\" \"melons\"))))\n\n(deftest does-not-detect-anagram-subsets\n  (is-equal '() (anagram:find \"good\" '(\"dog\" \"goody\"))))\n\n(deftest detects-anagram\n  (is-equal '(\"inlets\")\n            (anagram:find \"listen\" '(\"enlists\" \"google\" \"inlets\" \"banana\"))))\n\n(deftest detects-three-anagrams\n  (is-equal '(\"gallery\" \"regally\" \"largely\")\n            (anagram:find \"allergy\"\n                          '(\"gallery\" \"ballerina\" \"regally\" \"clergy\" \"largely\" \"leading\"))))\n\n(deftest detects-multiple-anagrams-with-different-case\n  (is-equal '(\"Eons\" \"ONES\") (anagram:find \"nose\" '(\"Eons\" \"ONES\"))))\n\n(deftest does-not-detect-non-anagrams-with-identical-checksum\n  (is-equal '() (anagram:find \"mass\" '(\"last\"))))\n\n(deftest detects-anagrams-case-insensitively\n  (is-equal '(\"Carthorse\")\n            (anagram:find \"Orchestra\" '(\"cashregister\" \"Carthorse\" \"radishes\"))))\n\n(deftest detects-anagrams-using-case-insensitive-subject\n  (is-equal '(\"carthorse\")\n            (anagram:find \"Orchestra\" '(\"cashregister\" \"carthorse\" \"radishes\"))))\n\n(deftest detects-anagrams-using-case-insensitive-possible-matches\n  (is-equal '(\"Carthorse\")\n            (anagram:find \"orchestra\" '(\"cashregister\" \"Carthorse\" \"radishes\"))))\n\n(deftest does-not-detect-an-anagram-if-the-original-word-is-repeated\n  (is-equal '() (anagram:find \"go\" '(\"goGoGO\"))))\n\n(deftest anagrams-must-use-all-letters-exactly-once\n  (is-equal '() (anagram:find \"tapper\" '(\"patter\"))))\n\n(deftest words-are-not-anagrams-of-themselves\n  (is-equal '() (anagram:find \"BANANA\" '(\"BANANA\"))))\n\n(deftest words-are-not-anagrams-of-themselves-even-if-letter-case-is-partially-different\n  (is-equal '() (anagram:find \"BANANA\" '(\"Banana\"))))\n\n(deftest words-are-not-anagrams-of-themselves-even-if-letter-case-is-completely-different\n  (is-equal '() (anagram:find \"BANANA\" '(\"banana\"))))\n\n(deftest words-other-than-themselves-can-be-anagrams\n  (is-equal '(\"Silent\") (anagram:find \"LISTEN\" '(\"LISTEN\" \"Silent\"))))\n\n;; Uncomment the following Unicode tests locally if you want an extra challenge.\n;; The online test runner won't run these.\n;;\n;; (deftest handles-case-of-greek-letters\n;;   (is-equal '(\"ΒΓΑ\" \"γβα\") (anagram:find \"ΑΒΓ\" '(\"ΒΓΑ\" \"ΒΓΔ\" \"γβα\" \"αβγ\"))))\n;;\n;; (deftest different-characters-may-have-the-same-bytes\n;;   (is-equal '() (anagram:find \"a⬂\" '(\"€a\"))))\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "adolfopa",
+    "BNAndras",
+    "etrepum",
+    "yurrriq"
+  ]
+}

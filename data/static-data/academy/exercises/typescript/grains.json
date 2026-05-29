@@ -1,0 +1,31 @@
+{
+  "id": "typescript:grains",
+  "trackSlug": "typescript",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "5a04b3f8-99b6-4aec-8afd-0d54930e4aff",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "export const square = () => {\n  throw new Error('Remove this line and implement the function')\n}\n\nexport const total = () => {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function square(n: number): bigint {\n  if (n <= 0 || n >= 65) {\n    throw new Error()\n  }\n\n  return 2n ** BigInt(n - 1)\n}\n\nexport function total(): bigint {\n  let result = 0n\n\n  for (let i = 1; i <= 64; i++) {\n    result += square(i)\n  }\n\n  return result\n}\n",
+  "test_code": "import { describe, xdescribe, it, expect, xit } from '@jest/globals'\nimport { square, total } from './grains.ts'\n\ndescribe('returns the number of grains on the square', () => {\n  it('1', () => {\n    const expected = 1n\n    expect(square(1)).toEqual(expected)\n  })\n\n  xit('2', () => {\n    const expected = 2n\n    expect(square(2)).toEqual(expected)\n  })\n\n  xit('3', () => {\n    const expected = 4n\n    expect(square(3)).toEqual(expected)\n  })\n\n  xit('4', () => {\n    const expected = 8n\n    expect(square(4)).toEqual(expected)\n  })\n\n  xit('16', () => {\n    const expected = 32768n\n    expect(square(16)).toEqual(expected)\n  })\n\n  xit('32', () => {\n    const expected = 2147483648n\n    expect(square(32)).toEqual(expected)\n  })\n\n  xit('64', () => {\n    const expected = 9223372036854775808n\n    expect(square(64)).toEqual(expected)\n  })\n\n  xit('square 0 raises an exception', () => {\n    expect(() => square(0)).toThrow()\n  })\n\n  xit('negative square raises an exception', () => {\n    expect(() => square(-1)).toThrow()\n  })\n\n  xit('square greater than 64 raises an exception', () => {\n    expect(() => square(65)).toThrow()\n  })\n})\n\nxdescribe('returns the total number of grains on the board', () => {\n  xit('total', () => {\n    const expected = 18446744073709551615n\n    expect(total()).toEqual(expected)\n  })\n})\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "CRivasGomez"
+  ],
+  "contributors": [
+    "G-Rath",
+    "masters3d",
+    "SleeplessByte",
+    "JoshiRaez"
+  ]
+}

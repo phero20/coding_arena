@@ -1,0 +1,41 @@
+{
+  "id": "perl5:bob",
+  "trackSlug": "perl5",
+  "slug": "bob",
+  "name": "Bob",
+  "uuid": "835a4c46-c837-4684-a1ed-7d257c786d77",
+  "type": "practice",
+  "status": null,
+  "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "booleans-and-conditionals",
+    "regular-expressions",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what Bob will reply to someone when they say something to him or ask him a question.\n\nBob only ever answers one of five things:\n\n- **\"Sure.\"**\n  This is his response if you ask him a question, such as \"How are you?\"\n  The convention used for questions is that it ends with a question mark.\n- **\"Whoa, chill out!\"**\n  This is his answer if you YELL AT HIM.\n  The convention used for yelling is ALL CAPITAL LETTERS.\n- **\"Calm down, I know what I'm doing!\"**\n  This is what he says if you yell a question at him.\n- **\"Fine. Be that way!\"**\n  This is how he responds to silence.\n  The convention used for silence is nothing, or various combinations of whitespace characters.\n- **\"Whatever.\"**\n  This is what he answers to anything else.\n",
+  "introduction": "# Introduction\n\nBob is a [lackadaisical][] teenager.\nHe likes to think that he's very cool.\nAnd he definitely doesn't get excited about things.\nThat wouldn't be cool.\n\nWhen people talk to him, his responses are pretty limited.\n\n[lackadaisical]: https://www.collinsdictionary.com/dictionary/english/lackadaisical\n",
+  "hints": null,
+  "starter_code": "# Declare package 'Bob'\npackage Bob;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<hey>;\n\nsub hey ($msg) {\n    return undef; # Replace this with your own code to pass the tests.\n}\n\n1;\n",
+  "example_solution": "# Declare package 'Bob'\npackage Bob;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<hey>;\n\nsub hey ($text) {\n    if ( uc($text) eq $text && $text =~ /\\p{Uppercase}/ ) {\n        return 'Calm down, I know what I\\'m doing!' if $text =~ /\\?\\s*$/;\n        return 'Whoa, chill out!';\n    }\n    return 'Fine. Be that way!' if $text =~ /^\\s*$/;\n    return 'Sure.'              if $text =~ /\\?\\s*$/;\n    return 'Whatever.';\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\"; # Find modules in the same dir as this file.\n\nuse Bob qw<hey>;\n\nis( # begin: e162fead-606f-437a-a166-d051915cea8e\n    hey(\"Tom-ay-to, tom-aaaah-to.\"),\n    \"Whatever.\",\n    \"stating something\",\n); # end: e162fead-606f-437a-a166-d051915cea8e\n\nis( # begin: 73a966dc-8017-47d6-bb32-cf07d1a5fcd9\n    hey(\"WATCH OUT!\"),\n    \"Whoa, chill out!\",\n    \"shouting\",\n); # end: 73a966dc-8017-47d6-bb32-cf07d1a5fcd9\n\nis( # begin: d6c98afd-df35-4806-b55e-2c457c3ab748\n    hey(\"FCECDFCAAB\"),\n    \"Whoa, chill out!\",\n    \"shouting gibberish\",\n); # end: d6c98afd-df35-4806-b55e-2c457c3ab748\n\nis( # begin: 8a2e771d-d6f1-4e3f-b6c6-b41495556e37\n    hey(\"Does this cryogenic chamber make me look fat?\"),\n    \"Sure.\",\n    \"asking a question\",\n); # end: 8a2e771d-d6f1-4e3f-b6c6-b41495556e37\n\nis( # begin: 81080c62-4e4d-4066-b30a-48d8d76920d9\n    hey(\"You are, what, like 15?\"),\n    \"Sure.\",\n    \"asking a numeric question\",\n); # end: 81080c62-4e4d-4066-b30a-48d8d76920d9\n\nis( # begin: 2a02716d-685b-4e2e-a804-2adaf281c01e\n    hey(\"fffbbcbeab?\"),\n    \"Sure.\",\n    \"asking gibberish\",\n); # end: 2a02716d-685b-4e2e-a804-2adaf281c01e\n\nis( # begin: c02f9179-ab16-4aa7-a8dc-940145c385f7\n    hey(\"Hi there!\"),\n    \"Whatever.\",\n    \"talking forcefully\",\n); # end: c02f9179-ab16-4aa7-a8dc-940145c385f7\n\nis( # begin: 153c0e25-9bb5-4ec5-966e-598463658bcd\n    hey(\"It's OK if you don't want to go work for NASA.\"),\n    \"Whatever.\",\n    \"using acronyms in regular speech\",\n); # end: 153c0e25-9bb5-4ec5-966e-598463658bcd\n\nis( # begin: a5193c61-4a92-4f68-93e2-f554eb385ec6\n    hey(\"WHAT'S GOING ON?\"),\n    \"Calm down, I know what I'm doing!\",\n    \"forceful question\",\n); # end: a5193c61-4a92-4f68-93e2-f554eb385ec6\n\nis( # begin: a20e0c54-2224-4dde-8b10-bd2cdd4f61bc\n    hey(\"1, 2, 3 GO!\"),\n    \"Whoa, chill out!\",\n    \"shouting numbers\",\n); # end: a20e0c54-2224-4dde-8b10-bd2cdd4f61bc\n\nis( # begin: f7bc4b92-bdff-421e-a238-ae97f230ccac\n    hey(\"1, 2, 3\"),\n    \"Whatever.\",\n    \"no letters\",\n); # end: f7bc4b92-bdff-421e-a238-ae97f230ccac\n\nis( # begin: bb0011c5-cd52-4a5b-8bfb-a87b6283b0e2\n    hey(\"4?\"),\n    \"Sure.\",\n    \"question with no letters\",\n); # end: bb0011c5-cd52-4a5b-8bfb-a87b6283b0e2\n\nis( # begin: 496143c8-1c31-4c01-8a08-88427af85c66\n    hey(\"ZOMG THE %^*\\@#\\$(*^ ZOMBIES ARE COMING!!11!!1!\"),\n    \"Whoa, chill out!\",\n    \"shouting with special characters\",\n); # end: 496143c8-1c31-4c01-8a08-88427af85c66\n\nis( # begin: e6793c1c-43bd-4b8d-bc11-499aea73925f\n    hey(\"I HATE THE DENTIST\"),\n    \"Whoa, chill out!\",\n    \"shouting with no exclamation mark\",\n); # end: e6793c1c-43bd-4b8d-bc11-499aea73925f\n\nis( # begin: aa8097cc-c548-4951-8856-14a404dd236a\n    hey(\"Ending with ? means a question.\"),\n    \"Whatever.\",\n    \"statement containing question mark\",\n); # end: aa8097cc-c548-4951-8856-14a404dd236a\n\nis( # begin: 9bfc677d-ea3a-45f2-be44-35bc8fa3753e\n    hey(\":) ?\"),\n    \"Sure.\",\n    \"non-letters with question\",\n); # end: 9bfc677d-ea3a-45f2-be44-35bc8fa3753e\n\nis( # begin: 8608c508-f7de-4b17-985b-811878b3cf45\n    hey(\"Wait! Hang on. Are you going to be OK?\"),\n    \"Sure.\",\n    \"prattling on\",\n); # end: 8608c508-f7de-4b17-985b-811878b3cf45\n\nis( # begin: bc39f7c6-f543-41be-9a43-fd1c2f753fc0\n    hey(\"\"),\n    \"Fine. Be that way!\",\n    \"silence\",\n); # end: bc39f7c6-f543-41be-9a43-fd1c2f753fc0\n\nis( # begin: d6c47565-372b-4b09-b1dd-c40552b8378b\n    hey(\"          \"),\n    \"Fine. Be that way!\",\n    \"prolonged silence\",\n); # end: d6c47565-372b-4b09-b1dd-c40552b8378b\n\nis( # begin: 4428f28d-4100-4d85-a902-e5a78cb0ecd3\n    hey(\"\\t\\t\\t\\t\\t\\t\\t\\t\\t\\t\"),\n    \"Fine. Be that way!\",\n    \"alternate silence\",\n); # end: 4428f28d-4100-4d85-a902-e5a78cb0ecd3\n\nis( # begin: 66953780-165b-4e7e-8ce3-4bcb80b6385a\n    hey(\"\\nDoes this cryogenic chamber make me look fat?\\nNo.\"),\n    \"Whatever.\",\n    \"multiple line question\",\n); # end: 66953780-165b-4e7e-8ce3-4bcb80b6385a\n\nis( # begin: 5371ef75-d9ea-4103-bcfa-2da973ddec1b\n    hey(\"         hmmmmmmm...\"),\n    \"Whatever.\",\n    \"starting with whitespace\",\n); # end: 5371ef75-d9ea-4103-bcfa-2da973ddec1b\n\nis( # begin: 05b304d6-f83b-46e7-81e0-4cd3ca647900\n    hey(\"Okay if like my  spacebar  quite a bit?   \"),\n    \"Sure.\",\n    \"ending with whitespace\",\n); # end: 05b304d6-f83b-46e7-81e0-4cd3ca647900\n\nis( # begin: 72bd5ad3-9b2f-4931-a988-dce1f5771de2\n    hey(\"\\n\\r \\t\"),\n    \"Fine. Be that way!\",\n    \"other whitespace\",\n); # end: 72bd5ad3-9b2f-4931-a988-dce1f5771de2\n\nis( # begin: 12983553-8601-46a8-92fa-fcaa3bc4a2a0\n    hey(\"This is a statement ending with whitespace      \"),\n    \"Whatever.\",\n    \"non-question ending with whitespace\",\n); # end: 12983553-8601-46a8-92fa-fcaa3bc4a2a0\n\ndone_testing;\n",
+  "source": "Inspired by the 'Deaf Grandma' exercise in Chris Pine's Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/chap_06.html",
+  "authors": [
+    "szabgab"
+  ],
+  "contributors": [
+    "alexkalderimis",
+    "austinlyons",
+    "cite-reader",
+    "darksuji",
+    "kentfredric",
+    "kotp",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo",
+    "stonemirror"
+  ]
+}

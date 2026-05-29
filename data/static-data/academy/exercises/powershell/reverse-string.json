@@ -1,0 +1,30 @@
+{
+  "id": "powershell:reverse-string",
+  "trackSlug": "powershell",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "925e73f0-28a9-4e33-937b-5f328ac50163",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "Function Get-ReverseString {\n    <#\n    .SYNOPSIS\n    Reverse a string\n\n    .DESCRIPTION\n    Reverses the string in its entirety. That is it does not reverse each word in a string individually.\n\n    .PARAMETER Forward\n    The string to be reversed\n\n    .EXAMPLE\n    Get-ReverseString \"PowerShell\"\n    \n    This will return llehSrewoP\n\n    .EXAMPLE\n    Get-ReverseString \"racecar\"\n\n    This will return racecar as it is a palindrome\n    #>\n    [CmdletBinding()]\n    Param(\n        [Parameter(Position=1, ValueFromPipeline=$true)]\n        [string]$Forward\n\t)\n\t\n\tThrow \"Please implement this function\"\n}\n",
+  "example_solution": "Function Get-ReverseString {\n    <#\n    .SYNOPSIS\n    Reverse a string\n\n    .DESCRIPTION\n    Reverses the string in its entirety. That is it does not reverse each word in a string individually.\n\n    .PARAMETER Forward\n    The string to be reversed\n\n    .EXAMPLE\n    Get-ReverseString \"PowerShell\"\n    \n    This will return llehSrewoP\n\n    .EXAMPLE\n    Get-ReverseString \"racecar\"\n\n    This will return racecar as it is a palindrome\n    #>\n    [CmdletBinding()]\n    Param(\n        [Parameter(Position=1, ValueFromPipeline=$true)]\n        [string]$Forward\n    )\n    $textElements = [Globalization.StringInfo]::GetTextElementEnumerator($Forward)\n    $graphemes = [Collections.Generic.List[String]]::new()\n    while ($textElements.MoveNext()) {\n        $graphemes.Insert(0, $textElements.GetTextElement())\n    }\n    -join $graphemes\n}\n",
+  "test_code": "BeforeAll {\n    . \".\\ReverseString.ps1\"\n}\n\nDescribe \"Get-ReverseString Tests\" {\n\tIt \"Given <Forward> it outputs <Reverse>\" -TestCases @(\n\t\t@{ Forward = \"\"; Reverse = \"\" },\n\t\t@{ Forward = \"PowerShell\"; Reverse = \"llehSrewoP\" },\n\t\t@{ Forward = \"robot\"; Reverse = \"tobor\" },\n\t\t@{ Forward = \"Ramen\"; Reverse = \"nemaR\" },\n\t\t@{ Forward = \"I'm hungry!\"; Reverse = \"!yrgnuh m'I\" },\n\t\t@{ Forward = \"racecar\"; Reverse = \"racecar\" }\n\t\t@{ Forward = \"drawer\"; Reverse = \"reward\" }\n\t) {\n\t\tParam(\n\t\t\t[string]$Forward,\n\t\t\t[string]$Reverse\n\t\t)\n\n\t\tGet-ReverseString -Forward $Forward | Should -BeExactly $Reverse\n\t}\n\n    #these tests are harders due to dealing with unicode, so they are optional and will be skipped online\n    #remove the -Skip flag offline to run them\n    It \"wide characters\" -Skip {\n\t\tGet-ReverseString -Forward \"子猫\" | Should -BeExactly \"猫子\"\n    }\n\n    It \"grapheme cluster with pre-combined form\" -Skip {\n\t\tGet-ReverseString -Forward \"Würstchenstand\" | Should -BeExactly \"dnatsnehctsrüW\"\n\t}\n\n    It \"grapheme clusters (thai)\" -Skip {\n\t\tGet-ReverseString -Forward \"ผู้เขียนโปรแกรม\" | Should -BeExactly \"มรกแรปโนยขีเผู้\"\n    }\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "gyssels"
+  ],
+  "contributors": [
+    "kchenery"
+  ]
+}

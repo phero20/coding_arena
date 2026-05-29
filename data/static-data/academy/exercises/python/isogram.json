@@ -1,0 +1,43 @@
+{
+  "id": "python:isogram",
+  "trackSlug": "python",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "d1a98c79-d3cc-4035-baab-0e334d2b6a57",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def is_isogram(string):\n    pass\n",
+  "example_solution": "def is_isogram(string):\n    characters_lower = [char.lower() for char in string if char.isalpha()]\n    return len(set(characters_lower)) == len(characters_lower)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/isogram/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom isogram import (\n    is_isogram,\n)\n\n\nclass IsogramTest(unittest.TestCase):\n    def test_empty_string(self):\n        self.assertIs(is_isogram(\"\"), True)\n\n    def test_isogram_with_only_lower_case_characters(self):\n        self.assertIs(is_isogram(\"isogram\"), True)\n\n    def test_word_with_one_duplicated_character(self):\n        self.assertIs(is_isogram(\"eleven\"), False)\n\n    def test_word_with_one_duplicated_character_from_the_end_of_the_alphabet(self):\n        self.assertIs(is_isogram(\"zzyzx\"), False)\n\n    def test_longest_reported_english_isogram(self):\n        self.assertIs(is_isogram(\"subdermatoglyphic\"), True)\n\n    def test_word_with_duplicated_character_in_mixed_case(self):\n        self.assertIs(is_isogram(\"Alphabet\"), False)\n\n    def test_word_with_duplicated_character_in_mixed_case_lowercase_first(self):\n        self.assertIs(is_isogram(\"alphAbet\"), False)\n\n    def test_hypothetical_isogrammic_word_with_hyphen(self):\n        self.assertIs(is_isogram(\"thumbscrew-japingly\"), True)\n\n    def test_hypothetical_word_with_duplicated_character_following_hyphen(self):\n        self.assertIs(is_isogram(\"thumbscrew-jappingly\"), False)\n\n    def test_isogram_with_duplicated_hyphen(self):\n        self.assertIs(is_isogram(\"six-year-old\"), True)\n\n    def test_made_up_name_that_is_an_isogram(self):\n        self.assertIs(is_isogram(\"Emily Jung Schwartzkopf\"), True)\n\n    def test_duplicated_character_in_the_middle(self):\n        self.assertIs(is_isogram(\"accentor\"), False)\n\n    def test_same_first_and_last_characters(self):\n        self.assertIs(is_isogram(\"angola\"), False)\n\n    def test_word_with_duplicated_character_and_with_two_hyphens(self):\n        self.assertIs(is_isogram(\"up-to-date\"), False)\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "behrtam"
+  ],
+  "contributors": [
+    "abhijitparida",
+    "cmccandless",
+    "Dog",
+    "ikhadykin",
+    "N-Parsons",
+    "Nishant23",
+    "olufotebig",
+    "rever0f",
+    "sdublish",
+    "thomasjpfan",
+    "tqa236",
+    "yawpitch"
+  ]
+}

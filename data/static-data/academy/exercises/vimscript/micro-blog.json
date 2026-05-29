@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:micro-blog",
+  "trackSlug": "vimscript",
+  "slug": "micro-blog",
+  "name": "Micro Blog",
+  "uuid": "726b5266-8fb7-4b15-b25c-868053b0b0f5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an input string, truncate it to 5 characters.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYou have identified a gap in the social media market for very very short posts.\nNow that Twitter allows 280 character posts, people wanting quick social media updates aren't being served.\nYou decide to create your own social media network.\n\nTo make your product noteworthy, you make it extreme and only allow posts of 5 or less characters.\nAny posts of more than 5 characters should be truncated to 5.\n\nTo allow your users to express themselves fully, you allow Emoji and other Unicode.\n\nThe task is to truncate input strings to 5 characters.\n\n## Text Encodings\n\nText stored digitally has to be converted to a series of bytes.\nThere are 3 ways to map characters to bytes in common use.\n\n- **ASCII** can encode English language characters.\n  All characters are precisely 1 byte long.\n- **UTF-8** is a Unicode text encoding.\n  Characters take between 1 and 4 bytes.\n- **UTF-16** is a Unicode text encoding.\n  Characters are either 2 or 4 bytes long.\n\nUTF-8 and UTF-16 are both Unicode encodings which means they're capable of representing a massive range of characters including:\n\n- Text in most of the world's languages and scripts\n- Historic text\n- Emoji\n\nUTF-8 and UTF-16 are both variable length encodings, which means that different characters take up different amounts of space.\n\nConsider the letter 'a' and the emoji '😛'.\nIn UTF-16 the letter takes 2 bytes but the emoji takes 4 bytes.\n\nThe trick to this exercise is to use APIs designed around Unicode characters (codepoints) instead of Unicode codeunits.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "scriptencoding utf-8\n\n\"\n\" Returns a string of five characters or less.\n\" Unicode characters are supported.\n\"\n\" Example:\n\"\n\"   :echo Truncate('Bärteppich')\n\"   Bärte\n\"\nfunction! Truncate(string) abort\n  \" your implementation goes here\nendfunction\n",
+  "example_solution": "function! Truncate(string) abort\n  let l:length = strchars(a:string)\n  let l:limit = min([l:length, 5])\n    \n  return strcharpart(a:string, 0, l:limit)\nendfunction\n",
+  "test_code": "\nExecute (English language short):\n  let g:phrase = \"Hi\"\n  let g:expected = \"Hi\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (English language long):\n  let g:phrase = \"Hello there\"\n  let g:expected = \"Hello\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (German language short (broth)):\n  let g:phrase = \"brühe\"\n  let g:expected = \"brühe\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (German language long (bear carpet → beards)):\n  let g:phrase = \"Bärteppich\"\n  let g:expected = \"Bärte\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Bulgarian language short (good)):\n  let g:phrase = \"Добър\"\n  let g:expected = \"Добър\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Greek language short (health)):\n  let g:phrase = \"υγειά\"\n  let g:expected = \"υγειά\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Maths short):\n  let g:phrase = \"a=πr²\"\n  let g:expected = \"a=πr²\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Maths long):\n  let g:phrase = \"∅⊊ℕ⊊ℤ⊊ℚ⊊ℝ⊊ℂ\"\n  let g:expected = \"∅⊊ℕ⊊ℤ\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (English and emoji short):\n  let g:phrase = \"Fly 🛫\"\n  let g:expected = \"Fly 🛫\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Emoji short):\n  let g:phrase = \"💇\"\n  let g:expected = \"💇\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Emoji long):\n  let g:phrase = \"❄🌡🤧🤒🏥🕰😀\"\n  let g:expected = \"❄🌡🤧🤒🏥\"\n  AssertEqual g:expected, Truncate(g:phrase)\n\nExecute (Royal Flush?):\n  let g:phrase = \"🃎🂸🃅🃋🃍🃁🃊\"\n  let g:expected = \"🃎🂸🃅🃋🃍\"\n  AssertEqual g:expected, Truncate(g:phrase)\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

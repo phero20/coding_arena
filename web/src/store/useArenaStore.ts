@@ -106,7 +106,10 @@ export const useArenaStore = create<ArenaState>()(
         }
 
         const { type, payload } = message;
+<<<<<<< HEAD
         console.log(`[Arena Sync] ${type}`, payload);
+=======
+>>>>>>> prod-deploy
 
         // 2. Delegate Business Logic to Processor
         let updates: Partial<ArenaState> = {};

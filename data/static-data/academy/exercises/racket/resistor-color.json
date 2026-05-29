@@ -1,0 +1,26 @@
+{
+  "id": "racket:resistor-color",
+  "trackSlug": "racket",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "278d9ae7-19da-449a-b2dd-56e3555d6d93",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide color-code colors)\n\n(define (color-code color)\n  (error \"Please implement 'color-code'\"))\n\n(define (colors)\n  (error \"Please implement 'colors'\"))\n",
+  "example_solution": "#lang racket\n\n(provide color-code colors)\n\n(define resistor-colors\n  (vector \"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\"))\n\n(define (color-code color)\n  (vector-member color resistor-colors))\n\n(define (colors)\n  (vector->list resistor-colors))\n",
+  "test_code": "#lang racket/base\n\n; Tests adapted from `problem-specifications/canonical-data.json v1.1.0\n(require \"resistor-color.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (run-tests\n   (test-suite \"resistor-color tests\"\n               (test-equal? \"Color codes -> Black\"\n                            (color-code \"black\")\n                            0)\n               (test-equal? \"Color codes -> White\"\n                            (color-code \"white\")\n                            9)\n               (test-equal? \"Color codes -> Orange\"\n                            (color-code \"orange\")\n                            3)\n               (test-equal? \"Colors\"\n                            (colors)\n                            '(\"black\" \"brown\" \"red\" \"orange\" \"yellow\" \"green\" \"blue\" \"violet\" \"grey\" \"white\")))))\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

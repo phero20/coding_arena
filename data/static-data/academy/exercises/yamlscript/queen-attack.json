@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:queen-attack",
+  "trackSlug": "yamlscript",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "a8c8b02e-2662-42ff-b7eb-6a4239f10066",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn create(queen):\n  # Implement the 'create' function.\n\ndefn can-attack(white-queen black-queen):\n  # Implement the 'can-attack' function.\n",
+  "example_solution": "!YS-v0\n\ndefn create(queen):\n  row col =: queen.position.map(qw(row column))\n  cond:\n    row < 0 : die('row not positive')\n    row > 7 : die('row not on board')\n    col < 0 : die('column not positive')\n    col > 7 : die('column not on board')\n    else    : 0\n\ndefn can-attack(white-queen black-queen):\n  x =: white-queen.position.row -\n       black-queen.position.row\n  y =: white-queen.position.column -\n       black-queen.position.column\n  not(x &&& y) ||: x:abs == y:abs\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'queen-attack.ys'\n\ntest::\n- name: Queen with a valid position\n  code: create({\"position\" {\"row\" 2, \"column\" 2}})\n  want: 0\n\n- name: Queen must have positive row\n  code: create({\"position\" {\"row\" -2, \"column\" 2}})\n  what: error\n  want: row not positive\n\n- name: Queen must have row on board\n  code: create({\"position\" {\"row\" 8, \"column\" 4}})\n  what: error\n  want: row not on board\n\n- name: Queen must have positive column\n  code: create({\"position\" {\"row\" 2, \"column\" -2}})\n  what: error\n  want: column not positive\n\n- name: Queen must have column on board\n  code: create({\"position\" {\"row\" 4, \"column\" 8}})\n  what: error\n  want: column not on board\n\n- name: Cannot attack\n  code: can-attack({\"position\" {\"row\" 2, \"column\" 4}} {\"position\" {\"row\" 6, \"column\" 6}})\n  want: false\n\n- name: Can attack on same row\n  code: can-attack({\"position\" {\"row\" 2, \"column\" 4}} {\"position\" {\"row\" 2, \"column\" 6}})\n  want: true\n\n- name: Can attack on same column\n  code: can-attack({\"position\" {\"row\" 4, \"column\" 5}} {\"position\" {\"row\" 2, \"column\" 5}})\n  want: true\n\n- name: Can attack on first diagonal\n  code: can-attack({\"position\" {\"row\" 2, \"column\" 2}} {\"position\" {\"row\" 0, \"column\" 4}})\n  want: true\n\n- name: Can attack on second diagonal\n  code: can-attack({\"position\" {\"row\" 2, \"column\" 2}} {\"position\" {\"row\" 3, \"column\" 1}})\n  want: true\n\n- name: Can attack on third diagonal\n  code: can-attack({\"position\" {\"row\" 2, \"column\" 2}} {\"position\" {\"row\" 1, \"column\" 1}})\n  want: true\n\n- name: Can attack on fourth diagonal\n  code: can-attack({\"position\" {\"row\" 1, \"column\" 7}} {\"position\" {\"row\" 0, \"column\" 6}})\n  want: true\n\n- name: Cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal\n  code: can-attack({\"position\" {\"row\" 4, \"column\" 1}} {\"position\" {\"row\" 2, \"column\" 5}})\n  want: false\n\ndone: 13\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

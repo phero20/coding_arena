@@ -1,0 +1,26 @@
+{
+  "id": "prolog:cheryls-birthday",
+  "trackSlug": "prolog",
+  "slug": "cheryls-birthday",
+  "name": "Cheryl's Birthday",
+  "uuid": "18fb98a9-9aa7-4343-bc02-63996241f1eb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Figure out Cheryl's Birthday",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nBased on the 10 possible dates and the three statements, find out Cheryl's birthday.\n",
+  "introduction": "# Introduction\n\nAlbert and Bernard just became friends with Cheryl, and they want to know when her birthday is. Cheryl gives them a list of 10 possible dates:\n\nMay 15, May 16, May 19\nJune 17, June 18\nJuly 14, July 16\nAugust 14, August 15, August 17\n\nCheryl then tells Albert and Bernard separately the month and the day of her birthday respectively.\n\nAlbert: I don't know when Cheryl's birthday is, but I know that Bernard doesn't know too. [sic]\nBernard: At first I don't [sic] know when Cheryl's birthday is, but I know now.\nAlbert: Then I also know when Cheryl's birthday is.\n",
+  "hints": null,
+  "starter_code": "cheryls_birthday(Month, Day).\n",
+  "example_solution": "possible_date(may, 15).\npossible_date(may, 16). \npossible_date(may, 19).\npossible_date(june, 17).\npossible_date(june, 18).\npossible_date(july, 14).\npossible_date(july, 16).\npossible_date(august, 14).\npossible_date(august, 15).\npossible_date(august, 17).\n\nday_with_unique_month(Day) :-\n    possible_date(Month, Day),\n    findall(Day1, possible_date(Month, Day1), Days),\n    length(Days, 1).\n\nmonth_with_unique_day(Month):-\n    possible_date(Month, Day),\n    findall(Month1, possible_date(Month1, Day), Months),\n    length(Months, 1).\n\nstatement_1(Month, Day):-\n    possible_date(Month, Day),\n    not(day_with_unique_month(Day)),\n    not(month_with_unique_day(Month)).\n\nstatement_2(Month, Day):-\n    possible_date(Month, Day),\n    findall(Month1, statement_1(Month1, Day), [Month]).\n\nstatement_3(Month, Day):-\n    possible_date(Month, Day),\n    findall(Day1, statement_2(Month, Day1), [Day]).\n\ncheryls_birthday(Month, Day) :-\n    statement_1(Month, Day),\n    statement_2(Month, Day),\n    statement_3(Month, Day),\n    !.\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(cheryls_birthday).\n\n    test(cheryls_birthday, condition(true)) :-\n        cheryls_birthday(Month, Day),\n        Month == july,\n        Day == 16.\n\n:- end_tests(cheryls_birthday).\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Cheryl%27s_Birthday",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

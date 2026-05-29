@@ -1,0 +1,31 @@
+{
+  "id": "scala:all-your-base",
+  "trackSlug": "scala",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "adcf2a9b-2f6c-490f-b441-ad413a03fee7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "import scala.annotation.tailrec\n\nobject AllYourBase {\n  def rebase(inputBase: Int, inputDigits: List[Int], outputBase: Int): Option[List[Int]] = {\n    if (inputBase < 2 || outputBase < 2)\n      None\n    else if (inputDigits.isEmpty)\n      Some(List(0))\n    else {\n      fromDigits(0, inputBase, inputDigits) match {\n        case None => None\n        case x if x.sum == 0 => Some(List(0))\n        case Some(x) => Some(toDigits(outputBase, x, List()))\n      }\n    }\n  }\n\n  @tailrec\n  private def fromDigits(acc: Int, base: Int, digits: List[Int]): Option[Int] = {\n    digits match {\n      case x::xs => if (x >= 0 && x < base)\n        fromDigits(acc * base + x, base, xs)\n      else\n        None\n      case Nil => Option(acc)\n    }\n  }\n\n  @tailrec\n  private def toDigits(base: Int, x: Int, acc: List[Int]): List[Int] = {\n    x match {\n      case 0 => acc\n      case _ => toDigits(base, x / base, x % base :: acc)\n    }\n  }\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 2.3.0 */\nclass AllYourBaseTest extends AnyFunSuite with Matchers {\n\n  test(\"single bit one to decimal\") {\n    AllYourBase.rebase(2, List(1), 10) should be(Some(List(1)))\n  }\n\n  test(\"binary to single decimal\") {\n    pending\n    AllYourBase.rebase(2, List(1, 0, 1), 10) should be(Some(List(5)))\n  }\n\n  test(\"single decimal to binary\") {\n    pending\n    AllYourBase.rebase(10, List(5), 2) should be(Some(List(1, 0, 1)))\n  }\n\n  test(\"binary to multiple decimal\") {\n    pending\n    AllYourBase.rebase(2, List(1, 0, 1, 0, 1, 0), 10) should be(\n      Some(List(4, 2)))\n  }\n\n  test(\"decimal to binary\") {\n    pending\n    AllYourBase.rebase(10, List(4, 2), 2) should be(\n      Some(List(1, 0, 1, 0, 1, 0)))\n  }\n\n  test(\"trinary to hexadecimal\") {\n    pending\n    AllYourBase.rebase(3, List(1, 1, 2, 0), 16) should be(Some(List(2, 10)))\n  }\n\n  test(\"hexadecimal to trinary\") {\n    pending\n    AllYourBase.rebase(16, List(2, 10), 3) should be(Some(List(1, 1, 2, 0)))\n  }\n\n  test(\"15-bit integer\") {\n    pending\n    AllYourBase.rebase(97, List(3, 46, 60), 73) should be(Some(List(6, 10, 45)))\n  }\n\n  test(\"empty list\") {\n    pending\n    AllYourBase.rebase(2, List(), 10) should be(Some(List(0)))\n  }\n\n  test(\"single zero\") {\n    pending\n    AllYourBase.rebase(10, List(0), 2) should be(Some(List(0)))\n  }\n\n  test(\"multiple zeros\") {\n    pending\n    AllYourBase.rebase(10, List(0, 0, 0), 2) should be(Some(List(0)))\n  }\n\n  test(\"leading zeros\") {\n    pending\n    AllYourBase.rebase(7, List(0, 6, 0), 10) should be(Some(List(4, 2)))\n  }\n\n  test(\"input base is one\") {\n    pending\n    AllYourBase.rebase(1, List(0), 10) should be(None)\n  }\n\n  test(\"input base is zero\") {\n    pending\n    AllYourBase.rebase(0, List(), 10) should be(None)\n  }\n\n  test(\"input base is negative\") {\n    pending\n    AllYourBase.rebase(-2, List(1), 10) should be(None)\n  }\n\n  test(\"negative digit\") {\n    pending\n    AllYourBase.rebase(2, List(1, -1, 1, 0, 1, 0), 10) should be(None)\n  }\n\n  test(\"invalid positive digit\") {\n    pending\n    AllYourBase.rebase(2, List(1, 2, 1, 0, 1, 0), 10) should be(None)\n  }\n\n  test(\"output base is one\") {\n    pending\n    AllYourBase.rebase(2, List(1, 0, 1, 0, 1, 0), 1) should be(None)\n  }\n\n  test(\"output base is zero\") {\n    pending\n    AllYourBase.rebase(10, List(7), 0) should be(None)\n  }\n\n  test(\"output base is negative\") {\n    pending\n    AllYourBase.rebase(2, List(1), -7) should be(None)\n  }\n\n  test(\"both bases are negative\") {\n    pending\n    AllYourBase.rebase(-2, List(1), -7) should be(None)\n  }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "abo64",
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

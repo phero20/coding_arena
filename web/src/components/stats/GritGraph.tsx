@@ -1,10 +1,24 @@
+<<<<<<< HEAD
+=======
+"use client";
+
+>>>>>>> prod-deploy
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { type UserActivityLog, type UserStats } from "@/types/stats";
 import { Info } from "lucide-react";
 import { Card } from "@/components/ui/card";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+=======
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+>>>>>>> prod-deploy
 import {
   Select,
   SelectContent,
@@ -21,7 +35,16 @@ interface GritGraphProps {
   className?: string;
 }
 
+<<<<<<< HEAD
 export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraphProps) {
+=======
+export function GritGraph({
+  activityLog,
+  stats,
+  joinedAt,
+  className,
+}: GritGraphProps) {
+>>>>>>> prod-deploy
   const [hoveredDay, setHoveredDay] = useState<UserActivityLog | null>(null);
 
   const {
@@ -30,19 +53,30 @@ export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraph
     yearOptions,
     totalSubmissions,
     activeDays,
+<<<<<<< HEAD
     filteredMonthsData
+=======
+    filteredMonthsData,
+>>>>>>> prod-deploy
   } = useActivityTimeline({ activityLog, joinedAt });
 
   // 1. Level Logic
   const getLevel = (submissions: number) => {
     if (submissions === 0) return 0;
+<<<<<<< HEAD
     if (submissions < 2) return 1;
     if (submissions < 4) return 2;
     if (submissions < 7) return 3;
+=======
+    if (submissions < 5) return 1;
+    if (submissions < 10) return 2;
+    if (submissions < 20) return 3;
+>>>>>>> prod-deploy
     return 4;
   };
 
   const levelColors = [
+<<<<<<< HEAD
     "bg-muted/90 ", 
     "bg-difficulty-easy/30",               
     "bg-difficulty-easy/60",               
@@ -52,6 +86,19 @@ export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraph
 
   return (
     <Card className={cn("px-4 py-5 space-y-5 bg-card border-border", className)}>
+=======
+    "bg-background/50",         // 0: Empty/Min
+    "bg-[#064e3b]",        // 1: Emerald 900 (Deepest)
+    "bg-[#047857]",        // 2: Emerald 700 (Dark Green)
+    "bg-[#10b981]",        // 3: Emerald 500 (Vibrant Green)
+    "bg-[#6ee7b7]",        // 4: Emerald 300 (Brightest - Peak)
+  ];
+
+  return (
+    <Card
+      className={cn("px-4 py-5 space-y-5 bg-card border-border", className)}
+    >
+>>>>>>> prod-deploy
       <TooltipProvider delayDuration={0}>
         {/* Tactical Header Row */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -61,18 +108,32 @@ export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraph
                 {totalSubmissions.toLocaleString()}
               </span>
               <span className="text-muted-foreground font-normal ml-1 whitespace-nowrap">
+<<<<<<< HEAD
                 submissions in {selectedYear === "Current" ? "the past one year" : selectedYear}
+=======
+                submissions in{" "}
+                {selectedYear === "Current"
+                  ? "the past one year"
+                  : selectedYear}
+>>>>>>> prod-deploy
               </span>
             </h2>
             <Tooltip>
               <TooltipTrigger>
+<<<<<<< HEAD
                 <Info size={14}  />
               </TooltipTrigger>
               <TooltipContent side="top" >
+=======
+                <Info size={14} />
+              </TooltipTrigger>
+              <TooltipContent side="top">
+>>>>>>> prod-deploy
                 Submissions are recorded in the UTC timezone.
               </TooltipContent>
             </Tooltip>
           </div>
+<<<<<<< HEAD
           
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
@@ -87,19 +148,58 @@ export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraph
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-muted-foreground/60 leading-none">Max streak:</span>
+=======
+
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-muted-foreground/60 leading-none">
+                Total active days:
+              </span>
+              <span className="text-xs font-bold text-foreground">
+                {activeDays}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 pr-4 border-r border-border/50">
+              <span className="text-[10px] text-muted-foreground/60 leading-none">
+                Current streak:
+              </span>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-bold text-foreground">
+                  {stats.currentStreak}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-muted-foreground/60 leading-none">
+                Max streak:
+              </span>
+>>>>>>> prod-deploy
               <span className="text-xs font-bold text-foreground">
                 {selectedYear === "Current" ? stats.bestStreak : "—"}
               </span>
             </div>
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> prod-deploy
             {/* Year Navigator Select */}
             <Select value={selectedYear} onValueChange={setSelectedYear}>
               <SelectTrigger className="h-7 w-[100px] text-[10px] bg-muted border-border hover:bg-muted/80 transition-all font-medium">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent className="bg-popover border-border">
+<<<<<<< HEAD
                 {yearOptions.map(year => (
                   <SelectItem key={year} value={year} className="text-[10px] focus:bg-muted focus:text-foreground">
+=======
+                {yearOptions.map((year) => (
+                  <SelectItem
+                    key={year}
+                    value={year}
+                    className="text-[10px] focus:bg-muted focus:text-foreground"
+                  >
+>>>>>>> prod-deploy
                     {year}
                   </SelectItem>
                 ))}
@@ -112,7 +212,11 @@ export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraph
           <div className="flex items-start gap-2 min-w-max">
             {filteredMonthsData.map((month, mIdx) => (
               <div key={mIdx} className="flex flex-col gap-2">
+<<<<<<< HEAD
                 <div className="grid grid-rows-7 grid-flow-col gap-[1.5px]">
+=======
+                <div className="grid grid-rows-7 grid-flow-col gap-[2.5px]">
+>>>>>>> prod-deploy
                   {month.days.map((day, dIdx) => {
                     const level = getLevel(day.submissions);
                     return (
@@ -120,7 +224,11 @@ export function GritGraph({ activityLog, stats, joinedAt, className }: GritGraph
                         <TooltipTrigger asChild>
                           <div
                             className={cn(
+<<<<<<< HEAD
                               "w-[11px] h-[11px] rounded-[2px] transition-all duration-200 cursor-pointer hover:ring-1 hover:ring-foreground/20 border border-border/20",
+=======
+                              "w-[10px] h-[10px] rounded-[2px] transition-all duration-200 cursor-pointer hover:ring-1 hover:ring-foreground/20 border border-border/20",
+>>>>>>> prod-deploy
                               levelColors[level],
                             )}
                             onMouseEnter={() =>

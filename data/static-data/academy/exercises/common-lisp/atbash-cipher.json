@@ -1,0 +1,31 @@
+{
+  "id": "common-lisp:atbash-cipher",
+  "trackSlug": "common-lisp",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "71a1fdb6-414e-452c-8d24-03f2a5621e62",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "characters"
+  ],
+  "prerequisites": [
+    "characters"
+  ],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :atbash-cipher\n  (:use :cl)\n  (:export :encode :decode))\n\n(in-package :atbash-cipher)\n\n(defun encode (plaintext))\n\n(defun decode (ciphertext))\n",
+  "example_solution": "(defpackage :atbash-cipher\n  (:use :common-lisp)\n  (:export :encode :decode))\n\n(in-package :atbash-cipher)\n\n(defun to-string (seq)\n  (concatenate 'string seq))\n\n(defun group (seq &optional (group-size 5))\n  (loop\n     for c in seq and i from 1\n     collect c\n     when (and (not (= i (length seq)))\n               (zerop (mod i group-size)))\n     collect #\\Space))\n\n(defparameter +key+\n  (pairlis\n   (coerce \"abcdefghijklmnopqrstuvwxyz1234567890\" 'list)\n   (coerce \"zyxwvutsrqponmlkjihgfedcba1234567890\" 'list)))\n\n(defun lookup-char (c) (cdr (assoc c +key+)))\n\n(defun normalize (str)\n  (remove-if-not #'alphanumericp (string-downcase str)))\n\n(defun encode (plaintext)\n  (to-string (group (map 'list #'lookup-char (normalize plaintext)))))\n\n(defun decode (ciphertext)\n  (map 'string #'lookup-char (normalize ciphertext)))\n",
+  "test_code": ";; Ensures that atbash-cipher.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"atbash-cipher\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from atbash-cipher and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :atbash-cipher-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :atbash-cipher-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* atbash-cipher-suite)\n\n(def-suite* encode :in atbash-cipher-suite)\n\n(test encode-yes (is (equal \"bvh\" (atbash-cipher:encode \"yes\"))))\n\n(test encode-no (is (equal \"ml\" (atbash-cipher:encode \"no\"))))\n\n(test encode-omg (is (equal \"lnt\" (atbash-cipher:encode \"OMG\"))))\n\n(test encode-spaces (is (equal \"lnt\" (atbash-cipher:encode \"O M G\"))))\n\n(test encode-mindblowingly\n  (is (equal \"nrmwy oldrm tob\" (atbash-cipher:encode \"mindblowingly\"))))\n\n(test encode-numbers\n (is\n  (equal \"gvhgr mt123 gvhgr mt\"\n         (atbash-cipher:encode \"Testing, 1 2 3, testing.\"))))\n\n(test encode-deep-thought\n  (is (equal \"gifgs rhurx grlm\" (atbash-cipher:encode \"Truth is fiction.\"))))\n\n(test encode-all-the-letters\n (let ((plaintext \"The quick brown fox jumps over the lazy dog.\")\n       (cipher \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"))\n   (is (equal cipher (atbash-cipher:encode plaintext)))))\n\n(def-suite* decode :in atbash-cipher-suite)\n\n(test decode-exercism\n  (is (equal \"exercism\" (atbash-cipher:decode \"vcvix rhn\"))))\n\n(test decode-a-sentence\n  (is (equal \"anobstacleisoftenasteppingstone\"\n             (atbash-cipher:decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"))))\n\n(test decode-numbers\n  (is (equal \"testing123testing\" (atbash-cipher:decode \"gvhgr mt123 gvhgr mt\"))))\n\n(test decode-all-the-letters\n  (is (equal \"thequickbrownfoxjumpsoverthelazydog\"\n             (atbash-cipher:decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"))))\n\n(test decode-with-too-many-spaces\n  (is (equal \"exercism\"\n             (atbash-cipher:decode \"vc vix    r hn\"))))\n\n(test decode-with-no-spaces\n  (is (equal \"anobstacleisoftenasteppingstone\"\n             (atbash-cipher:decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"))))\n\n(defun run-tests (&optional (test-or-suite 'atbash-cipher-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "verdammelt",
+    "PaulT89"
+  ],
+  "contributors": null
+}

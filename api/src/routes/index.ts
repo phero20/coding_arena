@@ -13,7 +13,17 @@ import { registerFollowRoutes } from "./user/follow.routes";
 import { registerProfileRoutes } from "./user/profile.routes";
 import { registerUserRoutes } from "./user/user.routes";
 import { registerCompilerRoutes } from "./compiler.routes";
+<<<<<<< HEAD
 
+=======
+import { registerContestRoutes } from "./contest/contest.routes";
+import { registerTaxonomyRoutes } from "./taxonomy/taxonomy.routes";
+import { registerSolutionRoutes } from "./solutions/solution.routes";
+import { registerWorkspaceRoutes } from "./workspace/workspace.routes";
+import { registerChatRoutes } from "./chat/chat.routes";
+import { registerAcademyRoutes } from "./academy/academy.routes";
+import { registerSystemDesignRoutes } from "./system-design/system-design.routes";
+>>>>>>> prod-deploy
 
 import { healthRoutes } from "./system/health.routes";
 
@@ -31,6 +41,17 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     profileController,
     userController,
     compilerController,
+<<<<<<< HEAD
+=======
+    contestController,
+    taxonomyController,
+    solutionController,
+    workspaceController,
+    chatController,
+    academyController,
+    academyExecutionController,
+    systemDesignController,
+>>>>>>> prod-deploy
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -103,6 +124,44 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     compilerController,
     rateLimitMiddleware,
   });
+<<<<<<< HEAD
+=======
+
+  registerContestRoutes(v1, {
+    contestController,
+  });
+
+  registerTaxonomyRoutes(v1, {
+    taxonomyController,
+    authMiddleware,
+    authorizationMiddleware,
+  });
+ 
+  registerSolutionRoutes(v1, {
+    solutionController,
+    authMiddleware,
+  });
+
+  registerWorkspaceRoutes(v1, {
+    workspaceController,
+    authMiddleware,
+  });
+
+  registerChatRoutes(v1, {
+    chatController,
+    authMiddleware,
+  });
+  
+  registerAcademyRoutes(v1, {
+    academyController,
+    academyExecutionController,
+    authMiddleware,
+  });
+
+  registerSystemDesignRoutes(v1, {
+    systemDesignController,
+  });
+>>>>>>> prod-deploy
  
   app.route("/api/v1", v1);
 };

@@ -1,0 +1,45 @@
+{
+  "id": "rust:crypto-square",
+  "trackSlug": "rust",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "0cc485e9-43ba-4d97-a622-ee4cb8b9f1f7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "char",
+    "iterators",
+    "string-vs-str"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn encrypt(input: &str) -> String {\n    todo!(\"Encrypt {input:?} using a square code\")\n}\n",
+  "example_solution": "pub fn encrypt(input: &str) -> String {\n    let mut input: Vec<_> = input\n        .to_ascii_lowercase()\n        .chars()\n        .filter(char::is_ascii_alphanumeric)\n        .collect();\n    if input.is_empty() {\n        return String::new();\n    }\n\n    let width = (input.len() as f64).sqrt().ceil() as usize;\n    let size = width * width;\n\n    // skip last row if already empty\n    let last_row = if input.len() + width > size {\n        width\n    } else {\n        width - 1\n    };\n\n    // padding\n    input.resize(size, ' ');\n\n    // prevent input from being moved into closure below\n    let input = &input;\n\n    // transpose\n    let mut res: String = (0..width)\n        .flat_map(|col| {\n            (0..last_row)\n                .map(move |row| input[row * width + col])\n                .chain(std::iter::once(' '))\n        })\n        .collect();\n\n    // trailing space separator\n    res.pop();\n\n    res\n}\n",
+  "test_code": "use crypto_square::*;\n\n#[test]\nfn empty_plaintext_results_in_an_empty_ciphertext() {\n    let actual = encrypt(\"\");\n    let expected = \"\";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn normalization_results_in_empty_plaintext() {\n    let actual = encrypt(\"... --- ...\");\n    let expected = \"\";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn lowercase() {\n    let actual = encrypt(\"A\");\n    let expected = \"a\";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn remove_spaces() {\n    let actual = encrypt(\"  b \");\n    let expected = \"b\";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn remove_punctuation() {\n    let actual = encrypt(\"@1,%!\");\n    let expected = \"1\";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn test_9_character_plaintext_results_in_3_chunks_of_3_characters() {\n    let actual = encrypt(\"This is fun!\");\n    let expected = \"tsf hiu isn\";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn test_8_character_plaintext_results_in_3_chunks_the_last_one_with_a_trailing_space() {\n    let actual = encrypt(\"Chill out.\");\n    let expected = \"clu hlt io \";\n    assert_eq!(&actual, expected);\n}\n\n#[test]\n#[ignore]\nfn test_54_character_plaintext_results_in_8_chunks_the_last_two_with_trailing_spaces() {\n    let actual = encrypt(\"If man was meant to stay on the ground, god would have given us roots.\");\n    let expected = \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \";\n    assert_eq!(&actual, expected);\n}\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "coriolinus"
+  ],
+  "contributors": [
+    "AndrewKvalheim",
+    "Baelyk",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "f3rn0s",
+    "lutostag",
+    "navossoc",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

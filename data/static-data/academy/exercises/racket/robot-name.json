@@ -1,0 +1,36 @@
+{
+  "id": "racket:robot-name",
+  "trackSlug": "racket",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "5ffc29de-9a26-40ba-83af-a4d15ad5d77f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "pattern-matching",
+    "randomness",
+    "regular-expressions",
+    "strings",
+    "text-formatting",
+    "object-oriented-programming"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide make-robot\n         name\n         reset!\n         reset-name-cache!)\n\n(define (make-robot)\n  (error \"Please implement 'make-robot'\"))\n\n(define (name robot)\n  (error \"Please implement 'name'\"))\n\n(define (reset! robot)\n  (error \"Please implement 'reset!'\"))\n\n(define (reset-name-cache!)\n  (error \"Please implement 'reset-name-cache!'\"))\n",
+  "example_solution": "#lang racket/base\n\n(provide make-robot\n         name\n         reset!\n         reset-name-cache!)\n\n;;; Public\n(define (make-robot)\n  (let ([name (name-generator 'get)])\n    (λ (msg)\n      (case msg\n        [(name) name]\n        [(reset!) (set! name (name-generator 'get))]\n        [else (error 'robot \"invalid message\" msg)]))))\n\n(define (name robot)\n  (robot 'name))\n\n(define (reset! robot)\n  (robot 'reset!))\n\n(define (reset-name-cache!)\n  (name-generator 'clear!))\n\n;;; Private\n(define max-names (* 26 26 10 10 10))\n\n(define generate-valid-name\n  (let ([random-digit\n         (let ([zero (char->integer #\\0)])\n           (λ () (integer->char (+ zero (random 10)))))]\n        [random-capital-letter\n         (let ([A (char->integer #\\A)])\n           (λ () (integer->char (+ A (random 26)))))])\n    (λ ()\n      (string (random-capital-letter)\n              (random-capital-letter)\n              (random-digit)\n              (random-digit)\n              (random-digit)))))\n\n(define name-generator\n  (let* ([name-cache (make-hash)]\n         [handle\n          (λ (name)\n            (if (hash-has-key? name-cache name)\n                (name-generator 'get)\n                (begin (hash-set! name-cache name #t)\n                       name)))])\n    (λ (msg)\n      (case msg\n        [(get)\n         (if (< (hash-count name-cache) max-names)\n             (handle (generate-valid-name))\n             (error 'name-generator \"name-cache is full\"))]\n        [(clear!) (hash-clear! name-cache)]\n        [else\n         (error 'name-generator \"invalid message passed\" msg)]))))\n",
+  "test_code": "#lang racket/base\n\n; There were no canonical tests to perform.\n(require \"robot-name.rkt\")\n\n(module+ test\n  (require rackunit\n           rackunit/text-ui)\n\n  (define max-names (* 26 26 10 10 10))\n\n  (define proper-robot-name #px\"^\\\\p{Lu}{2}\\\\p{Nd}{3}$\")\n\n  (define (check-proper-robot-name r)\n    (check-regexp-match proper-robot-name (name r)))\n\n  (define robot-name-suite\n    (test-suite\n     \"Check proper operation of 'robots'\"\n\n     (test-case\n      \"Check that robot names conforms to the expected standard.\"\n      (check-proper-robot-name (make-robot)))\n\n     (test-case\n      \"Check that resetting a robot name also gives a proper name.\"\n      (let* ([robby (make-robot)]\n             [name1 (name robby)]\n             [_ (reset! robby)]\n             [name2 (name robby)])\n        (check-regexp-match proper-robot-name name1)\n        (check-regexp-match proper-robot-name name2)\n        (check-not-equal? name1 name2)))\n\n     (test-case\n      \"Check that robots are created with unique names.\"\n      ;; sufficient to cause collision (birthday paradox)\n      (let ([count 5000])\n        ;; reset cache in order to generate all the names\n        (reset-name-cache!)\n        (check-equal?\n         (let ([names (make-hash)])\n           (for ((_ (in-range count)))\n             (hash-set! names (name (make-robot)) #t))\n           (hash-count names))\n         count)))))\n\n  (run-tests robot-name-suite))\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "cousinitt"
+  ],
+  "contributors": [
+    "guygastineau",
+    "robertpostill"
+  ]
+}

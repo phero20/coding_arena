@@ -1,0 +1,26 @@
+{
+  "id": "wasm:nth-prime",
+  "trackSlug": "wasm",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "9edd0fda-cc73-40a2-a32c-b16918c65167",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(module\n  ;;\n  ;; nth_prime - return the nth prime for n > 0\n  ;;\n  ;; @param {i32} $n - index of the returned prime\n  ;;\n  ;; @returns {i32} - the $nth prime\n  ;;\n  (func (export \"prime\") (param $n i32) (result i32)\n    (i32.const 2)\n  )\n)\n",
+  "example_solution": "(module\n  ;;\n  ;; nth_prime - return the nth prime for n > 0\n  ;;\n  ;; @param {i32} $n - index of the returned prime\n  ;;\n  ;; @returns {i32} - the $nth prime\n  ;;\n  (func (export \"prime\") (param $n i32) (result i32)\n    (local $candidate i32)\n    (local $factor i32)\n    (if (i32.lt_s (local.get $n) (i32.const 1)) (then (return (i32.const -1))))\n    (loop $count_up\n      (local.set $candidate (i32.add (local.get $candidate) (i32.const 1)))\n      (local.set $factor (i32.const 1))\n      (loop $is_prime\n        (local.set $factor (i32.add (local.get $factor) (i32.const 1)))\n      (br_if $is_prime (i32.and (i32.lt_u (local.get $factor) (local.get $candidate))\n        (i32.ne (i32.rem_u (local.get $candidate) (local.get $factor)) (i32.const 0)))))\n      (if (i32.eq (local.get $candidate) (local.get $factor))\n        (then (local.set $n (i32.sub (local.get $n) (i32.const 1)))))\n    (br_if $count_up (local.get $n)))\n    (local.get $candidate)\n  )\n)\n",
+  "test_code": "import { compileWat, WasmRunner } from \"@exercism/wasm-lib\";\n\nlet wasmModule;\nlet currentInstance;\n\nbeforeAll(async () => {\n  try {\n    const watPath = new URL(\"./nth-prime.wat\", import.meta.url);\n    const { buffer } = await compileWat(watPath);\n    wasmModule = await WebAssembly.compile(buffer);\n  } catch (err) {\n    console.log(`Error compiling *.wat: \\n${err}`);\n    process.exit(1);\n  }\n});\n\nconst prime = (nth) => currentInstance.exports.prime(nth);\n\ndescribe('nth-prime', () => {\n  beforeEach(async () => {\n    currentInstance = null;\n\n    if (!wasmModule) {\n      return Promise.reject();\n    }\n    try {\n      currentInstance = await new WasmRunner(wasmModule);\n      return Promise.resolve();\n    } catch (err) {\n      console.log(`Error instantiating WebAssembly module: ${err}`);\n      return Promise.reject();\n    }\n  });\n\n  test('first prime', () => {\n    expect(prime(1)).toEqual(2);\n  });\n\n  xtest('second prime', () => {\n    expect(prime(2)).toEqual(3);\n  });\n\n  xtest('sixth prime', () => {\n    expect(prime(6)).toEqual(13);\n  });\n\n  xtest('big prime', () => {\n    expect(prime(10001)).toEqual(104743);\n  });\n});\n",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "atk"
+  ],
+  "contributors": null
+}

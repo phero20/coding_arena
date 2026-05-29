@@ -1,0 +1,30 @@
+{
+  "id": "ballerina:legacy-service-client",
+  "trackSlug": "ballerina",
+  "slug": "legacy-service-client",
+  "name": "Legacy Service Client",
+  "uuid": "8c8cafdd-7cd6-46fd-9c9e-033dc9631c80",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Deprecated",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreating a service in ballerina is easy. Now you can add a query parameter and a relative path.\n\nThe objectives:\n\n- Modify the provided code",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import ballerina/http;\nimport ballerina/io;\n\n\n// Use the following endpoints to send HTTP GET request to get quotes\n\n// This is an existing endpoint (which will be automatically spawned by the test framework)\nhttp:Client clientEP1 = new(\"http://localhost:9095/brainyquote\");\n\n// This is a non-existing endpoint.\nhttp:Client clientEP2 = new(\"http://localhost:6060/legacyquote\");\n\n\npublic function main() {\n\n    // Invoke clientEP1 using HTTP GET request on \"/\"\n    // Invocation returns an 'union type' which can either be an 'http:Response' type or an 'error' type.\n    // Assign it to 'Var' variable (The type of the declared variable is inferred from the expression on the right-hand side.)\n\n\n    // Create a match caluse to handle\n    // 1. http:Response\n    // 2. error\n\n    // For case with http:Response, you need to get the text payload from the response message and print it the console (io:println).\n    // You may use 'match' again to handle the union type that can be string or error. So, you can simply use 'check' to explicitely get the\n    // string type if exists or pass the error to the caller.\n\n\n    // For error case just print the error message to the console (io:println)\n\n\n\n    // Similarly implement the same logic for the invocation of the clientEP2\n\n}\n",
+  "example_solution": "import ballerina/http;\nimport ballerina/io;\n\nhttp:Client clientEP1 = new(\"http://localhost:9095/brainyquote\");\n\nhttp:Client clientEP2 = new(\"http://localhost:6060/legacyquote\");\n\n\npublic function main() {\n    var resp1 = clientEP1->get(\"/\");\n    if (resp1 is http:Response) {\n        var res = resp1.getTextPayload();\n        if (res is string) {\n            io:println(res);\n        } else {\n            io:println(res.detail().message);\n        }\n    } else {\n        io:println(resp1.detail().message);\n    }\n\n    var resp2 = clientEP2->get(\"/\");\n    if (resp2 is http:Response) {\n        var res = resp2.getTextPayload();\n        if (res is string) {\n            io:println(res);\n        } else {\n            io:println(res.detail().message);\n        }\n    } else {\n        io:println(resp2.detail().message);\n    }\n}\n",
+  "test_code": "import ballerina/test;\nimport ballerina/io;\n\nany[] outputs = [];\nint counter = 0;\n\n// This is the mock function which will replace the real function\n@test:Mock {\n    moduleName: \"ballerina/io\",\n    functionName: \"println\"\n}\npublic function mockPrint(any... s) {\n    outputs[counter] = s[0];\n    counter +=1;\n}\n\n@test:Config\nfunction testFunc() {\n    // Invoking the main function\n    main();\n    test:assertEquals(outputs[0], \"Many of life’s failures are people who did not realize how close they were to success when they gave up. - Thomas A. Edison\\n\");\n    string s = <string>outputs[1];\n    test:assertTrue(s.contains(\"Connection refused\"), msg = \"Output message is not 'Connection Refused' error\");\n}",
+  "source": null,
+  "source_url": null,
+  "authors": [],
+  "contributors": [
+    "hemikak",
+    "kasun04",
+    "Manuri",
+    "vordimous",
+    "vinok88"
+  ]
+}

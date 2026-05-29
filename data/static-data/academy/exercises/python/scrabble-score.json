@@ -1,0 +1,47 @@
+{
+  "id": "python:scrabble-score",
+  "trackSlug": "python",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "d081446b-f26b-41a2-ab7f-dd7f6736ecfe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "regular-expressions"
+  ],
+  "prerequisites": [
+    "basics",
+    "dicts",
+    "lists",
+    "loops",
+    "string-methods",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "def score(word):\n    pass\n",
+  "example_solution": "POINTS = {\n    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1,\n    'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8,\n    'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1,\n    'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1,\n    'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4,\n    'z': 10\n}\n\n\ndef score(word):\n    if not word.isalpha():\n        return 0\n    return sum(POINTS[letter] for letter in word.lower())\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/scrabble-score/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom scrabble_score import (\n    score,\n)\n\n\nclass ScrabbleScoreTest(unittest.TestCase):\n    def test_lowercase_letter(self):\n        self.assertEqual(score(\"a\"), 1)\n\n    def test_uppercase_letter(self):\n        self.assertEqual(score(\"A\"), 1)\n\n    def test_valuable_letter(self):\n        self.assertEqual(score(\"f\"), 4)\n\n    def test_short_word(self):\n        self.assertEqual(score(\"at\"), 2)\n\n    def test_short_valuable_word(self):\n        self.assertEqual(score(\"zoo\"), 12)\n\n    def test_medium_word(self):\n        self.assertEqual(score(\"street\"), 6)\n\n    def test_medium_valuable_word(self):\n        self.assertEqual(score(\"quirky\"), 22)\n\n    def test_long_mixed_case_word(self):\n        self.assertEqual(score(\"OxyphenButazone\"), 41)\n\n    def test_english_like_word(self):\n        self.assertEqual(score(\"pinata\"), 8)\n\n    def test_empty_input(self):\n        self.assertEqual(score(\"\"), 0)\n\n    def test_entire_alphabet_available(self):\n        self.assertEqual(score(\"abcdefghijklmnopqrstuvwxyz\"), 87)\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [],
+  "contributors": [
+    "behrtam",
+    "cmccandless",
+    "Dog",
+    "ikhadykin",
+    "kotp",
+    "kytrinyx",
+    "lowks",
+    "N-Parsons",
+    "parinporecha",
+    "Peque",
+    "pheanex",
+    "sjakobi",
+    "tqa236"
+  ]
+}

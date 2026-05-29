@@ -1,0 +1,37 @@
+{
+  "id": "kotlin:pig-latin",
+  "trackSlug": "kotlin",
+  "slug": "pig-latin",
+  "name": "Pig Latin",
+  "uuid": "cb2ce8e5-f143-4423-a3bc-959f4222c186",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a program that translates from English to Pig Latin.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to translate text from English to Pig Latin.\nThe translation is defined using four rules, which look at the pattern of vowels and consonants at the beginning of a word.\nThese rules look at each word's use of vowels and consonants:\n\n- vowels: the letters `a`, `e`, `i`, `o`, and `u`\n- consonants: the other 21 letters of the English alphabet\n\n## Rule 1\n\nIf a word begins with a vowel, or starts with `\"xr\"` or `\"yt\"`, add an `\"ay\"` sound to the end of the word.\n\nFor example:\n\n- `\"apple\"` -> `\"appleay\"` (starts with vowel)\n- `\"xray\"` -> `\"xrayay\"` (starts with `\"xr\"`)\n- `\"yttria\"` -> `\"yttriaay\"` (starts with `\"yt\"`)\n\n## Rule 2\n\nIf a word begins with one or more consonants, first move those consonants to the end of the word and then add an `\"ay\"` sound to the end of the word.\n\nFor example:\n\n- `\"pig\"` -> `\"igp\"` -> `\"igpay\"` (starts with single consonant)\n- `\"chair\"` -> `\"airch\"` -> `\"airchay\"` (starts with multiple consonants)\n- `\"thrush\"` -> `\"ushthr\"` -> `\"ushthray\"` (starts with multiple consonants)\n\n## Rule 3\n\nIf a word starts with zero or more consonants followed by `\"qu\"`, first move those consonants (if any) and the `\"qu\"` part to the end of the word, and then add an `\"ay\"` sound to the end of the word.\n\nFor example:\n\n- `\"quick\"` -> `\"ickqu\"` -> `\"ickquay\"` (starts with `\"qu\"`, no preceding consonants)\n- `\"square\"` -> `\"aresqu\"` -> `\"aresquay\"` (starts with one consonant followed by `\"qu`\")\n\n## Rule 4\n\nIf a word starts with one or more consonants followed by `\"y\"`, first move the consonants preceding the `\"y\"`to the end of the word, and then add an `\"ay\"` sound to the end of the word.\n\nSome examples:\n\n- `\"my\"` -> `\"ym\"` -> `\"ymay\"` (starts with single consonant followed by `\"y\"`)\n- `\"rhythm\"` -> `\"ythmrh\"` -> `\"ythmrhay\"` (starts with multiple consonants followed by `\"y\"`)\n",
+  "introduction": "# Introduction\n\nYour parents have challenged you and your sibling to a game of two-on-two basketball.\nConfident they'll win, they let you score the first couple of points, but then start taking over the game.\nNeeding a little boost, you start speaking in [Pig Latin][pig-latin], which is a made-up children's language that's difficult for non-children to understand.\nThis will give you the edge to prevail over your parents!\n\n[pig-latin]: https://en.wikipedia.org/wiki/Pig_latin\n",
+  "hints": null,
+  "starter_code": "object PigLatin {\n\n    fun translate(phrase: String): String {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "object PigLatin {\n\n    fun translate(phrase: String) = phrase.split(Regex(\"\\\\s+\")).joinToString(\" \") { translateWord(it) }\n\n    private fun translateWord(word: String): String {\n        if (startsWithVowelSound(word)) {\n            return word + \"ay\"\n        }\n\n        val groups = splitInitialConsonantSound(word)\n        if(groups != null) {\n            return groups[1] + groups[0] + \"ay\"\n        }\n\n        return word\n    }\n\n    private val consonant = Regex(\"^([^aeiou]?qu|[^aeiouy]+|[^aeiou]+)([a-z]*)\", RegexOption.IGNORE_CASE)\n    private fun splitInitialConsonantSound(word: String) = consonant.matchEntire(word)?.groupValues?.drop(1)\n\n    private val vowels = Regex(\"^([aeiou]|y[^aeiou]|xr)[a-z]*\", RegexOption.IGNORE_CASE)\n    private fun startsWithVowelSound(word: String) = vowels.matches(word)\n\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.runner.RunWith\nimport org.junit.runners.Parameterized\nimport kotlin.test.assertEquals\n\n@RunWith(Parameterized::class)\nclass PigLatinTest(val input: String, val expectedOutput: String) {\n\n    companion object {\n        @JvmStatic\n        @Parameterized.Parameters(name = \"{index}: translate({0})={1}\")\n        fun data() = arrayOf(\n                // Ay is added to words that start with vowels\n                arrayOf(\"apple\",  \"appleay\"),\n                arrayOf(\"ear\",    \"earay\"),\n                arrayOf(\"igloo\",  \"iglooay\"),\n                arrayOf(\"object\", \"objectay\"),\n                arrayOf(\"under\",  \"underay\"),\n\n                // Ay is added to words that start with vowels followed by qu\n                arrayOf(\"equal\",  \"equalay\"),\n\n                // First letter and ay are moved to the end of words that start with consonants\n                arrayOf(\"pig\",    \"igpay\"),\n                arrayOf(\"koala\",  \"oalakay\"),\n                arrayOf(\"xenon\",  \"enonxay\"),\n                arrayOf(\"qat\",    \"atqay\"),\n\n                // Ch is treated like a single consonant\n                arrayOf(\"chair\", \"airchay\"),\n\n                // Qu is treated like a single consonant\n                arrayOf(\"queen\", \"eenquay\"),\n\n                // Qu and a single preceding consonant are treated like a single consonant\n                arrayOf(\"square\", \"aresquay\"),\n\n                // Th is treated like a single consonant\n                arrayOf(\"therapy\", \"erapythay\"),\n\n                // Thr is treated like a single consonant\n                arrayOf(\"thrush\", \"ushthray\"),\n\n                // Sch is treated like a single consonant\n                arrayOf(\"school\", \"oolschay\"),\n\n                // Yt is treated like a single vowel\n                arrayOf(\"yttria\", \"yttriaay\"),\n\n                // Xr is treated like a single vowel\n                arrayOf(\"xray\", \"xrayay\"),\n\n                // Y is treated like a consonant at the beginning of a word\n                arrayOf(\"yellow\", \"ellowyay\"),\n\n                // Y is treated like a vowel at the end of a consonant cluster\n                arrayOf(\"rhythm\", \"ythmrhay\"),\n\n                // Y as second letter in two letter word\n                arrayOf(\"my\",     \"ymay\"),\n\n                // Phrases are translated\n                arrayOf(\"quick fast run\", \"ickquay astfay unray\")\n        )\n    }\n\n    @Test\n    fun test() {\n        assertEquals(expectedOutput, PigLatin.translate(input))\n    }\n\n}\n",
+  "source": "The Pig Latin exercise at Test First Teaching by Ultrasaurus",
+  "source_url": "https://github.com/ultrasaurus/test-first-teaching/blob/master/learn_ruby/pig_latin/",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

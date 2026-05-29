@@ -1,0 +1,33 @@
+{
+  "id": "perl5:difference-of-squares",
+  "trackSlug": "perl5",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "590270ac-b638-4292-bbdc-eee1705904f1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "numbers"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package DifferenceOfSquares;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<square_of_sum sum_of_squares difference_of_squares>;\n\nsub square_of_sum ($number) {\n    return undef;\n}\n\nsub sum_of_squares ($number) {\n    return undef;\n}\n\nsub difference_of_squares ($number) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package DifferenceOfSquares;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<square_of_sum sum_of_squares difference_of_squares>;\n\nuse List::Util qw<sum>;\n\nsub square_of_sum ($number) {\n    return sum( 1 .. $number )**2;\n}\n\nsub sum_of_squares ($number) {\n    return sum( map { $_**2 } 1 .. $number );\n}\n\nsub difference_of_squares ($number) {\n    return square_of_sum($number) - sum_of_squares($number);\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse DifferenceOfSquares qw<square_of_sum sum_of_squares difference_of_squares>;\n\nis( # begin: e46c542b-31fc-4506-bcae-6b62b3268537\n    square_of_sum(1),\n    number(1),\n    \"Square the sum of the numbers up to the given number: square of sum 1\",\n); # end: e46c542b-31fc-4506-bcae-6b62b3268537\n\nis( # begin: 9b3f96cb-638d-41ee-99b7-b4f9c0622948\n    square_of_sum(5),\n    number(225),\n    \"Square the sum of the numbers up to the given number: square of sum 5\",\n); # end: 9b3f96cb-638d-41ee-99b7-b4f9c0622948\n\nis( # begin: 54ba043f-3c35-4d43-86ff-3a41625d5e86\n    square_of_sum(100),\n    number(25502500),\n    \"Square the sum of the numbers up to the given number: square of sum 100\",\n); # end: 54ba043f-3c35-4d43-86ff-3a41625d5e86\n\nis( # begin: 01d84507-b03e-4238-9395-dd61d03074b5\n    sum_of_squares(1),\n    number(1),\n    \"Sum the squares of the numbers up to the given number: sum of squares 1\",\n); # end: 01d84507-b03e-4238-9395-dd61d03074b5\n\nis( # begin: c93900cd-8cc2-4ca4-917b-dd3027023499\n    sum_of_squares(5),\n    number(55),\n    \"Sum the squares of the numbers up to the given number: sum of squares 5\",\n); # end: c93900cd-8cc2-4ca4-917b-dd3027023499\n\nis( # begin: 94807386-73e4-4d9e-8dec-69eb135b19e4\n    sum_of_squares(100),\n    number(338350),\n    \"Sum the squares of the numbers up to the given number: sum of squares 100\",\n); # end: 94807386-73e4-4d9e-8dec-69eb135b19e4\n\nis( # begin: 44f72ae6-31a7-437f-858d-2c0837adabb6\n    difference_of_squares(1),\n    number(0),\n    \"Subtract sum of squares from square of sums: difference of squares 1\",\n); # end: 44f72ae6-31a7-437f-858d-2c0837adabb6\n\nis( # begin: 005cb2bf-a0c8-46f3-ae25-924029f8b00b\n    difference_of_squares(5),\n    number(170),\n    \"Subtract sum of squares from square of sums: difference of squares 5\",\n); # end: 005cb2bf-a0c8-46f3-ae25-924029f8b00b\n\nis( # begin: b1bf19de-9a16-41c0-a62b-1f02ecc0b036\n    difference_of_squares(100),\n    number(25164150),\n    \"Subtract sum of squares from square of sums: difference of squares 100\",\n); # end: b1bf19de-9a16-41c0-a62b-1f02ecc0b036\n\ndone_testing;\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "bistik"
+  ],
+  "contributors": [
+    "kytrinyx",
+    "m-dango",
+    "rfilipo",
+    "Scientifica96"
+  ]
+}

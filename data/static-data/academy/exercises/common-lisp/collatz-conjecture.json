@@ -1,0 +1,31 @@
+{
+  "id": "common-lisp:collatz-conjecture",
+  "trackSlug": "common-lisp",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "b3ad38c2-2962-4b47-9b14-20ca262ebff6",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "arithmetic"
+  ],
+  "prerequisites": [
+    "integers",
+    "arithmetic"
+  ],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "(defpackage :collatz-conjecture\n  (:use :cl)\n  (:export :collatz))\n\n(in-package :collatz-conjecture)\n\n(defun collatz (n))\n",
+  "example_solution": "(defpackage :collatz-conjecture\n  (:use :common-lisp)\n  (:export :collatz))\n\n(in-package :collatz-conjecture)\n\n(defun collatz-helper (a n)\n  (cond ((= n 1)   a)\n        ((evenp n) (collatz-helper (+ 1 a) (floor n 2)))\n        (T         (collatz-helper (+ 1 a) (+ 1 (* 3 n))))))\n\n(defun collatz (n)\n  (when (> n 0)\n    (collatz-helper 0 n)))\n",
+  "test_code": ";; Ensures that collatz-conjecture.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"collatz-conjecture\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from collatz-conjecture and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :collatz-conjecture-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :collatz-conjecture-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* collatz-conjecture-suite)\n\n(test steps-for-1 (is (equal 0 (collatz-conjecture:collatz 1))))\n\n(test steps-for-16 (is (equal 4 (collatz-conjecture:collatz 16))))\n\n(test steps-for-12 (is (equal 9 (collatz-conjecture:collatz 12))))\n\n(test steps-for-1000000 (is (equal 152 (collatz-conjecture:collatz 1000000))))\n\n(test steps-for-0 (is (equal nil (collatz-conjecture:collatz 0))))\n\n(test steps-for-negative (is (equal nil (collatz-conjecture:collatz (- 0 15)))))\n\n(defun run-tests (&optional (test-or-suite 'collatz-conjecture-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "Average-user"
+  ],
+  "contributors": null
+}

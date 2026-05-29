@@ -1,0 +1,33 @@
+{
+  "id": "swift:flatten-array",
+  "trackSlug": "swift",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "b113d981-8fc8-4572-b3e0-7ba7a07419de",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "// // Write your code for the 'Flatten-Array' exercise in this file.",
+  "example_solution": "import Foundation\n\nfunc flattenArray<T>(_ list: [Any?]) -> [T] {\n\n  var flattenedArray = [T]()\n\n  func extractArrayElements(array: [Any?]) {\n\n    for element in array.compactMap({ $0 }) {\n\n      let anyObjectArray = element as? [Any?]\n\n      if let unwrappedArray = anyObjectArray {\n\n        extractArrayElements(array: unwrappedArray)\n\n      }\n\n      let value = element as? T\n\n      if let i = value {\n\n        flattenedArray.append(i)\n      }\n\n    }\n\n  }\n\n  extractArrayElements(array: list)\n\n  return flattenedArray\n\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import FlattenArray\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct FlattenArrayTests {\n\n  @Test(\"empty\")\n  func testEmpty() {\n    let result: [Int] = flattenArray([])\n    let expected: [Int] = []\n    #expect(expected == result)\n  }\n\n  @Test(\"no nesting\", .enabled(if: RUNALL))\n  func testNoNesting() {\n    let result: [Int] = flattenArray([0, 1, 2])\n    let expected: [Int] = [0, 1, 2]\n    #expect(expected == result)\n  }\n\n  @Test(\"flattens a nested array\", .enabled(if: RUNALL))\n  func testFlattensANestedArray() {\n    let result: [Int] = flattenArray([[[]]])\n    let expected: [Int] = []\n    #expect(expected == result)\n  }\n\n  @Test(\"flattens array with just integers present\", .enabled(if: RUNALL))\n  func testFlattensArrayWithJustIntegersPresent() {\n    let result: [Int] = flattenArray([1, [2, 3, 4, 5, 6, 7], 8])\n    let expected: [Int] = [1, 2, 3, 4, 5, 6, 7, 8]\n    #expect(expected == result)\n  }\n\n  @Test(\"5 level nesting\", .enabled(if: RUNALL))\n  func test5LevelNesting() {\n    let result: [Int] = flattenArray([0, 2, [[2, 3], 8, 100, 4, [[[50]]]], -2])\n    let expected: [Int] = [0, 2, 2, 3, 8, 100, 4, 50, -2]\n    #expect(expected == result)\n  }\n\n  @Test(\"6 level nesting\", .enabled(if: RUNALL))\n  func test6LevelNesting() {\n    let result: [Int] = flattenArray([1, [2, [[3]], [4, [[5]]], 6, 7], 8])\n    let expected: [Int] = [1, 2, 3, 4, 5, 6, 7, 8]\n    #expect(expected == result)\n  }\n\n  @Test(\"null values are omitted from the final result\", .enabled(if: RUNALL))\n  func testNullValuesAreOmittedFromTheFinalResult() {\n    let result: [Int] = flattenArray([1, 2, nil])\n    let expected: [Int] = [1, 2]\n    #expect(expected == result)\n  }\n\n  @Test(\n    \"consecutive null values at the front of the list are omitted from the final result\",\n    .enabled(if: RUNALL))\n  func testConsecutiveNullValuesAtTheFrontOfTheListAreOmittedFromTheFinalResult() {\n    let result: [Int] = flattenArray([nil, nil, 3])\n    let expected: [Int] = [3]\n    #expect(expected == result)\n  }\n\n  @Test(\n    \"consecutive null values in the middle of the list are omitted from the final result\",\n    .enabled(if: RUNALL))\n  func testConsecutiveNullValuesInTheMiddleOfTheListAreOmittedFromTheFinalResult() {\n    let result: [Int] = flattenArray([1, nil, nil, 4])\n    let expected: [Int] = [1, 4]\n    #expect(expected == result)\n  }\n\n  @Test(\"6 level nest list with null values\", .enabled(if: RUNALL))\n  func test6LevelNestListWithNullValues() {\n    let result: [Int] = flattenArray([0, 2, [[2, 3], 8, [[100]], nil, [[nil]]], -2])\n    let expected: [Int] = [0, 2, 2, 3, 8, 100, -2]\n    #expect(expected == result)\n  }\n\n  @Test(\"all values in nested list are null\", .enabled(if: RUNALL))\n  func testAllValuesInNestedListAreNull() {\n    let result: [Int] = flattenArray([nil, [[[nil]]], nil, nil, [[nil, nil], nil], nil])\n    let expected: [Int] = []\n    #expect(expected == result)\n  }\n}\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "AlwynC"
+  ],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "kytrinyx",
+    "lyuha",
+    "masters3d",
+    "ThomasHaz"
+  ]
+}

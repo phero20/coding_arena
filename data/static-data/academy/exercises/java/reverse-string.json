@@ -1,0 +1,45 @@
+{
+  "id": "java:reverse-string",
+  "trackSlug": "java",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "2c8afeed-480e-41f3-ad58-590fa8f88029",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "chars"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "class ReverseString {\n\n    String reverse(String inputString) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n  \n}\n",
+  "example_solution": "class ReverseString {\n\n    String reverse(String inputString) {\n        return new StringBuffer(inputString).reverse().toString();\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class ReverseStringTest {\n\n    @Test\n    @DisplayName(\"an empty string\")\n    public void testAnEmptyString() {\n        assertThat(new ReverseString().reverse(\"\")).isEqualTo(\"\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"a word\")\n    public void testAWord() {\n        assertThat(new ReverseString().reverse(\"robot\")).isEqualTo(\"tobor\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"a capitalized word\")\n    public void testACapitalizedWord() {\n        assertThat(new ReverseString().reverse(\"Ramen\")).isEqualTo(\"nemaR\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"a sentence with punctuation\")\n    public void testASentenceWithPunctuation() {\n        assertThat(new ReverseString().reverse(\"I'm hungry!\")).isEqualTo(\"!yrgnuh m'I\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"a palindrome\")\n    public void testAPalindrome() {\n        assertThat(new ReverseString().reverse(\"racecar\")).isEqualTo(\"racecar\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"an even-sized word\")\n    public void testAnEvenSizedWord() {\n        assertThat(new ReverseString().reverse(\"drawer\")).isEqualTo(\"reward\");\n    }\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "bmkiefer"
+  ],
+  "contributors": [
+    "barisozcanli",
+    "FridaTveit",
+    "ikhadykin",
+    "jmrunkle",
+    "Kyle-Pu",
+    "lemoncurry",
+    "mirkoperillo",
+    "msomji",
+    "muzimuzhi",
+    "ppiliar",
+    "sanderploegsma",
+    "sjwarner",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine"
+  ]
+}

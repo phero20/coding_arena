@@ -1,0 +1,34 @@
+{
+  "id": "vbnet:diffie-hellman",
+  "trackSlug": "vbnet",
+  "slug": "diffie-hellman",
+  "name": "Diffie-Hellman",
+  "uuid": "b561168e-835b-4301-b30c-0ff0970e4e35",
+  "type": "practice",
+  "status": null,
+  "blurb": "Diffie-Hellman key exchange.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "randomness",
+    "big-integers",
+    "math-operators"
+  ],
+  "prerequisites": [
+    "randomness",
+    "big-integers",
+    "math-operators"
+  ],
+  "instructions": "# Instructions\n\nDiffie-Hellman key exchange.\n\nAlice and Bob use Diffie-Hellman key exchange to share secrets.\nThey start with prime numbers, pick private keys, generate and share public keys, and then generate a shared secret key.\n\n## Step 0\n\nThe test program supplies prime numbers p and g.\n\n## Step 1\n\nAlice picks a private key, a, greater than 1 and less than p.\nBob does the same to pick a private key b.\n\n## Step 2\n\nAlice calculates a public key A.\n\n    A = gᵃ mod p\n\nUsing the same p and g, Bob similarly calculates a public key B from his private key b.\n\n## Step 3\n\nAlice and Bob exchange public keys.\nAlice calculates secret key s.\n\n    s = Bᵃ mod p\n\nBob calculates\n\n    s = Aᵇ mod p\n\nThe calculations produce the same result!\nAlice and Bob now share secret s.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\nImports System.Numerics\n\nPublic Module DiffieHellman\n    Public Function PrivateKey(ByVal primeP As BigInteger) As BigInteger\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\n\n    Public Function PublicKey(ByVal primeP As BigInteger, ByVal primeG As BigInteger, ByVal privateKey As BigInteger) As BigInteger\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\n\n    Public Function Secret(ByVal primeP As BigInteger, ByVal publicKey As BigInteger, ByVal privateKey As BigInteger) As BigInteger\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System\nImports System.Numerics\n\nPublic Module DiffieHellman\n    Private ReadOnly Random As Random = New Random()\n\n    Public Function PrivateKey(ByVal primeP As BigInteger) As BigInteger\n        Return New BigInteger(Random.Next(1, CInt(primeP) - 1))\n    End Function\n\n    Public Function PublicKey(ByVal primeP As BigInteger, ByVal primeG As BigInteger, ByVal privateKey As BigInteger) As BigInteger\n        Return BigInteger.ModPow(primeG, privateKey, primeP)\n    End Function\n\n    Public Function Secret(ByVal primeP As BigInteger, ByVal publicKey As BigInteger, ByVal privateKey As BigInteger) As BigInteger\n        Return BigInteger.ModPow(publicKey, privateKey, primeP)\n    End Function\nEnd Module\n",
+  "test_code": "Imports System.Linq\nImports System.Numerics\nImports Xunit\n\nPublic Class DiffieHellmanTests\n    <Fact>\n    Public Sub Private_key_is_greater_than_1_and_less_than_p()\n        Dim p = New BigInteger(7919)\n\n        For i = 0 To 1000 - 1\n            Dim privateKey = DiffieHellman.PrivateKey(p)\n            Assert.InRange(privateKey, New BigInteger(1), p)\n        Next\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Private_key_is_random()\n        Dim p = New BigInteger(7919)\n        Dim privateKeys = Enumerable.Range(0, 1000).[Select](Function(__) DiffieHellman.PrivateKey(p)).ToArray()\n        Assert.InRange(privateKeys.Distinct().Count(), privateKeys.Length - 100, privateKeys.Length)\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_calculate_public_key_using_private_key()\n        Dim p = New BigInteger(23)\n        Dim g = New BigInteger(5)\n        Dim privateKey = New BigInteger(6)\n        Assert.Equal(New BigInteger(8), DiffieHellman.PublicKey(p, g, privateKey))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_calculate_public_key_when_given_a_different_private_key()\n        Dim p = New BigInteger(23)\n        Dim g = New BigInteger(5)\n        Dim privateKey = New BigInteger(15)\n        Assert.Equal(New BigInteger(19), DiffieHellman.PublicKey(p, g, privateKey))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_calculate_secret_using_other_partys_public_key()\n        Dim p = New BigInteger(23)\n        Dim theirPublicKey = New BigInteger(19)\n        Dim myPrivateKey = New BigInteger(6)\n        Assert.Equal(New BigInteger(2), DiffieHellman.Secret(p, theirPublicKey, myPrivateKey))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Key_exchange()\n        Dim p = New BigInteger(23)\n        Dim g = New BigInteger(5)\n        Dim alicePrivateKey = DiffieHellman.PrivateKey(p)\n        Dim bobPrivateKey = DiffieHellman.PrivateKey(p)\n        Dim alicePublicKey = DiffieHellman.PublicKey(p, g, alicePrivateKey)\n        Dim bobPublicKey = DiffieHellman.PublicKey(p, g, bobPrivateKey)\n        Dim secretA = DiffieHellman.Secret(p, bobPublicKey, alicePrivateKey)\n        Dim secretB = DiffieHellman.Secret(p, alicePublicKey, bobPrivateKey)\n        Assert.Equal(secretA, secretB)\n    End Sub\nEnd Class\n",
+  "source": "Wikipedia, 1024 bit key from www.cryptopp.com/wiki.",
+  "source_url": "https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

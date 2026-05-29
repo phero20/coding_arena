@@ -1,0 +1,44 @@
+{
+  "id": "elixir:diamond",
+  "trackSlug": "elixir",
+  "slug": "diamond",
+  "name": "Diamond",
+  "uuid": "89633764-ace4-4ad5-a1aa-22cae7be7d18",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a letter, print a diamond starting with 'A' with the supplied letter at the widest point.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "charlists"
+  ],
+  "prerequisites": [
+    "charlists",
+    "strings",
+    "enum",
+    "recursion",
+    "ranges"
+  ],
+  "instructions": "# Instructions\n\nThe diamond kata takes as its input a letter, and outputs it in a diamond shape.\nGiven a letter, it prints a diamond starting with 'A', with the supplied letter at the widest point.\n\n## Requirements\n\n- The first row contains one 'A'.\n- The last row contains one 'A'.\n- All rows, except the first and last, have exactly two identical letters.\n- All rows have as many trailing spaces as leading spaces. (This might be 0).\n- The diamond is horizontally symmetric.\n- The diamond is vertically symmetric.\n- The diamond has a square shape (width equals height).\n- The letters form a diamond shape.\n- The top half has the letters in ascending order.\n- The bottom half has the letters in descending order.\n- The four corners (containing the spaces) are triangles.\n\n## Examples\n\nIn the following examples, spaces are indicated by `·` characters.\n\nDiamond for letter 'A':\n\n```text\nA\n```\n\nDiamond for letter 'C':\n\n```text\n··A··\n·B·B·\nC···C\n·B·B·\n··A··\n```\n\nDiamond for letter 'E':\n\n```text\n····A····\n···B·B···\n··C···C··\n·D·····D·\nE·······E\n·D·····D·\n··C···C··\n···B·B···\n····A····\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "defmodule Diamond do\n  @doc \"\"\"\n  Given a letter, it prints a diamond starting with 'A',\n  with the supplied letter at the widest point.\n  \"\"\"\n  @spec build_shape(char) :: String.t()\n  def build_shape(letter) do\n  end\nend\n",
+  "example_solution": "defmodule Diamond do\n  @doc \"\"\"\n  Given a letter, it prints a diamond starting with 'A',\n  with the supplied letter at the widest point.\n  \"\"\"\n  @spec build_shape(char) :: String.t()\n  def build_shape(letter) do\n    pos = letter - 64\n    size = pos * 2 - 1\n    half = build_half_diamond(pos, size)\n    Enum.join([half | Enum.slice(Enum.reverse(half), 1, length(half))])\n  end\n\n  defp build_half_diamond(rows, row_size) do\n    Enum.reduce(0..(rows - 1), [], fn x, acc ->\n      List.duplicate(\"\\s\", row_size)\n      |> List.update_at(rows - 1 - x, fn _ -> <<65 + x>> end)\n      |> Enum.reverse()\n      |> List.update_at(rows - 1 - x, fn _ -> <<65 + x>> end)\n      |> List.insert_at(row_size + 1, \"\\n\")\n      |> List.duplicate(1)\n      |> Enum.concat(acc)\n    end)\n    |> Enum.reverse()\n  end\nend\n",
+  "test_code": "defmodule DiamondTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"letter A\" do\n    shape = Diamond.build_shape(?A)\n    assert shape == \"A\\n\"\n  end\n\n  @tag :pending\n  test \"letter B\" do\n    shape = Diamond.build_shape(?B)\n\n    assert shape == \"\"\"\n           \\sA\\s\n           B B\n           \\sA\\s\n           \"\"\"\n  end\n\n  @tag :pending\n  test \"letter C\" do\n    shape = Diamond.build_shape(?C)\n\n    assert shape == \"\"\"\n           \\s A \\s\n           \\sB B\\s\n           C   C\n           \\sB B\\s\n           \\s A \\s\n           \"\"\"\n  end\n\n  @tag :pending\n  test \"letter D\" do\n    shape = Diamond.build_shape(?D)\n\n    assert shape == \"\"\"\n           \\s  A  \\s\n           \\s B B \\s\n           \\sC   C\\s\n           D     D\n           \\sC   C\\s\n           \\s B B \\s\n           \\s  A  \\s\n           \"\"\"\n  end\n\n  @tag :pending\n  test \"letter Z\" do\n    shape = Diamond.build_shape(?Z)\n\n    assert shape == \"\"\"\n           \\s                        A                        \\s\n           \\s                       B B                       \\s\n           \\s                      C   C                      \\s\n           \\s                     D     D                     \\s\n           \\s                    E       E                    \\s\n           \\s                   F         F                   \\s\n           \\s                  G           G                  \\s\n           \\s                 H             H                 \\s\n           \\s                I               I                \\s\n           \\s               J                 J               \\s\n           \\s              K                   K              \\s\n           \\s             L                     L             \\s\n           \\s            M                       M            \\s\n           \\s           N                         N           \\s\n           \\s          O                           O          \\s\n           \\s         P                             P         \\s\n           \\s        Q                               Q        \\s\n           \\s       R                                 R       \\s\n           \\s      S                                   S      \\s\n           \\s     T                                     T     \\s\n           \\s    U                                       U    \\s\n           \\s   V                                         V   \\s\n           \\s  W                                           W  \\s\n           \\s X                                             X \\s\n           \\sY                                               Y\\s\n           Z                                                 Z\n           \\sY                                               Y\\s\n           \\s X                                             X \\s\n           \\s  W                                           W  \\s\n           \\s   V                                         V   \\s\n           \\s    U                                       U    \\s\n           \\s     T                                     T     \\s\n           \\s      S                                   S      \\s\n           \\s       R                                 R       \\s\n           \\s        Q                               Q        \\s\n           \\s         P                             P         \\s\n           \\s          O                           O          \\s\n           \\s           N                         N           \\s\n           \\s            M                       M            \\s\n           \\s             L                     L             \\s\n           \\s              K                   K              \\s\n           \\s               J                 J               \\s\n           \\s                I               I                \\s\n           \\s                 H             H                 \\s\n           \\s                  G           G                  \\s\n           \\s                   F         F                   \\s\n           \\s                    E       E                    \\s\n           \\s                     D     D                     \\s\n           \\s                      C   C                      \\s\n           \\s                       B B                       \\s\n           \\s                        A                        \\s\n           \"\"\"\n  end\nend\n",
+  "source": "Seb Rose",
+  "source_url": "https://web.archive.org/web/20220807163751/http://claysnow.co.uk/recycling-tests-in-tdd/",
+  "authors": [
+    "jimmbraddock"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "davbre",
+    "devonestes",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "sotojuan",
+    "waiting-for-dev"
+  ]
+}

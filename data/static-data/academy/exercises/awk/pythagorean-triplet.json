@@ -1,0 +1,26 @@
+{
+  "id": "awk:pythagorean-triplet",
+  "trackSlug": "awk",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "fcbfab95-c055-4a29-a044-d2fd99c196a2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "# These variables are initialized on the command line (using '-v'):\n# - sum\n\nBEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "# These variables are initialized on the command line (using '-v'):\n# - sum\n\nBEGIN {  \n    OFS=\",\"  \n\n    limit = int(sum / 3)\n    for (a = 3; a <= limit; ++a) {\n        numerator = sum * sum - 2 * sum * a  \n        denominator = 2 * (sum - a)\n        if (numerator % denominator != 0) continue\n        b = numerator / denominator\n        if (a >= b) break\n        c = sum - a - b  \n        print a, b, c  \n    }  \n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.0.0.0\n\n# Output your triplets, comma-separated, one per line.\n\n\n@test \"triplets whose sum is 12\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=12\n    assert_success\n    actual=$( sort -t, -n -k1,1 <<< \"$output\" )\n    expected=\"3,4,5\"\n    assert_equal \"$actual\" \"$expected\"\n}\n\n@test \"triplets whose sum is 108\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=108\n    assert_success\n    actual=$( sort -t, -n -k1,1 <<< \"$output\" )\n    expected=\"27,36,45\"\n    assert_equal \"$actual\" \"$expected\"\n}\n\n@test \"triplets whose sum is 1000\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=1000\n    assert_success\n    actual=$( sort -t, -n -k1,1 <<< \"$output\" )\n    expected=\"200,375,425\"\n    assert_equal \"$actual\" \"$expected\"\n}\n\n@test \"no matching triplets for 1001\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=1001\n    assert_success\n    refute_output\n}\n\n# Note: using ANSI-C Quoting here\n# see https://www.gnu.org/software/bash/manual/bash.html#ANSI_002dC-Quoting\n\n@test \"returns all matching triplets\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=90\n    assert_success\n    actual=$( sort -t, -n -k1,1 <<< \"$output\" )\n    expected=$'9,40,41\\n15,36,39'\n    assert_equal \"$actual\" \"$expected\"\n}\n\n@test \"several matching triplets\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=840\n    assert_success\n    actual=$( sort -t, -n -k1,1 <<< \"$output\" )\n    expected=\"40,399,401\n56,390,394\n105,360,375\n120,350,370\n140,336,364\n168,315,357\n210,280,350\n240,252,348\"\n    assert_equal \"$actual\" \"$expected\"\n}\n\n# This test is very time-consuming for a brute force solution.\n\n@test \"triplets for large number\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run gawk -f pythagorean-triplet.awk -v sum=30000\n    assert_success\n    actual=$( sort -t, -n -k1,1 <<< \"$output\" )\n    expected=\"1200,14375,14425\n1875,14000,14125\n5000,12000,13000\n6000,11250,12750\n7500,10000,12500\"\n    assert_equal \"$actual\" \"$expected\"\n}\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "rabestro"
+  ],
+  "contributors": null
+}

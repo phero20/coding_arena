@@ -1,0 +1,36 @@
+{
+  "id": "elm:run-length-encoding",
+  "trackSlug": "elm",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "0b2ac079-f7ed-4e90-a566-00c9fe0d5c88",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module RunLengthEncoding exposing (decode, encode)\n\n\nencode : String -> String\nencode string =\n    Debug.todo \"Please implement this function\"\n\n\ndecode : String -> String\ndecode string =\n    Debug.todo \"Please implement this function\"\n",
+  "example_solution": "module RunLengthEncoding exposing (decode, encode)\n\nimport List exposing (head, tail)\nimport Maybe exposing (withDefault)\nimport Regex exposing (Regex)\nimport String exposing (fromChar)\n\n\n\n{-\n   To the unaware: this was written by a very green elmer, so don't consider\n   it an idiomatic exemplar to emulate.\n-}\n\n\nencode : String -> String\nencode string =\n    String.toList string\n        |> List.foldr countChars []\n        |> List.map stringifyCounts\n        |> String.concat\n\n\ncountChars : a -> List ( number, a ) -> List ( number, a )\ncountChars current counted =\n    case head counted of\n        Just ( count, previous ) ->\n            if previous == current then\n                ( count + 1, current ) :: withDefault [] (tail counted)\n\n            else\n                ( 1, current ) :: counted\n\n        Nothing ->\n            [ ( 1, current ) ]\n\n\nstringifyCounts : ( Int, Char ) -> String\nstringifyCounts ( count, char ) =\n    if count > 1 then\n        String.fromInt count ++ fromChar char\n\n    else\n        fromChar char\n\n\ndecode : String -> String\ndecode string =\n    string\n        |> Regex.find (regex \"(\\\\d+)|(\\\\D)\")\n        |> List.map .match\n        |> List.foldl expandCounts ( \"\", Nothing )\n        |> Tuple.first\n\n\nexpandCounts : String -> ( String, Maybe Int ) -> ( String, Maybe Int )\nexpandCounts match ( result, count ) =\n    case count of\n        Just number ->\n            ( result ++ String.repeat number match, Nothing )\n\n        Nothing ->\n            case String.toInt match of\n                Just number ->\n                    ( result, Just number )\n\n                Nothing ->\n                    ( result ++ match, Nothing )\n\n\nregex : String -> Regex\nregex string =\n    string\n        |> Regex.fromString\n        |> Maybe.withDefault Regex.never\n",
+  "test_code": "module Tests exposing (tests)\n\nimport Expect\nimport RunLengthEncoding exposing (decode, encode)\nimport Test exposing (..)\n\n\ntests : Test\ntests =\n    describe \"RunLengthEncoding\"\n        [ describe \"run-length encode a string\"\n            [ test \"empty string\" <|\n                \\() -> Expect.equal \"\" (encode \"\")\n            , skip <|\n                test \"single characters only are encoded without count\" <|\n                    \\() -> Expect.equal \"XYZ\" (encode \"XYZ\")\n            , skip <|\n                test \"string with no single characters\" <|\n                    \\() -> Expect.equal \"2A3B4C\" (encode \"AABBBCCCC\")\n            , skip <|\n                test \"single characters mixed with repeated characters\" <|\n                    \\() ->\n                        Expect.equal \"12WB12W3B24WB\"\n                            (encode \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")\n            , skip <|\n                test \"multiple whitespace mixed in string\" <|\n                    \\() -> Expect.equal \"2 hs2q q2w2 \" (encode \"  hsqq qww  \")\n            , skip <|\n                test \"lowercase characters\" <|\n                    \\() -> Expect.equal \"2a3b4c\" (encode \"aabbbcccc\")\n            ]\n        , describe \"run-length decode a string\"\n            [ skip <|\n                test \"empty string\" <|\n                    \\() -> Expect.equal \"\" (decode \"\")\n            , skip <|\n                test \"single characters only\" <|\n                    \\() -> Expect.equal \"XYZ\" (decode \"XYZ\")\n            , skip <|\n                test \"string with no single characters\" <|\n                    \\() -> Expect.equal \"AABBBCCCC\" (decode \"2A3B4C\")\n            , skip <|\n                test \"single characters with repeated characters\" <|\n                    \\() ->\n                        Expect.equal \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"\n                            (decode \"12WB12W3B24WB\")\n            , skip <|\n                test \"multiple whitespace mixed in string\" <|\n                    \\() -> Expect.equal \"  hsqq qww  \" (decode \"2 hs2q q2w2 \")\n            , skip <|\n                test \"lower case string\" <|\n                    \\() -> Expect.equal \"\" (decode \"\")\n            , skip <|\n                test \"with a x10 value\" <|\n                    \\() ->\n                        Expect.equal \"WWWWWWWWWW\"\n                            (decode \"10W\")\n            ]\n        , describe \"encode and then decode\"\n            [ skip <|\n                test \"encode followed by decode gives original string\" <|\n                    \\() ->\n                        Expect.equal \"zzz ZZ  zZ\"\n                            (decode (encode \"zzz ZZ  zZ\"))\n            ]\n        ]\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "tgecho"
+  ],
+  "contributors": [
+    "mrattner",
+    "nathanielknight",
+    "parkerl",
+    "tuxagon",
+    "ulve"
+  ]
+}

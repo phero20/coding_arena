@@ -1,0 +1,32 @@
+{
+  "id": "jq:reverse-string",
+  "trackSlug": "jq",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "40f24ed9-46cd-493b-9b22-4c2d438e5c0a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "reduce",
+    "arrays"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "\"Remove this line and implement your solution\" | halt_error\n",
+  "example_solution": ".value | reduce split(\"\")[] as $char (\"\"; $char + .)\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2022-11-02T20:59:42Z\nload bats-extra\nload bats-jq\n\n@test 'an empty string' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=''\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'a word' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"robot\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='tobor'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'a capitalized word' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"Ramen\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='nemaR'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'a sentence with punctuation' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"I'm hungry!\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='!yrgnuh m'\\''I'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'a palindrome' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"racecar\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='racecar'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'an even-sized word' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"drawer\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='reward'\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'wide characters' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f reverse-string.jq << 'END_INPUT'\n        {\n          \"value\": \"子猫\"\n        }\nEND_INPUT\n\n    assert_success\n    expected='猫子'\n    assert_equal \"$output\" \"$expected\"\n}\n\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

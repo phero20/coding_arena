@@ -1,0 +1,40 @@
+{
+  "id": "ruby:dominoes",
+  "trackSlug": "ruby",
+  "slug": "dominoes",
+  "name": "Dominoes",
+  "uuid": "705f3eb6-55a9-476c-b3f2-e9f3cb0bbe37",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make a chain of dominoes.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nMake a chain of dominoes.\n\nCompute a way to order a given set of domino stones so that they form a correct domino chain.\nIn the chain, the dots on one half of a stone must match the dots on the neighboring half of an adjacent stone.\nAdditionally, the dots on the halves of the stones without neighbors (the first and last stone) must match each other.\n\nFor example given the stones `[2|1]`, `[2|3]` and `[1|3]` you should compute something\nlike `[1|2] [2|3] [3|1]` or `[3|2] [2|1] [1|3]` or `[1|3] [3|2] [2|1]` etc, where the first and last numbers are the same.\n\nFor stones `[1|2]`, `[4|1]` and `[2|3]` the resulting chain is not valid: `[4|1] [1|2] [2|3]`'s first and last numbers are not the same.\n4 != 3\n\nSome test cases may use duplicate stones in a chain solution, assume that multiple Domino sets are being used.\n",
+  "introduction": "# Introduction\n\nIn Toyland, the trains are always busy delivering treasures across the city, from shiny marbles to rare building blocks.\nThe tracks they run on are made of colorful domino-shaped pieces, each marked with two numbers.\nFor the trains to move, the dominoes must form a perfect chain where the numbers match.\n\nToday, an urgent delivery of rare toys is on hold.\nYou've been handed a set of track pieces to inspect.\nIf they can form a continuous chain, the train will be on its way, bringing smiles across Toyland.\nIf not, the set will be discarded, and another will be tried.\n\nThe toys are counting on you to solve this puzzle.\nWill the dominoes connect the tracks and send the train rolling, or will the set be left behind?\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Dominoes' exercise in this file. Make the tests in\n`dominoes_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/dominoes` directory.\n=end\n",
+  "example_solution": "module Dominoes\n  def self.chain?(dominoes)\n    return dominoes if dominoes.empty?\n\n    first = dominoes.first\n\n    subchain = try_subchain(dominoes.drop(1), *first)\n    subchain && [first] + subchain\n  end\n\n  def self.try_subchain(dominoes, chain_left, chain_right)\n    return chain_left == chain_right ? [] : nil if dominoes.empty?\n\n    dominoes.each_with_index { |domino, i|\n      other_dominoes = dominoes.take(i) + dominoes.drop(i + 1)\n      # Try adding the domino either flipped or unflipped.\n      [domino, domino.reverse].each { |candidate|\n        domino_left, domino_right = candidate\n        if domino_left == chain_right\n          if (subchain = try_subchain(other_dominoes, chain_left, domino_right))\n            return [candidate] + subchain\n          end\n        end\n      }\n    }\n\n    # Found no suitable chain.\n    # Note that for \"no chain\" we have to use nil instead of [].\n    # This is because [] is the valid answer for `Dominoes.chain([])`.\n    # If we used [] for \"no chain\", then the meaning of [] is ambiguous.\n    nil\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'dominoes'\n\nclass DominoesTest < Minitest::Test\n  def test_empty_input_empty_output\n    # skip\n    dominoes = []\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_singleton_input_singleton_output\n    skip\n    dominoes = [[1, 1]]\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_singleton_that_cant_be_chained\n    skip\n    dominoes = [[1, 2]]\n    refute Dominoes.chain?(dominoes)\n  end\n\n  def test_three_elements\n    skip\n    dominoes = [[1, 2], [3, 1], [2, 3]]\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_can_reverse_dominoes\n    skip\n    dominoes = [[1, 2], [1, 3], [2, 3]]\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_cant_be_chained\n    skip\n    dominoes = [[1, 2], [4, 1], [2, 3]]\n    refute Dominoes.chain?(dominoes)\n  end\n\n  def test_disconnected___simple\n    skip\n    dominoes = [[1, 1], [2, 2]]\n    refute Dominoes.chain?(dominoes)\n  end\n\n  def test_disconnected___double_loop\n    skip\n    dominoes = [[1, 2], [2, 1], [3, 4], [4, 3]]\n    refute Dominoes.chain?(dominoes)\n  end\n\n  def test_disconnected___single_isolated\n    skip\n    dominoes = [[1, 2], [2, 3], [3, 1], [4, 4]]\n    refute Dominoes.chain?(dominoes)\n  end\n\n  def test_need_backtrack\n    skip\n    dominoes = [[1, 2], [2, 3], [3, 1], [2, 4], [2, 4]]\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_separate_loops\n    skip\n    dominoes = [[1, 2], [2, 3], [3, 1], [1, 1], [2, 2], [3, 3]]\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_nine_elements\n    skip\n    dominoes = [[1, 2], [5, 3], [3, 1], [1, 2], [2, 4], [1, 6], [2, 3], [3, 4], [5, 6]]\n    assert Dominoes.chain?(dominoes)\n  end\n\n  def test_separate_three_domino_loops\n    skip\n    dominoes = [[1, 2], [2, 3], [3, 1], [4, 5], [5, 6], [6, 4]]\n    refute Dominoes.chain?(dominoes)\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "petertseng"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "NeimadTL",
+    "tryantwit",
+    "kytrinyx"
+  ]
+}

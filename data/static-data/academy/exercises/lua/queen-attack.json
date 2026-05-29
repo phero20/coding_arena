@@ -1,0 +1,26 @@
+{
+  "id": "lua:queen-attack",
+  "trackSlug": "lua",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "8e36e8ae-f2c5-4fea-a807-8713b2b23ee4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(pos)\nend\n",
+  "example_solution": "return function(pos)\n  assert(pos.row >= 0, 'row must be positive')\n  assert(pos.row < 8, 'row must be on the board')\n  assert(pos.column >= 0, 'column must be positive')\n  assert(pos.column < 8, 'column must be on the board')\n\n  return {\n    row = pos.row,\n    column = pos.column,\n    can_attack = function(other)\n      local row_difference = math.abs(pos.row - other.row)\n      local column_difference = math.abs(pos.column - other.column)\n\n      local same_row = row_difference == 0\n      local same_column = column_difference == 0\n      local diagonal = row_difference == column_difference\n\n      return same_row or same_column or diagonal\n    end\n  }\nend\n",
+  "test_code": "local Queen = require('queen-attack')\n\ndescribe('queen-attack', function()\n  it('queen with a valid position', function()\n    assert.has_no_error(function()\n      Queen({ row = 2, column = 2 })\n    end)\n  end)\n\n  it('queen must have a positive row', function()\n    assert.has_error(function()\n      Queen({ row = -2, column = 2 })\n    end)\n  end)\n\n  it('queen must have row on board', function()\n    assert.has_error(function()\n      Queen({ row = 8, column = 4 })\n    end)\n  end)\n\n  it('queen must have positive column', function()\n    assert.has_error(function()\n      Queen({ row = 2, column = -2 })\n    end)\n  end)\n\n  it('queen must have column on board', function()\n    assert.has_error(function()\n      Queen({ row = 4, column = 8 })\n    end)\n  end)\n\n  it('can not attack', function()\n    local q1 = Queen({ row = 2, column = 4 })\n    local q2 = Queen({ row = 6, column = 6 })\n    assert.is_false(q1.can_attack(q2))\n  end)\n\n  it('can attack on same row', function()\n    local q1 = Queen({ row = 2, column = 4 })\n    local q2 = Queen({ row = 2, column = 6 })\n    assert.is_true(q1.can_attack(q2))\n  end)\n\n  it('can attack on same column', function()\n    local q1 = Queen({ row = 4, column = 5 })\n    local q2 = Queen({ row = 2, column = 5 })\n    assert.is_true(q1.can_attack(q2))\n  end)\n\n  it('can attack on first diagonal', function()\n    local q1 = Queen({ row = 2, column = 2 })\n    local q2 = Queen({ row = 0, column = 4 })\n    assert.is_true(q1.can_attack(q2))\n  end)\n\n  it('can attack on second diagonal', function()\n    local q1 = Queen({ row = 2, column = 2 })\n    local q2 = Queen({ row = 3, column = 1 })\n    assert.is_true(q1.can_attack(q2))\n  end)\n\n  it('can attack on third diagonal', function()\n    local q1 = Queen({ row = 2, column = 2 })\n    local q2 = Queen({ row = 1, column = 1 })\n    assert.is_true(q1.can_attack(q2))\n  end)\n\n  it('can attack on fourth diagonal', function()\n    local q1 = Queen({ row = 1, column = 7 })\n    local q2 = Queen({ row = 0, column = 6 })\n    assert.is_true(q1.can_attack(q2))\n  end)\n\n  it('cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal',\n     function()\n    local q1 = Queen({ row = 4, column = 1 })\n    local q2 = Queen({ row = 2, column = 5 })\n    assert.is_false(q1.can_attack(q2))\n  end)\nend)\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": null
+}

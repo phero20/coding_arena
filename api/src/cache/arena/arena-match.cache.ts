@@ -22,8 +22,13 @@ export class ArenaMatchCache implements IArenaMatchService {
   private readonly CACHE_CONFIG = {
     HISTORY: {
       TTL: 300, // 5 minutes (volatile match list)
+<<<<<<< HEAD
       GetKey: (userId: string, limit: number) =>
         `arena:match:history:${userId}:${limit}`,
+=======
+      GetKey: (userId: string, limit: number, offset: number) =>
+        `arena:match:history:${userId}:${limit}:${offset}`,
+>>>>>>> prod-deploy
     },
     DETAIL: {
       TTL: 86400, // 24 hours (immutable historical data)
@@ -38,12 +43,18 @@ export class ArenaMatchCache implements IArenaMatchService {
   /**
    * Proxies match history with a short-term Cache-Aside strategy.
    */
+<<<<<<< HEAD
   async getMatchHistory(userId: string, limit: number = 10): Promise<any[]> {
     const key = this.CACHE_CONFIG.HISTORY.GetKey(userId, limit);
+=======
+  async getMatchHistory(userId: string, limit: number = 10, offset: number = 0): Promise<{ matches: any[], total: number }> {
+    const key = this.CACHE_CONFIG.HISTORY.GetKey(userId, limit, offset);
+>>>>>>> prod-deploy
 
     try {
       const cached = await redis.get(key);
       if (cached) {
+<<<<<<< HEAD
         logger.info({ userId, limit }, "🚀 CACHE HIT (Arena Match History)");
         return JSON.parse(cached);
       }
@@ -53,6 +64,17 @@ export class ArenaMatchCache implements IArenaMatchService {
 
       // We only cache if history exists
       if (history && history.length > 0) {
+=======
+        logger.info({ userId, limit, offset }, "🚀 CACHE HIT (Arena Match History)");
+        return JSON.parse(cached);
+      }
+
+      logger.info({ userId, limit, offset }, "📉 CACHE MISS (Arena Match History)");
+      const history = await this.rawService.getMatchHistory(userId, limit, offset);
+
+      // We only cache if history exists
+      if (history && history.matches.length > 0) {
+>>>>>>> prod-deploy
         await redis.set(
           key,
           JSON.stringify(history),
@@ -61,11 +83,18 @@ export class ArenaMatchCache implements IArenaMatchService {
         );
       }
 
+<<<<<<< HEAD
 
       return history;
     } catch (err) {
       logger.error({ err, userId }, "Cache error in getMatchHistory");
       return this.rawService.getMatchHistory(userId, limit);
+=======
+      return history;
+    } catch (err) {
+      logger.error({ err, userId }, "Cache error in getMatchHistory");
+      return this.rawService.getMatchHistory(userId, limit, offset);
+>>>>>>> prod-deploy
     }
   }
 

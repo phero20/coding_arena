@@ -1,0 +1,26 @@
+{
+  "id": "8th:rotational-cipher",
+  "trackSlug": "8th",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "e0ef7b07-ec1f-4e00-ba47-737d3a7a696b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": rotate \\ s n -- s\n  \n;\n",
+  "example_solution": ": rotate-char \\ n -- n\n  dup 'a 'z n:between if 'a n:- r@ n:+ 26 n:mod 'a n:+ ;then\n  dup 'A 'Z n:between if 'A n:- r@ n:+ 26 n:mod 'A n:+ ;then  \n;\n\n: rotate \\ s n -- s\n  >r ' rotate-char s:map\n;\n",
+  "test_code": "\"rotational-cipher.8th\" f:include\nneeds exercism/test\nwith: test\n10 tests\n\n\"rotate a by 0, same output as input\"\n    ( \"a\" 0 rotate )\n    \"a\"\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"rotate a by 1\"\n    ( \"a\" 1 rotate )\n    \"b\"\n    equal?\n\n\"rotate a by 26, same output as input\"\n    ( \"a\" 26 rotate )\n    \"a\"\n    equal?\n\n\"rotate m by 13\"\n    ( \"m\" 13 rotate )\n    \"z\"\n    equal?\n\n\"rotate n by 13 with wrap around alphabet\"\n    ( \"n\" 13 rotate )\n    \"a\"\n    equal?\n\n\"rotate capital letters\"\n    ( \"OMG\" 5 rotate )\n    \"TRL\"\n    equal?\n\n\"rotate spaces\"\n    ( \"O M G\" 5 rotate )\n    \"T R L\"\n    equal?\n\n\"rotate numbers\"\n    ( \"Testing 1 2 3 testing\" 4 rotate )\n    \"Xiwxmrk 1 2 3 xiwxmrk\"\n    equal?\n\n\"rotate punctuation\"\n    ( \"Let's eat, Grandma!\" 21 rotate )\n    \"Gzo'n zvo, Bmviyhv!\"\n    equal?\n\n\"rotate all letters\"\n    ( \"The quick brown fox jumps over the lazy dog.\" 13 rotate )\n    \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\"\n    equal?\n\nend-of-tests\n;with\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "\u001b[Aerikschierboom"
+  ],
+  "contributors": null
+}

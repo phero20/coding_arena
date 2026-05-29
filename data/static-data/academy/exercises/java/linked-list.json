@@ -1,0 +1,51 @@
+{
+  "id": "java:linked-list",
+  "trackSlug": "java",
+  "slug": "linked-list",
+  "name": "Linked List",
+  "uuid": "7ba5084d-3b75-4406-a0d7-87c26387f9c0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a doubly linked list.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "lists",
+    "classes",
+    "generic-types"
+  ],
+  "instructions": "# Instructions\n\nYour team has decided to use a doubly linked list to represent each train route in the schedule.\nEach station along the train's route will be represented by a node in the linked list.\n\nYou don't need to worry about arrival and departure times at the stations.\nEach station will simply be represented by a number.\n\nRoutes can be extended, adding stations to the beginning or end of a route.\nThey can also be shortened by removing stations from the beginning or the end of a route.\n\nSometimes a station gets closed down, and in that case the station needs to be removed from the route, even if it is not at the beginning or end of the route.\n\nThe size of a route is measured not by how far the train travels, but by how many stations it stops at.\n\n~~~~exercism/note\nThe linked list is a fundamental data structure in computer science, often used in the implementation of other data structures.\nAs the name suggests, it is a list of nodes that are linked together.\nIt is a list of \"nodes\", where each node links to its neighbor or neighbors.\nIn a **singly linked list** each node links only to the node that follows it.\nIn a **doubly linked list** each node links to both the node that comes before, as well as the node that comes after.\n\nIf you want to dig deeper into linked lists, check out [this article][intro-linked-list] that explains it using nice drawings.\n\n[intro-linked-list]: https://medium.com/basecs/whats-a-linked-list-anyway-part-1-d8b7e6508b9d\n~~~~\n",
+  "introduction": "# Introduction\n\nYou are working on a project to develop a train scheduling system for a busy railway network.\n\nYou've been asked to develop a prototype for the train routes in the scheduling system.\nEach route consists of a sequence of train stations that a given train stops at.\n",
+  "hints": null,
+  "starter_code": "class DoublyLinkedList<T> {\n    private Element<T> head;\n\n    void push(T value) {\n        throw new UnsupportedOperationException(\"Please implement the DoublyLinkedList.push() method.\");\n    }\n\n    T pop() {\n        throw new UnsupportedOperationException(\"Please implement the DoublyLinkedList.pop() method.\");\n    }\n\n    void unshift(T value) {\n        throw new UnsupportedOperationException(\"Please implement the DoublyLinkedList.unshift() method.\");\n    }\n\n    T shift() {\n        throw new UnsupportedOperationException(\"Please implement the DoublyLinkedList.shift() method.\");\n    }\n\n    private static final class Element<T> {\n        private final T value;\n        private Element<T> prev;\n        private Element<T> next;\n\n        Element(T value, Element<T> prev, Element<T> next) {\n            throw new UnsupportedOperationException(\"Please implement the Element constructor.\");\n        }\n    }\n}\n",
+  "example_solution": "final class DoublyLinkedList<T> {\n    private Element<T> head;\n\n    void push(T value) {\n        if (head == null) {\n            head = new Element<>(value, null, null);\n            head.next = head;\n            head.prev = head;\n            return;\n        }\n\n        Element<T> oldTail = head.prev;\n        Element<T> tail = new Element<>(value, oldTail, head);\n        oldTail.next = tail;\n        head.prev = tail;\n    }\n\n    T pop() {\n        if (head == null) {\n            return null;\n        }\n\n        head = head.prev;\n        return shift();\n    }\n\n    void unshift(T value) {\n        push(value);\n        head = head.prev;\n    }\n\n    T shift() {\n        if (head == null) {\n            return null;\n        }\n\n        T value = head.value;\n\n        Element<T> newHead = head.next;\n        Element<T> newTail = head.prev;\n\n        if (newHead == head) {\n            head = null;\n        } else {\n            newHead.prev = newTail;\n            newTail.next = newHead;\n            head = newHead;\n        }\n\n        return value;\n    }\n\n    private static final class Element<T> {\n        private final T value;\n        private Element<T> prev;\n        private Element<T> next;\n\n        Element(T value, Element<T> prev, Element<T> next) {\n            this.value = value;\n            this.prev = prev;\n            this.next = next;\n        }\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class DoublyLinkedListTest {\n\n    @Test\n    @DisplayName(\"pop gets element from the list\")\n    public void popGetsElementFromTheList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.push(7);\n\n        assertThat(list.pop()).isEqualTo(7);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"push/pop respectively add/remove at the end of the list\")\n    public void pushAndPopRespectivelyAddsAndRemovesAtEndOfList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.push(11);\n        list.push(13);\n\n        assertThat(list.pop()).isEqualTo(13);\n        assertThat(list.pop()).isEqualTo(11);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"shift gets an element from the list\")\n    public void shiftGetsAnElementFromTheList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.push(17);\n\n        assertThat(list.shift()).isEqualTo(17);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"shift gets first element from the list\")\n    public void shiftGetsFirstElementFromTheList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.push(23);\n        list.push(5);\n\n        assertThat(list.shift()).isEqualTo(23);\n        assertThat(list.shift()).isEqualTo(5);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"unshift adds element at start of the list\")\n    public void unshiftAddsElementAtStartOfTheList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.unshift(23);\n        list.unshift(5);\n\n        assertThat(list.shift()).isEqualTo(5);\n        assertThat(list.shift()).isEqualTo(23);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"pop push shift unshift can be used in any order\")\n    public void popPushShiftUnshiftCanBeUsedInAnyOrder() {\n        DoublyLinkedList<String> list = new DoublyLinkedList<>();\n\n        list.push(\"one\");\n        list.push(\"two\");\n\n        assertThat(list.pop()).isEqualTo(\"two\");\n\n        list.push(\"three\");\n\n        assertThat(list.shift()).isEqualTo(\"one\");\n\n        list.unshift(\"four\");\n        list.push(\"five\");\n\n        assertThat(list.shift()).isEqualTo(\"four\");\n        assertThat(list.pop()).isEqualTo(\"five\");\n        assertThat(list.shift()).isEqualTo(\"three\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"popping to empty doesn't break the list\")\n    public void poppingToEmptyDoesNotBreakTheList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.push(41);\n        list.push(59);\n        list.pop();\n        list.pop();\n        list.push(47);\n\n        assertThat(list.pop()).isEqualTo(47);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"shifting to empty doesn't break the list\")\n    public void shiftingToEmptyDoesNotBreakTheList() {\n        DoublyLinkedList<Integer> list = new DoublyLinkedList<>();\n\n        list.push(41);\n        list.push(59);\n        list.shift();\n        list.shift();\n        list.push(47);\n\n        assertThat(list.shift()).isEqualTo(47);\n    }\n}\n",
+  "source": "Classic computer science topic",
+  "source_url": null,
+  "authors": [
+    "counterleft"
+  ],
+  "contributors": [
+    "aryasaatvik",
+    "FridaTveit",
+    "hugueschabot",
+    "javaeeeee",
+    "jmrunkle",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "matthewmorgan",
+    "mirkoperillo",
+    "mraediaz",
+    "msomji",
+    "muzimuzhi",
+    "Ppapierski",
+    "sanderploegsma",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "stkent",
+    "Zaldrick"
+  ]
+}

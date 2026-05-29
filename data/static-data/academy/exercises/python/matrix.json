@@ -1,0 +1,50 @@
+{
+  "id": "python:matrix",
+  "trackSlug": "python",
+  "slug": "matrix",
+  "name": "Matrix",
+  "uuid": "b564927a-f08f-4287-9e8d-9bd5daa7081f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "classes"
+  ],
+  "prerequisites": [
+    "basics",
+    "classes",
+    "lists",
+    "list-methods",
+    "loops",
+    "numbers",
+    "strings",
+    "string-methods"
+  ],
+  "instructions": "# Instructions\n\nGiven a string representing a matrix of numbers, return the rows and columns of that matrix.\n\nSo given a string with embedded newlines like:\n\n```text\n9 8 7\n5 3 2\n6 6 7\n```\n\nrepresenting this matrix:\n\n```text\n    1  2  3\n  |---------\n1 | 9  8  7\n2 | 5  3  2\n3 | 6  6  7\n```\n\nyour code should be able to spit out:\n\n- A list of the rows, reading each row left-to-right while moving top-to-bottom across the rows,\n- A list of the columns, reading each column top-to-bottom while moving from left-to-right.\n\nThe rows for our example matrix:\n\n- 9, 8, 7\n- 5, 3, 2\n- 6, 6, 7\n\nAnd its columns:\n\n- 9, 5, 6\n- 8, 3, 6\n- 7, 2, 7\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Matrix:\n    def __init__(self, matrix_string):\n        pass\n\n    def row(self, index):\n        pass\n\n    def column(self, index):\n        pass\n",
+  "example_solution": "class Matrix:\n    def __init__(self, matrix_string):\n        self.rows = [[int(number) for number in row.split()]\n                     for row in matrix_string.split('\\n')]\n        self.columns = [list(tup) for tup in zip(*self.rows)]\n\n    def row(self, index):\n        return self.rows[index - 1]\n\n    def column(self, index):\n        return self.columns[index - 1]\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/matrix/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom matrix import (\n    Matrix,\n)\n\n\nclass MatrixTest(unittest.TestCase):\n    def test_extract_row_from_one_number_matrix(self):\n        matrix = Matrix(\"1\")\n        self.assertEqual(matrix.row(1), [1])\n\n    def test_can_extract_row(self):\n        matrix = Matrix(\"1 2\\n3 4\")\n        self.assertEqual(matrix.row(2), [3, 4])\n\n    def test_extract_row_where_numbers_have_different_widths(self):\n        matrix = Matrix(\"1 2\\n10 20\")\n        self.assertEqual(matrix.row(2), [10, 20])\n\n    def test_can_extract_row_from_non_square_matrix_with_no_corresponding_column(self):\n        matrix = Matrix(\"1 2 3\\n4 5 6\\n7 8 9\\n8 7 6\")\n        self.assertEqual(matrix.row(4), [8, 7, 6])\n\n    def test_extract_column_from_one_number_matrix(self):\n        matrix = Matrix(\"1\")\n        self.assertEqual(matrix.column(1), [1])\n\n    def test_can_extract_column(self):\n        matrix = Matrix(\"1 2 3\\n4 5 6\\n7 8 9\")\n        self.assertEqual(matrix.column(3), [3, 6, 9])\n\n    def test_can_extract_column_from_non_square_matrix_with_no_corresponding_row(self):\n        matrix = Matrix(\"1 2 3 4\\n5 6 7 8\\n9 8 7 6\")\n        self.assertEqual(matrix.column(4), [4, 8, 6])\n\n    def test_extract_column_where_numbers_have_different_widths(self):\n        matrix = Matrix(\"89 1903 3\\n18 3 1\\n9 4 800\")\n        self.assertEqual(matrix.column(2), [1903, 3, 4])\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "sjakobi"
+  ],
+  "contributors": [
+    "AnAccountForReportingBugs",
+    "behrtam",
+    "BethanyG",
+    "cmccandless",
+    "danishprakash",
+    "Dog",
+    "kytrinyx",
+    "N-Parsons",
+    "pheanex",
+    "simmol",
+    "tqa236",
+    "yawpitch"
+  ]
+}

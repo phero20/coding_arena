@@ -1,0 +1,49 @@
+{
+  "id": "elixir:pythagorean-triplet",
+  "trackSlug": "elixir",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "087a2a3b-71e2-4473-ab2f-3be5240567b5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "enum"
+  ],
+  "prerequisites": [
+    "integers",
+    "ranges",
+    "enum",
+    "list-comprehensions",
+    "recursion"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": "# Hints\n\n## General\n\n- If checking through all sorts of triangles is too slow, consider that [right triangles grow on trees][triples].\n\n[triples]: https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples\n",
+  "starter_code": "defmodule Triplet do\n  @doc \"\"\"\n  Calculates sum of a given triplet of integers.\n  \"\"\"\n  @spec sum([non_neg_integer]) :: non_neg_integer\n  def sum(triplet) do\n  end\n\n  @doc \"\"\"\n  Calculates product of a given triplet of integers.\n  \"\"\"\n  @spec product([non_neg_integer]) :: non_neg_integer\n  def product(triplet) do\n  end\n\n  @doc \"\"\"\n  Determines if a given triplet is pythagorean. That is, do the squares of a and b add up to the square of c?\n  \"\"\"\n  @spec pythagorean?([non_neg_integer]) :: boolean\n  def pythagorean?([a, b, c]) do\n  end\n\n  @doc \"\"\"\n  Generates a list of pythagorean triplets whose values add up to a given sum.\n  \"\"\"\n  @spec generate(non_neg_integer) :: [list(non_neg_integer)]\n  def generate(sum) do\n  end\nend\n",
+  "example_solution": "defmodule Triplet do\n  @doc \"\"\"\n  Calculates sum of a given triplet of integers.\n  \"\"\"\n  @spec sum([non_neg_integer]) :: non_neg_integer\n  def sum(triplet) do\n    Enum.reduce(triplet, 0, &+/2)\n  end\n\n  @doc \"\"\"\n  Calculates product of a given triplet of integers.\n  \"\"\"\n  @spec product([non_neg_integer]) :: non_neg_integer\n  def product(triplet) do\n    Enum.reduce(triplet, 1, &*/2)\n  end\n\n  @doc \"\"\"\n  Determines if a given triplet is pythagorean. That is, do the squares of a and b add up to the square of c?\n  \"\"\"\n  @spec pythagorean?([non_neg_integer]) :: boolean\n  def pythagorean?([a, b, c]) do\n    a * a + b * b == c * c\n  end\n\n  @doc \"\"\"\n  Generates a list of pythagorean triplets whose values add up to a given sum.\n  \"\"\"\n  @spec generate(non_neg_integer) :: [list(non_neg_integer)]\n  def generate(sum) do\n    generate([[3, 4, 5]], sum)\n    |> Enum.filter(&(Triplet.sum(&1) == sum))\n    |> Enum.map(fn [a, b, c] -> [min(a, b), max(a, b), c] end)\n    |> Enum.sort()\n  end\n\n  defp generate([], _sum), do: []\n\n  defp generate([[a, b, c] = triple | triplets], sum) do\n    next =\n      triple\n      |> next_triplets\n      |> Enum.reject(&(Triplet.sum(&1) > sum))\n\n    multiples =\n      1..div(sum, 2 * c)\n      |> Enum.map(fn n -> [n * a, n * b, n * c] end)\n\n    multiples ++ generate(next ++ triplets, sum)\n  end\n\n  # Given a primitive Pythagorean triple, generate three more.\n  # [All primitive Pythagorean triples can be generated this way without duplication][https://en.wikipedia.org/wiki/Tree_of_primitive_Pythagorean_triples].\n  defp next_triplets([a, b, c]),\n    do: [\n      [a - 2 * b + 2 * c, 2 * a - b + 2 * c, 2 * a - 2 * b + 3 * c],\n      [a + 2 * b + 2 * c, 2 * a + b + 2 * c, 2 * a + 2 * b + 3 * c],\n      [-a + 2 * b + 2 * c, -2 * a + b + 2 * c, -2 * a + 2 * b + 3 * c]\n    ]\nend\n",
+  "test_code": "defmodule TripletTest do\n  use ExUnit.Case\n\n  # @tag :pending\n  test \"sum\" do\n    triplet = [3, 4, 5]\n    assert Triplet.sum(triplet) == 12\n  end\n\n  @tag :pending\n  test \"product\" do\n    triplet = [3, 4, 5]\n    assert Triplet.product(triplet) == 60\n  end\n\n  @tag :pending\n  test \"pythagorean\" do\n    triplet = [3, 4, 5]\n    assert Triplet.pythagorean?(triplet)\n  end\n\n  @tag :pending\n  test \"not pythagorean\" do\n    triplet = [5, 6, 7]\n    refute Triplet.pythagorean?(triplet)\n  end\n\n  @tag :pending\n  test \"triplets whose sum is 12\" do\n    assert Triplet.generate(12) == [[3, 4, 5]]\n  end\n\n  @tag :pending\n  test \"triplets whose sum is 108\" do\n    assert Triplet.generate(108) == [[27, 36, 45]]\n  end\n\n  @tag :pending\n  test \"triplets whose sum is 1000\" do\n    assert Triplet.generate(1000) == [[200, 375, 425]]\n  end\n\n  @tag :pending\n  test \"no matching triplets for 1001\" do\n    assert Triplet.generate(1001) == []\n  end\n\n  @tag :pending\n  test \"returns all matching triplets\" do\n    assert Triplet.generate(90) == [[9, 40, 41], [15, 36, 39]]\n  end\n\n  @tag :pending\n  test \"several matching triplets\" do\n    assert Triplet.generate(840) == [\n             [40, 399, 401],\n             [56, 390, 394],\n             [105, 360, 375],\n             [120, 350, 370],\n             [140, 336, 364],\n             [168, 315, 357],\n             [210, 280, 350],\n             [240, 252, 348]\n           ]\n  end\n\n  @tag :pending\n  @tag :slow\n  test \"triplets for large number\" do\n    assert Triplet.generate(30000) == [\n             [1200, 14375, 14425],\n             [1875, 14000, 14125],\n             [5000, 12000, 13000],\n             [6000, 11250, 12750],\n             [7500, 10000, 12500]\n           ]\n  end\nend\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "petehuang"
+  ],
+  "contributors": [
+    "andrewsardone",
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "dalexj",
+    "devonestes",
+    "jiegillet",
+    "jinyeow",
+    "lpil",
+    "neenjaw",
+    "parkerl",
+    "rubysolo",
+    "sotojuan",
+    "Teapane",
+    "waiting-for-dev"
+  ]
+}

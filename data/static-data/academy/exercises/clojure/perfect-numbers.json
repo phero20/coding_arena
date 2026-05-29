@@ -1,0 +1,33 @@
+{
+  "id": "clojure:perfect-numbers",
+  "trackSlug": "clojure",
+  "slug": "perfect-numbers",
+  "name": "Perfect Numbers",
+  "uuid": "e10b7063-75ac-46d6-848c-c50db87bddc7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.\n\nThe Greek mathematician [Nicomachus][nicomachus] devised a classification scheme for positive integers, identifying each as belonging uniquely to the categories of [perfect](#perfect), [abundant](#abundant), or [deficient](#deficient) based on their [aliquot sum][aliquot-sum].\nThe _aliquot sum_ is defined as the sum of the factors of a number not including the number itself.\nFor example, the aliquot sum of `15` is `1 + 3 + 5 = 9`.\n\n## Perfect\n\nA number is perfect when it equals its aliquot sum.\nFor example:\n\n- `6` is a perfect number because `1 + 2 + 3 = 6`\n- `28` is a perfect number because `1 + 2 + 4 + 7 + 14 = 28`\n\n## Abundant\n\nA number is abundant when it is less than its aliquot sum.\nFor example:\n\n- `12` is an abundant number because `1 + 2 + 3 + 4 + 6 = 16`\n- `24` is an abundant number because `1 + 2 + 3 + 4 + 6 + 8 + 12 = 36`\n\n## Deficient\n\nA number is deficient when it is greater than its aliquot sum.\nFor example:\n\n- `8` is a deficient number because `1 + 2 + 4 = 7`\n- Prime numbers are deficient\n\n## Task\n\nImplement a way to determine whether a given number is [perfect](#perfect).\nDepending on your language track, you may also need to implement a way to determine whether a given number is [abundant](#abundant) or [deficient](#deficient).\n\n[nicomachus]: https://en.wikipedia.org/wiki/Nicomachus\n[aliquot-sum]: https://en.wikipedia.org/wiki/Aliquot_sum\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns perfect-numbers)\n\n(defn classify\n  \"Classifies the given number as perfect, abundant, or deficient.\"\n  [num]\n  ;; function body\n  )\n",
+  "example_solution": "(ns perfect-numbers\n  (:require [clojure.math :as math]))\n\n(defn prime-factors-of\n  [num]\n  (loop [result []\n         candidate 2\n         n num]\n    (cond\n      (= n 1) (frequencies result)\n      (> candidate (math/sqrt n)) (recur (conj result n) candidate 1)\n      (zero? (mod n candidate))  (recur (conj result candidate) candidate (quot n candidate))\n      :else (recur result (inc candidate) n))))\n\n(defn powers-of\n  [num max-power]\n  (for [power (range (inc max-power))]\n    (reduce * (repeat power num))))\n\n(defn cartesian-product\n  [& collections]\n  (reduce (fn [acc coll]\n            (for [a acc\n                  b coll]\n              (* a b)))\n          [1] collections))\n\n(defn factors-of\n  [num]\n  (->> (prime-factors-of num)\n       (map #(powers-of (first %) (second %)))\n       (apply cartesian-product)))\n\n(defn aliquot-sum\n  [num]\n  (reduce + (disj (set (factors-of num)) num)))\n\n(defn classify\n  [num]\n  (let [sum (aliquot-sum num)]\n    (cond\n      (> sum num) :abundant\n      (= sum num) :perfect\n      (< sum num) :deficient)))\n",
+  "test_code": "(ns perfect-numbers-test\n  (:require [clojure.test :refer [deftest testing is]]\n            perfect-numbers))\n\n(deftest classify_test_1\n  (testing \"Perfect numbers ▶ Smallest perfect number is classified correctly\"\n    (is (= :perfect (perfect-numbers/classify 6)))))\n\n(deftest classify_test_2\n  (testing \"Perfect numbers ▶ Medium perfect number is classified correctly\"\n    (is (= :perfect (perfect-numbers/classify 28)))))\n\n(deftest classify_test_3\n  (testing \"Perfect numbers ▶ Large perfect number is classified correctly\"\n    (is (= :perfect (perfect-numbers/classify 33550336)))))\n\n(deftest classify_test_4\n  (testing \"Abundant numbers ▶ Smallest abundant number is classified correctly\"\n    (is (= :abundant (perfect-numbers/classify 12)))))\n\n(deftest classify_test_5\n  (testing \"Abundant numbers ▶ Medium abundant number is classified correctly\"\n    (is (= :abundant (perfect-numbers/classify 30)))))\n\n(deftest classify_test_6\n  (testing \"Abundant numbers ▶ Large abundant number is classified correctly\"\n    (is (= :abundant (perfect-numbers/classify 33550335)))))\n\n(deftest classify_test_7\n  (testing \"Deficient numbers ▶ Smallest prime deficient number is classified correctly\"\n    (is (= :deficient (perfect-numbers/classify 2)))))\n\n(deftest classify_test_8\n  (testing \"Deficient numbers ▶ Smallest non-prime deficient number is classified correctly\"\n    (is (= :deficient (perfect-numbers/classify 4)))))\n\n(deftest classify_test_9\n  (testing \"Deficient numbers ▶ Medium deficient number is classified correctly\"\n    (is (= :deficient (perfect-numbers/classify 32)))))\n\n(deftest classify_test_10\n  (testing \"Deficient numbers ▶ Large deficient number is classified correctly\"\n    (is (= :deficient (perfect-numbers/classify 33550337)))))\n\n(deftest classify_test_11\n  (testing \"Deficient numbers ▶ Edge case (no factors other than itself) is classified correctly\"\n    (is (= :deficient (perfect-numbers/classify 1)))))\n",
+  "source": "Taken from Chapter 2 of Functional Thinking by Neal Ford.",
+  "source_url": "https://www.oreilly.com/library/view/functional-thinking/9781449365509/",
+  "authors": [
+    "haus"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "sjwarner-bp",
+    "yurrriq",
+    "tasxatzial"
+  ]
+}

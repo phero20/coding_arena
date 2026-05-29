@@ -1,0 +1,26 @@
+{
+  "id": "futhark:atbash-cipher",
+  "trackSlug": "futhark",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "dfefc340-114c-4a90-be7b-82829c8f0805",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def encode (phrase: []u8): []u8 = ???\n\ndef decode (phrase: []u8): []u8 = ???\n",
+  "example_solution": "\ndef chunk [n] (phrase: [n]u8): []u8 =\n  let (i, a) = loop (i, a) = (0, replicate (n * 6 / 5) ' ') for c in phrase do\n    if i % 6 == 5 then (i + 2, a with [i + 1] = c) else\n    (i + 1, a with [i] = c)\n  in\n    a[0:i]\n\ndef process [n] (f: u8 -> u8) (phrase: [n]u8): []u8 =\n  let (i, a) = loop (i, a) = (0, replicate n '\\0') for c in phrase do\n    let number = c - '0'\n    let letter = (c | 32) - 'a'\n    in\n      if number < 10 then (i + 1, a with [i] = c) else\n      if letter < 26 then (i + 1, a with [i] = 'a' + f letter) else\n      (i, a)\n  in\n    a[0:i]\n\ndef transpose (letter: u8): u8 =\n  25 - letter\n\ndef encode [n] (phrase: [n]u8): []u8 =\n  chunk (process transpose phrase)\n\ndef decode [n] (phrase: [n]u8): []u8 =\n  process transpose phrase\n",
+  "test_code": "import \"atbash_cipher\"\n\n-- encode yes\n-- ==\n-- entry: test_encode\n-- input { \"yes\" }\n-- output { \"bvh\" }\n\n-- encode no\n-- ==\n-- entry: test_encode\n-- input { \"no\" }\n-- output { \"ml\" }\n\n-- encode OMG\n-- ==\n-- entry: test_encode\n-- input { \"OMG\" }\n-- output { \"lnt\" }\n\n-- encode spaces\n-- ==\n-- entry: test_encode\n-- input { \"O M G\" }\n-- output { \"lnt\" }\n\n-- encode mindblowingly\n-- ==\n-- entry: test_encode\n-- input { \"mindblowingly\" }\n-- output { \"nrmwy oldrm tob\" }\n\n-- encode numbers\n-- ==\n-- entry: test_encode\n-- input { \"Testing,1 2 3, testing.\" }\n-- output { \"gvhgr mt123 gvhgr mt\" }\n\n-- encode deep thought\n-- ==\n-- entry: test_encode\n-- input { \"Truth is fiction.\" }\n-- output { \"gifgs rhurx grlm\" }\n\n-- encode all the letters\n-- ==\n-- entry: test_encode\n-- input { \"The quick brown fox jumps over the lazy dog.\" }\n-- output { \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\" }\n\n-- decode exercism\n-- ==\n-- entry: test_decode\n-- input { \"vcvix rhn\" }\n-- output { \"exercism\" }\n\n-- decode a sentence\n-- ==\n-- entry: test_decode\n-- input { \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\" }\n-- output { \"anobstacleisoftenasteppingstone\" }\n\n-- decode numbers\n-- ==\n-- entry: test_decode\n-- input { \"gvhgr mt123 gvhgr mt\" }\n-- output { \"testing123testing\" }\n\n-- decode all the letters\n-- ==\n-- entry: test_decode\n-- input { \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\" }\n-- output { \"thequickbrownfoxjumpsoverthelazydog\" }\n\n-- decode with too many spaces\n-- ==\n-- entry: test_decode\n-- input { \"vc vix    r hn\" }\n-- output { \"exercism\" }\n\n-- decode with no spaces\n-- ==\n-- entry: test_decode\n-- input { \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\" }\n-- output { \"anobstacleisoftenasteppingstone\" }\n\n-- encode boundary characters\n-- ==\n-- entry: test_encode\n-- input { \"/09:@AMNZ[`amnz{\" }\n-- output { \"09znm aznma\" }\n\nentry test_encode (phrase: []u8): []u8 =\n  encode phrase\n\nentry test_decode (phrase: []u8): []u8 =\n  decode phrase\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

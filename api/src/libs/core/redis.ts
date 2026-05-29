@@ -15,10 +15,47 @@ if (!url) {
   throw new Error("Redis URL not found");
 }
 
+<<<<<<< HEAD
 export const redis = new Redis(url);
 
 redis.on("connect", () => logger.info("Connected to Redis successfully"));
 redis.on("error", (err) => logger.error({ err }, "Redis connection error"));
+=======
+/**
+ * Redis Connection with pooling configuration.
+ * Optimized for clustering (handles multiple worker processes).
+ */
+export const redis = new Redis(url, {
+  // Connection pooling
+  maxRetriesPerRequest: 3,
+  enableReadyCheck: false,
+  
+  // Retry strategy with exponential backoff
+  retryStrategy: (times) => {
+    const delay = Math.min(times * 100, 3000);
+    return delay;
+  },
+  
+  // Timeouts
+  commandTimeout: 5000, // 5s timeout for commands
+  connectTimeout: 10000, // 10s timeout for initial connection
+  
+  // Connection behavior
+  lazyConnect: false, // Connect immediately on instantiation
+  keepAlive: 30000, // Keep-alive ping every 30s
+  
+  // Pool sizing (auto-managed by ioredis)
+  family: 4, // IPv4 preferred
+  
+  // Logging
+  enableOfflineQueue: true,
+});
+
+redis.on("connect", () => logger.info("Connected to Redis successfully"));
+redis.on("error", (err) => logger.error({ err }, "Redis connection error"));
+redis.on("ready", () => logger.debug("Redis client ready for commands"));
+redis.on("reconnecting", () => logger.warn("Redis client reconnecting..."));
+>>>>>>> prod-deploy
 
 /**
  * Redlock instance for distributed locking.
@@ -70,4 +107,43 @@ export async function withLock<T>(
   }
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * Get connection pool metrics for monitoring
+ * Useful for detecting connection pool exhaustion
+ */
+export function getRedisPoolMetrics() {
+  const stats = (redis as any).status;
+  const connectedClients = (redis as any)._client?.connectionsById?.size || 1;
+  
+  return {
+    status: stats || "unknown",
+    connectedClients,
+    maxRetriesPerRequest: 3,
+    commandTimeout: 5000,
+  };
+}
+
+/**
+ * Pipeline bulk sets for high-throughput cache writes
+ * 
+ * @param operations Array of objects with key, value (JSON string or primitives), and ttl in seconds
+ * @returns Result of the pipeline execution
+ */
+export async function batchCache(
+  operations: Array<{ key: string; value: any; ttl: number }>,
+) {
+  const pipe = redis.pipeline();
+
+  for (const op of operations) {
+    const stringValue =
+      typeof op.value === "string" ? op.value : JSON.stringify(op.value);
+    pipe.setex(op.key, op.ttl, stringValue);
+  }
+
+  return pipe.exec();
+}
+
+>>>>>>> prod-deploy
 export default redis;

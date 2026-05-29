@@ -1,0 +1,6 @@
+{
+  "slug": "variable-length-arguments",
+  "name": "Variable-Length Arguments",
+  "introduction": "# About\n\nFunction arguments can be specified such that it can take any number of arguments:\n\n```php\n<?php\n\nfunction actOnItems(...$items) {\n  // $items is an array containing 0 or more values\n  // used to call the function.\n}\n\nactOnItems(1, 2, 3, 4); // $items => [1, 2, 3, 4]\n```",
+  "about": "# About\n\nFunction arguments can be specified such that it can take any number of arguments:\n\n```php\n<?php\n\nfunction actOnItems(...$items) {\n  // $items is an array containing 0 or more values\n  // used to call the function.\n}\n\nactOnItems(1, 2, 3, 4); // $items => [1, 2, 3, 4]\n```\n\nIf specifying a variable-length argument in addition to others, it must be the last argument.\n\n```php\n<?php\n\nfunction writeLines($file_handle, ...$lines)\n{\n    put_file_contents($file_handle, implode(\"\\n\", $lines));\n}\n\nwriteLines('file.txt', \"a\", \"b\", \"c\");\n```"
+}

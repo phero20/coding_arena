@@ -1,0 +1,26 @@
+{
+  "id": "lean:high-scores",
+  "trackSlug": "lean",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "d609e06e-3943-4e37-a29a-181c9f2d94a3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "namespace HighScores\n\ndef latestList (scores : List Nat) : Nat :=\n  sorry --remove this line and implement the function\n\ndef latestArray (scores : Array Nat) : Nat :=\n  sorry --remove this line and implement the function\n\ndef personalBestList (scores : List Nat) : Nat :=\n  sorry --remove this line and implement the function\n\ndef personalBestArray (scores : Array Nat) : Nat :=\n  sorry --remove this line and implement the function\n\ndef personalTopThreeList (scores : List Nat) : List Nat :=\n  sorry --remove this line and implement the function\n\ndef personalTopThreeArray (scores : Array Nat) : Array Nat :=\n  sorry --remove this line and implement the function\n\nend HighScores\n",
+  "example_solution": "namespace HighScores\n\ndef latestList (scores : List Nat) : Nat :=\n  scores.getLast!\n\ndef latestArray (scores : Array Nat) : Nat :=\n  scores.back!\n\ndef personalBestList (scores : List Nat) : Nat :=\n  scores.max? |>.get!\n\ndef personalBestArray (scores : Array Nat) : Nat :=\n  scores.getMax? (· ≤ ·) |>.get!\n\ndef personalTopThreeList (scores : List Nat) : List Nat :=\n  scores.mergeSort (· ≥ ·) |>.take 3\n\ndef personalTopThreeArray (scores : Array Nat) : Array Nat := Id.run do\n  let mut best : Array Nat := #[]\n  for s in scores do\n    if best.size < 3 then\n      best := (best.push s).insertionSort (· ≥ ·)\n    else if s > best[2]! then\n      best := (best.set! 2 s).insertionSort (· ≥ ·)\n  return best\n\nend HighScores\n",
+  "test_code": "import LeanTest\nimport HighScores\n\nopen LeanTest\n\ndef highScoresTests : TestSuite :=\n  (TestSuite.empty \"HighScores\")\n    |>.addTest \"Latest score\" (do\n        return assertEqual 30 (HighScores.latestList [100, 0, 90, 30]))\n    |>.addTest \"Latest score\" (do\n        return assertEqual 30 (HighScores.latestArray #[100, 0, 90, 30]))\n    |>.addTest \"Personal best\" (do\n        return assertEqual 100 (HighScores.personalBestList [40, 100, 70]))\n    |>.addTest \"Personal best\" (do\n        return assertEqual 100 (HighScores.personalBestArray #[40, 100, 70]))\n    |>.addTest \"Top 3 scores -> Personal top three from a list of scores\" (do\n        return assertEqual [100, 90, 70] (HighScores.personalTopThreeList [10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70]))\n    |>.addTest \"Top 3 scores -> Personal top three from a list of scores\" (do\n        return assertEqual #[100, 90, 70] (HighScores.personalTopThreeArray #[10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70]))\n    |>.addTest \"Top 3 scores -> Personal top highest to lowest\" (do\n        return assertEqual [30, 20, 10] (HighScores.personalTopThreeList [20, 10, 30]))\n    |>.addTest \"Top 3 scores -> Personal top highest to lowest\" (do\n        return assertEqual #[30, 20, 10] (HighScores.personalTopThreeArray #[20, 10, 30]))\n    |>.addTest \"Top 3 scores -> Personal top when there is a tie\" (do\n        return assertEqual [40, 40, 30] (HighScores.personalTopThreeList [40, 20, 40, 30]))\n    |>.addTest \"Top 3 scores -> Personal top when there is a tie\" (do\n        return assertEqual #[40, 40, 30] (HighScores.personalTopThreeArray #[40, 20, 40, 30]))\n    |>.addTest \"Top 3 scores -> Personal top when there are less than 3\" (do\n        return assertEqual [70, 30] (HighScores.personalTopThreeList [30, 70]))\n    |>.addTest \"Top 3 scores -> Personal top when there are less than 3\" (do\n        return assertEqual #[70, 30] (HighScores.personalTopThreeArray #[30, 70]))\n    |>.addTest \"Top 3 scores -> Personal top when there is only one\" (do\n        return assertEqual [40] (HighScores.personalTopThreeList [40]))\n    |>.addTest \"Top 3 scores -> Personal top when there is only one\" (do\n        return assertEqual #[40] (HighScores.personalTopThreeArray #[40]))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [highScoresTests]\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "oxe-i"
+  ],
+  "contributors": null
+}

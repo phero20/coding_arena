@@ -5,6 +5,11 @@ import { type ControllerRequest } from "../../types/infrastructure/hono.types";
 import { z } from "zod";
 import { AppError } from "../../utils/app-error";
 
+<<<<<<< HEAD
+=======
+import { type IStatsService } from "../../services/stats/stats.service";
+
+>>>>>>> prod-deploy
 export const updateProfileSchema = z.object({
   githubUsername: z.string().nullable().optional(),
   linkedinUsername: z.string().nullable().optional(),
@@ -13,10 +18,18 @@ export const updateProfileSchema = z.object({
 
 export class ProfileController extends BaseController {
   private readonly userRepository: IUserRepository;
+<<<<<<< HEAD
+=======
+  private readonly statsService: IStatsService;
+>>>>>>> prod-deploy
 
   constructor(cradle: ICradle) {
     super(cradle);
     this.userRepository = cradle.userRepository;
+<<<<<<< HEAD
+=======
+    this.statsService = cradle.statsService;
+>>>>>>> prod-deploy
   }
 
   /**
@@ -46,6 +59,12 @@ export class ProfileController extends BaseController {
       throw AppError.notFound("User not found");
     }
 
+<<<<<<< HEAD
+=======
+    // Invalidate the stats cache so the new linked accounts (LeetCode, etc.) show up instantly
+    await this.statsService.invalidateProfile(updatedUser.id);
+
+>>>>>>> prod-deploy
     return { 
       message: "Profile updated successfully", 
       user: {

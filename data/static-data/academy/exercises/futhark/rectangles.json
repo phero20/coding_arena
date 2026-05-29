@@ -1,0 +1,26 @@
+{
+  "id": "futhark:rectangles",
+  "trackSlug": "futhark",
+  "slug": "rectangles",
+  "name": "Rectangles",
+  "uuid": "93586bb2-3ee5-425f-ba18-ca9f1eecb17a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the rectangles in an ASCII diagram.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCount the rectangles in an ASCII diagram like the one below.\n\n```text\n   +--+\n  ++  |\n+-++--+\n|  |  |\n+--+--+\n```\n\nThe above diagram contains these 6 rectangles:\n\n```text\n\n\n+-----+\n|     |\n+-----+\n```\n\n```text\n   +--+\n   |  |\n   |  |\n   |  |\n   +--+\n```\n\n```text\n   +--+\n   |  |\n   +--+\n\n\n```\n\n```text\n\n\n   +--+\n   |  |\n   +--+\n```\n\n```text\n\n\n+--+\n|  |\n+--+\n```\n\n```text\n\n  ++\n  ++\n\n\n```\n\nYou may assume that the input is always a proper rectangle (i.e. the length of every line equals the length of the first line).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def rectangles (strings: [][]u8): i32 = ???\n",
+  "example_solution": "local def is_vertical_line (strings: [][]u8) (bottom: i64) (top: i64) (left: i64): bool =\n  let result = loop result = true for row in top...bottom do\n    result && (strings[row][left] == '|' || strings[row][left] == '+')\n  in\n    result\n\ndef rectangles [m] [n] (strings: [m][n]u8): i32 =\n  let result = loop result = 0 for bottom in 1..<m do\n    let result = loop result = result for right in 1..<n do\n      if strings[bottom][right] != '+' then result else\n      let (result, _) = loop (result, top) = (result, bottom - 1) while top >= 0 do\n        if strings[top][right] == '|' then (result, top - 1) else\n        if strings[top][right] != '+' then (result, -1) else\n        let (result, _) = loop (result, left) = (result, right - 1) while left >= 0 do\n          if is_vertical_line strings bottom top left then (result + 1, left - 1) else\n          if (strings[bottom][left] == '-' || strings[bottom][left] == '+') && (strings[top][left] == '-' || strings[top][left] == '+') then (result, left - 1) else\n          (result, -1)\n        in\n          (result, top - 1)\n      in\n        result\n    in\n      result\n  in\n    result\n",
+  "test_code": "import \"rectangles\"\n\n-- no rectangles\n-- ==\n-- input  { [\" \"] }\n-- output { 0 }\n\n-- one rectangle\n-- ==\n-- input  { [\"+-+\", \"| |\", \"+-+\"] }\n-- output { 1 }\n\n-- two rectangles without shared parts\n-- ==\n-- input  { [\"  +-+\", \"  | |\", \"+-+-+\", \"| |  \", \"+-+  \"] }\n-- output { 2 }\n\n-- five rectangles with shared parts\n-- ==\n-- input  { [\"  +-+\", \"  | |\", \"+-+-+\", \"| | |\", \"+-+-+\"] }\n-- output { 5 }\n\n-- rectangle of height 1 is counted\n-- ==\n-- input  { [\"+--+\", \"+--+\"] }\n-- output { 1 }\n\n-- rectangle of width 1 is counted\n-- ==\n-- input  { [\"++\", \"||\", \"++\"] }\n-- output { 1 }\n\n-- 1x1 square is counted\n-- ==\n-- input  { [\"++\", \"++\"] }\n-- output { 1 }\n\n-- only complete rectangles are counted\n-- ==\n-- input  { [\"  +-+\", \"    |\", \"+-+-+\", \"| | -\", \"+-+-+\"] }\n-- output { 1 }\n\n-- rectangles can be of different sizes\n-- ==\n-- input  { [\"+------+----+\", \"|      |    |\", \"+---+--+    |\", \"|   |       |\", \"+---+-------+\"] }\n-- output { 3 }\n\n-- corner is required for a rectangle to be complete\n-- ==\n-- input  { [\"+------+----+\", \"|      |    |\", \"+------+    |\", \"|   |       |\", \"+---+-------+\"] }\n-- output { 2 }\n\n-- large input with many rectangles\n-- ==\n-- input  { [\"+---+--+----+\", \"|   +--+----+\", \"+---+--+    |\", \"|   +--+----+\", \"+---+--+--+-+\", \"+---+--+--+-+\", \"+------+  | |\", \"          +-+\"] }\n-- output { 60 }\n\n-- rectangles must have four sides\n-- ==\n-- input  { [\"+-+ +-+\", \"| | | |\", \"+-+-+-+\", \"  | |  \", \"+-+-+-+\", \"| | | |\", \"+-+ +-+\"] }\n-- output { 5 }\n\nlet main (strings: [][]u8): i32 =\n  rectangles strings\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

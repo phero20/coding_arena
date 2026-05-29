@@ -1,0 +1,28 @@
+{
+  "id": "vimscript:allergies",
+  "trackSlug": "vimscript",
+  "slug": "allergies",
+  "name": "Allergies",
+  "uuid": "6cd2b3dc-9f3e-4a69-916e-ba19e2814fe7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies.\n\nAn allergy test produces a single numeric score which contains the information about all the allergies the person has (that they were tested for).\n\nThe list of items (and their value) that were tested are:\n\n- eggs (1)\n- peanuts (2)\n- shellfish (4)\n- strawberries (8)\n- tomatoes (16)\n- chocolate (32)\n- pollen (64)\n- cats (128)\n\nSo if Tom is allergic to peanuts and chocolate, he gets a score of 34.\n\nNow, given just that score of 34, your program should be able to say:\n\n- Whether Tom is allergic to any one of those allergens listed above.\n- All the allergens Tom is allergic to.\n\nNote: a given score may include allergens **not** listed above (i.e. allergens that score 256, 512, 1024, etc.).\nYour program should ignore those components of the score.\nFor example, if the allergy score is 257, your program should only report the eggs (1) allergy.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\n\" Given a person's allergy score, determine whether or not they're allergic to\n\" a given item, and their full list of allergies.\n\"\n\"   eggs          1\n\"   peanuts       2\n\"   shellfish     4\n\"   strawberries  8\n\"   tomatoes      16\n\"   chocolate     32\n\"   pollen        64\n\"   cats          128\n\"\n\" Examples:\n\"\n\"   :echo AllergicTo(5, 'shellfish')\n\"   1\n\"\n\"   :echo List(5)\n\"   ['eggs', 'shellfish']\n\"\n\nfunction! AllergicTo(score, allergy) abort\n  \" your code goes here\nendfunction\n\nfunction! List(score) abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "let s:allergy_map = {\n      \\ 'eggs':         1,\n      \\ 'peanuts':      2,\n      \\ 'shellfish':    4,\n      \\ 'strawberries': 8,\n      \\ 'tomatoes':     16,\n      \\ 'chocolate':    32,\n      \\ 'pollen':       64,\n      \\ 'cats':         128,\n      \\ }\n\nfunction! AllergicTo(score, allergy) abort\n  return and(a:score, s:allergy_map[a:allergy]) != 0\nendfunction\n\nfunction! List(score) abort\n  return filter(map(sort(items(s:allergy_map), 's:valsort'),\n        \\ 'v:val[0]'), 'AllergicTo(a:score, v:val)')\nendfunction\n\nfunction! s:valsort(a, b) abort\n  return a:a[1] - a:b[1]\nendfunction\n",
+  "test_code": "\"\n\" Version: 1.0.0\n\"\n\nBefore:\n  unlet! input expected\n\nExecute (no allergies means not allergic):\n  let input = 0\n  AssertEqual 0, AllergicTo(input, 'peanuts')\n  AssertEqual 0, AllergicTo(input, 'cats')\n  AssertEqual 0, AllergicTo(input, 'strawberries')\n\nExecute (is allergic to eggs):\n  let input = 1\n  AssertEqual 1, AllergicTo(input, 'eggs')\n\nExecute (allergic to eggs in addition to other stuff):\n  let input = 5\n  AssertEqual 1, AllergicTo(input, 'eggs')\n  AssertEqual 1, AllergicTo(input, 'shellfish')\n  AssertEqual 0, AllergicTo(input, 'strawberries')\n\nExecute (no allergies at all):\n  let input = 0\n  let expected = []\n  AssertEqual expected, List(input)\n\nExecute (allergic to just eggs):\n  let input = 1\n  let expected = ['eggs']\n  AssertEqual expected, List(input)\n\nExecute (allergic to just peanuts):\n  let input = 2\n  let expected = ['peanuts']\n  AssertEqual expected, List(input)\n\nExecute (allergic to just strawberries):\n  let input = 8\n  let expected = ['strawberries']\n  AssertEqual expected, List(input)\n\nExecute (allergic to eggs and peanuts):\n  let input = 3\n  let expected = ['eggs', 'peanuts']\n  AssertEqual expected, List(input)\n\nExecute (allergic to more than eggs but not peanuts):\n  let input = 5\n  let expected = ['eggs', 'shellfish']\n  AssertEqual expected, List(input)\n\nExecute (allergic to lots of stuff):\n  let input = 248\n  let expected = ['strawberries', 'tomatoes', 'chocolate', 'pollen', 'cats']\n  AssertEqual expected, List(input)\n\nExecute (allergic to everything):\n  let input = 255\n  let expected = ['eggs', 'peanuts', 'shellfish', 'strawberries', 'tomatoes', 'chocolate', 'pollen', 'cats']\n  AssertEqual expected, List(input)\n\nExecute (ignore non allergen score parts):\n  let input = 509\n  let expected = ['eggs', 'shellfish', 'strawberries', 'tomatoes', 'chocolate', 'pollen', 'cats']\n  AssertEqual expected, List(input)\n\nExecute (no allergen score parts without highest valid score):\n  let input = 257\n  let expected = ['eggs']\n  AssertEqual expected, List(input)\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "mhinz"
+  ],
+  "contributors": [
+    "kotp"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "8th:darts",
+  "trackSlug": "8th",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "773c9910-ae75-4560-b110-e9d057438aa9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ": darts-score \\ n n -- n\n\n;\n",
+  "example_solution": "\\ Courtesy @ron at https://8th-dev.com/forum/index.php/topic,2713.0.html\n\nwith: n\n: distance \\ x y -- n\n  sqr swap sqr + sqrt ;\n\n: score \\ n -- n\n  dup 10 > if drop 0 ;then\n  dup 5  > if drop 1 ;then\n  dup 1  > if drop 5 ;then\n  drop 10 ;\n\n: darts-score \\ x y -- n\n  distance score ;\n",
+  "test_code": "\"darts.8th\" f:include\nneeds exercism/test\nwith: test\n13 tests\n\n\"Missed target\"\n    ( -9 9 darts-score )\n    0\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"On the outer circle\"\n    ( 0 10 darts-score )\n    1\n    equal?\n\n\"On the middle circle\"\n    ( -5 0 darts-score )\n    5\n    equal?\n\n\"On the inner circle\"\n    ( 0 -1 darts-score )\n    10\n    equal?\n\n\"Exactly on center\"\n    ( 0 0 darts-score )\n    10\n    equal?\n\n\"Near the center\"\n    ( -0.1 -0.1 darts-score )\n    10\n    equal?\n\n\"Just within the inner circle\"\n    ( 0.7 0.7 darts-score )\n    10\n    equal?\n\n\"Just outside the inner circle\"\n    ( 0.8 -0.8 darts-score )\n    5\n    equal?\n\n\"Just within the middle circle\"\n    ( -3.5 3.5 darts-score )\n    5\n    equal?\n\n\"Just outside the middle circle\"\n    ( -3.6 -3.6 darts-score )\n    1\n    equal?\n\n\"Just within the outer circle\"\n    ( -7.0 7.0 darts-score )\n    1\n    equal?\n\n\"Just outside the outer circle\"\n    ( 7.1 -7.1 darts-score )\n    0\n    equal?\n\n\"Asymmetric position between the inner and middle circles\"\n    ( 0.5 -4 darts-score )\n    5\n    equal?\n\nend-of-tests\n;with\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

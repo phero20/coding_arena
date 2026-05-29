@@ -1,0 +1,47 @@
+{
+  "id": "rust:acronym",
+  "trackSlug": "rust",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "26a9102f-26f6-4238-858e-ba20db66f1a9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "loops"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn abbreviate(phrase: &str) -> String {\n    todo!(\"Given the phrase '{phrase}', return its acronym\");\n}\n",
+  "example_solution": "pub fn abbreviate(phrase: &str) -> String {\n    phrase\n        .split(|c: char| c.is_whitespace() || (c != '\\'' && !c.is_alphanumeric()))\n        .flat_map(split_camel)\n        .filter_map(|word| word.chars().next())\n        .collect::<String>()\n        .to_uppercase()\n}\n\nfn split_camel(phrase: &str) -> Vec<String> {\n    let chars: Vec<char> = phrase.chars().collect();\n    let mut words: Vec<String> = Vec::new();\n    let mut word_start: usize = 0;\n    for (i, c) in chars.iter().enumerate() {\n        if i == chars.len() - 1 || c.is_lowercase() && chars[i + 1].is_uppercase() {\n            words.push(chars[word_start..=i].iter().cloned().collect());\n            word_start = i + 1;\n        }\n    }\n    words\n}\n",
+  "test_code": "use acronym::*;\n\n#[test]\nfn basic() {\n    let input = \"Portable Network Graphics\";\n    let output = abbreviate(input);\n    let expected = \"PNG\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn lowercase_words() {\n    let input = \"Ruby on Rails\";\n    let output = abbreviate(input);\n    let expected = \"ROR\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn punctuation() {\n    let input = \"First In, First Out\";\n    let output = abbreviate(input);\n    let expected = \"FIFO\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn all_caps_word() {\n    let input = \"GNU Image Manipulation Program\";\n    let output = abbreviate(input);\n    let expected = \"GIMP\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn punctuation_without_whitespace() {\n    let input = \"Complementary metal-oxide semiconductor\";\n    let output = abbreviate(input);\n    let expected = \"CMOS\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn very_long_abbreviation() {\n    let input = \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\";\n    let output = abbreviate(input);\n    let expected = \"ROTFLSHTMDCOALM\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn consecutive_delimiters() {\n    let input = \"Something - I made up from thin air\";\n    let output = abbreviate(input);\n    let expected = \"SIMUFTA\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn apostrophes() {\n    let input = \"Halley's Comet\";\n    let output = abbreviate(input);\n    let expected = \"HC\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn underscore_emphasis() {\n    let input = \"The Road _Not_ Taken\";\n    let output = abbreviate(input);\n    let expected = \"TRNT\";\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn camelcase() {\n    let input = \"HyperText Markup Language\";\n    let output = abbreviate(input);\n    let expected = \"HTML\";\n    assert_eq!(output, expected);\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "gregcline"
+  ],
+  "contributors": [
+    "AndrewKvalheim",
+    "ClashTheBunny",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "IanWhitney",
+    "ktomsic",
+    "lutostag",
+    "mkantor",
+    "navossoc",
+    "nfiles",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "thvdburgt",
+    "xakon",
+    "ZapAnton"
+  ]
+}

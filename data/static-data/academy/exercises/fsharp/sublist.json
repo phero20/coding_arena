@@ -1,0 +1,43 @@
+{
+  "id": "fsharp:sublist",
+  "trackSlug": "fsharp",
+  "slug": "sublist",
+  "name": "Sublist",
+  "uuid": "d17b0c35-49a7-4ea6-b68c-7b2b56dc5968",
+  "type": "practice",
+  "status": null,
+  "blurb": "Write a function to determine if a list is a sublist of another list.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [
+    "comparing",
+    "discriminated-unions",
+    "generic-constraints",
+    "generic-methods"
+  ],
+  "prerequisites": [
+    "comparing",
+    "discriminated-unions",
+    "generic-constraints",
+    "generic-methods",
+    "lists"
+  ],
+  "instructions": "# Instructions\n\nGiven any two lists `A` and `B`, determine if:\n\n- List `A` is equal to list `B`; or\n- List `A` contains list `B` (`A` is a superlist of `B`); or\n- List `A` is contained by list `B` (`A` is a sublist of `B`); or\n- None of the above is true, thus lists `A` and `B` are unequal\n\nSpecifically, list `A` is equal to list `B` if both lists have the same values in the same order.\nList `A` is a superlist of `B` if `A` contains a contiguous sub-sequence of values equal to `B`.\nList `A` is a sublist of `B` if `B` contains a contiguous sub-sequence of values equal to `A`.\n\nExamples:\n\n- If `A = []` and `B = []` (both lists are empty), then `A` and `B` are equal\n- If `A = [1, 2, 3]` and `B = []`, then `A` is a superlist of `B`\n- If `A = []` and `B = [1, 2, 3]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4, 5]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [3, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` is a sublist of `B`\n- If `A = [1, 2, 3]` and `B = [1, 2, 3]`, then `A` and `B` are equal\n- If `A = [1, 2, 3, 4, 5]` and `B = [2, 3, 4]`, then `A` is a superlist of `B`\n- If `A = [1, 2, 4]` and `B = [1, 2, 3, 4, 5]`, then `A` and `B` are unequal\n- If `A = [1, 2, 3]` and `B = [1, 3, 2]`, then `A` and `B` are unequal\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Sublist\n\ntype SublistType = Equal | Sublist | Superlist | Unequal\n\nlet sublist xs ys = failwith \"You need to implement this function.\"",
+  "example_solution": "module Sublist\n\ntype SublistType = Equal | Sublist | Superlist | Unequal\n\nlet rec isSublist xs ys lx ly = \n    let rec helper xs' ys' =\n        match (xs', ys') with\n        | [], _ -> true\n        | x'::xs'', y'::ys'' when x' = y' -> helper xs'' ys''\n        | _ -> false\n\n    if lx > ly then false\n    elif helper xs ys then true\n    else isSublist xs (List.tail ys) lx (ly - 1)\n\nlet sublist xs ys = \n    match (List.length xs, List.length ys) with\n    | x, y when x < y && isSublist xs ys x y -> Sublist\n    | x, y when x > y && isSublist ys xs y x -> Superlist\n    | _ when xs = ys -> Equal\n    | _ -> Unequal",
+  "test_code": "module SublistTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Sublist\n\n[<Fact>]\nlet ``Empty lists`` () =\n    let listOne = []\n    let listTwo = []\n    sublist listOne listTwo |> should equal SublistType.Equal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Empty list within non empty list`` () =\n    let listOne = []\n    let listTwo = [1; 2; 3]\n    sublist listOne listTwo |> should equal SublistType.Sublist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Non empty list contains empty list`` () =\n    let listOne = [1; 2; 3]\n    let listTwo = []\n    sublist listOne listTwo |> should equal SublistType.Superlist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``List equals itself`` () =\n    let listOne = [1; 2; 3]\n    let listTwo = [1; 2; 3]\n    sublist listOne listTwo |> should equal SublistType.Equal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Different lists`` () =\n    let listOne = [1; 2; 3]\n    let listTwo = [2; 3; 4]\n    sublist listOne listTwo |> should equal SublistType.Unequal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``False start`` () =\n    let listOne = [1; 2; 5]\n    let listTwo = [0; 1; 2; 3; 1; 2; 5; 6]\n    sublist listOne listTwo |> should equal SublistType.Sublist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Consecutive`` () =\n    let listOne = [1; 1; 2]\n    let listTwo = [0; 1; 1; 1; 2; 1; 2]\n    sublist listOne listTwo |> should equal SublistType.Sublist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Sublist at start`` () =\n    let listOne = [0; 1; 2]\n    let listTwo = [0; 1; 2; 3; 4; 5]\n    sublist listOne listTwo |> should equal SublistType.Sublist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Sublist in middle`` () =\n    let listOne = [2; 3; 4]\n    let listTwo = [0; 1; 2; 3; 4; 5]\n    sublist listOne listTwo |> should equal SublistType.Sublist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Sublist at end`` () =\n    let listOne = [3; 4; 5]\n    let listTwo = [0; 1; 2; 3; 4; 5]\n    sublist listOne listTwo |> should equal SublistType.Sublist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``At start of superlist`` () =\n    let listOne = [0; 1; 2; 3; 4; 5]\n    let listTwo = [0; 1; 2]\n    sublist listOne listTwo |> should equal SublistType.Superlist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``In middle of superlist`` () =\n    let listOne = [0; 1; 2; 3; 4; 5]\n    let listTwo = [2; 3]\n    sublist listOne listTwo |> should equal SublistType.Superlist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``At end of superlist`` () =\n    let listOne = [0; 1; 2; 3; 4; 5]\n    let listTwo = [3; 4; 5]\n    sublist listOne listTwo |> should equal SublistType.Superlist\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``First list missing element from second list`` () =\n    let listOne = [1; 3]\n    let listTwo = [1; 2; 3]\n    sublist listOne listTwo |> should equal SublistType.Unequal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Second list missing element from first list`` () =\n    let listOne = [1; 2; 3]\n    let listTwo = [1; 3]\n    sublist listOne listTwo |> should equal SublistType.Unequal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``First list missing additional digits from second list`` () =\n    let listOne = [1; 2]\n    let listTwo = [1; 22]\n    sublist listOne listTwo |> should equal SublistType.Unequal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Order matters to a list`` () =\n    let listOne = [1; 2; 3]\n    let listTwo = [3; 2; 1]\n    sublist listOne listTwo |> should equal SublistType.Unequal\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Same digits but different numbers`` () =\n    let listOne = [1; 0; 1]\n    let listTwo = [10; 1]\n    sublist listOne listTwo |> should equal SublistType.Unequal\n\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

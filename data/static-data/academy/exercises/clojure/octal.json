@@ -1,0 +1,30 @@
+{
+  "id": "clojure:octal",
+  "trackSlug": "clojure",
+  "slug": "octal",
+  "name": "Octal",
+  "uuid": "fa596153-0cbe-40e9-a4d6-1a66fe6ef7e5",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert an octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nImplement octal to decimal conversion.\nGiven an octal input string, your program should produce a decimal output.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n- Treat invalid input as octal 0.\n\n## About Octal (Base-8)\n\nDecimal is a base-10 system.\n\nA number 233 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The nth number gets multiplied by 10^_(n-1)_.\n- All these values are summed.\n\nSo:\n\n```text\n   233 # decimal\n = 2*10^2 + 3*10^1 + 3*10^0\n = 2*100  + 3*10   + 3*1\n```\n\nOctal is similar, but uses powers of 8 rather than powers of 10.\n\nSo:\n\n```text\n   233 # octal\n = 2*8^2 + 3*8^1 + 3*8^0\n = 2*64  + 3*8   + 3*1\n = 128   + 24    + 3\n = 155\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns octal)\n\n(defn to-decimal [] ;; <- arglist goes here\n  ;; your code goes here\n)\n",
+  "example_solution": "(ns octal)\n\n(defn to-decimal [num]\n  (loop [sum 0, num num]\n    (if (empty? num)\n      sum\n      (let [diff (.compareTo (first num) \\0)]\n        (if (<= 0 diff 7)\n          (recur (+ (* sum 8) diff) (next num))\n          0)))))",
+  "test_code": "(ns octal-test\n  (:require [clojure.test :refer [deftest is testing]]\n            [octal :refer [to-decimal]]))\n\n(deftest octal-1-is-decimal-1\n  (testing \"1 should still be 1\"\n    (is (= 1 (to-decimal \"1\")))))\n\n(deftest octal-2-is-decimal-2\n  (testing \"2 should still be 2\"\n    (is (= 2 (to-decimal \"2\")))))\n\n(deftest octal-10-is-decimal-8\n  (testing \"10 should be 8\"\n    (is (= 8 (to-decimal \"10\")))))\n\n(deftest octal-11-is-decimal-9\n  (testing \"11 should be 9\"\n    (is (= 9 (to-decimal \"11\")))))\n\n(deftest octal-17-is-decimal-15\n  (testing \"17 should be 15\"\n    (is (= 15 (to-decimal \"17\")))))\n\n(deftest octal-130-is-decimal-88\n  (testing \"130 should be 88\"\n    (is (= 88 (to-decimal \"130\")))))\n\n(deftest octal-2047-is-decimal-1063\n  (testing \"2047 should be 1063\"\n    (is (= 1063 (to-decimal \"2047\")))))\n\n(deftest octal-7777-is-decimal-4095\n  (testing \"7777 should be 4095\"\n    (is (= 4095 (to-decimal \"7777\")))))\n\n(deftest octal-1234567-is-decimal-342391\n  (testing \"1234567 should be 342391\"\n    (is (= 342391 (to-decimal \"1234567\")))))\n\n(deftest invalid-input-is-decimal-0\n  (testing \"carrot should be invalid\"\n    (is (= 0 (to-decimal \"carrot\")))))\n\n(deftest eight-is-invalid-input-decimal-0\n  (testing \"8 should be invalid and return 0\"\n    (is (= 0 (to-decimal \"8\")))))\n\n(deftest nine-is-invalid-input-decimal-0\n  (testing \"9 should be invalid and return 0\"\n    (is (= 0 (to-decimal \"9\")))))\n\n(deftest invalid-input-6789-is-decimal-0\n  (testing \"6789 should be invalid and return 0\"\n    (is (= 0 (to-decimal \"6789\")))))\n\n(deftest invalid-input-with-digits-is-decimal-0\n  (testing \"abc1z should be 0\"\n    (is (= 0 (to-decimal \"abc1z\")))))\n\n(deftest leading-zero-is-okay\n  (testing \"Leading zero should be valid octal\"\n    (is (= 9 (to-decimal \"011\")))))",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "haus"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "sjwarner-bp",
+    "yurrriq"
+  ]
+}

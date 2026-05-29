@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:rna-transcription",
+  "trackSlug": "moonscript",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "f0c2aca7-00a9-47df-a927-b9d7df578bd0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "to_rna = (dna) ->\n  error 'Implement me'\n\nreturn to_rna\n",
+  "example_solution": "return (dna) ->\n  rna = A: 'U', C: 'G', G: 'C', T: 'A'\n  table.concat [rna[nucleotide] for nucleotide in dna\\gmatch('.')]\n",
+  "test_code": "to_rna = require 'rna_transcription'\n\ndescribe 'rna-transcription:', ->\n  it 'Empty RNA sequence', ->\n    result = to_rna ''\n    assert.are.equal '', result\n\n  pending 'RNA complement of cytosine is guanine', ->\n    result = to_rna 'C'\n    assert.are.equal 'G', result\n\n  pending 'RNA complement of guanine is cytosine', ->\n    result = to_rna 'G'\n    assert.are.equal 'C', result\n\n  pending 'RNA complement of thymine is adenine', ->\n    result = to_rna 'T'\n    assert.are.equal 'A', result\n\n  pending 'RNA complement of adenine is uracil', ->\n    result = to_rna 'A'\n    assert.are.equal 'U', result\n\n  pending 'RNA complement', ->\n    result = to_rna 'ACGTGGTCTTAA'\n    assert.are.equal 'UGCACCAGAAUU', result\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

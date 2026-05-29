@@ -1,0 +1,26 @@
+{
+  "id": "awk:series",
+  "trackSlug": "awk",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "4eb7c7e5-eb62-48cf-98f7-d80485e9418f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# These variables are initialized on the command line (using '-v'):\n# - len\n\nBEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "# These variables are initialized on the command line (using '-v'):\n# - len\n\nBEGIN {\n    FS = \"\"\n}\n\n! NF {\n    print(\"series cannot be empty\")\n    exit(1)\n}\n\nlen > NF || len < 1 {\n    print(\"invalid length\")\n    exit(1)\n}\n\n{\n    out = \"\"\n    for (start = 1; start <= NF - len + 1; start++ ) {\n        if (start > 1)\n            out = out \" \"\n        for (i = 0; i < len; i++)\n            out = out $(start + i)\n    }\n    print(out)\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.0.0.0\n\n@test \"slices of one from one\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"1\"\n    run gawk -f series.awk -v len=1 <<< 1\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"slices of one from two\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"1 2\"\n    run gawk -f series.awk -v len=1 <<< 12\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"slices of two\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"35\"\n    run gawk -f series.awk -v len=2 <<< 35\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"slices of two overlap\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"91 14 42\"\n    run gawk -f series.awk -v len=2 <<< 9142\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"slices can include duplicates\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"777 777 777 777\"\n    run gawk -f series.awk -v len=3 <<< 777777\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"slices of a long series\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"91849 18493 84939 49390 93904 39042 90424 04243\"\n    run gawk -f series.awk -v len=5 <<< 918493904243\n    assert_success\n    assert_output \"$expected\"\n}\n\n@test \"slice length is too large\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"invalid length\"\n    run gawk -f series.awk -v len=6 <<< 12345\n    assert_failure\n    assert_output --partial \"$expected\"\n}\n\n@test \"slice length is way too large\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"invalid length\"\n    run gawk -f series.awk -v len=42 <<< 12345\n    assert_failure\n    assert_output --partial \"$expected\"\n}\n\n@test \"slice length cannot be zero\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"invalid length\"\n    run gawk -f series.awk -v len=0 <<< 12345\n    assert_failure\n    assert_output --partial \"$expected\"\n}\n\n@test \"slice length cannot be negative\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"invalid length\"\n    run gawk -f series.awk -v len=-1 <<< 123\n    assert_failure\n    assert_output --partial \"$expected\"\n}\n\n@test \"empty series is invalid\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    expected=\"series cannot be empty\"\n    run gawk -f series.awk -v len=1 <<< \"\"\n    assert_failure\n    assert_output --partial \"$expected\"\n}\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "IsaacG"
+  ],
+  "contributors": null
+}

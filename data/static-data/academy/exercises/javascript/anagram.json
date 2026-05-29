@@ -1,0 +1,45 @@
+{
+  "id": "javascript:anagram",
+  "trackSlug": "javascript",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "309fa4f1-e03a-4ab2-b371-cdf742501cf7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "arrays",
+    "for-loops",
+    "conditionals",
+    "comparison"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Anagram' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const findAnagrams = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "const normalize = (str) => str.toLowerCase().split('').sort().join();\nconst sameWord = (word, candidate) =>\n  word.toLowerCase() === candidate.toLowerCase();\nconst isAnagram = (word, candidate) => normalize(word) === normalize(candidate);\n\nexport const findAnagrams = (subject, candidates) => {\n  const wordsCopy = Array.isArray(candidates) ? candidates : [...candidates];\n  return wordsCopy.filter(\n    (candidate) =>\n      !sameWord(subject, candidate) && isAnagram(subject, candidate),\n  );\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { findAnagrams } from './anagram';\n\nconst areSetsEqual = (setA, setB) =>\n  setA.size === setB.size && [...setA].every((val) => setB.has(val));\n\ndescribe('Anagram', () => {\n  test('no matches', () => {\n    const expected = [];\n    const actual = findAnagrams('diaper', [\n      'hello',\n      'world',\n      'zombies',\n      'pants',\n    ]);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects two anagrams', () => {\n    const expected = ['lemons', 'melons'];\n    const actual = findAnagrams('solemn', ['lemons', 'cherry', 'melons']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('does not detect anagram subsets', () => {\n    const expected = [];\n    const actual = findAnagrams('good', ['dog', 'goody']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects anagram', () => {\n    const expected = ['inlets'];\n    const actual = findAnagrams('listen', [\n      'enlists',\n      'google',\n      'inlets',\n      'banana',\n    ]);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects three anagrams', () => {\n    const expected = ['gallery', 'regally', 'largely'];\n    const actual = findAnagrams('allergy', [\n      'gallery',\n      'ballerina',\n      'regally',\n      'clergy',\n      'largely',\n      'leading',\n    ]);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects multiple anagrams with different case', () => {\n    const expected = ['Eons', 'ONES'];\n    const actual = findAnagrams('nose', ['Eons', 'ONES']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('does not detect non-anagrams with identical checksum', () => {\n    const expected = [];\n    const actual = findAnagrams('mass', ['last']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects anagrams case-insensitively', () => {\n    const expected = ['Carthorse'];\n    const actual = findAnagrams('Orchestra', [\n      'cashregister',\n      'Carthorse',\n      'radishes',\n    ]);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects anagrams using case-insensitive subject', () => {\n    const expected = ['carthorse'];\n    const actual = findAnagrams('Orchestra', [\n      'cashregister',\n      'carthorse',\n      'radishes',\n    ]);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('detects anagrams using case-insensitive possible matches', () => {\n    const expected = ['Carthorse'];\n    const actual = findAnagrams('orchestra', [\n      'cashregister',\n      'Carthorse',\n      'radishes',\n    ]);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('does not detect an anagram if the original word is repeated', () => {\n    const expected = [];\n    const actual = findAnagrams('go', ['goGoGO']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('anagrams must use all letters exactly once', () => {\n    const expected = [];\n    const actual = findAnagrams('tapper', ['patter']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('words are not anagrams of themselves', () => {\n    const expected = [];\n    const actual = findAnagrams('BANANA', ['BANANA']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('words are not anagrams of themselves even if letter case is partially different', () => {\n    const expected = [];\n    const actual = findAnagrams('BANANA', ['Banana']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('words are not anagrams of themselves even if letter case is completely different', () => {\n    const expected = [];\n    const actual = findAnagrams('BANANA', ['banana']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('words other than themselves can be anagrams', () => {\n    const expected = ['Silent'];\n    const actual = findAnagrams('LISTEN', ['LISTEN', 'Silent']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('handles case of greek letters', () => {\n    const expected = ['ΒΓΑ', 'γβα'];\n    const actual = findAnagrams('ΑΒΓ', ['ΒΓΑ', 'ΒΓΔ', 'γβα', 'αβγ']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n\n  xtest('different characters may have the same bytes', () => {\n    const expected = [];\n    const actual = findAnagrams('a⬂', ['€a']);\n    expect(areSetsEqual(new Set(expected), new Set(actual))).toEqual(true);\n  });\n});\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "rchavarria"
+  ],
+  "contributors": [
+    "amscotti",
+    "ankorGH",
+    "draalger",
+    "gabriel376",
+    "gargrave",
+    "jagdish-15",
+    "kytrinyx",
+    "matthewmorgan",
+    "ovidiu141",
+    "ryanplusplus",
+    "SleeplessByte",
+    "tejasbubane"
+  ]
+}

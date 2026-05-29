@@ -1,0 +1,32 @@
+{
+  "id": "common-lisp:perfect-numbers",
+  "trackSlug": "common-lisp",
+  "slug": "perfect-numbers",
+  "name": "Perfect Numbers",
+  "uuid": "b3ad38c2-2962-4b47-9b15-15ca262ebff6",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "arithmetic",
+    "conditionals"
+  ],
+  "prerequisites": [
+    "arithmetic",
+    "conditionals"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers.\n\nThe Greek mathematician [Nicomachus][nicomachus] devised a classification scheme for positive integers, identifying each as belonging uniquely to the categories of [perfect](#perfect), [abundant](#abundant), or [deficient](#deficient) based on their [aliquot sum][aliquot-sum].\nThe _aliquot sum_ is defined as the sum of the factors of a number not including the number itself.\nFor example, the aliquot sum of `15` is `1 + 3 + 5 = 9`.\n\n## Perfect\n\nA number is perfect when it equals its aliquot sum.\nFor example:\n\n- `6` is a perfect number because `1 + 2 + 3 = 6`\n- `28` is a perfect number because `1 + 2 + 4 + 7 + 14 = 28`\n\n## Abundant\n\nA number is abundant when it is less than its aliquot sum.\nFor example:\n\n- `12` is an abundant number because `1 + 2 + 3 + 4 + 6 = 16`\n- `24` is an abundant number because `1 + 2 + 3 + 4 + 6 + 8 + 12 = 36`\n\n## Deficient\n\nA number is deficient when it is greater than its aliquot sum.\nFor example:\n\n- `8` is a deficient number because `1 + 2 + 4 = 7`\n- Prime numbers are deficient\n\n## Task\n\nImplement a way to determine whether a given number is [perfect](#perfect).\nDepending on your language track, you may also need to implement a way to determine whether a given number is [abundant](#abundant) or [deficient](#deficient).\n\n[nicomachus]: https://en.wikipedia.org/wiki/Nicomachus\n[aliquot-sum]: https://en.wikipedia.org/wiki/Aliquot_sum\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defpackage :perfect-numbers\n  (:use :cl)\n  (:export :classify))\n\n(in-package :perfect-numbers)\n\n(defun classify (number))\n",
+  "example_solution": "(defpackage :perfect-numbers\n  (:use :common-lisp)\n  (:export :classify))\n\n(in-package :perfect-numbers)\n\n(defun divisors (number)\n  (remove-if-not (lambda (x) (= 0 (rem number x)))\n                 (loop for x from 1 to (floor number 2) collect x)))\n\n(defun classify (number)\n  (if (> number 0)\n      (let ((div-sum (reduce #'+ (divisors number))))\n        (cond ((= number div-sum) \"perfect\")\n              ((< number div-sum) \"abundant\")\n              (T             \"deficient\")))\n      (warn \"Just defined for natural numbers\")))\n",
+  "test_code": ";; Ensures that perfect-numbers.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"perfect-numbers\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from perfect-numbers and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :perfect-numbers-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :perfect-numbers-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* perfect-numbers-suite)\n\n(test smallest-perfect-number-is-classified-correctly\n    (let ((number 6))\n      (is (string= \"perfect\" (perfect-numbers:classify number)))))\n\n(test medium-perfect-number-is-classified-correctly\n    (let ((number 28))\n      (is (string= \"perfect\" (perfect-numbers:classify number)))))\n\n(test large-perfect-number-is-classified-correctly\n    (let ((number 33550336))\n      (is (string= \"perfect\" (perfect-numbers:classify number)))))\n\n(test perfect-square-abundant-number-is-classified-correctly\n    (let ((number 196))\n      (is (string= \"abundant\" (perfect-numbers:classify number)))))\n\n(test smallest-abundant-number-is-classified-correctly\n    (let ((number 12))\n      (is (string= \"abundant\" (perfect-numbers:classify number)))))\n\n(test medium-abundant-number-is-classified-correctly\n    (let ((number 30))\n      (is (string= \"abundant\" (perfect-numbers:classify number)))))\n\n(test large-abundant-number-is-classified-correctly\n    (let ((number 33550335))\n      (is (string= \"abundant\" (perfect-numbers:classify number)))))\n\n(test smallest-prime-deficient-number-is-classified-correctly\n    (let ((number 2))\n      (is (string= \"deficient\" (perfect-numbers:classify number)))))\n\n(test smallest-non-prime-deficient-number-is-classified-correctly\n    (let ((number 4))\n      (is (string= \"deficient\" (perfect-numbers:classify number)))))\n\n(test medium-deficient-number-is-classified-correctly\n    (let ((number 32))\n      (is (string= \"deficient\" (perfect-numbers:classify number)))))\n\n(test large-deficient-number-is-classified-correctly\n    (let ((number 33550337))\n      (is (string= \"deficient\" (perfect-numbers:classify number)))))\n\n(test edge-case-no-factors-other-than-itself-is-classified-correctly\n    (let ((number 1))\n      (is (string= \"deficient\" (perfect-numbers:classify number)))))\n\n(test zero-is-rejected-as-it-is-not-a-positive-integer\n    (let ((number 0))\n      (is (equal NIL (perfect-numbers:classify number)))))\n\n(test negative-integer-is-rejected-as-it-is-not-a-positive-integer\n    (let ((number -1))\n      (is (equal NIL (perfect-numbers:classify number)))))\n\n(defun run-tests (&optional (test-or-suite 'perfect-numbers-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Taken from Chapter 2 of Functional Thinking by Neal Ford.",
+  "source_url": "https://www.oreilly.com/library/view/functional-thinking/9781449365509/",
+  "authors": [
+    "Average-user"
+  ],
+  "contributors": null
+}

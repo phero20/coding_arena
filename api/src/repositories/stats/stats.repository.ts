@@ -57,7 +57,12 @@ export class StatsRepository implements IStatsRepository {
           hardSolved: difficulty === 'hard' ? sql`${schema.userStats.hardSolved} + 1` : schema.userStats.hardSolved,
           arenaGames: isMatch ? sql`${schema.userStats.arenaGames} + 1` : schema.userStats.arenaGames,
         },
+<<<<<<< HEAD
       });
+=======
+      })
+      .returning();
+>>>>>>> prod-deploy
   }
 
   /**

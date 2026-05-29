@@ -128,4 +128,11 @@ export class ProblemCache implements IProblemService {
 
     return problem;
   }
+<<<<<<< HEAD
+=======
+
+  async getUserSolvedProblems(userId: string): Promise<string[]> {
+    return this.rawProblemService.getUserSolvedProblems(userId);
+  }
+>>>>>>> prod-deploy
 }

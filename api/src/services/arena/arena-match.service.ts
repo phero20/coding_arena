@@ -33,7 +33,11 @@ export interface IArenaMatchService {
     session?: ClientSession,
   ): Promise<void>;
   forceFinishMatch(roomId: string): Promise<void>;
+<<<<<<< HEAD
   getMatchHistory(userId: string, limit?: number): Promise<any[]>;
+=======
+  getMatchHistory(userId: string, limit?: number, offset?: number): Promise<{ matches: any[], total: number }>;
+>>>>>>> prod-deploy
   getMatchDetail(matchId: string): Promise<any | null>;
 }
 
@@ -331,8 +335,13 @@ export class ArenaMatchService implements IArenaMatchService {
     });
   }
 
+<<<<<<< HEAD
   async getMatchHistory(userId: string, limit?: number) {
     return await this.arenaMatchRepository.getHistoryByUserId(userId, limit);
+=======
+  async getMatchHistory(userId: string, limit?: number, offset?: number) {
+    return await this.arenaMatchRepository.getHistoryByUserId(userId, limit, offset);
+>>>>>>> prod-deploy
   }
 
   async getMatchDetail(matchId: string) {

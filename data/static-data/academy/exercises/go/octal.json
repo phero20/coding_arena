@@ -1,0 +1,41 @@
+{
+  "id": "go:octal",
+  "trackSlug": "go",
+  "slug": "octal",
+  "name": "Octal",
+  "uuid": "4840c889-ebe5-4082-98c0-b9ed8618f6eb",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert an octal number, represented as a string (e.g. '1735263'), to its\ndecimal equivalent using first principles (i.e. no, you may not use built-in or\nexternal libraries to accomplish the conversion).\n\nImplement octal to decimal conversion.\nGiven an octal input string, your program should produce a decimal output.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n- Treat invalid input as octal 0.\n\n## About Octal (Base-8)\n\nDecimal is a base-10 system.\n\nA number 233 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The _n_th number gets multiplied by 10^_(n-1)_.\n- All these values are summed.\n\nSo:\n\n```text\n   233 # decimal\n = 2*10^2 + 3*10^1 + 3*10^0\n = 2*100  + 3*10   + 3*1\n```\n\nOctal is similar, but uses powers of 8 rather than powers of 10.\n\nSo:\n\n```text\n   233 # octal\n = 2*8^2 + 3*8^1 + 3*8^0\n = 2*64  + 3*8   + 3*1\n = 128   + 24    + 3\n = 155\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package octal\n\nfunc ParseOctal(input string, expectedNum int64, expectErr bool) {\n\tpanic(\"Please implement the ParseOctal function\")\n}\n",
+  "example_solution": "package octal\n\nimport (\n\t\"fmt\"\n)\n\nfunc ParseOctal(octal string) (int64, error) {\n\tnum := int64(0)\n\tfor _, digit := range octal {\n\t\t// if any digits aren't octal digits (0-7), return 0\n\t\tif digit < '0' || digit > '7' {\n\t\t\treturn 0, fmt.Errorf(\"unexpected rune '%c'\", digit)\n\t\t}\n\t\t// multiply the current number by 8 (left shift) and add the digit\n\t\tnum = num<<3 + int64(digit-'0')\n\t}\n\treturn num, nil\n}\n",
+  "test_code": "package octal\n\nimport (\n\t\"testing\"\n)\n\nvar testCases = []struct {\n\tinput       string\n\texpectedNum int64\n\texpectErr   bool\n}{\n\t{\"1\", 1, false},\n\t{\"10\", 8, false},\n\t{\"1234567\", 342391, false},\n\t{\"carrot\", 0, true},\n\t{\"35682\", 0, true},\n}\n\nfunc TestParseOctal(t *testing.T) {\n\tfor _, test := range testCases {\n\t\tactualNum, actualErr := ParseOctal(test.input)\n\t\t// check actualNum only if no error expected\n\t\tif !test.expectErr && actualNum != test.expectedNum {\n\t\t\tt.Fatalf(\"ParseOctal(%q): expected[%d], actual [%d]\",\n\t\t\t\ttest.input, test.expectedNum, actualNum)\n\t\t}\n\t\t// if we expect an error and there isn't one\n\t\tif test.expectErr && actualErr == nil {\n\t\t\tt.Errorf(\"ParseOctal(%q): expected an error, but error is nil\", test.input)\n\t\t}\n\t\t// if we don't expect an error and there is one\n\t\tif !test.expectErr && actualErr != nil {\n\t\t\tvar _ error = actualErr\n\t\t\tt.Errorf(\"ParseOctal(%q): expected no error, but error is: %s\", test.input, actualErr)\n\t\t}\n\t}\n}\n\nfunc BenchmarkParseOctal(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range testCases {\n\t\t\tParseOctal(test.input)\n\t\t}\n\t}\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=base+8",
+  "authors": [
+    "mikegehard"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "dvrkps",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "johngb",
+    "kytrinyx",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "strangeman",
+    "tleen",
+    "tompao"
+  ]
+}

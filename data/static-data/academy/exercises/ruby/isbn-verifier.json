@@ -1,0 +1,40 @@
+{
+  "id": "ruby:isbn-verifier",
+  "trackSlug": "ruby",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "a0aac827-8f7a-4065-9d05-a57009f5668d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [
+    "strings",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'ISBN Verifier' exercise in this file. Make the tests in\n`isbn_verifier_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/isbn-verifier` directory.\n=end\n",
+  "example_solution": "class IsbnVerifier\n  def self.valid?(str)\n    return false unless /\\A\\d-?\\d{3}-?\\d{5}-?[\\dX]\\z/.match(str)\n\n    result = str\n      .gsub(\"-\", \"\")\n      .chars\n      .map { |char|\n        char.gsub(\"X\",\"10\")\n      }\n      .zip(10.downto(1))\n      .map { |number, index|\n        number.to_i * index\n      }\n      .reduce(0){ |sum, digit|\n        sum + digit\n      }\n\n    result % 11 == 0\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'isbn_verifier'\n\nclass IsbnVerifierTest < Minitest::Test\n  def test_valid_isbn\n    # skip\n    string = '3-598-21508-8'\n    assert IsbnVerifier.valid?(string), \"Expected true, '#{string}' is a valid isbn\"\n  end\n\n  def test_invalid_isbn_check_digit\n    skip\n    string = '3-598-21508-9'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_valid_isbn_with_a_check_digit_of_10\n    skip\n    string = '3-598-21507-X'\n    assert IsbnVerifier.valid?(string), \"Expected true, '#{string}' is a valid isbn\"\n  end\n\n  def test_check_digit_is_a_character_other_than_x\n    skip\n    string = '3-598-21507-A'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_invalid_check_digit_in_isbn_is_not_treated_as_zero\n    skip\n    string = '4-598-21507-B'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_invalid_character_in_isbn_is_not_treated_as_zero\n    skip\n    string = '3-598-P1581-X'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_x_is_only_valid_as_a_check_digit\n    skip\n    string = '3-598-2X507-9'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_valid_isbn_without_separating_dashes\n    skip\n    string = '3598215088'\n    assert IsbnVerifier.valid?(string), \"Expected true, '#{string}' is a valid isbn\"\n  end\n\n  def test_isbn_without_separating_dashes_and_x_as_check_digit\n    skip\n    string = '359821507X'\n    assert IsbnVerifier.valid?(string), \"Expected true, '#{string}' is a valid isbn\"\n  end\n\n  def test_isbn_without_check_digit_and_dashes\n    skip\n    string = '359821507'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_too_long_isbn_and_no_dashes\n    skip\n    string = '3598215078X'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_too_short_isbn\n    skip\n    string = '00'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_isbn_without_check_digit\n    skip\n    string = '3-598-21507'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_check_digit_of_x_should_not_be_used_for_0\n    skip\n    string = '3-598-21515-X'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_empty_isbn\n    skip\n    string = ''\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_input_is_9_characters\n    skip\n    string = '134456729'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_invalid_characters_are_not_ignored_after_checking_length\n    skip\n    string = '3132P34035'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_invalid_characters_are_not_ignored_before_checking_length\n    skip\n    string = '3598P215088'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\n\n  def test_input_is_too_long_but_contains_a_valid_isbn\n    skip\n    string = '98245726788'\n    refute IsbnVerifier.valid?(string), \"Expected false, '#{string}' is not a valid isbn\"\n  end\nend\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "bmkiefer"
+  ],
+  "contributors": [
+    "cadwallion",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "pgaspar",
+    "tryantwit",
+    "kytrinyx"
+  ]
+}

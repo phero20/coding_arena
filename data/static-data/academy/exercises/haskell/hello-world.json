@@ -1,0 +1,34 @@
+{
+  "id": "haskell:hello-world",
+  "trackSlug": "haskell",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "c97d9dda-c7ee-4595-b447-693559d03ba5",
+  "type": "practice",
+  "status": null,
+  "blurb": "The classical introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module HelloWorld (hello) where\n\nhello :: String\nhello = \"Goodbye, Mars!\"\n",
+  "example_solution": "module HelloWorld (hello) where\n\nhello :: String\nhello = \"Hello, World!\"",
+  "test_code": "import Test.Hspec        (Spec, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport HelloWorld (hello)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = it \"hello\" $\n          hello `shouldBe` \"Hello, World!\"\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "iHiD",
+    "kytrinyx",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sshine",
+    "tejasbubane"
+  ]
+}

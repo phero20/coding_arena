@@ -1,0 +1,32 @@
+{
+  "id": "fortran:leap",
+  "trackSlug": "fortran",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "609a16cb-6b46-4697-addb-b8e4793c56a2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "conditionals",
+    "equality"
+  ],
+  "prerequisites": [
+    "conditionals",
+    "equality"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "module leap\n  implicit none\n\ncontains\n\n  logical function is_leap_year(year)\n    integer :: year\n\n    is_leap_year = .true.\n  end function\n\nend module\n\n",
+  "example_solution": "module leap\n  implicit none\n\ncontains\n\n  pure logical function is_leap_year(year)\n    integer, intent(in) :: year\n\n    is_leap_year = is_div(year, 4) &\n        & .AND. .NOT. is_div(year, 100) &\n        & .OR. is_div(year, 400)\n  end function\n\n  pure logical function is_div(a, b)\n    integer, intent(in) :: a, b\n\n    is_div = 0 == modulo(a, b)\n  end function\n\nend module\n\n",
+  "test_code": "\n\nprogram leap_test_main\n   use TesterMain\n   use leap\n\n   implicit none\n\n   ! Test 1: year not divisible by 4 in common year\n   call assert_equal(.false., is_leap_year(2015),\"year not divisible by 4 in common year\")\n\n   ! Test 2: year divisible by 2, not divisible by 4 in common year\n   call assert_equal(.false., is_leap_year(1970), \"year divisible by 2, not divisible by 4 in common year\")\n\n   ! Test 3: year divisible by 4, not divisible by 100 in leap year\n   call assert_equal(.true., is_leap_year(1996), \"year divisible by 4, not divisible by 100 in leap year\")\n\n   ! Test 4: year divisible by 4 and 5 is still a leap year\n   call assert_equal(.true., is_leap_year(1960), \"year divisible by 4 and 5 is still a leap year\")\n\n   ! Test 5: year divisible by 100, not divisible by 400 in common year\n   call assert_equal(.false., is_leap_year(2100), \"year divisible by 100, not divisible by 400 in common year\")\n\n   ! Test 6: year divisible by 100 but not by 3 is still not a leap year\n   call assert_equal(.false., is_leap_year(1900), \"year divisible by 100 but not by 3 is still not a leap year\")\n\n   ! Test 7: year divisible by 400 is leap year\n   call assert_equal(.true., is_leap_year(2000), \"year divisible by 400 is leap year\")\n\n   ! Test 8: year divisible by 400 but not by 125 is still a leap year\n   call assert_equal(.true., is_leap_year(2400), \"year divisible by 400 but not by 125 is still a leap year\")\n\n   ! Test 9: year divisible by 200, not divisible by 400 in common year\n   call assert_equal(.false., is_leap_year(1800), \"year divisible by 200, not divisible by 400 in common year\")\n\n   call test_report()\n\nend program\n\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "hiljusti"
+  ],
+  "contributors": null
+}

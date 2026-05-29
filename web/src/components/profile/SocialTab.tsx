@@ -5,7 +5,11 @@ import {
   useFollowingQuery,
 } from "@/hooks/queries/use-follow.queries";
 import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
+<<<<<<< HEAD
 import { useUser } from "@clerk/nextjs";
+=======
+import { useUser, useClerk } from "@clerk/nextjs";
+>>>>>>> prod-deploy
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, User, Users, UserPlus, UserMinus, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -17,10 +21,17 @@ import { QueryGuard } from "@/components/shared/QueryGuard";
 import { SocialListSkeleton } from "@/components/shared/Skeletons";
 
 
+<<<<<<< HEAD
 interface SocialTabProps {
   username: string;
   initialType?: "followers" | "following";
   onBack?: () => void;
+=======
+import { useProfileStore } from "@/store/use-profile-store";
+
+interface SocialTabProps {
+  username: string;
+>>>>>>> prod-deploy
 }
 
 /**
@@ -37,6 +48,10 @@ const SocialUserCard = ({
   isFollowing: boolean;
   listType: 'followers' | 'following';
 }) => {
+<<<<<<< HEAD
+=======
+  const { openSignIn } = useClerk();
+>>>>>>> prod-deploy
   const isMe = currentUser?.username === targetUser.username;
   const { follow, unfollow } = useFollowMutation(targetUser.username, currentUser?.username ?? undefined);
   const isPending = follow.isPending || unfollow.isPending;
@@ -72,6 +87,13 @@ const SocialUserCard = ({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+<<<<<<< HEAD
+=======
+                  if (!currentUser) {
+                    openSignIn();
+                    return;
+                  }
+>>>>>>> prod-deploy
                   if (isFollowing) unfollow.mutate();
                   else follow.mutate();
                 }}
@@ -169,6 +191,7 @@ const UserList = ({
  */
 export const SocialTab: React.FC<SocialTabProps> = ({
   username,
+<<<<<<< HEAD
   initialType = "followers",
   onBack,
 }) => {
@@ -184,6 +207,29 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 <ArrowLeft size={18} />
               </Button>
             )}
+=======
+}) => {
+  const { isFollowing } = useSocialRegistry();
+  const { socialType, setSocialType, setActiveTab } = useProfileStore();
+
+  return (
+    <div className="space-y-8">
+      <Tabs 
+        value={socialType} 
+        onValueChange={(val) => setSocialType(val as "followers" | "following")}
+        className="w-full"
+      >
+        <div className="flex flex-col md:items-start justify-between gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <Button 
+              size="icon" 
+              variant="outline"
+              className="h-10 w-10 border border-border transition-all"
+              onClick={() => setActiveTab('stats')}
+            >
+              <ArrowLeft size={18} />
+            </Button>
+>>>>>>> prod-deploy
           </div>
 
           <TabsList className="p-1 h-10 w-full md:w-auto">

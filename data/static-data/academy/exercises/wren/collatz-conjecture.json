@@ -1,0 +1,26 @@
+{
+  "id": "wren:collatz-conjecture",
+  "trackSlug": "wren",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "36184a81-d8e7-4057-9a6f-7419026e4f49",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "class Collatz {\n  static steps(n) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "class Collatz {\n  static isEven(n) { n % 2 == 0 }\n  static steps(n) {\n    if (n <= 0) Fiber.abort(\"Only positive integers are allowed\")\n    var steps = 0\n\n    // If n is even, divide n by 2 to get n / 2. If n is\n    // odd, multiply n by 3 and add 1 to get 3n + 1.\n    while(n != 1) {\n      n = isEven(n) ? n / 2 : n*3 + 1\n      steps = steps + 1\n    }\n    return steps\n  }\n}\n",
+  "test_code": "import \"./collatz-conjecture\" for Collatz\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"Collatz.steps()\") { |do, skip|\n  do.test(\"zero steps for one\") {\n    Expect.value(Collatz.steps(1)).toEqual(0)\n  }\n\n  skip.test(\"divide if even\") {\n    Expect.value(Collatz.steps(16)).toEqual(4)\n  }\n\n  skip.test(\"even and odd steps\") {\n    Expect.value(Collatz.steps(12)).toEqual(9)\n  }\n\n  skip.test(\"large number of even and odd steps\") {\n    Expect.value(Collatz.steps(1000000)).toEqual(152)\n  }\n\n  skip.test(\"zero is an error\") {\n    Expect.that {\n      Collatz.steps(0)\n    }.abortsWith(\"Only positive integers are allowed\")\n  }\n\n  skip.test(\"negative value is an error\") {\n    Expect.that {\n      Collatz.steps(-15)\n    }.abortsWith(\"Only positive integers are allowed\")\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

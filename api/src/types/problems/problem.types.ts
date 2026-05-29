@@ -1,7 +1,11 @@
 export interface Example {
   example_num: number;
   example_text: string;
+<<<<<<< HEAD
   images: string[];
+=======
+  images?: string[];
+>>>>>>> prod-deploy
 }
 
 export interface CodeSnippets {
@@ -15,6 +19,51 @@ export interface CodeSnippets {
   [language: string]: string | undefined;
 }
 
+<<<<<<< HEAD
+=======
+export interface FunctionParameter {
+  name: string;
+  type: string;
+}
+
+export interface FunctionSignature {
+  name: string;
+  return_type: string;
+  params: FunctionParameter[];
+  /** Set after canonical import; optional on raw dataset rows. */
+  param_order?: string[];
+  inplace_param_index?: number;
+  /** Wire format for testcase values after canonical coercion. */
+  testcase_serialization_version?: string;
+}
+
+export interface MethodSignature {
+  name: string;
+  return_type: string;
+  params: FunctionParameter[];
+}
+
+export interface ClassSignature {
+  class_name: string;
+  constructor_params: FunctionParameter[];
+  methods: MethodSignature[];
+}
+
+export interface JudgingPolicy {
+  comparator_mode?: 'strict' | 'problem_specific';
+  multi_answer?: boolean;
+  validation_policy?: string;
+  output_order?: 'strict' | 'any_order';
+  audit_hints?: string[];
+}
+
+/** Signature returned by enrichSignatureForDriver (always has driver metadata). */
+export type DriverReadyFunctionSignature = FunctionSignature & {
+  param_order: string[];
+  testcase_serialization_version: string;
+};
+
+>>>>>>> prod-deploy
 export interface Problem {
   title: string;
   problem_id: string; // Keeping snake_case as requested
@@ -28,6 +77,13 @@ export interface Problem {
   follow_ups: string[];
   hints: string[];
   code_snippets: CodeSnippets;
+<<<<<<< HEAD
+=======
+  problem_type: 'function' | 'class' | 'interactive';
+  function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
+>>>>>>> prod-deploy
   solutions?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -46,18 +102,36 @@ export interface CreateOrUpdateProblemInput {
   follow_ups?: string[];
   hints?: string[];
   code_snippets?: CodeSnippets;
+<<<<<<< HEAD
+=======
+  problem_type?: 'function' | 'class' | 'interactive';
+  function_signature?: FunctionSignature;
+  class_signature?: ClassSignature;
+  judging_policy?: JudgingPolicy;
+>>>>>>> prod-deploy
   solutions?: string;
 }
 
 export type ProblemTestType = 'public' | 'hidden' | 'stress' | 'ai_eval';
 
 export interface TestCase {
+<<<<<<< HEAD
   input: string;
   expected_output: string;
+=======
+  input: any; // Now supports structured JSON objects
+  expected_output: any; // Now supports structured JSON arrays/objects
+>>>>>>> prod-deploy
   timeout_ms?: number;
   memory_limit_mb?: number;
   weight?: number;
   is_sample?: boolean;
+<<<<<<< HEAD
+=======
+  determinism_check?: 'unique' | 'multi_valid';
+  comparator_mode?: 'strict' | 'problem_specific';
+  comparator_notes?: string;
+>>>>>>> prod-deploy
 }
 
 export interface ProblemTest {

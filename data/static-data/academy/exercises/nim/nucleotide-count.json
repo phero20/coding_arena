@@ -1,0 +1,28 @@
+{
+  "id": "nim:nucleotide-count",
+  "trackSlug": "nim",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "afb513c4-fcfb-4211-bcbc-7807063d301c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import std/tables\n\nproc countDna*(s: string): CountTable[char] =\n  discard\n",
+  "example_solution": "import std/tables\n\nfunc countDna*(s: string): CountTable[char] =\n  result = initCountTable[char](4)\n  for c in s:\n    if c in {'A', 'C', 'G', 'T'}:\n      result.inc c\n    else:\n      raise newException(ValueError, \"Not a valid nucleotide: \" & c)\n",
+  "test_code": "import unittest, tables\nimport nucleotide_count\n\nsuite \"Nucleotide Count\":\n  test \"empty strand\":\n    let counts = countDna(\"\")\n    check counts.getOrDefault('A') == 0\n    check counts.getOrDefault('C') == 0\n    check counts.getOrDefault('G') == 0\n    check counts.getOrDefault('T') == 0\n\n  test \"can count one nucleotide in single-character input\":\n    let counts = countDna(\"G\")\n    check counts.getOrDefault('A') == 0\n    check counts.getOrDefault('C') == 0\n    check counts.getOrDefault('G') == 1\n    check counts.getOrDefault('T') == 0\n\n  test \"strand with repeated nucleotide\":\n    let counts = countDna(\"GGGGGGG\")\n    check counts.getOrDefault('A') == 0\n    check counts.getOrDefault('C') == 0\n    check counts.getOrDefault('G') == 7\n    check counts.getOrDefault('T') == 0\n\n  test \"strand with multiple nucleotides\":\n    let counts = countDna(\"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCT\" &\n                          \"CTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\")\n    check counts['A'] == 20\n    check counts['C'] == 12\n    check counts['G'] == 17\n    check counts['T'] == 21\n\n  test \"strand with invalid nucleotides\":\n    expect ValueError:\n      discard countDna(\"AGXXACT\")\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "clementi"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

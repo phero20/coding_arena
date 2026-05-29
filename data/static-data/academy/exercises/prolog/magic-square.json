@@ -1,0 +1,26 @@
+{
+  "id": "prolog:magic-square",
+  "trackSlug": "prolog",
+  "slug": "magic-square",
+  "name": "Magic Square",
+  "uuid": "0dabf6ec-98fb-442c-9e1f-684108a67f26",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a square is a magic square",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to, given a square of positive integers, determine if the square is a magic square.\nA magic square is one where the sum of the numbers in each row, column and both diagonals are the same.\n\nAs an example, consider the following square:\n\n```text\n4 9 2\n3 5 7\n8 1 6\n```\n\nThis is a magic square, as the sum of every row, column and both diagonals is equal to 15.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "magic_square(Rows).\n",
+  "example_solution": ":- use_module(library(clpfd)).\n\ndiagonals(Rows, LeftRightDiagonal, RightLeftDiagonal) :-\n    length(Rows, N),\n    numlist(1, N, Indices),\n    reverse(Indices, ReverseIndices),\n    pairs_keys_values(LeftRightIndices, Indices, Indices),    \n    pairs_keys_values(RightLeftIndices, ReverseIndices, Indices),\n    maplist(diagonal_element(Rows), LeftRightIndices, LeftRightDiagonal),\n    maplist(diagonal_element(Rows), RightLeftIndices, RightLeftDiagonal).\n\ndiagonal_element(Rows, X-Y, Value) :- nth1(Y, Rows, Row), nth1(X, Row, Value).\n\nmagic_square(Rows) :-\n    maplist(sumlist, Rows, RowSums),\n    transpose(Rows, Cols),\n    maplist(sumlist, Cols, ColSums),\n    diagonals(Rows, LeftRightDiagonal, RightLeftDiagonal),\n    sumlist(LeftRightDiagonal, LeftRightDiagonalSum),\n    sumlist(RightLeftDiagonal, RightLeftDiagonalSum),\n    append([RowSums, ColSums, [LeftRightDiagonalSum, RightLeftDiagonalSum]], Sums),\n    sort(Sums, SortedSums),\n    length(SortedSums, 1).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(magic_square).\n\n    test(magic_square_order_3, condition(true)) :-\n        Square = \n            [\n                [2, 7, 6],\n                [9, 5, 1],\n                [4, 3, 8]\n            ],\n        magic_square(Square).\n\n    test(magic_square_order_4, condition(pending)) :-\n        Square = \n            [\n                [ 2, 16, 13,  3],\n                [11,  5,  8, 10],\n                [ 7,  9, 12,  6],\n                [14,  4,  1, 15]\n            ],\n        magic_square(Square).\n\n    test(magic_square_order_9, condition(pending)) :-\n        Square = \n            [\n                [31, 76, 13, 36, 81, 18, 29, 74, 11],\n                [22, 40, 58, 27, 45, 63, 20, 38, 56],\n                [67,  4, 49, 72,  9, 54, 65,  2, 47],\n                [30, 75, 12, 32, 77, 14, 34, 79, 16],\n                [21, 39, 57, 23, 41, 59, 25, 43, 61],\n                [66,  3, 48, 68,  5, 50, 70,  7, 52],\n                [35, 80, 17, 28, 73, 10, 33, 78, 15],\n                [26, 44, 62, 19, 37, 55, 24, 42, 60],\n                [71,  8, 53, 64,  1, 46, 69,  6, 51]\n            ],\n        magic_square(Square).\n\n    test(invalid_magic_square, [fail, condition(pending)]) :-\n        Square = \n            [\n                [1, 2, 3],\n                [4, 5, 6],\n                [7, 8, 9]\n            ],\n        magic_square(Square).\n\n:- end_tests(magic_square).\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

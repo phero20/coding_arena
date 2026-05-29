@@ -1,0 +1,26 @@
+{
+  "id": "go:deep-thought",
+  "trackSlug": "go",
+  "slug": "deep-thought",
+  "name": "Deep Thought",
+  "uuid": "097176e2-5024-44e7-ab86-9bc0ec245347",
+  "type": "concept",
+  "status": "deprecated",
+  "blurb": "Learn about errors by finding the absolute answer to life, the universe, and everything.",
+  "difficulty": null,
+  "concepts": [],
+  "practices": null,
+  "prerequisites": [],
+  "instructions": "# Instructions\n",
+  "introduction": "# Introduction\n",
+  "hints": "# Hints\n",
+  "starter_code": "package deepthought\n\n// TODO: add solution stub\n",
+  "example_solution": "package deepthought\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n)\n\nconst answer = 42\n\n// ErrCalculation is a general error that can be exported.\nvar ErrCalculation = errors.New(\"calculation error\")\n\n// ComputerState determines if the deepthought computer is ready for its computation.\nfunc ComputerState(isReady bool) error {\n\tif !isReady {\n\t\treturn errors.New(\"computer still booting\")\n\t}\n\treturn nil\n}\n\n// AnswerToLife checks if the given number is the answer to life.\nfunc AnswerToLife(number int) (bool, error) {\n\tif number != answer {\n\t\treturn false, fmt.Errorf(\"%s: wrong answer to life: %d\", ErrCalculation.Error(), number)\n\t}\n\treturn true, nil\n}\n\n// AskComputer checks if number is the answer to life, depending on the state of the computer.\nfunc AskComputer(isReady bool, number int) (bool, error) {\n\terr := ComputerState(isReady)\n\tif err != nil {\n\t\treturn false, fmt.Errorf(\"proposal %d could not be processed: %s\", number, err)\n\t}\n\tstatus, err := AnswerToLife(number)\n\treturn status, err\n}\n",
+  "test_code": "package deepthought\n\n// TODO: add tests\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "micuffaro"
+  ],
+  "contributors": null
+}

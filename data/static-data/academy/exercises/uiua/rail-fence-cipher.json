@@ -1,0 +1,26 @@
+{
+  "id": "uiua:rail-fence-cipher",
+  "trackSlug": "uiua",
+  "slug": "rail-fence-cipher",
+  "name": "Rail Fence Cipher",
+  "uuid": "8212c584-baab-4ee4-a63b-c62530699f11",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement encoding and decoding for the rail fence cipher.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement encoding and decoding for the rail fence cipher.\n\nThe Rail Fence cipher is a form of transposition cipher that gets its name from the way in which it's encoded.\nIt was already used by the ancient Greeks.\n\nIn the Rail Fence cipher, the message is written downwards on successive \"rails\" of an imaginary fence, then moving up when we get to the bottom (like a zig-zag).\nFinally the message is then read off in rows.\n\nFor example, using three \"rails\" and the message \"WE ARE DISCOVERED FLEE AT ONCE\", the cipherer writes out:\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nThen reads off:\n\n```text\nWECRLTEERDSOEEFEAOCAIVDEN\n```\n\nTo decrypt a message you take the zig-zag shape and fill the ciphertext along the rows.\n\n```text\n? . . . ? . . . ? . . . ? . . . ? . . . ? . . . ?\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nThe first row has seven spots that can be filled with \"WECRLTE\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? . ? .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nNow the 2nd row takes \"ERDSOEEFEAOC\".\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . ? . . . ? . . . ? . . . ? . . . ? . . . ? . .\n```\n\nLeaving \"AIVDEN\" for the last row.\n\n```text\nW . . . E . . . C . . . R . . . L . . . T . . . E\n. E . R . D . S . O . E . E . F . E . A . O . C .\n. . A . . . I . . . V . . . D . . . E . . . N . .\n```\n\nIf you now read along the zig-zag shape you can read the original message.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Encode a message using the rail fence cipher\n# Ciphertext ? Plaintext Rails\nEncode ← |2 ⊙⋅(⍤ \"Please implement Encode\" 0)\n\n# Decode a message using the rail fence cipher\n# Plaintext ? Ciphertext Rails\nDecode ← |2 ⊙⋅(⍤ \"Please implement Decode\" 0)\n",
+  "example_solution": "ZigZag ← ⍏⊃(↯¤⊓(⧻|⊂⊃(⇡|⇌↘1⇡-1))|∘) ▽⊸≠@ \nEncode ← ⊏ ZigZag\nDecode ← ⌝⊏ ZigZag\n",
+  "test_code": "~ \"rail-fence-cipher.ua\" ~ Decode Encode\n\n# encode with two rails\n⍤⤙≍ \"XXXXXXXXXOOOOOOOOO\" Encode \"XOXOXOXOXOXOXOXOXO\" 2\n\n# encode with three rails\n⍤⤙≍ \"WECRLTEERDSOEEFEAOCAIVDEN\" Encode \"WEAREDISCOVEREDFLEEATONCE\" 3\n\n# encode with ending in the middle\n⍤⤙≍ \"ESXIEECSR\" Encode \"EXERCISES\" 4\n\n# decode with three rails\n⍤⤙≍ \"THEDEVILISINTHEDETAILS\" Decode \"TEITELHDVLSNHDTISEIIEA\" 3\n\n# decode with five rails\n⍤⤙≍ \"EXERCISMISAWESOME\" Decode \"EIEXMSMESAORIWSCE\" 5\n\n# decode with six rails\n⍤⤙≍ \"112358132134558914423337761098715972584418167651094617711286\" Decode \"133714114238148966225439541018335470986172518171757571896261\" 6\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Transposition_cipher#Rail_Fence_cipher",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

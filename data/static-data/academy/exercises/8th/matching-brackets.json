@@ -1,0 +1,26 @@
+{
+  "id": "8th:matching-brackets",
+  "trackSlug": "8th",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "01c66794-36f0-4134-a9a9-4d09011beb5a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": ": paired? \\ s -- T\n\n;\n",
+  "example_solution": ": paired? \\ s -- T\n  a:new >r \n  (\n    dup '[ n:= if r> '] a:push >r drop ;then\n    dup '( n:= if r> ') a:push >r drop ;then\n    dup '{ n:= if r> '} a:push >r drop ;then\n    dup '] n:= if r> a:len 0 n:= if a:push >r break ;then a:pop swap >r n:= !if r> '] a:push >r break ;then ;then\n    dup ') n:= if r> a:len 0 n:= if a:push >r break ;then a:pop swap >r n:= !if r> ') a:push >r break ;then ;then\n    dup '} n:= if r> a:len 0 n:= if a:push >r break ;then a:pop swap >r n:= !if r> '} a:push >r break ;then ;then\n    drop\n  )\n  s:each!\n  r> a:len 0 n:= nip\n;\n",
+  "test_code": "\"matching-brackets.8th\" f:include\nneeds exercism/test\nwith: test\n20 tests\n\n\"paired square brackets\"\n    ( \"[]\" paired? )\n    true?\n\nSKIP-REST-OF-TESTS\n\n\"empty string\"\n    ( \"\" paired? )\n    true?\n\n\"unpaired brackets\"\n    ( \"[[\" paired? )\n    false?\n\n\"wrong ordered brackets\"\n    ( \"}{\" paired? )\n    false?\n\n\"wrong closing bracket\"\n    ( \"{]\" paired? )\n    false?\n\n\"paired with whitespace\"\n    ( \"{ }\" paired? )\n    true?\n\n\"partially paired brackets\"\n    ( \"{[])\" paired? )\n    false?\n\n\"simple nested brackets\"\n    ( \"{[]}\" paired? )\n    true?\n\n\"several paired brackets\"\n    ( \"{}[]\" paired? )\n    true?\n\n\"paired and nested brackets\"\n    ( \"([{}({}[])])\" paired? )\n    true?\n\n\"unopened closing brackets\"\n    ( \"{[)][]}\" paired? )\n    false?\n\n\"unpaired and nested brackets\"\n    ( \"([{])\" paired? )\n    false?\n\n\"paired and wrong nested brackets\"\n    ( \"[({]})\" paired? )\n    false?\n\n\"paired and wrong nested brackets but innermost are correct\"\n    ( \"[({}])\" paired? )\n    false?\n\n\"paired and incomplete brackets\"\n    ( \"{}[\" paired? )\n    false?\n\n\"too many closing brackets\"\n    ( \"[]]\" paired? )\n    false?\n\n\"early unexpected brackets\"\n    ( \")()\" paired? )\n    false?\n\n\"early mismatched brackets\"\n    ( \"{)()\" paired? )\n    false?\n\n\"math expression\"\n    ( \"(((185 + 223.85) * 15) - 543)/2\" paired? )\n    true?\n\n\"complex latex expression\"\n    ( \"\\left(\\begin{array}{cc} \\frac{1}{3} & x\\\\ \\mathrm{e}^{x} &... x^2 \\end{array}\\right)\" paired? )\n    true?\n\nend-of-tests\n;with\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

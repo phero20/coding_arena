@@ -1,0 +1,26 @@
+{
+  "id": "futhark:change",
+  "trackSlug": "futhark",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "3aa8ad23-2691-478f-9a50-4c14ad6b753e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "def find_fewest_coins (coins: []i32) (target: i32): []i32 = ???\n",
+  "example_solution": "def find_fewest_coins (coins: []i32) (target: i32): []i32 =\n  let capacity = assert (target >= 0) (target + 1)\n  let (table_coins, table_counts) = loop (table_coins, table_counts) = (replicate (i64.i32 capacity) 0, replicate (i64.i32 capacity) 0) for i in 1..<capacity do\n    let (best_coin, best_count) = loop (best_coin, best_count) = (0, capacity) for coin in coins do\n      if coin > i || table_counts[i - coin] + 1 >= best_count then (best_coin, best_count) else\n      (coin, table_counts[i - coin] + 1)\n    in\n      (table_coins with [i] = best_coin, table_counts with [i] = best_count)\n  in\n    let (result, _, _) = loop (result, remaining, j) = assert (table_counts[target] < capacity) (replicate (i64.i32 table_counts[target]) 0, target, 0) while remaining > 0 do\n      (result with [j] = table_coins[remaining], remaining - table_coins[remaining], j + 1)\n    in\n      result \n",
+  "test_code": "import \"change\"\n\n-- change for 1 cent\n-- ==\n-- input { [1, 5, 10, 25] 1 }\n-- output { [1] }\n\n-- single coin change\n-- ==\n-- input { [1, 5, 10, 25, 100] 25 }\n-- output { [25] }\n\n-- multiple coin change\n-- ==\n-- input { [1, 5, 10, 25, 100] 15 }\n-- output { [5, 10] }\n\n-- change with Lilliputian Coins\n-- ==\n-- input { [1, 4, 15, 20, 50] 23 }\n-- output { [4, 4, 15] }\n\n-- change with Lower Elbonia Coins\n-- ==\n-- input { [1, 5, 10, 21, 25] 63 }\n-- output { [21, 21, 21] }\n\n-- large target values\n-- ==\n-- input { [1, 2, 5, 10, 20, 50, 100] 999 }\n-- output { [2, 2, 5, 20, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100] }\n\n-- possible change without unit coins available\n-- ==\n-- input { [2, 5, 10, 20, 50] 21 }\n-- output { [2, 2, 2, 5, 10] }\n\n-- another possible change without unit coins available\n-- ==\n-- input { [4, 5] 27 }\n-- output { [4, 4, 4, 5, 5, 5] }\n\n-- a greedy approach is not optimal\n-- ==\n-- input { [1, 10, 11] 20 }\n-- output { [10, 10] }\n\n-- no coins make 0 change\n-- ==\n-- input { [1, 5, 10, 21, 25] 0 }\n-- output { empty([0]i32) }\n\n-- error testing for change smaller than the smallest of coins\n-- ==\n-- input { [5, 10] 3 }\n-- error: Error*\n\n-- error if no combination can add up to target\n-- ==\n-- input { [5, 10] 94 }\n-- error: Error*\n\n-- cannot find negative change values\n-- ==\n-- input { [1, 2, 5] -5 }\n-- error: Error*\n\ndef main (coins: []i32) (target: i32): []i32 =\n  find_fewest_coins coins target\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

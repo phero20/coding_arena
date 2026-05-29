@@ -6,16 +6,43 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+<<<<<<< HEAD
 import { 
   User, Users, BarChart3, Settings, 
   Code, Github, Linkedin, UserPlus, 
   UserMinus, Loader2, Edit, Code2, Trophy
+=======
+import {
+  User,
+  Users,
+  BarChart3,
+  Settings,
+  Code,
+  Github,
+  Linkedin,
+  UserPlus,
+  UserMinus,
+  Loader2,
+  Edit,
+  Code2,
+  Trophy,
+  BookOpen,
+  CheckCircle2,
+>>>>>>> prod-deploy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type UserStats } from "@/types/stats";
 import { useSocialRegistry } from "@/hooks/queries/use-social-registry";
 import { useFollowMutation } from "@/hooks/queries/use-follow.mutations";
+<<<<<<< HEAD
 import { useUser } from "@clerk/nextjs";
+=======
+import { useRouter } from "next/navigation";
+
+import { useProfileStore } from "@/store/use-profile-store";
+import { useUser, useClerk } from "@clerk/nextjs";
+import Link from "next/link";
+>>>>>>> prod-deploy
 
 interface ProfileSidebarProps {
   username: string;
@@ -28,8 +55,11 @@ interface ProfileSidebarProps {
   followingCount: number;
   isOwner: boolean;
   stats?: UserStats;
+<<<<<<< HEAD
   onTabChange: (tab: string) => void;
   onSocialClick: (type: "followers" | "following") => void;
+=======
+>>>>>>> prod-deploy
 }
 
 export function ProfileSidebar({
@@ -43,6 +73,7 @@ export function ProfileSidebar({
   followingCount,
   isOwner,
   stats,
+<<<<<<< HEAD
   onTabChange,
   onSocialClick,
 }: ProfileSidebarProps) {
@@ -50,6 +81,16 @@ export function ProfileSidebar({
   const isFollowing = checkIsFollowing(username);
   
   const { user } = useUser();
+=======
+}: ProfileSidebarProps) {
+  const router = useRouter();
+  const { setActiveTab, setSocialType } = useProfileStore();
+  const { isFollowing: checkIsFollowing } = useSocialRegistry();
+  const isFollowing = checkIsFollowing(username);
+
+  const { user } = useUser();
+  const { openSignIn } = useClerk();
+>>>>>>> prod-deploy
   const { follow, unfollow } = useFollowMutation(
     username,
     user?.username ?? undefined,
@@ -60,6 +101,11 @@ export function ProfileSidebar({
   const navItems = [
     { value: "stats", label: "Statistics", icon: BarChart3 },
     { value: "arena", label: "Arena Records", icon: Trophy },
+<<<<<<< HEAD
+=======
+    { value: "submissions", label: "Submissions", icon: Code2 },
+    { value: "solutions", label: "Solutions", icon: CheckCircle2 },
+>>>>>>> prod-deploy
     {
       value: "social",
       label: `Social`,
@@ -91,19 +137,34 @@ export function ProfileSidebar({
               <p className="text-xs font-bold text-muted-foreground tracking-wider lowercase truncate">
                 {username}
               </p>
+<<<<<<< HEAD
               <div className="mt-4">
                 <p className="text-[10px] font-black uppercase text-muted-foreground/60 tracking-widest leading-none">
                   Rank
                 </p>
                 <p className="text-sm font-black mt-1">3,14,914</p>
               </div>
+=======
+              <Link href="/leaderboard" className="mt-4">
+                <p className="text-[10px] font-black uppercase text-muted-foreground/60 tracking-widest leading-none">
+                  Global Rank
+                </p>
+                <p className="text-sm font-black mt-1 text-primary hover:underline">
+                  {stats?.rank ? `${stats.rank.toLocaleString()}` : "--:--"}
+                </p>
+              </Link>
+>>>>>>> prod-deploy
             </div>
           </div>
 
           <div className="flex justify-start gap-2 items-center h-auto pt-2">
             <Button
               variant="link"
+<<<<<<< HEAD
               onClick={() => onSocialClick("following")}
+=======
+              onClick={() => setSocialType("following")}
+>>>>>>> prod-deploy
               size="sm"
               className="h-full items-end hover:bg-transparent"
             >
@@ -117,7 +178,11 @@ export function ProfileSidebar({
             <div className="w-px h-4 bg-border"></div>
             <Button
               variant="link"
+<<<<<<< HEAD
               onClick={() => onSocialClick("followers")}
+=======
+              onClick={() => setSocialType("followers")}
+>>>>>>> prod-deploy
               size="sm"
               className="h-full items-end hover:bg-transparent"
             >
@@ -134,7 +199,11 @@ export function ProfileSidebar({
             <Button
               size="lg"
               className="w-full font-semibold"
+<<<<<<< HEAD
               onClick={() => onTabChange("settings")}
+=======
+              onClick={() => router.push("/settings?tab=profile")}
+>>>>>>> prod-deploy
             >
               <Edit size={16} className="mr-2" />
               Edit Profile
@@ -145,9 +214,19 @@ export function ProfileSidebar({
               variant={isFollowing ? "destructive" : "default"}
               className={cn("w-full")}
               disabled={isPending}
+<<<<<<< HEAD
               onClick={() =>
                 isFollowing ? unfollow.mutate() : follow.mutate()
               }
+=======
+              onClick={() => {
+                if (!user) {
+                  openSignIn();
+                  return;
+                }
+                isFollowing ? unfollow.mutate() : follow.mutate();
+              }}
+>>>>>>> prod-deploy
             >
               {isPending ? (
                 <Loader2 className="animate-spin" size={16} />
@@ -218,12 +297,19 @@ export function ProfileSidebar({
               return (
                 <Button
                   size="lg"
+<<<<<<< HEAD
                   onClick={() => onTabChange("settings")}
                   className="w-full font-semibold"
                 >
                   <Settings
                     size={14}
                   />
+=======
+                  onClick={() => router.push("/settings?tab=profile")}
+                  className="w-full font-semibold"
+                >
+                  <Settings size={14} />
+>>>>>>> prod-deploy
                   Add social links
                 </Button>
               );
@@ -248,7 +334,11 @@ export function ProfileSidebar({
 
           if (entries.length === 0) {
             return (
+<<<<<<< HEAD
               <p className="text-[10px] text-muted-foreground px-1 italic">
+=======
+              <p className="text-[10px] text-muted-foreground px-1">
+>>>>>>> prod-deploy
                 No solve data recorded yet.
               </p>
             );
@@ -257,7 +347,11 @@ export function ProfileSidebar({
           const visibleEntries = isExpanded ? entries : entries.slice(0, 5);
 
           return (
+<<<<<<< HEAD
             <div className="space-y-3 px-1">
+=======
+            <div className="space-y-3 px-1 border-b border-border py-2">
+>>>>>>> prod-deploy
               <div className="space-y-3">
                 {visibleEntries.map(([lang, count]) => (
                   <div
@@ -280,12 +374,23 @@ export function ProfileSidebar({
               </div>
 
               {entries.length > 5 && (
+<<<<<<< HEAD
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="w-full text-center text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors pt-1"
                 >
                   {isExpanded ? "Show less" : "Show more"}
                 </button>
+=======
+                <Button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  variant="link"
+                  size="sm"
+                  className="w-full text-center text-xs font-medium text-muted-foreground hover:text-primary pt-1"
+                >
+                  {isExpanded ? "Show less" : "Show more"}
+                </Button>
+>>>>>>> prod-deploy
               )}
             </div>
           );

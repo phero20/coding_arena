@@ -1,0 +1,40 @@
+{
+  "id": "fsharp:triangle",
+  "trackSlug": "fsharp",
+  "slug": "triangle",
+  "name": "Triangle",
+  "uuid": "47fd8f98-20d3-43fe-825f-27745e13908d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a triangle is equilateral, isosceles, or scalene.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "floating-point-numbers"
+  ],
+  "prerequisites": [
+    "booleans",
+    "floating-point-numbers",
+    "if-then-else-expressions"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a triangle is equilateral, isosceles, or scalene.\n\nAn _equilateral_ triangle has all three sides the same length.\n\nAn _isosceles_ triangle has at least two sides the same length.\n(It is sometimes specified as having exactly two sides the same length, but for the purposes of this exercise we'll say at least two.)\n\nA _scalene_ triangle has all sides of different lengths.\n\n## Note\n\nFor a shape to be a triangle at all, all sides have to be of length > 0, and the sum of the lengths of any two sides must be greater than or equal to the length of the third side.\n\n~~~~exercism/note\n_Degenerate triangles_ are triangles where the sum of the length of two sides is **equal** to the length of the third side, e.g. `1, 1, 2`.\nWe opted to not include tests for degenerate triangles in this exercise.\nYou may handle those situations if you wish to do so, or safely ignore them.\n~~~~\n\nIn equations:\n\nLet `a`, `b`, and `c` be sides of the triangle.\nThen all three of the following expressions must be true:\n\n```text\na + b ≥ c\nb + c ≥ a\na + c ≥ b\n```\n\nSee [Triangle Inequality][triangle-inequality]\n\n[triangle-inequality]: https://en.wikipedia.org/wiki/Triangle_inequality\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Triangle\n\nlet equilateral triangle = failwith \"You need to implement this function.\"\n\nlet isosceles triangle = failwith \"You need to implement this function.\"\n\nlet scalene triangle = failwith \"You need to implement this function.\"",
+  "example_solution": "module Triangle\n\nlet private isValid triangle = \n    let nonZero = List.sum triangle <> 0.0\n    let equality =\n        match triangle with\n        | [ x; y; z ] -> x + y >= z && x + z >= y && y + z >= x\n        | _ -> false\n    \n    equality && nonZero\n\nlet private distinctSides triangle = triangle |> List.distinct |> List.length\n\nlet equilateral triangle = isValid triangle && distinctSides triangle = 1\n\nlet isosceles triangle = isValid triangle && distinctSides triangle <= 2\n\nlet scalene triangle = isValid triangle && distinctSides triangle = 3",
+  "test_code": "module TriangleTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Triangle\n\n[<Fact>]\nlet ``Equilateral returns all sides are equal`` () =\n    equilateral [2.0; 2.0; 2.0] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Equilateral returns any side is unequal`` () =\n    equilateral [2.0; 3.0; 2.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Equilateral returns no sides are equal`` () =\n    equilateral [5.0; 4.0; 6.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Equilateral returns all zero sides is not a triangle`` () =\n    equilateral [0.0; 0.0; 0.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Equilateral returns sides may be floats`` () =\n    equilateral [0.5; 0.5; 0.5] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns last two sides are equal`` () =\n    isosceles [3.0; 4.0; 4.0] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns first two sides are equal`` () =\n    isosceles [4.0; 4.0; 3.0] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns first and last sides are equal`` () =\n    isosceles [4.0; 3.0; 4.0] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Equilateral triangles are also isosceles`` () =\n    isosceles [4.0; 4.0; 4.0] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns no sides are equal`` () =\n    isosceles [2.0; 3.0; 4.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns first triangle inequality violation`` () =\n    isosceles [1.0; 1.0; 3.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns second triangle inequality violation`` () =\n    isosceles [1.0; 3.0; 1.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns third triangle inequality violation`` () =\n    isosceles [3.0; 1.0; 1.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isosceles returns sides may be floats`` () =\n    isosceles [0.5; 0.4; 0.5] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns no sides are equal`` () =\n    scalene [5.0; 4.0; 6.0] |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns all sides are equal`` () =\n    scalene [4.0; 4.0; 4.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns first and second sides are equal`` () =\n    scalene [4.0; 4.0; 3.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns first and third sides are equal`` () =\n    scalene [3.0; 4.0; 3.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns second and third sides are equal`` () =\n    scalene [4.0; 3.0; 3.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns may not violate triangle inequality`` () =\n    scalene [7.0; 3.0; 2.0] |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Scalene returns sides may be floats`` () =\n    scalene [0.5; 0.4; 0.6] |> should equal true\n\n",
+  "source": "The Ruby Koans triangle project, parts 1 & 2",
+  "source_url": "https://www.rubykoans.com/",
+  "authors": [
+    "jwood803"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

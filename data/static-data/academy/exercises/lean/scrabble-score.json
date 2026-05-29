@@ -1,0 +1,26 @@
+{
+  "id": "lean:scrabble-score",
+  "trackSlug": "lean",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "6a9cd9b6-8dbe-4811-a5a6-d681687bd2e6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "namespace ScrabbleScore\n\ndef score (word : String) : Int :=\n  sorry --remove this line and implement the function\n\nend ScrabbleScore\n",
+  "example_solution": "namespace ScrabbleScore\n\ndef letterScore (c : Char) : Int :=\n  match c with\n  | 'A' | 'E' | 'I' | 'O' | 'U' | 'L' | 'N' | 'R' | 'S' | 'T' => 1\n  | 'D' | 'G' => 2\n  | 'B' | 'C' | 'M' | 'P' => 3\n  | 'F' | 'H' | 'V' | 'W' | 'Y' => 4\n  | 'K' => 5\n  | 'J' | 'X' => 8\n  | 'Q' | 'Z' => 10\n  | _ => 0\n\ndef process (total : Int) (c : Char) : Int :=\n  total + letterScore (Char.toUpper c)\n\ndef score (word : String) : Int :=\n  String.foldl process 0 word\n\nend ScrabbleScore\n",
+  "test_code": "import LeanTest\nimport ScrabbleScore\n\nopen LeanTest\n\ndef scrabbleScoreTests : TestSuite :=\n  (TestSuite.empty \"ScrabbleScore\")\n  |>.addTest \"lowercase letter\" (do\n      return assertEqual 1 (ScrabbleScore.score \"a\"))\n  |>.addTest \"uppercase letter\" (do\n      return assertEqual 1 (ScrabbleScore.score \"A\"))\n  |>.addTest \"valuable letter\" (do\n      return assertEqual 4 (ScrabbleScore.score \"f\"))\n  |>.addTest \"short word\" (do\n      return assertEqual 2 (ScrabbleScore.score \"at\"))\n  |>.addTest \"short, valuable word\" (do\n      return assertEqual 12 (ScrabbleScore.score \"zoo\"))\n  |>.addTest \"medium word\" (do\n      return assertEqual 6 (ScrabbleScore.score \"street\"))\n  |>.addTest \"medium, valuable word\" (do\n      return assertEqual 22 (ScrabbleScore.score \"quirky\"))\n  |>.addTest \"long, mixed-case word\" (do\n      return assertEqual 41 (ScrabbleScore.score \"OxyphenButazone\"))\n  |>.addTest \"english-like word\" (do\n      return assertEqual 8 (ScrabbleScore.score \"pinata\"))\n  |>.addTest \"empty input\" (do\n      return assertEqual 0 (ScrabbleScore.score \"\"))\n  |>.addTest \"entire alphabet available\" (do\n      return assertEqual 87 (ScrabbleScore.score \"abcdefghijklmnopqrstuvwxyz\"))\n\ndef main : IO UInt32 := do\n  runTestSuitesWithExitCode [scrabbleScoreTests]\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

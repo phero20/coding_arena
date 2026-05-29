@@ -1,0 +1,28 @@
+{
+  "id": "emacs-lisp:pangram",
+  "trackSlug": "emacs-lisp",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "42222c98-e8d2-41bd-9d95-2ace63864359",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": ";;; pangram.el --- Pangram (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(defun pangramp (phrase)\n  (error \"Delete this S-Expression and write your own implementation\"))\n\n\n(provide 'pangram)\n;;; pangram.el ends here\n",
+  "example_solution": ";;; pangram.el --- Pangram (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n(require 'cl-lib)\n\n(defun pangramp (phrase)\n  \"Determine if a given phrase is a pangram.\"\n  (let ((alphabet \"abcdefghijklmnopqrstuvwxyz\"))\n        (cl-every\n         (lambda (c) (string-match-p (char-to-string c) phrase))\n         alphabet)))\n\n\n(provide 'pangram)\n;;; pangram.el ends here\n",
+  "test_code": ";;; pangram-test.el --- Tests for Pangram (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n\n(load-file \"pangram.el\")\n(declare-function pangramp \"pangram.el\" (phrase))\n\n\n(ert-deftest empty-sentence ()\n  (should-not (pangramp \"\")))\n\n\n(ert-deftest perfect-lower-case ()\n  (should (pangramp \"abcdefghijklmnopqrstuvwxyz\")))\n\n\n(ert-deftest only-lower-case ()\n  (should (pangramp \"the quick brown fox jumps over the lazy dog\")))\n\n\n(ert-deftest missing-the-letter-x ()\n  (should-not (pangramp \"a quick movement of the enemy will jeopardize five gunboats\")))\n\n\n(ert-deftest missing-the-letter-h ()\n  (should-not (pangramp \"five boxing wizards jump quickly at it\")))\n\n\n(ert-deftest with-underscores ()\n  (should (pangramp \"the_quick_brown_fox_jumps_over_the_lazy_dog\")))\n\n\n(ert-deftest with-numbers ()\n  (should (pangramp \"the 1 quick brown fox jumps over the 2 lazy dogs\")))\n\n\n(ert-deftest missing-letters-replaced-by-numbers ()\n  (should-not (pangramp \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")))\n\n\n(ert-deftest mixed-case-and-punctuation ()\n  (should (pangramp \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")))\n\n\n(ert-deftest a-m-and-A-M-are-26-different-characters-but-not-a-pangram ()\n  (should-not (pangramp \"abcdefghijklm ABCDEFGHIJKLM\")))\n\n\n(provide 'pangram-test)\n;;; pangram-test.el ends here\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "benreyn"
+  ],
+  "contributors": [
+    "yurrriq"
+  ]
+}

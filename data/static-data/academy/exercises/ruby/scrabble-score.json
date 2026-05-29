@@ -1,0 +1,37 @@
+{
+  "id": "ruby:scrabble-score",
+  "trackSlug": "ruby",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "d934ebce-9ac3-4a41-bcb8-d70480170438",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Scrabble Score' exercise in this file. Make the tests in\n`scrabble_score_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/scrabble-score` directory.\n=end\n",
+  "example_solution": "class Scrabble\n  def self.score(term)\n    new(term).score\n  end\n\n  attr_reader :term\n  def initialize(term)\n    @term = term.to_s.downcase\n  end\n\n  def score\n    sum = 0\n    term.chars.each do |char|\n      sum += letter_values.fetch(char) { 0 }\n    end\n    sum\n  end\n\n  def letter_values\n    {\n      'a' => 1, 'b' => 3, 'c' => 3, 'd' => 2, 'e' => 1,\n      'f' => 4, 'g' => 2, 'h' => 4, 'i' => 1, 'j' => 8,\n      'k' => 5, 'l' => 1, 'm' => 3, 'n' => 1, 'o' => 1,\n      'p' => 3, 'q' => 10, 'r' => 1, 's' => 1, 't' => 1,\n      'u' => 1, 'v' => 4, 'w' => 4, 'x' => 8, 'y' => 4,\n      'z' => 10\n    }\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'scrabble_score'\n\nclass ScrabbleScoreTest < Minitest::Test\n  def test_lowercase_letter\n    # skip\n    actual = Scrabble.new('a').score\n    expected = 1\n    assert_equal expected, actual\n  end\n\n  def test_uppercase_letter\n    skip\n    actual = Scrabble.new('A').score\n    expected = 1\n    assert_equal expected, actual\n  end\n\n  def test_valuable_letter\n    skip\n    actual = Scrabble.new('f').score\n    expected = 4\n    assert_equal expected, actual\n  end\n\n  def test_short_word\n    skip\n    actual = Scrabble.new('at').score\n    expected = 2\n    assert_equal expected, actual\n  end\n\n  def test_short_valuable_word\n    skip\n    actual = Scrabble.new('zoo').score\n    expected = 12\n    assert_equal expected, actual\n  end\n\n  def test_medium_word\n    skip\n    actual = Scrabble.new('street').score\n    expected = 6\n    assert_equal expected, actual\n  end\n\n  def test_medium_valuable_word\n    skip\n    actual = Scrabble.new('quirky').score\n    expected = 22\n    assert_equal expected, actual\n  end\n\n  def test_long_mixed_case_word\n    skip\n    actual = Scrabble.new('OxyphenButazone').score\n    expected = 41\n    assert_equal expected, actual\n  end\n\n  def test_english_like_word\n    skip\n    actual = Scrabble.new('pinata').score\n    expected = 8\n    assert_equal expected, actual\n  end\n\n  def test_empty_input\n    skip\n    actual = Scrabble.new('').score\n    expected = 0\n    assert_equal expected, actual\n  end\n\n  def test_entire_alphabet_available\n    skip\n    actual = Scrabble.new('abcdefghijklmnopqrstuvwxyz').score\n    expected = 87\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kotp",
+    "tryantwit"
+  ]
+}

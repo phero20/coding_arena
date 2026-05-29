@@ -1,0 +1,40 @@
+{
+  "id": "csharp:matching-brackets",
+  "trackSlug": "csharp",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "a2070019-e56d-4d48-994b-300411598707",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "stacks"
+  ],
+  "prerequisites": [
+    "stacks",
+    "strings",
+    "chars",
+    "booleans"
+  ],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "public static class MatchingBrackets\n{\n    public static bool IsPaired(string input)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public static class MatchingBrackets\n{\n    public static bool IsPaired(string input)\n    {\n        var brackets = new string(input.Where(c => \"[]{}()\".Contains(c)).ToArray());\n        var previousLength = brackets.Length;\n\n        while (brackets.Length > 0)\n        {\n            brackets = brackets.Replace(\"[]\", \"\").Replace(\"{}\", \"\").Replace(\"()\", \"\");\n\n            if (brackets.Length == previousLength)\n                return false;\n\n            previousLength = brackets.Length;\n        }\n\n        return true;\n    }\n}\n",
+  "test_code": "public class MatchingBracketsTests\n{\n    [Fact]\n    public void Paired_square_brackets()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"[]\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Empty_string()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Unpaired_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"[[\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Wrong_ordered_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"}{\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Wrong_closing_bracket()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"{]\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Paired_with_whitespace()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"{ }\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Partially_paired_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"{[])\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Simple_nested_brackets()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"{[]}\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Several_paired_brackets()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"{}[]\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Paired_and_nested_brackets()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"([{}({}[])])\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Unopened_closing_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"{[)][]}\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Unpaired_and_nested_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"([{])\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Paired_and_wrong_nested_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"[({]})\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Paired_and_wrong_nested_brackets_but_innermost_are_correct()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"[({}])\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Paired_and_incomplete_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"{}[\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Too_many_closing_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"[]]\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Early_unexpected_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\")()\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Early_mismatched_brackets()\n    {\n        Assert.False(MatchingBrackets.IsPaired(\"{)()\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Math_expression()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"(((185 + 223.85) * 15) - 543)/2\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Complex_latex_expression()\n    {\n        Assert.True(MatchingBrackets.IsPaired(\"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\"));\n    }\n}\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "j2jensen",
+    "martinfreedman",
+    "robkeim",
+    "SleeplessByte",
+    "vgrigoriu",
+    "wolf99"
+  ]
+}

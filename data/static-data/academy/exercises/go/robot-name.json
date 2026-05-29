@@ -1,0 +1,47 @@
+{
+  "id": "go:robot-name",
+  "trackSlug": "go",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "86b8f1e6-e088-403e-984a-abd360f5dcef",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "methods",
+    "randomness"
+  ],
+  "prerequisites": [
+    "methods",
+    "randomness"
+  ],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package robotname\n\n// Define the Robot type here.\n\nfunc (r *Robot) Name() (string, error) {\n\tpanic(\"Please implement the Name function\")\n}\n\nfunc (r *Robot) Reset() {\n\tpanic(\"Please implement the Reset function\")\n}\n",
+  "example_solution": "// Package robotname implements a type Robot with a unique Name field.\n\npackage robotname\n\nimport (\n\t\"crypto/rand\"\n\t\"errors\"\n\t\"math/big\"\n)\n\ntype Robot struct {\n\tname string\n}\n\nconst (\n\tupperChar = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\n\tdigit     = \"0123456789\"\n)\n\n// digitSpec specifies valid digit values for a multi-base string from most\n// significant digit to least significant digit.\nvar digitSpec = []string{\n\tupperChar,\n\tupperChar,\n\tdigit,\n\tdigit,\n\tdigit,\n}\n\n// digitIncrements stores the increment value of each digit position for later\n// use during the encoding step.\nvar digitIncrements = make([]int, len(digitSpec))\n\n// MaxNames is the maximum number of names that can be generated based on the\n// defined digitSpec.\nvar MaxNames int\n\n// Keep track of unused integer IDs. These are intended to be used to\n// deterministically generate new robot names, and then be removed from this\n// slice.\nvar availableIDs []int\n\n// init initializes values for various global variables.\nfunc init() {\n\tvar m int\n\n\tm = 1\n\tnumDigits := len(digitSpec)\n\tfor i := numDigits - 1; i >= 0; i-- {\n\t\tdigitIncrements[i] = m\n\t\tm *= len(digitSpec[i])\n\t}\n\tMaxNames = m\n\n\tavailableIDs = make([]int, MaxNames)\n\tfor i := range MaxNames {\n\t\tavailableIDs[i] = i\n\t}\n}\n\n// randIntn wraps the crypto/rand integer generator to return a random\n// int.\nfunc randIntn(i int) int {\n\tbigi := big.NewInt(int64(i))\n\trndm, _ := rand.Int(rand.Reader, bigi)\n\treturn int(rndm.Int64())\n}\n\n// Given an integer \"ID\", encode it into a multi-base string according to the\n// given list of strings, digitSpec, where each string represents valid symbols\n// for its digit position in order of increasing value. The digit spec\n// describes digits in this way in order of most significant to least\n// significant, ie index 0 is the most significant digit, index 1 is the next\n// most significant, etc\nfunc intToMultiBaseString(id int, digitSpec []string) string {\n\tvar pos, rmndr, minVal int\n\tvar result string\n\n\trmndr = id\n\tfor i, digitChars := range digitSpec {\n\t\tminVal = digitIncrements[i]\n\n\t\t// The character for this digit position is determined by the number of\n\t\t// times that the minimum/increment value of that digit can evenly\n\t\t// divide into the remainder from the last digit's calculations (or the\n\t\t// original ID in the case of the most significant digit).\n\t\tpos = rmndr / minVal\n\t\tresult += string(digitChars[pos])\n\n\t\t// Calculate the remainder to be used for the next digit.\n\t\trmndr %= minVal\n\t}\n\n\treturn result\n}\n\n// getUniqueID returns a random unused ID and returns an error if none are left.\nfunc getUniqueID() (int, error) {\n\tnumAvailable := len(availableIDs)\n\tif numAvailable == 0 {\n\t\treturn 0, errors.New(\"all possible names have been taken\")\n\t}\n\n\ti := randIntn(numAvailable)\n\tuniqueID := availableIDs[i]\n\n\t// Delete the ith element by replacing it with the last element in the\n\t// array and cutting off the original last element.\n\tavailableIDs[i] = availableIDs[numAvailable-1]\n\tavailableIDs = availableIDs[:numAvailable-1]\n\n\treturn uniqueID, nil\n}\n\n// generateUniqueName returns an error if there are no valid unique names left, returns a\n// valid unique name otherwise.\nfunc generateUniqueName() (string, error) {\n\tid, err := getUniqueID()\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\treturn intToMultiBaseString(id, digitSpec), nil\n}\n\n// Name returns the name of the robot.\nfunc (r *Robot) Name() (string, error) {\n\tvar err error\n\tif r.name == \"\" {\n\t\tr.name, err = generateUniqueName()\n\t\tif err != nil {\n\t\t\treturn \"\", err\n\t\t}\n\t}\n\treturn r.name, nil\n}\n\n// Reset resets the robot's name to empty string.\nfunc (r *Robot) Reset() {\n\t*r = Robot{}\n}\n",
+  "test_code": "package robotname\n\nimport (\n\t\"regexp\"\n\t\"testing\"\n)\n\nvar (\n\tnamePat = regexp.MustCompile(`^[A-Z]{2}\\d{3}$`)\n\tseen    = map[string]int{}\n)\n\nfunc New() *Robot { return new(Robot) }\n\n// getName is a test helper function to facilitate optionally checking for seen\n// robot names.\nfunc (r *Robot) getName(t testing.TB, expectSeen bool) string {\n\tt.Helper()\n\tnewName, err := r.Name()\n\tif err != nil {\n\t\tt.Fatalf(\"Name() returned unexpected error: %q\", err)\n\t}\n\tif len(newName) != 5 {\n\t\tt.Fatalf(\"names should have 5 characters: name %q has %d character(s)\", newName, len(newName))\n\t}\n\n\t_, chk := seen[newName]\n\tif !expectSeen && chk {\n\t\tt.Fatalf(\"Name %q reissued after %d robots.\", newName, len(seen))\n\t}\n\tseen[newName] = 0\n\treturn newName\n}\n\nfunc TestNameValid(t *testing.T) {\n\tn := New().getName(t, false)\n\tif !namePat.MatchString(n) {\n\t\tt.Errorf(`Invalid robot name %q, want form \"AA###\".`, n)\n\t}\n}\n\nfunc TestNameSticks(t *testing.T) {\n\tr := New()\n\tn1 := r.getName(t, false)\n\tn2 := r.getName(t, true)\n\tif n2 != n1 {\n\t\tt.Errorf(`Robot name changed.  Now %q, was %q.`, n2, n1)\n\t}\n}\n\nfunc TestSuccessiveRobotsHaveDifferentNames(t *testing.T) {\n\tn1 := New().getName(t, false)\n\tn2 := New().getName(t, false)\n\tif n1 == n2 {\n\t\tt.Errorf(`Robots with same name.  Two %q's.`, n1)\n\t}\n}\n\nfunc TestResetName(t *testing.T) {\n\tr := New()\n\tn1 := r.getName(t, false)\n\tr.Reset()\n\tif r.getName(t, false) == n1 {\n\t\tt.Errorf(`Robot name not cleared on reset.  Still %q.`, n1)\n\t}\n}\n\n// Test 1000 names are unique - this should run reasonably quickly even with a solution that is not particularly fast.\nfunc TestMultipleNames(t *testing.T) {\n\t// Test uniqueness for new robots.\n\tfor i := len(seen); i <= 1000; i++ {\n\t\tNew().getName(t, false)\n\t}\n}\n\nvar maxNames = 26 * 26 * 10 * 10 * 10\n\nconst lotsOfNames = 76000\n\n// TestCollisions tests if unique names are generated by creating new robots until all names are used.\nfunc TestCollisions(t *testing.T) {\n\t// Remove the next line to make this test run\n\tt.Skip(\"skipping test as solutions that are not particularly fast can exceed testing time limits.\")\n\n\t// Test uniqueness for new robots.\n\tfor i := len(seen); i <= lotsOfNames; i++ {\n\t\tNew().getName(t, false)\n\t}\n\n\t// Test that names aren't recycled either.\n\t// Note that this runs till names are exhausted.\n\tr := New()\n\tfor i := len(seen); i < maxNames; i++ {\n\t\tr.Reset()\n\t\tr.getName(t, false)\n\t}\n\n\t// Test that name exhaustion is handled more or less correctly.\n\t_, err := New().Name()\n\tif err == nil {\n\t\tt.Fatalf(\"should return error if namespace is exhausted\")\n\t}\n}\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "h311ion",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "papahmsolo",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "tleen",
+    "waynr"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:hamming",
+  "trackSlug": "moonscript",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "03f299a8-2f01-4c77-90a0-4bcc972e2559",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "distance = (strand1, strand2) ->\n  error 'Implement me!'\n\n{ :distance }\n",
+  "example_solution": "distance = (strand1, strand2) ->\n  assert #strand1 == #strand2, 'strands must be of equal length'\n\n  count = 0\n  for i = 1, #strand1\n    count += 1 if strand1\\sub(i, i) != strand2\\sub(i, i)\n  count\n\n{ :distance }\n",
+  "test_code": "hamming = require 'hamming'\n\ndescribe 'hamming:', ->\n  it 'empty strands', ->\n    result = hamming.distance '', ''\n    assert.are.equal 0, result\n\n  pending 'single letter identical strands', ->\n    result = hamming.distance 'A', 'A'\n    assert.are.equal 0, result\n\n  pending 'single letter different strands', ->\n    result = hamming.distance 'G', 'T'\n    assert.are.equal 1, result\n\n  pending 'long identical strands', ->\n    result = hamming.distance 'GGACTGAAATCTG', 'GGACTGAAATCTG'\n    assert.are.equal 0, result\n\n  pending 'long different strands', ->\n    result = hamming.distance 'GGACGGATTCTG', 'AGGACGGATTCT'\n    assert.are.equal 9, result\n\n  pending 'disallow first strand longer', ->\n    f = -> hamming.distance 'AATG', 'AAA'\n    assert.has.error f, 'strands must be of equal length'\n\n  pending 'disallow second strand longer', ->\n    f = -> hamming.distance 'ATA', 'AGTG'\n    assert.has.error f, 'strands must be of equal length'\n\n  pending 'disallow empty first strand', ->\n    f = -> hamming.distance '', 'G'\n    assert.has.error f, 'strands must be of equal length'\n\n  pending 'disallow empty second strand', ->\n    f = -> hamming.distance 'G', ''\n    assert.has.error f, 'strands must be of equal length'\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,29 @@
+{
+  "id": "typescript:binary-search",
+  "trackSlug": "typescript",
+  "slug": "binary-search",
+  "name": "Binary Search",
+  "uuid": "53584e8d-9b8d-4c0e-8ad8-4c228fcf6bcf",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a binary search algorithm.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to implement a binary search algorithm.\n\nA binary search algorithm finds an item in a list by repeatedly splitting it in half, only keeping the half which contains the item we're looking for.\nIt allows us to quickly narrow down the possible locations of our item until we find it, or until we've eliminated all possible locations.\n\n~~~~exercism/caution\nBinary search only works when a list has been sorted.\n~~~~\n\nThe algorithm looks like this:\n\n- Find the middle element of a _sorted_ list and compare it with the item we're looking for.\n- If the middle element is our item, then we're done!\n- If the middle element is greater than our item, we can eliminate that element and all the elements **after** it.\n- If the middle element is less than our item, we can eliminate that element and all the elements **before** it.\n- If every element of the list has been eliminated then the item is not in the list.\n- Otherwise, repeat the process on the part of the list that has not been eliminated.\n\nHere's an example:\n\nLet's say we're looking for the number 23 in the following sorted list: `[4, 8, 12, 16, 23, 28, 32]`.\n\n- We start by comparing 23 with the middle element, 16.\n- Since 23 is greater than 16, we can eliminate the left half of the list, leaving us with `[23, 28, 32]`.\n- We then compare 23 with the new middle element, 28.\n- Since 23 is less than 28, we can eliminate the right half of the list: `[23]`.\n- We've found our item.\n",
+  "introduction": "# Introduction\n\nYou have stumbled upon a group of mathematicians who are also singer-songwriters.\nThey have written a song for each of their favorite numbers, and, as you can imagine, they have a lot of favorite numbers (like [0][zero] or [73][seventy-three] or [6174][kaprekars-constant]).\n\nYou are curious to hear the song for your favorite number, but with so many songs to wade through, finding the right song could take a while.\nFortunately, they have organized their songs in a playlist sorted by the title — which is simply the number that the song is about.\n\nYou realize that you can use a binary search algorithm to quickly find a song given the title.\n\n[zero]: https://en.wikipedia.org/wiki/0\n[seventy-three]: https://en.wikipedia.org/wiki/73_(number)\n[kaprekars-constant]: https://en.wikipedia.org/wiki/6174_(number)\n",
+  "hints": null,
+  "starter_code": "export function find(haystack: unknown, needle: unknown): number | never {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function find(array: number[], element: number): number | never {\n  let start = 0\n  let end = array.length - 1\n  let middle: number\n\n  while (start <= end) {\n    middle = Math.floor((start + end) / 2)\n    if (element === array[middle]) {\n      return middle\n    } else if (element < array[middle]) {\n      end = middle - 1\n    } else if (element > array[middle]) {\n      start = middle + 1\n    }\n  }\n\n  throw new Error('Value not in array')\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { find } from './binary-search.ts'\n\ndescribe('Binary Search', () => {\n  it('finds a value in an array with one element', () => {\n    expect(find([6], 6)).toEqual(0)\n  })\n\n  xit('finds a value in the middle of an array', () => {\n    const array = [1, 3, 4, 6, 8, 9, 11]\n    expect(find(array, 6)).toEqual(3)\n  })\n\n  xit('finds a value at the beginning of an array', () => {\n    const array = [1, 3, 4, 6, 8, 9, 11]\n    expect(find(array, 1)).toEqual(0)\n  })\n\n  xit('finds a value at the end of an array', () => {\n    const array = [1, 3, 4, 6, 8, 9, 11]\n    expect(find(array, 11)).toEqual(6)\n  })\n\n  xit('finds a value in an array of odd length', () => {\n    const array = [1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 634]\n    expect(find(array, 144)).toEqual(9)\n  })\n\n  xit('finds a value in an array of even length', () => {\n    const array = [1, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377]\n    expect(find(array, 21)).toEqual(5)\n  })\n\n  xit('identifies that a value is not included in the array', () => {\n    const array = [1, 3, 4, 6, 8, 9, 11]\n    expect(() => find(array, 7)).toThrow(new Error('Value not in array'))\n  })\n\n  xit(\"a value smaller than the array's smallest value is not found\", () => {\n    const array = [1, 3, 4, 6, 8, 9, 11]\n    expect(() => find(array, 0)).toThrow(new Error('Value not in array'))\n  })\n\n  xit(\"a value larger than the array's largest value is not found\", () => {\n    const array = [1, 3, 4, 6, 8, 9, 11]\n    expect(() => find(array, 13)).toThrow(new Error('Value not in array'))\n  })\n\n  xit('nothing is found in an empty array', () => {\n    expect(() => find([], 1)).toThrow(new Error('Value not in array'))\n  })\n\n  xit('nothing is found when the left and right bounds cross', () => {\n    expect(() => find([1, 2], 0)).toThrow(new Error('Value not in array'))\n  })\n})\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+  "authors": [
+    "anuragsoni"
+  ],
+  "contributors": [
+    "masters3d",
+    "SleeplessByte"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "python:all-your-base",
+  "trackSlug": "python",
+  "slug": "all-your-base",
+  "name": "All Your Base",
+  "uuid": "a2ff75f9-8b2c-4c4b-975d-913711def9ab",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "comparisons"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "comparisons",
+    "lists",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nConvert a sequence of digits in one base, representing a number, into a sequence of digits in another base, representing the same number.\n\n~~~~exercism/note\nTry to implement the conversion yourself.\nDo not use something else to perform the conversion for you.\n~~~~\n\n## About [Positional Notation][positional-notation]\n\nIn positional notation, a number in base **b** can be understood as a linear combination of powers of **b**.\n\nThe number 42, _in base 10_, means:\n\n`(4 × 10¹) + (2 × 10⁰)`\n\nThe number 101010, _in base 2_, means:\n\n`(1 × 2⁵) + (0 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (0 × 2⁰)`\n\nThe number 1120, _in base 3_, means:\n\n`(1 × 3³) + (1 × 3²) + (2 × 3¹) + (0 × 3⁰)`\n\n_Yes. Those three numbers above are exactly the same. Congratulations!_\n\n[positional-notation]: https://en.wikipedia.org/wiki/Positional_notation\n",
+  "introduction": "# Introduction\n\nYou've just been hired as professor of mathematics.\nYour first week went well, but something is off in your second week.\nThe problem is that every answer given by your students is wrong!\nLuckily, your math skills have allowed you to identify the problem: the student answers _are_ correct, but they're all in base 2 (binary)!\nAmazingly, it turns out that each week, the students use a different base.\nTo help you quickly verify the student answers, you'll be building a tool to translate between bases.\n",
+  "hints": null,
+  "starter_code": "def rebase(input_base, digits, output_base):\n    pass\n",
+  "example_solution": "def from_digits(digits, base):\n    return sum(number * base ** idx for idx, number in enumerate(reversed(digits)))\n\n\ndef to_digits(number, base_to):\n    result = []\n    while number > 0:\n        result.append(number % base_to)\n        number //= base_to\n    if result:\n        return result[::-1]  # list(reversed(result))\n    return [0]\n\n\ndef rebase(from_base, digits, to_base):\n    if from_base < 2:\n        raise ValueError(\"input base must be >= 2\")\n\n    if to_base < 2:\n        raise ValueError(\"output base must be >= 2\")\n\n    if any(True for idx in digits if idx < 0 or idx >= from_base):\n        raise ValueError(\"all digits must satisfy 0 <= d < input base\")\n\n    return to_digits(from_digits(digits, from_base), to_base)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/all-your-base/canonical-data.json\n# File last updated on 2023-07-20\n\nimport unittest\n\nfrom all_your_base import (\n    rebase,\n)\n\n\nclass AllYourBaseTest(unittest.TestCase):\n    def test_single_bit_one_to_decimal(self):\n        self.assertEqual(rebase(2, [1], 10), [1])\n\n    def test_binary_to_single_decimal(self):\n        self.assertEqual(rebase(2, [1, 0, 1], 10), [5])\n\n    def test_single_decimal_to_binary(self):\n        self.assertEqual(rebase(10, [5], 2), [1, 0, 1])\n\n    def test_binary_to_multiple_decimal(self):\n        self.assertEqual(rebase(2, [1, 0, 1, 0, 1, 0], 10), [4, 2])\n\n    def test_decimal_to_binary(self):\n        self.assertEqual(rebase(10, [4, 2], 2), [1, 0, 1, 0, 1, 0])\n\n    def test_trinary_to_hexadecimal(self):\n        self.assertEqual(rebase(3, [1, 1, 2, 0], 16), [2, 10])\n\n    def test_hexadecimal_to_trinary(self):\n        self.assertEqual(rebase(16, [2, 10], 3), [1, 1, 2, 0])\n\n    def test_15_bit_integer(self):\n        self.assertEqual(rebase(97, [3, 46, 60], 73), [6, 10, 45])\n\n    def test_empty_list(self):\n        self.assertEqual(rebase(2, [], 10), [0])\n\n    def test_single_zero(self):\n        self.assertEqual(rebase(10, [0], 2), [0])\n\n    def test_multiple_zeros(self):\n        self.assertEqual(rebase(10, [0, 0, 0], 2), [0])\n\n    def test_leading_zeros(self):\n        self.assertEqual(rebase(7, [0, 6, 0], 10), [4, 2])\n\n    def test_input_base_is_one(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(1, [0], 10)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"input base must be >= 2\")\n\n    def test_input_base_is_zero(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(0, [], 10)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"input base must be >= 2\")\n\n    def test_input_base_is_negative(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(-2, [1], 10)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"input base must be >= 2\")\n\n    def test_negative_digit(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(2, [1, -1, 1, 0, 1, 0], 10)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(\n            err.exception.args[0], \"all digits must satisfy 0 <= d < input base\"\n        )\n\n    def test_invalid_positive_digit(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(2, [1, 2, 1, 0, 1, 0], 10)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(\n            err.exception.args[0], \"all digits must satisfy 0 <= d < input base\"\n        )\n\n    def test_output_base_is_one(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(2, [1, 0, 1, 0, 1, 0], 1)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"output base must be >= 2\")\n\n    def test_output_base_is_zero(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(10, [7], 0)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"output base must be >= 2\")\n\n    def test_output_base_is_negative(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(2, [1], -7)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"output base must be >= 2\")\n\n    def test_both_bases_are_negative(self):\n        with self.assertRaises(ValueError) as err:\n            rebase(-2, [1], -7)\n        self.assertEqual(type(err.exception), ValueError)\n        self.assertEqual(err.exception.args[0], \"input base must be >= 2\")\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "behrtam"
+  ],
+  "contributors": [
+    "cmccandless",
+    "Dog",
+    "ikhadykin",
+    "N-Parsons",
+    "pywkm",
+    "smt923",
+    "tqa236",
+    "yawpitch"
+  ]
+}

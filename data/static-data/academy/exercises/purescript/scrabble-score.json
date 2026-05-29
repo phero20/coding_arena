@@ -1,0 +1,31 @@
+{
+  "id": "purescript:scrabble-score",
+  "trackSlug": "purescript",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "c956e70b-4e34-451b-9374-19b9f2aefa37",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "module ScrabbleScore\n  ( scoreWord\n  ) where\n\nimport Effect.Exception.Unsafe (unsafeThrow)\n\nscoreWord :: String -> Int\nscoreWord = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module ScrabbleScore\n  ( scoreWord\n  ) where\n\nimport Prelude\nimport Data.String.CodeUnits (toCharArray)\nimport Data.String.Common (toLower)\nimport Data.Foldable (foldl)\n\n\nscoreWord :: String -> Int\nscoreWord =\n  let\n    addLetterScore acc =\n      add acc <<< scoreChar\n  in\n    foldl addLetterScore 0 <<< toCharArray <<< toLower\n\n\nscoreChar :: Char -> Int\nscoreChar 'a' = 1\nscoreChar 'e' = 1\nscoreChar 'i' = 1\nscoreChar 'o' = 1\nscoreChar 'u' = 1\nscoreChar 'l' = 1\nscoreChar 'n' = 1\nscoreChar 'r' = 1\nscoreChar 's' = 1\nscoreChar 't' = 1\nscoreChar 'd' = 2\nscoreChar 'g' = 2\nscoreChar 'b' = 3\nscoreChar 'c' = 3\nscoreChar 'm' = 3\nscoreChar 'p' = 3\nscoreChar 'f' = 4\nscoreChar 'h' = 4\nscoreChar 'v' = 4\nscoreChar 'w' = 4\nscoreChar 'y' = 4\nscoreChar 'k' = 5\nscoreChar 'j' = 8\nscoreChar 'x' = 8\nscoreChar 'q' = 10\nscoreChar 'z' = 10\nscoreChar _ = 0\n",
+  "test_code": "module Test.Main where\n\nimport Prelude\n\nimport Test.Unit.Assert as Assert\nimport Effect (Effect)\nimport ScrabbleScore (scoreWord)\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Main (runTest)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"ScrabbleScore.scoreWord\" do\n    test \"lowercase letter\" do\n      Assert.equal 1 (scoreWord \"a\")\n\n    test \"uppercase letter\" do\n      Assert.equal 1 (scoreWord \"A\")\n\n    test \"valuable letter\" do\n      Assert.equal 4 (scoreWord \"f\")\n\n    test \"short word\" do\n      Assert.equal 2 (scoreWord \"at\")\n\n    test \"short, valuable word\" do\n      Assert.equal 12 (scoreWord \"zoo\")\n\n    test \"medium word\" do\n      Assert.equal 6 (scoreWord \"street\")\n\n    test \"medium, valuable word\" do\n      Assert.equal 22 (scoreWord \"quirky\")\n\n    test \"long, mixed-case word\" do\n      Assert.equal 41 (scoreWord \"OxyphenButazone\")\n\n    test \"english-like word\" do\n      Assert.equal 8 (scoreWord \"pinata\")\n\n    test \"non-english letter is not scored\" do\n      Assert.equal 7 (scoreWord \"piñata\")\n\n    test \"empty input\" do\n      Assert.equal 0 (scoreWord \"\")\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": [
+    "colinwahl",
+    "icyrockcom",
+    "paf31",
+    "spicydonuts"
+  ]
+}

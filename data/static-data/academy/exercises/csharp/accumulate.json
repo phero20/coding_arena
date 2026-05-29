@@ -1,0 +1,49 @@
+{
+  "id": "csharp:accumulate",
+  "trackSlug": "csharp",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "3c0563dc-665a-45b4-9b29-f133e235efd0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "lambdas",
+    "foreach",
+    "yield",
+    "extension-methods",
+    "generic-methods",
+    "enumerables"
+  ],
+  "prerequisites": [
+    "lambdas",
+    "generic-types",
+    "generic-methods",
+    "foreach",
+    "enumerables",
+    "extension-methods"
+  ],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public static class AccumulateExtensions\n{\n    public static IEnumerable<U> Accumulate<T, U>(this IEnumerable<T> collection, Func<T, U> func)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class AccumulateExtensions\n{\n    public static IEnumerable<U> Accumulate<T, U>(this IEnumerable<T> collection, Func<T, U> func)\n    {\n        foreach (var item in collection)\n            yield return func(item);\n    }\n}",
+  "test_code": "public class AccumulateTests\n{\n    [Fact]\n    public void Accumulate_empty()\n    {\n        int[] input = [];\n        int[] expected = [];\n        Assert.Equal(expected, input.Accumulate((x) => x * x));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Accumulate_squares()\n    {\n        int[] input = [1, 2, 3];\n        int[] expected = [1, 4, 9];\n        Assert.Equal(expected, input.Accumulate((x) => x * x));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Accumulate_upcases()\n    {\n        string[] input = [\"Hello\", \"world\"];\n        string[] expected = [\"HELLO\", \"WORLD\"];\n        Assert.Equal(expected, input.Accumulate((x) => x.ToUpper()));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Accumulate_reversed_strings()\n    {\n        string[] input = [\"the\", \"quick\", \"brown\", \"fox\", \"etc\"];\n        string[] expected = [\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"];\n        Assert.Equal(expected, input.Accumulate((x) => new string(x.Reverse().ToArray())));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Accumulate_recursively()\n    {\n        string[] input = [\"a\", \"b\", \"c\"];\n        string[][] expected = [[\"a1\", \"a2\", \"a3\"], [\"b1\", \"b2\", \"b3\"], [\"c1\", \"c2\", \"c3\"]];\n        Assert.Equal(expected, input.Accumulate((x) => new[] { \"1\", \"2\", \"3\" }.Accumulate((y) => x + y)));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Accumulate_is_lazy()\n    {\n        var counter = 0;\n        int[] input = [1, 2, 3];\n        var accumulation = input.Accumulate(x => x * counter++);\n        Assert.Equal(0, counter);\n        var _ = accumulation.ToList();\n        Assert.Equal(3, counter);\n    }\n}\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "bressain"
+  ],
+  "contributors": [
+    "B1tF8er",
+    "balazsbotond",
+    "ChrisPritchard",
+    "ErikSchierboom",
+    "j2jensen",
+    "jwood803",
+    "robkeim",
+    "wolf99"
+  ]
+}

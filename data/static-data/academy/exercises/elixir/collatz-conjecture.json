@@ -1,0 +1,40 @@
+{
+  "id": "elixir:collatz-conjecture",
+  "trackSlug": "elixir",
+  "slug": "collatz-conjecture",
+  "name": "Collatz Conjecture",
+  "uuid": "01f7ce73-ad6a-42bb-a401-cbd485c081d4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "integers",
+    "guards"
+  ],
+  "prerequisites": [
+    "integers",
+    "recursion",
+    "multiple-clause-functions",
+    "guards"
+  ],
+  "instructions": "# Instructions\n\nGiven a positive integer, return the number of steps it takes to reach 1 according to the rules of the Collatz Conjecture.\n",
+  "introduction": "# Introduction\n\nOne evening, you stumbled upon an old notebook filled with cryptic scribbles, as though someone had been obsessively chasing an idea.\nOn one page, a single question stood out: **Can every number find its way to 1?**\nIt was tied to something called the **Collatz Conjecture**, a puzzle that has baffled thinkers for decades.\n\nThe rules were deceptively simple.\nPick any positive integer.\n\n- If it's even, divide it by 2.\n- If it's odd, multiply it by 3 and add 1.\n\nThen, repeat these steps with the result, continuing indefinitely.\n\nCurious, you picked number 12 to test and began the journey:\n\n12 ➜ 6 ➜ 3 ➜ 10 ➜ 5 ➜ 16 ➜ 8 ➜ 4 ➜ 2 ➜ 1\n\nCounting from the second number (6), it took 9 steps to reach 1, and each time the rules repeated, the number kept changing.\nAt first, the sequence seemed unpredictable — jumping up, down, and all over.\nYet, the conjecture claims that no matter the starting number, we'll always end at 1.\n\nIt was fascinating, but also puzzling.\nWhy does this always seem to work?\nCould there be a number where the process breaks down, looping forever or escaping into infinity?\nThe notebook suggested solving this could reveal something profound — and with it, fame, [fortune][collatz-prize], and a place in history awaits whoever could unlock its secrets.\n\n[collatz-prize]: https://mathprize.net/posts/collatz-conjecture/\n",
+  "hints": null,
+  "starter_code": "defmodule CollatzConjecture do\n  @doc \"\"\"\n  calc/1 takes an integer and returns the number of steps required to get the\n  number to 1 when following the rules:\n    - if number is odd, multiply with 3 and add 1\n    - if number is even, divide by 2\n  \"\"\"\n  @spec calc(input :: pos_integer()) :: non_neg_integer()\n  def calc(input) do\n  end\nend\n",
+  "example_solution": "defmodule CollatzConjecture do\n  @doc \"\"\"\n  calc/1 takes an integer and returns the number of steps required to get the\n  number to 1 when following the rules:\n    - if number is odd, multiply with 3 and add 1\n    - if number is even, divide by 2\n  \"\"\"\n  @spec calc(input :: pos_integer()) :: non_neg_integer()\n  def calc(input) when is_integer(input) and input > 0, do: do_calc(input, 0)\n\n  defp do_calc(1, iterations), do: iterations\n  defp do_calc(n, iterations) when rem(n, 2) == 1, do: do_calc(n * 3 + 1, iterations + 1)\n  defp do_calc(n, iterations) when rem(n, 2) == 0, do: do_calc(div(n, 2), iterations + 1)\nend\n",
+  "test_code": "defmodule CollatzConjectureTest do\n  use ExUnit.Case\n\n  test \"zero steps for one\" do\n    assert CollatzConjecture.calc(1) == 0\n  end\n\n  @tag :pending\n  test \"zero is an error\" do\n    assert_raise FunctionClauseError, fn -> CollatzConjecture.calc(0) end\n  end\n\n  @tag :pending\n  test \"divide if even\" do\n    assert CollatzConjecture.calc(16) == 4\n  end\n\n  @tag :pending\n  test \"even and odd steps\" do\n    assert CollatzConjecture.calc(12) == 9\n  end\n\n  @tag :pending\n  test \"Large number of even and odd steps\" do\n    assert CollatzConjecture.calc(1_000_000) == 152\n  end\n\n  @tag :pending\n  test \"start with odd step\" do\n    assert CollatzConjecture.calc(21) == 7\n  end\n\n  @tag :pending\n  test \"more steps than starting number\" do\n    assert CollatzConjecture.calc(7) == 16\n  end\n\n  @tag :pending\n  test \"negative value is an error \" do\n    assert_raise FunctionClauseError, fn -> CollatzConjecture.calc(-15) end\n  end\n\n  @tag :pending\n  test \"string as input value is an error \" do\n    assert_raise FunctionClauseError, fn -> CollatzConjecture.calc(\"fubar\") end\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Collatz_conjecture",
+  "authors": [
+    "Tuxified"
+  ],
+  "contributors": [
+    "angelikatyborska",
+    "Cohen-Carlisle",
+    "devonestes",
+    "neenjaw",
+    "sotojuan"
+  ]
+}

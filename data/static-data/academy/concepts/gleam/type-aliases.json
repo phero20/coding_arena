@@ -1,0 +1,6 @@
+{
+  "slug": "type-aliases",
+  "name": "Type Aliases",
+  "introduction": "# Introduction\n\n## Type aliases\n\nA type alias can be used in Gleam to give a convenient name for an existing type that would be otherwise cumbersome to write.\n\n```gleam\npub type Headers =\n  List(#(String, String))\n\npub fn html_headers() -> Headers {\n  [\n    #(\"content-type\", \"text/html\"),\n    #(\"x-frame-options\", \"DENY\"),\n  ]\n}\n```\n\nWhen written with `pub type` the alias can be used outside of the module it is defined in. If `pub` is omitted then the alias is private and cannot be referenced in other modules.",
+  "about": "# About\n\n## Type aliases\n\nA type alias can be used in Gleam to give a convenient name for an existing type that would be otherwise cumbersome to write.\n\n```gleam\npub type Headers =\n  List(#(String, String))\n\npub fn html_headers() -> Headers {\n  [\n    #(\"content-type\", \"text/html\"),\n    #(\"x-frame-options\", \"DENY\"),\n  ]\n}\n```\n\nWhen written with `pub type` the alias can be used outside of the module it is defined in. If `pub` is omitted then the alias is private and cannot be referenced in other modules."
+}

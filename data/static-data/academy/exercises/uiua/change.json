@@ -1,0 +1,26 @@
+{
+  "id": "uiua:change",
+  "trackSlug": "uiua",
+  "slug": "change",
+  "name": "Change",
+  "uuid": "58e7ebd6-e458-4715-bd05-ba6a35ba0573",
+  "type": "practice",
+  "status": null,
+  "blurb": "Correctly determine change to be given using the least number of coins.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine the fewest number of coins to give a customer so that the sum of their values equals the correct amount of change.\n\n## Examples\n\n- An amount of 15 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5 and one coin of value 10, or [5, 10].\n- An amount of 40 with available coin values [1, 5, 10, 25, 100] should return one coin of value 5, one coin of value 10, and one coin of value 25, or [5, 10, 25].\n",
+  "introduction": "# Introduction\n\nIn the mystical village of Coinholt, you stand behind the counter of your bakery, arranging a fresh batch of pastries.\nThe door creaks open, and in walks Denara, a skilled merchant with a keen eye for quality goods.\nAfter a quick meal, she slides a shimmering coin across the counter, representing a value of 100 units.\n\nYou smile, taking the coin, and glance at the total cost of the meal: 88 units.\nThat means you need to return 12 units in change.\n\nDenara holds out her hand expectantly.\n\"Just give me the fewest coins,\" she says with a smile.\n\"My pouch is already full, and I don't want to risk losing them on the road.\"\n\nYou know you have a few options.\n\"We have Lumis (worth 10 units), Viras (worth 5 units), and Zenth (worth 2 units) available for change.\"\n\nYou quickly calculate the possibilities in your head:\n\n- one Lumis (1 × 10 units) + one Zenth (1 × 2 units) = 2 coins total\n- two Viras (2 × 5 units) + one Zenth (1 × 2 units) = 3 coins total\n- six Zenth (6 × 2 units) = 6 coins total\n\n\"The best choice is two coins: one Lumis and one Zenth,\" you say, handing her the change.\n\nDenara smiles, clearly impressed.\n\"As always, you've got it right.\"\n",
+  "hints": null,
+  "starter_code": "# Determine the fewest number of coins for a given target value\n# Change ? Coins Target\nChange ← |2 ⊙⋅(⍤ \"Please implement Change\" 0)\n",
+  "example_solution": "ShouldUpdate ← ⨬(>+1∩(⨬(⧻|∘)≍∞.)|0) ≍∞.\nUpdate       ← ⍜(⊡|□◌) ⊃(⋅⋅∘|⋅⋅⋅⋅∘|⊂⊙⋅⋅∘)\nProcess ← (\n  ⊙⊙◌◡⊃(°□⊡⊙⋅⋅|°□⊡⋅⊙⋅)◡(⌵-)°⊟\n  ◡ShouldUpdate\n  ⨬(⋅⋅⋅⋅∘|Update)\n)\nAmounts      ← ⍜(⊢|□[]◌) ↯[+1]:∞\nCombinations ← ▽⊸≡(≤°⊟)/⊂⊞⊂ ⊃(+1⇡◌|∘|⋅Amounts)\nCoins ← (\n  ◇⍆⊣ ∧Process Combinations\n  ⨬(∘|⍤\"can't make target with given coins\")=∞.\n)\nChange ← ⨬(⍤\"target can't be negative\"|[]|Coins)+1±⊃(⋅∘|⊙∘)\n",
+  "test_code": "~ \"change.ua\" ~ Change\n\n# Change for 1 cent\nCoins    ← [1 5 10 25]\nTarget   ← 1\nExpected ← [1]\n⍤⤙≍ Expected Change Coins Target\n\n# Single coin change\nCoins    ← [1 5 10 25 100]\nTarget   ← 25\nExpected ← [25]\n⍤⤙≍ Expected Change Coins Target\n\n# Multiple coin change\nCoins    ← [1 5 10 25 100]\nTarget   ← 15\nExpected ← [5 10]\n⍤⤙≍ Expected Change Coins Target\n\n# Change with Lilliputian Coins\nCoins    ← [1 4 15 20 50]\nTarget   ← 23\nExpected ← [4 4 15]\n⍤⤙≍ Expected Change Coins Target\n\n# Change with Lower Elbonia Coins\nCoins    ← [1 5 10 21 25]\nTarget   ← 63\nExpected ← [21 21 21]\n⍤⤙≍ Expected Change Coins Target\n\n# Large target values\nCoins    ← [1 2 5 10 20 50 100]\nTarget   ← 999\nExpected ← [2 2 5 20 20 50 100 100 100 100 100 100 100 100 100]\n⍤⤙≍ Expected Change Coins Target\n\n# Possible change without unit coins available\nCoins    ← [2 5 10 20 50]\nTarget   ← 21\nExpected ← [2 2 2 5 10]\n⍤⤙≍ Expected Change Coins Target\n\n# Another possible change without unit coins available\nCoins    ← [4 5]\nTarget   ← 27\nExpected ← [4 4 4 5 5 5]\n⍤⤙≍ Expected Change Coins Target\n\n# No coins make 0 change\nCoins    ← [1 5 10 21 25]\nTarget   ← 0\nExpected ← []\n⍤⤙≍ Expected Change Coins Target\n\n# Error testing for change smaller than the smallest of coins\nCoins  ← [5 10]\nTarget ← 3\n⍤⤙≍ \"can't make target with given coins\" ⍣(Change Coins Target|∘)\n\n# Error if no combination can add up to target\nCoins  ← [5 10]\nTarget ← 94\n⍤⤙≍ \"can't make target with given coins\" ⍣(Change Coins Target|∘)\n\n# Cannot find negative change values\nCoins  ← [1 2 5]\nTarget ← ¯5\n⍤⤙≍ \"target can't be negative\" ⍣(Change Coins Target|∘)\n",
+  "source": "Software Craftsmanship - Coin Change Kata",
+  "source_url": "https://web.archive.org/web/20130115115225/http://craftsmanship.sv.cmu.edu:80/exercises/coin-change-kata",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

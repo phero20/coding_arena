@@ -1,0 +1,32 @@
+{
+  "id": "vbnet:resistor-color-duo",
+  "trackSlug": "vbnet",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "7fe3065f-da2f-472b-b274-688cefb1e8ab",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "arrays"
+  ],
+  "prerequisites": [
+    "arrays",
+    "strings",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module ResistorColorDuo\n    Public Function Value(ByVal colors As String()) As Integer\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System\nImports System.Collections.Generic\nImports System.Linq\n\nPublic Module ResistorColorDuo\n    Public Function Value(ByVal colors As String()) As Integer\n        Return concat(colors.Take(2).Select(Function(c) Array.IndexOf(AllColors, c)))\n    End Function\n\n    Private Function concat(ByVal numbers As IEnumerable(Of Integer)) As Integer\n        Return Integer.Parse(numbers.Aggregate(\"\", Function(acc, num) acc & num.ToString()))\n    End Function\n\n    Private ReadOnly AllColors As String() = {\"black\", \"brown\", \"red\", \"orange\", \"yellow\", \"green\", \"blue\", \"violet\", \"grey\", \"white\"}\nEnd Module\n\n' An Alternative implementation that doesn't utilize LINQ\n' public static class ResistorColorDuo\n' {\n'     public static int Value(string[] colors) => Value(colors[0]) * 10 + Value(colors[1]);\n'     public static int Value(string color) => Array.IndexOf(AllColors, color);\n'     private static readonly string[] AllColors = new[] { \"black\", \"brown\", \"red\", \"orange\", \"yellow\", \"green\", \"blue\", \"violet\", \"grey\", \"white\" };\n' }\n",
+  "test_code": "Imports Xunit\n\nPublic Class ResistorColorDuoTests\n    <Fact>\n    Public Sub Brown_and_black()\n        Assert.Equal(10, Value({\"brown\", \"black\"}))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Blue_and_grey()\n        Assert.Equal(68, Value({\"blue\", \"grey\"}))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Yellow_and_violet()\n        Assert.Equal(47, Value({\"yellow\", \"violet\"}))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub White_and_red()\n        Assert.Equal(92, Value({\"white\", \"red\"}))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Orange_and_orange()\n        Assert.Equal(33, Value({\"orange\", \"orange\"}))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Ignore_additional_colors()\n        Assert.Equal(51, Value({\"green\", \"brown\", \"orange\"}))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Black_and_brown_one_digit()\n        Assert.Equal(1, Value({\"black\", \"brown\"}))\n    End Sub\nEnd Class\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

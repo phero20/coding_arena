@@ -1,0 +1,26 @@
+{
+  "id": "arturo:acronym",
+  "trackSlug": "arturo",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "f143475b-7a63-4a93-b3eb-156402e69fef",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "abbreviate: function[phrase][\n    panic \"Please implement the abbreviate function\"\n]",
+  "example_solution": "abbreviate: function[phrase][\n    replace phrase [\"_\" \"-\"] \" \"\n    | split.words\n    | map 'x -> upper  x\\0\n    | join\n]\n",
+  "test_code": "import.version:3.0.0 {unitt}! \nimport {src/acronym}!\n\ndescribe \"Acronym\" [\n    it \"basic\" [\n        phrase: \"Portable Network Graphics\"\n        expects.be: 'equal? @[\n            \"PNG\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"lowercase words\" [\n        phrase: \"Ruby on Rails\"\n        expects.be: 'equal? @[\n            \"ROR\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"punctuation\" [\n        phrase: \"First In, First Out\"\n        expects.be: 'equal? @[\n            \"FIFO\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"all uppercase word\" [\n        phrase: \"GNU Image Manipulation Program\"\n        expects.be: 'equal? @[\n            \"GIMP\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"punctuation without whitespace\" [\n        phrase: \"Complementary metal-oxide semiconductor\"\n        expects.be: 'equal? @[\n            \"CMOS\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"very long abbreviation\" [\n        phrase: \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\"\n        expects.be: 'equal? @[\n            \"ROTFLSHTMDCOALM\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"consecutive delimiters\" [\n        phrase: \"Something - I made up from thin air\"\n        expects.be: 'equal? @[\n            \"SIMUFTA\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"apostrophes\" [\n        phrase: \"Halley\\'s Comet\"\n        expects.be: 'equal? @[\n            \"HC\"\n            abbreviate phrase \n        ]\n    ]\n\n    it.skip \"underscore emphasis\" [\n        phrase: \"The Road _Not_ Taken\"\n        expects.be: 'equal? @[\n            \"TRNT\"\n            abbreviate phrase \n        ]\n    ]\n]\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

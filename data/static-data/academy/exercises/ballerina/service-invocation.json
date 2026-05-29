@@ -1,0 +1,31 @@
+{
+  "id": "ballerina:service-invocation",
+  "trackSlug": "ballerina",
+  "slug": "service-invocation",
+  "name": "Service Invocation",
+  "uuid": "90925a7d-e840-4e50-bb16-5ad8d55c90ee",
+  "type": "practice",
+  "status": "active",
+  "blurb": "Calling APIs is an important part of writing code on the internet.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalling APIs is an important part of writing code on the internet. In this exercise, you will need to fetch data from an endpoint and ensure it was retrieved successfully.\n\n## Objectives\n\n- Modify the provided code.\n- Invoke the HTTP client and try to retrieve a quote. This result should be a union type consisting `string` and `error`.\n- If the quote is received, print it to the console (using `io:println()`).\n- If an `error` has occurred, print the error message to the console.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "import ballerina/http;\nimport ballerina/io;\n\nfinal http:Client brainyQuoteClient = check new (\"http://localhost:9095/brainyquote\");\n\npublic function main() {\n\n    // Invoke the HTTP client and try to retrieve a quote. This result should be a union type consisting `string` and `error`.\n\n    // If the quote is received, print it to the console (using `io:println()`).\n\n    // If an `error` has occurred, print the error message to the console.\n}\n",
+  "example_solution": "import ballerina/io;\nimport ballerina/http;\n\nfinal http:Client brainyQuoteClient = check new (\"http://localhost:9095/brainyquote\");\n\npublic function main() {\n\n    // Invoke the HTTP client and try to retrive a quote. This result should be a union type consisting `string` and\n    // `error`\n    string|error quote = brainyQuoteClient->/;\n\n    // If the quote is received, print it to the console (using `io:println()`).\n    // If an `error` has occurred, print the error message to the console\n    if quote is string {\n        io:println(quote);\n    } else {\n        io:println(quote.message());\n    }\n}\n",
+  "test_code": "import ballerina/test;\n\nstring[] outputs = [];\n\n@test:Mock {\n    moduleName: \"ballerina/io\",\n    functionName: \"println\"\n}\ntest:MockFunction printlnMockFn = new ();\n\npublic function mockPrint(any... val) {\n    outputs.push(val.reduce(function(string a, any b) returns string => a + b.toString(), \"\"));\n}\n\n@test:Config {}\nfunction testFunc() {\n    test:when(printlnMockFn).call(\"mockPrint\");\n    main();\n\n}\n",
+  "source": "This is an exercise to introduce users to the Ballerina HTTP client ",
+  "source_url": "https://ballerina.io/learn/by-example/http-client-send-request-receive-response/",
+  "authors": [],
+  "contributors": [
+    "hemikak",
+    "kasun04",
+    "Manuri",
+    "vinok88",
+    "vordimous",
+    "ThisaruGuruge"
+  ]
+}

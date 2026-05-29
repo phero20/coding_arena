@@ -23,7 +23,15 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 
+<<<<<<< HEAD
 export const UserSearch = () => {
+=======
+interface UserSearchProps {
+  onSelect?: () => void;
+}
+
+export const UserSearch = ({ onSelect }: UserSearchProps) => {
+>>>>>>> prod-deploy
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
@@ -34,10 +42,18 @@ export const UserSearch = () => {
     router.push(`/u/${username}`);
     setOpen(false);
     setQuery("");
+<<<<<<< HEAD
   };
 
   return (
     <div className="relative w-84">
+=======
+    onSelect?.();
+  };
+
+  return (
+    <div className="relative w-full md:w-84">
+>>>>>>> prod-deploy
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div className="relative group cursor-pointer w-full">
@@ -58,11 +74,19 @@ export const UserSearch = () => {
           </div>
         </PopoverTrigger>
         <PopoverContent
+<<<<<<< HEAD
           className="p-1 w-84 border-border/40 bg-background/95 backdrop-blur-xl"
           align="start"
           sideOffset={8}
         >
           <Command shouldFilter={false} className="bg-transparent">
+=======
+          className="p-1 w-84 border-border bg-background"
+          align="start"
+          sideOffset={8}
+        >
+          <Command shouldFilter={false} className="bg-card/60">
+>>>>>>> prod-deploy
             <CommandInput
               placeholder="Search by name or username..."
               value={query}

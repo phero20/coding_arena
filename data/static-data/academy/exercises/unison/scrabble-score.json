@@ -1,0 +1,26 @@
+{
+  "id": "unison:scrabble-score",
+  "trackSlug": "unison",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "b03f5c6e-86c4-4aa7-92cc-7587dd5dc3d3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "scrabbleScore.score : Text -> Nat\nscrabbleScore.score word = todo \"implement score\"\n",
+  "example_solution": "scrabbleScore.score : Text -> Nat\nscrabbleScore.score word =\n  word\n    |> toCharList\n    |> List.foldLeft (total ch -> total + charToScore ch) 0\n\nscrabbleScore.charToScore : Char -> Nat\nscrabbleScore.charToScore char =\n  match toUppercase char with\n    c | List.contains c [?A, ?E, ?I, ?O, ?U, ?L, ?N, ?R, ?S, ?T] -> 1\n    c | List.contains c [?D, ?G] -> 2\n    c | List.contains c [?B, ?C, ?M, ?P] -> 3\n    c | List.contains c [?F, ?H, ?V, ?W, ?Y] -> 4\n    c | List.contains c [?J, ?X] -> 8\n    c | List.contains c [?Q, ?Z] -> 10\n    ?K -> 5\n    _ -> 0\n",
+  "test_code": "scrabbleScore.score.tests.ex1 = verify do\n  labeled \"lowercase letter\" do\n    expected = 1\n    actual = scrabbleScore.score \"a\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex2 = verify do\n  labeled \"uppercase letter\" do\n    expected = 1\n    actual = scrabbleScore.score \"A\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex3 = verify do\n  labeled \"valuable letter\" do\n    expected = 4\n    actual = scrabbleScore.score \"f\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex4 = verify do\n  labeled \"short word\" do\n    expected = 2\n    actual = scrabbleScore.score \"at\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex5 = verify do\n  labeled \"short, valuable word\" do\n    expected = 12\n    actual = scrabbleScore.score \"zoo\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex6 = verify do\n  labeled \"medium word\" do\n    expected = 6\n    actual = scrabbleScore.score \"street\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex7 = verify do\n  labeled \"medium, valuable word\" do\n    expected = 22\n    actual = scrabbleScore.score \"quirky\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex8 = verify do\n  labeled \"long, mixed-case word\" do\n    expected = 41\n    actual = scrabbleScore.score \"OxyphenButazone\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex9 = verify do\n  labeled \"english-like word\" do\n    expected = 8\n    actual = scrabbleScore.score \"pinata\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex10 = verify do\n  labeled \"empty input\" do\n    expected = 0\n    actual = scrabbleScore.score \"\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\nscrabbleScore.score.tests.ex11 = verify do\n  labeled \"entire alphabet available\" do\n    expected = 87\n    actual = scrabbleScore.score \"abcdefghijklmnopqrstuvwxyz\"\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ntest> scrabbleScore.tests = join [\n  scrabbleScore.score.tests.ex1,\n  scrabbleScore.score.tests.ex2,\n  scrabbleScore.score.tests.ex3,\n  scrabbleScore.score.tests.ex4,\n  scrabbleScore.score.tests.ex5,\n  scrabbleScore.score.tests.ex6,\n  scrabbleScore.score.tests.ex7,\n  scrabbleScore.score.tests.ex8,\n  scrabbleScore.score.tests.ex9,\n  scrabbleScore.score.tests.ex10,\n  scrabbleScore.score.tests.ex11\n]\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "SimaDovakin"
+  ],
+  "contributors": null
+}

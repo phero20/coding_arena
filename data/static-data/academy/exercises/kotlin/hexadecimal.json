@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:hexadecimal",
+  "trackSlug": "kotlin",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "13b1a62e-8e0e-4d57-b8c9-341b41f25cf5",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object Hexadecimal {\n\n    fun toDecimal(s: String): Int {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "object Hexadecimal {\n    private val hexChars = ('0'..'9') + ('a'..'f')\n\n    fun toDecimal(s: String): Int {\n        return s.lowercase().fold(0) { accum, char ->\n            when (char) {\n                in hexChars -> hexChars.indexOf(char) + (accum * 16)\n                else -> return 0\n            }\n        }\n    }\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport org.junit.runner.RunWith\nimport org.junit.runners.Parameterized\nimport kotlin.test.assertEquals\n\n@RunWith(Parameterized::class)\nclass HexadecimalTest(val input: String, val expectedOutput: Int) {\n\n    companion object {\n        @JvmStatic\n        @Parameterized.Parameters(name = \"{index}: binary({0})={1}\")\n        fun data() = listOf(\n                arrayOf(\"1\", 1),\n                arrayOf(\"c\", 12),\n                arrayOf(\"10\", 16),\n                arrayOf(\"af\", 175),\n                arrayOf(\"AF\", 175),\n                arrayOf(\"100\", 256),\n                arrayOf(\"19ace\", 105166),\n                arrayOf(\"000000\", 0),\n                arrayOf(\"ffffff\", 16777215),\n                arrayOf(\"ffff00\", 16776960),\n\n                //Invalid input\n                arrayOf(\"carrot1\", 0),\n                arrayOf(\"abc10z\", 0),\n                arrayOf(\"g1\", 0)\n        )\n    }\n\n\n    @Test\n    fun hexStringToInt() {\n        assertEquals(expectedOutput, Hexadecimal.toDecimal(input))\n    }\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "kytrinyx",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

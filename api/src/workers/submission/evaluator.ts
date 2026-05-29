@@ -1,5 +1,9 @@
 import { ProblemTestRepository } from "../../repositories/problems/problem-test.repository";
 import { AiJudgeCache } from "../../cache/judge/ai-judge.cache";
+<<<<<<< HEAD
+=======
+import { DriverJudgeExecutionService } from "../../services/judge/driver-judge-execution.service";
+>>>>>>> prod-deploy
 import {
   TestResult,
   SubmissionEvaluationResult,
@@ -11,8 +15,13 @@ const logger = createLogger("submission-evaluator");
 
 interface TestCase {
   index: number;
+<<<<<<< HEAD
   input: string;
   expected_output: string;
+=======
+  input: unknown;
+  expected_output: unknown;
+>>>>>>> prod-deploy
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -20,10 +29,19 @@ import { type ICradle } from "../../libs/awilix-container";
 export class SubmissionEvaluator {
   private readonly problemTestRepository: ProblemTestRepository;
   private readonly aiJudgeCache: AiJudgeCache;
+<<<<<<< HEAD
 
   constructor({ problemTestRepository, aiJudgeCache }: ICradle) {
     this.problemTestRepository = problemTestRepository;
     this.aiJudgeCache = aiJudgeCache;
+=======
+  private readonly driverJudgeExecutionService: DriverJudgeExecutionService;
+
+  constructor({ problemTestRepository, aiJudgeCache, driverJudgeExecutionService }: ICradle) {
+    this.problemTestRepository = problemTestRepository;
+    this.aiJudgeCache = aiJudgeCache;
+    this.driverJudgeExecutionService = driverJudgeExecutionService;
+>>>>>>> prod-deploy
   }
 
   async evaluate(data: {
@@ -84,6 +102,7 @@ export class SubmissionEvaluator {
       "Test cases loaded (public + hidden)",
     );
 
+<<<<<<< HEAD
     // 2. Call AiCodeJudgeService with caching
     const evaluationResult = await this.aiJudgeCache.runSamples({
       problemId: problemId,
@@ -92,6 +111,28 @@ export class SubmissionEvaluator {
       sourceCode: sourceCode,
       tests: allTestCases,
     });
+=======
+    // 2. Execute via robust driver for supported languages, fallback to AI otherwise
+    const evaluationResult = this.driverJudgeExecutionService.supportsLanguage(languageId)
+      ? await this.driverJudgeExecutionService.evaluate({
+          problemId,
+          languageId,
+          sourceCode,
+          includeHidden: true,
+          traceId: submissionId,
+        })
+      : await this.aiJudgeCache.runSamples({
+          problemId: problemId,
+          languageId: languageId,
+          languageName: getLanguageName(languageId),
+          sourceCode: sourceCode,
+          tests: allTestCases.map((t) => ({
+            ...t,
+            input: JSON.stringify(t.input),
+            expected_output: JSON.stringify(t.expected_output),
+          })),
+        });
+>>>>>>> prod-deploy
 
     // 3. Parse results
     let finalStatus = evaluationResult.overallStatus;
@@ -108,9 +149,15 @@ export class SubmissionEvaluator {
       compile_output: t.compile_output ?? null,
       message: t.message ?? null,
       status: t.status as SubmissionEvaluationResult["status"],
+<<<<<<< HEAD
       rawStatus: {
         id: 0,
         description: "AI Evaluation",
+=======
+      rawStatus: t.rawStatus ?? {
+        id: 0,
+        description: "Unknown",
+>>>>>>> prod-deploy
       },
       time: t.time ? String(t.time) : null,
       memory: t.memory ?? undefined,
@@ -120,7 +167,13 @@ export class SubmissionEvaluator {
       status: finalStatus as SubmissionEvaluationResult["status"],
       tests: testResults,
       executionTime: 0, // Will be calculated by processor
+<<<<<<< HEAD
       cached: evaluationResult.cached,
+=======
+      compileOutput: evaluationResult.compileOutput,
+      stderr: evaluationResult.stderr,
+      cached: "cached" in evaluationResult ? evaluationResult.cached : false,
+>>>>>>> prod-deploy
     };
   }
 }

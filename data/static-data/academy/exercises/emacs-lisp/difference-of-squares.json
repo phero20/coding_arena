@@ -1,0 +1,30 @@
+{
+  "id": "emacs-lisp:difference-of-squares",
+  "trackSlug": "emacs-lisp",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "7b421b14-c33c-41a6-9e7e-4f9b6fbe6fcc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; difference-of-squares.el --- Difference of Squares (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n(defun sum-of-squares (n)\n;;; Code:\n)\n\n(defun square-of-sum (n)\n;;; Code:\n)\n\n(defun difference (n)\n;;; Code:\n)\n\n(provide 'difference-of-squares)\n;;; difference-of-squares.el ends here\n",
+  "example_solution": ";;; difference-of-squares.el --- Difference of Squares (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n(require 'cl-lib)\n\n(defun sum-of-squares (n)\n  \"Square of sum of N.\"\n  (cl-reduce #'+ (mapcar (lambda (i) (expt i 2)) (number-sequence 1 n))))\n\n(defun square-of-sum (n)\n  \"Sum of squares of N.\"\n  (expt (cl-reduce #'+ (number-sequence 1 n)) 2))\n\n(defun difference (n)\n  \"Difference of squares pertaining to N.\"\n  (- (square-of-sum n)\n     (sum-of-squares n)))\n\n(provide 'difference-of-squares)\n;;; difference-of-squares.el ends here\n",
+  "test_code": ";;; difference-of-squares-test.el --- Tests for difference-of-squares (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;;; Code:\n\n(load-file \"difference-of-squares.el\")\n(declare-function sum-of-squares \"difference-of-squares.el\" (n))\n(declare-function square-of-sum \"difference-of-squares.el\" (n))\n(declare-function difference \"difference-of-squares.el\" (n))\n\n(ert-deftest square-of-sum-to-5 ()\n  (should (= 225 (square-of-sum 5))))\n\n(ert-deftest sum-of-squares-to-5 ()\n  (should (= 55 (sum-of-squares 5))))\n\n(ert-deftest difference-of-squares-to-5 ()\n  (should (= 170 (difference 5))))\n\n\n(ert-deftest square-of-sum-to-10 ()\n  (should (= 3025 (square-of-sum 10))))\n\n(ert-deftest sum-of-squares-to-10 ()\n  (should (= 385 (sum-of-squares 10))))\n\n(ert-deftest difference-of-squares-to-10 ()\n  (should (= 2640 (difference 10))))\n\n\n(ert-deftest square-of-sum-to-100 ()\n  (should (= 25502500 (square-of-sum 100))))\n\n(ert-deftest sum-of-squares-to-100 ()\n  (should (= 338350 (sum-of-squares 100))))\n\n(ert-deftest difference-of-squares-to-100 ()\n  (should (= 25164150 (difference 100))))\n\n\n(provide 'difference-of-squares-test)\n;;; difference-of-squares-test.el ends here\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "canweriotnow"
+  ],
+  "contributors": [
+    "Scientifica96",
+    "vermiculus",
+    "yurrriq"
+  ]
+}

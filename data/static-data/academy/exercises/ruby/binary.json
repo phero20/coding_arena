@@ -1,0 +1,42 @@
+{
+  "id": "ruby:binary",
+  "trackSlug": "ruby",
+  "slug": "binary",
+  "name": "Binary",
+  "uuid": "43bc27ed-d2fa-4173-8665-4459b71c9a3a",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles.\n\nImplement binary to decimal conversion.\nGiven a binary input string, your program should produce a decimal output.\nThe program should handle invalid inputs.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n\n## About Binary (Base-2)\n\nDecimal is a base-10 system.\n\nA number 23 in base 10 notation can be understood as a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The *n*th number gets multiplied by 10^*(n-1)*.\n- All these values are summed.\n\nSo: `23 => 2*10^1 + 3*10^0 => 2*10 + 3*1 = 23 base 10`\n\nBinary is similar, but uses powers of 2 rather than powers of 10.\n\nSo: `101 => 1*2^2 + 0*2^1 + 1*2^0 => 1*4 + 0*2 + 1*1 => 4 + 1 => 5 base 10`.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Binary' exercise in this file. Make the tests in\n`binary_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/binary` directory.\n=end\n",
+  "example_solution": "class Binary\n  def self.to_decimal binary\n    fail ArgumentError.new(\"invalid binary input #{binary}\") if invalid?(binary)\n\n    digits(binary).reduce(0, &method(:convert))\n  end\n\n  private\n\n  def self.invalid?(binary)\n    binary =~ /[^01]/\n  end\n\n  def self.digits(binary)\n    binary.chars.map(&:to_i)\n  end\n\n  def self.convert(decimal, digit)\n    decimal * 2 + digit\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'binary'\n\nclass BinaryTest < Minitest::Test\n  def test_binary_0_is_decimal_0\n    # skip\n    assert_equal 0, Binary.to_decimal('0')\n  end\n\n  def test_binary_1_is_decimal_1\n    skip\n    assert_equal 1, Binary.to_decimal('1')\n  end\n\n  def test_binary_10_is_decimal_2\n    skip\n    assert_equal 2, Binary.to_decimal('10')\n  end\n\n  def test_binary_11_is_decimal_3\n    skip\n    assert_equal 3, Binary.to_decimal('11')\n  end\n\n  def test_binary_100_is_decimal_4\n    skip\n    assert_equal 4, Binary.to_decimal('100')\n  end\n\n  def test_binary_1001_is_decimal_9\n    skip\n    assert_equal 9, Binary.to_decimal('1001')\n  end\n\n  def test_binary_11010_is_decimal_26\n    skip\n    assert_equal 26, Binary.to_decimal('11010')\n  end\n\n  def test_binary_10001101000_is_decimal_1128\n    skip\n    assert_equal 1128, Binary.to_decimal('10001101000')\n  end\n\n  def test_binary_ignores_leading_zeros\n    skip\n    assert_equal 31, Binary.to_decimal('000011111')\n  end\n\n  def test_2_is_not_a_valid_binary_digit\n    skip\n    assert_raises(ArgumentError) do\n      Binary.to_decimal('2')\n    end\n  end\n\n  def test_a_number_containing_a_non_binary_digit_is_invalid\n    skip\n    assert_raises(ArgumentError) do\n      Binary.to_decimal('01201')\n    end\n  end\n\n  def test_a_number_with_trailing_non_binary_characters_is_invalid\n    skip\n    assert_raises(ArgumentError) do\n      Binary.to_decimal('10nope')\n    end\n  end\n\n  def test_a_number_with_leading_non_binary_characters_is_invalid\n    skip\n    assert_raises(ArgumentError) do\n      Binary.to_decimal('nope10')\n    end\n  end\n\n  def test_a_number_with_internal_non_binary_characters_is_invalid\n    skip\n    assert_raises(ArgumentError) do\n      Binary.to_decimal('10nope10')\n    end\n  end\n\n  def test_a_number_and_a_word_whitespace_separated_is_invalid\n    skip\n    assert_raises(ArgumentError) do\n      Binary.to_decimal('001 nope')\n    end\n  end\nend\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "bmulvihill",
+    "budmc29",
+    "cadwallion",
+    "casto101",
+    "henrik",
+    "hilary",
+    "Insti",
+    "jpotts244",
+    "kickinbahk",
+    "kotp",
+    "pendletons",
+    "samjonester",
+    "scottcrawford03",
+    "tommyschaefer",
+    "tryantwit"
+  ]
+}

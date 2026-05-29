@@ -1,0 +1,34 @@
+{
+  "id": "vbnet:pythagorean-triplet",
+  "trackSlug": "vbnet",
+  "slug": "pythagorean-triplet",
+  "name": "Pythagorean Triplet",
+  "uuid": "ceb811d0-3aae-4517-9e37-1eca5ba07c39",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "tuples",
+    "generic-methods"
+  ],
+  "prerequisites": [
+    "tuples",
+    "numbers",
+    "enumerables",
+    "generic-methods"
+  ],
+  "instructions": "# Description\n\nA Pythagorean triplet is a set of three natural numbers, {a, b, c}, for which,\n\n```text\na² + b² = c²\n```\n\nand such that,\n\n```text\na < b < c\n```\n\nFor example,\n\n```text\n3² + 4² = 5².\n```\n\nGiven an input integer N, find all Pythagorean triplets for which `a + b + c = N`.\n\nFor example, with N = 1000, there is exactly one Pythagorean triplet for which `a + b + c = 1000`: `{200, 375, 425}`.\n",
+  "introduction": "# Introduction\n\nYou are an accomplished problem-solver, known for your ability to tackle the most challenging mathematical puzzles.\nOne evening, you receive an urgent letter from an inventor called the Triangle Tinkerer, who is working on a groundbreaking new project.\nThe letter reads:\n\n> Dear Mathematician,\n>\n> I need your help.\n> I am designing a device that relies on the unique properties of Pythagorean triplets — sets of three integers that satisfy the equation a² + b² = c².\n> This device will revolutionize navigation, but for it to work, I must program it with every possible triplet where the sum of a, b, and c equals a specific number, N.\n> Calculating these triplets by hand would take me years, but I hear you are more than up to the task.\n>\n> Time is of the essence.\n> The future of my invention — and perhaps even the future of mathematical innovation — rests on your ability to solve this problem.\n\nMotivated by the importance of the task, you set out to find all Pythagorean triplets that satisfy the condition.\nYour work could have far-reaching implications, unlocking new possibilities in science and engineering.\nCan you rise to the challenge and make history?\n",
+  "hints": null,
+  "starter_code": "Imports System\nImports System.Collections.Generic\n\nPublic Module PythagoreanTriplet\n    Public Function TripletsWithSum(ByVal sum As Integer) As IEnumerable(Of (Integer, Integer, Integer))\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System.Collections.Generic\n\nPublic Module PythagoreanTriplet\n\n    Public Iterator Function TripletsWithSum(ByVal sum As Integer) As IEnumerable(Of (Integer, Integer, Integer))\n        Dim triplets = New List(Of (Integer, Integer, Integer))()\n        For c = sum / 2 To 2 Step -1\n            Dim left = sum - c\n            Dim a = 1, b As Integer = left - a\n\n            While b > a\n                If a * a + b * b = c * c Then Yield (a, b, c)\n                a += 1\n                b -= 1\n            End While\n        Next\n    End Function\n\nEnd Module\n",
+  "test_code": "Imports System\nImports Xunit\n\nPublic Class PythagoreanTripletTests\n    <Fact>\n    Public Sub Triplets_whose_sum_is_12()\n        Assert.Equal({(3, 4, 5)}, TripletsWithSum(12))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Triplets_whose_sum_is_108()\n        Assert.Equal({(27, 36, 45)}, TripletsWithSum(108))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Triplets_whose_sum_is_1000()\n        Assert.Equal({(200, 375, 425)}, TripletsWithSum(1000))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub No_matching_triplets_for_1001()\n        Assert.Equal(Array.Empty(Of (Integer, Integer, Integer))(), TripletsWithSum(1001))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Returns_all_matching_triplets()\n        Assert.Equal({(9, 40, 41), (15, 36, 39)}, TripletsWithSum(90))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Several_matching_triplets()\n        Assert.Equal({(40, 399, 401), (56, 390, 394), (105, 360, 375), (120, 350, 370), (140, 336, 364), (168, 315, 357), (210, 280, 350), (240, 252, 348)}, TripletsWithSum(840))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Triplets_for_large_number()\n        Assert.Equal({(1200, 14375, 14425), (1875, 14000, 14125), (5000, 12000, 13000), (6000, 11250, 12750), (7500, 10000, 12500)}, TripletsWithSum(30000))\n    End Sub\nEnd Class\n",
+  "source": "A variation of Problem 9 from Project Euler",
+  "source_url": "https://projecteuler.net/problem=9",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

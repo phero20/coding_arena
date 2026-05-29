@@ -10,7 +10,18 @@ import {
   ShieldCheck,
   ChevronRight,
   Eye,
+<<<<<<< HEAD
 } from "lucide-react";
+=======
+  CheckCircle2,
+  X,
+  AlertCircle,
+  Users,
+  ChevronDown,
+  ChevronUp
+} from "lucide-react";
+import { RankIndicator } from "../stats/leaderboard/RankIndicator";
+>>>>>>> prod-deploy
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -33,9 +44,15 @@ import { cn, formatSolveTime } from "@/lib/utils";
 import type { ArenaMatch } from "@/types/arena";
 import { format } from "date-fns";
 import { VerdictBadge } from "@/components/ui/verdict-badge";
+<<<<<<< HEAD
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Link from "next/link";
+=======
+import { CodeViewer } from "@/components/ui/code-viewer";
+import Link from "next/link";
+import NotFound from "@/app/not-found";
+>>>>>>> prod-deploy
 
 interface ArenaMatchDetailProps {
   match: ArenaMatch;
@@ -101,8 +118,13 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
       </div>
 
       {/* Main Leaderboard Card */}
+<<<<<<< HEAD
       <Card className="overflow-hidden border-border/40 shadow-xl shadow-background/20 bg-card/30 backdrop-blur-md">
         <CardHeader className="border-b border-border/10 bg-muted/20 py-4">
+=======
+      <Card className="overflow-hidden border-border/40 bg-card/30">
+        <CardHeader className="border-b border-border/10 bg-muted/40 py-4">
+>>>>>>> prod-deploy
           <div className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-primary" />
             <CardTitle className="text-sm font-black uppercase tracking-widest">
@@ -151,11 +173,18 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                       <TableRow
                         className={cn(
                           "group cursor-pointer transition-colors border-b border-border/5",
+<<<<<<< HEAD
+=======
+                          index === 0 && "bg-rank-1-row",
+                          index === 1 && "bg-rank-2-row",
+                          index === 2 && "bg-rank-3-row",
+>>>>>>> prod-deploy
                           isExpanded && "bg-muted/50 border-primary/20",
                         )}
                         onClick={() => toggleExpand(player.userId)}
                       >
                         <TableCell className="pl-6 py-4">
+<<<<<<< HEAD
                           <div
                             className={cn(
                               "h-7 w-7 rounded-md flex items-center justify-center text-[10px] font-black ring-1 ring-inset",
@@ -163,6 +192,15 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                           >
                             {player.submissionOrder || "--"}
                           </div>
+=======
+                          {player.submissionOrder ? (
+                            <RankIndicator rank={player.submissionOrder} />
+                          ) : (
+                            <div className="flex items-center justify-center h-7 w-7 text-xs text-muted-foreground/30">
+                              --
+                            </div>
+                          )}
+>>>>>>> prod-deploy
                         </TableCell>
                         <TableCell className="py-4">
                           <div className="flex items-center gap-3 min-w-[160px]">
@@ -227,6 +265,7 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                       </TableRow>
 
                       {isExpanded && (
+<<<<<<< HEAD
                         <TableRow className="bg-muted hover:bg-muted">
                           <TableCell colSpan={7} className="p-0">
                             <div className="animate-in slide-in-from-top-2 duration-300">
@@ -267,6 +306,22 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                                   <ShieldCheck className="size-8 mb-2" />
                                   <p className="text-[10px] font-black uppercase italic">
                                     Code not available.
+=======
+                        <TableRow className="bg-muted/40 hover:bg-muted/40 border-none">
+                          <TableCell colSpan={7} className="p-0">
+                            <div className="animate-in slide-in-from-top-2 duration-300">
+                              {player.sourceCode ? (
+                                <CodeViewer
+                                  code={player.sourceCode}
+                                  language={player.languageId || match.language}
+                                  label={`${player.languageId}`}
+                                />
+                              ) : (
+                                <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">
+                                  <Code2 className="size-6" />
+                                  <p className="text-sm font-black ">
+                                    User has not submitted any solution.
+>>>>>>> prod-deploy
                                   </p>
                                 </div>
                               )}

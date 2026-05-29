@@ -1,0 +1,28 @@
+{
+  "id": "emacs-lisp:rna-transcription",
+  "trackSlug": "emacs-lisp",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "7b6767b9-2efc-414d-83f7-def9c371d63d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": ";;; rna-transcription.el -- RNA Transcription (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n(defun to-rna (strand)\n;;; Code:\n)\n\n(provide 'rna-transcription)\n;;; rna-transcription.el ends here\n",
+  "example_solution": ";;; rna-transcription.el -- RNA Transcription (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n;;\n;; Example derived pretty directly from xlisp example:\n;; https://github.com/exercism/xlisp/blob/master/rna-transcription/example.lisp\n;;\n\n;;; Code:\n\n(require 'cl-lib)\n\n(defun validate-strand (strand)\n  \"Check to see if RNA STRAND is valid.\"\n  (or (cl-every (lambda (c) (cl-find c \"ATCGU\")) (cl-coerce strand 'list))\n      (error \"Bad strand\")))\n\n(defvar dna->rna\n  '((?C . ?G) (?G . ?C) (?A . ?U) (?T . ?A)))\n\n(defun to-rna (strand)\n  \"Convert STRAND of DNA to RNA.\"\n  (validate-strand strand)\n  (cl-concatenate 'string\n                  (mapcar (lambda (c) (cdr (assoc c dna->rna)))\n                          (cl-coerce strand 'list))))\n\n\n(provide 'rna-transcription)\n;;; rna-transcription.el ends here\n",
+  "test_code": ";;; rna-transcription-test.el --- Tests for RNA Transcription (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n\n;;; Code:\n\n(require 'cl-lib)\n\n(load-file \"rna-transcription.el\")\n(declare-function to-rna \"rna-transcription.el\" (strand))\n\n(ert-deftest transcribes-cytosine-to-guanine ()\n  (should (string= \"G\" (to-rna \"C\"))))\n\n(ert-deftest transcribes-guanine-to-cytosine ()\n  (should (string= \"C\" (to-rna \"G\"))))\n\n(ert-deftest transcribes-adenine-to-uracil ()\n  (should (string= \"U\" (to-rna \"A\"))))\n\n(ert-deftest transcribes-thymine-to-adenine ()\n  (should (string= \"A\" (to-rna \"T\"))))\n\n(ert-deftest it-transcribes-all-nucleotides ()\n  (should (string= \"UGCACCAGAAUU\"\n                   (to-rna \"ACGTGGTCTTAA\"))))\n\n(ert-deftest it-validates-dna-strands ()\n  (should-error (to-rna \"XCGFGGTDTTAA\")))\n\n(provide 'rna-transcription-test)\n;;; rna-transcription-test.el ends here\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "canweriotnow"
+  ],
+  "contributors": [
+    "vermiculus"
+  ]
+}

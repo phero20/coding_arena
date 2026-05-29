@@ -1,0 +1,31 @@
+{
+  "id": "java:micro-blog",
+  "trackSlug": "java",
+  "slug": "micro-blog",
+  "name": "Micro Blog",
+  "uuid": "8295ae71-5c0e-49d0-bbe9-9b43a85bf2dd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an input string, truncate it to 5 characters.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYou have identified a gap in the social media market for very very short posts.\nNow that Twitter allows 280 character posts, people wanting quick social media updates aren't being served.\nYou decide to create your own social media network.\n\nTo make your product noteworthy, you make it extreme and only allow posts of 5 or less characters.\nAny posts of more than 5 characters should be truncated to 5.\n\nTo allow your users to express themselves fully, you allow Emoji and other Unicode.\n\nThe task is to truncate input strings to 5 characters.\n\n## Text Encodings\n\nText stored digitally has to be converted to a series of bytes.\nThere are 3 ways to map characters to bytes in common use.\n\n- **ASCII** can encode English language characters.\n  All characters are precisely 1 byte long.\n- **UTF-8** is a Unicode text encoding.\n  Characters take between 1 and 4 bytes.\n- **UTF-16** is a Unicode text encoding.\n  Characters are either 2 or 4 bytes long.\n\nUTF-8 and UTF-16 are both Unicode encodings which means they're capable of representing a massive range of characters including:\n\n- Text in most of the world's languages and scripts\n- Historic text\n- Emoji\n\nUTF-8 and UTF-16 are both variable length encodings, which means that different characters take up different amounts of space.\n\nConsider the letter 'a' and the emoji '😛'.\nIn UTF-16 the letter takes 2 bytes but the emoji takes 4 bytes.\n\nThe trick to this exercise is to use APIs designed around Unicode characters (codepoints) instead of Unicode codeunits.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class MicroBlog {\n    public String truncate(String input) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n}\n",
+  "example_solution": "class MicroBlog {\n    public String truncate(String input) {\n        return input.codePoints()\n            .limit(5)\n            .collect(\n                StringBuilder::new,\n                StringBuilder::appendCodePoint,\n                StringBuilder::append)\n            .toString();\n    }\n}\n",
+  "test_code": "import org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class MicroBlogTest {\n\n    private final MicroBlog microBlog = new MicroBlog();\n    \n    @Test\n    @DisplayName(\"English language short\")\n    public void englishLanguageShort() {\n        String expected = \"Hi\";\n        assertThat(microBlog.truncate(\"Hi\")).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"English language long\")\n    public void englishLanguageLong() {\n        String expected = \"Hello\";\n        assertThat(microBlog.truncate(\"Hello there\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"German language short (broth)\")\n    public void germanLanguageShortBroth() {\n        String expected = \"brühe\";\n        assertThat(microBlog.truncate(\"brühe\")).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"German language long (bear carpet → beards)\")\n    public void germanLanguageLongBearCarpetToBeards() {\n        String expected = \"Bärte\";\n        assertThat(microBlog.truncate(\"Bärteppich\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Bulgarian language short (good)\")\n    public void bulgarianLanguageShortGood() {\n        String expected = \"Добър\";\n        assertThat(microBlog.truncate(\"Добър\")).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Greek language short (health)\")\n    public void greekLanguageShortHealth() {\n        String expected = \"υγειά\";\n        assertThat(microBlog.truncate(\"υγειά\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Maths short\")\n    public void mathsShort() {\n        String expected = \"a=πr²\";\n        assertThat(microBlog.truncate(\"a=πr²\")).isEqualTo(expected);\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Maths long\")\n    public void mathsLong() {\n        String expected = \"∅⊊ℕ⊊ℤ\";\n        assertThat(microBlog.truncate(\"∅⊊ℕ⊊ℤ⊊ℚ⊊ℝ⊊ℂ\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"English and emoji short\")\n    public void englishAndEmojiShort() {\n        String expected = \"Fly 🛫\";\n        assertThat(microBlog.truncate(\"Fly 🛫\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Emoji short\")\n    public void emojiShort() {\n        String expected = \"💇\";\n        assertThat(microBlog.truncate(\"💇\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Emoji long\")\n    public void emojiLong() {\n        String expected = \"❄🌡🤧🤒🏥\";\n        assertThat(microBlog.truncate(\"❄🌡🤧🤒🏥🕰😀\")).isEqualTo(expected);\n    }\n    \n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"Royal Flush?\")\n    public void royalFlush() {\n        String expected = \"🃎🂸🃅🃋🃍\";\n        assertThat(microBlog.truncate(\"🃎🂸🃅🃋🃍🃁🃊\")).isEqualTo(expected);\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "jmrunkle"
+  ],
+  "contributors": [
+    "msomji",
+    "muzimuzhi"
+  ]
+}

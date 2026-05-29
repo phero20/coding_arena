@@ -1,0 +1,26 @@
+{
+  "id": "futhark:run-length-encoding",
+  "trackSlug": "futhark",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "9b14d6e1-bd0e-4450-817f-e6e2c3958a3d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def encode (string: []u8): []u8 = ???\n\ndef decode (string: []u8): []u8 = ???\n",
+  "example_solution": "def encode [n] (string: [n]u8): []u8 =\n  let (a, i, _) = loop (a, i, k) = (replicate n '\\0', n, n) while k > 0 do\n    let c = string[k - 1]\n    let j = loop j = k - 1 while j > 0 && string[j - 1] == c do\n      j - 1\n\n    -- Run-length encode the run from `j` (inclusive) to `k` (exclusive) of the character c\n    let a2 = a with [i - 1] = c\n    let i2 = i - 1\n    in\n      if k - j == 1 then (a2, i2, j) else\n      let (a3, i3, _) = loop (a3, i3, number) = (a2, i2, k - j) while number > 0 do\n        (a3 with [i3 - 1] = '0' + u8.i64 (number % 10), i3 - 1, number / 10)\n      in (a3, i3, j)\n  in\n    a[i:]\n\ndef decode_length (string: []u8): i64 =\n  let (i, _) = loop (i, number) = (0, 0) for c in string do\n    if c >= '0' && c <= '9' then (i, number * 10 + i64.u8 c - '0') else\n    if number == 0 then (i + 1, 0) else\n    (i + number, 0)\n  in\n    i\n\ndef decode [n] (string: [n]u8): []u8 =\n  let (a, _, _) = loop (a, i, number) = (replicate (decode_length string) '\\0', 0, 0) for c in string do\n    if c >= '0' && c <= '9' then (a, i, number * 10 + i64.u8 c - '0') else\n    if number == 0 then (a with [i] = c, i + 1, 0) else\n    let (a2, i2, number2) = loop (a2, i2, number2) = (a, i, number) while number2 > 0 do\n      (a2 with [i2] = c, i2 + 1, number2 - 1)\n    in\n      (a2, i2, number2)\n  in\n    a\n",
+  "test_code": "import \"run_length_encoding\"\n\n-- empty string\n-- ==\n-- entry: test_encode\n-- input { \"\" }\n-- output { \"\" }\n\n-- single characters only are encoded without count\n-- ==\n-- entry: test_encode\n-- input { \"XYZ\" }\n-- output { \"XYZ\" }\n\n-- string with no single characters\n-- ==\n-- entry: test_encode\n-- input { \"AABBBCCCC\" }\n-- output { \"2A3B4C\" }\n\n-- single characters mixed with repeated characters\n-- ==\n-- entry: test_encode\n-- input { \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\" }\n-- output { \"12WB12W3B24WB\" }\n\n-- multiple whitespace mixed in string\n-- ==\n-- entry: test_encode\n-- input { \"  hsqq qww  \" }\n-- output { \"2 hs2q q2w2 \" }\n\n-- lowercase characters\n-- ==\n-- entry: test_encode\n-- input { \"aabbbcccc\" }\n-- output { \"2a3b4c\" }\n\n-- empty string\n-- ==\n-- entry: test_decode\n-- input { \"\" }\n-- output { \"\" }\n\n-- single characters only\n-- ==\n-- entry: test_decode\n-- input { \"XYZ\" }\n-- output { \"XYZ\" }\n\n-- string with no single characters\n-- ==\n-- entry: test_decode\n-- input { \"2A3B4C\" }\n-- output { \"AABBBCCCC\" }\n\n-- single characters with repeated characters\n-- ==\n-- entry: test_decode\n-- input { \"12WB12W3B24WB\" }\n-- output { \"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\" }\n\n-- multiple whitespace mixed in string\n-- ==\n-- entry: test_decode\n-- input { \"2 hs2q q2w2 \" }\n-- output { \"  hsqq qww  \" }\n\n-- lowercase string\n-- ==\n-- entry: test_decode\n-- input { \"2a3b4c\" }\n-- output { \"aabbbcccc\" }\n\n-- encode followed by decode gives original string\n-- ==\n-- entry: test_consistency\n-- input { \"zzz ZZ  zZ\" }\n-- output { \"zzz ZZ  zZ\" }\n\nentry test_encode (string: []u8): []u8 =\n  encode string\n\nentry test_decode (string: []u8): []u8 =\n  decode string\n\nentry test_consistency (string: []u8): []u8 =\n  decode (encode string)\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

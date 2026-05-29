@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:micro-blog",
+  "trackSlug": "moonscript",
+  "slug": "micro-blog",
+  "name": "Micro Blog",
+  "uuid": "e4f7ccfc-fcc4-4b93-a392-e6e5b3df95c1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an input string, truncate it to 5 characters.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYou have identified a gap in the social media market for very very short posts.\nNow that Twitter allows 280 character posts, people wanting quick social media updates aren't being served.\nYou decide to create your own social media network.\n\nTo make your product noteworthy, you make it extreme and only allow posts of 5 or less characters.\nAny posts of more than 5 characters should be truncated to 5.\n\nTo allow your users to express themselves fully, you allow Emoji and other Unicode.\n\nThe task is to truncate input strings to 5 characters.\n\n## Text Encodings\n\nText stored digitally has to be converted to a series of bytes.\nThere are 3 ways to map characters to bytes in common use.\n\n- **ASCII** can encode English language characters.\n  All characters are precisely 1 byte long.\n- **UTF-8** is a Unicode text encoding.\n  Characters take between 1 and 4 bytes.\n- **UTF-16** is a Unicode text encoding.\n  Characters are either 2 or 4 bytes long.\n\nUTF-8 and UTF-16 are both Unicode encodings which means they're capable of representing a massive range of characters including:\n\n- Text in most of the world's languages and scripts\n- Historic text\n- Emoji\n\nUTF-8 and UTF-16 are both variable length encodings, which means that different characters take up different amounts of space.\n\nConsider the letter 'a' and the emoji '😛'.\nIn UTF-16 the letter takes 2 bytes but the emoji takes 4 bytes.\n\nThe trick to this exercise is to use APIs designed around Unicode characters (codepoints) instead of Unicode codeunits.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "truncate = (str) ->\n  error 'Implement me'\n\n{ :truncate }\n",
+  "example_solution": "{\n  truncate: (str, size=5) ->\n    codepoints = { utf8.codepoint str, 1, #str }\n    utf8.char(table.unpack [cp for cp in *codepoints[,size]])\n}\n",
+  "test_code": "MicroBlog = require 'micro_blog'\n\ndescribe 'micro-blog:', ->\n  it 'English language short', ->\n    result = MicroBlog.truncate 'Hi'\n    assert.are.equal 'Hi', result\n\n  pending 'English language long', ->\n    result = MicroBlog.truncate 'Hello there'\n    assert.are.equal 'Hello', result\n\n  pending 'German language short (broth)', ->\n    result = MicroBlog.truncate 'brühe'\n    assert.are.equal 'brühe', result\n\n  pending 'German language long (bear carpet → beards)', ->\n    result = MicroBlog.truncate 'Bärteppich'\n    assert.are.equal 'Bärte', result\n\n  pending 'Bulgarian language short (good)', ->\n    result = MicroBlog.truncate 'Добър'\n    assert.are.equal 'Добър', result\n\n  pending 'Greek language short (health)', ->\n    result = MicroBlog.truncate 'υγειά'\n    assert.are.equal 'υγειά', result\n\n  pending 'Maths short', ->\n    result = MicroBlog.truncate 'a=πr²'\n    assert.are.equal 'a=πr²', result\n\n  pending 'Maths long', ->\n    result = MicroBlog.truncate '∅⊊ℕ⊊ℤ⊊ℚ⊊ℝ⊊ℂ'\n    assert.are.equal '∅⊊ℕ⊊ℤ', result\n\n  pending 'English and emoji short', ->\n    result = MicroBlog.truncate 'Fly 🛫'\n    assert.are.equal 'Fly 🛫', result\n\n  pending 'Emoji short', ->\n    result = MicroBlog.truncate '💇'\n    assert.are.equal '💇', result\n\n  pending 'Emoji long', ->\n    result = MicroBlog.truncate '❄🌡🤧🤒🏥🕰😀'\n    assert.are.equal '❄🌡🤧🤒🏥', result\n\n  pending 'Royal Flush?', ->\n    result = MicroBlog.truncate '🃎🂸🃅🃋🃍🃁🃊'\n    assert.are.equal '🃎🂸🃅🃋🃍', result\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ruby:rna-transcription",
+  "trackSlug": "ruby",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "41f66d2a-1883-4a2c-875f-663c46fa88aa",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "advanced-enumeration"
+  ],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Rna Transcription' exercise in this file. Make the tests in\n`rna_transcription_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/rna-transcription` directory.\n=end\n",
+  "example_solution": "module Complement\n  def self.of_dna(strand)\n    raise ArgumentError if strand =~ /[^CGTA]/\n    strand.tr('CGTA', 'GCAU')\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'rna_transcription'\n\nclass RnaTranscriptionTest < Minitest::Test\n  def test_empty_rna_sequence\n    # skip\n    actual = Complement.of_dna('')\n    expected = ''\n    assert_equal expected, actual\n  end\n\n  def test_rna_complement_of_cytosine_is_guanine\n    skip\n    actual = Complement.of_dna('C')\n    expected = 'G'\n    assert_equal expected, actual\n  end\n\n  def test_rna_complement_of_guanine_is_cytosine\n    skip\n    actual = Complement.of_dna('G')\n    expected = 'C'\n    assert_equal expected, actual\n  end\n\n  def test_rna_complement_of_thymine_is_adenine\n    skip\n    actual = Complement.of_dna('T')\n    expected = 'A'\n    assert_equal expected, actual\n  end\n\n  def test_rna_complement_of_adenine_is_uracil\n    skip\n    actual = Complement.of_dna('A')\n    expected = 'U'\n    assert_equal expected, actual\n  end\n\n  def test_rna_complement\n    skip\n    actual = Complement.of_dna('ACGTGGTCTTAA')\n    expected = 'UGCACCAGAAUU'\n    assert_equal expected, actual\n  end\nend\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "alxndr",
+    "budmc29",
+    "cadwallion",
+    "Cohen-Carlisle",
+    "connorlay",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jmay",
+    "jpotts244",
+    "kickinbahk",
+    "kotp",
+    "mhelmetag",
+    "mike-hewitson",
+    "NobbZ",
+    "pck",
+    "tryantwit",
+    "tylerferraro"
+  ]
+}

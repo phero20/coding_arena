@@ -1,0 +1,30 @@
+{
+  "id": "crystal:isogram",
+  "trackSlug": "crystal",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "bba4f22b-1afc-46a5-bb99-046f7f4bee8c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Isogram\n  def self.isogram?(phrase : String) : Bool\n    # Write your code for the 'Isogram' exercise in this file.\n  end\nend\n",
+  "example_solution": "module Isogram\n  extend self\n\n  def isogram?(phrase : String) : Bool\n    characters_lower = phrase.chars.select { |c| c.ascii_letter? }.map { |c| c.downcase }\n    characters_lower.to_set.size == characters_lower.size\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"Isogram\" do\n  it \"empty string\" do\n    Isogram.isogram?(\"\").should eq(true)\n  end\n\n  pending \"isogram with only lower case characters\" do\n    Isogram.isogram?(\"isogram\").should eq(true)\n  end\n\n  pending \"word with one duplicated character\" do\n    Isogram.isogram?(\"eleven\").should eq(false)\n  end\n\n  pending \"word with one duplicated character from the end of the alphabet\" do\n    Isogram.isogram?(\"zzyzx\").should eq(false)\n  end\n\n  pending \"longest reported english isogram\" do\n    Isogram.isogram?(\"subdermatoglyphic\").should eq(true)\n  end\n\n  pending \"word with duplicated character in mixed case\" do\n    Isogram.isogram?(\"Alphabet\").should eq(false)\n  end\n\n  pending \"word with duplicated character in mixed case, lowercase first\" do\n    Isogram.isogram?(\"alphAbet\").should eq(false)\n  end\n\n  pending \"hypothetical isogrammic word with hyphen\" do\n    Isogram.isogram?(\"thumbscrew-japingly\").should eq(true)\n  end\n\n  pending \"hypothetical word with duplicated character following hyphen\" do\n    Isogram.isogram?(\"thumbscrew-jappingly\").should eq(false)\n  end\n\n  pending \"isogram with duplicated hyphen\" do\n    Isogram.isogram?(\"six-year-old\").should eq(true)\n  end\n\n  pending \"made-up name that is an isogram\" do\n    Isogram.isogram?(\"Emily Jung Schwartzkopf\").should eq(true)\n  end\n\n  pending \"duplicated character in the middle\" do\n    Isogram.isogram?(\"accentor\").should eq(false)\n  end\n\n  pending \"same first and last characters\" do\n    Isogram.isogram?(\"angola\").should eq(false)\n  end\n\n  pending \"word with duplicated character and with two hyphens\" do\n    Isogram.isogram?(\"up-to-date\").should eq(false)\n  end\nend\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "issyl0"
+  ]
+}

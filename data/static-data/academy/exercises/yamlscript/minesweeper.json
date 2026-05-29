@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:minesweeper",
+  "trackSlug": "yamlscript",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "4e7dd5dd-a6b6-4d8c-be9c-7a5995a86de9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 8,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn annotate(minefield):\n  # Implement the 'annotate' function.\n",
+  "example_solution": "!YS-v0\n\ndefn annotate(minefield):\n  map-indexed _ minefield:\n    fn(r row): !:join\n      map-indexed _ row:\n        fn(c col):\n          list =:\n            ? for x [-1 0 1],\n                  y [-1 0 1]\n                :when minefield\n                  .get(r + x)\n                  .get(c + y)\n                  .eq(\\\\*)\n            : 1\n          cond:\n            list.#.!: \\\\space\n            col == \\\\*: col\n            else: \\\\0 + list.#\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'minesweeper.ys'\n\ntest::\n- name: No rows\n  code: annotate([])\n  want: []\n\n- name: No columns\n  code: annotate([\"\"])\n  want:\n  - ''\n\n- name: No mines\n  code: annotate([\"   \" \"   \" \"   \"])\n  want:\n  - '   '\n  - '   '\n  - '   '\n\n- name: Minefield with only mines\n  code: annotate([\"***\" \"***\" \"***\"])\n  want:\n  - '***'\n  - '***'\n  - '***'\n\n- name: Mine surrounded by spaces\n  code: annotate([\"   \" \" * \" \"   \"])\n  want:\n  - '111'\n  - 1*1\n  - '111'\n\n- name: Space surrounded by mines\n  code: annotate([\"***\" \"* *\" \"***\"])\n  want:\n  - '***'\n  - '*8*'\n  - '***'\n\n- name: Horizontal line\n  code: annotate([\" * * \"])\n  want:\n  - 1*2*1\n\n- name: Horizontal line, mines at edges\n  code: annotate([\"*   *\"])\n  want:\n  - '*1 1*'\n\n- name: Vertical line\n  code: annotate([\" \" \"*\" \" \" \"*\" \" \"])\n  want:\n  - '1'\n  - '*'\n  - '2'\n  - '*'\n  - '1'\n\n- name: Vertical line, mines at edges\n  code: annotate([\"*\" \" \" \" \" \" \" \"*\"])\n  want:\n  - '*'\n  - '1'\n  - ' '\n  - '1'\n  - '*'\n\n- name: Cross\n  code: annotate([\"  *  \" \"  *  \" \"*****\" \"  *  \" \"  *  \"])\n  want:\n  - ' 2*2 '\n  - 25*52\n  - '*****'\n  - 25*52\n  - ' 2*2 '\n\n- name: Large minefield\n  code: annotate([\" *  * \" \"  *   \" \"    * \" \"   * *\" \" *  * \" \"      \"])\n  want:\n  - 1*22*1\n  - 12*322\n  - ' 123*2'\n  - 112*4*\n  - 1*22*2\n  - '111111'\n\ndone: 12\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

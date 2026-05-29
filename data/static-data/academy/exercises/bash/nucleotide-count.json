@@ -1,0 +1,35 @@
+{
+  "id": "bash:nucleotide-count",
+  "trackSlug": "bash",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "28f848c8-56ef-4147-a401-f1617c147b4b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/usr/bin/env bash\n\ninput=\"$1\";\n\na=0\nc=0\ng=0\nt=0\n\nfunction end() {\n        echo \"A: ${a}\"\n        echo \"C: ${c}\"\n        echo \"G: ${g}\"\n        echo \"T: ${t}\"\n\texit\n}\n\nif [ ! -n \"$input\" ]; then\n\tend\nfi\n\nfor i in $(seq 1 ${#input}); do\n\tchar=${input:i-1:1}\n\tif [ \"${char}\" = \"A\" ]; then\n\t\ta=$((a+1))\n\telif [ \"${char}\" = \"C\" ]; then\n\t\tc=$((c+1))\n\telif [ \"${char}\" = \"G\" ]; then\n\t\tg=$((g+1))\n\telif [ \"${char}\" = \"T\" ]; then\n\t\tt=$((t+1))\n\telse\n\t\techo \"Invalid nucleotide in strand\"\n\t\texit 1\n\tfi\ndone\n\nend\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n# local version: 1.3.0.0\n\n# count all nucleotides in a strand\n\n@test \"empty strand\" {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash nucleotide_count.sh \"\"\n  assert_success\n  assert_output $'A: 0\\nC: 0\\nG: 0\\nT: 0'\n}\n\n@test \"can count one nucleotide in single-character input\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash nucleotide_count.sh \"G\"\n  assert_success\n  assert_output $'A: 0\\nC: 0\\nG: 1\\nT: 0'\n}\n\n@test \"strand with repeated nucleotide\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash nucleotide_count.sh \"GGGGGGG\"\n  assert_success\n  assert_output $'A: 0\\nC: 0\\nG: 7\\nT: 0'\n}\n\n@test \"strand with multiple nucleotides\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash nucleotide_count.sh \"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"\n  assert_success\n  assert_output $'A: 20\\nC: 12\\nG: 17\\nT: 21'\n}\n\n@test \"strand with invalid nucleotides\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run bash nucleotide_count.sh \"AGXXACT\"\n  assert_failure\n  assert_output \"Invalid nucleotide in strand\"\n}\n\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "Smarticles101"
+  ],
+  "contributors": [
+    "bkhl",
+    "budmc29",
+    "glennj",
+    "guygastineau",
+    "IsaacG",
+    "kotp",
+    "sjwarner-bp",
+    "ZapAnton"
+  ]
+}

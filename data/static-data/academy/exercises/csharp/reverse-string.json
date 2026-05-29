@@ -1,0 +1,37 @@
+{
+  "id": "csharp:reverse-string",
+  "trackSlug": "csharp",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "7bc07922-f999-4358-9806-5d625ab6e333",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "linq",
+    "for-loops"
+  ],
+  "prerequisites": [
+    "strings",
+    "for-loops"
+  ],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "public static class ReverseString\n{\n    public static string Reverse(string input)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class ReverseString\n{\n    public static string Reverse(string input)\n    {\n        return new string(input.ToCharArray().Reverse().ToArray());\n    }\n}",
+  "test_code": "public class ReverseStringTests\n{\n    [Fact]\n    public void An_empty_string()\n    {\n        Assert.Equal(\"\", ReverseString.Reverse(\"\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_word()\n    {\n        Assert.Equal(\"tobor\", ReverseString.Reverse(\"robot\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_capitalized_word()\n    {\n        Assert.Equal(\"nemaR\", ReverseString.Reverse(\"Ramen\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_sentence_with_punctuation()\n    {\n        Assert.Equal(\"!yrgnuh m'I\", ReverseString.Reverse(\"I'm hungry!\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void A_palindrome()\n    {\n        Assert.Equal(\"racecar\", ReverseString.Reverse(\"racecar\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void An_even_sized_word()\n    {\n        Assert.Equal(\"reward\", ReverseString.Reverse(\"drawer\"));\n    }\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "robkeim"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "j2jensen",
+    "wolf99"
+  ]
+}

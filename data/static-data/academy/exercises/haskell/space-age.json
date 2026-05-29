@@ -1,0 +1,37 @@
+{
+  "id": "haskell:space-age",
+  "trackSlug": "haskell",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "6cbb7841-9d96-4528-88e3-6e98a450fd7c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on:\n\n- Mercury: orbital period 0.2408467 Earth years\n- Venus: orbital period 0.61519726 Earth years\n- Earth: orbital period 1.0 Earth years, 365.25 Earth days, or 31557600 seconds\n- Mars: orbital period 1.8808158 Earth years\n- Jupiter: orbital period 11.862615 Earth years\n- Saturn: orbital period 29.447498 Earth years\n- Uranus: orbital period 84.016846 Earth years\n- Neptune: orbital period 164.79132 Earth years\n\nSo if you were told someone were 1,000,000,000 seconds old, you should\nbe able to say that they're 31.69 Earth-years old.\n\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\nNote: The actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module SpaceAge (Planet(..), ageOn) where\n\ndata Planet = Mercury\n            | Venus\n            | Earth\n            | Mars\n            | Jupiter\n            | Saturn\n            | Uranus\n            | Neptune\n\nageOn :: Planet -> Float -> Float\nageOn planet seconds = error \"You need to implement this function.\"\n",
+  "example_solution": "module SpaceAge (Planet(..), ageOn) where\n\ndata Planet = Mercury\n            | Venus\n            | Earth\n            | Mars\n            | Jupiter\n            | Saturn\n            | Uranus\n            | Neptune\n\ntype Seconds = Double\ntype Years = Double\n\nageOn :: Planet -> Seconds -> Years\nageOn planet seconds = seconds / secondsPerYear planet\n\nsecondsPerYear :: Planet -> Seconds\nsecondsPerYear planet = earthYear * case planet of\n  Mercury -> 0.2408467\n  Venus   -> 0.61519726\n  Earth   -> 1\n  Mars    -> 1.8808158\n  Jupiter -> 11.862615\n  Saturn  -> 29.447498\n  Uranus  -> 84.016846\n  Neptune -> 164.79132\n  where earthYear = 365.25 * 24 * 60 * 60\n",
+  "test_code": "{-# OPTIONS_GHC -fno-warn-type-defaults #-}\n{-# LANGUAGE RecordWildCards #-}\n\nimport Data.Foldable     (for_)\nimport Data.Function     (on)\nimport Test.Hspec        (Spec, describe, it, shouldBe)\nimport Test.Hspec.Runner (configFailFast, defaultConfig, hspecWith)\n\nimport SpaceAge (Planet(..), ageOn)\n\nmain :: IO ()\nmain = hspecWith defaultConfig {configFailFast = True} specs\n\nspecs :: Spec\nspecs = describe \"ageOn\" $ for_ cases test\n  where\n    -- Here we used `fromIntegral`, `fromRational` and `toRational` to\n    -- generalize the test suite, allowing any function that takes a\n    -- `Planet` and a number, returning an instance of `Real`.\n    test Case{..} = it description $ expression `shouldBeAround` expected\n      where\n        expression = fromRational\n                   . toRational\n                   . ageOn planet\n                   . fromIntegral\n                   $ seconds\n        shouldBeAround = shouldBe `on` roundTo 2\n        roundTo n = (/ 10 ^ n) . fromIntegral . round . (* 10 ^ n)\n\ndata Case = Case { description :: String\n                 , planet      :: Planet\n                 , seconds     :: Integer\n                 , expected    :: Double\n                 }\n\ncases :: [Case]\ncases = [ Case { description = \"Earth\"\n               , planet      = Earth\n               , seconds     = 1000000000\n               , expected    = 31.69\n               }\n        , Case { description = \"Mercury\"\n               , planet      = Mercury\n               , seconds     = 2134835688\n               , expected    = 280.88\n               }\n        , Case { description = \"Venus\"\n               , planet      = Venus\n               , seconds     = 189839836\n               , expected    = 9.78\n               }\n        , Case { description = \"Mars\"\n               , planet      = Mars\n               , seconds     = 2129871239\n               , expected    = 35.88\n               }\n        , Case { description = \"Jupiter\"\n               , planet      = Jupiter\n               , seconds     = 901876382\n               , expected    = 2.41\n               }\n        , Case { description = \"Saturn\"\n               , planet      = Saturn\n               , seconds     = 2000000000\n               , expected    = 2.15\n               }\n        , Case { description = \"Uranus\"\n               , planet      = Uranus\n               , seconds     = 1210123456\n               , expected    = 0.46\n               }\n        , Case { description = \"Neptune\"\n               , planet      = Neptune\n               , seconds     = 1821023456\n               , expected    = 0.35\n               }\n        ]\n",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=01",
+  "authors": [
+    "etrepum"
+  ],
+  "contributors": [
+    "iHiD",
+    "joshgoebel",
+    "kytrinyx",
+    "mttakai",
+    "petertseng",
+    "ppartarr",
+    "rbasso",
+    "sharno",
+    "sshine",
+    "tejasbubane"
+  ]
+}

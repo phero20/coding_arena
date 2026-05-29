@@ -25,17 +25,26 @@ export function PracticeModeCard() {
               Practice Mode
             </span>
           </div>
+<<<<<<< HEAD
           <span className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-widest flex items-center gap-1 group-hover:text-primary transition-colors">
             Explore <ArrowRight className="size-3" />
           </span>
+=======
+>>>>>>> prod-deploy
         </div>
 
         {/* Dual pane layout */}
         <div className="flex-1 grid md:grid-cols-2 min-h-0">
           {/* Left Pane: Light UI Description */}
+<<<<<<< HEAD
           <div className="flex flex-col border-r border-border/40 min-w-0">
             {/* Left tabs */}
             <div className="h-10 px-3 border-b border-border/40 bg-muted/10 flex items-center gap-3 shrink-0 overflow-hidden">
+=======
+          <div className="flex flex-col bg-card/30 border-r border-border/40 min-w-0">
+            {/* Left tabs */}
+            <div className="h-10 px-3 border-b border-border/40 bg-muted/20 flex items-center gap-3 shrink-0 overflow-hidden">
+>>>>>>> prod-deploy
               <div className="text-[10px] font-black uppercase tracking-wide border-b-2 border-primary text-primary h-full flex items-center gap-1.5">
                 <BookOpen className="size-3" />
               </div>
@@ -87,13 +96,20 @@ export function PracticeModeCard() {
                 </p>
               </div>
 
+<<<<<<< HEAD
               {/* Fade out bottom overlay */}
               <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+=======
+>>>>>>> prod-deploy
             </div>
           </div>
 
           {/* Right Pane: Dark UI Editor */}
+<<<<<<< HEAD
           <div className="flex flex-col bg-card min-w-0">
+=======
+          <div className="flex flex-col bg-card/80 min-w-0">
+>>>>>>> prod-deploy
             {/* Editor tabs */}
             <div className="h-10 px-3 border-b border-border/40 bg-card/20 flex items-center justify-between shrink-0">
               <Badge className="text-[9px] font-bold px-1.5 h-4 bg-primary/10 text-primary hover:bg-primary/20">
@@ -133,7 +149,10 @@ export function PracticeModeCard() {
               >
                 {PYTHON_CODE}
               </SyntaxHighlighter>
+<<<<<<< HEAD
               <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+=======
+>>>>>>> prod-deploy
             </div>
           </div>
         </div>

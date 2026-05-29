@@ -1,0 +1,34 @@
+{
+  "id": "r:word-count",
+  "trackSlug": "r",
+  "slug": "word-count",
+  "name": "Word Count",
+  "uuid": "a7cbf043-504b-4fc8-b7fb-33a88ac7962d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a phrase, count the occurrences of each word in that phrase.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count how many times each word occurs in a subtitle of a drama.\n\nThe subtitles from these dramas use only ASCII characters.\n\nThe characters often speak in casual English, using contractions like _they're_ or _it's_.\nThough these contractions come from two words (e.g. _we are_), the contraction (_we're_) is considered a single word.\n\nWords can be separated by any form of punctuation (e.g. \":\", \"!\", or \"?\") or whitespace (e.g. \"\\t\", \"\\n\", or \" \").\nThe only punctuation that does not separate words is the apostrophe in contractions.\n\nNumbers are considered words.\nIf the subtitles say _It costs 100 dollars._ then _100_ will be its own word.\n\nWords are case insensitive.\nFor example, the word _you_ occurs three times in the following sentence:\n\n> You come back, you hear me? DO YOU HEAR ME?\n\nThe ordering of the word counts in the results doesn't matter.\n\nHere's an example that incorporates several of the elements discussed above:\n\n- simple words\n- contractions\n- numbers\n- case insensitive words\n- punctuation (including apostrophes) to separate words\n- different forms of whitespace to separate words\n\n`\"That's the password: 'PASSWORD 123'!\", cried the Special Agent.\\nSo I fled.`\n\nThe mapping for this subtitle would be:\n\n```text\n123: 1\nagent: 1\ncried: 1\nfled: 1\ni: 1\npassword: 2\nso: 1\nspecial: 1\nthat's: 1\nthe: 2\n```\n",
+  "introduction": "# Introduction\n\nYou teach English as a foreign language to high school students.\n\nYou've decided to base your entire curriculum on TV shows.\nYou need to analyze which words are used, and how often they're repeated.\n\nThis will let you choose the simplest shows to start with, and to gradually increase the difficulty as time passes.\n",
+  "hints": null,
+  "starter_code": "word_count <- function(input) {\n\n}\n",
+  "example_solution": "word_count <- function(input) {\n  input <- tolower(input)\n  input <- gsub(\"[^[:alnum:]']\", \" \", input)\n  input <- strsplit(input, \"[[:space:]]\")[[1]]\n  input <- gsub(\"^'\", \"\", input)\n  input <- gsub(\"'$\", \"\", input)\n  input[nchar(input) > 0] |>\n    table() |>\n    as.list()\n}\n",
+  "test_code": "source(\"./word-count.R\")\nlibrary(testthat)\n\n# When comparing lists, all.equal expects the objects to be in the same order\n# This expectation instead checks that a) the set of names are the same and\n# b) each named object is equal\nexpect_equal_pairs <- function(object, expected) {\n  expect_equal(sort(names(object)),\n    sort(names(expected)),\n    info = \"names in lists differ\"\n  )\n  for (name in names(expected)) {\n    expect_equal(object[name], expected[name], info = \"list element missing\")\n  }\n}\n\ntest_that(\"count one word\", {\n  expect_equal_pairs(\n    word_count(\"word\"),\n    list(\"word\" = 1)\n  )\n})\n\ntest_that(\"count one of each word\", {\n  expect_equal_pairs(\n    word_count(\"one of each\"),\n    list(\n      \"one\" = 1,\n      \"of\" = 1,\n      \"each\" = 1\n    )\n  )\n})\n\ntest_that(\"multiple occurrences of a word\", {\n  expect_equal_pairs(\n    word_count(\"one fish two fish red fish blue fish\"),\n    list(\n      \"one\" = 1,\n      \"fish\" = 4,\n      \"two\" = 1,\n      \"red\" = 1,\n      \"blue\" = 1\n    )\n  )\n})\n\ntest_that(\"handles cramped lists\", {\n  expect_equal_pairs(\n    word_count(\"one,two,three\"),\n    list(\n      \"one\" = 1,\n      \"two\" = 1,\n      \"three\" = 1\n    )\n  )\n})\n\ntest_that(\"handles expanded lists\", {\n  expect_equal_pairs(\n    word_count(\"one,\\ntwo,\\nthree\"),\n    list(\n      \"one\" = 1,\n      \"two\" = 1,\n      \"three\" = 1\n    )\n  )\n})\n\ntest_that(\"ignore punctuation\", {\n  expect_equal_pairs(\n    word_count(\"car : carpet as java : javascript!!&@$%^&\"),\n    list(\n      \"car\" = 1,\n      \"carpet\" = 1,\n      \"as\" = 1,\n      \"java\" = 1,\n      \"javascript\" = 1\n    )\n  )\n})\n\ntest_that(\"include numbers\", {\n  expect_equal_pairs(\n    word_count(\"testing, 1, 2 testing\"),\n    list(\n      \"testing\" = 2,\n      \"1\" = 1,\n      \"2\" = 1\n    )\n  )\n})\n\ntest_that(\"normalize case\", {\n  expect_equal_pairs(\n    word_count(\"go Go GO Stop stop\"),\n    list(\"go\" = 3, \"stop\" = 2)\n  )\n})\n\ntest_that(\"with apostrophes\", {\n  expect_equal_pairs(\n    word_count(\"'First: don't laugh. Then: don't cry. You're getting it.'\"),\n    list(\n      \"first\" = 1,\n      \"don't\" = 2,\n      \"laugh\" = 1,\n      \"then\" = 1,\n      \"cry\" = 1,\n      \"you're\" = 1,\n      \"getting\" = 1,\n      \"it\" = 1\n    )\n  )\n})\n\ntest_that(\"with quotations\", {\n  expect_equal_pairs(\n    word_count(\"Joe can't tell between 'large' and large.\"),\n    list(\n      \"joe\" = 1,\n      \"can't\" = 1,\n      \"tell\" = 1,\n      \"between\" = 1,\n      \"large\" = 2,\n      \"and\" = 1\n    )\n  )\n})\n\ntest_that(\"substrings from the beginning\", {\n  expect_equal_pairs(\n    word_count(\"Joe can't tell between app, apple and a.\"),\n    list(\n      \"joe\" = 1,\n      \"can't\" = 1,\n      \"tell\" = 1,\n      \"between\" = 1,\n      \"app\" = 1,\n      \"apple\" = 1,\n      \"and\" = 1,\n      \"a\" = 1\n    )\n  )\n})\n\ntest_that(\"multiple spaces not detected as a word\", {\n  expect_equal_pairs(\n    word_count(\" multiple   whitespaces\"),\n    list(\n      \"multiple\" = 1,\n      \"whitespaces\" = 1\n    )\n  )\n})\n\ntest_that(\"alternating word separators not detected as a word\", {\n  expect_equal_pairs(\n    word_count(\",\\n,one,\\n ,two \\n 'three'\"),\n    list(\n      \"one\" = 1,\n      \"two\" = 1,\n      \"three\" = 1\n    )\n  )\n})\n\ntest_that(\"quotation for word with apostrophe\", {\n  expect_equal_pairs(\n    word_count(\"can, can't, 'can't'\"),\n    list(\n      \"can\" = 1,\n      \"can't\" = 2\n    )\n  )\n})\n",
+  "source": "This is a classic toy problem, but we were reminded of it by seeing it in the Go Tour.",
+  "source_url": null,
+  "authors": [
+    "jonboiser"
+  ],
+  "contributors": [
+    "cmiller01",
+    "jonmcalder",
+    "katrinleinweber",
+    "kytrinyx",
+    "Robsteranium",
+    "ttnagata",
+    "zacchaeusluke"
+  ]
+}

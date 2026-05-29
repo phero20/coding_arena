@@ -1,0 +1,26 @@
+{
+  "id": "coffeescript:pangram",
+  "trackSlug": "coffeescript",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "b008c134-7cf2-4836-bf5b-018a89a82a5e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "class Pangram\n  @isPangram: (sentence) ->\n\nmodule.exports = Pangram\n",
+  "example_solution": "class Pangram\n  @isPangram: (sentence) ->\n    letters = new Set(sentence.replace(/[^a-z]+/gi, '').toLowerCase().split \"\")\n    letters.size == 26\n\nmodule.exports = Pangram\n",
+  "test_code": "Pangram = require './pangram'\n\ndescribe 'Pangram', ->\n  it 'empty sentence', ->\n    sentence = ''\n    expect(Pangram.isPangram sentence).toBe(false)\n\n  xit 'perfect lower case', ->\n    sentence = 'abcdefghijklmnopqrstuvwxyz'\n    expect(Pangram.isPangram sentence).toBe(true)\n\n  xit 'only lower case', ->\n    sentence = 'the quick brown fox jumps over the lazy dog'\n    expect(Pangram.isPangram sentence).toBe(true)\n\n  xit 'missing the letter \"x\"', ->\n    sentence = 'a quick movement of the enemy will jeopardize five gunboats'\n    expect(Pangram.isPangram sentence).toBe(false)\n\n  xit 'missing the letter \"h\"', ->\n    sentence = 'five boxing wizards jump quickly at it'\n    expect(Pangram.isPangram sentence).toBe(false)\n\n  xit 'with underscores', ->\n    sentence = 'the_quick_brown_fox_jumps_over_the_lazy_dog'\n    expect(Pangram.isPangram sentence).toBe(true)\n\n  xit 'with numbers', ->\n    sentence = 'the 1 quick brown fox jumps over the 2 lazy dogs'\n    expect(Pangram.isPangram sentence).toBe(true)\n\n  xit 'missing letters replaced by numbers', ->\n    sentence = '7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog'\n    expect(Pangram.isPangram sentence).toBe(false)\n\n  xit 'mixed case and punctuation', ->\n    sentence =  '\"Five quacking Zephyrs jolt my wax bed.\"'\n    expect(Pangram.isPangram sentence).toBe(true)\n\n  xit 'a-m and A-M are 26 different characters but not a pangram', ->\n    sentence =  'abcdefghijklm ABCDEFGHIJKLM'\n    expect(Pangram.isPangram sentence).toBe(false)\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

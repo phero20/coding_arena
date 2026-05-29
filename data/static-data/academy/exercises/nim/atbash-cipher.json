@@ -1,0 +1,28 @@
+{
+  "id": "nim:atbash-cipher",
+  "trackSlug": "nim",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "88dde3e7-95c8-4a5f-8514-1c489917966e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc encode*(s: string): string =\n  discard\n\nproc decode*(s: string): string =\n  discard\n",
+  "example_solution": "func atbash(c: char): char =\n  const alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n  if c in {'A'..'Z'}:\n    alphabet['Z'.ord - c.ord]\n  elif c in {'a'..'z'}:\n    alphabet['z'.ord - c.ord]\n  else:\n    c\n\nfunc encode*(s: string, groupLen = 5): string =\n  result = newStringOfCap(s.len + s.len div groupLen)\n  var count = 0\n  for c in s:\n    if c in {'0'..'9', 'a'..'z', 'A'..'Z'}:\n      if count == groupLen:\n        result.add ' '\n        count = 0\n      result.add atbash(c)\n      inc count\n\nfunc decode*(s: string): string =\n  result = newStringOfCap(s.len)\n  for c in s:\n    if c in {'0'..'9', 'a'..'z'}:\n      result.add atbash(c)\n",
+  "test_code": "import unittest\nimport atbash_cipher\n\n# The tests are divided into two groups:\n# Encoding from English to atbash cipher\n# Decoding from atbash cipher to all-lowercase-mashed-together English\n\nsuite \"Encode\":\n  test \"encode yes\":\n    let phrase = \"yes\"\n    let expected = \"bvh\"\n    check encode(phrase) == expected\n\n  test \"encode no\":\n    let phrase = \"no\"\n    let expected = \"ml\"\n    check encode(phrase) == expected\n\n  test \"encode OMG\":\n    let phrase = \"OMG\"\n    let expected = \"lnt\"\n    check encode(phrase) == expected\n\n  test \"encode spaces\":\n    let phrase = \"O M G\"\n    let expected = \"lnt\"\n    check encode(phrase) == expected\n\n  test \"encode mindblowingly\":\n    let phrase = \"mindblowingly\"\n    let expected = \"nrmwy oldrm tob\"\n    check encode(phrase) == expected\n\n  test \"encode numbers\":\n    let phrase = \"Testing,1 2 3, testing.\"\n    let expected = \"gvhgr mt123 gvhgr mt\"\n    check encode(phrase) == expected\n\n  test \"encode deep thought\":\n    let phrase = \"Truth is fiction.\"\n    let expected = \"gifgs rhurx grlm\"\n    check encode(phrase) == expected\n\n  test \"encode all the letters\":\n    let phrase = \"The quick brown fox jumps over the lazy dog.\"\n    let expected = \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n    check encode(phrase) == expected\n\n\nsuite \"Decode\":\n  test \"decode exercism\":\n    let phrase = \"vcvix rhn\"\n    let expected = \"exercism\"\n    check decode(phrase) == expected\n\n  test \"decode a sentence\":\n    let phrase = \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\"\n    let expected = \"anobstacleisoftenasteppingstone\"\n    check decode(phrase) == expected\n\n  test \"decode numbers\":\n    let phrase = \"gvhgr mt123 gvhgr mt\"\n    let expected = \"testing123testing\"\n    check decode(phrase) == expected\n\n  test \"decode all the letters\":\n    let phrase = \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"\n    let expected = \"thequickbrownfoxjumpsoverthelazydog\"\n    check decode(phrase) == expected\n\n  test \"decode with too many spaces\":\n    let phrase = \"vc vix    r hn\"\n    let expected = \"exercism\"\n    check decode(phrase) == expected\n\n  test \"decode with no spaces\":\n    let phrase = \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\"\n    let expected = \"anobstacleisoftenasteppingstone\"\n    check decode(phrase) == expected\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

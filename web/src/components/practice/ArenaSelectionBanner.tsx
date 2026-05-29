@@ -18,11 +18,19 @@ export const ArenaSelectionBanner: React.FC<ArenaSelectionBannerProps> = ({
             <Swords className="w-5 h-5 text-primary animate-pulse" />
           </div>
           <div>
+<<<<<<< HEAD
             <h3 className="text-sm font-bold tracking-tight uppercase opacity-90 text-primary">
               Arena Selection Mode
             </h3>
             <p className="text-muted-foreground text-[8px] md:text-xs font-bold uppercase tracking-widest opacity-60">
               Choose a problem to host your battle.
+=======
+            <h3 className="text-sm font-bold tracking-tight opacity-90 text-primary">
+              Arena Selection Mode
+            </h3>
+            <p className="text-muted-foreground text-[8px] md:text-xs font-bold  tracking-wider opacity-60">
+              Choose a problem to host the match.
+>>>>>>> prod-deploy
             </p>
           </div>
         </div>

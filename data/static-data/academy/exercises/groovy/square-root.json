@@ -1,0 +1,26 @@
+{
+  "id": "groovy:square-root",
+  "trackSlug": "groovy",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "d415f6a5-0407-4a5d-af51-74ac9f87aadc",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "class SquareRoot {\n\n    static Integer squareRoot(Integer radicand) {\n        throw new UnsupportedOperationException('squareRoot implementation is missing')\n    }\n\n}\n",
+  "example_solution": "class SquareRoot {\n\n    static Integer squareRoot(Integer radicand) {\n        Integer result = 0\n\n        while (result ** 2 != radicand) {\n            result += 1\n        }\n\n        result\n    }\n\n}\n",
+  "test_code": "import spock.lang.*\n\nclass SquareRootSpec extends Specification {\n\n    @Unroll\n    def \"root of #radicand\"() {\n        expect:\n        SquareRoot.squareRoot(radicand) == expected\n\n        where:\n        radicand    || expected\n        1           || 1\n        4           || 2\n        25          || 5\n        81          || 9\n        196         || 14\n        65025       || 255\n    }\n}\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

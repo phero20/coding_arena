@@ -1,0 +1,44 @@
+{
+  "id": "ruby:difference-of-squares",
+  "trackSlug": "ruby",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "f1e4ee0c-8718-43f2-90a5-fb1e915288da",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "advanced-enumeration",
+    "numbers"
+  ],
+  "prerequisites": [
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Difference Of Squares' exercise in this file. Make the tests in\n`difference_of_squares_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/difference-of-squares` directory.\n=end\n",
+  "example_solution": "class Squares\n  attr_reader :max\n\n  def initialize(max)\n    @max = max\n  end\n\n  def square_of_sum\n    sum = 0\n    (1..max).each do |i|\n      sum += i\n    end\n    sum**2\n  end\n\n  def sum_of_squares\n    sum = 0\n    (1..max).each do |i|\n      sum += i**2\n    end\n    sum\n  end\n\n  def difference\n    square_of_sum - sum_of_squares\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'difference_of_squares'\n\nclass DifferenceOfSquaresTest < Minitest::Test\n  def test_square_of_sum_1\n    # skip\n    assert_equal 1, Squares.new(1).square_of_sum\n  end\n\n  def test_square_of_sum_5\n    skip\n    assert_equal 225, Squares.new(5).square_of_sum\n  end\n\n  def test_square_of_sum_100\n    skip\n    assert_equal 25_502_500, Squares.new(100).square_of_sum\n  end\n\n  def test_sum_of_squares_1\n    skip\n    assert_equal 1, Squares.new(1).sum_of_squares\n  end\n\n  def test_sum_of_squares_5\n    skip\n    assert_equal 55, Squares.new(5).sum_of_squares\n  end\n\n  def test_sum_of_squares_100\n    skip\n    assert_equal 338_350, Squares.new(100).sum_of_squares\n  end\n\n  def test_difference_of_squares_1\n    skip\n    assert_equal 0, Squares.new(1).difference\n  end\n\n  def test_difference_of_squares_5\n    skip\n    assert_equal 170, Squares.new(5).difference\n  end\n\n  def test_difference_of_squares_100\n    skip\n    assert_equal 25_164_150, Squares.new(100).difference\n  end\nend\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "bjmllr",
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "landongrindheim",
+    "mike-hewitson",
+    "tryantwit"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "csharp:scrabble-score",
+  "trackSlug": "csharp",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "89c42da3-72a6-423d-a9c7-7caccbd9b1e6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "dictionaries"
+  ],
+  "prerequisites": [
+    "numbers",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "public static class ScrabbleScore\n{\n    public static int Score(string input)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}",
+  "example_solution": "public static class ScrabbleScore\n{\n    private static readonly Dictionary<char, int> LetterScores = new Dictionary<char, int>\n        {\n            { 'a', 1 }, { 'e', 1 }, { 'i', 1 }, { 'o', 1 }, { 'u', 1 }, { 'l', 1 }, { 'n', 1 }, { 'r', 1 }, { 's', 1 }, { 't', 1 },\n            { 'd', 2 }, { 'g', 2 },\n            { 'b', 3 }, { 'c', 3 }, { 'm', 3 }, { 'p', 3 },\n            { 'f', 4 }, { 'h', 4 }, { 'v', 4 }, { 'w', 4 }, { 'y', 4 },\n            { 'k', 5 },\n            { 'j', 8 }, { 'x', 8 },\n            { 'q', 10 }, { 'z', 10 }\n        };\n\n    public static int Score(string input)\n    {\n        if (string.IsNullOrWhiteSpace(input))\n            return 0;\n\n        return input.ToLower().Sum(x => LetterScores[x]);\n    }\n}\n",
+  "test_code": "public class ScrabbleScoreTests\n{\n    [Fact]\n    public void Lowercase_letter()\n    {\n        Assert.Equal(1, ScrabbleScore.Score(\"a\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Uppercase_letter()\n    {\n        Assert.Equal(1, ScrabbleScore.Score(\"A\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Valuable_letter()\n    {\n        Assert.Equal(4, ScrabbleScore.Score(\"f\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Short_word()\n    {\n        Assert.Equal(2, ScrabbleScore.Score(\"at\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Short_valuable_word()\n    {\n        Assert.Equal(12, ScrabbleScore.Score(\"zoo\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Medium_word()\n    {\n        Assert.Equal(6, ScrabbleScore.Score(\"street\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Medium_valuable_word()\n    {\n        Assert.Equal(22, ScrabbleScore.Score(\"quirky\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Long_mixed_case_word()\n    {\n        Assert.Equal(41, ScrabbleScore.Score(\"OxyphenButazone\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void English_like_word()\n    {\n        Assert.Equal(8, ScrabbleScore.Score(\"pinata\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Empty_input()\n    {\n        Assert.Equal(0, ScrabbleScore.Score(\"\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Entire_alphabet_available()\n    {\n        Assert.Equal(87, ScrabbleScore.Score(\"abcdefghijklmnopqrstuvwxyz\"));\n    }\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "bressain"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "j2jensen",
+    "jwood803",
+    "robkeim",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "purescript:hamming",
+  "trackSlug": "purescript",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "3cd10a88-9cc0-4dcd-a2f3-1f5bcb5eaf07",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "module Hamming\n  ( distance\n  ) where\n\nimport Data.Maybe (Maybe)\nimport Effect.Exception.Unsafe (unsafeThrow)\n\ndistance :: String -> String -> Maybe Int\ndistance = unsafeThrow \"You need to implement this function.\"\n",
+  "example_solution": "module Hamming\n  ( distance\n  ) where\n\nimport Prelude\nimport Data.Maybe (Maybe(Just, Nothing))\nimport Data.String (uncons)\n\ndistance :: String -> String -> Maybe Int\ndistance dna1 dna2 =\n  case uncons dna1, uncons dna2 of\n    Just {head: h1, tail: t1}, Just {head: h2, tail: t2} ->\n      (if h1 /= h2 then ((+) 1) else identity) <$> distance t1 t2\n    Nothing, Nothing ->\n      Just 0\n    _, _ ->\n      Nothing\n",
+  "test_code": "-- Test/exercise version: \"1.0.0\"\n\nmodule Test.Main where\n\nimport Prelude\n\nimport Effect (Effect)\nimport Test.Unit (TestSuite, suite, test)\nimport Test.Unit.Main (runTest)\nimport Test.Unit.Assert as Assert\nimport Data.Maybe (Maybe(..))\nimport Hamming (distance)\n\nmain :: Effect Unit\nmain = runTest suites\n\nsuites :: TestSuite\nsuites = do\n  suite \"hamming\" do\n    test \"identical strands\" $\n      Assert.equal (Just 0) (distance \"A\" \"A\")\n    test \"long identical strands\" $\n      Assert.equal (Just 0) (distance \"GGACTGA\" \"GGACTGA\")\n    test \"complete distance in single nucleotide strands\" $\n      Assert.equal (Just 1) (distance \"A\" \"G\")\n    test \"complete distance in small strands\" $\n      Assert.equal (Just 2) (distance \"AG\" \"CT\")\n    test \"small distance in small strands\" $\n      Assert.equal (Just 1) (distance \"AT\" \"CT\")\n    test \"small distance\" $\n      Assert.equal (Just 1) (distance \"GGACG\" \"GGTCG\")\n    test \"small distance in long strands\" $\n      Assert.equal (Just 2) (distance \"ACCAGGG\" \"ACTATGG\")\n    test \"non-unique character in first strand\" $\n      Assert.equal (Just 1) (distance \"AGA\" \"AGG\")\n    test \"non-unique character in second strand\" $\n      Assert.equal (Just 1) (distance \"AGG\" \"AGA\")\n    test \"same nucleotides in different positions\" $\n      Assert.equal (Just 2) (distance \"TAG\" \"GAT\")\n    test \"large distance\" $\n      Assert.equal (Just 4) (distance \"GATACA\" \"GCATAA\")\n    test \"large distance in off-by-one strand\" $\n      Assert.equal (Just 9) (distance \"GGACGGATTCTG\" \"AGGACGGATTCT\")\n    test \"empty strands\" $\n      Assert.equal (Just 0) (distance \"\" \"\")\n    test \"disallow first strand longer\" $\n      Assert.equal Nothing (distance \"AATG\" \"AAA\")\n    test \"disallow second strand longer\" $\n      Assert.equal Nothing (distance \"ATA\" \"AGTG\")\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "colinwahl",
+    "icyrockcom",
+    "lexun",
+    "spicydonuts"
+  ]
+}

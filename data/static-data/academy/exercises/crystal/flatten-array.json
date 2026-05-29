@@ -1,0 +1,31 @@
+{
+  "id": "crystal:flatten-array",
+  "trackSlug": "crystal",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "85b2450c-727d-4b84-9904-02c37f385610",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "array-methods"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested array of any depth and return a fully flattened array.\n\nNote that some language tracks may include null-like values in the input array, and the way these values are represented varies by track.\nSuch values should be excluded from the flattened array.\n\nAdditionally, the input may be of a different data type and contain different types, depending on the track.\n\nCheck the test suite for details.\n\n## Example\n\ninput: `[1, [2, 6, null], [[null, [4]], 5]]`\n\noutput: `[1, 2, 6, 4, 5]`\n",
+  "introduction": "# Introduction\n\nA shipment of emergency supplies has arrived, but there's a problem.\nTo protect from damage, the items — flashlights, first-aid kits, blankets — are packed inside boxes, and some of those boxes are nested several layers deep inside other boxes!\n\nTo be prepared for an emergency, everything must be easily accessible in one box.\nCan you unpack all the supplies and place them into a single box, so they're ready when needed most?\n",
+  "hints": null,
+  "starter_code": "module FlattenArray\n  def self.flatten(input : Array) : Array\n    # Write your code for the 'Flatten Array' exercise in this file.\n  end\nend\n",
+  "example_solution": "module FlattenArray\n  extend self\n\n  def flatten(arr)\n    arr.flatten.compact\n  end\nend\n",
+  "test_code": "require \"spec\"\nrequire \"../src/*\"\n\ndescribe \"FlattenArray\" do\n  it \"empty\" do\n    FlattenArray.flatten([] of Int32 | Nil).should eq([] of Int32)\n  end\n\n  pending \"no nesting\" do\n    FlattenArray.flatten([0, 1, 2]).should eq([0, 1, 2])\n  end\n\n  pending \"flattens a nested array\" do\n    FlattenArray.flatten(Array(Array(Int32)).new).should eq([] of Int32)\n  end\n\n  pending \"flattens array with just integers present\" do\n    FlattenArray.flatten([1, [2, 3, 4, 5, 6, 7], 8]).should eq([1, 2, 3, 4, 5, 6, 7, 8])\n  end\n\n  pending \"5 level nesting\" do\n    FlattenArray.flatten([0, 2, [[2, 3], 8, 100, 4, [[[50]]]], -2]).should eq([0, 2, 2, 3, 8, 100, 4, 50, -2])\n  end\n\n  pending \"6 level nesting\" do\n    FlattenArray.flatten([1, [2, [[3]], [4, [[5]]], 6, 7], 8]).should eq([1, 2, 3, 4, 5, 6, 7, 8])\n  end\n\n  pending \"null values are omitted from the final result\" do\n    FlattenArray.flatten([1, 2, nil]).should eq([1, 2])\n  end\n\n  pending \"consecutive null values at the front of the array are omitted from the final result\" do\n    FlattenArray.flatten([nil, nil, 3]).should eq([3])\n  end\n\n  pending \"consecutive null values in the middle of the array are omitted from the final result\" do\n    FlattenArray.flatten([1, nil, nil, 4]).should eq([1, 4])\n  end\n\n  pending \"6 level nested array with null values\" do\n    FlattenArray.flatten([0, 2, [[2, 3], 8, [[100]], nil, [[nil]]], -2]).should eq([0, 2, 2, 3, 8, 100, -2])\n  end\n\n  pending \"all values in nested array are null\" do\n    FlattenArray.flatten([nil, [[[nil]]], nil, nil, [[nil, nil], nil], nil]).should eq([] of Int32)\n  end\nend\n",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "mhelmetag"
+  ],
+  "contributors": [
+    "amscotti",
+    "issyl0"
+  ]
+}

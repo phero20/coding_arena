@@ -1,0 +1,27 @@
+{
+  "id": "typescript:raindrops",
+  "trackSlug": "typescript",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "c8677318-ba6c-4e8c-83ec-513cc6530e7f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "export function convert() {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function convert(drops: number): string {\n  let converted = ''\n\n  if (drops % 3 === 0) {\n    converted += 'Pling'\n  }\n  if (drops % 5 === 0) {\n    converted += 'Plang'\n  }\n  if (drops % 7 === 0) {\n    converted += 'Plong'\n  }\n\n  return converted ? converted : drops.toString()\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { convert } from './raindrops.ts'\n\ndescribe('Raindrops', () => {\n  it('converts 1', () => expect(convert(1)).toEqual('1'))\n\n  xit('converts 3', () => expect(convert(3)).toEqual('Pling'))\n\n  xit('converts 5', () => expect(convert(5)).toEqual('Plang'))\n\n  xit('converts 7', () => expect(convert(7)).toEqual('Plong'))\n\n  xit('converts 6', () => expect(convert(6)).toEqual('Pling'))\n\n  xit('converts 9', () => expect(convert(9)).toEqual('Pling'))\n\n  xit('converts 10', () => expect(convert(10)).toEqual('Plang'))\n\n  xit('converts 14', () => expect(convert(14)).toEqual('Plong'))\n\n  xit('converts 15', () => expect(convert(15)).toEqual('PlingPlang'))\n\n  xit('converts 21', () => expect(convert(21)).toEqual('PlingPlong'))\n\n  xit('converts 25', () => expect(convert(25)).toEqual('Plang'))\n\n  xit('converts 35', () => expect(convert(35)).toEqual('PlangPlong'))\n\n  xit('converts 49', () => expect(convert(49)).toEqual('Plong'))\n\n  xit('converts 52', () => expect(convert(52)).toEqual('52'))\n\n  xit('converts 105', () => expect(convert(105)).toEqual('PlingPlangPlong'))\n\n  xit('converts 12121', () => expect(convert(12121)).toEqual('12121'))\n})\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [],
+  "contributors": [
+    "masters3d",
+    "SleeplessByte"
+  ]
+}

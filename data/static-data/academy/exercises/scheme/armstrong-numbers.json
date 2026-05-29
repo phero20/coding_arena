@@ -1,0 +1,26 @@
+{
+  "id": "scheme:armstrong-numbers",
+  "trackSlug": "scheme",
+  "slug": "armstrong-numbers",
+  "name": "Armstrong Numbers",
+  "uuid": "84e07f6a-ee1e-4874-b73a-de27f5c09bb6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a number is an Armstrong number.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nAn [Armstrong number][armstrong-number] is a number that is the sum of its own digits each raised to the power of the number of digits.\n\nFor example:\n\n- 9 is an Armstrong number, because `9 = 9^1 = 9`\n- 10 is _not_ an Armstrong number, because `10 != 1^2 + 0^2 = 1`\n- 153 is an Armstrong number, because: `153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153`\n- 154 is _not_ an Armstrong number, because: `154 != 1^3 + 5^3 + 4^3 = 1 + 125 + 64 = 190`\n\nWrite some code to determine whether a number is an Armstrong number.\n\n[armstrong-number]: https://en.wikipedia.org/wiki/Narcissistic_number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (armstrong-number? n)\n  'implement-me!)\n",
+  "example_solution": "(import (rnrs))\n\n(define (list-digits n)\n  (let loop ([n n]\n             [ms '()])\n    (if (zero? n)\n        ms\n        (let-values ([(d m) (div-and-mod n 10)])\n          (loop d (cons m ms))))))\n\n(define (armstrong-number? n)\n  (let* ([digits (list-digits n)]\n         [number-of-digits (length digits)])\n    (= n\n       (apply + (map (lambda (d)\n                       (expt d number-of-digits))\n                     digits)))))\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success \"Zero is an Armstrong number\" equal?\n      armstrong-number? '(0) #t)\n    (test-success \"Single digit numbers are Armstrong numbers\"\n      equal? armstrong-number? '(5) #t)\n    (test-success \"There are no 2 digit Armstrong numbers\"\n      equal? armstrong-number? '(10) #f)\n    (test-success\n      \"Three digit number that is an Armstrong number\" equal?\n      armstrong-number? '(153) #t)\n    (test-success\n      \"Three digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(100) #f)\n    (test-success\n      \"Four digit number that is an Armstrong number\" equal?\n      armstrong-number? '(9474) #t)\n    (test-success\n      \"Four digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(9475) #f)\n    (test-success\n      \"Seven digit number that is an Armstrong number\" equal?\n      armstrong-number? '(9926315) #t)\n    (test-success\n      \"Seven digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(9926314) #f)\n    (test-success \"The 25th Armstrong number\" equal?\n      armstrong-number? '(24678050) #t)\n    (test-success\n      \"Eight digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(30852815) #f)\n    (test-success \"The 28th Armstrong number\" equal?\n      armstrong-number? '(146511208) #t)\n    (test-success\n      \"Nine digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(927427554) #f)\n    (test-success \"The 32nd Armstrong number\" equal?\n      armstrong-number? '(4679307774) #t)\n    (test-success\n      \"Ten digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(8320172640) #f)\n    (test-success \"The 34th Armstrong number\" equal?\n      armstrong-number? '(32164049651) #t)\n    (test-success\n      \"Eleven digit number that is not an Armstrong number\" equal?\n      armstrong-number? '(13930642218) #f)\n    (test-success \"The 66th Armstrong number\" equal?\n      armstrong-number? '(4422095118095899619457938) #t)\n    (test-success \"The 77th Armstrong number\" equal?\n      armstrong-number? '(1927890457142960697580636236639) #t)\n    (test-success \"The 88th Armstrong number\" equal?\n      armstrong-number? '(115132219018763992565095597973971522401)\n      #t)\n    (test-success \"Thirty-nine digit number that is not an Armstrong number\"\n      equal? armstrong-number?\n      '(7744959048678381442547644364350528967165) #f)))\n\n(run-with-cli \"armstrong-numbers.scm\" (list test-cases))\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Narcissistic_number",
+  "authors": [
+    "tongkiat"
+  ],
+  "contributors": null
+}

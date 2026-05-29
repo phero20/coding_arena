@@ -1,0 +1,26 @@
+{
+  "id": "8th:anagram",
+  "trackSlug": "8th",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "3d67ba9d-0a6c-4a30-9493-3c6b6c2693e1",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": ": anagrams \\ s a -- a\n\n;\n",
+  "example_solution": ": normalize \\ s -- a\n  s:lc null s:/ ' s:cmp a:sort \n;\n\n: anagram? \\ s s -- T\n  2dup s:=ic if 2drop false ;then\n  normalize swap normalize ' s:= a:= 2nip\n;\n\n: anagrams \\ s a -- a\n  ( over anagram? ) a:filter nip\n;\n",
+  "test_code": "\"anagram.8th\" f:include\nneeds exercism/test\nwith: test\n16 tests\n\n\"no matches\"\n    ( \"diaper\" [\"hello\", \"world\", \"zombies\", \"pants\"] anagrams )\n    []\n    equal?\n\nSKIP-REST-OF-TESTS\n\n\"detects two anagrams\"\n    ( \"solemn\" [\"lemons\", \"cherry\", \"melons\"] anagrams )\n    [\"lemons\", \"melons\"]\n    equal?\n\n\"does not detect anagram subsets\"\n    ( \"good\" [\"dog\", \"goody\"] anagrams )\n    []\n    equal?\n\n\"detects anagram\"\n    ( \"listen\" [\"enlists\", \"google\", \"inlets\", \"banana\"] anagrams )\n    [\"inlets\"]\n    equal?\n\n\"detects three anagrams\"\n    ( \"allergy\" [\"gallery\", \"ballerina\", \"regally\", \"clergy\", \"largely\", \"leading\"] anagrams )\n    [\"gallery\", \"regally\", \"largely\"]\n    equal?\n\n\"detects multiple anagrams with different case\"\n    ( \"nose\" [\"Eons\", \"ONES\"] anagrams )\n    [\"Eons\", \"ONES\"]\n    equal?\n\n\"does not detect non-anagrams with identical checksum\"\n    ( \"mass\" [\"last\"] anagrams )\n    []\n    equal?\n\n\"detects anagrams case-insensitively\"\n    ( \"Orchestra\" [\"cashregister\", \"Carthorse\", \"radishes\"] anagrams )\n    [\"Carthorse\"]\n    equal?\n\n\"detects anagrams using case-insensitive subject\"\n    ( \"Orchestra\" [\"cashregister\", \"carthorse\", \"radishes\"] anagrams )\n    [\"carthorse\"]\n    equal?\n\n\"detects anagrams using case-insensitive possible matches\"\n    ( \"orchestra\" [\"cashregister\", \"Carthorse\", \"radishes\"] anagrams )\n    [\"Carthorse\"]\n    equal?\n\n\"does not detect an anagram if the original word is repeated\"\n    ( \"go\" [\"goGoGO\"] anagrams )\n    []\n    equal?\n\n\"anagrams must use all letters exactly once\"\n    ( \"tapper\" [\"patter\"] anagrams )\n    []\n    equal?\n\n\"words are not anagrams of themselves\"\n    ( \"BANANA\" [\"BANANA\"] anagrams )\n    []\n    equal?\n\n\"words are not anagrams of themselves even if letter case is partially different\"\n    ( \"BANANA\" [\"Banana\"] anagrams )\n    []\n    equal?\n\n\"words are not anagrams of themselves even if letter case is completely different\"\n    ( \"BANANA\" [\"banana\"] anagrams )\n    []\n    equal?\n\n\"words other than themselves can be anagrams\"\n    ( \"LISTEN\" [\"LISTEN\", \"Silent\"] anagrams )\n    [\"Silent\"]\n    equal?\n\nend-of-tests\n;with\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

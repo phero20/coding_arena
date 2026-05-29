@@ -1,0 +1,6 @@
+{
+  "slug": "self",
+  "name": "Self",
+  "introduction": "# Introduction\n\nInstances of structs and classes each have an implicit value named `self` which refers to the instance itself. There are multiple uses for `self`, but it is most commonly used to disambiguate the names of properties and methods of the struct/class when there may be some confusion.\n\n```swift\nstruct MySelf {\n  var x = 0\n\n  mutating func move(x: Int) {\n    // here if we just say x = x it is unclear if we mean\n    // the property x or the method parameter x, so we use\n    // self for clarity\n    self.x = x\n  }\n}\n```",
+  "about": "# About\n\nInstances of structs and classes each have an implicit value named `self` which refers to the instance itself. There are multiple uses for `self`, but it is most commonly used to disambiguate the names of properties and methods of the struct/class when there may be some confusion.\n\n```swift\nstruct MySelf {\n  var x = 0\n\n  mutating func move(x: Int) {\n    // here if we just say x = x it is unclear if we mean\n    // the property x or the method parameter x, so we use\n    // self for clarity\n    self.x = x\n  }\n}\n```\n\nStructs and classes also have a `Self` value which refers the type if the struct or class, rather than the instance of the struct or class."
+}

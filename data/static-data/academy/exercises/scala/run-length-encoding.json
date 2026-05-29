@@ -1,0 +1,30 @@
+{
+  "id": "scala:run-length-encoding",
+  "trackSlug": "scala",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "163d247a-1763-4876-870a-63deb3a3daa8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "object RunLengthEncoding {\n  type Plain = String\n  type Encoded = String\n\n  def encode(str: Plain): Encoded = {\n    def encodeGroup(xs: Seq[Char]): Seq[Char] =\n      if (xs.length > 1) s\"${xs.length}${xs.head}\"\n      else xs.mkString\n\n    (splitByEquals(str) flatMap encodeGroup).mkString\n  }\n\n  def decode(str: Encoded): Plain = {\n    val nextChar: ((Int, Seq[Char]), Char) => (Int, Seq[Char]) = {\n      case ((n, xs), x) =>\n        if (x.isDigit) (n * 10 + x.asDigit, xs)\n        else if (n == 0) (0, x +: xs)\n        else (0, Seq.fill(n)(x) ++ xs)\n    }\n\n    val result = str.foldLeft((0, Seq.empty[Char]))(nextChar)\n    result._2.reverse.mkString\n  }\n\n  private def splitByEquals[T](xs: Seq[T]): Seq[Seq[T]] =\n    xs match {\n      case Seq() => Seq()\n      case x +: xss =>\n        val fs = xs takeWhile (_ == x)\n        fs +: splitByEquals(xs drop fs.length)\n    }\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.0.0 */\nclass RunLengthEncodingTest extends AnyFunSuite with Matchers {\n\n  test(\"encode - empty string\") {\n    RunLengthEncoding.encode(\"\") should be (\"\")\n  }\n\n  test(\"encode - single characters only are encoded without count\") {\n    pending\n    RunLengthEncoding.encode(\"XYZ\") should be (\"XYZ\")\n  }\n\n  test(\"encode - string with no single characters\") {\n    pending\n    RunLengthEncoding.encode(\"AABBBCCCC\") should be (\"2A3B4C\")\n  }\n\n  test(\"encode - single characters mixed with repeated characters\") {\n    pending\n    RunLengthEncoding.encode(\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\") should be (\"12WB12W3B24WB\")\n  }\n\n  test(\"encode - multiple whitespace mixed in string\") {\n    pending\n    RunLengthEncoding.encode(\"  hsqq qww  \") should be (\"2 hs2q q2w2 \")\n  }\n\n  test(\"encode - lowercase characters\") {\n    pending\n    RunLengthEncoding.encode(\"aabbbcccc\") should be (\"2a3b4c\")\n  }\n\n  test(\"decode - empty string\") {\n    pending\n    RunLengthEncoding.decode(\"\") should be (\"\")\n  }\n\n  test(\"decode - single characters only\") {\n    pending\n    RunLengthEncoding.decode(\"XYZ\") should be (\"XYZ\")\n  }\n\n  test(\"decode - string with no single characters\") {\n    pending\n    RunLengthEncoding.decode(\"2A3B4C\") should be (\"AABBBCCCC\")\n  }\n\n  test(\"decode - single characters with repeated characters\") {\n    pending\n    RunLengthEncoding.decode(\"12WB12W3B24WB\") should be (\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\")\n  }\n\n  test(\"decode - multiple whitespace mixed in string\") {\n    pending\n    RunLengthEncoding.decode(\"2 hs2q q2w2 \") should be (\"  hsqq qww  \")\n  }\n\n  test(\"decode - lower case string\") {\n    pending\n    RunLengthEncoding.decode(\"2a3b4c\") should be (\"aabbbcccc\")\n  }\n\n  test(\"consistency - encode followed by decode gives original string\") {\n    pending\n    RunLengthEncoding.decode(RunLengthEncoding.encode(\"zzz ZZ  zZ\")) should be (\"zzz ZZ  zZ\")\n  }\n}",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "abo64"
+  ],
+  "contributors": [
+    "ppartarr",
+    "rajeshpg",
+    "ricemery"
+  ]
+}

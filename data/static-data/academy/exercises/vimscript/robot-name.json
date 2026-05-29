@@ -1,0 +1,26 @@
+{
+  "id": "vimscript:robot-name",
+  "trackSlug": "vimscript",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "6f595055-783e-4e3f-a9e6-3fa64ebcd396",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"\n\" Creates a robot with a random name and a reset method.\n\"\nfunction! Create() abort\n  \" your code goes here\nendfunction\n",
+  "example_solution": "let s:census = {}\n\nfunction! Create() abort\n  let l:name = s:AssignName()\n  return {\n    \\ 'name': l:name,\n    \\ 'Reset': function('s:Reset')\n    \\ }\nendfunction\n\nfunction! s:Reset() dict\n  let self.name = s:AssignName()\nendfunction\n\nfunction! s:AssignName() abort\n  if len(s:census) == 26 * 26 * 10 * 10 * 10\n    throw 'All possible robot names have been used'\n  endif\n  \n  let l:name = s:GenerateName()\n  while has_key(s:census, l:name)\n    let l:name = s:GenerateName()\n  endwhile\n\n  let s:census[l:name] = 1\n  return l:name\nendfunction\n\nfunction! s:GenerateName() abort\n  let l:letters = map(repeat(['*'], 2), 's:GenerateLetter()')\n  let l:numbers = map(repeat(['*'], 3), 's:GenerateNumber()')\n  return join(l:letters + l:numbers, '')\nendfunction\n\nlet s:alphabet = range(65, 90)\n\nfunction! s:GenerateLetter() abort\n  return nr2char(s:alphabet[rand() % len(s:alphabet)])\nendfunction\n\nfunction! s:GenerateNumber() abort\n  return rand() % 10\nendfunction\n",
+  "test_code": "Execute (robot has a name):\n  let g:robot = Create()\n  Assert g:robot.name =~# '\\v^[A-Z]{2}\\d{3}$'\n\nExecute (different robots have different names):\n  let g:robot1 = Create()\n  let g:robot2 = Create()\n  Assert g:robot.name != robot2.name\n\nExecute (can reset the robot name):\n  let g:robot = Create()\n  let g:originalName = robot.name\n  call g:robot.Reset()\n  Assert g:robot.name != g:originalName\n\nExecute (robot name is valid after reset):\n  let g:robot = Create()\n  call g:robot.Reset()\n  Assert g:robot.name =~# '\\v^[A-Z]{2}\\d{3}$'\n\nExecute (robot names should be unique):\n  let g:seen = {}\n  for i in range(10000)\n    let g:current = Create()\n    Assert !has_key(g:seen, g:current.name)\n    let g:seen[g:current.name] = 1\n  endfor\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

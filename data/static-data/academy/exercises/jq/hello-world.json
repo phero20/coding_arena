@@ -1,0 +1,26 @@
+{
+  "id": "jq:hello-world",
+  "trackSlug": "jq",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "371035b8-691f-4ce3-9b5d-8e3e3d01675d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# This is the simplest jq \"filter\" -- just output a constant string\n\"Goodbye, Mars!\"\n",
+  "example_solution": "\"Hello, World!\"\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2022-11-02T20:59:14Z\nload bats-extra\nload bats-jq\n\n@test 'Say Hi!' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f hello-world.jq << 'END_INPUT'\n        {}\nEND_INPUT\n\n    assert_success\n    expected='Hello, World!'\n    assert_equal \"$output\" \"$expected\"\n}\n\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

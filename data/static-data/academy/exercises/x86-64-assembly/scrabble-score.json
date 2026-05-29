@@ -1,0 +1,28 @@
+{
+  "id": "x86-64-assembly:scrabble-score",
+  "trackSlug": "x86-64-assembly",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "1ddc9312-b16f-41fe-91c2-a1181d32fb15",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "default rel\n\nsection .text\nglobal score\nscore:\n    ; Provide your implementation here\n    ; The function has type signature int score(const char *score)\n    ; The return value is of type int, which is a 32-bit signed integer\n    ; The argument is of type const char*, which is the address of a read-only NUL-terminated sequence of bytes stored in memory\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "example_solution": "default rel\n\nsection .rodata\npoints: db 1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10\n\nsection .text\nglobal score\nscore:\n    cld\n    mov rsi, rdi\n    lea r8, [points]\n    xor r9, r9 ; total\n    xor r10, r10\n    xor rax, rax\n    jmp .read\n\n.update:\n    or al, 32 ; force to lower-case\n    sub al, 'a'\n    cmp al, 26\n    jae .read ; jump if not a letter\n\n    mov r10b, byte [r8 + rax] ; look up letter value\n    add r9, r10\n\n.read:\n    lodsb\n    test al, al\n    jnz .update\n\n    mov rax, r9\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "test_code": "#include \"vendor/unity.h\"\n\nextern int score(const char *score);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_lowercase_letter(void) {\n    TEST_ASSERT_EQUAL(1, score(\"a\"));\n}\n\nvoid test_uppercase_letter(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(1, score(\"A\"));\n}\n\nvoid test_valuable_letter(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(4, score(\"f\"));\n}\n\nvoid test_short_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(2, score(\"at\"));\n}\n\nvoid test_short_valuable_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(12, score(\"zoo\"));\n}\n\nvoid test_medium_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(6, score(\"street\"));\n}\n\nvoid test_medium_valuable_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(22, score(\"quirky\"));\n}\n\nvoid test_long_mixedcase_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(41, score(\"OxyphenButazone\"));\n}\n\nvoid test_englishlike_word(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(8, score(\"pinata\"));\n}\n\nvoid test_empty_input(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(0, score(\"\"));\n}\n\nvoid test_entire_alphabet_available(void) {\n    TEST_IGNORE();\n    TEST_ASSERT_EQUAL(87, score(\"abcdefghijklmnopqrstuvwxyz\"));\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_lowercase_letter);\n    RUN_TEST(test_uppercase_letter);\n    RUN_TEST(test_valuable_letter);\n    RUN_TEST(test_short_word);\n    RUN_TEST(test_short_valuable_word);\n    RUN_TEST(test_medium_word);\n    RUN_TEST(test_medium_valuable_word);\n    RUN_TEST(test_long_mixedcase_word);\n    RUN_TEST(test_englishlike_word);\n    RUN_TEST(test_empty_input);\n    RUN_TEST(test_entire_alphabet_available);\n    return UNITY_END();\n}\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

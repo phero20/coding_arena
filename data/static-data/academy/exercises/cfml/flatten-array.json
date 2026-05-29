@@ -1,0 +1,28 @@
+{
+  "id": "cfml:flatten-array",
+  "trackSlug": "cfml",
+  "slug": "flatten-array",
+  "name": "Flatten Array",
+  "uuid": "618196cb-5850-44a4-be78-807228179848",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take a nested list and return a single list with all values except nil/null.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nTake a nested list and return a single flattened list with all values except nil/null.\n\nThe challenge is to take an arbitrarily-deep nested list-like structure and produce a flattened structure without any nil/null values.\n\nFor example:\n\ninput: [1,[2,3,null,4],[null],5]\n\noutput: [1,2,3,4,5]\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the FlattenArray exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\tfunction flatten( array ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the FlattenArray exercise\n*/\ncomponent {\n\n\tfunction flatten( array ) {\n\t\tvar accumulator = [];\n\t\t\n\t\t// Loop over items in array\n\t\tarray\n\t\t\t.each( function( i ) {\n\t\t\t\t// Skip nulls\n\t\t\t\tif( !isNull( i ) ) {\n\t\t\t\t\t// Simple values get added\n\t\t\t\t\tif( isArray( i ) ) {\n\t\t\t\t\t\taccumulator.append( flatten( i ), true );\n\t\t\t\t\t// Nested arrays recurse\n\t\t\t\t\t} else {\n\t\t\t\t\t\taccumulator.append( i );\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t} );\n\t\treturn accumulator;\n\t}\n\t\t\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'FlattenArray' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My FlattenArray class\", function(){\t\t\t\n\n\t\t\tit( 'empty', function(){\n\t\t\t\texpect( SUT.flatten( array=[] ) ).toBe( [] );\n\t\t\t});\n\n\t\t\tit( 'no nesting', function(){\n\t\t\t\texpect( SUT.flatten( array=[0, 1, 2] ) ).toBe( [0,1,2] );\n\t\t\t});\n\n\t\t\tit( 'flattens a nested array', function(){\n\t\t\t\texpect( SUT.flatten( array=[[[]]] ) ).toBe( [] );\n\t\t\t});\n\n\t\t\tit( 'flattens array with just integers present', function(){\n\t\t\t\texpect( SUT.flatten( array=[1, [2, 3, 4, 5, 6, 7], 8] ) ).toBe( [1,2,3,4,5,6,7,8] );\n\t\t\t});\n\n\t\t\tit( '5 level nesting', function(){\n\t\t\t\texpect( SUT.flatten( array=[0, 2, [[2, 3], 8, 100, 4, [[[50]]]], -2] ) ).toBe( [0,2,2,3,8,100,4,50,-2] );\n\t\t\t});\n\n\t\t\tit( '6 level nesting', function(){\n\t\t\t\texpect( SUT.flatten( array=[1, [2, [[3]], [4, [[5]]], 6, 7], 8] ) ).toBe( [1,2,3,4,5,6,7,8] );\n\t\t\t});\n\n\t\t\tit( 'null values are omitted from the final result', function(){\n\t\t\t\texpect( SUT.flatten( array=[1, 2, nullValue()] ) ).toBe( [1,2] );\n\t\t\t});\n\n\t\t\tit( 'consecutive null values at the front of the list are omitted from the final result', function(){\n\t\t\t\texpect( SUT.flatten( array=[nullValue(), nullValue(), 3] ) ).toBe( [3] );\n\t\t\t});\n\n\t\t\tit( 'consecutive null values in the middle of the list are omitted from the final result', function(){\n\t\t\t\texpect( SUT.flatten( array=[1, nullValue(), nullValue(), 4] ) ).toBe( [1,4] );\n\t\t\t});\n\n\t\t\tit( '6 level nest list with null values', function(){\n\t\t\t\texpect( SUT.flatten( array=[0, 2, [[2, 3], 8, [[100]], nullValue(), [[nullValue()]]], -2] ) ).toBe( [0,2,2,3,8,100,-2] );\n\t\t\t});\n\n\t\t\tit( 'all values in nested list are null', function(){\n\t\t\t\texpect( SUT.flatten( array=[nullValue(), [[[nullValue()]]], nullValue(), nullValue(), [[nullValue(), nullValue()], nullValue()], nullValue()] ) ).toBe( [] );\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "Interview Question",
+  "source_url": "https://reference.wolfram.com/language/ref/Flatten.html",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

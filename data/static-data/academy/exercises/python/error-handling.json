@@ -1,0 +1,31 @@
+{
+  "id": "python:error-handling",
+  "trackSlug": "python",
+  "slug": "error-handling",
+  "name": "Error Handling",
+  "uuid": "0dac0feb-e1c8-497e-9a1b-e96e0523eea6",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement various kinds of error handling and resource management.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement various kinds of error handling and resource management.\n\nAn important point of programming is how to handle errors and close resources even if errors occur.\n\nThis exercise requires you to handle various errors.\nBecause error handling is rather programming language specific you'll have to refer to the tests for your track to see what's exactly required.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def handle_error_by_throwing_exception():\n    pass\n\n\ndef handle_error_by_returning_none(input_data):\n    pass\n\n\ndef handle_error_by_returning_tuple(input_data):\n    pass\n\n\ndef filelike_objects_are_closed_on_exception(filelike_object):\n    pass\n",
+  "example_solution": "def handle_error_by_throwing_exception():\n    raise Exception('Meaningful message describing the source of the error')\n\n\ndef handle_error_by_returning_none(input_data):\n    try:\n        return int(input_data)\n    except ValueError:\n        return None\n\n\ndef handle_error_by_returning_tuple(input_data):\n    try:\n        return (True, int(input_data))\n    except ValueError:\n        return (False, None)\n\n\ndef filelike_objects_are_closed_on_exception(filelike_object):\n    with filelike_object as file_obj:\n        file_obj.do_something()\n",
+  "test_code": "import unittest\n\nimport error_handling as er\nfrom test_utils import FileLike\n\n\nclass ErrorHandlingTest(unittest.TestCase):\n    def test_throw_exception(self):\n        with self.assertRaisesWithMessage(Exception):\n            er.handle_error_by_throwing_exception()\n\n    def test_return_none(self):\n        self.assertEqual(er.handle_error_by_returning_none('1'), 1,\n                         'Result of valid input should not be None')\n        self.assertIsNone(er.handle_error_by_returning_none('a'),\n                          'Result of invalid input should be None')\n\n    def test_return_tuple(self):\n        successful_result, result = er.handle_error_by_returning_tuple('1')\n        self.assertIs(successful_result, True,\n                      'Valid input should be successful')\n        self.assertEqual(result, 1, 'Result of valid input should not be None')\n\n        failure_result, result = er.handle_error_by_returning_tuple('a')\n        self.assertIs(failure_result, False,\n                      'Invalid input should not be successful')\n\n    def test_filelike_objects_are_closed_on_exception(self):\n        filelike_object = FileLike(fail_something=True)\n        with self.assertRaisesWithMessage(Exception):\n            er.filelike_objects_are_closed_on_exception(filelike_object)\n        self.assertIs(filelike_object.is_open, False,\n                      'filelike_object should be closed')\n        self.assertIs(filelike_object.was_open, True,\n                      'filelike_object should have been opened')\n        self.assertIs(filelike_object.did_something, True,\n                      'filelike_object should call do_something()')\n\n    def test_filelike_objects_are_closed_without_exception(self):\n        filelike_object = FileLike(fail_something=False)\n        er.filelike_objects_are_closed_on_exception(filelike_object)\n        self.assertIs(filelike_object.is_open, False,\n                      'filelike_object should be closed')\n        self.assertIs(filelike_object.was_open, True,\n                      'filelike_object should have been opened')\n        self.assertIs(filelike_object.did_something, True,\n                      'filelike_object should call do_something()')\n\n    # Utility functions\n    def assertRaisesWithMessage(self, exception):\n        return self.assertRaisesRegex(exception, r\".+\")\n\n\nif __name__ == '__main__':\n    unittest.main()\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "cmccandless"
+  ],
+  "contributors": [
+    "BethanyG",
+    "Dog",
+    "N-Parsons",
+    "tqa236"
+  ]
+}

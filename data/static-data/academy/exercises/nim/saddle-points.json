@@ -1,0 +1,26 @@
+{
+  "id": "nim:saddle-points",
+  "trackSlug": "nim",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "8809c138-3973-479e-9331-82a7f719f5cb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n    1  2  3  4\n  |-----------\n1 | 9  8  7  8\n2 | 5  3  2  4  <--- potential tree house at row 2, column 1, for tree with height 5\n3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "proc saddlePoints*(matrix: seq[seq[int]]): seq[tuple[r, c: int]] =\n  discard\n",
+  "example_solution": "import std/sequtils\n\nfunc saddlePoints*(matrix: seq[seq[int]]): seq[tuple[r, c: int]] =\n  if matrix.len == 0:\n    return\n\n  var colMins = newSeqWith(matrix[0].len, int.high)\n  for r, row in matrix:\n    for c, _ in row:\n      colMins[c] = min(colMins[c], matrix[r][c])\n\n  for r, row in matrix:\n    let rowMax = row.max\n    for c, _ in row:\n      if rowMax == colMins[c]:\n        result.add (r+1, c+1)\n",
+  "test_code": "import unittest, algorithm\nimport saddle_points\n\nsuite \"Saddle Points\":\n  test \"can identify single saddle point\":\n    const input = @[\n      @[9, 8, 7],\n      @[5, 3, 2],\n      @[6, 6, 7]\n    ]\n    const expected = @[(2, 1)]\n    check saddlePoints(input) == expected\n\n  test \"can identify that empty matrix has no saddle points\":\n    const input = newSeq[seq[int]]()\n    check saddlePoints(input).len == 0\n\n  test \"can identify lack of saddle points when there are none\":\n    const input = @[\n      @[1, 2, 3],\n      @[3, 1, 2],\n      @[2, 3, 1]\n    ]\n    check saddlePoints(input).len == 0\n\n  test \"can identify multiple saddle points in a column\":\n    const input = @[\n      @[4, 5, 4],\n      @[3, 5, 5],\n      @[1, 5, 4]\n    ]\n    const expected = @[(1, 2), (2, 2), (3, 2)]\n    check saddlePoints(input).sorted == expected\n\n  test \"can identify multiple saddle points in a row\":\n    const input = @[\n      @[6, 7, 8],\n      @[5, 5, 5],\n      @[7, 5, 6]\n    ]\n    const expected = @[(2, 1), (2, 2), (2, 3)]\n    check saddlePoints(input).sorted == expected\n\n  test \"can identify saddle point in bottom right corner\":\n    const input = @[\n      @[8, 7, 9],\n      @[6, 7, 6],\n      @[3, 2, 5]\n    ]\n    const expected = @[(3, 3)]\n    check saddlePoints(input) == expected\n\n  test \"can identify saddle points in a non square matrix\":\n    const input = @[\n      @[3, 1, 3],\n      @[3, 2, 4]\n    ]\n    const expected = @[(1, 1), (1, 3)]\n    check saddlePoints(input).sorted == expected\n\n  test \"can identify that saddle points in a single column matrix are those with the minimum value\":\n    const input = @[\n      @[2],\n      @[1],\n      @[4],\n      @[1]\n    ]\n    const expected = @[(2, 1), (4, 1)]\n    check saddlePoints(input).sorted == expected\n\n  test \"can identify that saddle points in a single row matrix are those with the maximum value\":\n    const input = @[\n      @[2, 5, 3, 5]\n    ]\n    const expected = @[(1, 2), (1, 4)]\n    check saddlePoints(input).sorted == expected\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ee7"
+  ],
+  "contributors": null
+}

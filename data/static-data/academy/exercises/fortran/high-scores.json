@@ -1,0 +1,26 @@
+{
+  "id": "fortran:high-scores",
+  "trackSlug": "fortran",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "d4c9aef2-b71e-41d9-897e-defb3e1ee304",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\nmodule high_scores\n  implicit none\ncontains\n\nfunction scores(score_list)\n  integer, dimension(:) :: score_list\n\nend function\n  \nend module\n",
+  "example_solution": "\nmodule high_scores\n  implicit none\ncontains\n\nfunction scores(score_list)\n  integer, dimension(:) :: score_list\n  integer, dimension(:) :: scores(size(score_list))\n  scores(:) = score_list(:)\nend function\n\ninteger function latest(score_list)\n  integer, dimension(:) :: score_list\n  integer :: slen \n  slen = size(score_list)\n  latest = score_list(slen)\nend function\n\n\ninteger function personalBest(score_list)\n  integer, dimension(:) :: score_list\n  personalBest = maxval(score_list) \nend function\n\n\n function personalTopThree(score_list)\n  integer, dimension(:) :: score_list\n  logical, dimension(:) :: score_list_mask(size(score_list))\n  integer, dimension(3) :: personalTopThree\n  integer :: i\n  integer :: j\n  personalTopThree=[0,0,0]\n  score_list_mask(:) = .true.\n  do i=1,min(3, size(score_list))\n    personalTopThree(i) = maxval(score_list, mask=score_list_mask) \n    j = maxloc(score_list, dim=1, mask=score_list_mask)\n    score_list_mask(j) = .false.\n  end do\nend function\n\n\n  \nend module\n",
+  "test_code": "program high_scores_test_main\n   use TesterMain\n   use high_scores\n\n   implicit none\n\n   ! Test 1: List of scores\n   call assert_equal([30, 50, 20, 70], scores([30, 50, 20, 70]), \"List of scores\")\n\n   ! Test 2: Latest score\n   call assert_equal(30, latest([100, 0, 90, 30]), \"Latest score\")\n\n   ! Test 3: Personal best\n   call assert_equal(100, personalBest([40, 100, 70]), \"Personal best\")\n\n   ! Test 4: Personal top three from a list of scores\n   call assert_equal([100, 90, 70], personalTopThree( &\n   & [10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70]), &\n   & \"Personal top three from a list of scores\")\n   ! Test 5: Personal top highest to lowest\n   call assert_equal([30, 20, 10], personalTopThree([20, 10, 30]), &\n   & \"Personal top highest to lowest\")\n   ! Test 6: Personal top when there is a tie\n   call assert_equal([40, 40, 30], personalTopThree([40, 20, 40, 30]), &\n   & \"Personal top when there is a tie\")\n   ! Test 7: Personal top when there are less than 3\n   call assert_equal([70, 30, 0], personalTopThree([30, 70]), &\n   & \"Personal top when there are less than 3\")\n   ! Test 8: Personal top when there is only one\n   call assert_equal([40, 0, 0], personalTopThree([40]), &\n   & \"Personal top when there is only one\")\n\n   call test_report()\n\nend program\n\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "pclausen"
+  ],
+  "contributors": null
+}

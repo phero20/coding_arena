@@ -1,0 +1,28 @@
+{
+  "id": "cfml:rna-transcription",
+  "trackSlug": "cfml",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "76f652f8-bc2a-4a2e-b13b-3bfe3ebbca70",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA Complement Transcription.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the RnaTranscription exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\t function toRNA( DNA ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the RnaTranscription exercise\n*/\ncomponent {\n\t\n\t function toRNA( DNA ) {\n\t\tvar RNA = '';\n\t\t\n\t\t// Loop over each input character\n\t\tfor( var i in DNA.listToArray( '' ) ) {\n\t\t\t\n\t\t\t// Swap with RNA value\n\t\t\tswitch( i ) {\n\t\t\t\tcase \"G\":\n\t\t\t\t\tRNA &= 'C';\n\t\t\t\t\tbreak;\n\t\t\t\tcase \"C\":\n\t\t\t\t\tRNA &= 'G';\n\t\t\t\t\tbreak;\n\t\t\t\tcase \"T\":\n\t\t\t\t\tRNA &= 'A';\n\t\t\t\t\tbreak;\n\t\t\t\tcase \"A\":\n\t\t\t\t\tRNA &= 'U';\n\t\t\t\t\tbreak;\n\t\t\t\t// Any unexpected char aborts method and returns null\n\t\t\t\tdefault: \n\t\t\t\t\treturn;\n\t\t\t}\n\t\t\t\n\t\t}\n\t\treturn RNA;\n\t}\n\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'RnaTranscription' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My RnaTranscription class\", function(){\t\t\t\n\n\t\t\tit( 'RNA complement of cytosine is guanine', function(){\n\t\t\t\texpect( SUT.toRna( dna='C' ) ).toBe( 'G' );\n\t\t\t});\n\n\t\t\tit( 'RNA complement of guanine is cytosine', function(){\n\t\t\t\texpect( SUT.toRna( dna='G' ) ).toBe( 'C' );\n\t\t\t});\n\n\t\t\tit( 'RNA complement of thymine is adenine', function(){\n\t\t\t\texpect( SUT.toRna( dna='T' ) ).toBe( 'A' );\n\t\t\t});\n\n\t\t\tit( 'RNA complement of adenine is uracil', function(){\n\t\t\t\texpect( SUT.toRna( dna='A' ) ).toBe( 'U' );\n\t\t\t});\n\n\t\t\tit( 'RNA complement', function(){\n\t\t\t\texpect( SUT.toRna( dna='ACGTGGTCTTAA' ) ).toBe( 'UGCACCAGAAUU' );\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

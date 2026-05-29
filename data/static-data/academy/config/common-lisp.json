@@ -1,0 +1,1677 @@
+{
+  "language": "Common Lisp",
+  "slug": "common-lisp",
+  "active": true,
+  "status": {
+    "concept_exercises": true,
+    "test_runner": true,
+    "representer": true,
+    "analyzer": false
+  },
+  "blurb": "A programmable programming language.",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2,
+    "highlightjs_language": "lisp"
+  },
+  "test_runner": {
+    "average_run_time": 2
+  },
+  "files": {
+    "solution": [
+      "%{kebab_slug}.lisp"
+    ],
+    "test": [
+      "%{kebab_slug}-test.lisp"
+    ],
+    "example": [
+      ".meta/example.lisp"
+    ],
+    "exemplar": [
+      ".meta/exempler.lisp"
+    ]
+  },
+  "exercises": {
+    "concept": [
+      {
+        "slug": "socks-and-sexprs",
+        "name": "Sorting Socks and Sexprs",
+        "uuid": "6787f07b-6fca-48ec-9ed1-f37bb77126f2",
+        "concepts": [
+          "comments",
+          "expressions",
+          "cons",
+          "symbols"
+        ],
+        "prerequisites": [],
+        "status": "beta",
+        "blurb": "Learn the basics of Common Lisp by helping your friend clean their room so they can go out and have some fun."
+      },
+      {
+        "slug": "key-comparison",
+        "name": "The Key to Comparison",
+        "uuid": "8d7ba0dc-7d87-452c-8208-39491d8f40f4",
+        "concepts": [
+          "equality"
+        ],
+        "prerequisites": [
+          "characters",
+          "strings",
+          "floating-point-numbers",
+          "integers",
+          "cons",
+          "arrays"
+        ],
+        "status": "beta",
+        "blurb": "Learn about equality by helping find the keys to the rooms of a maze."
+      },
+      {
+        "slug": "pizza-pi",
+        "name": "Pizza Pi",
+        "uuid": "f78cff23-2106-4e35-b439-2d8bd2830770",
+        "concepts": [
+          "integers",
+          "floating-point-numbers",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "expressions"
+        ],
+        "status": "beta",
+        "blurb": "Learn about arithmetic with integers and floating-point numbers by helping to make pizza."
+      },
+      {
+        "slug": "leslies-lists",
+        "name": "Leslie's Lengthy Lists",
+        "uuid": "fd1aaa1a-f3c0-419e-a713-761c5147a5e1",
+        "concepts": [
+          "lists"
+        ],
+        "prerequisites": [
+          "cons",
+          "symbols"
+        ],
+        "status": "beta",
+        "blurb": "Learn about Lists by helping to keep track of a shopping list."
+      },
+      {
+        "slug": "pal-picker",
+        "name": "Pal Picker",
+        "uuid": "c0155014-4d11-4cb2-872b-6dfdf794f7cd",
+        "concepts": [
+          "conditionals",
+          "truthy-and-falsy"
+        ],
+        "prerequisites": [
+          "expressions",
+          "integers",
+          "arithmetic",
+          "symbols"
+        ],
+        "status": "beta",
+        "blurb": "Learn about conditionals and truth and falseness by helping to choose and take care of a pet."
+      },
+      {
+        "slug": "lillys-lasagna",
+        "name": "Lilly's Lasagna",
+        "uuid": "60f4773a-e37e-4186-8542-a19ffbf6e6ae",
+        "concepts": [
+          "functions"
+        ],
+        "prerequisites": [
+          "expressions",
+          "integers",
+          "arithmetic"
+        ],
+        "status": "beta",
+        "blurb": "Learn about functions by helping to cook lasagna."
+      },
+      {
+        "slug": "lillys-lasagna-leftovers",
+        "name": "Lilly's Lasagna Leftovers",
+        "uuid": "994302db-c5e5-4342-a2a5-e2a5d09b10cc",
+        "concepts": [
+          "lambda-list",
+          "keyword-parameters",
+          "optional-parameters",
+          "rest-parameters"
+        ],
+        "prerequisites": [
+          "functions",
+          "symbols",
+          "conditionals"
+        ],
+        "status": "beta",
+        "blurb": "Learn about keyword, optional and rest arguments by again helping with lasagna."
+      },
+      {
+        "slug": "log-levels",
+        "name": "Log Levels",
+        "uuid": "50b5e2a8-d13f-43c6-8481-78270ecf1591",
+        "concepts": [
+          "strings"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "symbols"
+        ],
+        "status": "beta",
+        "blurb": "Learn about Common Lisp strings by processing log messages"
+      },
+      {
+        "slug": "character-study",
+        "name": "Character Study",
+        "uuid": "67f00071-564c-4f77-a35c-329c7b69cdc8",
+        "concepts": [
+          "characters"
+        ],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "status": "beta",
+        "blurb": "Learn the basics of Common Lisp characters by helping Lewis learn about Earth letters."
+      },
+      {
+        "slug": "larrys-winning-checker",
+        "name": "Larry's Winning Checker",
+        "uuid": "56958703-f77f-4545-b252-7fb06bdc3b2d",
+        "concepts": [
+          "arrays",
+          "vectors"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "symbols"
+        ],
+        "status": "beta",
+        "blurb": "Learn the basics of Common Lisp arrays by helping Larry check for winner of their tic-tac-toe like game."
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "40868cee-a480-48c4-b9e8-e11324c0708b",
+        "concepts": [
+          "hash-tables"
+        ],
+        "prerequisites": [
+          "functions",
+          "integers"
+        ],
+        "status": "beta",
+        "blurb": "Learn about hash tables by keeping track of the high scores in a game that Lamont wants to write."
+      },
+      {
+        "slug": "lucys-magnificent-mapper",
+        "name": "Lucy's Magnificent Mapper",
+        "uuid": "85e6438a-0dc7-4d94-b984-98714c0bf850",
+        "concepts": [
+          "mapping",
+          "filtering"
+        ],
+        "prerequisites": [
+          "functions",
+          "lists"
+        ],
+        "status": "beta",
+        "blurb": "Help Lucy try to make numbers more magnificent and keep only those that are."
+      },
+      {
+        "slug": "gigasecond-anniversary",
+        "name": "Gigasecond Anniversary",
+        "uuid": "4583eb37-0ca3-4c95-839c-3a167599718b",
+        "concepts": [
+          "date-time",
+          "multiple-values"
+        ],
+        "prerequisites": [
+          "lists",
+          "arithmetic"
+        ],
+        "status": "beta",
+        "blurb": "Learn about handling dates and times in Common Lisp by helping compute Gigasecond Anniversary dates"
+      },
+      {
+        "slug": "logans-numeric-partition",
+        "name": "Logan's Numeric Partition",
+        "uuid": "63ee56a6-ed3d-42f5-9c95-cb4298fedc44",
+        "concepts": [
+          "reducing"
+        ],
+        "prerequisites": [
+          "lists",
+          "functions",
+          "integers",
+          "keyword-parameters"
+        ],
+        "status": "beta",
+        "blurb": "Help Logan partition numbers into evens and odds by using reduce."
+      },
+      {
+        "slug": "reporting-for-duty",
+        "name": "Reporting for Duty",
+        "uuid": "c72ffe7d-eda5-41b0-b1ae-10c9db1550fa",
+        "concepts": [
+          "format-basics"
+        ],
+        "prerequisites": [
+          "strings",
+          "functions"
+        ],
+        "status": "beta",
+        "blurb": "Help Layla produce short reports"
+      }
+    ],
+    "practice": [
+      {
+        "slug": "hello-world",
+        "name": "Hello World",
+        "uuid": "314e1322-c3b0-4f12-85be-c35d5ffc020c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "status": "active",
+        "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\"."
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two Fer",
+        "uuid": "b80ab7d9-6152-4351-b405-07c2fb071962",
+        "practices": [
+          "optional-parameters",
+          "conditionals",
+          "functions",
+          "format-basics"
+        ],
+        "prerequisites": [
+          "functions",
+          "optional-parameters",
+          "conditionals",
+          "format-basics"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Create a sentence of the form \"One for X, one for me.\"."
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "c029678b-9b9f-4fb2-958f-3a118efa16a9",
+        "practices": [
+          "characters"
+        ],
+        "prerequisites": [
+          "functions",
+          "characters",
+          "strings"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Calculate the Hamming distance between two DNA strands."
+      },
+      {
+        "slug": "house",
+        "name": "House",
+        "uuid": "142528c1-80e3-4d97-9a20-766a63089287",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Output the nursery rhyme 'This is the House that Jack Built'."
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "5c215cbf-a575-42ad-9b3f-892410a63077",
+        "practices": [
+          "characters",
+          "mapping"
+        ],
+        "prerequisites": [
+          "functions",
+          "characters",
+          "mapping"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Given a DNA strand, return its RNA complement."
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "8bfa54a8-4ee6-4e6e-b286-7fc8c70b9e9f",
+        "practices": [
+          "conditionals",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "arithmetic"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Determine whether a given year is a leap year."
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "b9fd0f13-966c-4085-ac9d-ed49a96ac0bf",
+        "practices": [
+          "strings",
+          "filtering"
+        ],
+        "prerequisites": [
+          "functions",
+          "strings",
+          "filtering"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Given a word and a list of possible anagrams, select the correct sublist."
+      },
+      {
+        "slug": "beer-song",
+        "name": "Beer Song",
+        "uuid": "5c6f22e7-109c-4d9e-b8bf-4ea63b2823ca",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "status": "deprecated",
+        "blurb": "Produce the lyrics to that beloved classic, that field-trip favorite: 99 Bottles of Beer on the Wall."
+      },
+      {
+        "slug": "roman-numerals",
+        "name": "Roman Numerals",
+        "uuid": "150d3608-d234-4c9e-ab6d-2d91f8a2c855",
+        "practices": [
+          "integers",
+          "strings"
+        ],
+        "prerequisites": [
+          "functions"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Convert modern Arabic numbers into Roman numerals."
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "424ed7aa-24f3-4aec-9620-3cc9dc224166",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Given a phrase, count the occurrences of each word in that phrase."
+      },
+      {
+        "slug": "bob",
+        "name": "Bob",
+        "uuid": "1e6c8365-775d-4a4f-8fc7-e376912d7912",
+        "practices": [
+          "conditionals",
+          "strings",
+          "format-basics"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "strings",
+          "format-basics"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Bob is a lackadaisical teenager. In conversation, his responses are very limited."
+      },
+      {
+        "slug": "twelve-days",
+        "name": "Twelve Days",
+        "uuid": "40ce6656-b8f5-4156-94b6-d634876215b2",
+        "practices": [
+          "format-basics"
+        ],
+        "prerequisites": [
+          "format-basics"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Output the lyrics to 'The Twelve Days of Christmas'."
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "a999c375-f2e2-4d47-a9e2-5af923cd46d1",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Convert a long phrase to its acronym."
+      },
+      {
+        "slug": "all-your-base",
+        "name": "All Your Base",
+        "uuid": "9b01a3bd-68fe-4171-8e5e-ff3351865aaf",
+        "practices": [
+          "integers",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Convert a number, represented as a sequence of digits in one base, to any other base."
+      },
+      {
+        "slug": "allergies",
+        "name": "Allergies",
+        "uuid": "d2fd481e-7156-452d-976d-ea6df220fa18",
+        "practices": [
+          "integers",
+          "mapping"
+        ],
+        "prerequisites": [
+          "integers",
+          "mapping"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Given a person's allergy score, determine whether or not they're allergic to a given item, and their full list of allergies."
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "9319d1a6-276f-4b3b-8305-fc022cc48ef2",
+        "practices": [
+          "lists",
+          "mapping",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "integers",
+          "lists",
+          "arithmetic",
+          "mapping"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Determine if a number is an Armstrong number."
+      },
+      {
+        "slug": "binary",
+        "name": "Binary",
+        "uuid": "005ff8b4-9df8-4b82-b919-a0c67356d654",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "status": "deprecated",
+        "blurb": "Convert a binary number, represented as a string (e.g. '101010'), to its decimal equivalent using first principles."
+      },
+      {
+        "slug": "binary-search",
+        "name": "Binary Search",
+        "uuid": "b327bd9a-b12e-490b-91cb-d3c21a23b4eb",
+        "practices": [
+          "arrays",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "arrays",
+          "conditionals"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Implement a binary search algorithm."
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "b3ad38c2-2962-4b47-9b14-20ca262ebff6",
+        "practices": [
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture."
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "71804ace-6ca1-46b9-bf06-ff57faef7afa",
+        "practices": [
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers."
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "52ac3dd0-8803-445f-93cf-e984b59d6702",
+        "practices": [
+          "hash-tables"
+        ],
+        "prerequisites": [
+          "hash-tables"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Change the data format for scoring a game to more easily add other languages."
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "683068c2-97df-430d-a713-b4fca940c12d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation."
+      },
+      {
+        "slug": "gigasecond",
+        "name": "Gigasecond",
+        "uuid": "25506c31-7274-402a-95e1-8475fcdb34e1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "status": "deprecated",
+        "blurb": "Given a moment, determine the moment that would be after a gigasecond has passed."
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "eb3a92bf-0748-4406-ba67-9e27e367ae45",
+        "practices": [
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "arithmetic"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles."
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "89ea51d0-3f7e-4e07-8e2b-4dde4c76608b",
+        "practices": [
+          "filtering"
+        ],
+        "prerequisites": [
+          "filtering"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Determine if a word or phrase is an isogram."
+      },
+      {
+        "slug": "nucleotide-count",
+        "name": "Nucleotide Count",
+        "uuid": "b2ad38c2-2962-4a47-9b14-20ca262ebff6",
+        "practices": [
+          "characters"
+        ],
+        "prerequisites": [
+          "strings",
+          "characters"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string."
+      },
+      {
+        "slug": "pascals-triangle",
+        "name": "Pascal's Triangle",
+        "uuid": "34bc4fbe-f148-4519-a699-91efed432703",
+        "practices": [
+          "integers"
+        ],
+        "prerequisites": [
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Compute Pascal's triangle up to a given number of rows."
+      },
+      {
+        "slug": "perfect-numbers",
+        "name": "Perfect Numbers",
+        "uuid": "b3ad38c2-2962-4b47-9b15-15ca262ebff6",
+        "practices": [
+          "arithmetic",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "arithmetic",
+          "conditionals"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Determine if a number is perfect, abundant, or deficient based on Nicomachus' (60 - 120 CE) classification scheme for positive integers."
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "b5345fcb-d4cc-4ea0-b1b9-f1b0cb92f05c",
+        "practices": [
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong."
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "f350f23d-72f8-4f47-a0f5-fe3c00f3f5f1",
+        "practices": [
+          "characters"
+        ],
+        "prerequisites": [
+          "characters"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Given a word, compute the Scrabble score for that word."
+      },
+      {
+        "slug": "sieve",
+        "name": "Sieve",
+        "uuid": "40f3b911-0739-4fec-95cc-cfab99788c19",
+        "practices": [
+          "integers",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Use the Sieve of Eratosthenes to find all the primes from 2 up to a given number."
+      },
+      {
+        "slug": "space-age",
+        "name": "Space Age",
+        "uuid": "d24cf0ea-876f-4775-969b-99970425e413",
+        "practices": [
+          "functions",
+          "floating-point-numbers"
+        ],
+        "prerequisites": [
+          "functions",
+          "floating-point-numbers"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years."
+      },
+      {
+        "slug": "strain",
+        "name": "Strain",
+        "uuid": "1a81aac9-9128-48ab-aa6a-4d981d6eb602",
+        "practices": [
+          "conditionals",
+          "filtering"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "filtering"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Implement the `keep` and `discard` operation on collections."
+      },
+      {
+        "slug": "sublist",
+        "name": "Sublist",
+        "uuid": "428e5b28-31b6-4c84-8eae-d7753d45efc1",
+        "practices": [
+          "lists"
+        ],
+        "prerequisites": [
+          "lists"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Write a function to determine if a list is a sublist of another list."
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "bd2a55e3-9874-4d2e-ad6f-4b2f8c5e2e0a",
+        "practices": [
+          "conditionals"
+        ],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Determine if a triangle is equilateral, isosceles, or scalene."
+      },
+      {
+        "slug": "trinary",
+        "name": "Trinary",
+        "uuid": "ff3eb2c5-c7ce-4352-805c-e01d4fb85aa6",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "status": "deprecated",
+        "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles."
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "71a1fdb6-414e-452c-8d24-03f2a5621e62",
+        "practices": [
+          "characters"
+        ],
+        "prerequisites": [
+          "characters"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East."
+      },
+      {
+        "slug": "grade-school",
+        "name": "Grade School",
+        "uuid": "841641f2-16ba-4dc5-af1b-ffae5052853a",
+        "practices": [
+          "hash-tables"
+        ],
+        "prerequisites": [
+          "hash-tables"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Given students' names along with the grade that they are in, create a roster for the school."
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "d1d86b51-a3f4-4276-a18c-6db54bc8dfcc",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages."
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "cc138097-7c0f-44b4-b07e-2a24f6475986",
+        "practices": [
+          "integers",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "integers",
+          "arithmetic"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Compute the prime factors of a given natural number."
+      },
+      {
+        "slug": "relative-distance",
+        "name": "Relative Distance",
+        "uuid": "5e06855b-2894-4b30-992d-1a7af376d2ec",
+        "practices": [
+          "conditionals",
+          "hash-tables",
+          "mapping"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "hash-tables"
+        ],
+        "difficulty": 5,
+        "blurb": "Given a family tree, calculate the degree of separation."
+      },
+      {
+        "slug": "robot-name",
+        "name": "Robot Name",
+        "uuid": "79a4a35c-40d6-4e2d-92a1-005c40b4f4c5",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "Manage robot factory settings."
+      },
+      {
+        "slug": "robot-simulator",
+        "name": "Robot Simulator",
+        "uuid": "d218cf9e-3b35-4357-9734-87142c22d551",
+        "practices": [
+          "conditionals"
+        ],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "difficulty": 7,
+        "status": "beta",
+        "blurb": "Write a robot simulator."
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "fcfc6b44-597d-4a03-bf02-6be5c8f7ae4e",
+        "practices": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "arrays",
+          "strings"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Implement the classic method for composing secret messages called a square code."
+      },
+      {
+        "slug": "meetup",
+        "name": "Meetup",
+        "uuid": "6c702aa9-70f3-41d0-bc76-4323a08f8fbf",
+        "practices": [
+          "date-time"
+        ],
+        "prerequisites": [
+          "date-time"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Calculate the date of meetups."
+      },
+      {
+        "slug": "luhn",
+        "name": "Luhn",
+        "uuid": "7cc9d827-b08e-437d-826e-244f220feca0",
+        "practices": [
+          "integers"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Given a number determine whether or not it is valid per the Luhn formula."
+      },
+      {
+        "slug": "book-store",
+        "name": "Book Store",
+        "uuid": "7f4cc4e6-3bcd-4b63-9115-36e63fba21ec",
+        "practices": [
+          "lists",
+          "mapping",
+          "functions"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "lists",
+          "mapping",
+          "arithmetic",
+          "functions"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "To try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts of multiple-book purchases."
+      },
+      {
+        "slug": "isbn-verifier",
+        "name": "ISBN Verifier",
+        "uuid": "d234aba4-daa2-4573-b9df-4592589f2ccf",
+        "practices": [
+          "strings",
+          "filtering",
+          "mapping",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "strings",
+          "filtering",
+          "mapping",
+          "arithmetic",
+          "functions",
+          "conditionals"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Check if a given string is a valid ISBN-10 number."
+      },
+      {
+        "slug": "sum-of-multiples",
+        "name": "Sum of Multiples",
+        "uuid": "91d0b2c3-12b5-4413-9f34-cdae085da94e",
+        "practices": [
+          "lists"
+        ],
+        "prerequisites": [
+          "lists",
+          "integers",
+          "functions"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Given a number, find the sum of all the multiples of particular numbers up to but not including that number."
+      },
+      {
+        "slug": "matching-brackets",
+        "name": "Matching Brackets",
+        "uuid": "880223e2-2625-4753-917e-b1d82cc2a028",
+        "practices": [
+          "reducing",
+          "conditionals",
+          "filtering"
+        ],
+        "prerequisites": [
+          "reducing",
+          "conditionals",
+          "characters",
+          "filtering",
+          "functions"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Make sure the brackets and braces all match."
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run-Length Encoding",
+        "uuid": "bb589f12-5aaf-48bf-a105-97396d7533de",
+        "practices": [
+          "strings",
+          "characters"
+        ],
+        "prerequisites": [
+          "strings",
+          "conditionals",
+          "characters",
+          "format-basics"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Implement run-length encoding and decoding."
+      },
+      {
+        "slug": "largest-series-product",
+        "name": "Largest Series Product",
+        "uuid": "29edfde1-ba04-4502-80e2-8a52092e18a9",
+        "practices": [
+          "functions",
+          "mapping",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "strings",
+          "characters",
+          "mapping",
+          "functions"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Given a string of digits, calculate the largest product for a contiguous substring of digits of length n."
+      },
+      {
+        "slug": "queen-attack",
+        "name": "Queen Attack",
+        "uuid": "d8756342-ee14-483f-9e2e-210b666ee4c1",
+        "practices": [
+          "conditionals"
+        ],
+        "prerequisites": [
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other."
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "11ce78f7-7c28-4a8b-9560-055269aae7ff",
+        "practices": [
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "arithmetic",
+          "integers",
+          "lists"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Given a number n, determine what the nth prime is."
+      },
+      {
+        "slug": "knapsack",
+        "name": "Knapsack",
+        "uuid": "7b699611-7119-4f4e-93bb-ff7dc3064357",
+        "practices": [
+          "reducing",
+          "mapping",
+          "filtering"
+        ],
+        "prerequisites": [
+          "reducing",
+          "mapping",
+          "filtering",
+          "lists",
+          "functions"
+        ],
+        "difficulty": 7,
+        "status": "beta",
+        "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value."
+      },
+      {
+        "slug": "rail-fence-cipher",
+        "name": "Rail Fence Cipher",
+        "uuid": "22ad5969-163d-44db-a2a6-b9c6b0767598",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings",
+          "functions",
+          "lists",
+          "mapping"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Implement encoding and decoding for the rail fence cipher."
+      },
+      {
+        "slug": "pig-latin",
+        "name": "Pig Latin",
+        "uuid": "761dc40f-7142-4f0c-abc8-a05042600f42",
+        "practices": [
+          "strings",
+          "functions"
+        ],
+        "prerequisites": [
+          "strings",
+          "functions",
+          "lists",
+          "format-basics"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "Implement a program that translates from English to Pig Latin."
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "81ee1119-ddd8-412b-a9f4-7f4374c7cf46",
+        "practices": [
+          "conditionals"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "functions",
+          "lists"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Translate RNA sequences into proteins."
+      },
+      {
+        "slug": "saddle-points",
+        "name": "Saddle Points",
+        "uuid": "5e5cc82c-48a5-4a9d-a07a-4a1e9990587c",
+        "practices": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "arrays",
+          "lists",
+          "functions",
+          "mapping",
+          "filtering"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Detect saddle points in a matrix."
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "93e19e42-f81d-42f0-b3ad-a0f5974ccf20",
+        "practices": [
+          "strings",
+          "arrays"
+        ],
+        "prerequisites": [
+          "strings",
+          "arrays",
+          "functions",
+          "lists"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix."
+      },
+      {
+        "slug": "palindrome-products",
+        "name": "Palindrome Products",
+        "uuid": "55744a77-e371-4963-bd8a-43048eb56ad4",
+        "practices": [
+          "multiple-values",
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "multiple-values",
+          "arithmetic",
+          "functions",
+          "lists"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "Detect palindrome products in a given range."
+      },
+      {
+        "slug": "pythagorean-triplet",
+        "name": "Pythagorean Triplet",
+        "uuid": "f7bbf16d-77d9-4d13-a20c-e60f416de764",
+        "practices": [
+          "arithmetic"
+        ],
+        "prerequisites": [
+          "arithmetic",
+          "multiple-values",
+          "lists"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "Given an integer N, find all Pythagorean triplets for which a + b + c = N."
+      },
+      {
+        "slug": "affine-cipher",
+        "name": "Affine Cipher",
+        "uuid": "b7885c80-d4d9-4636-a9c2-6051c6f9204c",
+        "practices": [
+          "arithmetic",
+          "strings",
+          "characters"
+        ],
+        "prerequisites": [
+          "arithmetic",
+          "strings",
+          "characters",
+          "mapping",
+          "filtering"
+        ],
+        "difficulty": 4,
+        "status": "beta",
+        "blurb": "Create an implementation of the Affine cipher, an ancient encryption algorithm from the Middle East."
+      },
+      {
+        "slug": "say",
+        "name": "Say",
+        "uuid": "c1aff1f6-2b48-4b54-a784-c5dbe2a7a19c",
+        "practices": [
+          "format-basics"
+        ],
+        "prerequisites": [
+          "format-basics"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English."
+      },
+      {
+        "slug": "two-bucket",
+        "name": "Two Bucket",
+        "uuid": "3b972dcf-536e-4a42-9b39-040ac7f40f2f",
+        "practices": [
+          "conditionals",
+          "functions"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "functions"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "Given two buckets of different size, demonstrate how to measure an exact number of liters."
+      },
+      {
+        "slug": "flatten-array",
+        "name": "Flatten Array",
+        "uuid": "008ae436-b9d5-4882-b1c7-8809baff70ea",
+        "practices": [
+          "reducing"
+        ],
+        "prerequisites": [
+          "functions",
+          "lists",
+          "conditionals",
+          "filtering",
+          "reducing"
+        ],
+        "difficulty": 6,
+        "status": "beta",
+        "blurb": "Take a nested list and return a single list with all values except nil/null."
+      },
+      {
+        "slug": "spiral-matrix",
+        "name": "Spiral Matrix",
+        "uuid": "c9a6f47c-53a2-4a65-bd1e-9a370a2db71c",
+        "practices": [
+          "arrays"
+        ],
+        "prerequisites": [
+          "arrays",
+          "functions",
+          "mapping"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Given the size, return a square matrix of numbers in spiral order."
+      },
+      {
+        "slug": "diamond",
+        "name": "Diamond",
+        "uuid": "410ff5ca-cbef-47a8-b33a-e3d5a70e4a99",
+        "practices": [
+          "format-basics"
+        ],
+        "prerequisites": [
+          "format-basics"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Given a letter, print a diamond starting with 'A' with the supplied letter at the widest point."
+      },
+      {
+        "slug": "rotational-cipher",
+        "name": "Rotational Cipher",
+        "uuid": "d94532d1-9d7b-489d-8620-31310209ccee",
+        "practices": [
+          "strings"
+        ],
+        "prerequisites": [
+          "strings"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher."
+      },
+      {
+        "slug": "pangram",
+        "name": "Pangram",
+        "uuid": "43760aca-393a-4cb2-9c5a-62a2d1e34032",
+        "practices": [
+          "filtering"
+        ],
+        "prerequisites": [
+          "filtering",
+          "strings"
+        ],
+        "difficulty": 1,
+        "status": "beta",
+        "blurb": "Determine if a sentence is a pangram."
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "e2b72779-d795-45b8-8933-5914a0cb1937",
+        "practices": [
+          "conditionals",
+          "integers"
+        ],
+        "prerequisites": [
+          "conditionals",
+          "integers"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Given a decimal number, convert it to the appropriate sequence of events for a secret handshake."
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "ce90fcd2-bf4d-4ed4-ba1d-eadca619022f",
+        "practices": [
+          "arithmetic",
+          "floating-point-numbers",
+          "conditionals"
+        ],
+        "prerequisites": [
+          "arithmetic",
+          "floating-point-numbers",
+          "conditionals"
+        ],
+        "difficulty": 2,
+        "status": "beta",
+        "blurb": "Calculate the points scored in a single toss of a Darts game."
+      },
+      {
+        "slug": "proverb",
+        "name": "Proverb",
+        "uuid": "2e88cea7-59ea-409b-87a0-93eaaf06a7ba",
+        "practices": [
+          "format-basics"
+        ],
+        "prerequisites": [
+          "format-basics"
+        ],
+        "difficulty": 3,
+        "status": "beta",
+        "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme."
+      },
+      {
+        "slug": "food-chain",
+        "name": "Food Chain",
+        "uuid": "98f7f477-a55f-46e9-9c0e-a90ba2298039",
+        "practices": [
+          "format-basics"
+        ],
+        "prerequisites": [
+          "format-basics",
+          "functions",
+          "strings"
+        ],
+        "difficulty": 5,
+        "status": "beta",
+        "blurb": "Generate the lyrics of the song 'I Know an Old Lady Who Swallowed a Fly'."
+      },
+      {
+        "slug": "yacht",
+        "name": "Yacht",
+        "uuid": "a722b0da-7060-4dd5-930f-4fea566afebf",
+        "practices": [
+          "lists"
+        ],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Score a single throw of dice in the game Yacht."
+      },
+      {
+        "slug": "bottle-song",
+        "name": "Bottle Song",
+        "uuid": "71273720-57d4-41ee-b3be-063b594179a8",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Produce the lyrics to the popular children's repetitive song: Ten Green Bottles."
+      },
+      {
+        "slug": "square-root",
+        "name": "Square Root",
+        "uuid": "bb0ee09d-5d5c-45d6-949b-b65b04a5f5e7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a natural radicand, return its square root."
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "59c87423-c430-4e46-9790-bef60c9c62eb",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert a resistor band's color to its numeric representation."
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "ca69efa5-b3ef-4839-b835-1ff3885595ea",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert color codes, as used on resistors, to a numeric value."
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "821b4894-3a9e-4aac-9e83-ab8b05dbeea0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Convert color codes, as used on resistors, to a human-readable label."
+      },
+      {
+        "slug": "line-up",
+        "name": "Line Up",
+        "uuid": "62cbdb2d-8d93-44ef-9944-6429a5fee275",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Help lining up customers at Yaʻqūb's Deli."
+      }
+    ],
+    "foregone": [
+      "accumulate",
+      "bank-account",
+      "list-ops",
+      "linked-list",
+      "simple-linked-list",
+      "parallel-letter-frequency",
+      "lens-person",
+      "reverse-string"
+    ]
+  },
+  "concepts": [
+    {
+      "uuid": "b2a3eef0-eb53-4b1b-bf32-167fd2f7d880",
+      "slug": "arithmetic",
+      "name": "Arithmetic"
+    },
+    {
+      "uuid": "9afaa6c5-5c25-4f44-a908-5e0f156f7fb3",
+      "slug": "arrays",
+      "name": "Arrays"
+    },
+    {
+      "uuid": "3147bf8d-9050-4f1a-b267-25f297fc80d7",
+      "slug": "characters",
+      "name": "Characters"
+    },
+    {
+      "uuid": "477a4d8d-41d1-47a4-96f0-b39caeaee513",
+      "slug": "comments",
+      "name": "Comments"
+    },
+    {
+      "uuid": "894a6bcc-5b4c-41d1-bfba-a0ca3b121257",
+      "slug": "conditionals",
+      "name": "Conditionals"
+    },
+    {
+      "uuid": "9afa389a-17e2-4991-ab48-64be5fc955aa",
+      "slug": "cons",
+      "name": "Cons"
+    },
+    {
+      "uuid": "cb241bf3-a9f1-4f9d-b294-de660a23b713",
+      "slug": "date-time",
+      "name": "Date and Time"
+    },
+    {
+      "uuid": "a291e615-6148-46a4-ada8-9ab6eb343eb9",
+      "slug": "optional-parameters",
+      "name": "Optional Parameters"
+    },
+    {
+      "uuid": "80ea7d53-76aa-4e89-9d70-45548181a6eb",
+      "slug": "expressions",
+      "name": "Expressions"
+    },
+    {
+      "uuid": "fbf4b92b-37ba-4fa2-b5c4-e88125ad3ab6",
+      "slug": "filtering",
+      "name": "Filtering"
+    },
+    {
+      "uuid": "0d0ae380-7f1f-4ac7-8900-d501afd7a48a",
+      "slug": "floating-point-numbers",
+      "name": "Floating Point Numbers"
+    },
+    {
+      "uuid": "b4d57dc7-761d-4a53-818f-21aaa19e8db8",
+      "slug": "format-basics",
+      "name": "Format - Basics"
+    },
+    {
+      "uuid": "a7b463d3-4d7f-4b4a-8a47-28307219541d",
+      "slug": "functions",
+      "name": "Functions"
+    },
+    {
+      "uuid": "0f67b390-b13a-4623-82e5-4ca724a5cdef",
+      "slug": "hash-tables",
+      "name": "Hash Tables"
+    },
+    {
+      "uuid": "e5fefeda-9e02-48c4-9591-fc8a518d99f2",
+      "slug": "integers",
+      "name": "Integers"
+    },
+    {
+      "uuid": "53cff6b3-65fc-40c7-afec-b5d2b242884c",
+      "slug": "lambda-list",
+      "name": "Lambda List"
+    },
+    {
+      "uuid": "65c600a7-7f6a-428f-9913-d6f127f35234",
+      "slug": "lists",
+      "name": "Lists"
+    },
+    {
+      "uuid": "8cb78544-de29-40b2-8ae2-cfba83dea95c",
+      "slug": "mapping",
+      "name": "Mapping"
+    },
+    {
+      "uuid": "28499ea1-b9b7-40e9-af27-1f207020ad87",
+      "slug": "multiple-values",
+      "name": "Multiple Values"
+    },
+    {
+      "uuid": "727ade24-7e7a-46dc-92b0-188d5797edfa",
+      "slug": "keyword-parameters",
+      "name": "Keyword Parameters"
+    },
+    {
+      "uuid": "8d78a3b2-6adc-4013-a5cb-353b615945e5",
+      "slug": "rest-parameters",
+      "name": "Rest-Parameters"
+    },
+    {
+      "uuid": "c04de4d9-d69f-429f-916f-48ab461112ee",
+      "slug": "equality",
+      "name": "Equality"
+    },
+    {
+      "uuid": "630eaa07-1239-4548-be46-e695c8a2c73f",
+      "slug": "strings",
+      "name": "Strings"
+    },
+    {
+      "uuid": "c9ac82a1-19da-4aff-8184-8727efa67364",
+      "slug": "symbols",
+      "name": "Symbols"
+    },
+    {
+      "uuid": "59de6711-b247-4f06-8030-94633cf16a65",
+      "slug": "truthy-and-falsy",
+      "name": "Truthy And Falsy"
+    },
+    {
+      "uuid": "f1077b68-24ad-49fc-8444-db759eaa8c9c",
+      "slug": "vectors",
+      "name": "Vectors"
+    },
+    {
+      "uuid": "3e3c4267-1e80-416f-8604-75c4ca9d1cc2",
+      "slug": "reducing",
+      "name": "Reducing"
+    }
+  ],
+  "key_features": [
+    {
+      "title": "Interactive",
+      "content": "Common Lisp has a full featured REPL, development can happen as a 'conversation' with the system.",
+      "icon": "interactive"
+    },
+    {
+      "title": "Inspectible",
+      "content": "Common Lisp is fully inspectable with built-in functions for exploring every part of the language.",
+      "icon": "documentation"
+    },
+    {
+      "title": "Homoiconicity",
+      "content": "Code has the same structure as data, allowing for powerful macros: code that writes code.",
+      "icon": "homoiconic"
+    },
+    {
+      "title": "Extensible",
+      "content": "Generic functions, reader-macros, and flexible namespacing allow for the extension of the language",
+      "icon": "extensible"
+    },
+    {
+      "title": "Standardized",
+      "content": "The language is very stable, with multiple implementations to match your needs – JVM, embedded, etc.",
+      "icon": "stable"
+    },
+    {
+      "title": "Multi-paradigm",
+      "content": "Whether you prefer a functional style or something more object-oriented, Lisp adapts to your needs.",
+      "icon": "multi-paradigm"
+    }
+  ],
+  "tags": [
+    "execution_mode/compiled",
+    "execution_mode/interpreted",
+    "paradigm/functional",
+    "paradigm/imperative",
+    "paradigm/object_oriented",
+    "paradigm/procedural",
+    "platform/linux",
+    "platform/mac",
+    "platform/windows",
+    "runtime/language_specific",
+    "typing/dynamic",
+    "typing/strong",
+    "used_for/artificial_intelligence",
+    "used_for/backends",
+    "used_for/games",
+    "used_for/scripts"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/common-lisp.svg",
+  "about_content": "# About\n\nCommon Lisp is an offshoot of the long-running family of Lisp programming languages. \nIt's a multi-paradigm programming language that allows you to choose the approach and paradigm according to your application domain.\n\nCommon Lisp has fast prototyping capabilities, and exceptional support for object oriented programming. \nIt also boasts a macro system which allows you to adapt the language to your needs, and a run-time environment which allows modification of running applications.\n\nTo learn more about Common Lisp, take a look at [the Common Lisp homepage][common-lisp-net]\n\n[common-lisp-net]: https://common-lisp.net/\n"
+}

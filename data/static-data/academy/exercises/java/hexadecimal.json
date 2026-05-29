@@ -1,0 +1,42 @@
+{
+  "id": "java:hexadecimal",
+  "trackSlug": "java",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "6fe53a08-c123-465d-864a-ef18217203c4",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public class Hexadecimal {\n\n    public static int toDecimal(String input) {\n        throw new UnsupportedOperationException(\"Please implement the Hexadecimal.toDecimal() method.\");\n    }\n}\n",
+  "example_solution": "import java.util.Arrays;\n\nclass Hexadecimal {\n    private static final String HEXES = \"0123456789abcdef\";\n    static int toDecimal(String input) {\n        boolean  isHex = input.matches(\"^[0-9a-f]+\");\n        if (!isHex) {\n            return 0;\n        }\n        return Arrays.stream(input.split(\"\"))\n                .map(HEXES::indexOf)\n                .reduce(0, (decimal, hex) -> decimal * 16 + hex);\n\n    }\n}\n",
+  "test_code": "import org.junit.Test;\nimport org.junit.Ignore;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class HexadecimalTest {\n\n    @Test\n    public void testOne() {\n        assertThat(Hexadecimal.toDecimal(\"1\")).isEqualTo(1);\n    }\n\n    @Ignore\n    @Test\n    public void testC() {\n        assertThat(Hexadecimal.toDecimal(\"c\")).isEqualTo(12);\n    }\n\n    @Ignore\n    @Test\n    public void test10() {\n        assertThat(Hexadecimal.toDecimal(\"10\")).isEqualTo(16);\n    }\n\n    @Ignore\n    @Test\n    public void testAf() {\n        assertThat(Hexadecimal.toDecimal(\"af\")).isEqualTo(175);\n    }\n\n    @Ignore\n    @Test\n    public void test100() {\n        assertThat(Hexadecimal.toDecimal(\"100\")).isEqualTo(256);\n    }\n\n    @Ignore\n    @Test\n    public void test19ace() {\n        assertThat(Hexadecimal.toDecimal(\"19ace\")).isEqualTo(105166);\n    }\n\n    @Ignore\n    @Test\n    public void testInvalid() {\n        assertThat(Hexadecimal.toDecimal(\"carrot\")).isEqualTo(0);\n    }\n\n    @Ignore\n    @Test\n    public void testBlack() {\n        assertThat(Hexadecimal.toDecimal(\"000000\")).isEqualTo(0);\n    }\n\n    @Ignore\n    @Test\n    public void testWhite() {\n        assertThat(Hexadecimal.toDecimal(\"ffffff\")).isEqualTo(16777215);\n    }\n\n    @Ignore\n    @Test\n    public void testYellow() {\n        assertThat(Hexadecimal.toDecimal(\"ffff00\")).isEqualTo(16776960);\n    }\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "FridaTveit",
+    "javaeeeee",
+    "jmrunkle",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "mirkoperillo",
+    "msomji",
+    "muzimuzhi",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "stkent",
+    "t0dd",
+    "Zaldrick"
+  ]
+}

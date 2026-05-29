@@ -1,0 +1,39 @@
+{
+  "id": "kotlin:acronym",
+  "trackSlug": "kotlin",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "d8288e46-2e8c-42e4-8e14-20b1efd0f574",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "object Acronym {\n    fun generate(phrase: String) : String {\n        TODO(\"Implement the function to complete the task\")\n    }\n}\n",
+  "example_solution": "object Acronym {\n    fun generate(phrase: String) = Regex(\"[A-Z]+[a-z]*|[a-z]+\")\n            .findAll(phrase.replace(\"'\", \"\"))\n            .map { it.value.first().uppercaseChar() }\n            .joinToString(\"\")\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport kotlin.test.assertEquals\n\nclass AcronymTest {\n    @Test\n    fun `capitalized words`() = assertAcronymEquals(\n            \"Portable Network Graphics\",\n            \"PNG\")\n\n    @Ignore\n    @Test\n    fun `lowercase word in the middle`() = assertAcronymEquals(\n            \"Ruby on Rails\",\n            \"ROR\")\n\n    @Ignore\n    @Test\n    fun `punctuation is ignored`() = assertAcronymEquals(\n            \"First In, First Out\",\n            \"FIFO\")\n\n    @Ignore\n    @Test\n    fun `uppercased word at the start`() = assertAcronymEquals(\n            \"GNU Image Manipulation Program\",\n            \"GIMP\")\n\n    @Ignore\n    @Test\n    fun `hyphen is ignored`() = assertAcronymEquals(\n            \"Complementary metal-oxide semiconductor\",\n            \"CMOS\")\n\n    @Ignore\n    @Test\n    fun `lots of words`() = assertAcronymEquals(\n            \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\",\n            \"ROTFLSHTMDCOALM\")\n\n    @Ignore\n    @Test\n    fun `consecutive delimiters`() = assertAcronymEquals(\n            \"Something - I made up from thin air\",\n            \"SIMUFTA\")\n\n    @Ignore\n    @Test\n    fun `apostrophe is ignored`() = assertAcronymEquals(\n            \"Halley's Comet\",\n            \"HC\")\n\n    @Ignore\n    @Test\n    fun `underscore emphasis is ignored`() = assertAcronymEquals(\n            \"The Road _Not_ Taken\",\n            \"TRNT\")\n}\n\nprivate fun assertAcronymEquals(origin: String, acronym: String) = assertEquals(acronym, Acronym.generate(origin))\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "beatbrot",
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "kytrinyx",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

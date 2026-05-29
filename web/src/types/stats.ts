@@ -10,6 +10,10 @@ export interface UserStats {
   currentStreak: number;
   bestStreak: number;
   languageCounts?: Record<string, number>; // e.g. { java: 12, python: 5 }
+<<<<<<< HEAD
+=======
+  rank?: number | null;
+>>>>>>> prod-deploy
 }
 
 export interface UserActivityLog {
@@ -21,6 +25,26 @@ export interface UserActivityLog {
   matches: number;
 }
 
+<<<<<<< HEAD
+=======
+export interface LeetCodeStats {
+  solved: {
+    total: number;
+    easy: number;
+    medium: number;
+    hard: number;
+  };
+  contest: {
+    rating: number;
+    globalRank: number;
+    totalParticipants: number;
+    topPercentile: number;
+    attended: number;
+    history: { rating: number; date: string }[];
+  } | null;
+}
+
+>>>>>>> prod-deploy
 export interface UserProfileData {
   user: {
     id: string;
@@ -40,9 +64,29 @@ export interface UserProfileData {
     following: number;
     isFollowing: boolean;
   };
+<<<<<<< HEAD
 }
 
 export interface LeaderboardEntry extends UserStats {
   // If we ever join with username in the repo, we'd add it here
   // For now, it matches UserStats
+=======
+  leetcode?: LeetCodeStats | null;
+}
+
+export interface LeaderboardEntry {
+  userId: string;
+  username: string;
+  fullName: string | null;
+  avatarUrl: string | null;
+  points: number;
+  rank: number;
+  totalSolved: number;
+}
+
+export interface LeaderboardResponse {
+  entries: LeaderboardEntry[];
+  total: number;
+  viewerRank?: LeaderboardEntry | null;
+>>>>>>> prod-deploy
 }

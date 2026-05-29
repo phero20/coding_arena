@@ -1,0 +1,41 @@
+{
+  "id": "csharp:error-handling",
+  "trackSlug": "csharp",
+  "slug": "error-handling",
+  "name": "Error Handling",
+  "uuid": "77e46f6b-1070-4267-a1b5-a2aac931975a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement various kinds of error handling and resource management.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "exceptions",
+    "casting",
+    "resource-cleanup"
+  ],
+  "prerequisites": [
+    "exceptions",
+    "casting",
+    "resource-cleanup",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nImplement various kinds of error handling and resource management.\n\nAn important point of programming is how to handle errors and close resources even if errors occur.\n\nThis exercise requires you to handle various errors.\nBecause error handling is rather programming language specific you'll have to refer to the tests for your track to see what's exactly required.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public static class ErrorHandling\n{\n    public static void HandleErrorByThrowingException()\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public static int? HandleErrorByReturningNullableType(string input)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public static bool HandleErrorWithOutParam(string input, out int result)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n\n    public static void DisposableResourcesAreDisposedWhenExceptionIsThrown(IDisposable disposableObject)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "public static class ErrorHandling\n{\n    public static void HandleErrorByThrowingException()\n    {\n        throw new Exception(\"An error occured.\");\n    }\n\n    public static int? HandleErrorByReturningNullableType(string input)\n    {\n        int result;\n\n        if (int.TryParse(input, out result))\n        {\n            return result;\n        }\n\n        return null;\n    }\n\n    public static bool HandleErrorWithOutParam(string input, out int result)\n    {\n        return int.TryParse(input, out result);\n    }\n\n    public static void DisposableResourcesAreDisposedWhenExceptionIsThrown(IDisposable disposableObject)\n    {\n        using (disposableObject)\n        {\n            throw new Exception(\"An error occured.\");\n        }\n    }\n}\n",
+  "test_code": "public class ErrorHandlingTests\n{\n    // Read more about exception handling here:\n    // https://msdn.microsoft.com/en-us/library/ms173162.aspx?f=255&MSPPError=-2147217396\n    [Fact]\n    public void ThrowException()\n    {\n        Assert.Throws<Exception>(() => ErrorHandling.HandleErrorByThrowingException());\n    }\n\n    // Read more about nullable types here:\n    // https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx?f=255&MSPPError=-2147217396\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void ReturnNullableType()\n    {\n        var successfulResult = ErrorHandling.HandleErrorByReturningNullableType(\"1\");\n        Assert.Equal(1, successfulResult);\n\n        var failureResult = ErrorHandling.HandleErrorByReturningNullableType(\"a\");\n        Assert.Null(failureResult);\n    }\n\n    // Read more about out parameters here:\n    // https://msdn.microsoft.com/en-us/library/t3c3bfhx.aspx?f=255&MSPPError=-2147217396\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void ReturnWithOutParameter()\n    {\n        int result;\n        var successfulResult = ErrorHandling.HandleErrorWithOutParam(\"1\", out result);\n        Assert.True(successfulResult);\n        Assert.Equal(1, result);\n        \n        var failureResult = ErrorHandling.HandleErrorWithOutParam(\"a\", out result);\n        Assert.False(failureResult);\n        // The value of result is meaningless here (it could be anything) so it shouldn't be used and it's not validated \n    }\n\n    private class DisposableResource : IDisposable\n    {\n        public bool IsDisposed { get; private set; }\n\n        public void Dispose()\n        {\n            IsDisposed = true;\n        }\n    }\n\n    // Read more about IDisposable here:\n    // https://msdn.microsoft.com/en-us/library/system.idisposable(v=vs.110).aspx\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void DisposableObjectsAreDisposedWhenThrowingAnException()\n    {\n        var disposableResource = new DisposableResource();\n\n        Assert.Throws<Exception>(() => ErrorHandling.DisposableResourcesAreDisposedWhenExceptionIsThrown(disposableResource));\n        Assert.True(disposableResource.IsDisposed);\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "robkeim"
+  ],
+  "contributors": [
+    "balazsbotond",
+    "ErikSchierboom",
+    "felix91gr",
+    "j2jensen",
+    "wolf99"
+  ]
+}

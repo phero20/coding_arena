@@ -1,0 +1,50 @@
+{
+  "id": "python:sieve",
+  "trackSlug": "python",
+  "slug": "sieve",
+  "name": "Sieve",
+  "uuid": "ad0192e6-7742-4922-a53e-791e25eb9ba3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Use the Sieve of Eratosthenes to find all the primes from 2 up to a given number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "sets"
+  ],
+  "prerequisites": [
+    "basics",
+    "conditionals",
+    "lists",
+    "list-methods",
+    "loops",
+    "numbers",
+    "sets"
+  ],
+  "instructions": "# Instructions\n\nYour task is to create a program that implements the Sieve of Eratosthenes algorithm to find all prime numbers less than or equal to a given number.\n\nA prime number is a number larger than 1 that is only divisible by 1 and itself.\nFor example, 2, 3, 5, 7, 11, and 13 are prime numbers.\nBy contrast, 6 is _not_ a prime number as it not only divisible by 1 and itself, but also by 2 and 3.\n\nTo use the Sieve of Eratosthenes, first, write out all the numbers from 2 up to and including your given number.\nThen, follow these steps:\n\n1. Find the next unmarked number (skipping over marked numbers).\n   This is a prime number.\n2. Mark all the multiples of that prime number as **not** prime.\n\nRepeat the steps until you've gone through every number.\nAt the end, all the unmarked numbers are prime.\n\n~~~~exercism/note\nThe Sieve of Eratosthenes marks off multiples of each prime using addition (repeatedly adding the prime) or multiplication (directly computing its multiples), rather than checking each number for divisibility.\n\nThe tests don't check that you've implemented the algorithm, only that you've come up with the correct primes.\n~~~~\n\n## Example\n\nLet's say you're finding the primes less than or equal to 10.\n\n- Write out 2, 3, 4, 5, 6, 7, 8, 9, 10, leaving them all unmarked.\n\n  ```text\n  2 3 4 5 6 7 8 9 10\n  ```\n\n- 2 is unmarked and is therefore a prime.\n  Mark 4, 6, 8 and 10 as \"not prime\".\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] 9 [10]\n  ↑\n  ```\n\n- 3 is unmarked and is therefore a prime.\n  Mark 6 and 9 as not prime _(marking 6 is optional - as it's already been marked)_.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n    ↑\n  ```\n\n- 4 is marked as \"not prime\", so we skip over it.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n       ↑\n  ```\n\n- 5 is unmarked and is therefore a prime.\n  Mark 10 as not prime _(optional - as it's already been marked)_.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n          ↑\n  ```\n\n- 6 is marked as \"not prime\", so we skip over it.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n             ↑\n  ```\n\n- 7 is unmarked and is therefore a prime.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n                ↑\n  ```\n\n- 8 is marked as \"not prime\", so we skip over it.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n                   ↑\n  ```\n\n- 9 is marked as \"not prime\", so we skip over it.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n                       ↑\n  ```\n\n- 10 is marked as \"not prime\", so we stop as there are no more numbers to check.\n\n  ```text\n  2 3 [4] 5 [6] 7 [8] [9] [10]\n                           ↑\n  ```\n\nYou've examined all the numbers and found that 2, 3, 5, and 7 are still unmarked, meaning they're the primes less than or equal to 10.\n",
+  "introduction": "# Introduction\n\nYou bought a big box of random computer parts at a garage sale.\nYou've started putting the parts together to build custom computers.\n\nYou want to test the performance of different combinations of parts, and decide to create your own benchmarking program to see how your computers compare.\nYou choose the famous \"Sieve of Eratosthenes\" algorithm, an ancient algorithm, but one that should push your computers to the limits.\n",
+  "hints": null,
+  "starter_code": "def primes(limit):\n    pass\n",
+  "example_solution": "def primes(limit):\n    prime = [True] * (limit + 1)\n    prime[0] = prime[1] = False\n    for idx in range(2, int(limit ** 0.5) + 1):\n        if prime[idx]:\n            for edx in range(idx * idx, limit + 1, idx):\n                prime[edx] = False\n\n    return [edx for edx, idx in enumerate(prime) if idx]\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/sieve/canonical-data.json\n# File last updated on 2023-07-19\n\nimport unittest\n\nfrom sieve import (\n    primes,\n)\n\n\nclass SieveTest(unittest.TestCase):\n    def test_no_primes_under_two(self):\n        self.assertEqual(primes(1), [])\n\n    def test_find_first_prime(self):\n        self.assertEqual(primes(2), [2])\n\n    def test_find_primes_up_to_10(self):\n        self.assertEqual(primes(10), [2, 3, 5, 7])\n\n    def test_limit_is_prime(self):\n        self.assertEqual(primes(13), [2, 3, 5, 7, 11, 13])\n\n    def test_find_primes_up_to_1000(self):\n        self.assertEqual(\n            primes(1000),\n            [\n                2,\n                3,\n                5,\n                7,\n                11,\n                13,\n                17,\n                19,\n                23,\n                29,\n                31,\n                37,\n                41,\n                43,\n                47,\n                53,\n                59,\n                61,\n                67,\n                71,\n                73,\n                79,\n                83,\n                89,\n                97,\n                101,\n                103,\n                107,\n                109,\n                113,\n                127,\n                131,\n                137,\n                139,\n                149,\n                151,\n                157,\n                163,\n                167,\n                173,\n                179,\n                181,\n                191,\n                193,\n                197,\n                199,\n                211,\n                223,\n                227,\n                229,\n                233,\n                239,\n                241,\n                251,\n                257,\n                263,\n                269,\n                271,\n                277,\n                281,\n                283,\n                293,\n                307,\n                311,\n                313,\n                317,\n                331,\n                337,\n                347,\n                349,\n                353,\n                359,\n                367,\n                373,\n                379,\n                383,\n                389,\n                397,\n                401,\n                409,\n                419,\n                421,\n                431,\n                433,\n                439,\n                443,\n                449,\n                457,\n                461,\n                463,\n                467,\n                479,\n                487,\n                491,\n                499,\n                503,\n                509,\n                521,\n                523,\n                541,\n                547,\n                557,\n                563,\n                569,\n                571,\n                577,\n                587,\n                593,\n                599,\n                601,\n                607,\n                613,\n                617,\n                619,\n                631,\n                641,\n                643,\n                647,\n                653,\n                659,\n                661,\n                673,\n                677,\n                683,\n                691,\n                701,\n                709,\n                719,\n                727,\n                733,\n                739,\n                743,\n                751,\n                757,\n                761,\n                769,\n                773,\n                787,\n                797,\n                809,\n                811,\n                821,\n                823,\n                827,\n                829,\n                839,\n                853,\n                857,\n                859,\n                863,\n                877,\n                881,\n                883,\n                887,\n                907,\n                911,\n                919,\n                929,\n                937,\n                941,\n                947,\n                953,\n                967,\n                971,\n                977,\n                983,\n                991,\n                997,\n            ],\n        )\n",
+  "source": "Sieve of Eratosthenes at Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes",
+  "authors": [
+    "sjakobi"
+  ],
+  "contributors": [
+    "behrtam",
+    "cmccandless",
+    "crsmi",
+    "Dog",
+    "Grociu",
+    "ikhadykin",
+    "kytrinyx",
+    "N-Parsons",
+    "Peque",
+    "pheanex",
+    "rootulp",
+    "tqa236",
+    "yawpitch"
+  ]
+}

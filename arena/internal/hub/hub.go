@@ -9,6 +9,10 @@ import (
 	"sync"
 
 	"github.com/redis/go-redis/v9"
+<<<<<<< HEAD
+=======
+	"golang.org/x/sync/semaphore"
+>>>>>>> prod-deploy
 )
 
 type Message struct {
@@ -16,6 +20,7 @@ type Message struct {
 	Payload models.ArenaWSMessage
 }
 
+<<<<<<< HEAD
 type Hub struct {
 
 	// Active connections: userId -> Client
@@ -27,6 +32,19 @@ type Hub struct {
 	Register   chan *Client
 	Unregister chan *Client
 	mu         sync.RWMutex
+=======
+type RegisterRoomRequest struct {
+	Client *Client
+	RoomID string
+}
+
+type Hub struct {
+	rooms        map[string]*Room
+	RegisterRoom chan *RegisterRoomRequest
+	CleanupRoom  chan string
+	mu           sync.RWMutex
+	GoroutineSem *semaphore.Weighted
+>>>>>>> prod-deploy
 
 	Redis *redis.Client
 	Repo  *repository.ArenaRepository
@@ -34,6 +52,7 @@ type Hub struct {
 
 func NewHub(redis *redis.Client, repo *repository.ArenaRepository) *Hub {
 	return &Hub{
+<<<<<<< HEAD
 		Clients:    make(map[string]*Client),
 		Rooms:      make(map[string]map[string]*Client),
 		Broadcast:  make(chan Message),
@@ -41,12 +60,21 @@ func NewHub(redis *redis.Client, repo *repository.ArenaRepository) *Hub {
 		Unregister: make(chan *Client),
 		Redis:      redis,
 		Repo:       repo,
+=======
+		rooms:        make(map[string]*Room),
+		RegisterRoom: make(chan *RegisterRoomRequest, 32),
+		CleanupRoom:  make(chan string, 32),
+		GoroutineSem: semaphore.NewWeighted(20000), // Max 20K goroutines
+		Redis:        redis,
+		Repo:         repo,
+>>>>>>> prod-deploy
 	}
 }
 
 func (h *Hub) Run() {
 	for {
 		select {
+<<<<<<< HEAD
 		case client := <-h.Register:
 			h.mu.Lock()
 			// If existing connection for this user, close the OLD one gracefully
@@ -99,10 +127,78 @@ func (h *Hub) Run() {
 				}
 			}
 			h.mu.RUnlock()
+=======
+		case req := <-h.RegisterRoom:
+			h.mu.Lock()
+			room, exists := h.rooms[req.RoomID]
+			if !exists {
+				room = NewRoom(req.RoomID)
+				h.rooms[req.RoomID] = room
+				go room.Run(h)
+				slog.Info("Hub created new room goroutine", "roomId", req.RoomID)
+			}
+			h.mu.Unlock()
+
+			// Forward the client to the specific room's register channel
+			room.register <- req.Client
+
+		case roomID := <-h.CleanupRoom:
+			h.mu.Lock()
+			// Double check if room is still empty before deleting
+			if room, exists := h.rooms[roomID]; exists {
+				room.mu.RLock()
+				isEmpty := len(room.clients) == 0
+				room.mu.RUnlock()
+
+				if isEmpty {
+					delete(h.rooms, roomID)
+					slog.Info("Hub cleaned up empty room", "roomId", roomID)
+				}
+			}
+			h.mu.Unlock()
+>>>>>>> prod-deploy
 		}
 	}
 }
 
+<<<<<<< HEAD
+=======
+// BroadcastToRoom sends a message to a specific room without blocking the entire Hub
+func (h *Hub) BroadcastToRoom(roomID string, msg Message) {
+	h.mu.RLock()
+	room, exists := h.rooms[roomID]
+	h.mu.RUnlock()
+
+	if !exists {
+		return
+	}
+
+	// Non-blocking send to room's broadcast channel
+	select {
+	case room.broadcast <- msg:
+	default:
+		slog.Warn("Hub failed to forward broadcast to room (buffer full)", "roomId", roomID)
+	}
+}
+
+// UnregisterFromRoom removes a client from a specific room
+func (h *Hub) UnregisterFromRoom(roomID string, client *Client) {
+	h.mu.RLock()
+	room, exists := h.rooms[roomID]
+	h.mu.RUnlock()
+
+	if !exists {
+		return
+	}
+
+	select {
+	case room.unregister <- client:
+	default:
+		slog.Warn("Hub failed to forward unregister to room (buffer full)", "roomId", roomID)
+	}
+}
+
+>>>>>>> prod-deploy
 type RedisUpdate struct {
 	RoomID string      `json:"roomId"`
 	Type   string      `json:"type"`
@@ -181,9 +277,46 @@ func (h *Hub) ListenForUpdates(ctx context.Context) {
 			}
 		}
 
+<<<<<<< HEAD
 		h.Broadcast <- Message{
 			RoomID: update.RoomID,
 			Payload: wsMsg,
 		}
 	}
 }
+=======
+		h.BroadcastToRoom(update.RoomID, Message{
+			RoomID: update.RoomID,
+			Payload: wsMsg,
+		})
+	}
+}
+
+type ConnectionMetrics struct {
+	TotalConnections int `json:"totalConnections"`
+	SlowClients      int `json:"slowClients"`
+}
+
+func (h *Hub) GetMetrics() ConnectionMetrics {
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+
+	metrics := ConnectionMetrics{
+		TotalConnections: 0,
+		SlowClients:      0,
+	}
+
+	for _, room := range h.rooms {
+		room.mu.RLock()
+		metrics.TotalConnections += len(room.clients)
+		for _, client := range room.clients {
+			if client.IsUnhealthy {
+				metrics.SlowClients++
+			}
+		}
+		room.mu.RUnlock()
+	}
+
+	return metrics
+}
+>>>>>>> prod-deploy

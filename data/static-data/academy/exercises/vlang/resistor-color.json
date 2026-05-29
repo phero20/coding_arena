@@ -1,0 +1,26 @@
+{
+  "id": "vlang:resistor-color",
+  "trackSlug": "vlang",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "06e88843-e280-4022-8c66-f449303f419d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn color_code(color string) int {\n}\n\nconst colors = []string{}\n",
+  "example_solution": "module main\n\nfn color_code(color string) int {\n\treturn colors.index(color)\n}\n\nconst colors = [\n\t'black',\n\t'brown',\n\t'red',\n\t'orange',\n\t'yellow',\n\t'green',\n\t'blue',\n\t'violet',\n\t'grey',\n\t'white',\n]\n",
+  "test_code": "module main\n\nfn test_black() {\n\tassert color_code('black') == 0\n}\n\nfn test_white() {\n\tassert color_code('white') == 9\n}\n\nfn test_orange() {\n\tassert color_code('orange') == 3\n}\n\nfn test_colors() {\n\tassert colors == [\n\t\t'black',\n\t\t'brown',\n\t\t'red',\n\t\t'orange',\n\t\t'yellow',\n\t\t'green',\n\t\t'blue',\n\t\t'violet',\n\t\t'grey',\n\t\t'white',\n\t]\n}\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

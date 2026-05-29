@@ -1,0 +1,26 @@
+{
+  "id": "bash:square-root",
+  "trackSlug": "bash",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "a6394dea-9d98-4435-ac43-a950686b56d2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "#!/usr/bin/env bash\n\n# The following comments should help you get started:\n# - Bash is flexible. You may use functions or write a \"raw\" script.\n#\n# - Complex code can be made easier to read by breaking it up\n#   into functions, however this is sometimes overkill in bash.\n#\n# - You can find links about good style and other resources\n#   for Bash in './README.md'. It came with this exercise.\n#\n#   Example:\n#   # other functions here\n#   # ...\n#   # ...\n#\n#   main () {\n#     # your main function code here\n#   }\n#\n#   # call main with all of the positional arguments\n#   main \"$@\"\n#\n# *** PLEASE REMOVE THESE COMMENTS BEFORE SUBMITTING YOUR SOLUTION ***\n",
+  "example_solution": "#!/bin/bash\n# Using the Binary numeral system implementation from\n# https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Binary_numeral_system_(base_2)\n\nsqrt() {\n    local n=$1\n    # find b, the greatest power of 4 less than or equal to n\n    local i b\n    for ((i=0; b = 4**i, b <= n; i++)); do :; done\n\n    local x=0\n    while ((b != 0)); do\n        if ((n >= x + b)); then\n            ((n = n - x - b))\n            ((x = x/2 + b))\n        else\n            ((x /= 2))\n        fi\n        ((b /= 4))\n    done\n    echo $x\n}\n\nsqrt \"$1\"\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n@test \"root of 1\" {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash square_root.sh 1\n    assert_success\n    assert_output \"1\"\n}\n\n@test \"root of 4\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash square_root.sh \"4\"\n    assert_success\n    assert_output \"2\"\n}\n\n@test \"root of 25\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash square_root.sh \"25\"\n    assert_success\n    assert_output \"5\"\n}\n\n@test \"root of 81\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash square_root.sh \"81\"\n    assert_success\n    assert_output \"9\"\n}\n\n@test \"root of 196\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash square_root.sh \"196\"\n    assert_success\n    assert_output \"14\"\n}\n\n@test \"root of 65025\" {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n    run bash square_root.sh \"65025\"\n    assert_success\n    assert_output \"255\"\n}\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

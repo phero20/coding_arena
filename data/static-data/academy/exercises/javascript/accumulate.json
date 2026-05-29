@@ -1,0 +1,33 @@
+{
+  "id": "javascript:accumulate",
+  "trackSlug": "javascript",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "6ebe247c-3d11-48b7-8e6f-39f98359d233",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an\noperation to perform on each element of the collection, returns a new\ncollection containing the result of applying that operation to each element of\nthe input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality\nprovided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'Accumulate' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const accumulate = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "export const accumulate = (list, accumulator) => {\n  const out = [];\n  let idx = 0;\n  const end = Array.isArray(list) ? list.length : 0;\n\n  while (idx < end) {\n    out.push(accumulator(list[idx]));\n    idx += 1;\n  }\n\n  return out;\n};\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { accumulate } from './accumulate';\n\ndescribe('accumulate()', () => {\n  test('accumulation empty', () => {\n    const accumulator = (e) => e * e;\n    expect(accumulate([], accumulator)).toEqual([]);\n  });\n\n  xtest('accumulate squares', () => {\n    const accumulator = (number) => number * number;\n    const result = accumulate([1, 2, 3], accumulator);\n    expect(result).toEqual([1, 4, 9]);\n  });\n\n  xtest('accumulate upcases', () => {\n    const accumulator = (word) => word.toUpperCase();\n    const result = accumulate('hello world'.split(/\\s/), accumulator);\n    expect(result).toEqual(['HELLO', 'WORLD']);\n  });\n\n  xtest('accumulate reversed strings', () => {\n    const accumulator = (word) => word.split('').reverse().join('');\n    const result = accumulate(\n      'the quick brown fox etc'.split(/\\s/),\n      accumulator,\n    );\n    expect(result).toEqual(['eht', 'kciuq', 'nworb', 'xof', 'cte']);\n  });\n\n  xtest('accumulate recursively', () => {\n    const result = accumulate('a b c'.split(/\\s/), (char) =>\n      accumulate('1 2 3'.split(/\\s/), (digit) => char + digit),\n    );\n\n    expect(result).toEqual([\n      ['a1', 'a2', 'a3'],\n      ['b1', 'b2', 'b3'],\n      ['c1', 'c2', 'c3'],\n    ]);\n  });\n});\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "https://twitter.com/jeg2",
+  "authors": [
+    "matthewmorgan"
+  ],
+  "contributors": [
+    "ankorGH",
+    "gargrave",
+    "rchavarria",
+    "ryanplusplus",
+    "SleeplessByte",
+    "xarxziux"
+  ]
+}

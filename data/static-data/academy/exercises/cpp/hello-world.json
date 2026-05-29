@@ -1,0 +1,32 @@
+{
+  "id": "cpp:hello-world",
+  "trackSlug": "cpp",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "3eeadff6-82b6-43be-8834-d9ef258e454d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"hello_world.h\"\n\nusing namespace std;\n\nnamespace hello_world {\n\nstring hello() { return \"Goodbye, Mars!\"; }\n\n}  // namespace hello_world\n",
+  "example_solution": "#include \"hello_world.h\"\n\nusing namespace std;\n\nnamespace hello_world {\n\nstring hello() { return \"Hello, World!\"; }\n\n}  // namespace hello_world\n",
+  "test_code": "// Include the header file with the definitions of the functions you create.\n#include \"hello_world.h\"\n\n// Include the test framework.\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\n// Declares a single test.\nTEST_CASE(\"test_hello\") {\n    // Check if your function returns \"Hello, World!\".\n    REQUIRE(hello_world::hello() == \"Hello, World!\");\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "samsondstl"
+  ],
+  "contributors": [
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "patricksjackson",
+    "sturzl"
+  ]
+}

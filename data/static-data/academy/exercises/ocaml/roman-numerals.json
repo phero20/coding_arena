@@ -1,0 +1,34 @@
+{
+  "id": "ocaml:roman-numerals",
+  "trackSlug": "ocaml",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "8f7fcaad-c588-4495-9f9e-20611187a0a5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "let to_roman _ =\n    failwith \"'to_roman' is missing\"",
+  "example_solution": "\nlet to_roman n = \n  assert (n < 4000);\n\n  let build ones halves tens = function\n    | 0 -> \"\"\n    | 1 -> ones\n    | 2 -> ones ^ ones\n    | 3 -> ones ^ ones ^ ones\n    | 4 -> ones ^ halves\n    | 5 -> halves\n    | 6 -> halves ^ ones\n    | 7 -> halves ^ ones ^ ones\n    | 8 -> halves ^ ones ^ ones ^ ones\n    | 9 -> ones ^ tens\n    | _ -> assert false\n  in\n  let thousands n = build \"M\" \"\" \"\" (n / 1000 mod 10) in\n  let hundreds n  = build \"C\" \"D\" \"M\" (n / 100 mod 10) in\n  let tens n      = build \"X\" \"L\" \"C\" (n / 10 mod 10) in\n  let ones n      = build \"I\" \"V\" \"X\" (n mod 10) in\n\n  thousands n ^ hundreds n ^ tens n ^ ones n",
+  "test_code": "(* roman-numerals - 1.0 *)\nopen OUnit2\nopen Roman_numerals\n\nlet ae expected actual _ctx = assert_equal ~printer:(fun x -> x) expected actual\n\nlet tests = [\n  \"1 is I\" >::\n  ae \"I\" (to_roman 1);\n  \"2 is II\" >::\n  ae \"II\" (to_roman 2);\n  \"3 is III\" >::\n  ae \"III\" (to_roman 3);\n  \"4 is IV\" >::\n  ae \"IV\" (to_roman 4);\n  \"5 is V\" >::\n  ae \"V\" (to_roman 5);\n  \"6 is VI\" >::\n  ae \"VI\" (to_roman 6);\n  \"9 is IX\" >::\n  ae \"IX\" (to_roman 9);\n  \"16 is XVI\" >::\n  ae \"XVI\" (to_roman 16);\n  \"27 is XXVII\" >::\n  ae \"XXVII\" (to_roman 27);\n  \"48 is XLVIII\" >::\n  ae \"XLVIII\" (to_roman 48);\n  \"49 is XLIX\" >::\n  ae \"XLIX\" (to_roman 49);\n  \"59 is LIX\" >::\n  ae \"LIX\" (to_roman 59);\n  \"66 is LXVI\" >::\n  ae \"LXVI\" (to_roman 66);\n  \"93 is XCIII\" >::\n  ae \"XCIII\" (to_roman 93);\n  \"141 is CXLI\" >::\n  ae \"CXLI\" (to_roman 141);\n  \"163 is CLXIII\" >::\n  ae \"CLXIII\" (to_roman 163);\n  \"166 is CLXVI\" >::\n  ae \"CLXVI\" (to_roman 166);\n  \"402 is CDII\" >::\n  ae \"CDII\" (to_roman 402);\n  \"575 is DLXXV\" >::\n  ae \"DLXXV\" (to_roman 575);\n  \"666 is DCLXVI\" >::\n  ae \"DCLXVI\" (to_roman 666);\n  \"911 is CMXI\" >::\n  ae \"CMXI\" (to_roman 911);\n  \"1024 is MXXIV\" >::\n  ae \"MXXIV\" (to_roman 1024);\n  \"1666 is MDCLXVI\" >::\n  ae \"MDCLXVI\" (to_roman 1666);\n  \"3000 is MMM\" >::\n  ae \"MMM\" (to_roman 3000);\n  \"3001 is MMMI\" >::\n  ae \"MMMI\" (to_roman 3001);\n  \"3999 is MMMCMXCIX\" >::\n  ae \"MMMCMXCIX\" (to_roman 3999);\n]\n\nlet () =\n  run_test_tt_main (\"roman-numerals test\" >::: tests)\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "vrotaru"
+  ],
+  "contributors": [
+    "dvberkel",
+    "iHiD",
+    "marionebl",
+    "Peaupote",
+    "sbl",
+    "sshine",
+    "stevejb71"
+  ]
+}

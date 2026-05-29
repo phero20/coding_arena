@@ -1,11 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
+<<<<<<< HEAD
 import { DynamicEditor as Editor } from "@/components/workspace-shared/DynamicEditor";
 import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import { useTheme } from "next-themes";
 import { WrapText, Code2, RefreshCw } from "lucide-react";
+=======
+import { DynamicEditor as Editor, LanguageSelector } from "@/components/workspace-shared";
+import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
+import { useTheme } from "next-themes";
+import { useEditorStore } from "@/store/use-editor-store";
+import { WrapText, Code2, RefreshCw, Settings } from "lucide-react";
+>>>>>>> prod-deploy
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getLangConfig } from "@/constants/compiler-languages";
@@ -15,6 +23,10 @@ import {
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+<<<<<<< HEAD
+=======
+import Link from "next/link";
+>>>>>>> prod-deploy
 
 interface Props {
   code: string;
@@ -33,46 +45,110 @@ export const CompilerEditor: React.FC<Props> = ({
   code, onChange, language, languages, onLanguageChange, onReset,
 }) => {
   const { theme } = useTheme();
+<<<<<<< HEAD
   const [wordWrap, setWordWrap] = useState(true);
   const monacoOptions = useMonacoConfig(wordWrap);
+=======
+  const { preferences } = useEditorStore();
+  const [wordWrap, setWordWrap] = useState(true);
+  const monacoOptions = useMonacoConfig({ ...preferences, wordWrap });
+>>>>>>> prod-deploy
   const monacoLanguage = getLangConfig(language).monacoLang;
 
   return (
     <div className="flex flex-col h-full bg-background">
       <header className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0">
         <div className="flex items-center gap-2 shrink-0">
+<<<<<<< HEAD
           <LanguageSelector value={language} onChange={onLanguageChange} languages={languages} />
 
           <Button variant="ghost" size="icon" title="Toggle Word Wrap"
             className={cn("size-7 shrink-0 transition-colors",
               wordWrap ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary")}
             onClick={() => setWordWrap(w => !w)}>
+=======
+          <LanguageSelector
+            value={language}
+            onChange={onLanguageChange}
+            languages={languages}
+          />
+
+          <Button
+            variant="ghost"
+            size="icon"
+            title="Toggle Word Wrap"
+            className={cn(
+              "size-7 shrink-0 transition-colors",
+              wordWrap
+                ? "text-primary bg-primary/10"
+                : "text-muted-foreground hover:text-primary",
+            )}
+            onClick={() => setWordWrap((w) => !w)}
+          >
+>>>>>>> prod-deploy
             <WrapText className="size-3.5" />
           </Button>
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
+<<<<<<< HEAD
               <Button variant="ghost" size="icon"
                 className="size-7 shrink-0 text-muted-foreground hover:text-primary transition-colors">
+=======
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 shrink-0 text-muted-foreground hover:text-primary transition-colors"
+              >
+>>>>>>> prod-deploy
                 <RefreshCw className="size-3.5" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-card/95 backdrop-blur-xl border-border/40">
               <AlertDialogHeader>
+<<<<<<< HEAD
                 <AlertDialogTitle className="text-sm font-bold">Reset Code?</AlertDialogTitle>
+=======
+                <AlertDialogTitle className="text-sm font-bold">
+                  Reset Code?
+                </AlertDialogTitle>
+>>>>>>> prod-deploy
                 <AlertDialogDescription className="text-xs text-muted-foreground">
                   Restores the default boilerplate for the selected language.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
+<<<<<<< HEAD
                 <AlertDialogCancel className="h-8 text-xs font-bold border-border/40">Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={onReset}
                   className="h-8 text-xs font-bold bg-primary text-primary-foreground hover:opacity-90">
+=======
+                <AlertDialogCancel className="h-8 text-xs font-bold border-border/40">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={onReset}
+                  className="h-8 text-xs font-bold bg-primary text-primary-foreground hover:opacity-90"
+                >
+>>>>>>> prod-deploy
                   Reset
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+<<<<<<< HEAD
+=======
+          <Link href="/settings?tab=editor">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 text-muted-foreground hover:text-primary transition-colors shrink-0"
+              title="Editor Settings"
+            >
+              <Settings className="size-3.5" />
+            </Button>
+          </Link>
+>>>>>>> prod-deploy
         </div>
 
         <div className="ml-auto flex items-center h-full">
@@ -87,7 +163,11 @@ export const CompilerEditor: React.FC<Props> = ({
         <Editor
           height="100%"
           language={monacoLanguage}
+<<<<<<< HEAD
           theme={theme === "dark" ? "vs-dark" : "light"}
+=======
+          theme="vs-dark"
+>>>>>>> prod-deploy
           value={code}
           onChange={(val) => onChange(val ?? "")}
           options={monacoOptions}

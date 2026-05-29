@@ -1,0 +1,28 @@
+{
+  "id": "typescript:acronym",
+  "trackSlug": "typescript",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "f6631a0f-2da3-47a4-b46b-7a81fa0d4dfd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "export function parse(phrase: unknown): unknown {\n  throw new Error('Remove this line and implement the function')\n}\n",
+  "example_solution": "export function parse(phrase: string): string {\n  if (typeof phrase !== 'undefined' && phrase !== undefined) {\n    const match = phrase.match(/[A-Z]+[a-z]*|[a-z]+/g)\n    return !match\n      ? ''\n      : match.reduce(\n          (acronym: string, word: string) => (acronym += word[0].toUpperCase()),\n          ''\n        )\n  }\n  return ''\n}\n",
+  "test_code": "import { describe, it, expect, xit } from '@jest/globals'\nimport { parse } from './acronym.ts'\n\ndescribe('Acronym are produced from', () => {\n  it('title cased phrases', () => {\n    expect(parse('Portable Network Graphics')).toEqual('PNG')\n  })\n\n  xit('other title cased phrases', () => {\n    expect(parse('Ruby on Rails')).toEqual('ROR')\n  })\n\n  xit('inconsistently cased phrases', () => {\n    expect(parse('HyperText Markup Language')).toEqual('HTML')\n  })\n\n  xit('phrases with punctuation', () => {\n    expect(parse('First In, First Out')).toEqual('FIFO')\n  })\n\n  xit('other phrases with punctuation', () => {\n    expect(parse('PHP: Hypertext Preprocessor')).toEqual('PHP')\n  })\n\n  xit('phrases with punctuation and sentence casing', () => {\n    expect(parse('Complementary metal-oxide semiconductor')).toEqual('CMOS')\n  })\n})\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [],
+  "contributors": [
+    "lilislilit",
+    "masters3d",
+    "SleeplessByte"
+  ]
+}

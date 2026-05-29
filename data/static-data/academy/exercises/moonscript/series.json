@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:series",
+  "trackSlug": "moonscript",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "9206db65-e0c9-4ea5-afc2-23910ea6dca2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "{\n  slices: (series, length) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "{\n  slices: (series, length) ->\n    assert length > -1, 'slice length cannot be negative'\n    assert length > 0, 'slice length cannot be zero'\n    assert #series > 0, 'series cannot be empty'\n    assert #series >= length, 'slice length cannot be greater than series length'\n\n    -- a \"stateful iterator\"\n    idx = 0\n    last = #series - length\n    ->\n      if idx <= last\n        idx += 1\n        return series\\sub(idx, idx + length - 1)\n}\n",
+  "test_code": "import slices from require 'series'\n\ndescribe 'series:', ->\n  it 'slices of one from one', ->\n    result = [slice for slice in slices '1', 1]\n    expected = {'1'}\n    assert.are.same expected, result\n\n  pending 'slices of one from two', ->\n    result = [slice for slice in slices '12', 1]\n    expected = {'1', '2'}\n    assert.are.same expected, result\n\n  pending 'slices of two', ->\n    result = [slice for slice in slices '35', 2]\n    expected = {'35'}\n    assert.are.same expected, result\n\n  pending 'slices of two overlap', ->\n    result = [slice for slice in slices '9142', 2]\n    expected = {'91', '14', '42'}\n    assert.are.same expected, result\n\n  pending 'slices can include duplicates', ->\n    result = [slice for slice in slices '777777', 3]\n    expected = {'777', '777', '777', '777'}\n    assert.are.same expected, result\n\n  pending 'slices of a long series', ->\n    result = [slice for slice in slices '918493904243', 5]\n    expected = {'91849', '18493', '84939', '49390', '93904', '39042', '90424', '04243'}\n    assert.are.same expected, result\n\n  pending 'slice length is too large', ->\n    f = -> slices '12345', 6\n    assert.has_error f, 'slice length cannot be greater than series length'\n\n  pending 'slice length is way too large', ->\n    f = -> slices '12345', 42\n    assert.has_error f, 'slice length cannot be greater than series length'\n\n  pending 'slice length cannot be zero', ->\n    f = -> slices '12345', 0\n    assert.has_error f, 'slice length cannot be zero'\n\n  pending 'slice length cannot be negative', ->\n    f = -> slices '123', -1\n    assert.has_error f, 'slice length cannot be negative'\n\n  pending 'empty series is invalid', ->\n    f = -> slices '', 1\n    assert.has_error f, 'series cannot be empty'\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

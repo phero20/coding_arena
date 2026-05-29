@@ -1,0 +1,41 @@
+{
+  "id": "fsharp:isogram",
+  "trackSlug": "fsharp",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "61404a27-62c3-43dc-93b7-7e4547e0a0d9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "sets",
+    "strings"
+  ],
+  "prerequisites": [
+    "booleans",
+    "chars",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module Isogram\n\nlet isIsogram (str: string): bool = failwith \"You need to implement this function.\"\n",
+  "example_solution": "module Isogram\n\nopen System\n\nlet normalize str = str |> Seq.filter Char.IsLetter |> Seq.map Char.ToLower |> Seq.toList\n\nlet isIsogram str = \n    let normalized = normalize str\n    Seq.length normalized = (normalized |> Seq.distinct |> Seq.length) ",
+  "test_code": "module IsogramTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen Isogram\n\n[<Fact>]\nlet ``Empty string`` () =\n    isIsogram \"\" |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isogram with only lower case characters`` () =\n    isIsogram \"isogram\" |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Word with one duplicated character`` () =\n    isIsogram \"eleven\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Word with one duplicated character from the end of the alphabet`` () =\n    isIsogram \"zzyzx\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Longest reported english isogram`` () =\n    isIsogram \"subdermatoglyphic\" |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Word with duplicated character in mixed case`` () =\n    isIsogram \"Alphabet\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Word with duplicated character in mixed case, lowercase first`` () =\n    isIsogram \"alphAbet\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hypothetical isogrammic word with hyphen`` () =\n    isIsogram \"thumbscrew-japingly\" |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Hypothetical word with duplicated character following hyphen`` () =\n    isIsogram \"thumbscrew-jappingly\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Isogram with duplicated hyphen`` () =\n    isIsogram \"six-year-old\" |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Made-up name that is an isogram`` () =\n    isIsogram \"Emily Jung Schwartzkopf\" |> should equal true\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Duplicated character in the middle`` () =\n    isIsogram \"accentor\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Same first and last characters`` () =\n    isIsogram \"angola\" |> should equal false\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Word with duplicated character and with two hyphens`` () =\n    isIsogram \"up-to-date\" |> should equal false\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "balazsbotond",
+    "jrr",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "vrnithinkumar",
+    "wolf99"
+  ]
+}

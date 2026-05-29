@@ -1,0 +1,26 @@
+{
+  "id": "vbnet:eliuds-eggs",
+  "trackSlug": "vbnet",
+  "slug": "eliuds-eggs",
+  "name": "Eliud's Eggs",
+  "uuid": "fdb2a717-08d5-4f2a-bd53-fba6fe7c85db",
+  "type": "practice",
+  "status": null,
+  "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to count the number of 1 bits in the binary representation of a number.\n\n## Restrictions\n\nKeep your hands off that bit-count functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": "# Introduction\n\nYour friend Eliud inherited a farm from her grandma Tigist.\nHer granny was an inventor and had a tendency to build things in an overly complicated manner.\nThe chicken coop has a digital display showing an encoded number representing the positions of all eggs that could be picked up.\n\nEliud is asking you to write a program that shows the actual number of eggs in the coop.\n\nThe position information encoding is calculated as follows:\n\n1. Scan the potential egg-laying spots and mark down a `1` for an existing egg or a `0` for an empty spot.\n2. Convert the number from binary to decimal.\n3. Show the result on the display.\n\n## Example 1\n\n![Seven individual nest boxes arranged in a row whose first, third, fourth and seventh nests each have a single egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n|E| |E|E| | |E|\n```\n\n### Resulting Binary\n\n![1011001](https://assets.exercism.org/images/exercises/eliuds-eggs/example-1-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|1|0|1|1|0|0|1|\n```\n\n### Decimal number on the display\n\n89\n\n### Actual eggs in the coop\n\n4\n\n## Example 2\n\n![Seven individual nest boxes arranged in a row where only the fourth nest has an egg.](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-coop.svg)\n\n```text\n _ _ _ _ _ _ _\n| | | |E| | | |\n```\n\n### Resulting Binary\n\n![0001000](https://assets.exercism.org/images/exercises/eliuds-eggs/example-2-binary.svg)\n\n```text\n _ _ _ _ _ _ _\n|0|0|0|1|0|0|0|\n```\n\n### Decimal number on the display\n\n8\n\n### Actual eggs in the coop\n\n1\n",
+  "hints": null,
+  "starter_code": "Imports System\n\nPublic Module EliudsEggs\n    Public Function EggCount(ByVal number As Integer) As Integer\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System\n\nPublic Module EliudsEggs\n    Public Function EggCount(ByVal number As Integer) As Integer\n        If number = 1 Then\n            Return 0\n        End If\n        \n        Dim count = 0\n        While number > 0\n            If (number And 1) = 1 Then\n                count += 1\n            End If\n            \n            number = number >> 1\n        End While\n        \n        Return count\n    End Function\nEnd Module\n",
+  "test_code": "Imports System\nImports XUnit\n\n\nPublic Class EliudsEggsTests\n    <Fact>\n    Public Sub Zero_eggs()\n        Assert.Equal(0, EggCount(0))\n    End Sub\n \n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub One_egg()\n        Assert.Equal(1, EggCount(16))\n    End Sub\n \n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Four_eggs()\n        Assert.Equal(4, EggCount(89))\n    End Sub\n \n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Thirteen_eggs()\n        Assert.Equal(13, EggCount(2000000000))\n    End Sub\nEnd Class\n",
+  "source": "Christian Willner, Eric Willigers",
+  "source_url": "https://forum.exercism.org/t/new-exercise-suggestion-pop-count/7632/5",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

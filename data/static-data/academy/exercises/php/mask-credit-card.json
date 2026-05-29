@@ -1,0 +1,28 @@
+{
+  "id": "php:mask-credit-card",
+  "trackSlug": "php",
+  "slug": "mask-credit-card",
+  "name": "Mask Credit Card",
+  "uuid": "8ea0a659-df50-4575-b6a4-2a0e8d29738a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a function to mask digits of a credit card number.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate a function `maskify` to mask digits of a credit card number with `#`.\n\n**Requirements:**\n\n- Do not mask the first digit and the last four digits\n- Do not mask non-digit chars\n- Do not mask if the input is less than 6\n- Return '' when input is empty\n\n**Examples:**\n\n- `1234-5678-9012` converts to `1###-####-9012`\n- `123456789012` converts to `1#######9012`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "<?php\n\n/*\n * By adding type hints and enabling strict type checking, code can become\n * easier to read, self-documenting and reduce the number of potential bugs.\n * By default, type declarations are non-strict, which means they will attempt\n * to change the original type to match the type specified by the\n * type-declaration.\n *\n * In other words, if you pass a string to a function requiring a float,\n * it will attempt to convert the string value to a float.\n *\n * To enable strict mode, a single declare directive must be placed at the top\n * of the file.\n * This means that the strictness of typing is configured on a per-file basis.\n * This directive not only affects the type declarations of parameters, but also\n * a function's return type.\n *\n * For more info review the Concept on strict type checking in the PHP track\n * <link>.\n *\n * To disable strict typing, comment out the directive below.\n */\n\ndeclare(strict_types=1);\n\nfunction maskify(string $cc): string\n{\n    throw new \\BadFunctionCallException(\"Implement the maskify function\");\n}\n",
+  "example_solution": "<?php\n\n/*\n * By adding type hints and enabling strict type checking, code can become\n * easier to read, self-documenting and reduce the number of potential bugs.\n * By default, type declarations are non-strict, which means they will attempt\n * to change the original type to match the type specified by the\n * type-declaration.\n *\n * In other words, if you pass a string to a function requiring a float,\n * it will attempt to convert the string value to a float.\n *\n * To enable strict mode, a single declare directive must be placed at the top\n * of the file.\n * This means that the strictness of typing is configured on a per-file basis.\n * This directive not only affects the type declarations of parameters, but also\n * a function's return type.\n *\n * For more info review the Concept on strict type checking in the PHP track\n * <link>.\n *\n * To disable strict typing, comment out the directive below.\n */\n\ndeclare(strict_types=1);\n\nfunction maskify(string $cc): string\n{\n    // Do no mask if cc less than 6 or empty string\n    if (strlen($cc) < 6) {\n        return $cc;\n    }\n\n    $masked = [];\n    $ccArr = str_split($cc);\n    $length = count($ccArr);\n\n    foreach ($ccArr as $idx => $item) {\n        // Exclude first and last four items\n        if (0 === $idx || $idx >= $length - 4) {\n            $masked[] = $item;\n            continue;\n        }\n\n        // All non digits\n        preg_match('/\\D/', $item, $matches);\n\n        if (count($matches) > 0) {\n            $masked[] = $item;\n            continue;\n        }\n\n        $masked[] = '#';\n    }\n\n    return implode('', $masked);\n}\n",
+  "test_code": "<?php\n\n/*\n * By adding type hints and enabling strict type checking, code can become\n * easier to read, self-documenting and reduce the number of potential bugs.\n * By default, type declarations are non-strict, which means they will attempt\n * to change the original type to match the type specified by the\n * type-declaration.\n *\n * In other words, if you pass a string to a function requiring a float,\n * it will attempt to convert the string value to a float.\n *\n * To enable strict mode, a single declare directive must be placed at the top\n * of the file.\n * This means that the strictness of typing is configured on a per-file basis.\n * This directive not only affects the type declarations of parameters, but also\n * a function's return type.\n *\n * For more info review the Concept on strict type checking in the PHP track\n * <link>.\n *\n * To disable strict typing, comment out the directive below.\n */\n\ndeclare(strict_types=1);\n\nuse PHPUnit\\Framework\\TestCase;\n\nclass MaskCreditCardTest extends TestCase\n{\n    public static function setUpBeforeClass(): void\n    {\n        require_once 'MaskCreditCard.php';\n    }\n\n    public function testDoNotMaskShorterThan6Chars()\n    {\n        $this->assertSame('12345', maskify('12345'));\n    }\n\n    public function testReturnEmptyStringWhenEmpty()\n    {\n        $this->assertSame('', maskify(''));\n    }\n\n    public function testMaskCcWithDashes()\n    {\n        $this->assertSame('1###-####-9012', maskify('1234-5678-9012'));\n    }\n\n    public function testMaskCcWithoutDashes()\n    {\n        $this->assertSame('1#######9012', maskify('123456789012'));\n    }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "codedge"
+  ],
+  "contributors": [
+    "neenjaw"
+  ]
+}

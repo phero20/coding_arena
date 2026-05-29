@@ -1,0 +1,42 @@
+{
+  "id": "clojure:kindergarten-garden",
+  "trackSlug": "clojure",
+  "slug": "kindergarten-garden",
+  "name": "Kindergarten Garden",
+  "uuid": "e40c52a7-9509-4a4d-9ad6-8ca7a3bdca1d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a diagram, determine which plants each child in the kindergarten class is responsible for.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to, given a diagram, determine which plants each child in the kindergarten class is responsible for.\n\nThere are 12 children in the class:\n\n- Alice, Bob, Charlie, David, Eve, Fred, Ginny, Harriet, Ileana, Joseph, Kincaid, and Larry.\n\nFour different types of seeds are planted:\n\n| Plant  | Diagram encoding |\n| ------ | ---------------- |\n| Grass  | G                |\n| Clover | C                |\n| Radish | R                |\n| Violet | V                |\n\nEach child gets four cups, two on each row:\n\n```text\n[window][window][window]\n........................ # each dot represents a cup\n........................\n```\n\nTheir teacher assigns cups to the children alphabetically by their names, which means that Alice comes first and Larry comes last.\n\nHere is an example diagram representing Alice's plants:\n\n```text\n[window][window][window]\nVR......................\nRG......................\n```\n\nIn the first row, nearest the windows, she has a violet and a radish.\nIn the second row she has a radish and some grass.\n\nYour program will be given the plants from left-to-right starting with the row nearest the windows.\nFrom this, it should be able to determine which plants belong to each student.\n\nFor example, if it's told that the garden looks like so:\n\n```text\n[window][window][window]\nVRCGVVRVCGGCCGVRGCVCGCGV\nVRCCCGCRRGVCGCRVVCVGCGCV\n```\n\nThen if asked for Alice's plants, it should provide:\n\n- Violets, radishes, violets, radishes\n\nWhile asking for Bob's plants would yield:\n\n- Clover, grass, clover, clover\n",
+  "introduction": "# Introduction\n\nThe kindergarten class is learning about growing plants.\nThe teacher thought it would be a good idea to give the class seeds to plant and grow in the dirt.\nTo this end, the children have put little cups along the window sills and planted one type of plant in each cup.\nThe children got to pick their favorites from four available types of seeds: grass, clover, radishes, and violets.\n",
+  "hints": null,
+  "starter_code": "(ns kindergarten-garden)\n\n(defn garden [] ;; <- arglist goes here\n  ;; your code goes here\n)\n",
+  "example_solution": "(ns kindergarten-garden)\n\n(def default-students [\"Alice\" \"Bob\" \"Charlie\" \"David\" \"Eve\" \"Fred\" \"Ginny\"\n                       \"Harriet\" \"Ileana\" \"Joseph\" \"Kincaid\" \"Larry\"])\n\n(def seeds {\\G :grass \\C :clover \\R :radishes \\V :violets})\n\n(defn row-to-seeds [row-string]\n  (map seeds row-string))\n\n(defn garden-to-rows [garden]\n  (clojure.string/split-lines garden))\n\n(defn garden\n  ([string]\n   (garden string default-students))\n  ([string students]\n   (let [students     (map #(keyword (clojure.string/lower-case %1)) (sort students))\n         [front back] (map #(partition 2 %1)\n                           (map row-to-seeds (garden-to-rows string)))]\n     (->> (interleave front back)\n          (partition 2)\n          (map flatten)\n          (map vec)\n          (zipmap students)))))\n",
+  "test_code": "(ns kindergarten-garden-test\n  (:require [clojure.test :refer [deftest testing is]]\n            kindergarten-garden))\n\n(deftest garden_test_1\n  (testing \"partial garden -> garden with single student\"\n    (is (= [:radishes :clover :grass :grass]\n           (:alice (kindergarten-garden/garden \"RC\\nGG\"))))))\n\n(deftest garden_test_2\n  (testing \"partial garden -> different garden with single student\"\n    (is (= [:violets :clover :radishes :clover]\n           (:alice (kindergarten-garden/garden \"VC\\nRC\"))))))\n\n(deftest garden_test_3\n  (testing \"partial garden -> garden with two students\"\n    (is (= [:clover :grass :radishes :clover]\n           (:bob (kindergarten-garden/garden \"VVCG\\nVVRC\"))))))\n\n(deftest garden_test_4\n  (testing \"partial garden -> multiple students for the same garden with three students -> second student's garden\"\n    (is (= [:clover :clover :clover :clover]\n           (:bob (kindergarten-garden/garden \"VVCCGG\\nVVCCGG\"))))))\n\n(deftest garden_test_5\n  (testing \"partial garden -> multiple students for the same garden with three students -> third student's garden\"\n    (is (= [:grass :grass :grass :grass]\n           (:charlie (kindergarten-garden/garden \"VVCCGG\\nVVCCGG\"))))))\n\n(deftest garden_test_6\n  (testing \"full garden -> for Alice first student's garden\"\n    (is (= [:violets :radishes :violets :radishes]\n           (:alice (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_7\n  (testing \"full garden -> for Bob second student's garden\"\n    (is (= [:clover :grass :clover :clover]\n           (:bob (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_8\n  (testing \"full garden -> for Charlie\"\n    (is (= [:violets :violets :clover :grass]\n           (:charlie (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_9\n  (testing \"full garden -> for David\"\n    (is (= [:radishes :violets :clover :radishes]\n           (:david (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_10\n  (testing \"full garden -> for Eve\"\n    (is (= [:clover :grass :radishes :grass]\n           (:eve (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_11\n  (testing \"full garden -> for Fred\"\n    (is (= [:grass :clover :violets :clover]\n           (:fred (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_12\n  (testing \"full garden -> for Ginny\"\n    (is (= [:clover :grass :grass :clover]\n           (:ginny (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_13\n  (testing \"full garden -> for Harriet\"\n    (is (= [:violets :radishes :radishes :violets]\n           (:harriet (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_14\n  (testing \"full garden -> for Ileana\"\n    (is (= [:grass :clover :violets :clover]\n           (:ileana (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_15\n  (testing \"full garden -> for Joseph\"\n    (is (= [:violets :clover :violets :grass]\n           (:joseph (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_16\n  (testing \"full garden -> for Kincaid second to last student's garden\"\n    (is (= [:grass :clover :clover :grass]\n           (:kincaid (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n\n(deftest garden_test_17\n  (testing \"full garden -> for Larry last student's garden\"\n    (is (= [:grass :violets :clover :violets]\n           (:larry (kindergarten-garden/garden \"VRCGVVRVCGGCCGVRGCVCGCGV\\nVRCCCGCRRGVCGCRVVCVGCGCV\"))))))\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "AndreaCrotti",
+    "canweriotnow",
+    "dkinzer",
+    "ducky427",
+    "geofflane",
+    "haus",
+    "m1kal",
+    "mathias",
+    "mwfogleman",
+    "rubysolo",
+    "sjwarner-bp",
+    "yurrriq",
+    "tasxatzial"
+  ]
+}

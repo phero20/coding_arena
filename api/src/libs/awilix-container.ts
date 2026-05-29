@@ -18,6 +18,7 @@ import { type ArenaRepository } from "../repositories/arena/arena.repository";
 import { type ArenaMatchRepository } from "../repositories/arena/arena-match.repository";
 import { type ArenaSubmissionRepository } from "../repositories/arena/arena-submission.repository";
 import { type StatsRepository } from "../repositories/stats/stats.repository";
+<<<<<<< HEAD
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
@@ -29,6 +30,28 @@ import { type ArenaMatchService, type IArenaMatchService } from "../services/are
 
 import { type MatchValidatorService } from "../services/arena/match-validator.service";
 import { type AiCodeJudgeService } from "../services/judge/ai-code-judge.service";
+=======
+import { type ContestRepository } from "../repositories/contest/contest.repository";
+import { type TaxonomyRepository } from "../repositories/taxonomy/taxonomy.repository";
+import { type SolutionRepository } from "../repositories/solutions/solution.repository";
+import { type WorkspaceRepository } from "../repositories/workspace/workspace.repository";
+import { type AuthService } from "../services/auth/auth.service";
+import { type ProblemService } from "../services/problems/problem.service";
+import { type ProblemTestService } from "../services/problems/problem-test.service";
+import { ISubmissionService, type SubmissionService } from "../services/submissions/submission.service";
+import { type GroqLlmService } from "../services/ai/groq-llm.service";
+import { type AiProblemService } from "../services/problems/ai-problem.service";
+import { type ArenaService } from "../services/arena/arena.service";
+import {
+  type ArenaMatchService,
+  type IArenaMatchService,
+} from "../services/arena/arena-match.service";
+
+import { type MatchValidatorService } from "../services/arena/match-validator.service";
+import { type AiCodeJudgeService } from "../services/judge/ai-code-judge.service";
+import { type AiVerdictAuditService } from "../services/judge/ai-verdict-audit.service";
+import { type DriverJudgeExecutionService } from "../services/judge/driver-judge-execution.service";
+>>>>>>> prod-deploy
 import { type ExecutionService } from "../services/submissions/execution.service";
 import { type ProblemValidatorService } from "../services/problems/problem-validator.service";
 import { type MatchDomainEngine } from "../services/arena/match-domain-engine.service";
@@ -37,11 +60,27 @@ import { type IStatsService } from "../services/stats/stats.service";
 import { type Judge0Service } from "../services/judge/judge0.service";
 import { type WandboxService } from "../services/judge/wandbox.service";
 import { type CompilerService } from "../services/compiler/compiler.service";
+<<<<<<< HEAD
 import { type StatsController } from "../controllers/stats/stats.controller";
+=======
+import { type ClistService } from "../services/contest/clist.service";
+import { type ContestService } from "../services/contest/contest.service";
+import { type TaxonomyService } from "../services/taxonomy/taxonomy.service";
+import { type StatsController } from "../controllers/stats/stats.controller";
+import { type ContestController } from "../controllers/contest/contest.controller";
+import { type SolutionController } from "../controllers/solutions/solution.controller";
+import { type ILeetCodeService } from "../services/stats/leetcode.service";
+>>>>>>> prod-deploy
 
 import { type ProblemCache } from "../cache/problems/problem.cache";
 import { type ProblemTestCache } from "../cache/problems/problem-test.cache";
 import { type AiJudgeCache } from "../cache/judge/ai-judge.cache";
+<<<<<<< HEAD
+=======
+import { SubmissionCache } from "../cache/submissions/submission.cache";
+import { SolutionCache } from "../cache/solutions/solution.cache";
+import { type AcademyCache } from "../cache/academy/academy.cache";
+>>>>>>> prod-deploy
 
 import { type AuthMiddleware } from "../middlewares/security/auth.middleware";
 import { type AuthorizationMiddleware } from "../middlewares/security/authorization.middleware";
@@ -58,6 +97,26 @@ import { type AiProblemController } from "../controllers/problems/ai-problem.con
 import { type ArenaController } from "../controllers/arena/arena.controller";
 import { type UserController } from "../controllers/user/user.controller";
 import { type CompilerController } from "../controllers/compiler/compiler.controller";
+<<<<<<< HEAD
+=======
+import { type TaxonomyController } from "../controllers/taxonomy/taxonomy.controller";
+import { type WorkspaceController } from "../controllers/workspace/workspace.controller";
+import { type WorkspaceService, type IWorkspaceService } from "../services/workspace/workspace.service";
+import { type WorkspaceCache } from "../cache/workspace/workspace.cache";
+import { type ChatController } from "../controllers/chat/chat.controller";
+import { type ChatService, type IChatService } from "../services/chat/chat.service";
+import { type DiagramResolverService, type IDiagramResolverService } from "../services/ai/diagram-resolver.service";
+import { type GroqDiagramService, type IGroqDiagramService } from "../services/ai/groq-diagram.service";
+import { type ChatRepository, type IChatRepository } from "../repositories/chat/chat.repository";
+import { type IAcademyRepository } from "../repositories/academy/academy.repository";
+import { type IAcademyService, type AcademyService } from "../services/academy/academy.service";
+import { type AcademyExecutionService } from "../services/academy/academy-execution.service";
+import { type AcademyController } from "../controllers/academy/academy.controller";
+import { type AcademyExecutionController } from "../controllers/academy/academy-execution.controller";
+import { type ISystemDesignRepository } from "../repositories/system-design/system-design.repository";
+import { type ISystemDesignService } from "../services/system-design/system-design.service";
+import { type SystemDesignController } from "../controllers/system-design/system-design.controller";
+>>>>>>> prod-deploy
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -75,7 +134,16 @@ import { type IFollowService } from "../services/user/follow.service";
 import { FollowController } from "../controllers/user/follow.controller";
 import { ProfileController } from "../controllers/user/profile.controller";
 import { type IUserService } from "../services/user/user.service";
+<<<<<<< HEAD
 import { UserStatsCache } from "../cache/user/user-stats.cache";
+=======
+import { type ContestCache } from "../cache/contest/contest.cache";
+import { type UserStatsCache } from "../cache/user/user-stats.cache";
+import { type LeetCodeCache } from "../cache/user/leetcode.cache";
+import { type LeaderboardCache } from "../cache/stats/leaderboard.cache";
+import { type TaxonomyCache } from "../cache/taxonomy/taxonomy.cache";
+import { GeminiLlmService } from "../services/ai/gemini-llm.service";
+>>>>>>> prod-deploy
 
 export interface ICradle {
   // Infrastructure
@@ -93,16 +161,35 @@ export interface ICradle {
   arenaMatchRepository: ArenaMatchRepository;
   arenaSubmissionRepository: ArenaSubmissionRepository;
   statsRepository: StatsRepository;
+<<<<<<< HEAD
+=======
+  contestRepository: ContestRepository;
+  taxonomyRepository: TaxonomyRepository;
+  solutionRepository: SolutionRepository;
+  workspaceRepository: WorkspaceRepository;
+  chatRepository: IChatRepository;
+  academyRepository: IAcademyRepository;
+  systemDesignRepository: ISystemDesignRepository;
+>>>>>>> prod-deploy
 
   // Services (Primary/Cached)
   authService: AuthService;
   problemService: ProblemService;
   problemTestService: ProblemTestService;
+<<<<<<< HEAD
   submissionService: SubmissionService;
   statsSubmissionService: StatsSubmissionService;
   statsService: IStatsService;
   groqLlmService: GroqLlmService;
   llm: GroqLlmService;
+=======
+  submissionService: ISubmissionService;
+  statsSubmissionService: StatsSubmissionService;
+  statsService: IStatsService;
+  groqLlmService: GroqLlmService;
+  geminiLlmService: GeminiLlmService;
+  llm: GeminiLlmService;
+>>>>>>> prod-deploy
   aiProblemService: AiProblemService;
   arenaMatchService: ArenaMatchService;
   rawArenaMatchService: IArenaMatchService;
@@ -111,17 +198,47 @@ export interface ICradle {
   matchValidatorService: MatchValidatorService;
   problemValidatorService: ProblemValidatorService;
   aiCodeJudgeService: AiCodeJudgeService;
+<<<<<<< HEAD
+=======
+  aiVerdictAuditService: AiVerdictAuditService;
+  driverJudgeExecutionService: DriverJudgeExecutionService;
+>>>>>>> prod-deploy
   matchDomainEngine: MatchDomainEngine;
   matchBroadcaster: MatchBroadcasterService;
   judge0Service: Judge0Service;
   wandboxService: WandboxService;
   compilerService: CompilerService;
+<<<<<<< HEAD
+=======
+  clistService: ClistService;
+  contestService: ContestService;
+  taxonomyService: TaxonomyService;
+  solutionService: import("../services/solutions/solution.service").ISolutionService;
+  workspaceService: IWorkspaceService;
+  chatService: IChatService;
+  diagramResolverService: IDiagramResolverService;
+  groqDiagramService: IGroqDiagramService;
+  leetcodeService: ILeetCodeService;
+  academyService: IAcademyService;
+  academyExecutionService: AcademyExecutionService;
+  academyAiJudgeService: import("../services/academy/academy-ai-judge.service").AcademyAiJudgeService;
+  systemDesignService: ISystemDesignService;
+>>>>>>> prod-deploy
 
   // Raw Services
   rawProblemService: ProblemService;
   rawProblemTestService: ProblemTestService;
   rawAiCodeJudgeService: AiCodeJudgeService;
   rawStatsService: IStatsService;
+<<<<<<< HEAD
+=======
+  rawLeetCodeService: ILeetCodeService;
+  rawTaxonomyService: TaxonomyService;
+  rawSubmissionService: SubmissionService;
+  rawSolutionService: import("../services/solutions/solution.service").SolutionService;
+  rawWorkspaceService: WorkspaceService;
+  rawAcademyService: AcademyService;
+>>>>>>> prod-deploy
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -139,7 +256,18 @@ export interface ICradle {
   problemTestCache: ProblemTestCache;
   aiJudgeCache: AiJudgeCache;
   userStatsCache: UserStatsCache;
+<<<<<<< HEAD
 
+=======
+  contestCache: ContestCache;
+  leetcodeCache: LeetCodeCache;
+  taxonomyCache: TaxonomyCache;
+  leaderboardCache: LeaderboardCache;
+  submissionCache: SubmissionCache;
+  solutionCache: SolutionCache;
+  workspaceCache: WorkspaceCache;
+  academyCache: AcademyCache;
+>>>>>>> prod-deploy
 
   // Controllers
   authController: AuthController;
@@ -152,6 +280,17 @@ export interface ICradle {
   statsController: StatsController;
   userController: UserController;
   compilerController: CompilerController;
+<<<<<<< HEAD
+=======
+  contestController: ContestController;
+  taxonomyController: TaxonomyController;
+  solutionController: SolutionController;
+  workspaceController: WorkspaceController;
+  chatController: ChatController;
+  academyController: AcademyController;
+  academyExecutionController: AcademyExecutionController;
+  systemDesignController: SystemDesignController;
+>>>>>>> prod-deploy
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

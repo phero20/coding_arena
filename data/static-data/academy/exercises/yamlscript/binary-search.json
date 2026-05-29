@@ -1,0 +1,26 @@
+{
+  "id": "yamlscript:binary-search",
+  "trackSlug": "yamlscript",
+  "slug": "binary-search",
+  "name": "Binary Search",
+  "uuid": "db284b8d-a06d-4a34-9f8a-6c78ef56ce26",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement a binary search algorithm.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to implement a binary search algorithm.\n\nA binary search algorithm finds an item in a list by repeatedly splitting it in half, only keeping the half which contains the item we're looking for.\nIt allows us to quickly narrow down the possible locations of our item until we find it, or until we've eliminated all possible locations.\n\n~~~~exercism/caution\nBinary search only works when a list has been sorted.\n~~~~\n\nThe algorithm looks like this:\n\n- Find the middle element of a _sorted_ list and compare it with the item we're looking for.\n- If the middle element is our item, then we're done!\n- If the middle element is greater than our item, we can eliminate that element and all the elements **after** it.\n- If the middle element is less than our item, we can eliminate that element and all the elements **before** it.\n- If every element of the list has been eliminated then the item is not in the list.\n- Otherwise, repeat the process on the part of the list that has not been eliminated.\n\nHere's an example:\n\nLet's say we're looking for the number 23 in the following sorted list: `[4, 8, 12, 16, 23, 28, 32]`.\n\n- We start by comparing 23 with the middle element, 16.\n- Since 23 is greater than 16, we can eliminate the left half of the list, leaving us with `[23, 28, 32]`.\n- We then compare 23 with the new middle element, 28.\n- Since 23 is less than 28, we can eliminate the right half of the list: `[23]`.\n- We've found our item.\n",
+  "introduction": "# Introduction\n\nYou have stumbled upon a group of mathematicians who are also singer-songwriters.\nThey have written a song for each of their favorite numbers, and, as you can imagine, they have a lot of favorite numbers (like [0][zero] or [73][seventy-three] or [6174][kaprekars-constant]).\n\nYou are curious to hear the song for your favorite number, but with so many songs to wade through, finding the right song could take a while.\nFortunately, they have organized their songs in a playlist sorted by the title — which is simply the number that the song is about.\n\nYou realize that you can use a binary search algorithm to quickly find a song given the title.\n\n[zero]: https://en.wikipedia.org/wiki/0\n[seventy-three]: https://en.wikipedia.org/wiki/73_(number)\n[kaprekars-constant]: https://en.wikipedia.org/wiki/6174_(number)\n",
+  "hints": null,
+  "starter_code": "!YS-v0\n\ndefn find(array value):\n  # Implement the 'find' function.\n",
+  "example_solution": "!YS-v0\n\ndefn find(array value):\n  when array.#.!: die('value not in array')\n  mid =: array.#.--.quot(2)\n  case compare(array.$mid value):\n    0  : mid\n    1  : find(take(mid array) value)\n    -1 : find(drop(mid.++ array) value) + mid.++\n",
+  "test_code": "#!/usr/bin/env ys-0\n\nuse ys::taptest: :all\nload: 'binary-search.ys'\n\ntest::\n- name: Finds a value in an array with one element\n  code: find([6] 6)\n  want: 0\n\n- name: Finds a value in the middle of an array\n  code: find([1 3 4 6 8 9 11] 6)\n  want: 3\n\n- name: Finds a value at the beginning of an array\n  code: find([1 3 4 6 8 9 11] 1)\n  want: 0\n\n- name: Finds a value at the end of an array\n  code: find([1 3 4 6 8 9 11] 11)\n  want: 6\n\n- name: Finds a value in an array of odd length\n  code: find([1 3 5 8 13 21 34 55 89 144 233 377 634] 144)\n  want: 9\n\n- name: Finds a value in an array of even length\n  code: find([1 3 5 8 13 21 34 55 89 144 233 377] 21)\n  want: 5\n\n- name: Identifies that a value is not included in the array\n  code: find([1 3 4 6 8 9 11] 7)\n  what: error\n  want: value not in array\n\n- name: A value smaller than the array's smallest value is not found\n  code: find([1 3 4 6 8 9 11] 0)\n  what: error\n  want: value not in array\n\n- name: A value larger than the array's largest value is not found\n  code: find([1 3 4 6 8 9 11] 13)\n  what: error\n  want: value not in array\n\n- name: Nothing is found in an empty array\n  code: find([] 1)\n  what: error\n  want: value not in array\n\ndone: 10\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Binary_search_algorithm",
+  "authors": [
+    "ingydotnet"
+  ],
+  "contributors": null
+}

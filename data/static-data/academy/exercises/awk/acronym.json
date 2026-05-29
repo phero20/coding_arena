@@ -1,0 +1,26 @@
+{
+  "id": "awk:acronym",
+  "trackSlug": "awk",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "6f6587a1-1d10-422d-9335-3c3d3e2781b7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "BEGIN {\n    print \"Implement this solution\" > \"/dev/stderr\"\n    exit 1\n}\n",
+  "example_solution": "BEGIN {\n    # field separator is whitespace or hyphen\n    FS = \"[[:blank:]-]+\"\n}\n{\n    acr = \"\"\n    for (i=1; i<=NF; i++) {\n        gsub(/[^[:alpha:]]/, \"\", $i)    # remove non-letters\n        acr = acr substr($i, 1, 1)      # and take the first letter\n    }\n    print toupper(acr)\n}\n",
+  "test_code": "#!/usr/bin/env bats\nload bats-extra\n\n@test 'basic' {\n  #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< 'Portable Network Graphics'\n  assert_success\n  assert_output 'PNG'\n}\n\n@test 'lowercase words' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< 'Ruby on Rails'\n  assert_success\n  assert_output 'ROR'\n}\n\n@test 'punctuation' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< 'First In, First Out'\n  assert_success\n  assert_output 'FIFO'\n}\n\n@test 'all caps word' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< 'GNU Image Manipulation Program'\n  assert_success\n  assert_output 'GIMP'\n}\n\n@test 'punctuation without whitespace' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< 'Complementary metal-oxide semiconductor'\n  assert_success\n  assert_output 'CMOS'\n}\n\n@test 'very long abbreviation' {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< 'Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me'\n  assert_success\n  assert_output 'ROTFLSHTMDCOALM'\n}\n\n@test \"consecutive delimiters\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< \"Something - I made up from thin air\"\n  assert_success\n  assert_output \"SIMUFTA\"\n}\n\n@test \"apostrophes\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< \"Halley's Comet\"\n  assert_success\n  assert_output \"HC\"\n}\n\n@test \"underscore emphasis\" {\n  [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n  run gawk -f acronym.awk <<< \"The Road __Not__ Taken\"\n  assert_success\n  assert_output \"TRNT\"\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

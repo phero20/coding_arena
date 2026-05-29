@@ -1,0 +1,26 @@
+{
+  "id": "lfe:pangram",
+  "trackSlug": "lfe",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "d319360a-afef-4b65-be5f-da45d48367cb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "(defmodule pangram\n  (export (pangram? 1)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule pangram\n  (export (pangram? 1)))\n\n(defun pangram? (sentence)\n  (ordsets:is_subset (lists:seq #\\a #\\z)\n                     (ordsets:from_list (string:lowercase sentence))))\n",
+  "test_code": "(defmodule pangram-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(deftest empty-sentence\n  (is-not (pangram:pangram? \"\")))\n\n(deftest perfect-lower-case\n  (is (pangram:pangram? \"abcdefghijklmnopqrstuvwxyz\")))\n\n(deftest only-lower-case\n  (is (pangram:pangram? \"the quick brown fox jumps over the lazy dog\")))\n\n(deftest missing-the-letter-x\n  (is-not (pangram:pangram? \"a quick movement of the enemy will jeopardize five gunboats\")))\n\n(deftest missing-the-letter-h\n  (is-not (pangram:pangram? \"five boxing wizards jump quickly at it\")))\n\n(deftest with-underscores\n  (is (pangram:pangram? \"the_quick_brown_fox_jumps_over_the_lazy_dog\")))\n\n(deftest with-numbers\n  (is (pangram:pangram? \"the 1 quick brown fox jumps over the 2 lazy dogs\")))\n\n(deftest missing-letters-replaced-by-numbers\n  (is-not (pangram:pangram? \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\")))\n\n(deftest mixed-case-and-punctuation\n  (is (pangram:pangram? \"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\")))\n\n(deftest a-to-m-and-A-to-M-are-twenty-six-different-characters-but-not-a-pangram\n  (is-not (pangram:pangram? \"abcdefghijklm ABCDEFGHIJKLM\")))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

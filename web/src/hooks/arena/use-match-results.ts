@@ -2,6 +2,11 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
+=======
+import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@clerk/nextjs";
+>>>>>>> prod-deploy
 import { useArenaStore } from "@/store/useArenaStore";
 import { 
   ArenaPlayerResult, 
@@ -46,7 +51,10 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
   // 2. Force close WebSocket on mount to prevent lag
   useEffect(() => {
     if (socket && socket.readyState === WebSocket.OPEN) {
+<<<<<<< HEAD
       console.log("[Results] Closing socket to prevent lag");
+=======
+>>>>>>> prod-deploy
       socket.close();
       setSocket(null);
       setIsConnected(false);
@@ -58,6 +66,23 @@ export function useMatchResults({ roomId, userId }: UseMatchResultsProps) {
   // 3. TanStack Query
   const { data: roomMetadata, isLoading: isRoomLoading } = useArenaRoomQuery(roomId);
   const { data: serverResults, isLoading: isResultsLoading } = useMatchResultsQuery(matchId);
+<<<<<<< HEAD
+=======
+  const queryClient = useQueryClient();
+  const { user: currentUser } = useUser();
+
+  // Invalidate stats and history when results are finalized
+  useEffect(() => {
+    if (serverResults && currentUser?.username) {
+      queryClient.invalidateQueries({
+        queryKey: ["stats", "profile", currentUser.username],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["arena-history", currentUser.id],
+      });
+    }
+  }, [serverResults, currentUser?.username, currentUser?.id, queryClient]);
+>>>>>>> prod-deploy
 
   // Sync metadata if missing
   useEffect(() => {

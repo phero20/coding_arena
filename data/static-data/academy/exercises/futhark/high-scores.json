@@ -1,0 +1,26 @@
+{
+  "id": "futhark:high-scores",
+  "trackSlug": "futhark",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "d20b330c-6018-4cc3-990e-9b4f6cf237fe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "def scores (values: []i32): []i32 = ???\n\ndef latest (values: []i32): i32 = ??????\n\ndef personal_best (values: []i32): i32 = ???\n\ndef personal_top_three (values: []i32): [3]i32 = ???\n",
+  "example_solution": "import \"lib/github.com/diku-dk/sorts/merge_sort\"\n\ndef scores = id\n\ndef latest = last\n\ndef personal_best = i32.maximum\n\ndef personal_top_three (values: []i32): [3]i32 = \n  values\n  |> merge_sort (>) \n  |> take 3\n",
+  "test_code": "import \"high_scores\"\n\n-- List of scores\n-- ==\n-- entry: test_scores\n-- input { [30, 50, 20, 70] }\n-- output { [30, 50, 20, 70] }\n\n-- Latest score\n-- ==\n-- entry: test_latest\n-- input { [100, 0, 90, 30] }\n-- output { 30 }\n\n-- Personal best\n-- ==\n-- entry: test_personal_best\n-- input { [40, 100, 70] }\n-- output { 100 }\n\n-- Personal top three from a list of scores\n-- ==\n-- entry: test_personal_top_three\n-- input { [10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70] }\n-- output { [100, 90, 70] }\n\n-- Personal top highest to lowest\n-- ==\n-- entry: test_personal_top_three\n-- input { [20, 10, 30] }\n-- output { [30, 20, 10] }\n\n-- Personal top when there is a tie\n-- ==\n-- entry: test_personal_top_three\n-- input { [40, 20, 40, 30] }\n-- output { [40, 40, 30] }\n\nentry test_scores [n] (values: [n]i32): [n]i32 =\n  scores values\n\nentry test_latest (values: []i32): i32 =\n  latest values\n\nentry test_personal_best (values: []i32): i32 =\n  personal_best values\n\nentry test_personal_top_three (values: []i32): [3]i32 =\n  personal_top_three values\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

@@ -3,6 +3,12 @@ import { type IUserService } from "../../services/user/user.service";
 import { type ICradle } from "../../libs/awilix-container";
 import { type ControllerRequest } from "../../types/infrastructure/hono.types";
 import { AppError } from "../../utils/app-error";
+<<<<<<< HEAD
+=======
+import { createLogger } from "../../libs/utils/logger";
+
+const logger = createLogger("user.controller");
+>>>>>>> prod-deploy
 
 export class UserController extends BaseController {
   private readonly userService: IUserService;
@@ -17,7 +23,11 @@ export class UserController extends BaseController {
    */
   async searchUsers(req: ControllerRequest<never, never, { q?: string }>) {
     const query = req.query.q;
+<<<<<<< HEAD
     console.log(`[UserController] Received search query: "${query}"`);
+=======
+    logger.debug({ query }, "Received search query");
+>>>>>>> prod-deploy
     
     // Business logic and data retrieval now delegated to the Service layer
     const users = await this.userService.searchUsers(query || "");

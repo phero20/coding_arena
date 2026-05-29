@@ -1,0 +1,36 @@
+{
+  "id": "c:grains",
+  "trackSlug": "c",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "53959d50-efad-4911-84de-b67efe1bee5f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "#include \"grains.h\"\n",
+  "example_solution": "#include \"grains.h\"\n\n#define NUMBER_OF_SQUARES (64)\n\nuint64_t square(uint8_t index)\n{\n   if ((!index) || (index > NUMBER_OF_SQUARES)) {\n      return 0;\n   }\n\n   return (uint64_t)1 << (index - 1);\n}\n\nuint64_t total(void)\n{\n   uint64_t result = 0;\n\n   for (uint8_t i = 1; i <= NUMBER_OF_SQUARES; i++) {\n      result += square(i);\n   }\n\n   return result;\n}\n",
+  "test_code": "#include \"test-framework/unity.h\"\n#include \"grains.h\"\n\nvoid setUp(void)\n{\n}\n\nvoid tearDown(void)\n{\n}\n\nstatic void test_square_1(void)\n{\n   TEST_ASSERT_EQUAL_UINT64(1ull, square(1));\n}\n\nstatic void test_square_2(void)\n{\n   TEST_IGNORE();   // delete this line to run test\n   TEST_ASSERT_EQUAL_UINT64(2ull, square(2));\n}\n\nstatic void test_square_3(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(4ull, square(3));\n}\n\nstatic void test_square_4(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(8ull, square(4));\n}\n\nstatic void test_square_16(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(32768ull, square(16));\n}\n\nstatic void test_square_32(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(2147483648ull, square(32));\n}\n\nstatic void test_square_64(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(9223372036854775808ull, square(64));\n}\n\nstatic void test_square_0_does_not_exist(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(0, square(0));\n}\n\nstatic void test_square_greater_than_64_does_not_exist(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(0, square(65));\n}\n\nstatic void test_total(void)\n{\n   TEST_IGNORE();\n   TEST_ASSERT_EQUAL_UINT64(18446744073709551615ull, total());\n}\n\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_square_1);\n   RUN_TEST(test_square_2);\n   RUN_TEST(test_square_3);\n   RUN_TEST(test_square_4);\n   RUN_TEST(test_square_16);\n   RUN_TEST(test_square_32);\n   RUN_TEST(test_square_64);\n   RUN_TEST(test_square_0_does_not_exist);\n   RUN_TEST(test_square_greater_than_64_does_not_exist);\n   RUN_TEST(test_total);\n\n   return UNITY_END();\n}\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "RealBarrettBrown"
+  ],
+  "contributors": [
+    "bcc32",
+    "Gamecock",
+    "gea-migration",
+    "h-3-0",
+    "patricksjackson",
+    "QLaille",
+    "ryanplusplus",
+    "wiredancer",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "emacs-lisp:robot-name",
+  "trackSlug": "emacs-lisp",
+  "slug": "robot-name",
+  "name": "Robot Name",
+  "uuid": "55bc8c2a-1db3-4d26-b7c6-a778b61bf46b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage robot factory settings.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage robot factory settings.\n\nWhen a robot comes off the factory floor, it has no name.\n\nThe first time you turn on a robot, a random name is generated in the format of two uppercase letters followed by three digits, such as RX837 or BC811.\n\nEvery once in a while we need to reset a robot to its factory settings, which means that its name gets wiped.\nThe next time you ask, that robot will respond with a new random name.\n\nThe names must be random: they should not follow a predictable sequence.\nUsing random names means a risk of collisions.\nYour solution must ensure that every existing robot has a unique name.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": ";;; robot-name.el --- Robot Name (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n;;\n;; Build a robot with a name like AA000, that can be reset\n;; to a new name. Instructions are in README.md\n;;\n\n(defun build-robot ()\n  \"Build a new robot with a random name.\"\n;;; Code:\n)\n\n(defun robot-name (robot)\n  \"Get the ROBOT's name.\"\n;;; Code:\n)\n\n(defun reset-robot (robot)\n  \"Reset the name of ROBOT.  Factory reset!\"\n;;; Code:\n)\n\n(provide 'robot-name)\n;;; robot-name.el ends here\n",
+  "example_solution": ";;; robot-name.el --- Robot Name (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n;;\n;; Build a robot with a name like AA000, that can be reset\n;; to a new name. Instructions are in README.md\n;;\n\n;;; Code:\n\n(defun rand-alpha-char ()\n  \"Return a random alphabetic character as a string.\"\n  (let* ((char-list (number-sequence ?A ?Z))\n         (char-int (nth (random (length char-list)) char-list)))\n    (string char-int)))\n\n(defun rand-digit-char ()\n  \"Return a random digit [0-9] as a string.\"\n  (int-to-string (random 10)))\n\n(defun random-robot-name ()\n  \"Create a random robot name with 2 alpha chars and 3 digits.\"\n  (concat (rand-alpha-char)\n          (rand-alpha-char)\n          (rand-digit-char)\n          (rand-digit-char)\n          (rand-digit-char)))\n\n(defun build-robot ()\n  \"Build a new robot with a random name.\"\n  (let ((new-robot (make-hash-table :test 'equal)))\n    (puthash \"name\" (random-robot-name) new-robot)\n    new-robot))\n\n(build-robot)\n\n(defun robot-name (robot)\n  \"Get the ROBOT's name.\"\n  (gethash \"name\" robot))\n\n(defun reset-robot (robot)\n  \"Reset the name of ROBOT.  Factory reset!\"\n  (setf robot (puthash \"name\" (random-robot-name) robot))\n  robot)\n\n\n(provide 'robot-name)\n;;; robot-name.el ends here\n",
+  "test_code": ";;; robot-name-test.el --- Tests for Robot Name (exercism)  -*- lexical-binding: t; -*-\n\n;;; Commentary:\n\n;; Ported pretty much directly from the xlisp version :)\n\n;;; Code:\n\n(require 'rx)\n\n(load-file \"robot-name.el\")\n(declare-function build-robot \"robot-name.el\")\n(declare-function robot-name \"robot-name.el\" (robot))\n(declare-function reset-robot \"robot-name.el\" (robot))\n\n(defvar *robbie* (build-robot))\n(defvar *clutz*  (build-robot))\n\n(defvar robot-name-re\n  (rx string-start\n      (= 2 upper-case)\n      (= 3 digit)\n      string-end))\n\n(ert-deftest name-matches-expected-pattern ()\n  (let ((name (robot-name *robbie*)))\n    (should (string-match-p robot-name-re name))))\n\n(ert-deftest name-is-persistent ()\n  \"Test that robot name is persistent.\"\n  (should (equal (robot-name *robbie*) (robot-name *robbie*))))\n\n(ert-deftest different-robots-have-different-names ()\n  (should-not (equal (robot-name *robbie*) (robot-name *clutz*))))\n\n(ert-deftest name-can-be-reset ()\n  (let* ((robot (build-robot))\n         (original-name (robot-name robot)))\n    (reset-robot robot)\n    (should-not (equal original-name (robot-name robot)))))\n\n(provide 'robot-name-test)\n;;; robot-name-test.el ends here\n",
+  "source": "A debugging session with Paul Blackwell at gSchool.",
+  "source_url": null,
+  "authors": [
+    "canweriotnow"
+  ],
+  "contributors": [
+    "wasamasa",
+    "yurrriq"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "lua:series",
+  "trackSlug": "lua",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "4527f869-1901-4301-88bf-1c6fbb4d5898",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(s, length)\nend\n",
+  "example_solution": "return function(s, length)\n  assert(string.len(s) > 0, \"series cannot be empty\")\n  assert(length >= 0, \"slice length cannot be negative\")\n  assert(length > 0, \"slice length cannot be zero\")\n  assert(length <= string.len(s), \"slice length cannot be greater than series length\")\n\n  return coroutine.wrap(function()\n    for i = 1, #s - length + 1 do\n      coroutine.yield(s:sub(i, i + length - 1))\n    end\n  end)\nend\n",
+  "test_code": "local series = require('series')\n\ndescribe('series', function()\n  it('slices of one from one', function()\n    local result = {}\n    for s in series(\"1\", 1) do\n      table.insert(result, s)\n    end\n    assert.same({ \"1\" }, result)\n  end)\n\n  it('slices of one from two', function()\n    local result = {}\n    for s in series(\"12\", 1) do\n      table.insert(result, s)\n    end\n    assert.same({ \"1\", \"2\" }, result)\n  end)\n\n  it('slices of two', function()\n    local result = {}\n    for s in series(\"35\", 2) do\n      table.insert(result, s)\n    end\n    assert.same({ \"35\" }, result)\n  end)\n\n  it('slices of two overlap', function()\n    local result = {}\n    for s in series(\"9142\", 2) do\n      table.insert(result, s)\n    end\n    assert.same({ \"91\", \"14\", \"42\" }, result)\n  end)\n\n  it('slices can include duplicates', function()\n    local result = {}\n    for s in series(\"777777\", 3) do\n      table.insert(result, s)\n    end\n    assert.same({ \"777\", \"777\", \"777\", \"777\" }, result)\n  end)\n\n  it('slices of a long series', function()\n    local result = {}\n    for s in series(\"918493904243\", 5) do\n      table.insert(result, s)\n    end\n    assert.same({ \"91849\", \"18493\", \"84939\", \"49390\", \"93904\", \"39042\", \"90424\", \"04243\" }, result)\n  end)\n\n  it('slice length is too large', function()\n    assert.has_error(function()\n      series(\"12345\", 6)\n    end, \"slice length cannot be greater than series length\")\n  end)\n\n  it('slice length is way too large', function()\n    assert.has_error(function()\n      series(\"12345\", 42)\n    end, \"slice length cannot be greater than series length\")\n  end)\n\n  it('slice length cannot be zero', function()\n    assert.has_error(function()\n      series(\"12345\", 0)\n    end, \"slice length cannot be zero\")\n  end)\n\n  it('slice length cannot be negative', function()\n    assert.has_error(function()\n      series(\"123\", -1)\n    end, \"slice length cannot be negative\")\n  end)\n\n  it('empty series is invalid', function()\n    assert.has_error(function()\n      series(\"\", 1)\n    end, \"series cannot be empty\")\n  end)\nend)\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

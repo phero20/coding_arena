@@ -1,0 +1,26 @@
+{
+  "id": "ballerina:reverse-string",
+  "trackSlug": "ballerina",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "ea715197-053b-4bda-8632-f872c0a8e4c3",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "public function reverse(string str) returns string {\n    // TODO: implement this function\n}\n",
+  "example_solution": "public function reverse(string str) returns string {\n\n    string reversed = \"\";\n\n    foreach string chr in str {\n        reversed = chr + reversed;\n    }\n\n    return reversed;\n}\n",
+  "test_code": "import ballerina/test;\n\n@test:Config\nfunction testEmptyString() {\n    test:assertEquals(reverse(\"\"), \"\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testAWord() {\n    test:assertEquals(reverse(\"robot\"), \"tobor\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testACapitalizedWord() {\n    test:assertEquals(reverse(\"Ramen\"), \"nemaR\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testASentenceWithPunctuation() {\n    test:assertEquals(reverse(\"I'm hungry!\"), \"!yrgnuh m'I\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testAPalindrome() {\n    test:assertEquals(reverse(\"racecar\"), \"racecar\");\n}\n\n@test:Config {\n    enable: false\n}\nfunction testAnEvenSizedWord() {\n    test:assertEquals(reverse(\"drawer\"), \"reward\");\n}\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://medium.freecodecamp.org/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,31 @@
+{
+  "id": "csharp:hexadecimal",
+  "trackSlug": "csharp",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "5d30c5a0-0f69-4b79-8c7e-3b1fe6a5707f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public class Hexadecimal\n{\n    public static int ToDecimal(string value)\n    {\n        throw new NotImplementedException(\"You need to implement this method.\");\n    }\n}\n",
+  "example_solution": "using System.Text.RegularExpressions;\n\npublic class Hexadecimal\n{\n    private static readonly Dictionary<char, int> AlphaValues = new Dictionary<char, int>\n        {\n            { 'a', 10 },\n            { 'b', 11 },\n            { 'c', 12 },\n            { 'd', 13 },\n            { 'e', 14 },\n            { 'f', 15 }\n        };\n\n    public static int ToDecimal(string value)\n    {\n        if (IsNotValidHexadecimal(value)) return 0;\n\n        return value.Select((c, i) => GetNumericValue(c) * SixteenToThePowerOf(value.Length - i - 1)).Sum();\n    }\n\n    private static bool IsNotValidHexadecimal(string value)\n    {\n        return Regex.IsMatch(value, \"[^0-9abcdef]\", RegexOptions.IgnoreCase);\n    }\n\n    private static int GetNumericValue(char value)\n    {\n        if (char.IsNumber(value))\n            return (int)char.GetNumericValue(value);\n        return AlphaValues[value];\n    }\n\n    private static int SixteenToThePowerOf(int power)\n    {\n        return (int)Math.Pow(16, power);\n    }\n}",
+  "test_code": "public class HexadecimalTest\n{\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_1_is_decimal_1()\n    {\n        Assert.Equal(1, Hexadecimal.ToDecimal(\"1\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_c_is_decimal_12()\n    {\n        Assert.Equal(12, Hexadecimal.ToDecimal(\"c\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_10_is_decimal_16()\n    {\n        Assert.Equal(16, Hexadecimal.ToDecimal(\"10\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_af_is_decimal_175()\n    {\n        Assert.Equal(175, Hexadecimal.ToDecimal(\"af\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_100_is_decimal_256()\n    {\n        Assert.Equal(256, Hexadecimal.ToDecimal(\"100\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_19ace_is_decimal_105166()\n    {\n        Assert.Equal(105166, Hexadecimal.ToDecimal(\"19ace\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_carrot_is_decimal_0()\n    {\n        Assert.Equal(0, Hexadecimal.ToDecimal(\"carrot\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_000000_is_decimal_0()\n    {\n        Assert.Equal(0, Hexadecimal.ToDecimal(\"000000\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_ffffff_is_decimal_16777215()\n    {\n        Assert.Equal(16777215, Hexadecimal.ToDecimal(\"ffffff\"));\n    }\n\n    [Fact(Skip = \"Remove this Skip property to run this test\")]\n    public void Hexadecimal_ffff00_is_decimal_16776960()\n    {\n        Assert.Equal(16776960, Hexadecimal.ToDecimal(\"ffff00\"));\n    }\n\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "bressain"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "j2jensen",
+    "jwood803",
+    "wolf99"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "gleam:accumulate",
+  "trackSlug": "gleam",
+  "slug": "accumulate",
+  "name": "Accumulate",
+  "uuid": "d04cd9d6-6494-4336-8e6c-2b9f612eba05",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "lists",
+    "recursion"
+  ],
+  "prerequisites": [
+    "lists",
+    "recursion",
+    "case-expressions",
+    "generics"
+  ],
+  "instructions": "# Instructions\n\nImplement the `accumulate` operation, which, given a collection and an operation to perform on each element of the collection, returns a new collection containing the result of applying that operation to each element of the input collection.\n\nGiven the collection of numbers:\n\n- 1, 2, 3, 4, 5\n\nAnd the operation:\n\n- square a number (`x => x * x`)\n\nYour code should be able to produce the collection of squares:\n\n- 1, 4, 9, 16, 25\n\nCheck out the test suite to see the expected function signature.\n\n## Restrictions\n\nKeep your hands off that collect/map/fmap/whatchamacallit functionality provided by your standard library!\nSolve this one yourself using other basic tools instead.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn accumulate(list: List(a), fun: fn(a) -> b) -> List(b) {\n  todo as \"Implement this function\"\n}\n",
+  "example_solution": "pub fn accumulate(list: List(a), fun: fn(a) -> b) -> List(b) {\n  case list {\n    [] -> []\n    [x, ..xs] -> [fun(x), ..accumulate(xs, fun)]\n  }\n}\n",
+  "test_code": "import accumulate\nimport exercism/should\nimport exercism/test_runner\nimport gleam/string\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn empty_accumulation_test() {\n  accumulate.accumulate([], fn(x) { x * x })\n  |> should.equal([])\n}\n\npub fn accumulate_squares_test() {\n  accumulate.accumulate([1, 2, 3], fn(x) { x * x })\n  |> should.equal([1, 4, 9])\n}\n\npub fn accumulate_upcases_test() {\n  accumulate.accumulate([\"hello\", \"world\"], string.uppercase)\n  |> should.equal([\"HELLO\", \"WORLD\"])\n}\n\npub fn accumulate_reversed_strings_test() {\n  accumulate.accumulate([\"the\", \"quick\", \"brown\", \"fox\", \"etc\"], string.reverse)\n  |> should.equal([\"eht\", \"kciuq\", \"nworb\", \"xof\", \"cte\"])\n}\n\npub fn accumulate_recursively_test() {\n  accumulate.accumulate([\"a\", \"b\", \"c\"], fn(x) -> List(String) {\n    accumulate.accumulate([\"1\", \"2\", \"3\"], fn(y) -> String {\n      string.append(x, y)\n    })\n  })\n  |> should.equal([[\"a1\", \"a2\", \"a3\"], [\"b1\", \"b2\", \"b3\"], [\"c1\", \"c2\", \"c3\"]])\n}\n",
+  "source": "Conversation with James Edward Gray II",
+  "source_url": "http://graysoftinc.com/",
+  "authors": [
+    "nono"
+  ],
+  "contributors": [
+    "lpil"
+  ]
+}

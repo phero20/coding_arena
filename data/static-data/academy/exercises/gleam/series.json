@@ -1,0 +1,35 @@
+{
+  "id": "gleam:series",
+  "trackSlug": "gleam",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "4a084cb7-335d-41f1-8148-5d3abbce8ab0",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "results"
+  ],
+  "prerequisites": [
+    "custom-types",
+    "results",
+    "strings",
+    "ints",
+    "lists",
+    "bools"
+  ],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn slices(input: String, size: Int) -> Result(List(String), Error) {\n  todo\n}\n\npub type Error {\n  YourErrorVariantsGoHere\n}\n",
+  "example_solution": "import gleam/bool\nimport gleam/list\nimport gleam/string\n\npub fn slices(input: String, size: Int) -> Result(List(String), Error) {\n  use <- bool.guard(input == \"\", Error(EmptySeries))\n  use <- bool.guard(size == 0, Error(SliceLengthZero))\n  use <- bool.guard(size < 0, Error(SliceLengthNegative))\n\n  let characters = string.to_graphemes(input)\n  let length = list.length(characters)\n  use <- bool.guard(size > length, Error(SliceLengthTooLarge))\n\n  characters\n  |> list.window(size)\n  |> list.map(string.concat)\n  |> Ok\n}\n\npub type Error {\n  SliceLengthNegative\n  SliceLengthTooLarge\n  SliceLengthZero\n  EmptySeries\n}\n",
+  "test_code": "import exercism/should\nimport exercism/test_runner\nimport series\n\npub fn main() {\n  test_runner.main()\n}\n\npub fn slices_of_one_from_one_test() {\n  \"1\"\n  |> series.slices(1)\n  |> should.equal(Ok([\"1\"]))\n}\n\npub fn slices_of_one_from_two_test() {\n  \"12\"\n  |> series.slices(1)\n  |> should.equal(Ok([\"1\", \"2\"]))\n}\n\npub fn slices_of_two_test() {\n  \"35\"\n  |> series.slices(2)\n  |> should.equal(Ok([\"35\"]))\n}\n\npub fn slices_of_two_overlap_test() {\n  \"9142\"\n  |> series.slices(2)\n  |> should.equal(Ok([\"91\", \"14\", \"42\"]))\n}\n\npub fn slices_can_include_duplicates_test() {\n  \"777777\"\n  |> series.slices(3)\n  |> should.equal(Ok([\"777\", \"777\", \"777\", \"777\"]))\n}\n\npub fn slices_of_a_long_series_test() {\n  \"918493904243\"\n  |> series.slices(5)\n  |> should.equal(\n    Ok([\"91849\", \"18493\", \"84939\", \"49390\", \"93904\", \"39042\", \"90424\", \"04243\"]),\n  )\n}\n\npub fn slice_length_is_too_large_test() {\n  \"12345\"\n  |> series.slices(6)\n  |> should.equal(Error(series.SliceLengthTooLarge))\n}\n\npub fn slice_length_is_way_too_large_test() {\n  \"12345\"\n  |> series.slices(42)\n  |> should.equal(Error(series.SliceLengthTooLarge))\n}\n\npub fn slice_length_cannot_be_zero_test() {\n  \"12345\"\n  |> series.slices(0)\n  |> should.equal(Error(series.SliceLengthZero))\n}\n\npub fn slice_length_cannot_be_negative_test() {\n  \"123\"\n  |> series.slices(-1)\n  |> should.equal(Error(series.SliceLengthNegative))\n}\n\npub fn empty_series_is_invalid_test() {\n  \"\"\n  |> series.slices(1)\n  |> should.equal(Error(series.EmptySeries))\n}\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "lpil"
+  ],
+  "contributors": null
+}

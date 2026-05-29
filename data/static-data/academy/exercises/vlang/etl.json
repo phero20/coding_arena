@@ -1,0 +1,26 @@
+{
+  "id": "vlang:etl",
+  "trackSlug": "vlang",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "3d66d6f5-5d74-4d29-872e-e92154df5dd6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "module main\n\nfn transform(legacy map[int][]rune) map[rune]int {\n}\n",
+  "example_solution": "module main\n\nfn transform(legacy map[int][]rune) map[rune]int {\n\tmut result := map[rune]int{}\n\tfor score, letters in legacy {\n\t\tfor letter in letters {\n\t\t\tlower_letter := letter.str().to_lower()[0]\n\t\t\tresult[lower_letter] = score\n\t\t}\n\t}\n\treturn result\n}\n",
+  "test_code": "module main\n\nfn test_single_letter() {\n\tlegacy := {\n\t\t1: [`A`]\n\t}\n\texpected := {\n\t\t`a`: 1\n\t}\n\tassert transform(legacy) == expected\n}\n\nfn test_single_score_with_multiple_letters() {\n\tlegacy := {\n\t\t1: [`A`, `E`, `I`, `O`, `U`]\n\t}\n\texpected := {\n\t\t`a`: 1\n\t\t`e`: 1\n\t\t`i`: 1\n\t\t`o`: 1\n\t\t`u`: 1\n\t}\n\tassert transform(legacy) == expected\n}\n\nfn test_multiple_scores_with_multiple_letters() {\n\tlegacy := {\n\t\t1: [`A`, `E`]\n\t\t2: [`D`, `G`]\n\t}\n\texpected := {\n\t\t`a`: 1\n\t\t`d`: 2\n\t\t`e`: 1\n\t\t`g`: 2\n\t}\n\tassert transform(legacy) == expected\n}\n\nfn test_multiple_scores_with_differing_numbers_of_letters() {\n\tlegacy := {\n\t\t1:  [`A`, `E`, `I`, `O`, `U`, `L`, `N`, `R`, `S`, `T`]\n\t\t2:  [`D`, `G`]\n\t\t3:  [`B`, `C`, `M`, `P`]\n\t\t4:  [`F`, `H`, `V`, `W`, `Y`]\n\t\t5:  [`K`]\n\t\t8:  [`J`, `X`]\n\t\t10: [`Q`, `Z`]\n\t}\n\texpected := {\n\t\t`a`: 1\n\t\t`b`: 3\n\t\t`c`: 3\n\t\t`d`: 2\n\t\t`e`: 1\n\t\t`f`: 4\n\t\t`g`: 2\n\t\t`h`: 4\n\t\t`i`: 1\n\t\t`j`: 8\n\t\t`k`: 5\n\t\t`l`: 1\n\t\t`m`: 3\n\t\t`n`: 1\n\t\t`o`: 1\n\t\t`p`: 3\n\t\t`q`: 10\n\t\t`r`: 1\n\t\t`s`: 1\n\t\t`t`: 1\n\t\t`u`: 1\n\t\t`v`: 4\n\t\t`w`: 4\n\t\t`x`: 8\n\t\t`y`: 4\n\t\t`z`: 10\n\t}\n\tassert transform(legacy) == expected\n}\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

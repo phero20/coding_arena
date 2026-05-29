@@ -1,0 +1,26 @@
+{
+  "id": "roc:high-scores",
+  "trackSlug": "roc",
+  "slug": "high-scores",
+  "name": "High Scores",
+  "uuid": "80043e33-2549-435d-8739-14cbfa337b17",
+  "type": "practice",
+  "status": null,
+  "blurb": "Manage a player's High Score list.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nManage a game player's High Score list.\n\nYour task is to build a high-score component of the classic Frogger game, one of the highest selling and most addictive games of all time, and a classic of the arcade era.\nYour task is to write methods that return the highest score from the list, the last added score and the three highest scores.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [latest, personal_best, personal_top_three]\n\nScore : U64\n\nlatest : List Score -> Result Score _\nlatest = |scores|\n    crash(\"Please implement the 'latest' function\")\n\npersonal_best : List Score -> Result Score _\npersonal_best = |scores|\n    crash(\"Please implement the 'personal_best' function\")\n\npersonal_top_three : List Score -> List Score\npersonal_top_three = |scores|\n    crash(\"Please implement the 'personal_top_three' function\")\n",
+  "example_solution": "module [latest, personal_best, personal_top_three]\n\nScore : U64\n\nlatest : List Score -> Result Score [ListWasEmpty]\nlatest = List.last\n\npersonal_best : List Score -> Result Score [ListWasEmpty]\npersonal_best = List.max\n\npersonal_top_three : List Score -> List Score\npersonal_top_three = |scores|\n    scores |> List.sort_desc |> List.take_first(3)\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/high-scores/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport HighScores exposing [latest, personal_best, personal_top_three]\n\n## Latest score\nexpect\n    result = latest([100, 0, 90, 30])\n    result == Ok(30)\n\n## Personal best\nexpect\n    result = personal_best([40, 100, 70])\n    result == Ok(100)\n\n## Top 3 scores\n# Personal top three from a list of scores\nexpect\n    result = personal_top_three([10, 30, 90, 30, 100, 20, 10, 0, 30, 40, 40, 70, 70])\n    result == [100, 90, 70]\n\n# Personal top highest to lowest\nexpect\n    result = personal_top_three([20, 10, 30])\n    result == [30, 20, 10]\n\n# Personal top when there is a tie\nexpect\n    result = personal_top_three([40, 20, 40, 30])\n    result == [40, 40, 30]\n\n# Personal top when there are less than 3\nexpect\n    result = personal_top_three([30, 70])\n    result == [70, 30]\n\n# Personal top when there is only one\nexpect\n    result = personal_top_three([40])\n    result == [40]\n\n",
+  "source": "Tribute to the eighties' arcade game Frogger",
+  "source_url": null,
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

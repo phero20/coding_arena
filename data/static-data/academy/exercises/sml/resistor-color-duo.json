@@ -1,0 +1,26 @@
+{
+  "id": "sml:resistor-color-duo",
+  "trackSlug": "sml",
+  "slug": "resistor-color-duo",
+  "name": "Resistor Color Duo",
+  "uuid": "d88bd83a-2cc4-4f36-b383-8795e52b9412",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert color codes, as used on resistors, to a numeric value.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\nFor example, if they printed a brown band (value 1) followed by a green band (value 5), it would translate to the number 15.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\nThe program will take color names as input and output a two digit number, even if the input is more than two colors!\n\nThe band colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nFrom the example above:\nbrown-green should return 15, and\nbrown-green-violet should return 15 too, ignoring the third color.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "fun value (colors: string list): int =\n  raise Fail \"'value' is not implemented\"",
+  "example_solution": "val colors =\n  [\"black\", \"brown\", \"red\", \"orange\", \"yellow\", \"green\", \"blue\", \"violet\", \"grey\", \"white\"]\n\nfun colorCode (color: string) =\n  let\n    fun recurse (l: string list, index: int): int =\n      case l of\n          nil => raise Fail \"invalid color\"\n        | first :: rest =>\n            if first = color then index\n            else recurse (rest, index + 1)\n  in\n    recurse (colors, 0)\n  end\n\nfun value (colors: string list): int =\n  case colors of\n      first :: second :: rest =>\n        10 * (colorCode first) + (colorCode second)\n    | _ => raise Fail \"insufficient colors\"\n",
+  "test_code": "use \"testlib.sml\";\nuse \"resistor-color-duo.sml\";\n\ninfixr |>\nfun x |> f = f x\n\nval testsuite =\n  describe \"resistor-color-duo\" [\n    test \"Brown and black\"\n      (fn _ => value [\"brown\", \"black\"] |> Expect.equalTo 10),\n\n    test \"Blue and grey\"\n      (fn _ => value [\"blue\", \"grey\"] |> Expect.equalTo 68),\n\n    test \"Yellow and violet\"\n      (fn _ => value [\"yellow\", \"violet\"] |> Expect.equalTo 47),\n\n    test \"White and red\"\n      (fn _ => value [\"white\", \"red\"] |> Expect.equalTo 92),\n\n    test \"Orange and orange\"\n      (fn _ => value [\"orange\", \"orange\"] |> Expect.equalTo 33),\n\n    test \"Ignore additional colors\"\n      (fn _ => value [\"green\", \"brown\", \"orange\"] |> Expect.equalTo 51),\n\n    test \"Black and brown, one-digit\"\n      (fn _ => value [\"black\", \"brown\"] |> Expect.equalTo 1)\n  ]\n\nval _ = Test.run testsuite",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1464",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,42 @@
+{
+  "id": "fsharp:book-store",
+  "trackSlug": "fsharp",
+  "slug": "book-store",
+  "name": "Book Store",
+  "uuid": "3741977a-adff-47bb-a9c5-c2e444805bac",
+  "type": "practice",
+  "status": null,
+  "blurb": "To try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts of multiple-book purchases.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "floating-point-numbers",
+    "recursion"
+  ],
+  "prerequisites": [
+    "floating-point-numbers",
+    "for-loops",
+    "lists",
+    "numbers"
+  ],
+  "instructions": "# Instructions\n\nTo try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts on multiple book purchases.\n\nOne copy of any of the five books costs $8.\n\nIf, however, you buy two different books, you get a 5% discount on those two books.\n\nIf you buy 3 different books, you get a 10% discount.\n\nIf you buy 4 different books, you get a 20% discount.\n\nIf you buy all 5, you get a 25% discount.\n\nNote that if you buy four books, of which 3 are different titles, you get a 10% discount on the 3 that form part of a set, but the fourth book still costs $8.\n\nYour mission is to write code to calculate the price of any conceivable shopping basket (containing only books of the same series), giving as big a discount as possible.\n\nFor example, how much does this basket of books cost?\n\n- 2 copies of the first book\n- 2 copies of the second book\n- 2 copies of the third book\n- 1 copy of the fourth book\n- 1 copy of the fifth book\n\nOne way of grouping these 8 books is:\n\n- 1 group of 5 (1st, 2nd,3rd, 4th, 5th)\n- 1 group of 3 (1st, 2nd, 3rd)\n\nThis would give a total of:\n\n- 5 books at a 25% discount\n- 3 books at a 10% discount\n\nResulting in:\n\n- 5 × (100% - 25%) × $8 = 5 × $6.00 = $30.00, plus\n- 3 × (100% - 10%) × $8 = 3 × $7.20 = $21.60\n\nWhich equals $51.60.\n\nHowever, a different way to group these 8 books is:\n\n- 1 group of 4 books (1st, 2nd, 3rd, 4th)\n- 1 group of 4 books (1st, 2nd, 3rd, 5th)\n\nThis would give a total of:\n\n- 4 books at a 20% discount\n- 4 books at a 20% discount\n\nResulting in:\n\n- 4 × (100% - 20%) × $8 = 4 × $6.40 = $25.60, plus\n- 4 × (100% - 20%) × $8 = 4 × $6.40 = $25.60\n\nWhich equals $51.20.\n\nAnd $51.20 is the price with the biggest discount.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module BookStore\n\nlet total books = failwith \"You need to implement this function.\"",
+  "example_solution": "module BookStore\n\nlet private costPerGroup groupSize =\n    let discountPercentage =\n        match groupSize with\n        | 1 ->  0m\n        | 2 ->  5m\n        | 3 -> 10m\n        | 4 -> 20m\n        | 5 -> 25m\n        | _ -> failwith \"Invalid group size\"\n\n    8m * (groupSize |> decimal) * (100m - discountPercentage) / 100m\n\nlet private remove n list =\n    let rec removeTail n list acc =\n        match list with\n        | x::xs when x = n -> List.append (List.rev acc) xs\n        | x::xs            -> removeTail n xs (x::acc)\n        | []               -> List.rev acc\n    removeTail n list []\n\nlet rec private calculateTotalCostHelper books priceSoFar =\n    match books |> List.length with\n    | 0 -> priceSoFar\n    | _ ->\n        let groups =\n            books\n            |> List.groupBy id\n            |> List.sortByDescending (fun (key, value) -> value.Length)\n            |> List.map fst\n        \n        let prices =\n            [1 .. groups |> List.length]\n            |> List.map (fun i ->\n                let itemsToRemove =\n                    groups\n                    |> List.take i\n\n                let remaining =\n                    itemsToRemove\n                    |> List.fold (fun state t ->\n                        remove t state)\n                        books\n\n                calculateTotalCostHelper remaining (priceSoFar + costPerGroup i)\n            )\n        \n        prices\n        |> List.min\n\nlet total books =\n    calculateTotalCostHelper books 0m",
+  "test_code": "module BookStoreTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen BookStore\n\n[<Fact>]\nlet ``Only a single book`` () =\n    total [1] |> should equal 8.00m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two of the same book`` () =\n    total [2; 2] |> should equal 16.00m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Empty basket`` () =\n    total [] |> should equal 0.00m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two different books`` () =\n    total [1; 2] |> should equal 15.20m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Three different books`` () =\n    total [1; 2; 3] |> should equal 21.60m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Four different books`` () =\n    total [1; 2; 3; 4] |> should equal 25.60m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Five different books`` () =\n    total [1; 2; 3; 4; 5] |> should equal 30.00m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two groups of four is cheaper than group of five plus group of three`` () =\n    total [1; 1; 2; 2; 3; 3; 4; 5] |> should equal 51.20m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two groups of four is cheaper than groups of five and three`` () =\n    total [1; 1; 2; 3; 4; 4; 5; 5] |> should equal 51.20m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Group of four plus group of two is cheaper than two groups of three`` () =\n    total [1; 1; 2; 2; 3; 4] |> should equal 40.80m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two each of first four books and one copy each of rest`` () =\n    total [1; 1; 2; 2; 3; 3; 4; 4; 5] |> should equal 55.60m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Two copies of each book`` () =\n    total [1; 1; 2; 2; 3; 3; 4; 4; 5; 5] |> should equal 60.00m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Three copies of first book and two each of remaining`` () =\n    total [1; 1; 2; 2; 3; 3; 4; 4; 5; 5; 1] |> should equal 68.00m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Three each of first two books and two each of remaining books`` () =\n    total [1; 1; 2; 2; 3; 3; 4; 4; 5; 5; 1; 2] |> should equal 75.20m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Four groups of four are cheaper than two groups each of five and three`` () =\n    total [1; 1; 2; 2; 3; 3; 4; 5; 1; 1; 2; 2; 3; 3; 4; 5] |> should equal 102.40m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``Check that groups of four are created properly even when there are more groups of three than groups of five`` () =\n    total [1; 1; 1; 1; 1; 1; 2; 2; 2; 2; 2; 2; 3; 3; 3; 3; 3; 3; 4; 4; 5; 5] |> should equal 145.60m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One group of one and four is cheaper than one group of two and three`` () =\n    total [1; 1; 2; 3; 4] |> should equal 33.60m\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``One group of one and two plus three groups of four is cheaper than one group of each size`` () =\n    total [1; 2; 2; 3; 3; 3; 4; 4; 4; 4; 5; 5; 5; 5; 5] |> should equal 100.00m\n\n",
+  "source": "Inspired by the harry potter kata from Cyber-Dojo.",
+  "source_url": "https://cyber-dojo.org/creator/home",
+  "authors": [
+    "robkeim"
+  ],
+  "contributors": [
+    "bob0the0mighty",
+    "davidelettieri",
+    "ErikSchierboom",
+    "jrr",
+    "lestephane",
+    "valentin-p",
+    "wolf99"
+  ]
+}

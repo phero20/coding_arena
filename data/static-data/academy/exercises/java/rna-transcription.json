@@ -1,0 +1,50 @@
+{
+  "id": "java:rna-transcription",
+  "trackSlug": "java",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "8e983ed2-62f7-439a-a144-fb8fdbdf4d30",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "foreach-loops",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "class RnaTranscription {\n\n    String transcribe(String dnaStrand) {\n        throw new UnsupportedOperationException(\"Delete this statement and write your own implementation.\");\n    }\n\n}\n",
+  "example_solution": "class RnaTranscription {\n\n    String transcribe(String dnaStrand) {\n        StringBuilder sb = new StringBuilder();\n        for (char c : dnaStrand.toCharArray()) {\n            switch (c) {\n                case 'A':\n                    sb.append('U');\n                    break;\n                case 'G':\n                    sb.append('C');\n                    break;\n                case 'C':\n                    sb.append('G');\n                    break;\n                case 'T':\n                    sb.append('A');\n                    break;\n                default:\n                    throw new IllegalArgumentException(\"Invalid input\");\n\n            }\n        }\n\n        return sb.toString();\n    }\n\n}\n",
+  "test_code": "import org.junit.jupiter.api.BeforeEach;\nimport org.junit.jupiter.api.Disabled;\nimport org.junit.jupiter.api.DisplayName;\nimport org.junit.jupiter.api.Test;\n\nimport static org.assertj.core.api.Assertions.assertThat;\n\npublic class RnaTranscriptionTest {\n\n    private RnaTranscription rnaTranscription;\n\n    @BeforeEach\n    public void setUp() {\n        rnaTranscription = new RnaTranscription();\n    }\n\n    @Test\n    @DisplayName(\"Empty RNA sequence\")\n    public void testEmptyRnaSequence() {\n        assertThat(rnaTranscription.transcribe(\"\")).isEmpty();\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"RNA complement of cytosine is guanine\")\n    public void testRnaTranscriptionOfCytosineIsGuanine() {\n        assertThat(rnaTranscription.transcribe(\"C\")).isEqualTo(\"G\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"RNA complement of guanine is cytosine\")\n    public void testRnaTranscriptionOfGuanineIsCytosine() {\n        assertThat(rnaTranscription.transcribe(\"G\")).isEqualTo(\"C\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"RNA complement of thymine is adenine\")\n    public void testRnaTranscriptionOfThymineIsAdenine() {\n        assertThat(rnaTranscription.transcribe(\"T\")).isEqualTo(\"A\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"RNA complement of adenine is uracil\")\n    public void testRnaTranscriptionOfAdenineIsUracil() {\n        assertThat(rnaTranscription.transcribe(\"A\")).isEqualTo(\"U\");\n    }\n\n    @Disabled(\"Remove to run test\")\n    @Test\n    @DisplayName(\"RNA complement\")\n    public void testRnaTranscription() {\n        assertThat(rnaTranscription.transcribe(\"ACGTGGTCTTAA\")).isEqualTo(\"UGCACCAGAAUU\");\n    }\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "PaulNoth"
+  ],
+  "contributors": [
+    "aadityakulkarni",
+    "alis0nc",
+    "FridaTveit",
+    "jmrunkle",
+    "jsertel",
+    "jtigger",
+    "kytrinyx",
+    "lemoncurry",
+    "matthewmorgan",
+    "McEileen",
+    "msomji",
+    "muzimuzhi",
+    "sjwarner",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "Smarticles101",
+    "sshine",
+    "stkent",
+    "vdemeester",
+    "Zaldrick"
+  ]
+}

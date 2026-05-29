@@ -1,7 +1,16 @@
 import * as React from "react";
 import type { Problem, ProblemTest } from "@/types/api";
 import type { ArenaPlayer, ArenaPlayerResult, ArenaRoom } from "@/types/arena";
+<<<<<<< HEAD
 import type { ExecutionVerdict, ExecutionTestResult, RunSubmissionResponse, Submission } from "@/types/submission";
+=======
+import type {
+  ExecutionVerdict,
+  ExecutionTestResult,
+  RunSubmissionResponse,
+  Submission,
+} from "@/types/submission";
+>>>>>>> prod-deploy
 
 // Container.tsx
 export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -59,7 +68,11 @@ export interface MatchResultsProps {
 // MatchTimer.tsx
 export type SlidingNumberProps = {
   value: number;
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> prod-deploy
 
 export interface MatchTimerProps {
   endTime: number | string;
@@ -100,6 +113,10 @@ export interface ProblemRowProps {
   isSelectPage: boolean;
   onSelect: () => void;
   isHosting: boolean;
+<<<<<<< HEAD
+=======
+  isSolved?: boolean;
+>>>>>>> prod-deploy
 }
 
 // ProblemTable.tsx
@@ -114,6 +131,11 @@ export interface ProblemTableProps {
   isUpdating: boolean;
   topicFilter: string;
   onRetry?: () => void;
+<<<<<<< HEAD
+=======
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean;
+>>>>>>> prod-deploy
 }
 
 // ProblemWorkspace.tsx
@@ -136,6 +158,11 @@ export interface BaseWorkspaceProps {
   isSubmitting?: boolean;
   hasSubmitted?: boolean;
   confirmSubmit?: boolean;
+<<<<<<< HEAD
+=======
+  isArena?: boolean;
+  hideRun?: boolean;
+>>>>>>> prod-deploy
 }
 
 // ConsolePanel.tsx
@@ -144,10 +171,17 @@ export interface ConsolePanelProps {
   isLoading: boolean;
   error: Error | null;
   initialTab?: "testcase" | "result";
+<<<<<<< HEAD
   runResult?: RunSubmissionResponse | null;
   runResultLoading?: boolean;
   runError?: Error | string | null;
   verdict?: ExecutionVerdict | "PENDING" | null;
+=======
+  runResult?: (RunSubmissionResponse & { overallStatus?: ExecutionVerdict | "IDLE" }) | null;
+  runResultLoading?: boolean;
+  runError?: Error | string | null;
+  verdict?: ExecutionVerdict | "PENDING" | "IDLE" | null;
+>>>>>>> prod-deploy
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;
@@ -156,24 +190,40 @@ export interface ConsolePanelProps {
 // DescriptionPanel.tsx
 export interface DescriptionPanelProps {
   problem: Problem;
+<<<<<<< HEAD
   mode?: "practice" | "arena";
   room?: ArenaRoom | null;
   currentUserId?: string | null;
   roomId?: string;
+=======
+  mode?: "practice" | "arena" | "exercise";
+  room?: ArenaRoom | null;
+  roomId?: string;
+  trackSlug?: string;
+>>>>>>> prod-deploy
 }
 
 // EditorPanel.tsx
 export interface EditorPanelProps {
   problem: Problem;
+<<<<<<< HEAD
   mode?: "practice" | "arena";
   runResult?: RunSubmissionResponse | null;
+=======
+  mode?: "practice" | "arena" | "exercise";
+  runResult?: (RunSubmissionResponse & { overallStatus?: ExecutionVerdict | "IDLE" }) | null;
+>>>>>>> prod-deploy
   isRunning?: boolean;
   runError?: Error | string | null;
   activeTab?: string;
   onTabChange?: (tab: any) => void;
   enforcedLanguage?: string;
   roomId?: string;
+<<<<<<< HEAD
   verdict?: ExecutionVerdict | "PENDING" | null;
+=======
+  verdict?: ExecutionVerdict | "PENDING" | "IDLE" | null;
+>>>>>>> prod-deploy
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;
@@ -200,7 +250,18 @@ export interface OpponentsPanelProps {
 
 // SolutionViewer.tsx
 export interface SolutionViewerProps {
+<<<<<<< HEAD
   content?: string;
+=======
+  problemId: string;
+  problemTitle: string;
+  problemSlug: string;
+  officialSolution?: string;
+  onAddSolution?: () => void;
+  defaultTab?: string;
+  mode?: "practice" | "arena" | "exercise";
+  trackSlug?: string;
+>>>>>>> prod-deploy
 }
 
 // SubmissionHistory.tsx
@@ -214,7 +275,11 @@ export interface SubmissionHistoryProps {
 // TestCaseField.tsx
 export interface TestCaseFieldProps {
   label: string;
+<<<<<<< HEAD
   value: string;
+=======
+  value: any;
+>>>>>>> prod-deploy
   isOutput?: boolean;
 }
 
@@ -233,4 +298,13 @@ export interface WorkspaceHeaderProps {
   confirmSubmit?: boolean;
   /** Hide the Submit button entirely (e.g. Compiler Playground) */
   hideSubmit?: boolean;
+<<<<<<< HEAD
 }
+=======
+  /** Hide the Run button entirely (e.g. Academy mode) */
+  hideRun?: boolean;
+  onToggleScratchpad?: () => void;
+  isScratchpadOpen?: boolean;
+  isArena?: boolean;
+}
+>>>>>>> prod-deploy

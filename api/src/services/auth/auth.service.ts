@@ -24,11 +24,21 @@ export class AuthService {
   private readonly userRepository: IUserRepository;
   private readonly clerkClient: ReturnType<typeof createClerkClient>;
   private readonly clock: IClockService;
+<<<<<<< HEAD
 
   constructor({ userRepository, clerkClient, clockService }: ICradle) {
     this.userRepository = userRepository;
     this.clerkClient = clerkClient;
     this.clock = clockService;
+=======
+  private readonly statsService: ICradle["statsService"];
+
+  constructor({ userRepository, clerkClient, clockService, statsService }: ICradle) {
+    this.userRepository = userRepository;
+    this.clerkClient = clerkClient;
+    this.clock = clockService;
+    this.statsService = statsService;
+>>>>>>> prod-deploy
   }
 
   async ensureUser(payload: AuthUserPayload): Promise<User> {
@@ -48,15 +58,29 @@ export class AuthService {
 
     logger.info({ clerkId, username }, "User found or created via ensureUser");
 
+<<<<<<< HEAD
     return this.userRepository.create({
       clerkId,
       username,
       fullName: payload.fullName,
       email: payload.email,
+=======
+    const created = await this.userRepository.create({
+      clerkId,
+      username,
+      email: payload.email,
+      fullName: payload.fullName ?? null,
+>>>>>>> prod-deploy
       avatarUrl: payload.avatarUrl ?? undefined,
       status: "active",
       role: "user",
     });
+<<<<<<< HEAD
+=======
+
+    await this.statsService.invalidateProfile(created.id);
+    return created;
+>>>>>>> prod-deploy
   }
 
   async ensureUserFromIdOnly(clerkId: string): Promise<User | null> {
@@ -77,6 +101,12 @@ export class AuthService {
         email: payload.email,
         avatarUrl: payload.avatarUrl ?? undefined,
       });
+<<<<<<< HEAD
+=======
+      if (updated) {
+        await this.statsService.invalidateProfile(updated.id);
+      }
+>>>>>>> prod-deploy
       return updated ?? existing;
     }
 
@@ -86,14 +116,28 @@ export class AuthService {
     // Back-sync to Clerk
     await this.pushUsernameToClerk(clerkId, username);
 
+<<<<<<< HEAD
     return this.userRepository.create({
       clerkId,
       username,
       email: payload.email,
+=======
+    const created = await this.userRepository.create({
+      clerkId,
+      username,
+      email: payload.email,
+      fullName: payload.fullName ?? null,
+>>>>>>> prod-deploy
       avatarUrl: payload.avatarUrl ?? undefined,
       status: "active",
       role: "user",
     });
+<<<<<<< HEAD
+=======
+
+    await this.statsService.invalidateProfile(created.id);
+    return created;
+>>>>>>> prod-deploy
   }
 
   async deleteUser(clerkId: string): Promise<void> {

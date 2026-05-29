@@ -1,0 +1,30 @@
+{
+  "id": "scala:saddle-points",
+  "trackSlug": "scala",
+  "slug": "saddle-points",
+  "name": "Saddle Points",
+  "uuid": "aa135256-28c8-4e3e-a942-8ae5ae996ab5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Detect saddle points in a matrix.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to find the potential trees where you could build your tree house.\n\nThe data company provides the data as grids that show the heights of the trees.\nThe rows of the grid represent the east-west direction, and the columns represent the north-south direction.\n\nAn acceptable tree will be the largest in its row, while being the smallest in its column.\n\nA grid might not have any good trees at all.\nOr it might have one, or even several.\n\nHere is a grid that has exactly one candidate tree.\n\n```text\n    1  2  3  4\n  |-----------\n1 | 9  8  7  8\n2 | 5  3  2  4  <--- potential tree house at row 2, column 1, for tree with height 5\n3 | 6  6  7  1\n```\n\n- Row 2 has values 5, 3, 2, and 4. The largest value is 5.\n- Column 1 has values 9, 5, and 6. The smallest value is 5.\n\nSo the point at `[2, 1]` (row: 2, column: 1) is a great spot for a tree house.\n",
+  "introduction": "# Introduction\n\nYou plan to build a tree house in the woods near your house so that you can watch the sun rise and set.\n\nYou've obtained data from a local survey company that show the height of every tree in each rectangular section of the map.\nYou need to analyze each grid on the map to find good trees for your tree house.\n\nA good tree is both:\n\n- taller than every tree to the east and west, so that you have the best possible view of the sunrises and sunsets.\n- shorter than every tree to the north and south, to minimize the amount of tree climbing.\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "case class Matrix(values: List[List[Int]]) {\n  lazy val saddlePoints: Set[(Int, Int)] = {\n    val columns = values.transpose\n    if (values.isEmpty || columns.isEmpty) {\n      Set()\n    } else {\n      val rowMaxes = values.map(_.max).toVector\n      val colMins = columns.map(_.min).toVector\n      (for {\n        i <- values.indices\n        j <- columns.indices\n        if rowMaxes(i) == colMins(j)\n      } yield (i, j)).toSet\n    }\n  }\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass SaddlePointsTest extends AnyFunSuite with Matchers {\n\n  test(\"Can identify single saddle point\") {\n    Matrix(List(List(9, 8, 7), List(5, 3, 2), List(6, 6, 7))).saddlePoints should be(\n      Set((1, 0)))\n  }\n\n  test(\"Can identify that empty matrix has no saddle points\") {\n    pending\n    Matrix(List(List())).saddlePoints should be(Set())\n  }\n\n  test(\"Can identify lack of saddle points when there are none\") {\n    pending\n    Matrix(List(List(1, 2, 3), List(3, 1, 2), List(2, 3, 1))).saddlePoints should be(\n      Set())\n  }\n\n  test(\"Can identify multiple saddle points\") {\n    pending\n    Matrix(List(List(4, 5, 4), List(3, 5, 5), List(1, 5, 4))).saddlePoints should be(\n      Set((0, 1), (1, 1), (2, 1)))\n  }\n\n  test(\"Can identify saddle point in bottom right corner\") {\n    pending\n    Matrix(List(List(8, 7, 9), List(6, 7, 6), List(3, 2, 5))).saddlePoints should be(\n      Set((2, 2)))\n  }\n}\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

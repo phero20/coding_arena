@@ -1,0 +1,32 @@
+{
+  "id": "common-lisp:spiral-matrix",
+  "trackSlug": "common-lisp",
+  "slug": "spiral-matrix",
+  "name": "Spiral Matrix",
+  "uuid": "c9a6f47c-53a2-4a65-bd1e-9a370a2db71c",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Given the size, return a square matrix of numbers in spiral order.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "arrays"
+  ],
+  "prerequisites": [
+    "arrays",
+    "functions",
+    "mapping"
+  ],
+  "instructions": "# Instructions\n\nYour task is to return a square matrix of a given size.\n\nThe matrix should be filled with natural numbers, starting from 1 in the top-left corner, increasing in an inward, clockwise spiral order, like these examples:\n\n## Examples\n\n### Spiral matrix of size 3\n\n```text\n1 2 3\n8 9 4\n7 6 5\n```\n\n### Spiral matrix of size 4\n\n```text\n 1  2  3 4\n12 13 14 5\n11 16 15 6\n10  9  8 7\n```\n",
+  "introduction": "# Introduction\n\nIn a small village near an ancient forest, there was a legend of a hidden treasure buried deep within the woods.\nDespite numerous attempts, no one had ever succeeded in finding it.\nThis was about to change, however, thanks to a young explorer named Elara.\nShe had discovered an old document containing instructions on how to locate the treasure.\nUsing these instructions, Elara was able to draw a map that revealed the path to the treasure.\n\nTo her surprise, the path followed a peculiar clockwise spiral.\nIt was no wonder no one had been able to find the treasure before!\nWith the map in hand, Elara embarks on her journey to uncover the hidden treasure.\n",
+  "hints": null,
+  "starter_code": "(defpackage :spiral-matrix\n  (:use :cl)\n  (:export :spiral-matrix))\n\n(in-package :spiral-matrix)\n\n(defun spiral-matrix (size))\n",
+  "example_solution": "(defpackage :spiral-matrix\n  (:use :cl)\n  (:export :spiral-matrix))\n\n(in-package :spiral-matrix)\n\n(defun turnp (matrix index delta size)\n  (let ((look-ahead (mapcar #'+ index delta)))\n    (or (minusp (second look-ahead))\n        (= size (first look-ahead))\n        (= size (second look-ahead))\n        (apply #'aref matrix look-ahead))))\n\n(defun spiral-matrix (size)\n  (when (plusp size)\n    (let ((cycler '#0=((0 1) (1 0) (0 -1) (-1 0) . #0#))\n          (matrix (make-array (list size size) :initial-element nil))\n          (index '(0 0)))\n      (loop for i from 1 to (array-total-size matrix) with delta = (pop cycler)\n        do (setf (apply #'aref matrix index) i)\n        when (turnp matrix index delta size) do (setf delta (pop cycler))\n        do (setf index (mapcar #'+ index delta))\n        finally (return matrix)))))\n",
+  "test_code": ";; Ensures that spiral-matrix.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"spiral-matrix\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from spiral-matrix and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :spiral-matrix-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :spiral-matrix-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* spiral-matrix-suite)\n\n(test empty-spiral\n    (let ((size 0))\n      (is (eql NIL (spiral-matrix:spiral-matrix size)))))\n\n(test trivial-spiral\n    (let ((size 1)\n          (result #2A((1))))\n      (is (equalp result (spiral-matrix:spiral-matrix size)))))\n\n(test spiral-of-size-2\n    (let ((size 2)\n          (result #2A((1 2)\n                      (4 3))))\n      (is (equalp result (spiral-matrix:spiral-matrix size)))))\n\n(test spiral-of-size-3\n    (let ((size 3)\n          (result #2A((1 2 3)\n                      (8 9 4)\n                      (7 6 5))))\n      (is (equalp result (spiral-matrix:spiral-matrix size)))))\n\n(test spiral-of-size-4\n    (let ((size 4)\n          (result #2A((1 2 3 4)\n                      (12 13 14 5)\n                      (11 16 15 6)\n                      (10 9 8 7))))\n      (is (equalp result (spiral-matrix:spiral-matrix size)))))\n\n(test spiral-of-size-5\n    (let ((size 5)\n          (result #2A((1 2 3 4 5)\n                      (16 17 18 19 6)\n                      (15 24 25 20 7)\n                      (14 23 22 21 8)\n                      (13 12 11 10 9))))\n      (is (equalp result (spiral-matrix:spiral-matrix size)))))\n\n(defun run-tests (&optional (test-or-suite 'spiral-matrix-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Reddit r/dailyprogrammer challenge #320 [Easy] Spiral Ascension.",
+  "source_url": "https://web.archive.org/web/20230607064729/https://old.reddit.com/r/dailyprogrammer/comments/6i60lr/20170619_challenge_320_easy_spiral_ascension/",
+  "authors": [
+    "PaulT89"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,30 @@
+{
+  "id": "jq:isogram",
+  "trackSlug": "jq",
+  "slug": "isogram",
+  "name": "Isogram",
+  "uuid": "7194fe45-441d-40a8-a922-0ec5e6a920b7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a word or phrase is an isogram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "conditionals"
+  ],
+  "prerequisites": [
+    "conditionals"
+  ],
+  "instructions": "# Instructions\n\nDetermine if a word or phrase is an isogram.\n\nAn isogram (also known as a \"non-pattern word\") is a word or phrase without a repeating letter, however spaces and hyphens are allowed to appear multiple times.\n\nExamples of isograms:\n\n- lumberjacks\n- background\n- downstream\n- six-year-old\n\nThe word _isograms_, however, is not an isogram, because the s repeats.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "\"Remove this line and implement your solution\" | halt_error\n",
+  "example_solution": ".phrase\n| ascii_upcase\n| . / \"\"        # split into array of characters\n| map(select(\"A\" <= . and . <= \"Z\"))\n| group_by(.)\n| map(length == 1)\n| all\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2022-11-02T20:59:14Z\nload bats-extra\nload bats-jq\n\n@test 'empty string' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=true\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'isogram with only lower case characters' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"isogram\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=true\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'word with one duplicated character' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"eleven\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'word with one duplicated character from the end of the alphabet' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"zzyzx\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'longest reported english isogram' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"subdermatoglyphic\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=true\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'word with duplicated character in mixed case' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"Alphabet\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'word with duplicated character in mixed case, lowercase first' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"alphAbet\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'hypothetical isogrammic word with hyphen' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"thumbscrew-japingly\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=true\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'hypothetical word with duplicated character following hyphen' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"thumbscrew-jappingly\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'isogram with duplicated hyphen' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"six-year-old\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=true\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'made-up name that is an isogram' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"Emily Jung Schwartzkopf\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=true\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'duplicated character in the middle' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"accentor\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'same first and last characters' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"angola\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'word with duplicated character and with two hyphens' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f isogram.jq << 'END_INPUT'\n        {\n          \"phrase\": \"up-to-date\"\n        }\nEND_INPUT\n\n    assert_success\n    expected=false\n    assert_equal \"$output\" \"$expected\"\n}\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Isogram",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

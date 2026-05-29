@@ -1,0 +1,26 @@
+{
+  "id": "vlang:darts",
+  "trackSlug": "vlang",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "6868f54b-7a5e-469a-b0c4-723fe1fea127",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn score(x f64, y f64) int {\n}\n",
+  "example_solution": "module main\n\nimport math\n\nfn score(x f64, y f64) int {\n\tr := math.sqrt(x * x + y * y)\n\tif r > 10.0 {\n\t\treturn 0\n\t}\n\tif r > 5.0 {\n\t\treturn 1\n\t}\n\tif r > 1.0 {\n\t\treturn 5\n\t}\n\treturn 10\n}\n",
+  "test_code": "module main\n\nfn test_missed_target() {\n\tassert score(-9.0, 9.0) == 0\n}\n\nfn test_on_the_outer_circle() {\n\tassert score(0.0, 10.0) == 1\n}\n\nfn test_on_the_middle_circle() {\n\tassert score(-5.0, 0.0) == 5\n}\n\nfn test_on_the_inner_circle() {\n\tassert score(0.0, -1.0) == 10\n}\n\nfn test_exactly_on_center() {\n\tassert score(0.0, 0.0) == 10\n}\n\nfn test_near_the_center() {\n\tassert score(-0.1, -0.1) == 10\n}\n\nfn test_just_within_the_inner_circle() {\n\tassert score(0.7, 0.7) == 10\n}\n\nfn test_just_outside_the_inner_circle() {\n\tassert score(0.8, -0.8) == 5\n}\n\nfn test_just_within_the_middle_circle() {\n\tassert score(-3.5, 3.5) == 5\n}\n\nfn test_just_outside_the_middle_circle() {\n\tassert score(-3.6, -3.6) == 1\n}\n\nfn test_just_within_the_outer_circle() {\n\tassert score(-7.0, 7.0) == 1\n}\n\nfn test_just_outside_the_outer_circle() {\n\tassert score(7.1, -7.1) == 0\n}\n\nfn test_asymmetric_position_between_the_inner_and_middle_circles() {\n\tassert score(0.5, -4.0) == 5\n}\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

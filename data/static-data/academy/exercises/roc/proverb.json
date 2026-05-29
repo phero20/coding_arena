@@ -1,0 +1,26 @@
+{
+  "id": "roc:proverb",
+  "trackSlug": "roc",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "1e7b941b-f02e-4b54-ac19-561c765b4313",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module [recite]\n\nrecite : List Str -> Str\nrecite = |strings|\n    crash(\"Please implement the 'recite' function\")\n",
+  "example_solution": "module [recite]\n\nrecite : List Str -> Str\nrecite = |strings|\n    when strings is\n        [] -> \"\"\n        [firtst_thing, .. as rest] ->\n            rest\n            |> List.walk(\n                (firtst_thing, []),\n                |(thing1, lines), thing2|\n                    (thing2, lines |> List.append(\"For want of a ${thing1} the ${thing2} was lost.\")),\n            )\n            |> .1\n            |> List.append(\"And all for the want of a ${firtst_thing}.\")\n            |> Str.join_with(\"\\n\")\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/proverb/canonical-data.json\n# File last updated on 2025-09-15\napp [main!] {\n    pf: platform \"https://github.com/roc-lang/basic-cli/releases/download/0.20.0/X73hGh05nNTkDHU06FHC0YfFaQB1pimX7gncRcao5mU.tar.br\",\n}\n\nimport pf.Stdout\n\nmain! = |_args|\n    Stdout.line!(\"\")\n\nimport Proverb exposing [recite]\n\n# zero pieces\nexpect\n    result = recite([])\n    expected = \"\"\n    result == expected\n\n# one piece\nexpect\n    result = recite([\"nail\"])\n    expected = \"And all for the want of a nail.\"\n    result == expected\n\n# two pieces\nexpect\n    result = recite([\"nail\", \"shoe\"])\n    expected =\n        \"\"\"\n        For want of a nail the shoe was lost.\n        And all for the want of a nail.\n        \"\"\"\n    result == expected\n\n# three pieces\nexpect\n    result = recite([\"nail\", \"shoe\", \"horse\"])\n    expected =\n        \"\"\"\n        For want of a nail the shoe was lost.\n        For want of a shoe the horse was lost.\n        And all for the want of a nail.\n        \"\"\"\n    result == expected\n\n# full proverb\nexpect\n    result = recite([\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"])\n    expected =\n        \"\"\"\n        For want of a nail the shoe was lost.\n        For want of a shoe the horse was lost.\n        For want of a horse the rider was lost.\n        For want of a rider the message was lost.\n        For want of a message the battle was lost.\n        For want of a battle the kingdom was lost.\n        And all for the want of a nail.\n        \"\"\"\n    result == expected\n\n# four pieces modernized\nexpect\n    result = recite([\"pin\", \"gun\", \"soldier\", \"battle\"])\n    expected =\n        \"\"\"\n        For want of a pin the gun was lost.\n        For want of a gun the soldier was lost.\n        For want of a soldier the battle was lost.\n        And all for the want of a pin.\n        \"\"\"\n    result == expected\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "ageron"
+  ],
+  "contributors": null
+}

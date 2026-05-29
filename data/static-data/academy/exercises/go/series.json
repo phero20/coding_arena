@@ -1,0 +1,39 @@
+{
+  "id": "go:series",
+  "trackSlug": "go",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "2c5fb577-a9ce-4c4c-8fc8-fffb38d020d6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package series\n\nfunc All(n int, s string) []string {\n\tpanic(\"Please implement the All function\")\n}\n\nfunc UnsafeFirst(n int, s string) string {\n\tpanic(\"Please implement the UnsafeFirst function\")\n}\n",
+  "example_solution": "package series\n\nfunc All(n int, s string) (r []string) {\n\tif n <= 0 {\n\t\treturn nil\n\t}\n\tfor i := 0; n <= len(s); i++ {\n\t\tr = append(r, s[i:n])\n\t\tn++\n\t}\n\treturn r\n}\n\nfunc UnsafeFirst(n int, s string) string {\n\treturn s[:n]\n}\n",
+  "test_code": "//go:build first\n\npackage series\n\nimport \"testing\"\n\nfunc TestFirst(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tswitch got, ok := First(tc.digits, tc.input); {\n\t\tcase !ok:\n\t\t\tif len(tc.expected) > 0 {\n\t\t\t\tt.Fatalf(\"First(%d, %q) returned ok=false, want ok=true\", tc.digits, tc.input)\n\t\t\t}\n\t\tcase len(tc.expected) == 0:\n\t\t\tt.Fatalf(\"First(%d, %q) = %q, %v | expected ok=false\", tc.digits, tc.input, got, ok)\n\t\tcase got != tc.expected[0]:\n\t\t\tt.Fatalf(\"First(%d, %q) = %q, want: %q\", tc.digits, tc.input, got, tc.expected[0])\n\t\t}\n\t}\n}\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "kytrinyx",
+    "leenipper",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "tleen",
+    "eklatzer"
+  ]
+}

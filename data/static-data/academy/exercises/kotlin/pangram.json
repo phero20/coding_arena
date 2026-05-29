@@ -1,0 +1,39 @@
+{
+  "id": "kotlin:pangram",
+  "trackSlug": "kotlin",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "0e9ca09d-c32e-4fed-930f-1b7c10b67dc2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "object Pangram {\n\n    fun isPangram(input: String): Boolean {\n        TODO(\"Implement this function to complete the task\")\n    }\n}\n",
+  "example_solution": "object Pangram {\n    const val alphaLength = 26\n    fun isPangram(input: String) = input.lowercase().replace(Regex(\"[^a-z]\"), \"\").toSet().size == alphaLength\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport kotlin.test.assertFalse\nimport kotlin.test.assertTrue\n\nclass PangramTest {\n\n    @Test\n    fun emptySentence() {\n        assertFalse(Pangram.isPangram(\"\"))\n    }\n\n    @Ignore\n    @Test\n    fun perfectLowerCase() {\n        assertTrue(Pangram.isPangram(\"abcdefghijklmnopqrstuvwxyz\"))\n    }\n\n    @Ignore\n    @Test\n    fun onlyLowerCase() {\n        assertTrue(Pangram.isPangram(\"the quick brown fox jumps over the lazy dog\"))\n    }\n\n    @Ignore\n    @Test\n    fun missingTheLetterX() {\n        assertFalse(Pangram.isPangram(\"a quick movement of the enemy will jeopardize five gunboats\"))\n    }\n\n    @Ignore\n    @Test\n    fun missingTheLetterH() {\n        assertFalse(Pangram.isPangram(\"five boxing wizards jump quickly at it\"))\n    }\n\n    @Ignore\n    @Test\n    fun withUnderscores() {\n        assertTrue(Pangram.isPangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\"))\n    }\n\n    @Ignore\n    @Test\n    fun withNumbers() {\n        assertTrue(Pangram.isPangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\"))\n    }\n\n    @Ignore\n    @Test\n    fun missingLettersReplacedByNumbers() {\n        assertFalse(Pangram.isPangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"))\n    }\n\n    @Ignore\n    @Test\n    fun mixedCaseAndPunctuation() {\n        assertTrue(Pangram.isPangram(\"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"))\n    }\n\n    @Ignore\n    @Test\n    fun caseInsensitive() {\n        assertFalse(Pangram.isPangram(\"the quick brown fox jumps over with lazy FX\"))\n    }\n\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "enixander",
+    "eparovyshnaya",
+    "jtigger",
+    "lihofm",
+    "markhobson",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

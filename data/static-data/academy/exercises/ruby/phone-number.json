@@ -1,0 +1,46 @@
+{
+  "id": "ruby:phone-number",
+  "trackSlug": "ruby",
+  "slug": "phone-number",
+  "name": "Phone Number",
+  "uuid": "b68665d5-14ef-4351-ac4a-c28a80c27b3d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nClean up phone numbers so that they can be sent SMS messages.\n\nThe **North American Numbering Plan (NANP)** is a telephone numbering system used by many countries in North America like the United States, Canada or Bermuda.\nAll NANP-countries share the same international country code: `1`.\n\nNANP numbers are ten-digit numbers consisting of a three-digit Numbering Plan Area code, commonly known as _area code_, followed by a seven-digit local number.\nThe first three digits of the local number represent the _exchange code_, followed by the unique four-digit number which is the _subscriber number_.\n\nThe format is usually represented as\n\n```text\nNXX NXX-XXXX\n```\n\nwhere `N` is any digit from 2 through 9 and `X` is any digit from 0 through 9.\n\nSometimes they also have the country code (represented as `1` or `+1`) prefixed.\n\nYour task is to clean up differently formatted telephone numbers by removing punctuation and the country code if present.\n\nFor example, the inputs\n\n- `+1 (613)-995-0253`\n- `613-995-0253`\n- `1 613 995 0253`\n- `613.995.0253`\n\nshould all produce the output\n\n`6139950253`\n\n**Note:** As this exercise only deals with telephone numbers used in NANP-countries, only 1 is considered a valid country code.\n",
+  "introduction": "# Introduction\n\nYou've joined LinkLine, a leading communications company working to ensure reliable connections for everyone.\nThe team faces a big challenge: users submit phone numbers in all sorts of formats — dashes, spaces, dots, parentheses, and even prefixes.\nSome numbers are valid, while others are impossible to use.\n\nYour mission is to turn this chaos into order.\nYou'll clean up valid numbers, formatting them appropriately for use in the system.\nAt the same time, you'll identify and filter out any invalid entries.\n\nThe success of LinkLine's operations depends on your ability to separate the useful from the unusable.\nAre you ready to take on the challenge and keep the connections running smoothly?\n",
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Phone Number' exercise in this file. Make the tests in\n`phone_number_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/phone-number` directory.\n=end\n",
+  "example_solution": "module PhoneNumber\n  NANP_PROTOCOL = %r{\n    \\A\n    (?<international_code>1?)\n    (?<area_code>[2-9]{1}[0-9]{2})\n    (?<exchange_code>[2-9]{1}[0-9]{2})\n    (?<subscriber>[0-9]{4})\n    \\z\n  }x\n\n  def self.clean(number)\n    sanitized = digits_only(number)\n    sections = nanp_parse(sanitized)\n    format '%<area_code>s%<exchange_code>s%<subscriber>s', sections if sections\n  end\n\n  def self.digits_only(number)\n    number.gsub(/\\D/, '')\n  end\n\n  def self.nanp_parse(number)\n    matches = number.match(NANP_PROTOCOL)\n    matches.names.map(&:to_sym).zip(matches.captures).to_h if matches\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'phone_number'\n\nclass PhoneNumberTest < Minitest::Test\n  def test_cleans_the_number\n    # skip\n    actual = PhoneNumber.clean('(223) 456-7890')\n    expected = '2234567890'\n    assert_equal expected, actual\n  end\n\n  def test_cleans_numbers_with_dots\n    skip\n    actual = PhoneNumber.clean('223.456.7890')\n    expected = '2234567890'\n    assert_equal expected, actual\n  end\n\n  def test_cleans_numbers_with_multiple_spaces\n    skip\n    actual = PhoneNumber.clean('223 456   7890   ')\n    expected = '2234567890'\n    assert_equal expected, actual\n  end\n\n  def test_invalid_when_9_digits\n    skip\n    assert_nil PhoneNumber.clean('123456789')\n  end\n\n  def test_invalid_when_11_digits_does_not_start_with_a_1\n    skip\n    assert_nil PhoneNumber.clean('22234567890')\n  end\n\n  def test_valid_when_11_digits_and_starting_with_1\n    skip\n    actual = PhoneNumber.clean('12234567890')\n    expected = '2234567890'\n    assert_equal expected, actual\n  end\n\n  def test_valid_when_11_digits_and_starting_with_1_even_with_punctuation\n    skip\n    actual = PhoneNumber.clean('+1 (223) 456-7890')\n    expected = '2234567890'\n    assert_equal expected, actual\n  end\n\n  def test_invalid_when_more_than_11_digits\n    skip\n    assert_nil PhoneNumber.clean('321234567890')\n  end\n\n  def test_invalid_with_letters\n    skip\n    assert_nil PhoneNumber.clean('523-abc-7890')\n  end\n\n  def test_invalid_with_punctuations\n    skip\n    assert_nil PhoneNumber.clean('523-@:!-7890')\n  end\n\n  def test_invalid_if_area_code_starts_with_0\n    skip\n    assert_nil PhoneNumber.clean('(023) 456-7890')\n  end\n\n  def test_invalid_if_area_code_starts_with_1\n    skip\n    assert_nil PhoneNumber.clean('(123) 456-7890')\n  end\n\n  def test_invalid_if_exchange_code_starts_with_0\n    skip\n    assert_nil PhoneNumber.clean('(223) 056-7890')\n  end\n\n  def test_invalid_if_exchange_code_starts_with_1\n    skip\n    assert_nil PhoneNumber.clean('(223) 156-7890')\n  end\n\n  def test_invalid_if_area_code_starts_with_0_on_valid_11_digit_number\n    skip\n    assert_nil PhoneNumber.clean('1 (023) 456-7890')\n  end\n\n  def test_invalid_if_area_code_starts_with_1_on_valid_11_digit_number\n    skip\n    assert_nil PhoneNumber.clean('1 (123) 456-7890')\n  end\n\n  def test_invalid_if_exchange_code_starts_with_0_on_valid_11_digit_number\n    skip\n    assert_nil PhoneNumber.clean('1 (223) 056-7890')\n  end\n\n  def test_invalid_if_exchange_code_starts_with_1_on_valid_11_digit_number\n    skip\n    assert_nil PhoneNumber.clean('1 (223) 156-7890')\n  end\nend\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "dalexj",
+    "dkinzer",
+    "drueck",
+    "fluxusfrequency",
+    "henrik",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kchien",
+    "kotp",
+    "mjansen401",
+    "PatrickMcSweeny",
+    "pgaspar",
+    "tryantwit"
+  ]
+}

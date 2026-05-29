@@ -1,0 +1,26 @@
+{
+  "id": "objective-c:prime-factors",
+  "trackSlug": "objective-c",
+  "slug": "prime-factors",
+  "name": "Prime Factors",
+  "uuid": "1ab06e01-0a06-4d00-995f-078182fd97ec",
+  "type": "practice",
+  "status": null,
+  "blurb": "Compute the prime factors of a given natural number.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCompute the prime factors of a given natural number.\n\nA prime number is only evenly divisible by itself and 1.\n\nNote that 1 is not a prime number.\n\n## Example\n\nWhat are the prime factors of 60?\n\n- Our first divisor is 2.\n  2 goes into 60, leaving 30.\n- 2 goes into 30, leaving 15.\n  - 2 doesn't go cleanly into 15.\n    So let's move on to our next divisor, 3.\n- 3 goes cleanly into 15, leaving 5.\n  - 3 does not go cleanly into 5.\n    The next possible factor is 4.\n  - 4 does not go cleanly into 5.\n    The next possible factor is 5.\n- 5 does go cleanly into 5.\n- We're left only with 1, so now, we're done.\n\nOur successful divisors in that computation represent the list of prime factors of 60: 2, 2, 3, and 5.\n\nYou can check this yourself:\n\n```text\n2 * 2 * 3 * 5\n= 4 * 15\n= 60\n```\n\nSuccess!\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#import \"PrimeFactors.h\"\n\n@implementation PrimeFactors\n\n// TODO: add your solution here\n\n@end\n",
+  "example_solution": "#import \"PrimeFactorsExample.h\"\n\n@implementation PrimeFactors\n\n+ (NSArray <NSNumber *> *)factorsForInteger:(long long)integer {\n    \n    long long number = integer;\n    long long divisor = 2;\n    NSMutableArray <NSNumber *> *primes = [[NSMutableArray alloc] init];\n    \n    while (number > 1) {\n        \n        while (number % divisor == 0) { // !OCLint\n            [primes addObject:[NSNumber numberWithLongLong:divisor]];\n            number /= divisor;\n        }\n        \n        divisor++;\n    }\n    \n    return primes;\n}\n\n@end\n",
+  "test_code": "#import <XCTest/XCTest.h>\n\n#if __has_include(\"PrimeFactorsExample.h\")\n#import \"PrimeFactorsExample.h\"\n#else\n#import \"PrimeFactors.h\"\n#endif\n\n@interface PrimeFactorsTest : XCTestCase\n\n@end\n\n@implementation PrimeFactorsTest\n\n- (void)test1 {\n    XCTAssertEqualObjects(@[], [PrimeFactors factorsForInteger:1]);\n}\n\n- (void)test2 {\n    XCTAssertEqualObjects(@[@2], [PrimeFactors factorsForInteger:2]);\n}\n\n- (void)test3 {\n    XCTAssertEqualObjects(@[@3], [PrimeFactors factorsForInteger:3]);\n}\n\n- (void)test4 {\n    NSArray<NSNumber *> *expected = @[@2, @2];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:4]);\n}\n\n- (void)test6 {\n    NSArray<NSNumber *> *expected = @[@2, @3];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:6]);\n}\n\n- (void)test8 {\n    NSArray<NSNumber *> *expected = @[@2, @2, @2];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:8]);\n}\n\n- (void)test9 {\n    NSArray<NSNumber *> *expected = @[@3, @3];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:9]);\n}\n\n- (void)test27 {\n    NSArray<NSNumber *> *expected = @[@3, @3, @3];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:27]);\n}\n\n- (void)test625 {\n    NSArray<NSNumber *> *expected = @[@5, @5, @5, @5];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:625]);\n}\n\n- (void)test901255 {\n    NSArray<NSNumber *> *expected = @[@5, @17, @23, @461];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:901255]);\n}\n\n- (void)test93819012551 {\n    NSArray<NSNumber *> *expected = @[@11, @9539, @894119];\n    XCTAssertEqualObjects(expected, [PrimeFactors factorsForInteger:93819012551]);\n}\n\n@end\n",
+  "source": "The Prime Factors Kata by Uncle Bob",
+  "source_url": "https://web.archive.org/web/20221026171801/http://butunclebob.com/ArticleS.UncleBob.ThePrimeFactorsKata",
+  "authors": [
+    "robtimp"
+  ],
+  "contributors": null
+}

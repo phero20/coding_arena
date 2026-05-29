@@ -1,0 +1,46 @@
+{
+  "id": "ruby:wordy",
+  "trackSlug": "ruby",
+  "slug": "wordy",
+  "name": "Wordy",
+  "uuid": "cb58e4cf-e3af-469c-9f2d-02557b9f61ed",
+  "type": "practice",
+  "status": null,
+  "blurb": "Parse and evaluate simple math word problems returning the answer as an integer.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [
+    "conditionals"
+  ],
+  "prerequisites": [
+    "strings",
+    "numbers",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nParse and evaluate simple math word problems returning the answer as an integer.\n\n## Iteration 0 — Numbers\n\nProblems with no operations simply evaluate to the number given.\n\n> What is 5?\n\nEvaluates to 5.\n\n## Iteration 1 — Addition\n\nAdd two numbers together.\n\n> What is 5 plus 13?\n\nEvaluates to 18.\n\nHandle large numbers and negative numbers.\n\n## Iteration 2 — Subtraction, Multiplication and Division\n\nNow, perform the other three operations.\n\n> What is 7 minus 5?\n\n2\n\n> What is 6 multiplied by 4?\n\n24\n\n> What is 25 divided by 5?\n\n5\n\n## Iteration 3 — Multiple Operations\n\nHandle a set of operations, in sequence.\n\nSince these are verbal word problems, evaluate the expression from left-to-right, _ignoring the typical order of operations._\n\n> What is 5 plus 13 plus 6?\n\n24\n\n> What is 3 plus 2 multiplied by 3?\n\n15 (i.e. not 9)\n\n## Iteration 4 — Errors\n\nThe parser should reject:\n\n- Unsupported operations (\"What is 52 cubed?\")\n- Non-math questions (\"Who is the President of the United States\")\n- Word problems with invalid syntax (\"What is 1 plus plus 2?\")\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Wordy' exercise in this file. Make the tests in\n`wordy_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/wordy` directory.\n=end\n",
+  "example_solution": "class WordProblem\n  attr_reader :question\n\n  def initialize(question)\n    @question = question\n  end\n\n  def answer\n    raise ArgumentError, \"I don't understand the question\" if too_complicated?\n\n    if matches[2].nil?\n      @answer = n1\n    else\n      @answer = n1.send(operation(2), n2)\n      @answer = @answer.send(operation(4), n3) if chain?\n    end\n\n    @answer\n  end\n\n  private\n  def too_complicated?\n    matches.nil?\n  end\n\n  def matches\n    @matches ||= question.match(pattern)\n  end\n\n  def pattern\n    operations = '(plus|minus|multiplied by|divided by)'\n    /What is (-?\\d+)(?: #{operations} (-?\\d+))?(?: #{operations} (-?\\d+))?\\?/\n  end\n\n  def operation(index)\n    case matches[index]\n    when 'plus' then :+\n    when 'minus' then :-\n    when 'multiplied by' then :*\n    when 'divided by' then :/\n    end\n  end\n\n  def n1\n    matches[1].to_i\n  end\n\n  def n2\n    matches[3].to_i\n  end\n\n  def n3\n    matches[-1].to_i\n  end\n\n  def chain?\n    !!matches[4]\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'wordy'\n\nclass WordyTest < Minitest::Test\n  def test_just_a_number\n    # skip\n    actual = WordProblem.new(\"What is 5?\").answer\n    expected = 5\n    assert_equal expected, actual\n  end\n\n  def test_just_a_zero\n    skip\n    actual = WordProblem.new(\"What is 0?\").answer\n    expected = 0\n    assert_equal expected, actual\n  end\n\n  def test_just_a_negative_number\n    skip\n    actual = WordProblem.new(\"What is -123?\").answer\n    expected = -123\n    assert_equal expected, actual\n  end\n\n  def test_addition\n    skip\n    actual = WordProblem.new(\"What is 1 plus 1?\").answer\n    expected = 2\n    assert_equal expected, actual\n  end\n\n  def test_addition_with_a_left_hand_zero\n    skip\n    actual = WordProblem.new(\"What is 0 plus 2?\").answer\n    expected = 2\n    assert_equal expected, actual\n  end\n\n  def test_addition_with_a_right_hand_zero\n    skip\n    actual = WordProblem.new(\"What is 3 plus 0?\").answer\n    expected = 3\n    assert_equal expected, actual\n  end\n\n  def test_more_addition\n    skip\n    actual = WordProblem.new(\"What is 53 plus 2?\").answer\n    expected = 55\n    assert_equal expected, actual\n  end\n\n  def test_addition_with_negative_numbers\n    skip\n    actual = WordProblem.new(\"What is -1 plus -10?\").answer\n    expected = -11\n    assert_equal expected, actual\n  end\n\n  def test_large_addition\n    skip\n    actual = WordProblem.new(\"What is 123 plus 45678?\").answer\n    expected = 45_801\n    assert_equal expected, actual\n  end\n\n  def test_subtraction\n    skip\n    actual = WordProblem.new(\"What is 4 minus -12?\").answer\n    expected = 16\n    assert_equal expected, actual\n  end\n\n  def test_multiplication\n    skip\n    actual = WordProblem.new(\"What is -3 multiplied by 25?\").answer\n    expected = -75\n    assert_equal expected, actual\n  end\n\n  def test_division\n    skip\n    actual = WordProblem.new(\"What is 33 divided by -3?\").answer\n    expected = -11\n    assert_equal expected, actual\n  end\n\n  def test_multiple_additions\n    skip\n    actual = WordProblem.new(\"What is 1 plus 1 plus 1?\").answer\n    expected = 3\n    assert_equal expected, actual\n  end\n\n  def test_addition_and_subtraction\n    skip\n    actual = WordProblem.new(\"What is 1 plus 5 minus -2?\").answer\n    expected = 8\n    assert_equal expected, actual\n  end\n\n  def test_multiple_subtraction\n    skip\n    actual = WordProblem.new(\"What is 20 minus 4 minus 13?\").answer\n    expected = 3\n    assert_equal expected, actual\n  end\n\n  def test_subtraction_then_addition\n    skip\n    actual = WordProblem.new(\"What is 17 minus 6 plus 3?\").answer\n    expected = 14\n    assert_equal expected, actual\n  end\n\n  def test_multiple_multiplication\n    skip\n    actual = WordProblem.new(\"What is 2 multiplied by -2 multiplied by 3?\").answer\n    expected = -12\n    assert_equal expected, actual\n  end\n\n  def test_addition_and_multiplication\n    skip\n    actual = WordProblem.new(\"What is -3 plus 7 multiplied by -2?\").answer\n    expected = -8\n    assert_equal expected, actual\n  end\n\n  def test_multiple_division\n    skip\n    actual = WordProblem.new(\"What is -12 divided by 2 divided by -3?\").answer\n    expected = 2\n    assert_equal expected, actual\n  end\n\n  def test_unknown_operation\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is 52 cubed?\")\n      problem.answer\n    end\n  end\n\n  def test_non_math_question\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"Who is the President of the United States?\")\n      problem.answer\n    end\n  end\n\n  def test_reject_problem_missing_an_operand\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is 1 plus?\")\n      problem.answer\n    end\n  end\n\n  def test_reject_problem_with_no_operands_or_operators\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is?\")\n      problem.answer\n    end\n  end\n\n  def test_reject_two_operations_in_a_row\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is 1 plus plus 2?\")\n      problem.answer\n    end\n  end\n\n  def test_reject_two_numbers_in_a_row\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is 1 plus 2 1?\")\n      problem.answer\n    end\n  end\n\n  def test_reject_postfix_notation\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is 1 2 plus?\")\n      problem.answer\n    end\n  end\n\n  def test_reject_prefix_notation\n    skip\n    assert_raises(ArgumentError) do\n      problem = WordProblem.new(\"What is plus 1 2?\")\n      problem.answer\n    end\n  end\nend\n",
+  "source": "Inspired by one of the generated questions in the Extreme Startup game.",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "vosechu"
+  ],
+  "contributors": [
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "jpotts244",
+    "kotp",
+    "kytrinyx",
+    "pgaspar",
+    "srabuini",
+    "tommyschaefer",
+    "tryantwit"
+  ]
+}

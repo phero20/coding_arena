@@ -1,0 +1,30 @@
+{
+  "id": "scala:minesweeper",
+  "trackSlug": "scala",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "04c3197c-cd3d-4853-af3f-50c189af80c7",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "class Board(rows: List[String]) {\n  lazy val annotate: List[String] =\n    (for (y <- 0 until numRows) yield annotateRow(y)).toList\n\n  private lazy val numRows = rows.length\n  private lazy val numCols = if (rows.isEmpty) 0 else rows.head.length\n  private lazy val boardVector = rows.toVector.map(_.toVector)\n\n  private def annotateRow(y: Int) =\n    (for (x <- 0 until numCols) yield annotateSquare(x, y)).mkString\n\n  private def annotateSquare(x: Int, y: Int) =\n    if (hasMine(x, y)) mineChar\n    else neighborsWithMines(x, y) match {\n      case 0 => ' '\n      case n => (n + '0').toChar\n    }\n\n  private def neighborsWithMines(x: Int, y: Int) = (for (\n    yNeighbor <- Math.max(0, y - 1) to Math.min(numRows - 1, y + 1);\n    xNeighbor <- Math.max(0, x - 1) to Math.min(numCols - 1, x + 1)\n      if (yNeighbor != y || xNeighbor != x) && hasMine(xNeighbor, yNeighbor)\n  ) yield ()).length\n\n  private def hasMine(x: Int, y: Int) = isMineChar(boardVector(y)(x))\n  private def isMineChar(c: Char) = c == mineChar\n  private val mineChar = '*'\n}\n\nobject Minesweeper {\n  def annotate(board: List[String]): List[String] = new Board(board).annotate\n}\n",
+  "test_code": "import org.scalatest.funsuite.AnyFunSuite\nimport org.scalatest.matchers.should.Matchers\n\n\n/** @version 1.1.0 */\nclass MinesweeperTest extends AnyFunSuite with Matchers {\n\n  test(\"no rows\") {\n    Minesweeper.annotate(List()) should be(List())\n  }\n\n  test(\"no columns\") {\n    pending\n    Minesweeper.annotate(List(\"\")) should be(List(\"\"))\n  }\n\n  test(\"no mines\") {\n    pending\n    Minesweeper.annotate(List(\"   \",\n                              \"   \",\n                              \"   \")) should be(\n      List(\"   \",\n           \"   \",\n           \"   \"))\n  }\n\n  test(\"minefield with only mines\") {\n    pending\n    Minesweeper.annotate(List(\"***\",\n                              \"***\",\n                              \"***\")) should be(\n      List(\"***\",\n           \"***\",\n           \"***\"))\n  }\n\n  test(\"mine surrounded by spaces\") {\n    pending\n    Minesweeper.annotate(List(\"   \",\n                              \" * \",\n                              \"   \")) should be(\n      List(\"111\",\n           \"1*1\",\n           \"111\"))\n  }\n\n  test(\"space surrounded by mines\") {\n    pending\n    Minesweeper.annotate(List(\"***\",\n                              \"* *\",\n                              \"***\")) should be(\n      List(\"***\",\n           \"*8*\",\n           \"***\"))\n  }\n\n  test(\"horizontal line\") {\n    pending\n    Minesweeper.annotate(List(\" * * \")) should be(List(\"1*2*1\"))\n  }\n\n  test(\"horizontal line, mines at edges\") {\n    pending\n    Minesweeper.annotate(List(\"*   *\")) should be(List(\"*1 1*\"))\n  }\n\n  test(\"vertical line\") {\n    pending\n    Minesweeper.annotate(List(\" \",\n                              \"*\",\n                              \" \",\n                              \"*\",\n                              \" \")) should be(\n      List(\"1\",\n           \"*\",\n           \"2\",\n           \"*\",\n           \"1\"))\n  }\n\n  test(\"vertical line, mines at edges\") {\n    pending\n    Minesweeper.annotate(List(\"*\",\n                              \" \",\n                              \" \",\n                              \" \",\n                              \"*\")) should be(\n      List(\"*\",\n           \"1\",\n           \" \",\n           \"1\",\n           \"*\"))\n  }\n\n  test(\"cross\") {\n    pending\n    Minesweeper.annotate(List(\"  *  \",\n                              \"  *  \",\n                              \"*****\",\n                              \"  *  \",\n                              \"  *  \")) should be(\n      List(\" 2*2 \",\n           \"25*52\",\n           \"*****\",\n           \"25*52\",\n           \" 2*2 \"))\n  }\n\n  test(\"large minefield\") {\n    pending\n    Minesweeper.annotate(List(\" *  * \",\n                              \"  *   \",\n                              \"    * \",\n                              \"   * *\",\n                              \" *  * \",\n                              \"      \")) should be(\n      List(\"1*22*1\",\n           \"12*322\",\n           \" 123*2\",\n           \"112*4*\",\n           \"1*22*2\",\n           \"111111\"))\n  }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

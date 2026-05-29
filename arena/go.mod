@@ -1,12 +1,20 @@
 module arena
 
+<<<<<<< HEAD
 go 1.22
+=======
+go 1.23.0
+>>>>>>> prod-deploy
 
 require (
 	github.com/gofiber/contrib/websocket v1.3.4
 	github.com/gofiber/fiber/v2 v2.52.12
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/redis/go-redis/v9 v9.18.0
+<<<<<<< HEAD
+=======
+	golang.org/x/sync v0.8.0
+>>>>>>> prod-deploy
 )
 
 require (

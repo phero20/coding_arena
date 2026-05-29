@@ -1,0 +1,38 @@
+{
+  "id": "rust:series",
+  "trackSlug": "rust",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "9de405e1-3a05-43cb-8eb3-00b81a2968e9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "pub fn series(digits: &str, len: usize) -> Vec<String> {\n    todo!(\"What are the series of length {len} in string {digits:?}\")\n}\n",
+  "example_solution": "pub fn series(digits: &str, len: usize) -> Vec<String> {\n    match len {\n        0 => vec![\"\".to_string(); digits.len() + 1],\n        _ => digits\n            .chars()\n            .collect::<Vec<char>>()\n            .windows(len)\n            .map(|window| window.iter().collect::<String>())\n            .collect::<Vec<String>>(),\n    }\n}\n",
+  "test_code": "use series::*;\n\n#[test]\nfn slices_of_one_from_one() {\n    let input = \"1\";\n    let length = 1;\n    let output = series(input, length);\n    let expected = &[\"1\"];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slices_of_one_from_two() {\n    let input = \"12\";\n    let length = 1;\n    let output = series(input, length);\n    let expected = &[\"1\", \"2\"];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slices_of_two() {\n    let input = \"35\";\n    let length = 2;\n    let output = series(input, length);\n    let expected = &[\"35\"];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slices_of_two_overlap() {\n    let input = \"9142\";\n    let length = 2;\n    let output = series(input, length);\n    let expected = &[\"91\", \"14\", \"42\"];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slices_can_include_duplicates() {\n    let input = \"777777\";\n    let length = 3;\n    let output = series(input, length);\n    let expected = &[\"777\", \"777\", \"777\", \"777\"];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slices_of_a_long_series() {\n    let input = \"918493904243\";\n    let length = 5;\n    let output = series(input, length);\n    let expected = &[\n        \"91849\", \"18493\", \"84939\", \"49390\", \"93904\", \"39042\", \"90424\", \"04243\",\n    ];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slice_length_is_too_large() {\n    let input = \"12345\";\n    let length = 6;\n    let output = series(input, length);\n    let expected: &[&str] = &[];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn slice_length_is_way_too_large() {\n    let input = \"12345\";\n    let length = 42;\n    let output = series(input, length);\n    let expected: &[&str] = &[];\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn empty_series_is_invalid() {\n    let input = \"\";\n    let length = 1;\n    let output = series(input, length);\n    let expected: &[&str] = &[];\n    assert_eq!(output, expected);\n}\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [
+    "kedeggel"
+  ],
+  "contributors": [
+    "Baelyk",
+    "coriolinus",
+    "cwhakes",
+    "efx",
+    "ErikSchierboom",
+    "lutostag",
+    "petertseng",
+    "rofrol",
+    "stringparser",
+    "xakon",
+    "ZapAnton"
+  ]
+}

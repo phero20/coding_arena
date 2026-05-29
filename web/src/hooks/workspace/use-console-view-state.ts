@@ -43,7 +43,11 @@ export function useConsoleViewState({
   const isProcessing = runResultLoading || isEvaluating || isPending;
   const isTabLoading = isProcessing && !hasTestResults;
 
+<<<<<<< HEAD
   const hasValidStatus = currentStatus && currentStatus !== "IDLE" && currentStatus !== "PENDING";
+=======
+  const hasValidStatus = currentStatus && currentStatus !== "PENDING" && currentStatus !== "IDLE";
+>>>>>>> prod-deploy
   const showResultsSection = !runError && (hasValidStatus || hasTestResults);
 
   const isForbiddenError = useMemo(() => {

@@ -1,0 +1,551 @@
+{
+  "language": "ABAP",
+  "slug": "abap",
+  "active": true,
+  "status": {
+    "concept_exercises": false,
+    "test_runner": true,
+    "representer": false,
+    "analyzer": false
+  },
+  "blurb": "ABAP is a high level programming language created by SAP",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 2,
+    "highlightjs_language": "abap"
+  },
+  "test_runner": {
+    "average_run_time": 9
+  },
+  "files": {
+    "solution": [
+      "zcl_%{snake_slug}.clas.abap"
+    ],
+    "test": [
+      "zcl_%{snake_slug}.clas.testclasses.abap"
+    ],
+    "example": [
+      ".meta/zcl_%{snake_slug}.clas.abap"
+    ],
+    "exemplar": [
+      ".meta/zcl_%{snake_slug}.clas.abap"
+    ]
+  },
+  "exercises": {
+    "concept": [
+      {
+        "slug": "lasagna",
+        "name": "Lucian's Luscious Lasagna",
+        "uuid": "0bb8f970-fe74-41f2-8ae6-2d771d87b607",
+        "concepts": [
+          "basics"
+        ],
+        "prerequisites": [],
+        "status": "wip",
+        "blurb": "Learn the basics of ABAP cooking a brilliant lasagna from your favorite cooking book."
+      }
+    ],
+    "practice": [
+      {
+        "slug": "itab-basics",
+        "name": "ITAB Basics",
+        "uuid": "b82db578-ac72-480a-a907-409a0a82cbd7",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Basics of Internal Tables: Initialization, Sorting, and Searching"
+      },
+      {
+        "slug": "itab-aggregation",
+        "name": "ITAB Aggregation",
+        "uuid": "b31ecd5d-939b-44a5-80ac-798787c2dde3",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given a certain internal table, aggregate the data while also grouping it"
+      },
+      {
+        "slug": "itab-combination",
+        "name": "ITAB Combination",
+        "uuid": "859b8764-71d0-461a-a30d-c2e0fee75ced",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given two different internal tables, combine the values of each table together into one internal table"
+      },
+      {
+        "slug": "itab-nesting",
+        "name": "ITAB Nesting",
+        "uuid": "9aad92ad-1522-4612-8640-1545b7167857",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Given three different internal tables, combine the data from each table into one internal table while using nested tables"
+      },
+      {
+        "slug": "hello-world",
+        "name": "Hello, World!",
+        "uuid": "837b21ed-7f1c-45d0-ad9d-c0c8e081b707",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\"."
+      },
+      {
+        "slug": "scrabble-score",
+        "name": "Scrabble Score",
+        "uuid": "86e73de5-3f6a-4c65-b0d6-2070d1601bdf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a word, compute the Scrabble score for that word."
+      },
+      {
+        "slug": "two-fer",
+        "name": "Two Fer",
+        "uuid": "4606da73-f376-409e-8526-f95bec03643b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Create a sentence of the form \"One for X, one for me.\"."
+      },
+      {
+        "slug": "reverse-string",
+        "name": "Reverse String",
+        "uuid": "fad4b5a6-6a15-4687-886c-34787df7b45e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Reverse a given string."
+      },
+      {
+        "slug": "high-scores",
+        "name": "High Scores",
+        "uuid": "b6df2ca1-c5b4-4552-95e3-0a9c489a0a61",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Manage a player's High Score list."
+      },
+      {
+        "slug": "resistor-color",
+        "name": "Resistor Color",
+        "uuid": "978db3d3-0a13-4ca1-b75b-051e389bf171",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert a resistor band's color to its numeric representation."
+      },
+      {
+        "slug": "resistor-color-duo",
+        "name": "Resistor Color Duo",
+        "uuid": "02daf508-b4d8-47c9-a9c7-f26e7032258c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert color codes, as used on resistors, to a numeric value."
+      },
+      {
+        "slug": "resistor-color-trio",
+        "name": "Resistor Color Trio",
+        "uuid": "5d31468c-8e83-4901-8e08-0397f09e0462",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert color codes, as used on resistors, to a human-readable label."
+      },
+      {
+        "slug": "leap",
+        "name": "Leap",
+        "uuid": "ed451561-a84a-4b44-a3c9-9a0d9378667c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Determine whether a given year is a leap year."
+      },
+      {
+        "slug": "line-up",
+        "name": "Line Up",
+        "uuid": "9ede7530-808e-41f4-a1c1-1f528dc9772e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Help lining up customers at Yaʻqūb's Deli."
+      },
+      {
+        "slug": "grains",
+        "name": "Grains",
+        "uuid": "ec0e08bc-c3c1-4e3e-9f62-29a4740e22dc",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles."
+      },
+      {
+        "slug": "kindergarten-garden",
+        "name": "Kindergarten Garden",
+        "uuid": "571dd0ad-8903-42d4-a57e-96e2d669dced",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Given a diagram, determine which plants each child in the kindergarten class is responsible for."
+      },
+      {
+        "slug": "clock",
+        "name": "Clock",
+        "uuid": "ac4e5fb1-1e7c-461d-b2df-1abfd88d8c8a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Implement a clock that handles times without dates."
+      },
+      {
+        "slug": "hamming",
+        "name": "Hamming",
+        "uuid": "4f44d8d4-5822-4cdd-8b5b-2a806a2b9ce0",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Calculate the Hamming distance between two DNA strands."
+      },
+      {
+        "slug": "protein-translation",
+        "name": "Protein Translation",
+        "uuid": "73d301f2-9a3e-4d67-8138-dee878094539",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Translate RNA sequences into proteins."
+      },
+      {
+        "slug": "atbash-cipher",
+        "name": "Atbash Cipher",
+        "uuid": "cdb6d3b8-b2a7-42a7-a124-3b25d7ce545c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East."
+      },
+      {
+        "slug": "nth-prime",
+        "name": "Nth Prime",
+        "uuid": "f43a798e-7f77-41ca-a5d0-c63c24209c18",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Given a number n, determine what the nth prime is."
+      },
+      {
+        "slug": "isogram",
+        "name": "Isogram",
+        "uuid": "fc284dd9-db92-4280-ba4c-74d91cdf8f84",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Determine if a word or phrase is an isogram."
+      },
+      {
+        "slug": "phone-number",
+        "name": "Phone Number",
+        "uuid": "73cc3dcb-c79e-4c8f-90f3-3fe3aa48face",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "topics": [
+          "parsing",
+          "transforming"
+        ],
+        "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages."
+      },
+      {
+        "slug": "raindrops",
+        "name": "Raindrops",
+        "uuid": "eaee0cbd-c525-4431-bedf-69bbce8c18bf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong."
+      },
+      {
+        "slug": "anagram",
+        "name": "Anagram",
+        "uuid": "3b824dfa-49fa-4a32-9706-ee2267289e62",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a word and a list of possible anagrams, select the correct sublist."
+      },
+      {
+        "slug": "eliuds-eggs",
+        "name": "Eliud's Eggs",
+        "uuid": "34a2ee25-abe1-4683-a0fd-40f3e65eab55",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Help Eliud count the number of eggs in her chicken coop by counting the number of 1 bits in a binary representation."
+      },
+      {
+        "slug": "run-length-encoding",
+        "name": "Run Length Encoding",
+        "uuid": "18479071-0e8a-4ba6-8a32-fb2ee40cc94c",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Implement run-length encoding and decoding."
+      },
+      {
+        "slug": "matrix",
+        "name": "Matrix",
+        "uuid": "55885cea-3c6a-4b76-b765-5e44210d7a3e",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Given a string representing a matrix of numbers, return the rows and columns of that matrix."
+      },
+      {
+        "slug": "prime-factors",
+        "name": "Prime Factors",
+        "uuid": "174e3905-92ad-49c9-ae58-118388db6778",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Compute the prime factors of a given natural number."
+      },
+      {
+        "slug": "flower-field",
+        "name": "Flower Field",
+        "uuid": "6e096ef1-5502-446f-b32c-65c3e4a8166b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Mark all the flowers in a garden."
+      },
+      {
+        "slug": "minesweeper",
+        "name": "Minesweeper",
+        "uuid": "c8f6abc0-41a4-4104-8050-2df35f0d469a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "status": "deprecated",
+        "blurb": "Add the numbers to a minesweeper board."
+      },
+      {
+        "slug": "word-count",
+        "name": "Word Count",
+        "uuid": "a8f558ad-28df-46fa-9ac7-aac9afad5a67",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "topics": [
+          "loops",
+          "lists",
+          "regular_expressions",
+          "strings"
+        ],
+        "blurb": "Given a phrase, count the occurrences of each word in that phrase."
+      },
+      {
+        "slug": "beer-song",
+        "name": "Beer Song",
+        "uuid": "6573f168-d8fc-4ccf-a864-1a61f432fae1",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "topics": [
+          "conditionals",
+          "loops",
+          "strings"
+        ],
+        "blurb": "Produce the lyrics to that beloved classic, that field-trip favorite: 99 Bottles of Beer on the Wall."
+      },
+      {
+        "slug": "darts",
+        "name": "Darts",
+        "uuid": "770c3fea-f417-45e0-b285-c76e67698f08",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 2,
+        "blurb": "Calculate the points scored in a single toss of a Darts game."
+      },
+      {
+        "slug": "elyses-enchantments",
+        "name": "Elyses Enchantments",
+        "uuid": "dfddaddc-4749-4f93-b539-8643d48523fe",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Help Elyse with her Enchantments and learn about internal tables in the process."
+      },
+      {
+        "slug": "custom-signs",
+        "name": "Custom Signs",
+        "uuid": "f6ffd6ef-5b5d-45f9-b9e4-294d6e3a0797",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Learn about characters by helping a sign company create custom messages for their signs."
+      },
+      {
+        "slug": "secret-handshake",
+        "name": "Secret Handshake",
+        "uuid": "bc263681-aabb-4171-8b0d-acfb7358e2ab",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 4,
+        "blurb": "Given a decimal number, convert it to the appropriate sequence of events for a secret handshake."
+      },
+      {
+        "slug": "book-store",
+        "name": "Book Store",
+        "uuid": "0ceab982-40cd-48b3-be49-0fc1128708fd",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 7,
+        "blurb": "To try and encourage more sales of different books from a popular 5 book series, a bookshop has decided to offer discounts of multiple-book purchases."
+      },
+      {
+        "slug": "acronym",
+        "name": "Acronym",
+        "uuid": "425e218f-6feb-4fa2-a3cc-3c7239c50eaf",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Convert a long phrase to its acronym."
+      },
+      {
+        "slug": "armstrong-numbers",
+        "name": "Armstrong Numbers",
+        "uuid": "8dc36b6e-cc15-4953-baca-7c6475b7112a",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Determine if a number is an Armstrong number."
+      },
+      {
+        "slug": "collatz-conjecture",
+        "name": "Collatz Conjecture",
+        "uuid": "3b0744b0-6cfd-40d3-aae9-f50403abbe12",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 1,
+        "blurb": "Calculate the number of steps to reach 1 using the Collatz conjecture."
+      },
+      {
+        "slug": "state-of-tic-tac-toe",
+        "name": "State of Tic-Tac-Toe",
+        "uuid": "47290e3c-885c-4940-bdaf-6aaf1fbfbae2",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Determine the game state of a match of Tic-Tac-Toe."
+      },
+      {
+        "slug": "crypto-square",
+        "name": "Crypto Square",
+        "uuid": "26a24356-e26c-49f8-a302-78951892829b",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Implement the classic method for composing secret messages called a square code."
+      },
+      {
+        "slug": "etl",
+        "name": "ETL",
+        "uuid": "521e9992-5122-42e9-aaeb-4234f2e3d8e4",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Change the data format for scoring a game to more easily add other languages."
+      },
+      {
+        "slug": "affine-cipher",
+        "name": "Affine Cipher",
+        "uuid": "85dae1ac-f9e5-411d-920e-bfa988c49876",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 5,
+        "blurb": "Create an implementation of the Affine cipher, an ancient encryption algorithm from the Middle East."
+      },
+      {
+        "slug": "difference-of-squares",
+        "name": "Difference of Squares",
+        "uuid": "6cc8cd8d-e3e5-4f05-b01d-949a23a5b298",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers."
+      },
+      {
+        "slug": "triangle",
+        "name": "Triangle",
+        "uuid": "b916066b-918e-403c-9a9c-be33c4a6250d",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Determine if a triangle is equilateral, isosceles, or scalene."
+      },
+      {
+        "slug": "rna-transcription",
+        "name": "RNA Transcription",
+        "uuid": "bc73c977-cd23-40f5-a890-773e12f71d01",
+        "practices": [],
+        "prerequisites": [],
+        "difficulty": 3,
+        "blurb": "Given a DNA strand, return its RNA complement."
+      }
+    ]
+  },
+  "concepts": [
+    {
+      "uuid": "4a11ac86-a699-43e9-922e-f75681c86fd9",
+      "slug": "basics",
+      "name": "Basics"
+    }
+  ],
+  "key_features": [
+    {
+      "title": "Evolving",
+      "content": "ABAP is a modern and constantly evolving language supported by SAP.",
+      "icon": "evolving"
+    },
+    {
+      "title": "Fun",
+      "content": "Always a new or old feature to discover.",
+      "icon": "fun"
+    },
+    {
+      "title": "Easy",
+      "content": "Statements are easily readable and understandable.",
+      "icon": "easy"
+    },
+    {
+      "title": "Productive",
+      "content": "Easily create data structures and interact with database contents.",
+      "icon": "productive"
+    },
+    {
+      "title": "Typed",
+      "content": "Static types linked to database schemas.",
+      "icon": "statically-typed"
+    },
+    {
+      "title": "Reliability",
+      "content": "Stable functionality to run the core of the worlds largest businesses.",
+      "icon": "stable"
+    }
+  ],
+  "tags": [
+    "execution_mode/compiled",
+    "paradigm/object_oriented",
+    "paradigm/procedural",
+    "runtime/language_specific",
+    "typing/static",
+    "typing/strong",
+    "used_for/backends",
+    "used_for/financial_systems"
+  ],
+  "icon_url": "https://assets.exercism.org/tracks/abap.svg",
+  "about_content": "# About\n\nABAP is a high level programming language created by [SAP SE](https://www.sap.com/).\n\nThe ABAP language goes back to the 1980s and new features are still being added in new releases.\n\nABAP technology is the solid longtime foundation for SAP’s solution portfolio. Its proven robustness, scalability and extensibility makes it the platform of choice for running mission-critical business processes.\n\n## Why Learn ABAP?\n\nABAP runs productively in more than 100,000 SAP customer systems, where it enables enterprise-ready business applications and processes, and reduces total cost of development due to its integrated, self-compiling nature.\n\nABAP Platform\n\n* 5,000 productive SAP Business Suite systems\n* 64,000 standalone systems\n* 4.5 million registered ABAP developers\n\nIn short, it's a big market and there's demand for more people who can develop in ABAP.\n\n## How to Learn ABAP using Exercism?\n\nYou can find details on how to learn ABAP, install it locally, and test your ABAP skills in the [track-specific documentation](https://exercism.org/docs/tracks/abap).\n\n## Background Information\n\n[WikiPedia](https://en.wikipedia.org/wiki/ABAP)\n\n\n"
+}

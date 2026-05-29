@@ -1,0 +1,26 @@
+{
+  "id": "idris:grains",
+  "trackSlug": "idris",
+  "slug": "grains",
+  "name": "Grains",
+  "uuid": "977f96d0-853c-4e41-8bae-92a769d37a5b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the number of grains of wheat on a chessboard given that the number on each square doubles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the number of grains of wheat on a chessboard.\n\nA chessboard has 64 squares.\nSquare 1 has one grain, square 2 has two grains, square 3 has four grains, and so on, doubling each time.\n\nWrite code that calculates:\n\n- the number of grains on a given square\n- the total number of grains on the chessboard\n",
+  "introduction": "# Introduction\n\nThere once was a wise servant who saved the life of a prince.\nThe king promised to pay whatever the servant could dream up.\nKnowing that the king loved chess, the servant told the king he would like to have grains of wheat.\nOne grain on the first square of a chessboard, with the number of grains doubling on each successive square.\n",
+  "hints": null,
+  "starter_code": "module Grains\n\nexport\ngrains : Integer -> Maybe Integer\ngrains square = ?grains_rhs\n\nexport\ntotalGrains : Integer\ntotalGrains = ?totalGrains_rhs\n",
+  "example_solution": "module Grains\n\nimport Data.Bits\n\nexport\ngrains : Integer -> Maybe Integer\ngrains square = if (square < 1 || square > 64) then Nothing\n                else Just $ bit $ cast $ square - 1\n\nexport\ntotalGrains : Integer\ntotalGrains = 0xffffffffffffffff\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport Grains\n\ntests : List Test\ntests =\n  [ test \"grains on square 1\"                              (assertEq (grains 1) $ Just 1)\n  , test \"grains on square 2\"                              (assertEq (grains 2) $ Just 2)\n  , test \"grains on square 3\"                              (assertEq (grains 3) $ Just 4)\n  , test \"grains on square 4\"                              (assertEq (grains 4) $ Just 8)\n  , test \"grains on square 16\"                             (assertEq (grains 16) $ Just 32768)\n  , test \"grains on square 32\"                             (assertEq (grains 32) $ Just 2147483648)\n  , test \"grains on square 64\"                             (assertEq (grains 64) $ Just 9223372036854775808)\n  , test \"square 0 is invalid\"                             (assertEq (grains 0) $ Nothing)\n  , test \"negative square is invalid\"                      (assertEq (grains $ -1) $ Nothing)\n  , test \"square greater than 64 is invalid\"               (assertEq (grains 65) $ Nothing)\n  , test \"returns the total number of grains on the board\" (assertEq totalGrains 18446744073709551615)\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "The CodeRanch Cattle Drive, Assignment 6",
+  "source_url": "https://web.archive.org/web/20240908084142/https://coderanch.com/wiki/718824/Grains",
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

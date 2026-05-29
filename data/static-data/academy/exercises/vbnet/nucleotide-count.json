@@ -1,0 +1,36 @@
+{
+  "id": "vbnet:nucleotide-count",
+  "trackSlug": "vbnet",
+  "slug": "nucleotide-count",
+  "name": "Nucleotide Count",
+  "uuid": "57d134bd-f992-4452-b14c-fe2b533d72ee",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "dictionaries",
+    "exceptions"
+  ],
+  "prerequisites": [
+    "dictionaries",
+    "strings",
+    "chars",
+    "if-statements",
+    "foreach-loops",
+    "exceptions"
+  ],
+  "instructions": "# Instructions\n\nEach of us inherits from our biological parents a set of chemical instructions known as DNA that influence how our bodies are constructed.\nAll known life depends on DNA!\n\n> Note: You do not need to understand anything about nucleotides or DNA to complete this exercise.\n\nDNA is a long chain of other chemicals and the most important are the four nucleotides, adenine, cytosine, guanine and thymine.\nA single DNA chain can contain billions of these four nucleotides and the order in which they occur is important!\nWe call the order of these nucleotides in a bit of DNA a \"DNA sequence\".\n\nWe represent a DNA sequence as an ordered collection of these four nucleotides and a common way to do that is with a string of characters such as \"ATTACG\" for a DNA sequence of 6 nucleotides.\n'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' for thymine.\n\nGiven a string representing a DNA sequence, count how many of each nucleotide is present.\nIf the string contains characters that aren't A, C, G, or T then it is invalid and you should signal an error.\n\nFor example:\n\n```text\n\"GATTACA\" -> 'A': 3, 'C': 1, 'G': 1, 'T': 2\n\"INVALID\" -> error\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Imports System\nImports System.Collections.Generic\n\nPublic Module NucleotideCount\n    Public Function Count(ByVal sequence As String) As IDictionary(Of Char, Integer)\n        Throw New NotImplementedException(\"You need to implement this function.\")\n    End Function\nEnd Module\n",
+  "example_solution": "Imports System\nImports System.Collections.Generic\n\nPublic Module NucleotideCount\n    Public Function Count(ByVal sequence As String) As IDictionary(Of Char, Integer)\n        Dim nucleotideCounts = New Dictionary(Of Char, Integer) From {\n            {\"A\"c, 0},\n            {\"T\"c, 0},\n            {\"C\"c, 0},\n            {\"G\"c, 0}\n        }\n        Dim lCount As Integer = Nothing\n\n        For Each s In sequence\n\n            If nucleotideCounts.TryGetValue(s, lCount) Then\n                nucleotideCounts(s) = lCount + 1\n            Else\n                Throw New ArgumentException()\n            End If\n        Next\n\n        Return nucleotideCounts\n    End Function\nEnd Module\n",
+  "test_code": "Imports System\nImports System.Collections.Generic\nImports Xunit\n\nPublic Class NucleotideCountTests\n    <Fact>\n    Public Sub Empty_strand()\n        Dim expected = New Dictionary(Of Char, Integer) From {\n    {\"A\"c, 0},\n    {\"C\"c, 0},\n    {\"G\"c, 0},\n    {\"T\"c, 0}\n}\n        Assert.Equal(expected, Count(\"\"))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Can_count_one_nucleotide_in_single_character_input()\n        Dim expected = New Dictionary(Of Char, Integer) From {\n    {\"A\"c, 0},\n    {\"C\"c, 0},\n    {\"G\"c, 1},\n    {\"T\"c, 0}\n}\n        Assert.Equal(expected, Count(\"G\"))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Strand_with_repeated_nucleotide()\n        Dim expected = New Dictionary(Of Char, Integer) From {\n    {\"A\"c, 0},\n    {\"C\"c, 0},\n    {\"G\"c, 7},\n    {\"T\"c, 0}\n}\n        Assert.Equal(expected, Count(\"GGGGGGG\"))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Strand_with_multiple_nucleotides()\n        Dim expected = New Dictionary(Of Char, Integer) From {\n    {\"A\"c, 20},\n    {\"C\"c, 12},\n    {\"G\"c, 17},\n    {\"T\"c, 21}\n}\n        Assert.Equal(expected, Count(\"AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC\"))\n    End Sub\n\n    <Fact(Skip:=\"Remove this Skip property to run this test\")>\n    Public Sub Strand_with_invalid_nucleotides()\n        Assert.Throws(Of ArgumentException)(Function() Count(\"AGXXACT\"))\n    End Sub\nEnd Class\n",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,30 @@
+{
+  "id": "scala:hexadecimal",
+  "trackSlug": "scala",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "7c949a14-70dc-4034-874f-0c9e3217fcf8",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "object Hexadecimal {\n  private val hexChars  = 'a' to 'f'\n\n  def hexToInt(s: String): Int =\n    s.foldLeft(Some(0): Option[Int]){case (acc, c) => accumulate(acc, c)}.getOrElse(0)\n\n  private def accumulate(acc: Option[Int], c: Char) =\n    if (c.isDigit || (hexChars contains c.toLower))\n      acc.map(x => c.asDigit + (x * 16))\n    else\n      None\n}\n",
+  "test_code": "import org.scalatest.flatspec.AnyFlatSpec\nimport org.scalatest.matchers.should.Matchers\n\n\nclass HexadecimalTest extends AnyFlatSpec with Matchers {\n  it should \"handle empty\" in {\n    Hexadecimal.hexToInt(\"\") should equal(0)\n  }\n\n  it should \"handle zeros\" in {\n    pending\n    Hexadecimal.hexToInt(\"00000000\") should equal(0)\n  }\n\n  it should \"handle single digit\" in {\n    pending\n    Hexadecimal.hexToInt(\"1\") should equal(1)\n  }\n\n  it should \"handle single hex digit\" in {\n    pending\n    Hexadecimal.hexToInt(\"c\") should equal(12)\n  }\n\n  it should \"handle upper case\" in {\n    pending\n    Hexadecimal.hexToInt(\"C\") should equal(12)\n  }\n\n  it should \"handle multiple digits\" in {\n    pending\n    Hexadecimal.hexToInt(\"10\") should equal(16)\n  }\n\n  it should \"handle multiple hex digits\" in {\n    pending\n    Hexadecimal.hexToInt(\"AF\") should equal(175)\n  }\n\n  it should \"handle complex strings\" in {\n    pending\n    Hexadecimal.hexToInt(\"19ace\") should equal(105166)\n    Hexadecimal.hexToInt(\"ffffff\") should equal(16777215)\n    Hexadecimal.hexToInt(\"ffff00\") should equal(16776960)\n  }\n\n  it should \"handle invalid strings\" in {\n    pending\n    Hexadecimal.hexToInt(\"carrot\") should equal(0)\n    Hexadecimal.hexToInt(\"abczcba\") should equal(0)\n  }\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "ricemery"
+  ],
+  "contributors": [
+    "ErikSchierboom",
+    "ppartarr",
+    "rajeshpg"
+  ]
+}

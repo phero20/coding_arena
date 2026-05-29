@@ -1,0 +1,33 @@
+{
+  "id": "swift:flower-field",
+  "trackSlug": "swift",
+  "slug": "flower-field",
+  "name": "Flower Field",
+  "uuid": "4b9d68e5-2faa-44b2-b330-92be228da2d9",
+  "type": "practice",
+  "status": null,
+  "blurb": "Mark all the flowers in a garden.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add flower counts to empty squares in a completed Flower Field garden.\nThe garden itself is a rectangle board composed of squares that are either empty (`' '`) or a flower (`'*'`).\n\nFor each empty square, count the number of flowers adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent flowers, leave it empty.\nOtherwise replace it with the count of adjacent flowers.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Flower Field][history] is a compassionate reimagining of the popular game Minesweeper.\nThe object of the game is to find all the flowers in the garden using numeric hints that indicate how many flowers are directly adjacent (horizontally, vertically, diagonally) to a square.\n\"Flower Field\" shipped in regional versions of Microsoft Windows in Italy, Germany, South Korea, Japan and Taiwan.\n\n[history]: https://web.archive.org/web/20020409051321fw_/http://rcm.usr.dsi.unimi.it/rcmweb/fnm/\n",
+  "hints": null,
+  "starter_code": "class Board {\n  // Write your code for the 'Flower Field' exercise in this file.\n}\n",
+  "example_solution": "class Board {\n  var rows: [String]\n\n  init(_ rows: [String]) {\n    self.rows = rows\n  }\n\n  func transform() -> [String] {\n    var result = [String]()\n    for (rowIndex, row) in rows.enumerated() {\n      var resultRow = \"\"\n      for (columnIndex, column) in row.enumerated() {\n        if column == \"*\" {\n          resultRow += \"*\"\n        } else {\n          let count = countFlowers(rowIndex: rowIndex, columnIndex: columnIndex)\n          resultRow += count == 0 ? \" \" : String(count)\n        }\n      }\n      result.append(resultRow)\n    }\n\n    return result\n  }\n\n  private func countFlowers(rowIndex: Int, columnIndex: Int) -> Int {\n    var count = 0\n    for row in rowIndex - 1...rowIndex + 1 {\n      for column in columnIndex - 1...columnIndex + 1 {\n        if row >= 0 && row < rows.count && column >= 0 && column < rows[row].count {\n          let currentRow = rows[row]\n          let currentColumn = currentRow[currentRow.index(currentRow.startIndex, offsetBy: column)]\n          if currentColumn == \"*\" {\n            count += 1\n          }\n        }\n      }\n    }\n    return count\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import FlowerField\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct FlowerFieldTests {\n\n  @Test(\"no rows\")\n  func testNoRows() {\n    let input = [String]()\n    let output = [String]()\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"no columns\", .enabled(if: RUNALL))\n  func testNoColumns() {\n    let input = [\"\"]\n    let output = [\"\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"no flowers\", .enabled(if: RUNALL))\n  func testNoFlowers() {\n    let input = [\"   \", \"   \", \"   \"]\n    let output = [\"   \", \"   \", \"   \"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"garden full of flowers\", .enabled(if: RUNALL))\n  func testGardenFullOfFlowers() {\n    let input = [\"***\", \"***\", \"***\"]\n    let output = [\"***\", \"***\", \"***\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"flower surrounded by spaces\", .enabled(if: RUNALL))\n  func testFlowerSurroundedBySpaces() {\n    let input = [\"   \", \" * \", \"   \"]\n    let output = [\"111\", \"1*1\", \"111\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"space surrounded by flowers\", .enabled(if: RUNALL))\n  func testSpaceSurroundedByFlowers() {\n    let input = [\"***\", \"* *\", \"***\"]\n    let output = [\"***\", \"*8*\", \"***\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"horizontal line\", .enabled(if: RUNALL))\n  func testHorizontalLine() {\n    let input = [\" * * \"]\n    let output = [\"1*2*1\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"horizontal line, flowers at edges\", .enabled(if: RUNALL))\n  func testHorizontalLineFlowersAtEdges() {\n    let input = [\"*   *\"]\n    let output = [\"*1 1*\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"vertical line\", .enabled(if: RUNALL))\n  func testVerticalLine() {\n    let input = [\" \", \"*\", \" \", \"*\", \" \"]\n    let output = [\"1\", \"*\", \"2\", \"*\", \"1\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"vertical line, flowers at edges\", .enabled(if: RUNALL))\n  func testVerticalLineFlowersAtEdges() {\n    let input = [\"*\", \" \", \" \", \" \", \"*\"]\n    let output = [\"*\", \"1\", \" \", \"1\", \"*\"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"cross\", .enabled(if: RUNALL))\n  func testCross() {\n    let input = [\"  *  \", \"  *  \", \"*****\", \"  *  \", \"  *  \"]\n    let output = [\" 2*2 \", \"25*52\", \"*****\", \"25*52\", \" 2*2 \"]\n    #expect(Board(input).transform() == output)\n  }\n\n  @Test(\"large garden\", .enabled(if: RUNALL))\n  func testLargeGarden() {\n    let input = [\" *  * \", \"  *   \", \"    * \", \"   * *\", \" *  * \", \"      \"]\n    let output = [\"1*22*1\", \"12*322\", \" 123*2\", \"112*4*\", \"1*22*2\", \"111111\"]\n    #expect(Board(input).transform() == output)\n  }\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [],
+  "contributors": [
+    "bhargavg",
+    "BNAndras",
+    "harquail",
+    "lyuha",
+    "masters3d",
+    "robtimp",
+    "ThomasHaz",
+    "meatball133"
+  ]
+}

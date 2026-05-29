@@ -35,7 +35,11 @@ export function useActivityFeed(username?: string, pageSize: number = 10) {
     });
   }, [data?.pages]);
 
+<<<<<<< HEAD
   const latestPagination = data?.pages[data.pages.length - 1]?.pagination;
+=======
+  const latestPagination = data?.pages?.at(-1)?.pagination;
+>>>>>>> prod-deploy
 
   return {
     activities,

@@ -3,12 +3,31 @@ import type { ProblemTest, TestCase } from "../../types/problems/problem.types";
 
 const TestCaseSchema = new mongoose.Schema(
   {
+<<<<<<< HEAD
     input: { type: String, required: true },
     expected_output: { type: String, required: true },
+=======
+    input: { type: mongoose.Schema.Types.Mixed, required: true },
+    expected_output: { type: mongoose.Schema.Types.Mixed, required: true },
+>>>>>>> prod-deploy
     timeout_ms: { type: Number },
     memory_limit_mb: { type: Number },
     weight: { type: Number, default: 1 },
     is_sample: { type: Boolean, default: false },
+<<<<<<< HEAD
+=======
+    determinism_check: {
+      type: String,
+      enum: ["unique", "multi_valid"],
+      default: undefined,
+    },
+    comparator_mode: {
+      type: String,
+      enum: ["strict", "problem_specific"],
+      default: undefined,
+    },
+    comparator_notes: { type: String, default: undefined },
+>>>>>>> prod-deploy
   },
   { _id: false },
 );

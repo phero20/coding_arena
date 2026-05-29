@@ -1,0 +1,44 @@
+{
+  "id": "python:knapsack",
+  "trackSlug": "python",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "b0301d0b-d97a-4043-bd82-ba1edf8c1b16",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "itertools",
+    "list-comprehensions"
+  ],
+  "prerequisites": [
+    "basics",
+    "bools",
+    "conditionals",
+    "dicts",
+    "list-methods",
+    "lists",
+    "loops",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "def maximum_value(maximum_weight, items):\n    pass\n",
+  "example_solution": "def maximum_value(maximum_weight, items):\n    totals = [[0 for _ in range(len(items) + 1)]\n              for _ in range(maximum_weight + 1)]\n\n    for weight in range(1, maximum_weight + 1):\n        for index, item in enumerate(items, 1):\n            if item['weight'] <= weight:\n                value = item['value'] + \\\n                        totals[weight - item['weight']][index - 1]\n\n                value_without_item = totals[weight][index - 1]\n                totals[weight][index] = max(value, value_without_item)\n            else:\n                totals[weight][index] = totals[weight][index - 1]\n    return totals[maximum_weight][len(items)]\n",
+  "test_code": "# These tests are auto-generated with test data from:\n# https://github.com/exercism/problem-specifications/tree/main/exercises/knapsack/canonical-data.json\n# File last updated on 2023-12-27\n\nimport unittest\n\nfrom knapsack import (\n    maximum_value,\n)\n\n\nclass KnapsackTest(unittest.TestCase):\n    def test_no_items(self):\n        self.assertEqual(maximum_value(100, []), 0)\n\n    def test_one_item_too_heavy(self):\n        self.assertEqual(maximum_value(10, [{\"weight\": 100, \"value\": 1}]), 0)\n\n    def test_five_items_cannot_be_greedy_by_weight(self):\n        self.assertEqual(\n            maximum_value(\n                10,\n                [\n                    {\"weight\": 2, \"value\": 5},\n                    {\"weight\": 2, \"value\": 5},\n                    {\"weight\": 2, \"value\": 5},\n                    {\"weight\": 2, \"value\": 5},\n                    {\"weight\": 10, \"value\": 21},\n                ],\n            ),\n            21,\n        )\n\n    def test_five_items_cannot_be_greedy_by_value(self):\n        self.assertEqual(\n            maximum_value(\n                10,\n                [\n                    {\"weight\": 2, \"value\": 20},\n                    {\"weight\": 2, \"value\": 20},\n                    {\"weight\": 2, \"value\": 20},\n                    {\"weight\": 2, \"value\": 20},\n                    {\"weight\": 10, \"value\": 50},\n                ],\n            ),\n            80,\n        )\n\n    def test_example_knapsack(self):\n        self.assertEqual(\n            maximum_value(\n                10,\n                [\n                    {\"weight\": 5, \"value\": 10},\n                    {\"weight\": 4, \"value\": 40},\n                    {\"weight\": 6, \"value\": 30},\n                    {\"weight\": 4, \"value\": 50},\n                ],\n            ),\n            90,\n        )\n\n    def test_8_items(self):\n        self.assertEqual(\n            maximum_value(\n                104,\n                [\n                    {\"weight\": 25, \"value\": 350},\n                    {\"weight\": 35, \"value\": 400},\n                    {\"weight\": 45, \"value\": 450},\n                    {\"weight\": 5, \"value\": 20},\n                    {\"weight\": 25, \"value\": 70},\n                    {\"weight\": 3, \"value\": 8},\n                    {\"weight\": 2, \"value\": 5},\n                    {\"weight\": 2, \"value\": 5},\n                ],\n            ),\n            900,\n        )\n\n    def test_15_items(self):\n        self.assertEqual(\n            maximum_value(\n                750,\n                [\n                    {\"weight\": 70, \"value\": 135},\n                    {\"weight\": 73, \"value\": 139},\n                    {\"weight\": 77, \"value\": 149},\n                    {\"weight\": 80, \"value\": 150},\n                    {\"weight\": 82, \"value\": 156},\n                    {\"weight\": 87, \"value\": 163},\n                    {\"weight\": 90, \"value\": 173},\n                    {\"weight\": 94, \"value\": 184},\n                    {\"weight\": 98, \"value\": 192},\n                    {\"weight\": 106, \"value\": 201},\n                    {\"weight\": 110, \"value\": 210},\n                    {\"weight\": 113, \"value\": 214},\n                    {\"weight\": 115, \"value\": 221},\n                    {\"weight\": 118, \"value\": 229},\n                    {\"weight\": 120, \"value\": 240},\n                ],\n            ),\n            1458,\n        )\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "omer-g"
+  ],
+  "contributors": [
+    "BethanyG",
+    "cmccandless",
+    "Dog",
+    "kylecjo",
+    "yawpitch"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "reasonml:rna-transcription",
+  "trackSlug": "reasonml",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "9690c216-d999-4b44-b73c-b7a8d776cf5d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "type dna =\n  | A\n  | C\n  | G\n  | T;\n\ntype rna =\n  | A\n  | C\n  | G\n  | U;\n\nlet toRna = (_) => {\n  failwith(\"TODO: implement toRna function\");\n};",
+  "example_solution": "type dna =\n  | A\n  | C\n  | G\n  | T;\n\ntype rna =\n  | A\n  | C\n  | G\n  | U;\n\nlet convertOne = (d: dna) =>\n  switch (d) {\n  | A => U\n  | C => G\n  | G => C\n  | T => A\n  };\n\nlet toRna = (ds: list(dna)) => List.map(convertOne, ds);\n",
+  "test_code": "open Jest;\nopen Expect;\nopen RnaTranscription;\n\ndescribe(\"Rna-transcription\", () => {\n  test(\"transcribes empty list\", () =>\n    expect(RnaTranscription.toRna([])) |> toEqual([])\n  );\n  test(\"transcribes cytidine\", () =>\n    expect(RnaTranscription.toRna([C])) |> toEqual([G])\n  );\n  test(\"transcribes guanosine\", () =>\n    expect(RnaTranscription.toRna([G])) |> toEqual([C])\n  );\n  test(\"transcribes adenosie\", () =>\n    expect(RnaTranscription.toRna([A])) |> toEqual([U])\n  );\n  test(\"transcribes thymidine\", () =>\n    expect(RnaTranscription.toRna([T])) |> toEqual([A])\n  );\n  test(\"transcribes multiple\", () =>\n    expect(RnaTranscription.toRna([A, C, G, T, G, G, T, C, T, T, A, A])) |> toEqual([U, G, C, A, C, C, A, G, A, A, U, U])\n  );\n})",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "naartjie",
+    "ohana54",
+    "tejasbubane"
+  ]
+}

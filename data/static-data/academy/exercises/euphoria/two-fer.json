@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:two-fer",
+  "trackSlug": "euphoria",
+  "slug": "two-fer",
+  "name": "Two-Fer",
+  "uuid": "86818461-e063-4009-95f2-d6d650be2118",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "--public function two_fer(sequence name)\n",
+  "example_solution": "public function two_fer(sequence name = \"you\")\n    return \"One for \" & name & \", one for me.\"\nend function",
+  "test_code": "include std/unittest.e\n\ninclude two-fer.ex\n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"no name given\", \"One for you, one for me.\", two_fer())\ntest_equal(\"a name given\", \"One for Alice, one for me.\", two_fer(\"Alice\"))\ntest_equal(\"another name given\", \"One for Bob, one for me.\", two_fer(\"Bob\"))\n\ntest_report()",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "axtens"
+  ],
+  "contributors": null
+}

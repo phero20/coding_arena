@@ -1,0 +1,26 @@
+{
+  "id": "vlang:rectangles",
+  "trackSlug": "vlang",
+  "slug": "rectangles",
+  "name": "Rectangles",
+  "uuid": "7f78f9da-93cf-4934-a50f-c93f6bf5a0cd",
+  "type": "practice",
+  "status": null,
+  "blurb": "Count the rectangles in an ASCII diagram.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCount the rectangles in an ASCII diagram like the one below.\n\n```text\n   +--+\n  ++  |\n+-++--+\n|  |  |\n+--+--+\n```\n\nThe above diagram contains these 6 rectangles:\n\n```text\n\n\n+-----+\n|     |\n+-----+\n```\n\n```text\n   +--+\n   |  |\n   |  |\n   |  |\n   +--+\n```\n\n```text\n   +--+\n   |  |\n   +--+\n\n\n```\n\n```text\n\n\n   +--+\n   |  |\n   +--+\n```\n\n```text\n\n\n+--+\n|  |\n+--+\n```\n\n```text\n\n  ++\n  ++\n\n\n```\n\nYou may assume that the input is always a proper rectangle (i.e. the length of every line equals the length of the first line).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "module main\n\nfn rectangles(strings []string) int {\n}\n",
+  "example_solution": "module main\n\nfn rectangles(strings []string) int {\n\tis_corner := fn [strings] (row int, col int) bool {\n\t\treturn strings[row][col] == u8(`+`)\n\t}\n\n\tis_horizontal := fn [strings] (row int, col int) bool {\n\t\treturn strings[row][col] == u8(`-`) || strings[row][col] == u8(`+`)\n\t}\n\n\tis_vertical := fn [strings] (row int, col int) bool {\n\t\treturn strings[row][col] == u8(`|`) || strings[row][col] == u8(`+`)\n\t}\n\n\tmut result := 0\n\tfor top in 0 .. (strings.len) {\n\t\tfor left in 0 .. (strings[0].len) {\n\t\t\tif !is_corner(top, left) {\n\t\t\t\tcontinue\n\t\t\t}\n\n\t\t\tfor bottom in (top + 1) .. (strings.len) {\n\t\t\t\tif !is_vertical(bottom, left) {\n\t\t\t\t\tbreak\n\t\t\t\t}\n\t\t\t\tif !is_corner(bottom, left) {\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\n\t\t\t\tfor right in (left + 1) .. (strings[0].len) {\n\t\t\t\t\tif !is_horizontal(top, right) || !is_horizontal(bottom, right) {\n\t\t\t\t\t\tbreak\n\t\t\t\t\t}\n\t\t\t\t\tif !is_corner(top, right) || !is_corner(bottom, right) {\n\t\t\t\t\t\tcontinue\n\t\t\t\t\t}\n\n\t\t\t\t\tmut valid := true\n\t\t\t\t\tfor row in (top + 1) .. bottom {\n\t\t\t\t\t\tif !is_vertical(row, right) {\n\t\t\t\t\t\t\tvalid = false\n\t\t\t\t\t\t\tbreak\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif valid {\n\t\t\t\t\t\tresult++\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn result\n}\n",
+  "test_code": "module main\n\nfn test_no_rows() {\n\tstrings := []string{}\n\tassert rectangles(strings) == 0\n}\n\nfn test_no_columns() {\n\tstrings := [\n\t\t'',\n\t]\n\tassert rectangles(strings) == 0\n}\n\nfn test_no_rectangles() {\n\tstrings := [\n\t\t' ',\n\t]\n\tassert rectangles(strings) == 0\n}\n\nfn test_one_rectangle() {\n\tstrings := [\n\t\t'+-+',\n\t\t'| |',\n\t\t'+-+',\n\t]\n\tassert rectangles(strings) == 1\n}\n\nfn test_two_rectangles_without_shared_parts() {\n\tstrings := [\n\t\t'  +-+',\n\t\t'  | |',\n\t\t'+-+-+',\n\t\t'| |  ',\n\t\t'+-+  ',\n\t]\n\tassert rectangles(strings) == 2\n}\n\nfn test_five_rectangles_with_shared_parts() {\n\tstrings := [\n\t\t'  +-+',\n\t\t'  | |',\n\t\t'+-+-+',\n\t\t'| | |',\n\t\t'+-+-+',\n\t]\n\tassert rectangles(strings) == 5\n}\n\nfn test_rectangle_of_height_1_is_counted() {\n\tstrings := [\n\t\t'+--+',\n\t\t'+--+',\n\t]\n\tassert rectangles(strings) == 1\n}\n\nfn test_rectangle_of_width_1_is_counted() {\n\tstrings := [\n\t\t'++',\n\t\t'||',\n\t\t'++',\n\t]\n\tassert rectangles(strings) == 1\n}\n\nfn test_1x1_square_is_counted() {\n\tstrings := [\n\t\t'++',\n\t\t'++',\n\t]\n\tassert rectangles(strings) == 1\n}\n\nfn test_only_complete_rectangles_are_counted() {\n\tstrings := [\n\t\t'  +-+',\n\t\t'    |',\n\t\t'+-+-+',\n\t\t'| | -',\n\t\t'+-+-+',\n\t]\n\tassert rectangles(strings) == 1\n}\n\nfn test_rectangles_can_be_of_different_sizes() {\n\tstrings := [\n\t\t'+------+----+',\n\t\t'|      |    |',\n\t\t'+---+--+    |',\n\t\t'|   |       |',\n\t\t'+---+-------+',\n\t]\n\tassert rectangles(strings) == 3\n}\n\nfn test_corner_is_required_for_a_rectangle_to_be_complete() {\n\tstrings := [\n\t\t'+------+----+',\n\t\t'|      |    |',\n\t\t'+------+    |',\n\t\t'|   |       |',\n\t\t'+---+-------+',\n\t]\n\tassert rectangles(strings) == 2\n}\n\nfn test_large_input_with_many_rectangles() {\n\tstrings := [\n\t\t'+---+--+----+',\n\t\t'|   +--+----+',\n\t\t'+---+--+    |',\n\t\t'|   +--+----+',\n\t\t'+---+--+--+-+',\n\t\t'+---+--+--+-+',\n\t\t'+------+  | |',\n\t\t'          +-+',\n\t]\n\tassert rectangles(strings) == 60\n}\n\nfn test_rectangles_must_have_four_sides() {\n\tstrings := [\n\t\t'+-+ +-+',\n\t\t'| | | |',\n\t\t'+-+-+-+',\n\t\t'  | |  ',\n\t\t'+-+-+-+',\n\t\t'| | | |',\n\t\t'+-+ +-+',\n\t]\n\tassert rectangles(strings) == 5\n}\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "keiravillekode"
+  ],
+  "contributors": null
+}

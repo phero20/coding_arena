@@ -1,0 +1,28 @@
+{
+  "id": "lua:octal",
+  "trackSlug": "lua",
+  "slug": "octal",
+  "name": "Octal",
+  "uuid": "f0ba9767-b0e5-4a80-9980-e135526b6f3f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert an octal number, represented as a string (e.g. '1735263'), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nImplement octal to decimal conversion.\nGiven an octal input string, your program should produce a decimal output.\n\n## Note\n\n- Implement the conversion yourself.\n  Do not use something else to perform the conversion for you.\n- Treat invalid input as octal 0.\n\n## About Octal (Base-8)\n\nDecimal is a base-10 system.\n\nA number 233 in base 10 notation can be understood\nas a linear combination of powers of 10:\n\n- The rightmost digit gets multiplied by 10^0 = 1\n- The next number gets multiplied by 10^1 = 10\n- ...\n- The nth number gets multiplied by 10^_(n-1)_.\n- All these values are summed.\n\nSo:\n\n```text\n   233 # decimal\n = 2*10^2 + 3*10^1 + 3*10^0\n = 2*100  + 3*10   + 3*1\n```\n\nOctal is similar, but uses powers of 8 rather than powers of 10.\n\nSo:\n\n```text\n   233 # octal\n = 2*8^2 + 3*8^1 + 3*8^0\n = 2*64  + 3*8   + 3*1\n = 128   + 24    + 3\n = 155\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "return function(s)\n  return {\n    to_decimal = function()\n    end\n  }\nend\n",
+  "example_solution": "local function to_decimal(s)\n  local decimal = 0\n  for i = #s, 1, -1 do\n    local digit = tonumber(s:sub(i, i))\n    if not digit or digit >= 8 then\n      return 0\n    end\n    decimal = decimal + digit * 8 ^ (#s - i)\n  end\n  return decimal\nend\n\nreturn function(s)\n  return {\n    to_decimal = function()\n      return to_decimal(s)\n    end\n  }\nend\n",
+  "test_code": "local Octal = require('./octal')\n\ndescribe('octal', function()\n  it('should convert 1 to decimal 1', function()\n    assert.equal(1, Octal('1').to_decimal())\n  end)\n\n  it('should convert 10 to decimal 8', function()\n    assert.equal(8, Octal('10').to_decimal())\n  end)\n\n  it('should convert 17 to decimal 15', function()\n    assert.equal(15, Octal('17').to_decimal())\n  end)\n\n  it('should convert 11 to decimal 9', function()\n    assert.equal(9, Octal('11').to_decimal())\n  end)\n\n  it('should convert 130 to decimal 88', function()\n    assert.equal(88, Octal('130').to_decimal())\n  end)\n\n  it('should convert 2047 to decimal 1063', function()\n    assert.equal(1063, Octal('2047').to_decimal())\n  end)\n\n  it('should convert 7777 to decimal 4095', function()\n    assert.equal(4095, Octal('7777').to_decimal())\n  end)\n\n  it('should convert 1234567 to decimal 342391', function()\n    assert.equal(342391, Octal('1234567').to_decimal())\n  end)\n\n  it('should return 0 when the octal string contains invalid characters', function()\n    assert.equal(0, Octal('carrot').to_decimal())\n    assert.equal(0, Octal('123z456').to_decimal())\n  end)\n\n  it('should return 0 when the octal string contains invalid digits', function()\n    assert.equal(0, Octal('8').to_decimal())\n    assert.equal(0, Octal('9').to_decimal())\n  end)\nend)\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "ryanplusplus"
+  ],
+  "contributors": [
+    "aarti"
+  ]
+}

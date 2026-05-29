@@ -1,0 +1,26 @@
+{
+  "id": "red:pangram",
+  "trackSlug": "red",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "125d167d-952f-44cf-ad56-aa81924efa7b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Pangram\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nis-pangram: function [\n\tsentence\n] [\n\tcause-error 'user 'message \"You need to implement is-pangram function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Pangram\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nis-pangram: function [\n\tsentence\n] [\n\tforeach letter \"abcdefghijklmnopqrstuvwxyz\" [\n\t\tif not find sentence letter [\n\t\t\treturn false\n\t\t]\n\t]\n\n\ttrue\n]\n\n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Pangram\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %pangram.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"empty sentence\"\n    input: #[\n        sentence: \"\"\n    ]\n    expected: false\n    function: \"is-pangram\"\n    uuid: \"64f61791-508e-4f5c-83ab-05de042b0149\"\n] #[\n    description: \"perfect lower case\"\n    input: #[\n        sentence: \"abcdefghijklmnopqrstuvwxyz\"\n    ]\n    expected: true\n    function: \"is-pangram\"\n    uuid: \"74858f80-4a4d-478b-8a5e-c6477e4e4e84\"\n] #[\n    description: \"only lower case\"\n    input: #[\n        sentence: \"the quick brown fox jumps over the lazy dog\"\n    ]\n    expected: true\n    function: \"is-pangram\"\n    uuid: \"61288860-35ca-4abe-ba08-f5df76ecbdcd\"\n] #[\n    description: \"missing the letter 'x'\"\n    input: #[\n        sentence: {a quick movement of the enemy will jeopardize five gunboats}\n    ]\n    expected: false\n    function: \"is-pangram\"\n    uuid: \"6564267d-8ac5-4d29-baf2-e7d2e304a743\"\n] #[\n    description: \"missing the letter 'h'\"\n    input: #[\n        sentence: \"five boxing wizards jump quickly at it\"\n    ]\n    expected: false\n    function: \"is-pangram\"\n    uuid: \"c79af1be-d715-4cdb-a5f2-b2fa3e7e0de0\"\n] #[\n    description: \"with underscores\"\n    input: #[\n        sentence: \"the_quick_brown_fox_jumps_over_the_lazy_dog\"\n    ]\n    expected: true\n    function: \"is-pangram\"\n    uuid: \"d835ec38-bc8f-48e4-9e36-eb232427b1df\"\n] #[\n    description: \"with numbers\"\n    input: #[\n        sentence: \"the 1 quick brown fox jumps over the 2 lazy dogs\"\n    ]\n    expected: true\n    function: \"is-pangram\"\n    uuid: \"8cc1e080-a178-4494-b4b3-06982c9be2a8\"\n] #[\n    description: \"missing letters replaced by numbers\"\n    input: #[\n        sentence: \"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"\n    ]\n    expected: false\n    function: \"is-pangram\"\n    uuid: \"bed96b1c-ff95-45b8-9731-fdbdcb6ede9a\"\n] #[\n    description: \"mixed case and punctuation\"\n    input: #[\n        sentence: {\"Five quacking Zephyrs jolt my wax bed.\"}\n    ]\n    expected: true\n    function: \"is-pangram\"\n    uuid: \"938bd5d8-ade5-40e2-a2d9-55a338a01030\"\n] #[\n    description: {a-m and A-M are 26 different characters but not a pangram}\n    input: #[\n        sentence: \"abcdefghijklm ABCDEFGHIJKLM\"\n    ]\n    expected: false\n    function: \"is-pangram\"\n    uuid: \"7138e389-83e4-4c6e-8413-1e40a0076951\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

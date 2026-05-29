@@ -1,0 +1,33 @@
+{
+  "id": "swift:matching-brackets",
+  "trackSlug": "swift",
+  "slug": "matching-brackets",
+  "name": "Matching Brackets",
+  "uuid": "b3924cce-02f7-4962-85a5-e67d8b1ac1fa",
+  "type": "practice",
+  "status": null,
+  "blurb": "Make sure the brackets and braces all match.",
+  "difficulty": 7,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a string containing brackets `[]`, braces `{}`, parentheses `()`, or any combination thereof, verify that any and all pairs are matched and nested correctly.\nAny other characters should be ignored.\nFor example, `\"{what is (42)}?\"` is balanced and `\"[text}\"` is not.\n",
+  "introduction": "# Introduction\n\nYou're given the opportunity to write software for the Bracketeer™, an ancient but powerful mainframe.\nThe software that runs on it is written in a proprietary language.\nMuch of its syntax is familiar, but you notice _lots_ of brackets, braces and parentheses.\nDespite the Bracketeer™ being powerful, it lacks flexibility.\nIf the source code has any unbalanced brackets, braces or parentheses, the Bracketeer™ crashes and must be rebooted.\nTo avoid such a scenario, you start writing code that can verify that brackets, braces, and parentheses are balanced before attempting to run it on the Bracketeer™.\n",
+  "hints": null,
+  "starter_code": "class MatchingBrackets {\n  static func paired(text: String) -> Bool {\n    // Write your code for the 'MatchingBrackets' exercise in this file.\n  }\n}\n",
+  "example_solution": "struct MatchingBrackets {\n\n  private static let brackets: [Character: Character] = [\n    \")\": \"(\",\n    \"]\": \"[\",\n    \"}\": \"{\",\n  ]\n\n  static func paired(text: String) -> Bool {\n    var stack = [Character]()\n\n    for character in text {\n      if brackets.values.contains(character) {\n        stack.append(character)\n      } else if brackets.keys.contains(character) {\n        guard let last = stack.popLast(),\n          last == brackets[character]\n        else {\n          return false\n        }\n      }\n    }\n\n    return stack.isEmpty\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import MatchingBrackets\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct MatchingBracketsTests {\n\n  @Test(\"paired square brackets\")\n  func testPairedSquareBrackets() {\n    #expect(MatchingBrackets.paired(text: \"[]\"))\n  }\n\n  @Test(\"empty string\", .enabled(if: RUNALL))\n  func testEmptyString() {\n    #expect(MatchingBrackets.paired(text: \"\"))\n  }\n\n  @Test(\"unpaired brackets\", .enabled(if: RUNALL))\n  func testUnpairedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"[[\"))\n  }\n\n  @Test(\"wrong ordered brackets\", .enabled(if: RUNALL))\n  func testWrongOrderedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"}{\"))\n  }\n\n  @Test(\"wrong closing bracket\", .enabled(if: RUNALL))\n  func testWrongClosingBracket() {\n    #expect(!MatchingBrackets.paired(text: \"{]\"))\n  }\n\n  @Test(\"paired with whitespace\", .enabled(if: RUNALL))\n  func testPairedWithWhitespace() {\n    #expect(MatchingBrackets.paired(text: \"{ }\"))\n  }\n\n  @Test(\"partially paired brackets\", .enabled(if: RUNALL))\n  func testPartiallyPairedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"{[])\"))\n  }\n\n  @Test(\"simple nested brackets\", .enabled(if: RUNALL))\n  func testSimpleNestedBrackets() {\n    #expect(MatchingBrackets.paired(text: \"{[]}\"))\n  }\n\n  @Test(\"several paired brackets\", .enabled(if: RUNALL))\n  func testSeveralPairedBrackets() {\n    #expect(MatchingBrackets.paired(text: \"{}[]\"))\n  }\n\n  @Test(\"paired and nested brackets\", .enabled(if: RUNALL))\n  func testPairedAndNestedBrackets() {\n    #expect(MatchingBrackets.paired(text: \"([{}({}[])])\"))\n  }\n\n  @Test(\"unopened closing brackets\", .enabled(if: RUNALL))\n  func testUnopenedClosingBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"{[)][]}\"))\n  }\n\n  @Test(\"unpaired and nested brackets\", .enabled(if: RUNALL))\n  func testUnpairedAndNestedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"([{])\"))\n  }\n\n  @Test(\"paired and wrong nested brackets\", .enabled(if: RUNALL))\n  func testPairedAndWrongNestedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"[({]})\"))\n  }\n\n  @Test(\"paired and wrong nested brackets but innermost are correct\", .enabled(if: RUNALL))\n  func testPairedAndWrongNestedBracketsButInnermostAreCorrect() {\n    #expect(!MatchingBrackets.paired(text: \"[({}])\"))\n  }\n\n  @Test(\"paired and incomplete brackets\", .enabled(if: RUNALL))\n  func testPairedAndIncompleteBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"{}[\"))\n  }\n\n  @Test(\"too many closing brackets\", .enabled(if: RUNALL))\n  func testTooManyClosingBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"[]]\"))\n  }\n\n  @Test(\"early unexpected brackets\", .enabled(if: RUNALL))\n  func testEarlyUnexpectedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \")()\"))\n  }\n\n  @Test(\"early mismatched brackets\", .enabled(if: RUNALL))\n  func testEarlyMismatchedBrackets() {\n    #expect(!MatchingBrackets.paired(text: \"{)()\"))\n  }\n\n  @Test(\"math expression\", .enabled(if: RUNALL))\n  func testMathExpression() {\n    #expect(MatchingBrackets.paired(text: \"(((185 + 223.85) * 15) - 543)/2\"))\n  }\n\n  @Test(\"complex latex expression\", .enabled(if: RUNALL))\n  func testComplexLatexExpression() {\n    #expect(\n      MatchingBrackets.paired(\n        text:\n          \"\\\\left(\\\\begin{array}{cc} \\\\frac{1}{3} & x\\\\\\\\ \\\\mathrm{e}^{x} &... x^2 \\\\end{array}\\\\right)\"\n      ))\n  }\n}\n",
+  "source": "Ginna Baker",
+  "source_url": null,
+  "authors": [
+    "robtimp"
+  ],
+  "contributors": [
+    "thomchop",
+    "bhargavg",
+    "harquail",
+    "lyuha",
+    "masters3d",
+    "ThomasHaz"
+  ]
+}

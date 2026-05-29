@@ -1,0 +1,36 @@
+{
+  "id": "racket:meetup",
+  "trackSlug": "racket",
+  "slug": "meetup",
+  "name": "Meetup",
+  "uuid": "72ac5f36-ec1b-465e-b359-1cc49efc262d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the date of meetups.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "conditionals",
+    "dates",
+    "parsing",
+    "pattern-recognition",
+    "strings"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to find the exact date of a meetup, given a month, year, weekday and week.\n\nThere are six week values to consider: `first`, `second`, `third`, `fourth`, `last`, `teenth`.\n\nFor example, you might be asked to find the date for the meetup on the first Monday in January 2018 (January 1, 2018).\n\nSimilarly, you might be asked to find:\n\n- the third Tuesday of August 2019 (August 20, 2019)\n- the teenth Wednesday of May 2020 (May 13, 2020)\n- the fourth Sunday of July 2021 (July 25, 2021)\n- the last Thursday of November 2022 (November 24, 2022)\n- the teenth Saturday of August 1953 (August 15, 1953)\n\n## Teenth\n\nThe teenth week refers to the seven days in a month that end in '-teenth' (13th, 14th, 15th, 16th, 17th, 18th and 19th).\n\nIf asked to find the teenth Saturday of August, 1953, we check its calendar:\n\n```plaintext\n    August 1953\nSu Mo Tu We Th Fr Sa\n                   1\n 2  3  4  5  6  7  8\n 9 10 11 12 13 14 15\n16 17 18 19 20 21 22\n23 24 25 26 27 28 29\n30 31\n```\n\nFrom this we find that the teenth Saturday is August 15, 1953.\n",
+  "introduction": "# Introduction\n\nEvery month, your partner meets up with their best friend.\nBoth of them have very busy schedules, making it challenging to find a suitable date!\nGiven your own busy schedule, your partner always double-checks potential meetup dates with you:\n\n- \"Can I meet up on the first Friday of next month?\"\n- \"What about the third Wednesday?\"\n- \"Maybe the last Sunday?\"\n\nIn this month's call, your partner asked you this question:\n\n- \"I'd like to meet up on the teenth Thursday; is that okay?\"\n\nConfused, you ask what a \"teenth\" day is.\nYour partner explains that a teenth day, a concept they made up, refers to the days in a month that end in '-teenth':\n\n- 13th (thirteenth)\n- 14th (fourteenth)\n- 15th (fifteenth)\n- 16th (sixteenth)\n- 17th (seventeenth)\n- 18th (eighteenth)\n- 19th (nineteenth)\n\nAs there are also seven weekdays, it is guaranteed that each day of the week has _exactly one_ teenth day each month.\n\nNow that you understand the concept of a teenth day, you check your calendar.\nYou don't have anything planned on the teenth Thursday, so you happily confirm the date with your partner.\n",
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide meetup-day)\n\n(define (meetup-day year month weekday week-of-month)\n  (error \"Please implement 'meetup-day'\"))\n",
+  "example_solution": "#lang racket\n\n(require racket/date)\n\n(define (leap-year? year)\n  (or (and (zero? (modulo year 4))\n           (not (zero? (modulo year 100))))\n      (zero? (modulo year 400))))\n\n(define (days-in-month year month)\n  (case month\n    [(1 3 5 7 8 10 12) 31]\n    [(4 6 9 11) 30]\n    [(2) (if (leap-year? year) 29 28)]))\n\n(define (make-date year month day)\n  (seconds->date (find-seconds 0 0 0 day month year #f) #f))\n\n(define (meetup-day year month weekday week)\n  (let ([first-of-week\n          (case week\n            [(first) 1]\n            [(second) 8]\n            [(teenth) 13]\n            [(third) 15]\n            [(fourth) 22]\n            [(last) (- (days-in-month year month) 6)]\n            [else (raise-argument-error 'meetup-day \"week\" 3 year month weekday week)])]\n        [weekday\n          (case weekday\n            [(Sunday) 0]\n            [(Monday) 1]\n            [(Tuesday) 2]\n            [(Wednesday) 3]\n            [(Thursday) 4]\n            [(Friday) 5]\n            [(Saturday) 6]\n            [else (raise-argument-error 'meetup-day \"weekday\" 3 year month weekday week)])])\n    (make-date year month\n               (+ first-of-week\n                    (modulo\n                      (- weekday\n                       (date-week-day (make-date year month first-of-week))) 7)))))\n\n(provide meetup-day)\n",
+  "test_code": "#lang racket\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n  (require racket/date)\n  (require \"meetup.rkt\")\n\n  (define (make-date year month day)\n    (seconds->date (find-seconds 0 0 0 day month year #f) #f))\n\n  (define suite\n    (test-suite\n     \"Tests for the meetup exercise\"\n\n     (check-equal? (meetup-day 2013 5 'Monday 'teenth)\n                   (make-date 2013 5 13))\n\n     (check-equal? (meetup-day 2013 2 'Saturday 'teenth)\n                   (make-date 2013 2 16))\n\n     (check-equal? (meetup-day 2013 5 'Tuesday 'first)\n                   (make-date 2013 5 7))\n\n     (check-equal? (meetup-day 2013 4 'Monday 'second)\n                   (make-date 2013 4 8))\n\n     (check-equal? (meetup-day 2013 9 'Thursday 'third)\n                   (make-date 2013 9 19))\n\n     (check-equal? (meetup-day 2013 3 'Sunday 'fourth)\n                   (make-date 2013 3 24))\n\n     (check-equal? (meetup-day 2013 10 'Thursday 'last)\n                   (make-date 2013 10 31))\n\n     (check-equal? (meetup-day 2012 2 'Wednesday 'last)\n                   (make-date 2012 2 29))))\n\n  (run-tests suite))\n",
+  "source": "Jeremy Hinegardner mentioned a Boulder meetup that happens on the Wednesteenth of every month",
+  "source_url": null,
+  "authors": [
+    "mbertheau"
+  ],
+  "contributors": [
+    "arguello",
+    "jgilray",
+    "yurrriq"
+  ]
+}

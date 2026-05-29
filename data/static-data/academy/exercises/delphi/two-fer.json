@@ -1,0 +1,28 @@
+{
+  "id": "delphi:two-fer",
+  "trackSlug": "delphi",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "60eb0882-495d-45f4-8d38-5b10d8851cf6",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "unit utwofer;\n\ninterface\n\n  function twoFer(aName: string='you'): string;\n\nimplementation\n\nfunction twoFer(aName: string='you'): string;\nbegin\n  result := 'One for ' + aName + ', one for me.';\nend;\n\nend.\n",
+  "test_code": "(******************************************************************************\n You got an error, which is exactly as it should be.\n This is the first step in the Test-Driven Development\n (TDD) process.\n\n The most important part of the error is\n\n   \"cannot compile\"\n\n It's looking for a file named utwo-fer.pas that doesn't exist.\n\n To fix the error, create a unit file named utwo-fer.pas\n in the same directory as the file utwo-ferTest.pas.\n\n The beginning of the new unit file should contain a unit statement:\n\n unit utwofer;\n\n The new unit should contain Interface, Implementation, and End. statements.\n\n Hint: Delphi will take care of all this if you instruct it to add a new unit\n to your project.  Be sure to save the new unit as utwo-fer.pas before\n trying to compile again.\n\n For more guidance as you work on this exercise, see\n GETTING_STARTED.md.\n******************************************************************************)\nunit utwoferTests;\n\ninterface\nuses\n  DUnitX.TestFramework;\n  \nconst\n  CanonicalVersion = '1.2.0.1';\n\ntype\n  [TestFixture]\n  twoferTest = class(TObject)\n  public\n    [Test]\n//    [Ignore('Comment the \"[Ignore]\" statement to run the test')]\n    procedure No_name_given;\n\n    [Test]\n    [Ignore]\n    procedure A_name_given;\n\n    [Test]\n    [Ignore]\n    procedure Another_name_given;\n  end;\n\nimplementation\nuses utwofer;\n\nprocedure twoferTest.No_name_given;\nbegin\n  Assert.AreEqual('One for you, one for me.', twoFer);\nend;\n\nprocedure twoferTest.A_name_given;\nbegin\n  Assert.AreEqual('One for Alice, one for me.', twoFer('Alice'));\nend;\n\nprocedure twoferTest.Another_name_given;\nbegin\n  Assert.AreEqual('One for Bob, one for me.', twoFer('Bob'));\nend;\n\ninitialization\n  TDUnitX.RegisterTestFixture(twoferTest);\nend.\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "rpottsoh"
+  ],
+  "contributors": [
+    "kotp"
+  ]
+}

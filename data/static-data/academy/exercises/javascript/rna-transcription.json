@@ -1,0 +1,41 @@
+{
+  "id": "javascript:rna-transcription",
+  "trackSlug": "javascript",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "342974d6-9083-4754-a6c5-ed1e19e40ec5",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "strings",
+    "array-transformations",
+    "objects"
+  ],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "//\n// This is only a SKELETON file for the 'RNA Transcription' exercise. It's been provided as a\n// convenience to get you started writing code faster.\n//\n\nexport const toRna = () => {\n  throw new Error('Remove this line and implement the function');\n};\n",
+  "example_solution": "const DNA_TO_RNA = {\n  G: 'C',\n  C: 'G',\n  T: 'A',\n  A: 'U',\n};\n\nexport const toRna = (dna) =>\n  dna.replace(/./g, (nucleotide) => DNA_TO_RNA[nucleotide]);\n",
+  "test_code": "import { describe, expect, test, xtest } from '@jest/globals';\nimport { toRna } from './rna-transcription';\n\ndescribe('Transcription', () => {\n  test('empty rna sequence', () => {\n    expect(toRna('')).toEqual('');\n  });\n\n  xtest('transcribes cytosine to guanine', () => {\n    expect(toRna('C')).toEqual('G');\n  });\n\n  xtest('transcribes guanine to cytosine', () => {\n    expect(toRna('G')).toEqual('C');\n  });\n\n  xtest('transcribes thymine to adenine', () => {\n    expect(toRna('T')).toEqual('A');\n  });\n\n  xtest('transcribes adenine to uracil', () => {\n    expect(toRna('A')).toEqual('U');\n  });\n\n  xtest('transcribes all dna nucleotides to their rna complements', () => {\n    expect(toRna('ACGTGGTCTTAA')).toEqual('UGCACCAGAAUU');\n  });\n});\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "rchavarria"
+  ],
+  "contributors": [
+    "amscotti",
+    "ankorGH",
+    "draalger",
+    "kytrinyx",
+    "matthewmorgan",
+    "ryanplusplus",
+    "SleeplessByte",
+    "tarunvelli",
+    "tejasbubane",
+    "xarxziux"
+  ]
+}

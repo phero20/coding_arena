@@ -1,0 +1,39 @@
+{
+  "id": "go:transpose",
+  "trackSlug": "go",
+  "slug": "transpose",
+  "name": "Transpose",
+  "uuid": "7f19ebbd-b072-45e5-ad67-2fff8ad1c9e2",
+  "type": "practice",
+  "status": null,
+  "blurb": "Take input text and output it transposed.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an input text output it transposed.\n\nRoughly explained, the transpose of a matrix:\n\n```text\nABC\nDEF\n```\n\nis given by:\n\n```text\nAD\nBE\nCF\n```\n\nRows become columns and columns become rows.\nSee [transpose][].\n\nIf the input has rows of different lengths, this is to be solved as follows:\n\n- Pad to the left with spaces.\n- Don't pad to the right.\n\nTherefore, transposing this matrix:\n\n```text\nABC\nDE\n```\n\nresults in:\n\n```text\nAD\nBE\nC\n```\n\nAnd transposing:\n\n```text\nAB\nDEF\n```\n\nresults in:\n\n```text\nAD\nBE\n F\n```\n\nIn general, all characters from the input should also be present in the transposed output.\nThat means that if a column in the input text contains only spaces on its bottom-most row(s), the corresponding output row should contain the spaces in its right-most column(s).\n\n[transpose]: https://en.wikipedia.org/wiki/Transpose\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package transpose\n\nfunc Transpose(input []string) []string {\n\tpanic(\"Please implement the Transpose function\")\n}\n",
+  "example_solution": "package transpose\n\nfunc Transpose(m []string) []string {\n\tmax := maxLen(m)\n\tt := make([]string, max)\n\tfor i, row := range m {\n\t\tfor j, c := range row {\n\t\t\tt[j] += string(c)\n\t\t}\n\t\tremMax := maxLen(m[i:])\n\t\tfor j := len(row); j < remMax; j++ {\n\t\t\tt[j] += \" \"\n\t\t}\n\t}\n\treturn t\n}\n\nfunc maxLen(m []string) (length int) {\n\tfor _, l := range m {\n\t\tif len(l) > length {\n\t\t\tlength = len(l)\n\t\t}\n\t}\n\treturn length\n}\n",
+  "test_code": "package transpose\n\nimport (\n\t\"slices\"\n\t\"testing\"\n)\n\nfunc TestTranspose(t *testing.T) {\n\tfor _, tc := range testCases {\n\t\tt.Run(tc.description, func(t *testing.T) {\n\t\t\tactual := Transpose(tc.input)\n\t\t\tif len(actual) == 0 && len(tc.expected) == 0 {\n\t\t\t\treturn\n\t\t\t}\n\t\t\tif !slices.Equal(actual, tc.expected) {\n\t\t\t\t// let's make the error more specific and find the row it's on\n\t\t\t\tsmallest := min(len(tc.expected), len(actual))\n\t\t\t\tfor i := range smallest {\n\t\t\t\t\tif tc.expected[i] != actual[i] {\n\t\t\t\t\t\tt.Fatalf(\"Transpose(%#v)\\ngot: %#v\\nwant: %#v\\n row:%d\\ngot: %q\\nwant: %q\", tc.input, actual, tc.expected, i, actual[i], tc.expected[i])\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tt.Fatalf(\"Transpose(%#v)\\ngot: %#v\\nwant: %#v\", tc.input, actual, tc.expected)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc BenchmarkTranspose(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range testCases {\n\t\t\tTranspose(test.input)\n\t\t}\n\t}\n}\n",
+  "source": "Reddit r/dailyprogrammer challenge #270 [Easy].",
+  "source_url": "https://web.archive.org/web/20230630051421/https://old.reddit.com/r/dailyprogrammer/comments/4msu2x/challenge_270_easy_transpose_the_input_text/",
+  "authors": [
+    "robphoenix"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "ilmanzo",
+    "leenipper",
+    "sebito91",
+    "strangeman",
+    "tapank",
+    "tleen",
+    "eklatzer"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "euphoria:nth-prime",
+  "trackSlug": "euphoria",
+  "slug": "nth-prime",
+  "name": "Nth Prime",
+  "uuid": "42664f39-c165-4fb5-81e1-5b7bb644b735",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number n, determine what the nth prime is.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number n, determine what the nth prime is.\n\nBy listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.\n\nIf your language provides methods in the standard library to deal with prime numbers, pretend they don't exist and implement them yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "public function prime( integer number )\n\nend function\n",
+  "example_solution": "include std/math.e\n\npublic function prime( integer number )\n  if number = 1 then\n    return 2\n  end if\n\n  atom count = 0\n  atom candidate = 2\n\n  while count < number do\n    if is_prime(candidate) then\n      count += 1\n      if count = number then\n        return candidate\n      end if\n    end if\n    candidate += 1\n  end while\n\n  return count\nend function\n\nfunction is_prime ( integer number )\n  if number <= 1 then\n    return 0\n  end if\n  \n  if number = 2 then\n    return 1\n  end if\n\n  if remainder(number, 2) = 0 then\n    return 0\n  end if\n\n  atom limit = floor(sqrt(number))\n\n  for i = 3 to limit by 2 do\n      if remainder(number, i) = 0 then\n          return 0\n      end if\n  end for\n\n  return 1\nend function\n",
+  "test_code": "include std/unittest.e\n\ninclude nth-prime.ex\n\nset_test_verbosity(TEST_SHOW_ALL)\n\ntest_equal(\"first prime\", 2, prime(1))\ntest_equal(\"second prime\", 3, prime(2))\ntest_equal(\"sixth prime\", 13, prime(6))\ntest_equal(\"big prime\", 104743, prime(10001))\n\ntest_report()",
+  "source": "A variation on Problem 7 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=7",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

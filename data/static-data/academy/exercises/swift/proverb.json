@@ -1,0 +1,31 @@
+{
+  "id": "swift:proverb",
+  "trackSlug": "swift",
+  "slug": "proverb",
+  "name": "Proverb",
+  "uuid": "9604f1ef-4925-4c28-9c59-b986c1a42c7e",
+  "type": "practice",
+  "status": null,
+  "blurb": "For want of a horseshoe nail, a kingdom was lost, or so the saying goes. Output the full text of this proverbial rhyme.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFor want of a horseshoe nail, a kingdom was lost, or so the saying goes.\n\nGiven a list of inputs, generate the relevant proverb.\nFor example, given the list `[\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]`, you will output the full text of this proverbial rhyme:\n\n```text\nFor want of a nail the shoe was lost.\nFor want of a shoe the horse was lost.\nFor want of a horse the rider was lost.\nFor want of a rider the message was lost.\nFor want of a message the battle was lost.\nFor want of a battle the kingdom was lost.\nAnd all for the want of a nail.\n```\n\nNote that the list of inputs may vary; your solution should be able to handle lists of arbitrary length and content.\nNo line of the output text should be a static, unchanging string; all should vary according to the input given.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class Proverb {\n  // Write your solution to the 'Proverb' exercise in this file.\n}\n",
+  "example_solution": "class Proverb {\n  let words: [String]\n\n  init(_ words: [String]) {\n    self.words = words\n  }\n\n  func recite() -> String {\n    var result = \"\"\n    for i in 0..<words.count {\n      if i == words.count - 1 {\n        result += \"And all for the want of a \\(words[0]).\"\n      } else {\n        result += \"For want of a \\(words[i]) the \\(words[i + 1]) was lost.\\n\"\n      }\n    }\n    return result\n  }\n}\n",
+  "test_code": "import Foundation\nimport Testing\n\n@testable import Proverb\n\nlet RUNALL = Bool(ProcessInfo.processInfo.environment[\"RUNALL\", default: \"false\"]) ?? false\n\n@Suite struct ProverbTests {\n\n  @Test(\"zero pieces\")\n  func testZeroPieces() {\n    let expected = \"\"\n    #expect(Proverb([]).recite() == expected)\n  }\n\n  @Test(\"one piece\", .enabled(if: RUNALL))\n  func testOnePiece() {\n    let expected = \"And all for the want of a nail.\"\n    #expect(Proverb([\"nail\"]).recite() == expected)\n  }\n\n  @Test(\"two pieces\", .enabled(if: RUNALL))\n  func testTwoPieces() {\n    let expected = \"For want of a nail the shoe was lost.\\n\" + \"And all for the want of a nail.\"\n    #expect(Proverb([\"nail\", \"shoe\"]).recite() == expected)\n  }\n\n  @Test(\"three pieces\", .enabled(if: RUNALL))\n  func testThreePieces() {\n    let expected =\n      \"For want of a nail the shoe was lost.\\n\" + \"For want of a shoe the horse was lost.\\n\"\n      + \"And all for the want of a nail.\"\n    #expect(Proverb([\"nail\", \"shoe\", \"horse\"]).recite() == expected)\n  }\n\n  @Test(\"full proverb\", .enabled(if: RUNALL))\n  func testFullProverb() {\n    let expected =\n      \"For want of a nail the shoe was lost.\\n\" + \"For want of a shoe the horse was lost.\\n\"\n      + \"For want of a horse the rider was lost.\\n\" + \"For want of a rider the message was lost.\\n\"\n      + \"For want of a message the battle was lost.\\n\"\n      + \"For want of a battle the kingdom was lost.\\n\" + \"And all for the want of a nail.\"\n    #expect(\n      Proverb([\"nail\", \"shoe\", \"horse\", \"rider\", \"message\", \"battle\", \"kingdom\"]).recite()\n        == expected)\n  }\n\n  @Test(\"four pieces modernized\", .enabled(if: RUNALL))\n  func testFourPiecesModernized() {\n    let expected =\n      \"For want of a pin the gun was lost.\\n\" + \"For want of a gun the soldier was lost.\\n\"\n      + \"For want of a soldier the battle was lost.\\n\" + \"And all for the want of a pin.\"\n    #expect(Proverb([\"pin\", \"gun\", \"soldier\", \"battle\"]).recite() == expected)\n  }\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/For_Want_of_a_Nail",
+  "authors": [
+    "AlwynC"
+  ],
+  "contributors": [
+    "bhargavg",
+    "masters3d",
+    "ThomasHaz",
+    "meatball133"
+  ]
+}

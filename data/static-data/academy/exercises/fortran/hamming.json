@@ -1,0 +1,30 @@
+{
+  "id": "fortran:hamming",
+  "trackSlug": "fortran",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "c4b23221-b6a8-452c-9816-c30501fc690f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "module hamming\n  implicit none\ncontains\n\n  function compute(strand1, strand2, distance)\n      character(*) :: strand1, strand2\n      integer :: distance\n      logical :: compute\n\n  end function compute\n\nend module hamming\n",
+  "example_solution": "module hamming\n\nimplicit none\ncontains\n\n  function compute(strand1, strand2, distance)\n      character(*) :: strand1, strand2\n      integer :: distance, i\n      logical :: compute\n\n      distance = 0\n      compute = .true.\n\n      if ( len(strand1) .NE. len(strand2) ) then\n          compute = .false.\n          return\n      end if\n\n      do i = 1,len(strand1)\n        if (strand1(i:i) .NE. strand2(i:i)) then\n          distance = distance + 1\n        end if\n\n      end do\n\n  end function compute\nend module hamming\n",
+  "test_code": "program hamming_test_main\n   use TesterMain\n   use hamming\n\n   implicit none\n\n   integer distance\n\n   ! Test 1: empty strands\n   call assert_equal(.true., compute(\"\", \"\", distance), \"empty strands\")\n   call assert_equal(0, distance, \"empty strands, distance=0\")\n\n   ! Test 2: single letter identical strands\n   call assert_equal(.true., compute(\"A\", \"A\", distance), \"single letter identical strands\")\n   call assert_equal(0, distance,\"single letter identical strands, distance=0\")\n\n   ! Test 3: single letter different strands\n   call assert_equal(.true., compute(\"G\", \"T\", distance), \"single letter different strands\")\n   call assert_equal(1, distance, \"single letter different strands, distance=1\")\n\n   ! Test 4: long identical strands\n   call assert_equal(.true., compute(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\", distance), \"long identical strands\")\n   call assert_equal(0, distance, \"single letter different strands, distance=0\")\n\n   ! Test 5: long different strands\n   call assert_equal(.true., compute(\"GGACGGATTCTG\", \"AGGACGGATTCT\", distance), \"long different strands\")\n   call assert_equal(9, distance,\"long different strands, distance=9\")\n\n   ! Test 6: disallow first strand longer\n   call assert_equal(.false., compute(\"AATG\", \"AAA\", distance), \"disallow first strand longer\")\n   call assert_equal(0, distance,\"disallow first strand longer, distance=0\")\n\n   ! Test 7: disallow second strand longer\n   call assert_equal(.false., compute(\"ATA\", \"AGTG\", distance), \"disallow second strand longer\")\n   call assert_equal(0, distance,\"disallow second strand longer, distance=0\")\n\n   ! Test 8: disallow left empty strand\n   call assert_equal(.false., compute(\"\", \"G\", distance), \"disallow left empty strand\")\n   call assert_equal(0, distance,\"disallow left empty strand, distance=0\")\n\n   ! Test 9: disallow right empty strand\n   call assert_equal(.false., compute(\"G\", \"\", distance), \"disallow right empty strand\")\n   call assert_equal(0, distance,\"disallow right empty strand, distance=0\")\n\n   call test_report()\n\nend program\n\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "sentientmonkey"
+  ],
+  "contributors": [
+    "kotp",
+    "pclausen",
+    "sjwarner"
+  ]
+}

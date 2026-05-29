@@ -1,0 +1,26 @@
+{
+  "id": "tcl:reverse-string",
+  "trackSlug": "tcl",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "1b3c48ba-0a49-4723-b191-a35376483bdb",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "proc reverse {input} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc reverse {input {reversed \"\"}} {\n    if {$input eq \"\"} {\n        return $reversed\n    }\n    tailcall reverse \\\n        [string range $input 1 end] \\\n        [string cat [string index $input 0] $reversed]\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"reverse-string.tcl\"\n\ntest reverse-string-1 \"an empty string\" -body {\n    reverse \"\"\n} -returnCodes ok -result \"\"\n\nskip reverse-string-2\ntest reverse-string-2 \"a word\" -body {\n    reverse \"robot\"\n} -returnCodes ok -result \"tobor\"\n\nskip reverse-string-3\ntest reverse-string-3 \"a capitalized word\" -body {\n    reverse \"Ramen\"\n} -returnCodes ok -result \"nemaR\"\n\nskip reverse-string-4\ntest reverse-string-4 \"a sentence with punctuation\" -body {\n    reverse \"I'm hungry!\"\n} -returnCodes ok -result \"!yrgnuh m'I\"\n\nskip reverse-string-5\ntest reverse-string-5 \"a palindrome\" -body {\n    reverse \"racecar\"\n} -returnCodes ok -result \"racecar\"\n\nskip reverse-string-6\ntest reverse-string-6 \"an even-sized word\" -body {\n    reverse \"drawer\"\n} -returnCodes ok -result \"reward\"\n\nskip reverse-string-7\ntest reverse-string-7 \"wide characters\" -body {\n    reverse \"子猫\"\n} -returnCodes ok -result \"猫子\"\n\ncleanupTests\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

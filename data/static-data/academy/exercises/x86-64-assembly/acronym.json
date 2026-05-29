@@ -1,0 +1,28 @@
+{
+  "id": "x86-64-assembly:acronym",
+  "trackSlug": "x86-64-assembly",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "3cd968cd-02cd-42d5-a74b-088f757af86d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "interfacing-with-c-types"
+  ],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "section .text\nglobal abbreviate\nabbreviate:\n    ; Provide your implementation here\n    ; rdi - char * in - read\n    ; rsi - char * out - write result, assume length 0x100\n    ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "example_solution": "section .text\nisalpha:\n        xor     eax, eax\n        and     edi, -33\n        sub     edi, 65\n        cmp     dil, 25\n        setbe   al\n        ret\ntoupper:\n        mov     eax, edi\n        and     eax, -33\n        ret\nglobal abbreviate\nabbreviate:\n        mov     rax, rdi\n        test    rdi, rdi\n        je      .null\n        mov     dl, [rdi]\n        test    dl, dl\n        je      .empty\n        mov     [rsi], dl\n        push    r14\n        push    r13\n        push    r12\n        lea     r12, [rsi+1]\n        push    rbp\n        mov     rbp, rsi\n        push    rbx\n        lea     rbx, [rdi+1]\n.loop:\n        mov     al, [rbx]\n        test    al, al\n        je      .fin\n        cmp     al, 45\n        je      .check_alpha\n        cmp     al, 32\n        jne     .next\n.check_alpha:\n        movsx   r13d, byte [rbx]\n        mov     r14, rbx\n        inc     rbx\n        mov     edi, r13d\n        call    isalpha\n        test    eax, eax\n        je      .check_alpha\n        mov     edi, r13d\n        inc     r12\n        mov     rbx, r14\n        call    toupper\n        mov     [r12-1], al\n.next:\n        inc     rbx\n        jmp     .loop\n.fin:\n        mov     byte [r12], 0\n        mov     rax, rbp\n        pop     rbx\n        pop     rbp\n        pop     r12\n        pop     r13\n        pop     r14\n        ret\n.empty:\n        xor     eax, eax\n        ret\n.null:\n        ret\n\n%ifidn __OUTPUT_FORMAT__,elf64\nsection .note.GNU-stack noalloc noexec nowrite progbits\n%endif\n",
+  "test_code": "#include <string.h>\n\n#include \"vendor/unity.h\"\n\n#define BUFFER_SIZE 0x100\n\nextern void abbreviate(const char *in, char *out);\n\nvoid setUp(void) {\n}\n\nvoid tearDown(void) {\n}\n\nvoid test_basic(void) {\n    const char *in = \"Portable Network Graphics\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"PNG\", out);\n}\n\nvoid test_lowercase_words(void) {\n    TEST_IGNORE();\n    const char *in = \"Ruby on Rails\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"ROR\", out);\n}\n\nvoid test_punctuation(void) {\n    TEST_IGNORE();\n    const char *in = \"First In, First Out\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"FIFO\", out);\n}\n\nvoid test_all_caps_word(void) {\n    TEST_IGNORE();\n    const char *in = \"GNU Image Manipulation Program\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"GIMP\", out);\n}\n\nvoid test_punctuation_without_whitespace(void) {\n    TEST_IGNORE();\n    const char *in = \"Complementary metal-oxide semiconductor\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"CMOS\", out);\n}\n\nvoid test_very_long_abbreviation(void) {\n    TEST_IGNORE();\n    const char *in = \"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"ROTFLSHTMDCOALM\", out);\n}\n\nvoid test_consecutive_delimiters(void) {\n    TEST_IGNORE();\n    const char *in = \"Something - I made up from thin air\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"SIMUFTA\", out);\n}\n\nvoid test_apostrophes(void) {\n    TEST_IGNORE();\n    const char *in = \"Halley's Comet\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"HC\", out);\n}\n\nvoid test_underscore_emphasis(void) {\n    TEST_IGNORE();\n    const char *in = \"The Road _Not_ Taken\";\n    char out[BUFFER_SIZE];\n    abbreviate(in, out);\n    TEST_ASSERT_EQUAL_STRING(\"TRNT\", out);\n}\n\nint main(void) {\n    UNITY_BEGIN();\n    RUN_TEST(test_basic);\n    RUN_TEST(test_lowercase_words);\n    RUN_TEST(test_punctuation);\n    RUN_TEST(test_all_caps_word);\n    RUN_TEST(test_punctuation_without_whitespace);\n    RUN_TEST(test_very_long_abbreviation);\n    RUN_TEST(test_consecutive_delimiters);\n    RUN_TEST(test_apostrophes);\n    RUN_TEST(test_underscore_emphasis);\n    return UNITY_END();\n}\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "sudhackar"
+  ],
+  "contributors": null
+}

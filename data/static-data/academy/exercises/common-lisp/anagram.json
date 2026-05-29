@@ -1,0 +1,36 @@
+{
+  "id": "common-lisp:anagram",
+  "trackSlug": "common-lisp",
+  "slug": "anagram",
+  "name": "Anagram",
+  "uuid": "b9fd0f13-966c-4085-ac9d-ed49a96ac0bf",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Given a word and a list of possible anagrams, select the correct sublist.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "filtering"
+  ],
+  "prerequisites": [
+    "functions",
+    "strings",
+    "filtering"
+  ],
+  "instructions": "# Instructions\n\nGiven a target word and one or more candidate words, your task is to find the candidates that are anagrams of the target.\n\nAn anagram is a rearrangement of letters to form a new word: for example `\"owns\"` is an anagram of `\"snow\"`.\nA word is _not_ its own anagram: for example, `\"stop\"` is not an anagram of `\"stop\"`.\n\nThe target word and candidate words are made up of one or more ASCII alphabetic characters (`A`-`Z` and `a`-`z`).\nLowercase and uppercase characters are equivalent: for example, `\"PoTS\"` is an anagram of `\"sTOp\"`, but `\"StoP\"` is not an anagram of `\"sTOp\"`.\nThe words you need to find should be taken from the candidate words, using the same letter case.\n\nGiven the target `\"stone\"` and the candidate words `\"stone\"`, `\"tones\"`, `\"banana\"`, `\"tons\"`, `\"notes\"`, and `\"Seton\"`, the anagram words you need to find are `\"tones\"`, `\"notes\"`, and `\"Seton\"`.\n",
+  "introduction": "# Introduction\n\nAt a garage sale, you find a lovely vintage typewriter at a bargain price!\nExcitedly, you rush home, insert a sheet of paper, and start typing away.\nHowever, your excitement wanes when you examine the output: all words are garbled!\nFor example, it prints \"stop\" instead of \"post\" and \"least\" instead of \"stale.\"\nCarefully, you try again, but now it prints \"spot\" and \"slate.\"\nAfter some experimentation, you find there is a random delay before each letter is printed, which messes up the order.\nYou now understand why they sold it for so little money!\n\nYou realize this quirk allows you to generate anagrams, which are words formed by rearranging the letters of another word.\nPleased with your finding, you spend the rest of the day generating hundreds of anagrams.\n",
+  "hints": null,
+  "starter_code": "(defpackage :anagram\n  (:use :cl)\n  (:export :anagrams-for))\n\n(in-package :anagram)\n\n(defun anagrams-for (subject candidates)\n  \"Returns a sublist of candidates which are anagrams of the subject.\"\n  )\n",
+  "example_solution": "(defpackage :anagram\n  (:use :common-lisp)\n  (:export :anagrams-for))\n\n(in-package :anagram)\n\n(defun anagram-equal (a b)\n  (and\n   (string-equal (sort (copy-seq a) #'char-lessp)\n\t\t (sort (copy-seq b) #'char-lessp))\n   (string-not-equal a b)))\n\n(defun anagrams-for (subject candidates)\n  (remove-if-not\n   #'(lambda (w) (anagram-equal w subject))\n   candidates))\n",
+  "test_code": ";; Ensures that anagram.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"anagram\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from anagram and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :anagram-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :anagram-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* anagram-suite)\n\n(defun set-equal-p (set0 set1)\n  (null (set-exclusive-or set0 set1 :test #'equal)))\n\n(test no-matches\n  (is (equal nil\n             (anagram:anagrams-for \"diaper\" '(\"hello\" \"world\" \"zombies\" \"pants\")))))\n\n(test detects-two-anagrams\n  (is (set-equal-p '(\"lemons\" \"melons\")\n             (anagram:anagrams-for \"solemn\" '(\"lemons\" \"cherry\" \"melons\")))))\n\n(test does-not-detect-anagram-subsets\n  (is (equal nil (anagram:anagrams-for \"good\" '(\"dog\" \"goody\")))))\n\n(test detect-anagram\n  (is (equal '(\"inlets\")\n             (anagram:anagrams-for \"listen\"\n                                   '(\"enlists\" \"google\" \"inlets\" \"banana\")))))\n\n(test detects-three-anagrams\n  (is (set-equal-p '(\"gallery\" \"regally\" \"largely\")\n             (anagram:anagrams-for \"allergy\"\n                                   '(\"gallery\" \"ballerina\" \"regally\" \"clergy\"\n                                     \"largely\" \"leading\")))))\n\n(test detects-multiple-anagrams-with-different-case\n  (is (set-equal-p '(\"Eons\" \"ONES\") (anagram:anagrams-for \"nose\" '(\"Eons\" \"ONES\")))))\n\n(test does-not-detect-non-anagrams-with-identical-checksum\n  (is (equal nil (anagram:anagrams-for \"mass\" '(\"last\")))))\n\n(test detects-anagrams-case-insensitively\n  (is (equal '(\"Carthorse\")\n             (anagram:anagrams-for \"Orchestra\"\n                                   '(\"cashregister\" \"Carthorse\" \"radishes\")))))\n\n(test detects-anagrams-using-case-insensitive-subject\n  (is (equal '(\"carthorse\")\n             (anagram:anagrams-for \"Orchestra\"\n                                   '(\"cashregister\" \"carthorse\" \"radishes\")))))\n\n(test detects-anagrams-using-case-insensitive-possible-matches\n  (is (equal '(\"Carthorse\")\n             (anagram:anagrams-for \"orchestra\"\n                                   '(\"cashregister\" \"Carthorse\" \"radishes\")))))\n\n(test does-not-detect-an-anagram-if-the-original-word-is-repeated\n  (is (equal nil (anagram:anagrams-for \"go\" '(\"goGoGO\")))))\n\n(test anagrams-must-use-all-letters-exactly-once\n  (is (equal nil (anagram:anagrams-for \"tapper\" '(\"patter\")))))\n\n(test words-are-not-anagrams-of-themselves\n  (is (equal nil (anagram:anagrams-for \"BANANA\" '(\"BANANA\")))))\n\n(test words-are-not-anagrams-of-themselves-even-if-letter-case-is-partially-different\n  (is (equal nil (anagram:anagrams-for \"BANANA\" '(\"Banana\"))))  )\n\n(test words-are-not-anagrams-of-themselves-even-if-letter-case-is-completely-different\n  (is (equal nil (anagram:anagrams-for \"BANANA\" '(\"banana\"))))  )\n\n(test words-other-than-themselves-can-be-anagrams\n  (is (equal '(\"Silent\") (anagram:anagrams-for \"LISTEN\" '(\"LISTEN\" \"Silent\")))))\n\n(test handles-case-of-greek-letters\n  (is (set-equal-p '(\"ΒΓΑ\" \"γβα\") (anagram:anagrams-for \"ΑΒΓ\" '(\"ΒΓΑ\" \"ΒΓΔ\" \"γβα\" \"αβγ\")))))\n\n(test different-characters-may-have-the-same-bytes\n  (is (equal nil (anagram:anagrams-for \"a⬂\" '(\"€a\")))))\n\n(defun run-tests (&optional (test-or-suite 'anagram-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "verdammelt"
+  ],
+  "contributors": [
+    "dnmfarrell",
+    "spacebat"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "r:scrabble-score",
+  "trackSlug": "r",
+  "slug": "scrabble-score",
+  "name": "Scrabble Score",
+  "uuid": "c82dfe0c-77c9-4a3b-8110-962a9547ac64",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a word, compute the Scrabble score for that word.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to compute a word's Scrabble score by summing the values of its letters.\n\nThe letters are valued as follows:\n\n| Letter                       | Value |\n| ---------------------------- | ----- |\n| A, E, I, O, U, L, N, R, S, T | 1     |\n| D, G                         | 2     |\n| B, C, M, P                   | 3     |\n| F, H, V, W, Y                | 4     |\n| K                            | 5     |\n| J, X                         | 8     |\n| Q, Z                         | 10    |\n\nFor example, the word \"cabbage\" is worth 14 points:\n\n- 3 points for C\n- 1 point for A\n- 3 points for B\n- 3 points for B\n- 1 point for A\n- 2 points for G\n- 1 point for E\n",
+  "introduction": "# Introduction\n\n[Scrabble][wikipedia] is a word game where players place letter tiles on a board to form words.\nEach letter has a value.\nA word's score is the sum of its letters' values.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Scrabble\n",
+  "hints": null,
+  "starter_code": "scrabble_score <- function(input){\n  \n}\n",
+  "example_solution": "scrabble_score <- function(input){\n  \n  # Letter                           Value\n  # A, E, I, O, U, L, N, R, S, T       1\n  # D, G                               2\n  # B, C, M, P                         3\n  # F, H, V, W, Y                      4\n  # K                                  5\n  # J, X                               8\n  # Q, Z                               10\n  \n  letter_score <- c(1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, \n                    1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10)\n  names(letter_score) <- LETTERS\n  \n  chars <- unlist(strsplit(input, \"\"))\n  \n  sum(letter_score[toupper(chars)])\n  \n}\n",
+  "test_code": "source(\"./scrabble-score.R\")\nlibrary(testthat)\n\ntest_that(\"lowercase letter\", {\n  input <- \"a\"\n  expect_equal(scrabble_score(input), 1)\n})\n\ntest_that(\"uppercase letter\", {\n  input <- \"A\"\n  expect_equal(scrabble_score(input), 1)\n})\n\ntest_that(\"valuable letter\", {\n  input <- \"f\"\n  expect_equal(scrabble_score(input), 4)\n})\n\ntest_that(\"short word\", {\n  input <- \"at\"\n  expect_equal(scrabble_score(input), 2)\n})\n\ntest_that(\"short, valuable word\", {\n  input <- \"zoo\"\n  expect_equal(scrabble_score(input), 12)\n})\n\ntest_that(\"medium word\", {\n  input <- \"street\"\n  expect_equal(scrabble_score(input), 6)\n})\n\ntest_that(\"medium, valuable word\", {\n  input <- \"quirky\"\n  expect_equal(scrabble_score(input), 22)\n})\n\ntest_that(\"long, mixed-case word\", {\n  input <- \"OxyphenButazone\"\n  expect_equal(scrabble_score(input), 41)\n})\n\ntest_that(\"english-like word\", {\n  input <- \"pinata\"\n  expect_equal(scrabble_score(input), 8)\n})\n\ntest_that(\"empty input\", {\n  input <- \"\"\n  expect_equal(scrabble_score(input), 0)\n})\n\ntest_that(\"entire alphabet available\", {\n  input <- \"abcdefghijklmnopqrstuvwxyz\"\n  expect_equal(scrabble_score(input), 87)\n})\n",
+  "source": "Inspired by the Extreme Startup game",
+  "source_url": "https://github.com/rchatley/extreme_startup",
+  "authors": [
+    "jonmcalder"
+  ],
+  "contributors": [
+    "katrinleinweber",
+    "zacchaeusluke"
+  ]
+}

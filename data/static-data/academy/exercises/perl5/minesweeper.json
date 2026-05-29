@@ -1,0 +1,31 @@
+{
+  "id": "perl5:minesweeper",
+  "trackSlug": "perl5",
+  "slug": "minesweeper",
+  "name": "Minesweeper",
+  "uuid": "8cbf6c2c-6f89-4e2e-a63f-5ea5af41f033",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Add the numbers to a minesweeper board.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to add the mine counts to empty squares in a completed Minesweeper board.\nThe board itself is a rectangle composed of squares that are either empty (`' '`) or a mine (`'*'`).\n\nFor each empty square, count the number of mines adjacent to it (horizontally, vertically, diagonally).\nIf the empty square has no adjacent mines, leave it empty.\nOtherwise replace it with the adjacent mines count.\n\nFor example, you may receive a 5 x 4 board like this (empty spaces are represented here with the '·' character for display on screen):\n\n```text\n·*·*·\n··*··\n··*··\n·····\n```\n\nWhich your code should transform into this:\n\n```text\n1*3*1\n13*31\n·2*2·\n·111·\n```\n",
+  "introduction": "# Introduction\n\n[Minesweeper][wikipedia] is a popular game where the user has to find the mines using numeric hints that indicate how many mines are directly adjacent (horizontally, vertically, diagonally) to a square.\n\n[wikipedia]: https://en.wikipedia.org/wiki/Minesweeper_(video_game)\n",
+  "hints": null,
+  "starter_code": "package Minesweeper;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<annotate>;\n\nsub annotate ($minefield) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package Minesweeper;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<annotate>;\n\nsub annotate ($input) {\n    my @lines  = split /\\n/, $input;\n    my $height = scalar @lines;\n    my $width  = length $lines[0];\n    my @grid   = map { [ split // ] } @lines;\n\n    for my $y ( 0 .. $height - 1 ) {\n        for my $x ( 0 .. $width - 1 ) {\n            next if $grid[$y][$x] eq '*';\n            my $count = 0;\n            for my $dy ( -1 .. 1 ) {\n                for my $dx ( -1 .. 1 ) {\n                    next if $dx == 0 && $dy == 0;\n                    my $nx = $x + $dx;\n                    my $ny = $y + $dy;\n                    next if $nx < 0 || $nx >= $width || $ny < 0 || $ny >= $height;\n                    $count++ if $grid[$ny][$nx] eq '*';\n                }\n            }\n            $grid[$y][$x] = $count || ' ';\n        }\n    }\n\n    return join \"\\n\", map { join '', @$_ } @grid;\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse Minesweeper qw<annotate>;\n\nis( # begin: 0c5ec4bd-dea7-4138-8651-1203e1cb9f44\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n\nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n\nEXPECTED\n    \"no rows\",\n); # end: 0c5ec4bd-dea7-4138-8651-1203e1cb9f44\n\nis( # begin: 650ac4c0-ad6b-4b41-acde-e4ea5852c3b8\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n\nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n\nEXPECTED\n    \"no columns\",\n); # end: 650ac4c0-ad6b-4b41-acde-e4ea5852c3b8\n\nis( # begin: 6fbf8f6d-a03b-42c9-9a58-b489e9235478\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n   \n   \n   \nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n   \n   \n   \nEXPECTED\n    \"no mines\",\n); # end: 6fbf8f6d-a03b-42c9-9a58-b489e9235478\n\nis( # begin: 61aff1c4-fb31-4078-acad-cd5f1e635655\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n***\n***\n***\nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n***\n***\n***\nEXPECTED\n    \"minefield with only mines\",\n); # end: 61aff1c4-fb31-4078-acad-cd5f1e635655\n\nis( # begin: 84167147-c504-4896-85d7-246b01dea7c5\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n   \n * \n   \nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n111\n1*1\n111\nEXPECTED\n    \"mine surrounded by spaces\",\n); # end: 84167147-c504-4896-85d7-246b01dea7c5\n\nis( # begin: cb878f35-43e3-4c9d-93d9-139012cccc4a\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n***\n* *\n***\nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n***\n*8*\n***\nEXPECTED\n    \"space surrounded by mines\",\n); # end: cb878f35-43e3-4c9d-93d9-139012cccc4a\n\nis( # begin: 7037f483-ddb4-4b35-b005-0d0f4ef4606f\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n * * \nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n1*2*1\nEXPECTED\n    \"horizontal line\",\n); # end: 7037f483-ddb4-4b35-b005-0d0f4ef4606f\n\nis( # begin: e359820f-bb8b-4eda-8762-47b64dba30a6\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n*   *\nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n*1 1*\nEXPECTED\n    \"horizontal line, mines at edges\",\n); # end: e359820f-bb8b-4eda-8762-47b64dba30a6\n\nis( # begin: c5198b50-804f-47e9-ae02-c3b42f7ce3ab\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n \n*\n \n*\n \nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n1\n*\n2\n*\n1\nEXPECTED\n    \"vertical line\",\n); # end: c5198b50-804f-47e9-ae02-c3b42f7ce3ab\n\nis( # begin: 0c79a64d-703d-4660-9e90-5adfa5408939\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n*\n \n \n \n*\nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n*\n1\n \n1\n*\nEXPECTED\n    \"vertical line, mines at edges\",\n); # end: 0c79a64d-703d-4660-9e90-5adfa5408939\n\nis( # begin: 4b098563-b7f3-401c-97c6-79dd1b708f34\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n  *  \n  *  \n*****\n  *  \n  *  \nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n 2*2 \n25*52\n*****\n25*52\n 2*2 \nEXPECTED\n    \"cross\",\n); # end: 4b098563-b7f3-401c-97c6-79dd1b708f34\n\nis( # begin: 04a260f1-b40a-4e89-839e-8dd8525abe0e\n    annotate( <<'INPUT' =~ s/\\n$//r ),\n *  * \n  *   \n    * \n   * *\n *  * \n      \nINPUT\n    <<'EXPECTED' =~ s/\\n$//r,\n1*22*1\n12*322\n 123*2\n112*4*\n1*22*2\n111111\nEXPECTED\n    \"large minefield\",\n); # end: 04a260f1-b40a-4e89-839e-8dd8525abe0e\n\ndone_testing;\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "autark"
+  ],
+  "contributors": [
+    "bistik",
+    "kytrinyx",
+    "m-dango",
+    "rfilipo"
+  ]
+}

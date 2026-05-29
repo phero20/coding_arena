@@ -1,0 +1,26 @@
+{
+  "id": "red:acronym",
+  "trackSlug": "red",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "cfc8475e-d8e8-4ee0-99a3-d993527a3e47",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "Red [\n\tdescription: {\"Acronym\" exercise solution for exercism platform}\n\tauthor: \"\" ; you can write your name here, in quotes\n]\n\nabbreviate: function [\n\tphrase\n] [\n\tcause-error 'user 'message \"You need to implement abbreviate function.\"\n]\n\n",
+  "example_solution": "Red [\n\tdescription: {\"Acronym\" exercise solution for exercism platform}\n\tauthor: \"BNAndras\"\n]\n\nabbreviate: function [\n\tphrase\n] [\n\tabbreviation: \"\"\n\twords: split replace/all replace/all phrase \"-\" \" \" \"_\" \"\" \" \"\n\tforeach word words [\n\t\tletter: either empty? word [\"\"] [first word]\n\t\tappend abbreviation letter\n\t] \n\t\n\tuppercase abbreviation\n]\n \n",
+  "test_code": "Red [\n\tdescription: {Tests for \"Acronym\" Exercism exercise}\n\tauthor: \"loziniak\"\n]\n\n#include %testlib.red\n\ntest-init/limit %acronym.red 1\n; test-init/limit %.meta/example.red 1\t\t\t\t\t\t; test example solution\n\ncanonical-cases: [#[\n    description: \"basic\"\n    input: #[\n        phrase: \"Portable Network Graphics\"\n    ]\n    expected: \"PNG\"\n    function: \"abbreviate\"\n    uuid: \"1e22cceb-c5e4-4562-9afe-aef07ad1eaf4\"\n] #[\n    description: \"lowercase words\"\n    input: #[\n        phrase: \"Ruby on Rails\"\n    ]\n    expected: \"ROR\"\n    function: \"abbreviate\"\n    uuid: \"79ae3889-a5c0-4b01-baf0-232d31180c08\"\n] #[\n    description: \"punctuation\"\n    input: #[\n        phrase: \"First In, First Out\"\n    ]\n    expected: \"FIFO\"\n    function: \"abbreviate\"\n    uuid: \"ec7000a7-3931-4a17-890e-33ca2073a548\"\n] #[\n    description: \"all caps word\"\n    input: #[\n        phrase: \"GNU Image Manipulation Program\"\n    ]\n    expected: \"GIMP\"\n    function: \"abbreviate\"\n    uuid: \"32dd261c-0c92-469a-9c5c-b192e94a63b0\"\n] #[\n    description: \"punctuation without whitespace\"\n    input: #[\n        phrase: \"Complementary metal-oxide semiconductor\"\n    ]\n    expected: \"CMOS\"\n    function: \"abbreviate\"\n    uuid: \"ae2ac9fa-a606-4d05-8244-3bcc4659c1d4\"\n] #[\n    description: \"very long abbreviation\"\n    input: #[\n        phrase: {Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me}\n    ]\n    expected: \"ROTFLSHTMDCOALM\"\n    function: \"abbreviate\"\n    uuid: \"0e4b1e7c-1a6d-48fb-81a7-bf65eb9e69f9\"\n] #[\n    description: \"consecutive delimiters\"\n    input: #[\n        phrase: \"Something - I made up from thin air\"\n    ]\n    expected: \"SIMUFTA\"\n    function: \"abbreviate\"\n    uuid: \"6a078f49-c68d-4b7b-89af-33a1a98c28cc\"\n] #[\n    description: \"apostrophes\"\n    input: #[\n        phrase: \"Halley's Comet\"\n    ]\n    expected: \"HC\"\n    function: \"abbreviate\"\n    uuid: \"5118b4b1-4572-434c-8d57-5b762e57973e\"\n] #[\n    description: \"underscore emphasis\"\n    input: #[\n        phrase: \"The Road _Not_ Taken\"\n    ]\n    expected: \"TRNT\"\n    function: \"abbreviate\"\n    uuid: \"adc12eab-ec2d-414f-b48c-66a4fc06cdef\"\n]]\n\n\nforeach c-case canonical-cases [\n\tcase-code: reduce [\n\t\t'expect c-case/expected compose [\n\t\t\t(to word! c-case/function) (values-of c-case/input)\n\t\t] \n\t]\n\n\ttest c-case/description case-code\n]\n\ntest-results/print\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": []
+}

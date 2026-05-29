@@ -1,0 +1,26 @@
+{
+  "id": "unison:difference-of-squares",
+  "trackSlug": "unison",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "a9022ecf-0811-4807-8d8e-29da4c684d6b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "differenceOfSquares.squareOfSum : Nat -> Nat\ndifferenceOfSquares.squareOfSum number = todo \"squareOfSum\"\n\ndifferenceOfSquares.sumOfSquares : Nat -> Nat\ndifferenceOfSquares.sumOfSquares number = todo \"sumOfSquares\"\n\ndifferenceOfSquares.difference : Nat -> Nat\ndifferenceOfSquares.difference number = todo \"difference\"\n",
+  "example_solution": "differenceOfSquares.square : Nat -> Nat\ndifferenceOfSquares.square n = n * n\n\ndifferenceOfSquares.squareOfSum : Nat -> Nat\ndifferenceOfSquares.squareOfSum number =\n  List.rangeClosed 1 number |> sum |> square\n\ndifferenceOfSquares.sumOfSquares : Nat -> Nat\ndifferenceOfSquares.sumOfSquares number =\n  List.rangeClosed 1 number |> List.map square |> sum\n\ndifferenceOfSquares.difference : Nat -> Nat\ndifferenceOfSquares.difference number =\n  squareOfSum number - sumOfSquares number\n",
+  "test_code": "differenceOfSquares.test.ex1 = verify do\n  labeled \"Square of sum 1\" do\n    expected = 1\n    actual = squareOfSum 1\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex2 = verify do\n  labeled \"Square of sum 5\" do\n    expected = 225\n    actual = squareOfSum 5\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex3 = verify do\n  labeled \"Square of sum 100\" do\n    expected = 25502500\n    actual = squareOfSum 100\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex4 = verify do\n  labeled \"Sum of squares 1\" do\n    expected = 1\n    actual = sumOfSquares 1\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex5 = verify do\n  labeled \"Sum of squares 5\" do\n    expected = 55\n    actual = sumOfSquares 5\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex6 = verify do\n  labeled \"Sum of squares 100\" do\n    expected = 338350\n    actual = sumOfSquares 100\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex7 = verify do\n  labeled \"Difference of squares 1\" do\n    expected = 0\n    actual = difference 1\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex8 = verify do\n  labeled \"Difference of squares 5\" do\n    expected = 170\n    actual = difference 5\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ndifferenceOfSquares.test.ex9 = verify do\n  labeled \"Difference of squares 100\" do\n    expected = 25164150\n    actual = difference 100\n    label \"expected\" expected\n    label \"actual\" actual\n    ensureEqual expected actual\n\ntest> differenceOfSquares.tests = join [\n  differenceOfSquares.test.ex1,\n  differenceOfSquares.test.ex2,\n  differenceOfSquares.test.ex3,\n  differenceOfSquares.test.ex4,\n  differenceOfSquares.test.ex5,\n  differenceOfSquares.test.ex6,\n  differenceOfSquares.test.ex7,\n  differenceOfSquares.test.ex8,\n  differenceOfSquares.test.ex9\n]\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

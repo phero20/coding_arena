@@ -1,0 +1,28 @@
+{
+  "id": "pyret:resistor-color",
+  "trackSlug": "pyret",
+  "slug": "resistor-color",
+  "name": "Resistor Color",
+  "uuid": "57bc4302-4c4b-43a7-9abb-2378dd6ef70e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a resistor band's color to its numeric representation.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "lists"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nIf you want to build something using a Raspberry Pi, you'll probably use _resistors_.\nFor this exercise, you need to know two things about them:\n\n- Each resistor has a resistance value.\n- Resistors are small - so small in fact that if you printed the resistance value on them, it would be hard to read.\n\nTo get around this problem, manufacturers print color-coded bands onto the resistors to denote their resistance values.\nEach band has a position and a numeric value.\n\nThe first 2 bands of a resistor have a simple encoding scheme: each color maps to a single number.\n\nIn this exercise you are going to create a helpful program so that you don't have to remember the values of the bands.\n\nThese colors are encoded as follows:\n\n- black: 0\n- brown: 1\n- red: 2\n- orange: 3\n- yellow: 4\n- green: 5\n- blue: 6\n- violet: 7\n- grey: 8\n- white: 9\n\nThe goal of this exercise is to create a way:\n\n- to look up the numerical value associated with a particular color band\n- to list the different band colors\n\nMnemonics map the colors to the numbers, that, when stored as an array, happen to map to their index in the array:\nBetter Be Right Or Your Great Big Values Go Wrong.\n\nMore information on the color encoding of resistors can be found in the [Electronic color code Wikipedia article][e-color-code].\n\n[e-color-code]: https://en.wikipedia.org/wiki/Electronic_color_code\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide: color-code, colors end\n\nfun color-code(color):\n  raise(\"Please implement the color-code function\")\nend\n\nfun colors():\n  raise(\"Please implement the colors function\")\nend\n",
+  "example_solution": "use context starter2024\n\nprovide: color-code, colors end\n\nRESISTOR-COLORS = [list:\n  \"black\",\n  \"brown\",\n  \"red\",\n  \"orange\",\n  \"yellow\",\n  \"green\",\n  \"blue\",\n  \"violet\",\n  \"grey\",\n  \"white\",\n  ]\n\nfun color-code(color):\n  fun index-of(l, elem):\n    if not(l.member(elem)):\n      -1\n    else:\n      cases (List) l:\n        | empty => 0\n        | link(f, r) => if f == elem: 0 else: 1 + index-of(r, elem) end\n      end\n    end\n  end\n\n  index-of(RESISTOR-COLORS, color)\nend\n\n\nfun colors():\n  RESISTOR-COLORS\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"resistor-color.arr\")\n\ncheck \"Color codes -> Black\":\n  color-code(\"black\") is 0\nend\n\ncheck \"Color codes -> White\":\n  color-code(\"white\") is 9\nend\n\ncheck \"Color codes -> Orange\":\n  color-code(\"orange\") is 3\nend\n\ncheck \"Colors\":\n  colors() is [list:\n    \"black\",\n    \"brown\",\n    \"red\",\n    \"orange\",\n    \"yellow\",\n    \"green\",\n    \"blue\",\n    \"violet\",\n    \"grey\",\n    \"white\",\n    ]\nend\n",
+  "source": "Maud de Vries, Erik Schierboom",
+  "source_url": "https://github.com/exercism/problem-specifications/issues/1458",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

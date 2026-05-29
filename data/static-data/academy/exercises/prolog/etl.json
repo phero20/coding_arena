@@ -1,0 +1,26 @@
+{
+  "id": "prolog:etl",
+  "trackSlug": "prolog",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "6e90da13-9ba9-43eb-9e5e-e165c038ec46",
+  "type": "practice",
+  "status": null,
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "transform(ScoreLetters, LetterScores).\n",
+  "example_solution": "transform([], []).\n\ntransform([Score-Letters|Xs], LetterScores) :-\n    transform(Xs, LetterScores1),\n    length(Letters, N),\n    length(Scores, N),\n    maplist(=(Score), Scores),\n    maplist(string_lower,Letters,LowerLetters),\n    maplist(atom_string,LowerLetterAtoms,LowerLetters),\n    pairs_keys_values(LetterScores0,LowerLetterAtoms,Scores),\n    append(LetterScores0, LetterScores1, LetterScores2),\n    sort(LetterScores2, LetterScores).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(etl).\n\ntest(single_letter, condition(true)) :-\n  transform([1-[\"A\"]], LetterScores),\n  LetterScores == [a-1].\n\ntest(single_score_with_multiple_letters, condition(pending)) :-\n  transform([1-[\"A\",\"E\",\"I\",\"O\",\"U\"]], LetterScores),\n  LetterScores == [a-1,e-1,i-1,o-1,u-1].\n\ntest(multiple_scores_with_multiple_letters, condition(pending)) :-\n  transform([1-[\"A\",\"E\"], 2-[\"D\",\"G\"]], LetterScores),\n  LetterScores == [a-1,d-2,e-1,g-2].\n\ntest(multiple_scores_with_differing_numbers_of_letters, condition(pending)) :-\n  transform([\n    1-[\"A\",\"E\",\"I\",\"O\",\"U\",\"L\",\"N\",\"R\",\"S\",\"T\"],    \n    2-[\"D\",\"G\"],\n    3-[\"B\",\"C\",\"M\",\"P\"],\n    4-[\"F\",\"H\",\"V\",\"W\",\"Y\"],\n    5-[\"K\"],\n    8-[\"J\",\"X\"],\n    10-[\"Q\",\"Z\"]\n  ], LetterScores),\n  LetterScores == [a-1,b-3,c-3,d-2,e-1,f-4,g-2,h-4,i-1,j-8,k-5,l-1,m-3,\n                   n-1,o-1,p-3,q-10,r-1,s-1,t-1,u-1,v-4,w-4,x-8,y-4,z-10].\n\n:- end_tests(etl).\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

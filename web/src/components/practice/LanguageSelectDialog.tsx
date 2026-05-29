@@ -11,7 +11,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+<<<<<<< HEAD
 import { LanguageSelector } from "@/components/workspace-shared/LanguageSelector";
+=======
+import { LanguageSelector } from "@/components/workspace-shared";
+>>>>>>> prod-deploy
 import type { Problem } from "@/types/api";
 import type { LanguageSelectDialogProps } from "@/types/component.types";
 

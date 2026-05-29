@@ -1,0 +1,26 @@
+{
+  "id": "uiua:isbn-verifier",
+  "trackSlug": "uiua",
+  "slug": "isbn-verifier",
+  "name": "ISBN Verifier",
+  "uuid": "1dca3719-e0dc-4ab1-8c0c-e9b9b8e943fa",
+  "type": "practice",
+  "status": null,
+  "blurb": "Check if a given string is a valid ISBN-10 number.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe [ISBN-10 verification process][isbn-verification] is used to validate book identification numbers.\nThese normally contain dashes and look like: `3-598-21508-8`\n\n## ISBN\n\nThe ISBN-10 format is 9 digits (0 to 9) plus one check character (either a digit or an X only).\nIn the case the check character is an X, this represents the value '10'.\nThese may be communicated with or without hyphens, and can be checked for their validity by the following formula:\n\n```text\n(d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0\n```\n\nIf the result is 0, then it is a valid ISBN-10, otherwise it is invalid.\n\n## Example\n\nLet's take the ISBN-10 `3-598-21508-8`.\nWe plug it in to the formula, and get:\n\n```text\n(3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 * 1) mod 11 == 0\n```\n\nSince the result is 0, this proves that our ISBN is valid.\n\n## Task\n\nGiven a string the program should check if the provided string is a valid ISBN-10.\nPutting this into place requires some thinking about preprocessing/parsing of the string prior to calculating the check digit for the ISBN.\n\nThe program should be able to verify ISBN-10 both with and without separating dashes.\n\n## Caveats\n\nConverting from strings to numbers can be tricky in certain languages.\nNow, it's even trickier since the check digit of an ISBN-10 may be 'X' (representing '10').\nFor instance `3-598-21507-X` is a valid ISBN-10.\n\n[isbn-verification]: https://en.wikipedia.org/wiki/International_Standard_Book_Number\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "# Check if a given ISBN is valid\n# ValidationResult ? ISBN\nIsValid ← |1 ⊙(⍤ \"Please implement IsValid\" 0)\n",
+  "example_solution": "ValidateFormat   ← |1 ⍤. =1 ⊢△ regex \"^[0-9]{9}[0-9X]$\" . ▽≠@-.\nParseToArray     ← |1 ≡⍣⋕10 ▽≠@-.⍣ValidateFormat \"\"\nValidateChecksum ← |1 =0 ◿ 11 /+ × +1⇌⇡10\nIsValid          ← |1 ⍣ValidateChecksum 0 ParseToArray\n",
+  "test_code": "~ \"isbn-verifier.ua\" ~ IsValid\n\n# valid isbn\n⍤⤙≍ 1 IsValid \"3-598-21508-8\"\n\n# invalid isbn check digit\n⍤⤙≍ 0 IsValid \"3-598-21508-9\"\n\n# valid isbn with a check digit of 10\n⍤⤙≍ 1 IsValid \"3-598-21507-X\"\n\n# check digit is a character other than X\n⍤⤙≍ 0 IsValid \"3-598-21507-A\"\n\n# invalid check digit in isbn is not treated as zero\n⍤⤙≍ 0 IsValid \"4-598-21507-B\"\n\n# invalid character in isbn is not treated as zero\n⍤⤙≍ 0 IsValid \"3-598-P1581-X\"\n\n# X is only valid as a check digit\n⍤⤙≍ 0 IsValid \"3-598-2X507-9\"\n\n# valid isbn without separating dashes\n⍤⤙≍ 1 IsValid \"3598215088\"\n\n# isbn without separating dashes and X as check digit\n⍤⤙≍ 1 IsValid \"359821507X\"\n\n# isbn without check digit and dashes\n⍤⤙≍ 0 IsValid \"359821507\"\n\n# too long isbn and no dashes\n⍤⤙≍ 0 IsValid \"3598215078X\"\n\n# too short isbn\n⍤⤙≍ 0 IsValid \"00\"\n\n# isbn without check digit\n⍤⤙≍ 0 IsValid \"3-598-21507\"\n\n# check digit of X should not be used for 0\n⍤⤙≍ 0 IsValid \"3-598-21515-X\"\n\n# empty isbn\n⍤⤙≍ 0 IsValid \"\"\n\n# input is 9 characters\n⍤⤙≍ 0 IsValid \"134456729\"\n\n# invalid characters are not ignored after checking length\n⍤⤙≍ 0 IsValid \"3132P34035\"\n\n# invalid characters are not ignored before checking length\n⍤⤙≍ 0 IsValid \"3598P215088\"\n\n# input is too long but contains a valid isbn\n⍤⤙≍ 0 IsValid \"98245726788\"\n",
+  "source": "Converting a string into a number and some basic processing utilizing a relatable real world example.",
+  "source_url": "https://en.wikipedia.org/wiki/International_Standard_Book_Number#ISBN-10_check_digit_calculation",
+  "authors": [
+    "vaeng"
+  ],
+  "contributors": null
+}

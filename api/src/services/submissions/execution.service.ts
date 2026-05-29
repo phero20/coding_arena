@@ -1,8 +1,15 @@
 import type { IProblemTestService } from "../problems/problem-test.service";
+<<<<<<< HEAD
 import type { SubmissionService } from "./submission.service";
 import type { SubmissionStatus } from "../../mongo/models/submission.model";
 import type { ExecutionTestResult } from "../../libs/utils/verdict.util";
 import type { IAiJudgeService } from "../judge/ai-code-judge.service";
+=======
+import type { SubmissionStatus } from "../../mongo/models/submission.model";
+import type { ExecutionTestResult } from "../../libs/utils/verdict.util";
+import type { IAiJudgeService } from "../judge/ai-code-judge.service";
+import type { DriverJudgeExecutionService } from "../judge/driver-judge-execution.service";
+>>>>>>> prod-deploy
 import { getLanguageName } from "../../libs/utils/languages";
 
 export interface RunSamplesInput {
@@ -16,23 +23,48 @@ export interface RunSamplesResult {
   submissionId?: string;
   overallStatus: SubmissionStatus;
   tests: ExecutionTestResult[];
+<<<<<<< HEAD
+=======
+  compileOutput?: string;
+  stderr?: string;
+>>>>>>> prod-deploy
 }
 
 import { type ICradle } from "../../libs/awilix-container";
 
+<<<<<<< HEAD
 export class ExecutionService {
   private readonly problemTestService: IProblemTestService;
   private readonly aiCodeJudgeService: IAiJudgeService;
   private readonly submissionService: SubmissionService;
+=======
+export interface IExecutionService {
+  runSamples(input: RunSamplesInput): Promise<RunSamplesResult>;
+  runFullSubmission(input: RunSamplesInput): Promise<RunSamplesResult>;
+}
+
+export class ExecutionService implements IExecutionService {
+  private readonly problemTestService: IProblemTestService;
+  private readonly aiCodeJudgeService: IAiJudgeService;
+  private readonly driverJudgeExecutionService: DriverJudgeExecutionService;
+>>>>>>> prod-deploy
 
   constructor({
     problemTestService,
     aiCodeJudgeService,
+<<<<<<< HEAD
     submissionService,
   }: ICradle) {
     this.problemTestService = problemTestService;
     this.aiCodeJudgeService = aiCodeJudgeService;
     this.submissionService = submissionService;
+=======
+    driverJudgeExecutionService,
+  }: ICradle) {
+    this.problemTestService = problemTestService;
+    this.aiCodeJudgeService = aiCodeJudgeService;
+    this.driverJudgeExecutionService = driverJudgeExecutionService;
+>>>>>>> prod-deploy
   }
 
   /**
@@ -54,6 +86,7 @@ export class ExecutionService {
       throw new Error("No public tests configured for this problem");
     }
 
+<<<<<<< HEAD
     const aiResult = await this.aiCodeJudgeService.runSamples({
       problemId: input.problemId,
       languageId: input.languageId,
@@ -67,10 +100,39 @@ export class ExecutionService {
     });
     const tests: ExecutionTestResult[] = aiResult.tests;
     const overallStatus: SubmissionStatus = aiResult.overallStatus;
+=======
+    const result = this.driverJudgeExecutionService.supportsLanguage(input.languageId)
+      ? await this.driverJudgeExecutionService.evaluate({
+          problemId: input.problemId,
+          languageId: input.languageId,
+          sourceCode: input.sourceCode,
+          includeHidden: false,
+        })
+      : await this.aiCodeJudgeService.runSamples({
+          problemId: input.problemId,
+          languageId: input.languageId,
+          languageName: getLanguageName(input.languageId),
+          sourceCode: input.sourceCode,
+          tests: testsDoc.cases.map((testCase, index) => ({
+            index,
+            input: JSON.stringify(testCase.input),
+            expected_output: JSON.stringify(testCase.expected_output),
+          })),
+        });
+    const tests: ExecutionTestResult[] = result.tests;
+    const overallStatus: SubmissionStatus = result.overallStatus;
+    const compileOutput = "compileOutput" in result ? (result.compileOutput as string) : undefined;
+    const stderr = "stderr" in result ? (result.stderr as string) : undefined;
+>>>>>>> prod-deploy
 
     return {
       overallStatus,
       tests,
+<<<<<<< HEAD
+=======
+      compileOutput,
+      stderr,
+>>>>>>> prod-deploy
     };
   }
 
@@ -90,8 +152,13 @@ export class ExecutionService {
 
     const allCases: {
       index: number;
+<<<<<<< HEAD
       input: string;
       expected_output: string;
+=======
+      input: unknown;
+      expected_output: unknown;
+>>>>>>> prod-deploy
       isPublic: boolean;
     }[] = [];
 
@@ -123,6 +190,7 @@ export class ExecutionService {
     // 2. We don't reuse the same submission record here because
     // SubmissionController.submit already creates one.
     // Instead, we just perform the evaluation.
+<<<<<<< HEAD
     const aiResult = await this.aiCodeJudgeService.runSamples({
       problemId: input.problemId,
       languageId: input.languageId,
@@ -137,10 +205,40 @@ export class ExecutionService {
 
     const tests: ExecutionTestResult[] = aiResult.tests;
     const overallStatus: SubmissionStatus = aiResult.overallStatus;
+=======
+    const result = this.driverJudgeExecutionService.supportsLanguage(input.languageId)
+      ? await this.driverJudgeExecutionService.evaluate({
+          problemId: input.problemId,
+          languageId: input.languageId,
+          sourceCode: input.sourceCode,
+          includeHidden: true,
+        })
+      : await this.aiCodeJudgeService.runSamples({
+          problemId: input.problemId,
+          languageId: input.languageId,
+          languageName: getLanguageName(input.languageId),
+          sourceCode: input.sourceCode,
+          tests: allCases.map((c) => ({
+            index: c.index,
+            input: JSON.stringify(c.input),
+            expected_output: JSON.stringify(c.expected_output),
+          })),
+        });
+
+    const tests: ExecutionTestResult[] = result.tests;
+    const overallStatus: SubmissionStatus = result.overallStatus;
+    const compileOutput = "compileOutput" in result ? (result.compileOutput as string) : undefined;
+    const stderr = "stderr" in result ? (result.stderr as string) : undefined;
+>>>>>>> prod-deploy
 
     return {
       overallStatus,
       tests,
+<<<<<<< HEAD
+=======
+      compileOutput,
+      stderr,
+>>>>>>> prod-deploy
     };
   }
 }

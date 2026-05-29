@@ -1,0 +1,30 @@
+{
+  "id": "r:phone-number",
+  "trackSlug": "r",
+  "slug": "phone-number",
+  "name": "Phone Number",
+  "uuid": "e5166378-e3fc-4393-b4f8-4c36da444c56",
+  "type": "practice",
+  "status": null,
+  "blurb": "Clean up user-entered phone numbers so that they can be sent SMS messages.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nClean up phone numbers so that they can be sent SMS messages.\n\nThe **North American Numbering Plan (NANP)** is a telephone numbering system used by many countries in North America like the United States, Canada or Bermuda.\nAll NANP-countries share the same international country code: `1`.\n\nNANP numbers are ten-digit numbers consisting of a three-digit Numbering Plan Area code, commonly known as _area code_, followed by a seven-digit local number.\nThe first three digits of the local number represent the _exchange code_, followed by the unique four-digit number which is the _subscriber number_.\n\nThe format is usually represented as\n\n```text\nNXX NXX-XXXX\n```\n\nwhere `N` is any digit from 2 through 9 and `X` is any digit from 0 through 9.\n\nSometimes they also have the country code (represented as `1` or `+1`) prefixed.\n\nYour task is to clean up differently formatted telephone numbers by removing punctuation and the country code if present.\n\nFor example, the inputs\n\n- `+1 (613)-995-0253`\n- `613-995-0253`\n- `1 613 995 0253`\n- `613.995.0253`\n\nshould all produce the output\n\n`6139950253`\n\n**Note:** As this exercise only deals with telephone numbers used in NANP-countries, only 1 is considered a valid country code.\n",
+  "introduction": "# Introduction\n\nYou've joined LinkLine, a leading communications company working to ensure reliable connections for everyone.\nThe team faces a big challenge: users submit phone numbers in all sorts of formats — dashes, spaces, dots, parentheses, and even prefixes.\nSome numbers are valid, while others are impossible to use.\n\nYour mission is to turn this chaos into order.\nYou'll clean up valid numbers, formatting them appropriately for use in the system.\nAt the same time, you'll identify and filter out any invalid entries.\n\nThe success of LinkLine's operations depends on your ability to separate the useful from the unusable.\nAre you ready to take on the challenge and keep the connections running smoothly?\n",
+  "hints": null,
+  "starter_code": "parse_phone_number <- function(number_string) {\n  \n}\n",
+  "example_solution": "parse_phone_number <- function(number_string) {\n  str <- gsub(\"\\\\D\", replacement = \"\", number_string)\n  if (substr(str, 1, 1) == '1') \n    str <- substr(str, 2, nchar(str))\n  if (nchar(str) != 10) \n    return(NULL)\n  if (strtoi(substr(str, 1, 1)) < 2 || strtoi(substr(str, 4, 4)) < 2) \n    return(NULL)\n  str\n}\n",
+  "test_code": "source(\"./phone-number.R\")\nlibrary(testthat)\n\ntest_that(\"cleans the number\", {\n  expect_equal(parse_phone_number(\"(223) 456-7890\"), \"2234567890\")\n})\n\ntest_that(\"cleans numbers with dots\", {\n  expect_equal(parse_phone_number(\"223.456.7890\"), \"2234567890\")\n})\n\ntest_that(\"cleans numbers with multiple spaces\", {\n  expect_equal(parse_phone_number(\"223 456   7890   \"), \"2234567890\")\n})\n\ntest_that(\"invalid when 9 digits\", {\n  expect_null(parse_phone_number(\"123456789\"))\n})\n\ntest_that(\"invalid when 11 digits and not starting with a 1\", {\n  expect_null(parse_phone_number(\"22234567890\"))\n})\n\ntest_that(\"valid when 11 digits and starting with 1\", {\n  expect_equal(parse_phone_number(\"12234567890\"), \"2234567890\")\n})\n\ntest_that(\"valid when 11 digits and starting with 1 even with punctuation\", {\n  expect_equal(parse_phone_number(\"+1 (223) 456-7890\"), \"2234567890\")\n})\n\ntest_that(\"invalid when more than 11 digits\", {\n  expect_null(parse_phone_number(\"321234567890\"))\n})\n\ntest_that(\"invalid with letters\", {\n  expect_null(parse_phone_number(\"523-abc-7890\"))\n})\n\ntest_that(\"invalid with punctuations\", {\n  expect_null(parse_phone_number(\"523-@:!-7890\"))\n})\n\ntest_that(\"invalid if area code starts with 0\", {\n  expect_null(parse_phone_number(\"(023) 456-7890\"))\n})\n\ntest_that(\"invalid if area code starts with 1\", {\n  expect_null(parse_phone_number(\"(123) 456-7890\"))\n})\n\ntest_that(\"invalid if exchange code starts with 0\", {\n  expect_null(parse_phone_number(\"(223) 056-7890\"))\n})\n\ntest_that(\"invalid if exchange code starts with 1\", {\n  expect_null(parse_phone_number(\"(223) 156-7890\"))\n})\n\ntest_that(\"invalid if area code starts with 0 on valid 11-digit number\", {\n  expect_null(parse_phone_number(\"1 (023) 456-7890\"))\n})\n\ntest_that(\"invalid if area code starts with 1 on valid 11-digit number\", {\n  expect_null(parse_phone_number(\"1 (123) 456-7890\"))\n})\n\ntest_that(\"invalid if exchange code starts with 0 on valid 11-digit number\", {\n  expect_null(parse_phone_number(\"1 (223) 056-7890\"))\n})\n\ntest_that(\"invalid if exchange code starts with 1 on valid 11-digit number\", {\n  expect_null(parse_phone_number(\"1 (223) 156-7890\"))\n})\n",
+  "source": "Exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/",
+  "authors": [
+    "jonmcalder"
+  ],
+  "contributors": [
+    "jonboiser",
+    "katrinleinweber",
+    "zacchaeusluke"
+  ]
+}

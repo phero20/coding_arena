@@ -1,0 +1,26 @@
+{
+  "id": "cpp:knapsack",
+  "trackSlug": "cpp",
+  "slug": "knapsack",
+  "name": "Knapsack",
+  "uuid": "35705d66-fe72-4dee-8eb0-54823240f2d7",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a knapsack that can only carry a certain weight, determine which items to put in the knapsack in order to maximize their combined value.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine which items to take so that the total value of her selection is maximized, taking into account the knapsack's carrying capacity.\n\nItems will be represented as a list of items.\nEach item will have a weight and value.\nAll values given will be strictly positive.\nLhakpa can take only one of each item.\n\nFor example:\n\n```text\nItems: [\n  { \"weight\": 5, \"value\": 10 },\n  { \"weight\": 4, \"value\": 40 },\n  { \"weight\": 6, \"value\": 30 },\n  { \"weight\": 4, \"value\": 50 }\n]\n\nKnapsack Maximum Weight: 10\n```\n\nFor the above, the first item has weight 5 and value 10, the second item has weight 4 and value 40, and so on.\nIn this example, Lhakpa should take the second and fourth item to maximize her value, which, in this case, is 90.\nShe cannot get more than 90 as her knapsack has a weight limit of 10.\n",
+  "introduction": "# Introduction\n\nLhakpa is a [Sherpa][sherpa] mountain guide and porter.\nAfter months of careful planning, the expedition Lhakpa works for is about to leave.\nShe will be paid the value she carried to the base camp.\n\nIn front of her are many items, each with a value and weight.\nLhakpa would gladly take all of the items, but her knapsack can only hold so much weight.\n\n[sherpa]: https://en.wikipedia.org/wiki/Sherpa_people#Mountaineering\n",
+  "hints": null,
+  "starter_code": "#include \"knapsack.h\"\n\nnamespace knapsack {\n\n// TODO: add your solution here\n\n}  // namespace knapsack\n",
+  "example_solution": "#include \"knapsack.h\"\n\nnamespace knapsack {\n\nint maximum_value(int maximum_weight, const std::vector<Item>& items) {\n    std::vector<int> dp(maximum_weight + 1);\n    for (auto item : items)\n        for (int weight = maximum_weight; weight >= item.weight; --weight)\n            dp[weight] =\n                std::max(dp[weight], dp[weight - item.weight] + item.value);\n    return dp[maximum_weight];\n}\n\n}  // namespace knapsack\n",
+  "test_code": "#include \"knapsack.h\"\n\n#include <vector>\n#ifdef EXERCISM_TEST_SUITE\n#include <catch2/catch.hpp>\n#else\n#include \"test/catch.hpp\"\n#endif\n\nTEST_CASE(\"no items\", \"[maximumValue][3993a824-c20e-493d-b3c9-ee8a7753ee59]\") {\n    int max_weight = 100;\n    const std::vector<knapsack::Item> items{};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 0);\n}\n\n#if defined(EXERCISM_RUN_ALL_TESTS)\n\nTEST_CASE(\"one item, too heavy\",\n          \"[maximumValue][1d39e98c-6249-4a8b-912f-87cb12e506b0]\") {\n    int max_weight = 10;\n    const std::vector<knapsack::Item> items{{100, 1}};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 0);\n}\n\nTEST_CASE(\"five items (cannot be greedy by weight)\",\n          \"[maximumValue][833ea310-6323-44f2-9d27-a278740ffbd8]\") {\n    int max_weight = 10;\n    const std::vector<knapsack::Item> items{\n        {2, 5}, {2, 5}, {2, 5}, {2, 5}, {10, 21}};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 21);\n}\n\nTEST_CASE(\"five items (cannot be greedy by value)\",\n          \"[maximumValue][277cdc52-f835-4c7d-872b-bff17bab2456]\") {\n    int max_weight = 10;\n    const std::vector<knapsack::Item> items{\n        {2, 20}, {2, 20}, {2, 20}, {2, 20}, {10, 50}};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 80);\n}\n\nTEST_CASE(\"example knapsack\",\n          \"[maximumValue][81d8e679-442b-4f7a-8a59-7278083916c9]\") {\n    int max_weight = 10;\n    const std::vector<knapsack::Item> items{{5, 10}, {4, 40}, {6, 30}, {4, 50}};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 90);\n}\n\nTEST_CASE(\"8 items\", \"[maximumValue][f23a2449-d67c-4c26-bf3e-cde020f27ecc]\") {\n    int max_weight = 104;\n    const std::vector<knapsack::Item> items{{25, 350}, {35, 400}, {45, 450},\n                                            {5, 20},   {25, 70},  {3, 8},\n                                            {2, 5},    {2, 5}};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 900);\n}\n\nTEST_CASE(\"15 items\", \"[maximumValue][7c682ae9-c385-4241-a197-d2fa02c81a11]\") {\n    int max_weight = 750;\n    const std::vector<knapsack::Item> items{\n        {70, 135},  {73, 139},  {77, 149},  {80, 150},  {82, 156},\n        {87, 163},  {90, 173},  {94, 184},  {98, 192},  {106, 201},\n        {110, 210}, {113, 214}, {115, 221}, {118, 229}, {120, 240}};\n    REQUIRE(knapsack::maximum_value(max_weight, items) == 1458);\n}\n\n#endif  // EXERCISM_RUN_ALL_TESTS\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Knapsack_problem",
+  "authors": [
+    "siebenschlaefer"
+  ],
+  "contributors": null
+}

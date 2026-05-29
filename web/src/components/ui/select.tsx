@@ -14,7 +14,13 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
+<<<<<<< HEAD
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+=======
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    children?: React.ReactNode;
+  }
+>>>>>>> prod-deploy
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}

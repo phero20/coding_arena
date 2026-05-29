@@ -1,12 +1,20 @@
 "use client";
 
+<<<<<<< HEAD
 import React from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> prod-deploy
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+<<<<<<< HEAD
 import { WorkspaceHeader } from "@/components/workspace-shared/WorkspaceHeader";
+=======
+import { WorkspaceHeader, Scratchpad } from "@/components/workspace-shared";
+>>>>>>> prod-deploy
 import { CompilerEditor } from "./CompilerEditor";
 import { CompilerConsole } from "./CompilerConsole";
 import { useCompilerWorkspace } from "@/hooks/workspace/use-compiler-workspace";
@@ -18,20 +26,48 @@ export const CompilerWorkspace: React.FC = () => {
     isExecuting, setLanguage, setCode, setStdin, runCode,
   } = useCompilerWorkspace();
 
+<<<<<<< HEAD
+=======
+  const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
+  const playgroundProblem = { 
+    problem_id: "compiler-playground", 
+    title: "Compiler Playground" 
+  } as any;
+
+>>>>>>> prod-deploy
   function handleReset() {
     localStorage.removeItem("coding-arena-playground-state");
     window.location.reload();
   }
   const router = useRouter();
+<<<<<<< HEAD
   return (
     <div className="h-screen w-full bg-background flex flex-col">
       <WorkspaceHeader
         problem={{ title: "Compiler Playground" } as any}
+=======
+
+  return (
+    <div className="h-screen w-full bg-background flex flex-col">
+      <WorkspaceHeader
+        problem={playgroundProblem}
+>>>>>>> prod-deploy
         onRun={runCode}
         onExit={() => router.push("/")}
         exitText="Home"
         isLoading={isExecuting}
         hideSubmit
+<<<<<<< HEAD
+=======
+        onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
+        isScratchpadOpen={isScratchpadOpen}
+      />
+
+      <Scratchpad 
+        isOpen={isScratchpadOpen} 
+        onClose={() => setIsScratchpadOpen(false)} 
+        problem={playgroundProblem}
+>>>>>>> prod-deploy
       />
 
       {/* Desktop */}

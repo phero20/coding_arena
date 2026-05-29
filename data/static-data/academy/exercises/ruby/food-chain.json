@@ -1,0 +1,49 @@
+{
+  "id": "ruby:food-chain",
+  "trackSlug": "ruby",
+  "slug": "food-chain",
+  "name": "Food Chain",
+  "uuid": "6f0919eb-2160-4cca-8504-286acc2ae9c8",
+  "type": "practice",
+  "status": null,
+  "blurb": "Generate the lyrics of the song 'I Know an Old Lady Who Swallowed a Fly'.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [
+    "strings",
+    "conditionals"
+  ],
+  "prerequisites": [
+    "strings",
+    "numbers",
+    "conditionals",
+    "loops"
+  ],
+  "instructions": "# Instructions\n\nGenerate the lyrics of the song 'I Know an Old Lady Who Swallowed a Fly'.\n\nWhile you could copy/paste the lyrics, or read them from a file, this problem is much more interesting if you approach it algorithmically.\n\nThis is a [cumulative song][cumulative-song] of unknown origin.\n\nThis is one of many common variants.\n\n```text\nI know an old lady who swallowed a fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a spider.\nIt wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a bird.\nHow absurd to swallow a bird!\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a cat.\nImagine that, to swallow a cat!\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a dog.\nWhat a hog, to swallow a dog!\nShe swallowed the dog to catch the cat.\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a goat.\nJust opened her throat and swallowed a goat!\nShe swallowed the goat to catch the dog.\nShe swallowed the dog to catch the cat.\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a cow.\nI don't know how she swallowed a cow!\nShe swallowed the cow to catch the goat.\nShe swallowed the goat to catch the dog.\nShe swallowed the dog to catch the cat.\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n\nI know an old lady who swallowed a horse.\nShe's dead, of course!\n```\n\n[cumulative-song]: https://en.wikipedia.org/wiki/Cumulative_song\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "=begin\nWrite your code for the 'Food Chain' exercise in this file. Make the tests in\n`food_chain_test.rb` pass.\n\nTo get started with TDD, see the `README.md` file in your\n`ruby/food-chain` directory.\n=end\n",
+  "example_solution": "module FoodChain\n  def self.song\n    verses(1, 8)\n  end\n\n  def self.verses(lower_bound, upper_bound)\n    (lower_bound..upper_bound).map { |i| verse(i) }.join(\"\\n\")\n  end\n\n  def self.verse(number)\n    case number\n    when 1\n      <<-LINES\nI know an old lady who swallowed a fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 2\n      <<-LINES\nI know an old lady who swallowed a spider.\nIt wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 3\n      <<-LINES\nI know an old lady who swallowed a bird.\nHow absurd to swallow a bird!\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 4\n      <<-LINES\nI know an old lady who swallowed a cat.\nImagine that, to swallow a cat!\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 5\n      <<-LINES\nI know an old lady who swallowed a dog.\nWhat a hog, to swallow a dog!\nShe swallowed the dog to catch the cat.\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 6\n      <<-LINES\nI know an old lady who swallowed a goat.\nJust opened her throat and swallowed a goat!\nShe swallowed the goat to catch the dog.\nShe swallowed the dog to catch the cat.\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 7\n      <<-LINES\nI know an old lady who swallowed a cow.\nI don't know how she swallowed a cow!\nShe swallowed the cow to catch the goat.\nShe swallowed the goat to catch the dog.\nShe swallowed the dog to catch the cat.\nShe swallowed the cat to catch the bird.\nShe swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\nShe swallowed the spider to catch the fly.\nI don't know why she swallowed the fly. Perhaps she'll die.\n      LINES\n    when 8\n      <<-LINES\nI know an old lady who swallowed a horse.\nShe's dead, of course!\n      LINES\n    end\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\n\nrequire_relative 'food_chain'\n\nclass NoCheating < IOError\n  def message\n    <<~END_OF_MESSAGE\n      The use of File.open and IO.read is restricted.\n\n      This exercise intends to help you improve your ability to work\n      with data generated from your code. Your program must not read\n      the song.txt file.\n    END_OF_MESSAGE\n  end\nend\n\nclass FoodChainTest < Minitest::Test\n  # This test is an acceptance test.\n  #\n  # If you find it difficult to work the problem with so much\n  # output, go ahead and add a `skip`, and write whatever\n  # unit tests will help you. Then unskip it again\n  # to make sure you got it right.\n  # There's no need to submit the tests you write, unless you\n  # specifically want feedback on them.\n  def test_the_whole_song\n    song_file = File.expand_path('song.txt', __dir__)\n    expected  = IO.read(song_file)\n    assert_equal expected, FoodChain.song\n  end\n\n  # Tests that an error is effectively raised when IO.read or\n  # File.open are used within FoodChain.\n  def test_read_guard\n    song_file = File.expand_path('song.txt', __dir__)\n    [\"IO.read '#{song_file}'\", \"File.open '#{song_file}'\"].each do |trigger|\n      assert_raises(NoCheating) { FoodChain.send :class_eval, trigger }\n    end\n  end\nend\n\nmodule RestrictedClasses\n  class File\n    def self.open(*)\n      raise NoCheating\n    end\n\n    def self.read(*)\n      raise NoCheating\n    end\n\n    def open(*)\n      raise NoCheating\n    end\n\n    def read(*)\n      raise NoCheating\n    end\n  end\n\n  class IO\n    def self.read(*)\n      raise NoCheating\n    end\n\n    def read(*)\n      raise NoCheating\n    end\n  end\nend\n\nFoodChain.prepend RestrictedClasses\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/There_Was_an_Old_Lady_Who_Swallowed_a_Fly",
+  "authors": [
+    "kytrinyx"
+  ],
+  "contributors": [
+    "alexbrinkman",
+    "alxndr",
+    "budmc29",
+    "cadwallion",
+    "dkinzer",
+    "fluxusfrequency",
+    "hilary",
+    "iHiD",
+    "Insti",
+    "kickinbahk",
+    "kotp",
+    "McEileen",
+    "Rojo",
+    "tryantwit"
+  ]
+}

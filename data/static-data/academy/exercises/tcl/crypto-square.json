@@ -1,0 +1,28 @@
+{
+  "id": "tcl:crypto-square",
+  "trackSlug": "tcl",
+  "slug": "crypto-square",
+  "name": "Crypto Square",
+  "uuid": "139774f8-3163-4f9f-8c99-fc7db27afeec",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement the classic method for composing secret messages called a square code.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement the classic method for composing secret messages called a square code.\n\nGiven an English text, output the encoded version of that text.\n\nFirst, the input is normalized: the spaces and punctuation are removed from the English text and the message is down-cased.\n\nThen, the normalized characters are broken into rows.\nThese rows can be regarded as forming a rectangle when printed with intervening newlines.\n\nFor example, the sentence\n\n```text\n\"If man was meant to stay on the ground, god would have given us roots.\"\n```\n\nis normalized to:\n\n```text\n\"ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots\"\n```\n\nThe plaintext should be organized into a rectangle as square as possible.\nThe size of the rectangle should be decided by the length of the message.\n\nIf `c` is the number of columns and `r` is the number of rows, then for the rectangle `r` x `c` find the smallest possible integer `c` such that:\n\n- `r * c >= length of message`,\n- and `c >= r`,\n- and `c - r <= 1`.\n\nOur normalized text is 54 characters long, dictating a rectangle with `c = 8` and `r = 7`:\n\n```text\n\"ifmanwas\"\n\"meanttos\"\n\"tayonthe\"\n\"groundgo\"\n\"dwouldha\"\n\"vegivenu\"\n\"sroots  \"\n```\n\nThe coded message is obtained by reading down the columns going left to right.\n\nThe message above is coded as:\n\n```text\n\"imtgdvsfearwermayoogoanouuiontnnlvtwttddesaohghnsseoau\"\n```\n\nOutput the encoded text in chunks that fill perfect rectangles `(r X c)`, with `c` chunks of `r` length, separated by spaces.\nFor phrases that are `n` characters short of the perfect rectangle, pad each of the last `n` chunks with a single trailing space.\n\n```text\n\"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n```\n\nNotice that were we to stack these, we could visually decode the ciphertext back in to the original message:\n\n```text\n\"imtgdvs\"\n\"fearwer\"\n\"mayoogo\"\n\"anouuio\"\n\"ntnnlvt\"\n\"wttddes\"\n\"aohghn \"\n\"sseoau \"\n```\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc encrypt {plaintext} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc encrypt {plaintext} {\n    set text [regsub -all {[^[:alnum:]]} [string tolower $plaintext] \"\"]\n\n    if {$text eq \"\"} then {return \"\"}\n\n    set size [expr {int(ceil(sqrt([string length $text])))}]\n    set segments [regexp -all -inline \".{1,$size}\" $text]\n\n    # pad the last segment with spaces\n    lset segments end [format {%-*s} $size [lindex $segments end]]\n\n    set transposed {}\n    for {set i 0} {$i < $size} {incr i} {\n        set column [lmap seg $segments {string range $seg $i $i}]\n        lappend transposed [join $column \"\"]\n    }\n\n    return [join $transposed]\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"crypto-square.tcl\"\n\ntest crypto-1 \"empty plaintext results in an empty ciphertext\" -body {\n    encrypt \"\"\n} -returnCodes ok -result \"\"\n\nskip crypto-8\ntest crypto-8 \"normalization results in empty plaintext\" -body {\n    encrypt \"... --- ...\"\n} -returnCodes ok -result \"\"\n\nskip crypto-2\ntest crypto-2 \"Lowercase\" -body {\n    encrypt \"A\"\n} -returnCodes ok -result \"a\"\n\nskip crypto-3\ntest crypto-3 \"Remove spaces\" -body {\n    encrypt \"  b \"\n} -returnCodes ok -result \"b\"\n\nskip crypto-4\ntest crypto-4 \"Remove punctuation\" -body {\n    encrypt \"@1,%!\"\n} -returnCodes ok -result \"1\"\n\nskip crypto-5\ntest crypto-5 \"9 character plaintext results in 3 chunks of 3 characters\" -body {\n    encrypt \"This is fun!\"\n} -returnCodes ok -result \"tsf hiu isn\"\n\nskip crypto-6\ntest crypto-6 \"8 character plaintext results in 3 chunks, the last one with a trailing space\" -body {\n    encrypt \"Chill out.\"\n} -returnCodes ok -result \"clu hlt io \"\n\nskip crypto-7\ntest crypto-7 \"54 character plaintext results in 8 chunks, the last two with trailing spaces\" -body {\n    encrypt \"If man was meant to stay on the ground, god would have given us roots.\"\n} -returnCodes ok -result \"imtgdvs fearwer mayoogo anouuio ntnnlvt wttddes aohghn  sseoau \"\n\n\ncleanupTests\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

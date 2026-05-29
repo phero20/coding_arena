@@ -67,10 +67,24 @@ interface EnvConfig {
 
   // AI
   groqApiKey?: string;
+<<<<<<< HEAD
+=======
+  geminiApiKey?: string;
+>>>>>>> prod-deploy
 
   // Redis
   redisUrl: string;
 
+<<<<<<< HEAD
+=======
+  // Clist API
+  clistUsername?: string;
+  clistApiKey?: string;
+
+  // LeetCode API
+  leetcodeApiUrl?: string;
+
+>>>>>>> prod-deploy
   // Logging
   logLevel: string;
   logPretty: boolean;
@@ -111,10 +125,24 @@ export const config: EnvConfig = {
 
   // AI
   groqApiKey: Bun.env.GROQ_API_KEY,
+<<<<<<< HEAD
+=======
+  geminiApiKey: Bun.env.GEMINI_API_KEY,
+>>>>>>> prod-deploy
 
   // Redis
   redisUrl: Bun.env.REDIS_URL || "redis://localhost:6379",
 
+<<<<<<< HEAD
+=======
+  // Clist API
+  clistUsername: Bun.env.CLIST_USERNAME,
+  clistApiKey: Bun.env.CLIST_API_KEY,
+
+  // LeetCode API
+  leetcodeApiUrl: Bun.env.LEETCODE_API_URL,
+
+>>>>>>> prod-deploy
   // Logging
   logLevel: Bun.env.LOG_LEVEL || "info",
   logPretty: Bun.env.LOG_PRETTY === "true",

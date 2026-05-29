@@ -1,0 +1,35 @@
+{
+  "id": "ruby:amusement-park-improvements",
+  "trackSlug": "ruby",
+  "slug": "amusement-park-improvements",
+  "name": "Amusement Park Improvements",
+  "uuid": "06ea7869-4907-454d-a5e5-9d5b71098b17",
+  "type": "concept",
+  "status": null,
+  "blurb": "Learn about booleans by writing a system that can check if an attendee can use a ride.",
+  "difficulty": null,
+  "concepts": [
+    "booleans"
+  ],
+  "practices": null,
+  "prerequisites": [
+    "instance-variables",
+    "nil"
+  ],
+  "instructions": "# Instructions\n\nContinuing your work with the amusement park, you are tasked with writing some utility methods to facilitate checking if an attendee can use a ride.\n\n## 1. Check if an attendee has a ride pass\n\nImplement the `Attendee#has_pass?` method to return a boolean (`true`/`false`) value based on the presence of a ride pass.\n\n```ruby\nAttendee.new(100).has_pass?\n# => false\n```\n\n## 2. Check if an attendee fits a ride\n\nImplement the `Attendee#fits_ride?` method to see if an attendee fits a ride based on their height.\nThe ride's required minimum height is provided as an argument.\nAn attendee must have height greater than or equal to ride's required minimum height.\n\n```ruby\nAttendee.new(140).fits_ride?(100)\n# => true\n```\n\n## 3. Check if an attendee is allowed to ride\n\nImplement the `Attendee#allowed_to_ride?` method to see if an attendee is allowed to go on a ride. The ride's required minimum height is provided as an argument. An attendee must have a ride pass and be able to fit the ride.\n\n```ruby\nattendee = Attendee.new(100)\nattendee.issue_pass!(42)\nattendee.allowed_to_ride?(120)\n# => false\n```\n",
+  "introduction": "# Introduction\n\n## True and False\n\nTrue and false logical states are represented with `true` and `false` in Ruby. \n\n```ruby\nhappy = true\nsad = false\n```\n\n## Equality and comparison\n\nRuby allows you to compare objects to each other using the normal equality symbols:\n- Use `==` to see if two objects are equal\n- Use `>` to see if the object on the left is **greater than** the object on the right\n- Use `<` to see if the object on the left is **less than** the object on the right.\n- Use `>=` or `<=` to test for \"greater than or equal to\" and \"less than or equal to\" respectively.\n\nYou can also use boolean logic with the normal operators:\n- Use `&&` or `and` to check if `x and y` are true\n- Use `||` or `or` to check if `x or y` is true.\n- Use `!` or `not` to invert equality - e.g. `x != y` (x does not equal y)\n\nHere are some examples:\n```ruby\n# Is \"true equal to false\"? \ntrue == false # false\n\n# Is \"true not equal to false\"\ntrue != false # true\n\n# Is 5 greater than 4?\n5 > 4 # true\n\n# Is 3 less than or equal to 2?\n3 <= 2 # false\n```\n\n[nil-dictionary]: https://www.merriam-webster.com/dictionary/nil\n",
+  "hints": "# Hints\n\n## General\n\n- [Ruby for beginners: Nothingness and the truth][rfb-nothingness-and-truth]\n\n## 1. Check if an attendee has a ride pass\n\n- Convert the pass_id to a boolean object.\n- Look at the [`BasicObject`][basicobject-class] class, it contains methods which most classes inherit.\n\n## 2. Check if an attendee fits a ride\n\n- Compare the ride's minimum height to the attendee's height.\n- Look at the [`Comparable`][comparable-module] module, it contains methods for comparing objects which can be used when they are included.\n  - The [Integer][integer-class] class includes the [`Comparable`][comparable-module] module.\n\n## 3. Check if an attendee is allowed to ride\n\n- Combine the instance methods you've created using a [boolean operator][pr-boolean-operator] to return the result.\n\n[pr-boolean-operator]: https://ruby-doc.com/docs/ProgrammingRuby/html/tut_expressions.html#UG\n[rfb-nothingness-and-truth]: http://ruby-for-beginners.rubymonstas.org/conditionals/nothing_and_truth.html\n[basicobject-class]: https://docs.ruby-lang.org/en/master/BasicObject.html\n[comparable-module]: https://docs.ruby-lang.org/en/master/Comparable.html\n[integer-class]: https://docs.ruby-lang.org/en/master/Integer.html\n[kernel-class]: https://docs.ruby-lang.org/en/master/Kernel.html\n[methods]: https://launchschool.com/books/ruby/read/methods\n",
+  "starter_code": "class Attendee\n  def initialize(height)\n    @height = height\n  end\n\n  def issue_pass!(pass_id)\n    @pass_id = pass_id\n  end\n\n  def revoke_pass!\n    @pass_id = nil\n  end\n\n  # Do not edit above methods, add your own methods below.\n\n  def has_pass?\n    raise 'Please implement the Attendee#haspass? method'\n  end\n\n  def fits_ride?(ride_minimum_height)\n    raise 'Please implement the Attendee#fits_ride? method'\n  end\n\n  def allowed_to_ride?(ride_minimum_height)\n    raise 'Please implement the Attendee#allowed_to_ride? method'\n  end\nend\n",
+  "example_solution": "class Attendee\n  def initialize(height)\n    @height = height\n  end\n\n  def has_pass?\n    !!@pass_id\n  end\n\n  def issue_pass!(pass_id)\n    @pass_id = pass_id\n  end\n\n  def revoke_pass!\n    @pass_id = nil\n  end\n\n  # #########################################\n  # Do not edit the methods above this line #\n  # #########################################\n\n  def fits_ride?(ride_minimum_height)\n    @height >= ride_minimum_height\n  end\n\n  def allowed_to_ride?(ride_minimum_height)\n    has_pass? && fits_ride?(ride_minimum_height)\n  end\nend\n",
+  "test_code": "require 'minitest/autorun'\nrequire_relative 'attendee'\n\nclass AttendeeTest < Minitest::Test\n  def test_new_instance_doesnt_have_pass\n    refute Attendee.new(100).has_pass?\n  end\n\n  def test_when_issued_pass\n    attendee = Attendee.new(100)\n    attendee.issue_pass!(1)\n    assert attendee.has_pass?\n  end\n\n  def test_when_revoked_doesnt_have_pass\n    attendee = Attendee.new(100)\n    attendee.issue_pass!(1)\n    attendee.revoke_pass!\n    refute attendee.has_pass?\n  end\n\n  def test_fits_ride_exactly\n    assert Attendee.new(100).fits_ride?(100)\n  end\n\n  def test_fits_small_ride\n    assert Attendee.new(100).fits_ride?(80)\n  end\n\n  def test_doesnt_fit_big_ride\n    refute Attendee.new(100).fits_ride?(110)\n  end\n\n  def test_fits_ride_but_no_pass\n    refute Attendee.new(100).allowed_to_ride?(100)\n  end\n\n  def test_fits_ride_and_pass\n    attendee = Attendee.new(100)\n    attendee.issue_pass!(1)\n    assert attendee.allowed_to_ride?(100)\n  end\n\n  def test_does_not_fit_ride_and_pass\n    attendee = Attendee.new(100)\n    attendee.issue_pass!(1)\n    refute attendee.allowed_to_ride?(120)\n  end\nend\n",
+  "source": null,
+  "source_url": null,
+  "authors": [
+    "neenjaw"
+  ],
+  "contributors": [
+    "kotp",
+    "iHiD",
+    "kayn1"
+  ]
+}

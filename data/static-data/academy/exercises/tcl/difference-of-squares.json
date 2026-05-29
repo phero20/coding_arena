@@ -1,0 +1,28 @@
+{
+  "id": "tcl:difference-of-squares",
+  "trackSlug": "tcl",
+  "slug": "difference-of-squares",
+  "name": "Difference of Squares",
+  "uuid": "294e0af9-436a-4d0e-be87-d1da7df16a08",
+  "type": "practice",
+  "status": null,
+  "blurb": "Find the difference between the square of the sum and the sum of the squares of the first N natural numbers.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nFind the difference between the square of the sum and the sum of the squares of the first N natural numbers.\n\nThe square of the sum of the first ten natural numbers is\n(1 + 2 + ... + 10)² = 55² = 3025.\n\nThe sum of the squares of the first ten natural numbers is\n1² + 2² + ... + 10² = 385.\n\nHence the difference between the square of the sum of the first ten natural numbers and the sum of the squares of the first ten natural numbers is 3025 - 385 = 2640.\n\nYou are not expected to discover an efficient solution to this yourself from first principles; research is allowed, indeed, encouraged.\nFinding the best algorithm for the problem is a key skill in software engineering.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "proc squareOfSum {n} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n\nproc sumOfSquares {n} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n\nproc differenceOfSquares {n} {\n    throw {NOT_IMPLEMENTED} \"Implement this procedure.\"\n}\n",
+  "example_solution": "proc squareOfSum {n} {\n    set sum 0\n    for {set i 1} {$i <= $n} {incr i} {\n        incr sum $i\n    }\n    return [expr {$sum ** 2}]\n}\n\nproc sumOfSquares {n} {\n    set sum 0\n    for {set i 1} {$i <= $n} {incr i} {\n        incr sum [expr {$i ** 2}]\n    }\n    return $sum\n}\n\nproc differenceOfSquares {n} {\n    return [expr {[squareOfSum $n] - [sumOfSquares $n]}]\n}\n",
+  "test_code": "#!/usr/bin/env tclsh\npackage require tcltest\nnamespace import ::tcltest::*\nsource testHelpers.tcl\n\n############################################################\nsource \"difference-of-squares.tcl\"\n\ntest squares-1 \"square of sum 1\" -body {\n    squareOfSum 1\n} -returnCodes ok -result 1\n\nskip squares-2\ntest squares-2 \"square of sum 5\" -body {\n    squareOfSum 5\n} -returnCodes ok -result 225\n\nskip squares-3\ntest squares-3 \"square of sum 100\" -body {\n    squareOfSum 100\n} -returnCodes ok -result 25502500\n\nskip squares-4\ntest squares-4 \"sum of squares 1\" -body {\n    sumOfSquares 1\n} -returnCodes ok -result 1\n\nskip squares-5\ntest squares-5 \"sum of squares 5\" -body {\n    sumOfSquares 5\n} -returnCodes ok -result 55\n\nskip squares-6\ntest squares-6 \"sum of squares 100\" -body {\n    sumOfSquares 100\n} -returnCodes ok -result 338350\n\nskip squares-7\ntest squares-7 \"difference of squares 1\" -body {\n    differenceOfSquares 1\n} -returnCodes ok -result 0\n\nskip squares-8\ntest squares-8 \"difference of squares 5\" -body {\n    differenceOfSquares 5\n} -returnCodes ok -result 170\n\nskip squares-9\ntest squares-9 \"difference of squares 100\" -body {\n    differenceOfSquares 100\n} -returnCodes ok -result 25164150\n\n\ncleanupTests\n",
+  "source": "Problem 6 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=6",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": [
+    "sshine"
+  ]
+}

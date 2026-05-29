@@ -1,0 +1,38 @@
+{
+  "id": "kotlin:etl",
+  "trackSlug": "kotlin",
+  "slug": "etl",
+  "name": "ETL",
+  "uuid": "f0f297f2-429f-4626-8b7f-0706a1e8f255",
+  "type": "practice",
+  "status": null,
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to change the data format of letters and their point values in the game.\n\nCurrently, letters are stored in groups based on their score, in a one-to-many mapping.\n\n- 1 point: \"A\", \"E\", \"I\", \"O\", \"U\", \"L\", \"N\", \"R\", \"S\", \"T\",\n- 2 points: \"D\", \"G\",\n- 3 points: \"B\", \"C\", \"M\", \"P\",\n- 4 points: \"F\", \"H\", \"V\", \"W\", \"Y\",\n- 5 points: \"K\",\n- 8 points: \"J\", \"X\",\n- 10 points: \"Q\", \"Z\",\n\nThis needs to be changed to store each individual letter with its score in a one-to-one mapping.\n\n- \"a\" is worth 1 point.\n- \"b\" is worth 3 points.\n- \"c\" is worth 3 points.\n- \"d\" is worth 2 points.\n- etc.\n\nAs part of this change, the team has also decided to change the letters to be lower-case rather than upper-case.\n\n~~~~exercism/note\nIf you want to look at how the data was previously structured and how it needs to change, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a company that makes an online multiplayer game called Lexiconia.\n\nTo play the game, each player is given 13 letters, which they must rearrange to create words.\nDifferent letters have different point values, since it's easier to create words with some letters than others.\n\nThe game was originally launched in English, but it is very popular, and now the company wants to expand to other languages as well.\n\nDifferent languages need to support different point values for letters.\nThe point values are determined by how often letters are used, compared to other letters in that language.\n\nFor example, the letter 'C' is quite common in English, and is only worth 3 points.\nBut in Norwegian it's a very rare letter, and is worth 10 points.\n\nTo make it easier to add new languages, your team needs to change the way letters and their point values are stored in the game.\n",
+  "hints": null,
+  "starter_code": "object ETL {\n    fun transform(source: Map<Int, Collection<Char>>): Map<Char, Int> {\n        TODO(\"Implement the function to complete the task\")\n    }\n}\n",
+  "example_solution": "object ETL {\n\n    fun transform(old: Map<Int, Collection<Char>>): Map<Char, Int> {\n        return old.flatMap { mapEntry ->\n            mapEntry.value.map { word ->\n                Pair(word.lowercaseChar(), mapEntry.key)\n            }\n        }.toMap()\n    }\n\n}\n",
+  "test_code": "import org.junit.Test\nimport org.junit.Ignore\nimport kotlin.test.assertEquals\n\nclass ETLTest {\n\n    @Test\n    fun `single letter`() = assertTransformedEquals(\n            mapOf(\n                    1 to listOf('A')),\n            mapOf(\n                    'a' to 1))\n\n    @Ignore\n    @Test\n    fun `single score with multiple letters`() = assertTransformedEquals(\n            mapOf(\n                    1 to listOf('A', 'E', 'I', 'O', 'U')),\n            mapOf(\n                    'a' to 1, 'e' to 1, 'i' to 1, 'o' to 1, 'u' to 1))\n\n    @Ignore\n    @Test\n    fun `multiple scores with multiple letters`() = assertTransformedEquals(\n            mapOf(\n                    1 to listOf('A', 'E'), 2 to listOf('D', 'G')),\n            mapOf(\n                    'a' to 1, 'd' to 2, 'e' to 1, 'g' to 2))\n\n    @Ignore\n    @Test\n    fun `multiple scores with differing numbers of letters`() =\n            assertTransformedEquals(\n                    mapOf(\n                            1 to listOf('A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'),\n                            2 to listOf('D', 'G'),\n                            3 to listOf('B', 'C', 'M', 'P'),\n                            4 to listOf('F', 'H', 'V', 'W', 'Y'),\n                            5 to listOf('K'),\n                            8 to listOf('J', 'X'),\n                            10 to listOf('Q', 'Z')),\n                    mapOf(\n                            'a' to 1, 'b' to 3, 'c' to 3, 'd' to 2, 'e' to 1,\n                            'f' to 4, 'g' to 2, 'h' to 4, 'i' to 1, 'j' to 8,\n                            'k' to 5, 'l' to 1, 'm' to 3, 'n' to 1, 'o' to 1,\n                            'p' to 3, 'q' to 10, 'r' to 1, 's' to 1, 't' to 1,\n                            'u' to 1, 'v' to 4, 'w' to 4, 'x' to 8, 'y' to 4,\n                            'z' to 10))\n\n}\n\nprivate fun assertTransformedEquals(input: Map<Int, List<Char>>, expectation: Map<Char, Int>) =\n        assertEquals(expectation, ETL.transform(input))\n\n",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://turing.edu",
+  "authors": [
+    "sdavids13"
+  ],
+  "contributors": [
+    "dector",
+    "eparovyshnaya",
+    "jtigger",
+    "kytrinyx",
+    "lihofm",
+    "mdowds",
+    "nithia",
+    "sjwarner-bp",
+    "SleeplessByte",
+    "stkent",
+    "uzilan"
+  ]
+}

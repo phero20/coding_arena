@@ -1,0 +1,26 @@
+{
+  "id": "cairo:hamming",
+  "trackSlug": "cairo",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "906dbb3e-892b-4297-8a0e-9eafca5d6832",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "pub fn distance(strand1: ByteArray, strand2: ByteArray) -> u256 {\n    panic!(\"implement `distance`\")\n}\n",
+  "example_solution": "pub fn distance(strand1: ByteArray, strand2: ByteArray) -> u256 {\n    if strand1.len() != strand2.len() {\n        panic!(\"strands must be of equal length\");\n    }\n\n    let mut count = 0;\n\n    let mut i = 0;\n    loop {\n        if i >= strand1.len() {\n            break;\n        }\n\n        if strand1[i] != strand2[i] {\n            count += 1;\n        }\n\n        i += 1;\n    }\n\n    count\n}\n",
+  "test_code": "use hamming::distance;\n\n#[test]\nfn empty_strands() {\n    let output = distance(\"\", \"\");\n    let expected = 0;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn single_letter_identical_strands() {\n    let output = distance(\"A\", \"A\");\n    let expected = 0;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn single_letter_different_strands() {\n    let output = distance(\"G\", \"T\");\n    let expected = 1;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn long_identical_strands() {\n    let output = distance(\"GGACTGAAATCTG\", \"GGACTGAAATCTG\");\n    let expected = 0;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\nfn long_different_strands() {\n    let output = distance(\"GGACGGATTCTG\", \"AGGACGGATTCT\");\n    let expected = 9;\n    assert_eq!(output, expected);\n}\n\n#[test]\n#[ignore]\n#[should_panic(expected: (\"strands must be of equal length\",))]\nfn disallow_first_strand_longer() {\n    distance(\"AATG\", \"AAA\");\n}\n\n#[test]\n#[ignore]\n#[should_panic(expected: (\"strands must be of equal length\",))]\nfn disallow_second_strand_longer() {\n    distance(\"ATA\", \"AGTG\");\n}\n\n#[test]\n#[ignore]\n#[should_panic(expected: (\"strands must be of equal length\",))]\nfn disallow_empty_first_strand() {\n    distance(\"\", \"G\");\n}\n\n#[test]\n#[ignore]\n#[should_panic(expected: (\"strands must be of equal length\",))]\nfn disallow_empty_second_strand() {\n    distance(\"G\", \"\");\n}\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

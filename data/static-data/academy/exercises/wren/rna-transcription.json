@@ -1,0 +1,26 @@
+{
+  "id": "wren:rna-transcription",
+  "trackSlug": "wren",
+  "slug": "rna-transcription",
+  "name": "RNA Transcription",
+  "uuid": "91e29b22-5d7f-480a-b9de-28a56bd2638d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a DNA strand, return its RNA complement.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine the RNA complement of a given DNA sequence.\n\nBoth DNA and RNA strands are a sequence of nucleotides.\n\nThe four nucleotides found in DNA are adenine (**A**), cytosine (**C**), guanine (**G**), and thymine (**T**).\n\nThe four nucleotides found in RNA are adenine (**A**), cytosine (**C**), guanine (**G**), and uracil (**U**).\n\nGiven a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:\n\n- `G` -> `C`\n- `C` -> `G`\n- `T` -> `A`\n- `A` -> `U`\n\n~~~~exercism/note\nIf you want to look at how the inputs and outputs are structured, take a look at the examples in the test suite.\n~~~~\n",
+  "introduction": "# Introduction\n\nYou work for a bioengineering company that specializes in developing therapeutic solutions.\n\nYour team has just been given a new project to develop a targeted therapy for a rare type of cancer.\n\n~~~~exercism/note\nIt's all very complicated, but the basic idea is that sometimes people's bodies produce too much of a given protein.\nThat can cause all sorts of havoc.\n\nBut if you can create a very specific molecule (called a micro-RNA), it can prevent the protein from being produced.\n\nThis technique is called [RNA Interference][rnai].\n\n[rnai]: https://admin.acceleratingscience.com/ask-a-scientist/what-is-rnai/\n~~~~\n",
+  "hints": null,
+  "starter_code": "class DNA {\n  static toRNA(strand) {\n    Fiber.abort(\"Remove this statement and implement this function\")\n  }\n}\n",
+  "example_solution": "var DNA_TO_RNA = {\n  \"G\": \"C\",\n  \"C\": \"G\",\n  \"T\": \"A\",\n  \"A\": \"U\"\n}\n\nclass DNA {\n  static toRNA(strand) {\n    return strand.map {|x| DNA_TO_RNA[x] }.join(\"\")\n  }\n}\n",
+  "test_code": "import \"./rna-transcription\" for DNA\nimport \"wren-testie/testie\" for Testie, Expect\n\nTestie.test(\"RNA Transcription\") { |do, skip|\n  do.test(\"empty rna sequence\") {\n    Expect.value(DNA.toRNA(\"\")).toEqual(\"\")\n  }\n\n  skip.test(\"transcribes cytosine to guanine\") {\n    Expect.value(DNA.toRNA(\"C\")).toEqual(\"G\")\n  }\n\n  skip.test(\"transcribes guanine to cytosine\") {\n    Expect.value(DNA.toRNA(\"G\")).toEqual(\"C\")\n  }\n\n  skip.test(\"transcribes thymine to adenine\") {\n    Expect.value(DNA.toRNA(\"T\")).toEqual(\"A\")\n  }\n\n  skip.test(\"transcribes adenine to uracil\") {\n    Expect.value(DNA.toRNA(\"A\")).toEqual(\"U\")\n  }\n\n  skip.test(\"transcribes all dna nucleotides to their rna complements\") {\n    Expect.value(DNA.toRNA(\"ACGTGGTCTTAA\")).toEqual(\"UGCACCAGAAUU\")\n  }\n}\n",
+  "source": "Hyperphysics",
+  "source_url": "https://web.archive.org/web/20220408112140/http://hyperphysics.phy-astr.gsu.edu/hbase/Organic/transcription.html",
+  "authors": [
+    "joshgoebel"
+  ],
+  "contributors": null
+}

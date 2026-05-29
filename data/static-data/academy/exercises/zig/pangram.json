@@ -1,0 +1,42 @@
+{
+  "id": "zig:pangram",
+  "trackSlug": "zig",
+  "slug": "pangram",
+  "name": "Pangram",
+  "uuid": "8f48a213-9a28-4a7e-93f9-f2b1fbe46e58",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine if a sentence is a pangram.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "bitwise-operations",
+    "builtin-functions",
+    "conditionals",
+    "control-flow",
+    "importing",
+    "slices",
+    "type-coercion"
+  ],
+  "prerequisites": [
+    "bitwise-operations",
+    "builtin-functions",
+    "conditionals",
+    "control-flow",
+    "importing",
+    "slices",
+    "type-coercion"
+  ],
+  "instructions": "# Instructions\n\nYour task is to figure out if a sentence is a pangram.\n\nA pangram is a sentence using every letter of the alphabet at least once.\nIt is case insensitive, so it doesn't matter if a letter is lower-case (e.g. `k`) or upper-case (e.g. `K`).\n\nFor this exercise, a sentence is a pangram if it contains each of the 26 letters in the English alphabet.\n",
+  "introduction": "# Introduction\n\nYou work for a company that sells fonts through their website.\nThey'd like to show a different sentence each time someone views a font on their website.\nTo give a comprehensive sense of the font, the random sentences should use **all** the letters in the English alphabet.\n\nThey're running a competition to get suggestions for sentences that they can use.\nYou're in charge of checking the submissions to see if they are valid.\n\n~~~~exercism/note\nPangram comes from Greek, παν γράμμα, pan gramma, which means \"every letter\".\n\nThe best known English pangram is:\n\n> The quick brown fox jumps over the lazy dog.\n~~~~\n",
+  "hints": null,
+  "starter_code": "pub fn isPangram(str: []const u8) bool {\n    _ = str;\n    @compileError(\"please implement the isPangram function\");\n}\n",
+  "example_solution": "pub fn isPangram(s: []const u8) bool {\n    if (s.len < 26) return false;\n\n    var letters = [_]bool{false} ** 26;\n    for (s) |c| {\n        const i = switch (c) {\n            'A'...'Z' => c - 'A',\n            'a'...'z' => c - 'a',\n            else => continue,\n        };\n        letters[i] = true;\n    }\n    for (letters) |b| {\n        if (!b) return false;\n    }\n    return true;\n}\n",
+  "test_code": "const std = @import(\"std\");\nconst testing = std.testing;\n\nconst pangram = @import(\"pangram.zig\");\n\ntest \"empty sentence\" {\n    try testing.expect(!pangram.isPangram(\"\"));\n}\n\ntest \"perfect lower case\" {\n    try testing.expect(pangram.isPangram(\"abcdefghijklmnopqrstuvwxyz\"));\n}\n\ntest \"only lower case\" {\n    try testing.expect(pangram.isPangram(\"the quick brown fox jumps over the lazy dog\"));\n}\n\ntest \"missing the letter 'x'\" {\n    try testing.expect(!pangram.isPangram(\"a quick movement of the enemy will jeopardize five gunboats\"));\n}\n\ntest \"missing the letter 'h'\" {\n    try testing.expect(!pangram.isPangram(\"five boxing wizards jump quickly at it\"));\n}\n\ntest \"with underscores\" {\n    try testing.expect(pangram.isPangram(\"the_quick_brown_fox_jumps_over_the_lazy_dog\"));\n}\n\ntest \"with numbers\" {\n    try testing.expect(pangram.isPangram(\"the 1 quick brown fox jumps over the 2 lazy dogs\"));\n}\n\ntest \"missing letters replaced by numbers\" {\n    try testing.expect(!pangram.isPangram(\"7h3 qu1ck brown fox jumps ov3r 7h3 lazy dog\"));\n}\n\ntest \"mixed case and punctuation\" {\n    try testing.expect(pangram.isPangram(\"\\\"Five quacking Zephyrs jolt my wax bed.\\\"\"));\n}\n\ntest \"a-m and A-M are 26 different characters but not a pangram\" {\n    try testing.expect(!pangram.isPangram(\"abcdefghijklm ABCDEFGHIJKLM\"));\n}\n\ntest \"non-alphanumeric printable ASCII\" {\n    try testing.expect(!pangram.isPangram(\" !\\\"#$%&'()*+,-./:;<=>?@[\\\\]^_`{|}~\"));\n}\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Pangram",
+  "authors": [
+    "massivelivefun"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,28 @@
+{
+  "id": "cfml:space-age",
+  "trackSlug": "cfml",
+  "slug": "space-age",
+  "name": "Space Age",
+  "uuid": "efe65169-28d7-4b29-b27a-cb2e278a1c0f",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given an age in seconds, calculate how old someone is in terms of a given planet's solar years.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven an age in seconds, calculate how old someone would be on a planet in our Solar System.\n\nOne Earth year equals 365.25 Earth days, or 31,557,600 seconds.\nIf you were told someone was 1,000,000,000 seconds old, their age would be 31.69 Earth-years.\n\nFor the other planets, you have to account for their orbital period in Earth Years:\n\n| Planet  | Orbital period in Earth Years |\n| ------- | ----------------------------- |\n| Mercury | 0.2408467                     |\n| Venus   | 0.61519726                    |\n| Earth   | 1.0                           |\n| Mars    | 1.8808158                     |\n| Jupiter | 11.862615                     |\n| Saturn  | 29.447498                     |\n| Uranus  | 84.016846                     |\n| Neptune | 164.79132                     |\n\n~~~~exercism/note\nThe actual length of one complete orbit of the Earth around the sun is closer to 365.256 days (1 sidereal year).\nThe Gregorian calendar has, on average, 365.2425 days.\nWhile not entirely accurate, 365.25 is the value used in this exercise.\nSee [Year on Wikipedia][year] for more ways to measure a year.\n\n[year]: https://en.wikipedia.org/wiki/Year#Summary\n~~~~\n",
+  "introduction": "# Introduction\n\nThe year is 2525 and you've just embarked on a journey to visit all planets in the Solar System (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune).\nThe first stop is Mercury, where customs require you to fill out a form (bureaucracy is apparently _not_ Earth-specific).\nAs you hand over the form to the customs officer, they scrutinize it and frown.\n\"Do you _really_ expect me to believe you're just 50 years old?\nYou must be closer to 200 years old!\"\n\nAmused, you wait for the customs officer to start laughing, but they appear to be dead serious.\nYou realize that you've entered your age in _Earth years_, but the officer expected it in _Mercury years_!\nAs Mercury's orbital period around the sun is significantly shorter than Earth, you're actually a lot older in Mercury years.\nAfter some quick calculations, you're able to provide your age in Mercury Years.\nThe customs officer smiles, satisfied, and waves you through.\nYou make a mental note to pre-calculate your planet-specific age _before_ future customs checks, to avoid such mix-ups.\n\n~~~~exercism/note\nIf you're wondering why Pluto didn't make the cut, go watch [this YouTube video][pluto-video].\n\n[pluto-video]: https://www.youtube.com/watch?v=Z_2gbGXzFbs\n~~~~\n",
+  "hints": null,
+  "starter_code": "/**\n* Your implementation of the SpaceAge exercise\n*/\ncomponent {\n\t\n\t/**\n\t* @returns \n\t*/\n\t function age( planet, seconds ) {\n\t\t// Implement me here\n\t}\n\t\n}",
+  "example_solution": "/**\n* Here is an example solution for the SpaceAge exercise\n*/\ncomponent {\n\n\t function age( planet, seconds ) {\n\t \t\n\t \t// Seconds in one Earth lunar year\n\t\tvar baseSeconds = 31557600;\n\t\t\n\t\t// Relative factor for each planet compared to Earth\n\t\tvar planets = {\n\t\t\tEarth : 1,\n\t\t\tMercury : 0.2408467,\n\t\t\tVenus : 0.61519726,\n\t\t\tMars : 1.8808158,\n\t\t\tJupiter : 11.862615,\n\t\t\tSaturn : 29.447498,\n\t\t\tUranus : 84.016846,\n\t\t\tNeptune : 164.79132\n\t\t};\n\t\t\n\t\t// age in seconds divded by planet's relative solar year, rounded to two decimals\n\t\treturn numberFormat( seconds  / ( planets[ planet ] * baseSeconds ), '.00' );\n\t\t\n\t}\n\t\t\n}",
+  "test_code": "component extends=\"testbox.system.BaseSpec\" {\n\n\tfunction beforeAll(){\n\t  SUT = createObject( 'SpaceAge' );\n\t}\n\n\tfunction run(){\n\t\n\t\tdescribe( \"My SpaceAge class\", function(){\t\t\t\n\n\t\t\tit( 'age on Earth', function(){\n\t\t\t\texpect( SUT.age( planet='Earth', seconds='1000000000' ) ).toBe( '31.69' );\n\t\t\t});\n\n\t\t\tit( 'age on Mercury', function(){\n\t\t\t\texpect( SUT.age( planet='Mercury', seconds='2134835688' ) ).toBe( '280.88' );\n\t\t\t});\n\n\t\t\tit( 'age on Venus', function(){\n\t\t\t\texpect( SUT.age( planet='Venus', seconds='189839836' ) ).toBe( '9.78' );\n\t\t\t});\n\n\t\t\tit( 'age on Mars', function(){\n\t\t\t\texpect( SUT.age( planet='Mars', seconds='2329871239' ) ).toBe( '39.25' );\n\t\t\t});\n\n\t\t\tit( 'age on Jupiter', function(){\n\t\t\t\texpect( SUT.age( planet='Jupiter', seconds='901876382' ) ).toBe( '2.41' );\n\t\t\t});\n\n\t\t\tit( 'age on Saturn', function(){\n\t\t\t\texpect( SUT.age( planet='Saturn', seconds='3000000000' ) ).toBe( '3.23' );\n\t\t\t});\n\n\t\t\tit( 'age on Uranus', function(){\n\t\t\t\texpect( SUT.age( planet='Uranus', seconds='3210123456' ) ).toBe( '1.21' );\n\t\t\t});\n\n\t\t\tit( 'age on Neptune', function(){\n\t\t\t\texpect( SUT.age( planet='Neptune', seconds='8210123456' ) ).toBe( '1.58' );\n\t\t\t});\n\n\t\t});\n\t\t\n\t}\n \n}",
+  "source": "Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial.",
+  "source_url": "https://pine.fm/LearnToProgram/?Chapter=01",
+  "authors": [
+    "bdw429s"
+  ],
+  "contributors": [
+    "kytrinyx"
+  ]
+}

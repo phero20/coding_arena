@@ -1,10 +1,20 @@
 import { createLogger } from "../../libs/utils/logger";
+<<<<<<< HEAD
+=======
+import { getLanguageName, normalizeLanguageId, getLanguageSlug } from "../../libs/utils/languages";
+>>>>>>> prod-deploy
 import { type ICradle } from "../../libs/awilix-container";
 import type { IStatsRepository } from "../../repositories/stats/stats.repository";
 import type { IProblemRepository } from "../../repositories/problems/problem.repository";
 import type { IUserRepository } from "../../repositories/user/user.repository";
 import type { Submission } from "../../types/submissions/submission.types";
 import { type IStatsService } from "./stats.service";
+<<<<<<< HEAD
+=======
+import { type ITaxonomyService } from "../taxonomy/taxonomy.service";
+import { type LeaderboardCache } from "../../cache/stats/leaderboard.cache";
+import { type User } from "../../db/schema";
+>>>>>>> prod-deploy
 
 
 const logger = createLogger("stats-submission-service");
@@ -14,17 +24,32 @@ export class StatsSubmissionService {
   private readonly problemRepository: IProblemRepository;
   private readonly userRepository: IUserRepository;
   private readonly statsService: IStatsService;
+<<<<<<< HEAD
+=======
+  private readonly taxonomyService: ITaxonomyService;
+  private readonly leaderboardCache: LeaderboardCache;
+>>>>>>> prod-deploy
 
   constructor({
     statsRepository,
     problemRepository,
     userRepository,
     statsService,
+<<<<<<< HEAD
+=======
+    taxonomyService,
+    leaderboardCache,
+>>>>>>> prod-deploy
   }: ICradle) {
     this.statsRepository = statsRepository;
     this.problemRepository = problemRepository;
     this.userRepository = userRepository;
     this.statsService = statsService;
+<<<<<<< HEAD
+=======
+    this.taxonomyService = taxonomyService;
+    this.leaderboardCache = leaderboardCache;
+>>>>>>> prod-deploy
   }
 
 
@@ -83,7 +108,11 @@ export class StatsSubmissionService {
           { submissionId: submission.id },
           "Submission is ACCEPTED. Processing points...",
         );
+<<<<<<< HEAD
         await this.processAcceptedSolve(submission, postgresUserId);
+=======
+        await this.processAcceptedSolve(submission, user);
+>>>>>>> prod-deploy
       } else {
         logger.info(
           { status: submission.status },
@@ -104,8 +133,14 @@ export class StatsSubmissionService {
 
   private async processAcceptedSolve(
     submission: Submission,
+<<<<<<< HEAD
     postgresUserId: string,
   ): Promise<void> {
+=======
+    user: User,
+  ): Promise<void> {
+    const postgresUserId = user.id;
+>>>>>>> prod-deploy
     logger.info(
       { problemId: submission.problemId },
       "Fetching problem details from MongoDB...",
@@ -147,13 +182,31 @@ export class StatsSubmissionService {
       );
 
       // Update Total Performance Stats
+<<<<<<< HEAD
       await this.statsRepository.updateUserStats({
+=======
+      const [updatedStats] = await this.statsRepository.updateUserStats({
+>>>>>>> prod-deploy
         userId: postgresUserId,
         points,
         difficulty,
         isMatch: false,
       });
 
+<<<<<<< HEAD
+=======
+      // Update Leaderboard ZSET in real-time
+      if (updatedStats) {
+        await Promise.all([
+          this.leaderboardCache.updateScore(postgresUserId, updatedStats.totalPoints),
+          this.leaderboardCache.updateUserMetadata({
+            ...user,
+            totalSolved: updatedStats.totalSolved
+          })
+        ]);
+      }
+
+>>>>>>> prod-deploy
       // Credit the earned points to today's activity log
       await this.statsRepository.logActivity(
         postgresUserId,
@@ -167,6 +220,12 @@ export class StatsSubmissionService {
         { userId: postgresUserId, problemId: submission.problemId, points },
         "Postgres unique problem stats updated successfully ✅",
       );
+<<<<<<< HEAD
+=======
+
+      // Invalidate Roadmap Progress cache so the new solve shows up on the canvas
+      await this.taxonomyService.invalidateUserProgress(postgresUserId);
+>>>>>>> prod-deploy
     } else {
       logger.info(
         { userId: postgresUserId, problemId: submission.problemId },
@@ -185,32 +244,56 @@ export class StatsSubmissionService {
     // Language counter — runs on every ACCEPTED, gated by its own (problem, language) dedup.
     // Separate from isNewSolve so solving the same problem in a new language still counts.
     if (submission.languageId) {
+<<<<<<< HEAD
+=======
+      const langSlug = getLanguageSlug(submission.languageId);
+>>>>>>> prod-deploy
       logger.info(
         {
           userId: postgresUserId,
           problemId: submission.problemId,
           languageId: submission.languageId,
+<<<<<<< HEAD
+=======
+          langSlug,
+>>>>>>> prod-deploy
         },
         "Processing language solve recording...",
       );
       const isNewLang = await this.statsRepository.recordSolvedLanguage(
         postgresUserId,
         submission.problemId,
+<<<<<<< HEAD
         submission.languageId,
+=======
+        langSlug,
+>>>>>>> prod-deploy
       );
 
       if (isNewLang) {
         logger.info(
+<<<<<<< HEAD
           { userId: postgresUserId, languageId: submission.languageId },
+=======
+          { userId: postgresUserId, languageId: langSlug },
+>>>>>>> prod-deploy
           "New language solve detected! Incrementing counter...",
         );
         await this.statsRepository.updateLanguageCount(
           postgresUserId,
+<<<<<<< HEAD
           submission.languageId,
         );
       } else {
         logger.info(
           { userId: postgresUserId, languageId: submission.languageId },
+=======
+          langSlug,
+        );
+      } else {
+        logger.info(
+          { userId: postgresUserId, languageId: langSlug },
+>>>>>>> prod-deploy
           "Language solve already recorded for this problem. Skipping counter.",
         );
       }
@@ -261,7 +344,11 @@ export class StatsSubmissionService {
           const postgresUserId = user.id;
 
           // 1. Update Core Stats (Increment games and dual-write points)
+<<<<<<< HEAD
           await this.statsRepository.updateUserStats({
+=======
+          const [updatedStats] = await this.statsRepository.updateUserStats({
+>>>>>>> prod-deploy
             userId: postgresUserId,
             points: arenaBonusPoints, // Still adds to the global total
             arenaPoints: arenaBonusPoints, // Adds to the exclusive Arena pool
@@ -269,6 +356,20 @@ export class StatsSubmissionService {
             // difficulty is undefined -> don't double-count solve count
           });
 
+<<<<<<< HEAD
+=======
+          // Sync to Leaderboard ZSET
+          if (updatedStats) {
+             await Promise.all([
+              this.leaderboardCache.updateScore(postgresUserId, updatedStats.totalPoints),
+              this.leaderboardCache.updateUserMetadata({
+            ...user,
+            totalSolved: updatedStats.totalSolved
+          })
+            ]);
+          }
+
+>>>>>>> prod-deploy
           // 2. Log Activity (Increment match count and add rank-based bonus)
           await this.statsRepository.logActivity(
             postgresUserId,
@@ -282,6 +383,12 @@ export class StatsSubmissionService {
             { postgresUserId, rank, points: arenaBonusPoints },
             "Arena stats updated for ranked player",
           );
+<<<<<<< HEAD
+=======
+
+          // 3. Invalidate User Stats Cache so the new rank/points show up instantly
+          await this.statsService.invalidateProfile(postgresUserId);
+>>>>>>> prod-deploy
         } catch (err) {
           logger.error(
             { userId: player.userId, err },

@@ -15,6 +15,11 @@ import { ProblemRowSkeleton } from "@/components/shared/Skeletons";
 import { EmptyDisplay } from "@/components/shared/StatusState";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import type { ProblemTableProps } from "@/types/component.types";
+<<<<<<< HEAD
+=======
+import { useAuth } from "@clerk/nextjs";
+import { useUserSolvedProblemsQuery } from "@/hooks/queries/use-problem.queries";
+>>>>>>> prod-deploy
 
 export const ProblemTable: React.FC<ProblemTableProps> = ({
   problems,
@@ -27,7 +32,18 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
   isUpdating,
   topicFilter,
   onRetry,
+<<<<<<< HEAD
 }) => {
+=======
+  isFetchingNextPage,
+  hasNextPage,
+}) => {
+  const { userId } = useAuth();
+  const { data: solvedProblems } = useUserSolvedProblemsQuery(userId as string, !!userId);
+  const solvedIds = React.useMemo(() => new Set(solvedProblems || []), [solvedProblems]);
+
+
+>>>>>>> prod-deploy
   return (
     <Card className="border rounded-lg border-border/60 bg-card/70 backdrop-blur-sm overflow-hidden">
       <CardContent className="p-0">
@@ -37,6 +53,28 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
           data={problems}
           skeleton={
             <Table className="table-fixed">
+<<<<<<< HEAD
+=======
+              <TableHeader className="bg-muted/40">
+                <TableRow className="border-b border-border/40 hover:bg-transparent">
+                  <TableHead className="pl-4 pr-0 md:pr-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-12">
+                    ID
+                  </TableHead>
+                  <TableHead className="px-4 md:px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
+                    Title
+                  </TableHead>
+                  <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-20 sm:w-32">
+                    Difficulty
+                  </TableHead>
+                  <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-40 hidden md:table-cell">
+                    Topics
+                  </TableHead>
+                  <TableHead className="px-4 py-3 h-12 text-right font-bold text-xs uppercase tracking-widest w-24 sm:w-28">
+                    Action
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+>>>>>>> prod-deploy
               <ProblemRowSkeleton />
             </Table>
           }
@@ -79,8 +117,17 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
                     isHosting={
                       (isHosting || isUpdating) && selectingId === problem.problem_id
                     }
+<<<<<<< HEAD
                   />
                 ))}
+=======
+                    isSolved={solvedIds.has(problem.problem_id)}
+                  />
+                ))}
+                {isFetchingNextPage && (
+                  <ProblemRowSkeleton count={5} fragment />
+                )}
+>>>>>>> prod-deploy
               </TableBody>
             </Table>
           )}

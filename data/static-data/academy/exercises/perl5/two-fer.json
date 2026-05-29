@@ -1,0 +1,32 @@
+{
+  "id": "perl5:two-fer",
+  "trackSlug": "perl5",
+  "slug": "two-fer",
+  "name": "Two Fer",
+  "uuid": "749dac4a-a746-4af7-aca6-db9e69ccad8c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create a sentence of the form \"One for X, one for me.\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "booleans-and-conditionals",
+    "strings",
+    "subroutines"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine what you will say as you give away the extra cookie.\n\nIf you know the person's name (e.g. if they're named Do-yun), then you will say:\n\n```text\nOne for Do-yun, one for me.\n```\n\nIf you don't know the person's name, you will say _you_ instead.\n\n```text\nOne for you, one for me.\n```\n\nHere are some examples:\n\n| Name   | Dialogue                    |\n| :----- | :-------------------------- |\n| Alice  | One for Alice, one for me.  |\n| Bohdan | One for Bohdan, one for me. |\n|        | One for you, one for me.    |\n| Zaphod | One for Zaphod, one for me. |\n",
+  "introduction": "# Introduction\n\nIn some English accents, when you say \"two for\" quickly, it sounds like \"two fer\".\nTwo-for-one is a way of saying that if you buy one, you also get one for free.\nSo the phrase \"two-fer\" often implies a two-for-one offer.\n\nImagine a bakery that has a holiday offer where you can buy two cookies for the price of one (\"two-fer one!\").\nYou take the offer and (very generously) decide to give the extra cookie to someone else in the queue.\n",
+  "hints": null,
+  "starter_code": "package TwoFer;\n\nuse v5.40;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<two_fer>;\n\nsub two_fer ( $name = undef ) {\n    return undef;\n}\n\n1;\n",
+  "example_solution": "package TwoFer;\n\nuse strict;\nuse warnings;\nuse experimental qw<signatures postderef postderef_qq>;\n\nuse Exporter qw<import>;\nour @EXPORT_OK = qw<two_fer>;\n\nsub two_fer ( $name = 'you' ) {\n    return \"One for $name, one for me.\";\n}\n\n1;\n",
+  "test_code": "#!/usr/bin/env perl\nuse Test2::V0;\n\nuse FindBin qw<$Bin>;\nuse lib \"$Bin/../lib\", \"$Bin/../local/lib/perl5\";\n\nuse TwoFer qw<two_fer>;\n\nis( # begin: 1cf3e15a-a3d7-4a87-aeb3-ba1b43bc8dce\n    two_fer(),\n    \"One for you, one for me.\",\n    \"no name given\",\n); # end: 1cf3e15a-a3d7-4a87-aeb3-ba1b43bc8dce\n\nis( # begin: b4c6dbb8-b4fb-42c2-bafd-10785abe7709\n    two_fer(\"Alice\"),\n    \"One for Alice, one for me.\",\n    \"a name given\",\n); # end: b4c6dbb8-b4fb-42c2-bafd-10785abe7709\n\nis( # begin: 3549048d-1a6e-4653-9a79-b0bda163e8d5\n    two_fer(\"Bob\"),\n    \"One for Bob, one for me.\",\n    \"another name given\",\n); # end: 3549048d-1a6e-4653-9a79-b0bda163e8d5\n\ndone_testing;\n",
+  "source": null,
+  "source_url": "https://github.com/exercism/problem-specifications/issues/757",
+  "authors": [
+    "m-dango"
+  ],
+  "contributors": [
+    "rfilipo"
+  ]
+}

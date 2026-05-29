@@ -1,0 +1,32 @@
+{
+  "id": "clojure:series",
+  "trackSlug": "clojure",
+  "slug": "series",
+  "name": "Series",
+  "uuid": "f342d3f2-775f-4fb6-93c2-9aea4a8f5f22",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a string of digits, output all the contiguous substrings of length `n` in that string.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "vectors"
+  ],
+  "instructions": "# Instructions\n\nGiven a string of digits, output all the contiguous substrings of length `n` in that string in the order that they appear.\n\nFor example, the string \"49142\" has the following 3-digit series:\n\n- \"491\"\n- \"914\"\n- \"142\"\n\nAnd the following 4-digit series:\n\n- \"4914\"\n- \"9142\"\n\nAnd if you ask for a 6-digit series from a 5-digit string, you deserve whatever you get.\n\nNote that these series are only required to occupy _adjacent positions_ in the input;\nthe digits need not be _numerically consecutive_.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns series)\n\n(defn slices\n  \"Returns all contiguous substrings of length n from the string s.\"\n  [s n]\n  ;; function body\n  )\n",
+  "example_solution": "(ns series)\n\n(defn slices [s n]\n  (cond\n    (= \"\" s) (throw (IllegalArgumentException. \"series cannot be empty\"))\n    (zero? n) (throw (IllegalArgumentException. \"slice length cannot be zero\"))\n    (neg? n) (throw (IllegalArgumentException. \"slice length cannot be negative\"))\n    (> n (.length s)) (throw (IllegalArgumentException. \"slice length cannot be greater than series length\")))\n  (->> s\n       (partition n 1)\n       (map #(apply str %))))\n",
+  "test_code": "(ns series-test\n  (:require [clojure.test :refer [deftest testing is]]\n            series))\n\n(deftest slices_test_1\n  (testing \"slices of one from one\"\n    (is (= [\"1\"]\n           (series/slices \"1\" 1)))))\n\n(deftest slices_test_2\n  (testing \"slices of one from two\"\n    (is (= [\"1\" \"2\"]\n           (series/slices \"12\" 1)))))\n\n(deftest slices_test_3\n  (testing \"slices of two\"\n    (is (= [\"35\"]\n           (series/slices \"35\" 2)))))\n\n(deftest slices_test_4\n  (testing \"slices of two overlap\"\n    (is (= [\"91\" \"14\" \"42\"]\n           (series/slices \"9142\" 2)))))\n\n(deftest slices_test_5\n  (testing \"slices can include duplicates\"\n    (is (= [\"777\" \"777\" \"777\" \"777\"]\n           (series/slices \"777777\" 3)))))\n\n(deftest slices_test_6\n  (testing \"slices of a long series\"\n    (is (= [\"91849\" \"18493\" \"84939\" \"49390\" \"93904\" \"39042\" \"90424\" \"04243\"]\n           (series/slices \"918493904243\" 5)))))\n\n(deftest slices_test_7\n  (testing \"slice length is too large\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^slice length cannot be greater than series length$\"\n                          (series/slices \"12345\" 6)))))\n\n(deftest slices_test_8\n  (testing \"slice length is way too large\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^slice length cannot be greater than series length$\"\n                          (series/slices \"12345\" 42)))))\n\n(deftest slices_test_9\n  (testing \"slice length cannot be zero\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^slice length cannot be zero$\"\n                          (series/slices \"12345\" 0)))))\n\n(deftest slices_test_10\n  (testing \"slice length cannot be negative\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^slice length cannot be negative$\"\n                          (series/slices \"123\" -1)))))\n\n(deftest slices_test_11\n  (testing \"empty series is invalid\"\n    (is (thrown-with-msg? IllegalArgumentException #\"^series cannot be empty$\"\n                          (series/slices \"\" 1)))))\n",
+  "source": "A subset of the Problem 8 at Project Euler",
+  "source_url": "https://projecteuler.net/problem=8",
+  "authors": [],
+  "contributors": [
+    "AndreaCrotti",
+    "haus",
+    "sjwarner-bp",
+    "tasxatzial"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "prolog:acronym",
+  "trackSlug": "prolog",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "0432534c-f25d-4747-8ae7-07d0f86a7872",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name like Portable Network Graphics to its acronym (PNG).\n\nPunctuation is handled as follows: hyphens are word separators (like whitespace); all other punctuation can be removed from the input.\n\nFor example:\n\n| Input                     | Output |\n| ------------------------- | ------ |\n| As Soon As Possible       | ASAP   |\n| Liquid-crystal display    | LCD    |\n| Thank George It's Friday! | TGIF   |\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "abbreviate(Sentence, Acronym).\n",
+  "example_solution": "words(Sentence, Words) :-\n    split_string(Sentence, \" \", \"\", W0),\n    maplist([Word,Acc]>>(split_string(Word,\"-\", \"\",Acc)), W0, W1),\n    flatten(W1, W2),\n    maplist(string_upper, W2, W3),\n    delete(W3, \"\", Words).\n\nabbreviate_word(Word, Letter) :-\n    string_chars(Word, Letters),\n    delete(Letters, '_', [Letter|_]).\n\nabbreviate(Sentence, Acromym) :-\n    words(Sentence, Words),\n    maplist(abbreviate_word, Words, Letters),\n    string_chars(Acromym, Letters).\n",
+  "test_code": "pending :-\n    current_prolog_flag(argv, ['--all'|_]).\npending :-\n    write('\\nA TEST IS PENDING!\\n'),\n    fail.\n\n:- begin_tests(acronym).\n\n    test(basic, condition(true)) :-\n        abbreviate(\"Portable Network Graphics\", Acronym),\n        Acronym == \"PNG\".\n\n    test(lowercase_words, condition(pending)) :-\n        abbreviate(\"Ruby on Rails\", Acronym),\n        Acronym == \"ROR\".\n\n    test(punctuation, condition(pending)) :-\n        abbreviate(\"First In, First Out\", Acronym),\n        Acronym == \"FIFO\".\n\n    test(all_caps_word, condition(pending)) :-\n        abbreviate(\"GNU Image Manipulation Program\", Acronym),\n        Acronym == \"GIMP\".\n\n    test(punctuation_without_whitespace, condition(pending)) :-\n        abbreviate(\"Complementary metal-oxide semiconductor\", Acronym),\n        Acronym == \"CMOS\".\n\n    test(very_long_abbreviation, condition(pending)) :-\n        abbreviate(\"Rolling On The Floor Laughing So Hard That My Dogs Came Over And Licked Me\", Acronym),\n        Acronym == \"ROTFLSHTMDCOALM\".\n\n    test(consecutive_delimiters, condition(pending)) :-\n        abbreviate(\"Something - I made up from thin air\", Acronym),\n        Acronym == \"SIMUFTA\".\n\n    test(apostrophes, condition(pending)) :-\n        abbreviate(\"Halley's Comet\", Acronym),\n        Acronym == \"HC\".\n\n    test(underscore_emphasis, condition(pending)) :-\n        abbreviate(\"The Road _Not_ Taken\", Acronym),\n        Acronym == \"TRNT\".\n\n:- end_tests(acronym).\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

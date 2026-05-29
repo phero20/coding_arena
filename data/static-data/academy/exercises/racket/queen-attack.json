@@ -1,0 +1,26 @@
+{
+  "id": "racket:queen-attack",
+  "trackSlug": "racket",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "42c10a4c-140f-40d0-9a46-8373dd7d7a72",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#lang racket\n\n(provide create-queen\n         can-attack?)\n\n(define (create-queen row column)\n  (error \"Please implement 'create-queen'\"))\n\n(define (can-attack? white-queen black-queen)\n  (error \"Please implement 'can-attack?'\"))\n",
+  "example_solution": "#lang racket\n\n(provide create-queen\n         can-attack?)\n\n(struct queen (row column))\n\n(define (grid-position? n)\n  (and (exact-nonnegative-integer? n)\n       (> 8 n)))\n\n(define/contract (create-queen row column)\n  (-> grid-position? grid-position? queen?)\n  (queen row column))\n\n(define/contract (can-attack? white-queen black-queen)\n  (-> queen? queen? boolean?)\n  (match (list white-queen black-queen)\n    [(list (queen r _) (queen r _))\n     #t]\n    [(list (queen _ c) (queen _ c))\n     #t]\n    [(list (queen wr wc) (queen br bc))\n     #:when (= (abs (- wr br))\n               (abs (- wc bc)))\n     #t]\n    [_ #f]))\n",
+  "test_code": "#lang racket/base\n\n(require \"queen-attack.rkt\")\n\n(module+ test\n  (require rackunit rackunit/text-ui)\n\n  (define suite\n    (test-suite\n     \"queen-attack tests\"\n\n     (test-not-exn \"queen with a valid position\"\n                   (lambda () (create-queen 2 2)))\n\n     (test-exn \"queen must have positive row\"\n                exn:fail?\n                (lambda () (create-queen -2 2)))\n\n     (test-exn \"queen must have row on board\"\n                exn:fail?\n                (lambda () (create-queen 8 4)))\n\n     (test-exn \"queen must have positive column\"\n                exn:fail?\n                (lambda () (create-queen 2 -2)))\n\n     (test-exn \"queen must have column on board\"\n                exn:fail?\n                (lambda () (create-queen 4 8)))\n\n     (test-false \"cannot attack\"\n                 (can-attack? (create-queen 2 4)\n                              (create-queen 6 6)))\n\n    (test-true \"can attack on same row\"\n               (can-attack? (create-queen 2 4)\n                            (create-queen 2 6)))\n\n    (test-true \"can attack on same column\"\n               (can-attack? (create-queen 4 5)\n                            (create-queen 2 5)))\n\n    (test-true \"can attack on first diagonal\"\n               (can-attack? (create-queen 2 2)\n                            (create-queen 0 4)))\n\n    (test-true \"can attack on second diagonal\"\n               (can-attack? (create-queen 2 2)\n                            (create-queen 3 1)))\n\n    (test-true \"can attack on third diagonal\"\n               (can-attack? (create-queen 2 2)\n                            (create-queen 1 1)))\n\n    (test-true \"can attack on fourth diagonal\"\n               (can-attack? (create-queen 1 7)\n                            (create-queen 0 6)))\n\n    (test-false \"cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal\"\n                (can-attack? (create-queen 4 1)\n                             (create-queen 2 5)))))\n\n  (run-tests suite))\n\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

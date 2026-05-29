@@ -1,0 +1,28 @@
+{
+  "id": "pyret:queen-attack",
+  "trackSlug": "pyret",
+  "slug": "queen-attack",
+  "name": "Queen Attack",
+  "uuid": "5a57c5fa-f4a2-460d-9dec-812834ae1cd4",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [
+    "data-definitions"
+  ],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven the position of two queens on a chess board, indicate whether or not they are positioned so that they can attack each other.\n\nIn the game of chess, a queen can attack pieces which are on the same row, column, or diagonal.\n\nA chessboard can be represented by an 8 by 8 array.\n\nSo if you are told the white queen is at `c5` (zero-indexed at column 2, row 3) and the black queen at `f2` (zero-indexed at column 5, row 6), then you know that the set-up is like so:\n\n![A chess board with two queens. Arrows emanating from the queen at c5 indicate possible directions of capture along file, rank and diagonal.](https://assets.exercism.org/images/exercises/queen-attack/queen-capture.svg)\n\nYou are also able to answer whether the queens can attack each other.\nIn this case, that answer would be yes, they can, because both pieces share a diagonal.\n\n## Credit\n\nThe chessboard image was made by [habere-et-dispertire][habere-et-dispertire] using LaTeX and the [chessboard package][chessboard-package] by Ulrike Fischer.\n\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[chessboard-package]: https://github.com/u-fischer/chessboard\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "use context starter2024\n\nprovide-types *\n\ndata Queen:\n ... # replace the dots with your implementation\nend\n",
+  "example_solution": "use context starter2024\n\nprovide-types *\n\nfun is-on-board(n :: NumInteger) -> Boolean:\n  (n >= 0) and (n <= 7)\nend\n\ndata Queen:\n  | queen(row :: NumInteger%(is-on-board), column :: NumInteger%(is-on-board))\n    with:\n    method can-attack(self, other :: Queen) -> Boolean:\n      (self.row == other.row) or\n      (self.column == other.column) or\n      (\n        num-abs(other.column - self.column)\n          == num-abs(other.row - self.row)\n      )\n    end\nend\n",
+  "test_code": "use context starter2024\n\ninclude file(\"queen-attack.arr\")\n\ncheck \"Test creation of Queens with valid and invalid positions -> queen with a valid position\":\n  queen(2, 2) does-not-raise\nend\n\ncheck \"Test creation of Queens with valid and invalid positions -> queen must have positive row\":\n  queen(-2, 2) raises \"\" # matches any exception message\nend\n\ncheck \"Test creation of Queens with valid and invalid positions -> queen must have row on board\":\n  queen(8, 4) raises \"\" # matches any exception message\nend\n\ncheck \"Test creation of Queens with valid and invalid positions -> queen must have positive column\":\n  queen(2, -2) raises \"\" # matches any exception message\nend\n\ncheck \"Test creation of Queens with valid and invalid positions -> queen must have column on board\":\n  queen(4, 8) raises \"\" # matches any exception message\nend\n\ncheck \"Test the ability of one queen to attack another -> cannot attack\":\n  queen(2, 4).can-attack(queen(6, 6)) is false\nend\n\ncheck \"Test the ability of one queen to attack another -> can attack on same row\":\n  queen(2, 4).can-attack(queen(2, 6)) is true\nend\n\ncheck \"Test the ability of one queen to attack another -> can attack on same column\":\n  queen(4, 5).can-attack(queen(2, 5)) is true\nend\n\ncheck \"Test the ability of one queen to attack another -> can attack on first diagonal\":\n  queen(2, 2).can-attack(queen(0, 4)) is true\nend\n\ncheck \"Test the ability of one queen to attack another -> can attack on second diagonal\":\n  queen(2, 2).can-attack(queen(3, 1)) is true\nend\n\ncheck \"Test the ability of one queen to attack another -> can attack on third diagonal\":\n  queen(2, 2).can-attack(queen(1, 1)) is true\nend\n\ncheck \"Test the ability of one queen to attack another -> can attack on fourth diagonal\":\n  queen(1, 7).can-attack(queen(0, 6)) is true\nend\n\ncheck \"Test the ability of one queen to attack another -> cannot attack if falling diagonals are only the same when reflected across the longest falling diagonal\":\n  queen(4, 1).can-attack(queen(2, 5)) is false\nend\n",
+  "source": "J Dalbey's Programming Practice problems",
+  "source_url": "https://users.csc.calpoly.edu/~jdalbey/103/Projects/ProgrammingPractice.html",
+  "authors": [
+    "BNAndras"
+  ],
+  "contributors": null
+}

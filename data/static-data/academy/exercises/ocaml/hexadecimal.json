@@ -1,0 +1,38 @@
+{
+  "id": "ocaml:hexadecimal",
+  "trackSlug": "ocaml",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "d0c937ef-3c7b-40be-891d-3024129b443f",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "let to_int _ = \n    failwith \"'to_int' is missing\"\n",
+  "example_solution": "open Base\n\nlet digit_to_int c =\n  match c with\n  | '0'..'9'  -> Some (Char.to_int(c) - 48)\n  | 'a'..'f'  -> Some (Char.to_int(c) - 97 + 10)\n  | 'A'..'F'  -> Some (Char.to_int(c) - 97 + 10)\n  | _ -> None\n\nlet to_int hex_str =\n  let rec go acc = function\n    | []    -> acc\n    | c::cs -> match digit_to_int c with\n                    | Some n -> go (acc * 16 + n) cs\n                    | None -> 0 in\n  go 0 (String.to_list hex_str)\n",
+  "test_code": "open OUnit2\nopen Hexadecimal\n\nlet ae exp got _test_ctxt = assert_equal exp got\n\nlet tests = [\"1 to 1\"    >:: ae 1 (to_int \"1\");\n             \"c to 12\"   >:: ae 12 (to_int \"c\");\n             \"10 to 16\"  >:: ae 16 (to_int \"10\");\n             \"af to 175\" >:: ae 175 (to_int \"af\");\n             \"100 to 256\" >:: ae 256 (to_int \"100\");\n             \"19ace to 105166\" >:: ae 105166 (to_int \"19ace\");\n             \"carrot to 0\" >:: ae 0 (to_int \"carrot\");\n             \"000000 to 0\" >:: ae 0 (to_int \"000000\");\n             \"ffffff to 16777215\" >:: ae 16777215 (to_int \"ffffff\");\n             \"ffff00 to 16776960\" >:: ae 16776960 (to_int \"ffff00\");\n            ]\n\nlet () =\n  run_test_tt_main (\"hexidecimal tests\" >::: tests)\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [
+    "tmcgilchrist"
+  ],
+  "contributors": [
+    "daveyarwood",
+    "dvberkel",
+    "iHiD",
+    "ismaelga",
+    "kytrinyx",
+    "marionebl",
+    "Peaupote",
+    "pminten",
+    "sbl",
+    "sshine",
+    "stevejb71"
+  ]
+}

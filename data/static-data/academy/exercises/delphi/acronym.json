@@ -1,0 +1,26 @@
+{
+  "id": "delphi:acronym",
+  "trackSlug": "delphi",
+  "slug": "acronym",
+  "name": "Acronym",
+  "uuid": "0bad09fa-ea2f-4ebe-95a8-5b183c32912b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a long phrase to its acronym.",
+  "difficulty": 4,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a phrase to its acronym.\n\nTechies love their TLA (Three Letter Acronyms)!\n\nHelp generate some jargon by writing a program that converts a long name\nlike Portable Network Graphics to its acronym (PNG).\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "",
+  "example_solution": "unit uAcronym;\n\ninterface\n\nfunction abbreviate(aPhrase: string): string;\n\nimplementation\nuses SysUtils\n     ,RegularExpressions\n     ,System.Generics.Collections;\n\nfunction abbreviate(aPhrase: string): string;\n\n  function findWords(inputPhrase: string): TMatchCollection;\n  begin\n    inputPhrase := inputPhrase.Replace('''s', '');\n    result := TRegex.Matches(inputPhrase,'[A-Z]+[a-z]*|[a-z]+');\n  end;\n\n  function makeListOfWords(aMatches: TMatchCollection): TList<string>;\n  var\n    lMatch: TMatch;\n  begin\n    result := TList<string>.create;\n    for lMatch in aMatches do\n      if lMatch.Success then\n        result.Add(lMatch.Value);\n  end;\n\n  function ExtractAndUpcaseFirstLetters(aWords: TList<string>): string;\n  var\n    _Word: string;\n  begin\n    result := '';\n    for _Word in aWords do\n      result := result + _Word.ToUpperInvariant[1];\n  end;\n\nbegin\n  result := ExtractAndUpcaseFirstLetters(makeListOfWords(findWords(aPhrase)));\nend;\n\nend.\n\n",
+  "test_code": "unit uAcronymTests;\n\ninterface\nuses\n  DUnitX.TestFramework;\n\nconst\n  CanonicalVersion = '1.7.0';\n\ntype\n\n  [TestFixture('Abbreviate a phrase')]\n  AcronymTests = class(TObject)\n  public\n    [Test]\n//    [Ignore('Comment the \"[Ignore]\" statement to run the test')]\n    procedure basic;\n\n    [Test]\n    [Ignore]\n    procedure lowercase_words;\n\n    [Test]\n    [Ignore]\n    procedure punctuation;\n\n    [Test]\n    [Ignore]\n    procedure all_caps_word;\n\n    [Test]\n    [Ignore]\n    procedure punctuation_without_whitespace;\n\n    [Test]\n    [Ignore]\n    procedure very_long_abbreviation;\n\n    [Test]\n    [Ignore]\n    procedure consecutive_delimiters;\n\n    [Test]\n    [Ignore]\n    procedure apostrophes;\n\n    [Test]\n    [Ignore]\n    procedure underscore_emphasis;\n  end;\n\nimplementation\nuses SysUtils, uAcronym;\n\n{ AcronymTests }\n\nprocedure AcronymTests.all_caps_word;\nbegin\n  Assert.AreEqual('GIMP', abbreviate('GNU Image Manipulation Program'));\nend;\n\nprocedure AcronymTests.apostrophes;\nbegin\n  Assert.AreEqual('HC', abbreviate('Halley''s Comet'));\nend;\n\nprocedure AcronymTests.basic;\nbegin\n  Assert.AreEqual('PNG', abbreviate('Portable Network Graphics'));\nend;\n\nprocedure AcronymTests.consecutive_delimiters;\nbegin\n  Assert.AreEqual('SIMUFTA', abbreviate('Something - I made up from thin air'));\nend;\n\nprocedure AcronymTests.lowercase_words;\nbegin\n  Assert.AreEqual('ROR', abbreviate('Ruby on Rails'));\nend;\n\nprocedure AcronymTests.punctuation;\nbegin\n  Assert.AreEqual('FIFO', abbreviate('First In, First Out'));\nend;\n\nprocedure AcronymTests.punctuation_without_whitespace;\nbegin\n  Assert.AreEqual('CMOS', abbreviate('Complementary metal-oxide semiconductor'));\nend;\n\nprocedure AcronymTests.very_long_abbreviation;\nbegin\n  Assert.AreEqual('ROTFLSHTMDCOALM', abbreviate('Rolling On The Floor ' +\n    'Laughing So Hard That My Dogs Came Over And Licked Me'));\nend;\n\nprocedure AcronymTests.underscore_emphasis;\nbegin\n  Assert.AreEqual('TRNT', abbreviate('The Road _Not_ Taken'));\nend;\n\ninitialization\n  TDUnitX.RegisterTestFixture(AcronymTests);\nend.\n",
+  "source": "Julien Vanier",
+  "source_url": "https://github.com/monkbroc",
+  "authors": [
+    "rpottsoh"
+  ],
+  "contributors": null
+}

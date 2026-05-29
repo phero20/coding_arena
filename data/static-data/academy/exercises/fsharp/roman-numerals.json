@@ -1,0 +1,42 @@
+{
+  "id": "fsharp:roman-numerals",
+  "trackSlug": "fsharp",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "2e88193d-9f80-4d83-901b-bb5ac4b0804c",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [
+    "extension-methods",
+    "numbers",
+    "while-loops"
+  ],
+  "prerequisites": [
+    "extension-methods",
+    "numbers",
+    "strings",
+    "while-loops"
+  ],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "module RomanNumerals\n\nlet roman arabicNumeral = failwith \"You need to implement this function.\"",
+  "example_solution": "module RomanNumerals\n\nlet numeralThresholds = [(1000, \"M\");\n                            (900,  \"CM\");\n                            (500,  \"D\");\n                            (400,  \"CD\");\n                            (100,  \"C\");\n                            (90,   \"XC\");\n                            (50,   \"L\");\n                            (40,   \"XL\");\n                            (10,   \"X\");\n                            (9,    \"IX\");\n                            (5,    \"V\");\n                            (4,    \"IV\");\n                            (1,    \"I\")]\n\nlet rec toRomanLoop remainder acc thresholds =         \n    match thresholds with\n        | [] -> acc\n        | (threshold, numeral)::xs ->\n            if threshold <= remainder then toRomanLoop (remainder - threshold) (acc + numeral) thresholds\n            else toRomanLoop remainder acc xs\n\nlet roman (arabicNumeral: int) = toRomanLoop arabicNumeral \"\" numeralThresholds\n",
+  "test_code": "module RomanNumeralsTests\n\nopen FsUnit.Xunit\nopen Xunit\n\nopen RomanNumerals\n\n[<Fact>]\nlet ``1 is I`` () =\n    roman 1 |> should equal \"I\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``2 is II`` () =\n    roman 2 |> should equal \"II\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``3 is III`` () =\n    roman 3 |> should equal \"III\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``4 is IV`` () =\n    roman 4 |> should equal \"IV\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``5 is V`` () =\n    roman 5 |> should equal \"V\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``6 is VI`` () =\n    roman 6 |> should equal \"VI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``9 is IX`` () =\n    roman 9 |> should equal \"IX\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``16 is XVI`` () =\n    roman 16 |> should equal \"XVI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``27 is XXVII`` () =\n    roman 27 |> should equal \"XXVII\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``48 is XLVIII`` () =\n    roman 48 |> should equal \"XLVIII\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``49 is XLIX`` () =\n    roman 49 |> should equal \"XLIX\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``59 is LIX`` () =\n    roman 59 |> should equal \"LIX\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``66 is LXVI`` () =\n    roman 66 |> should equal \"LXVI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``93 is XCIII`` () =\n    roman 93 |> should equal \"XCIII\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``141 is CXLI`` () =\n    roman 141 |> should equal \"CXLI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``163 is CLXIII`` () =\n    roman 163 |> should equal \"CLXIII\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``166 is CLXVI`` () =\n    roman 166 |> should equal \"CLXVI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``402 is CDII`` () =\n    roman 402 |> should equal \"CDII\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``575 is DLXXV`` () =\n    roman 575 |> should equal \"DLXXV\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``666 is DCLXVI`` () =\n    roman 666 |> should equal \"DCLXVI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``911 is CMXI`` () =\n    roman 911 |> should equal \"CMXI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``1024 is MXXIV`` () =\n    roman 1024 |> should equal \"MXXIV\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``1666 is MDCLXVI`` () =\n    roman 1666 |> should equal \"MDCLXVI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``3000 is MMM`` () =\n    roman 3000 |> should equal \"MMM\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``3001 is MMMI`` () =\n    roman 3001 |> should equal \"MMMI\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``3888 is MMMDCCCLXXXVIII`` () =\n    roman 3888 |> should equal \"MMMDCCCLXXXVIII\"\n\n[<Fact(Skip = \"Remove this Skip property to run this test\")>]\nlet ``3999 is MMMCMXCIX`` () =\n    roman 3999 |> should equal \"MMMCMXCIX\"\n\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "ErikSchierboom"
+  ],
+  "contributors": [
+    "jrr",
+    "kytrinyx",
+    "lestephane",
+    "robkeim",
+    "valentin-p",
+    "wolf99"
+  ]
+}

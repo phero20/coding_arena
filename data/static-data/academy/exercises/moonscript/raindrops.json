@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:raindrops",
+  "trackSlug": "moonscript",
+  "slug": "raindrops",
+  "name": "Raindrops",
+  "uuid": "9c6613c5-3df7-44a5-bb6e-4e7f0663b888",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a number into its corresponding raindrop sounds - Pling, Plang and Plong.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to convert a number into its corresponding raindrop sounds.\n\nIf a given number:\n\n- is divisible by 3, add \"Pling\" to the result.\n- is divisible by 5, add \"Plang\" to the result.\n- is divisible by 7, add \"Plong\" to the result.\n- **is not** divisible by 3, 5, or 7, the result should be the number as a string.\n\n## Examples\n\n- 28 is divisible by 7, but not 3 or 5, so the result would be `\"Plong\"`.\n- 30 is divisible by 3 and 5, but not 7, so the result would be `\"PlingPlang\"`.\n- 34 is not divisible by 3, 5, or 7, so the result would be `\"34\"`.\n\n~~~~exercism/note\nA common way to test if one number is evenly divisible by another is to compare the [remainder][remainder] or [modulus][modulo] to zero.\nMost languages provide operators or functions for one (or both) of these.\n\n[remainder]: https://exercism.org/docs/programming/operators/remainder\n[modulo]: https://en.wikipedia.org/wiki/Modulo_operation\n~~~~\n",
+  "introduction": "# Introduction\n\nRaindrops is a slightly more complex version of the FizzBuzz challenge, a classic interview question.\n",
+  "hints": null,
+  "starter_code": "raindrops = (num) ->\n  error 'Implement me!'\n\nraindrops\n",
+  "example_solution": "raindrops = (num) ->\n    result = ''\n    result ..= 'Pling' if num % 3 == 0 else ''\n    result ..= 'Plang' if num % 5 == 0 else ''\n    result ..= 'Plong' if num % 7 == 0 else ''\n\n    result == '' and (tostring num) or result\n\nraindrops\n",
+  "test_code": "raindrops = require 'raindrops'\n\ndescribe 'raindrops:', ->\n  it 'the sound for 1 is 1', ->\n    result = raindrops 1\n    assert.are.equal '1', result\n\n  pending 'the sound for 3 is Pling', ->\n    result = raindrops 3\n    assert.are.equal 'Pling', result\n\n  pending 'the sound for 5 is Plang', ->\n    result = raindrops 5\n    assert.are.equal 'Plang', result\n\n  pending 'the sound for 7 is Plong', ->\n    result = raindrops 7\n    assert.are.equal 'Plong', result\n\n  pending 'the sound for 6 is Pling as it has a factor 3', ->\n    result = raindrops 6\n    assert.are.equal 'Pling', result\n\n  pending '2 to the power 3 does not make a raindrop sound as 3 is the exponent not the base', ->\n    result = raindrops 8\n    assert.are.equal '8', result\n\n  pending 'the sound for 9 is Pling as it has a factor 3', ->\n    result = raindrops 9\n    assert.are.equal 'Pling', result\n\n  pending 'the sound for 10 is Plang as it has a factor 5', ->\n    result = raindrops 10\n    assert.are.equal 'Plang', result\n\n  pending 'the sound for 14 is Plong as it has a factor of 7', ->\n    result = raindrops 14\n    assert.are.equal 'Plong', result\n\n  pending 'the sound for 15 is PlingPlang as it has factors 3 and 5', ->\n    result = raindrops 15\n    assert.are.equal 'PlingPlang', result\n\n  pending 'the sound for 21 is PlingPlong as it has factors 3 and 7', ->\n    result = raindrops 21\n    assert.are.equal 'PlingPlong', result\n\n  pending 'the sound for 25 is Plang as it has a factor 5', ->\n    result = raindrops 25\n    assert.are.equal 'Plang', result\n\n  pending 'the sound for 27 is Pling as it has a factor 3', ->\n    result = raindrops 27\n    assert.are.equal 'Pling', result\n\n  pending 'the sound for 35 is PlangPlong as it has factors 5 and 7', ->\n    result = raindrops 35\n    assert.are.equal 'PlangPlong', result\n\n  pending 'the sound for 49 is Plong as it has a factor 7', ->\n    result = raindrops 49\n    assert.are.equal 'Plong', result\n\n  pending 'the sound for 52 is 52', ->\n    result = raindrops 52\n    assert.are.equal '52', result\n\n  pending 'the sound for 105 is PlingPlangPlong as it has factors 3, 5 and 7', ->\n    result = raindrops 105\n    assert.are.equal 'PlingPlangPlong', result\n\n  pending 'the sound for 3125 is Plang as it has a factor 5', ->\n    result = raindrops 3125\n    assert.are.equal 'Plang', result\n",
+  "source": "A variation on FizzBuzz, a famous technical interview question that is intended to weed out potential candidates. That question is itself derived from Fizz Buzz, a popular children's game for teaching division.",
+  "source_url": "https://en.wikipedia.org/wiki/Fizz_buzz",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

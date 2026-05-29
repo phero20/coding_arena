@@ -1,0 +1,26 @@
+{
+  "id": "moonscript:say",
+  "trackSlug": "moonscript",
+  "slug": "say",
+  "name": "Say",
+  "uuid": "c1c9b94f-abbb-4356-b35b-8cff366e9415",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a number from 0 to 999,999,999,999, spell out that number in English.",
+  "difficulty": 6,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nGiven a number, your task is to express it in English words exactly as your friend should say it out loud.\nYaʻqūb expects to use numbers from 0 up to 999,999,999,999.\n\nExamples:\n\n- 0 → zero\n- 1 → one\n- 12 → twelve\n- 123 → one hundred twenty-three\n- 1,234 → one thousand two hundred thirty-four\n",
+  "introduction": "# Introduction\n\nYour friend Yaʻqūb works the counter at the busiest deli in town, slicing, weighing, and wrapping orders for a never-ending line of hungry customers.\nTo keep things moving, each customer takes a numbered ticket when they arrive.\n\nWhen it’s time to call the next person, Yaʻqūb reads their number out loud, always in full English words to make sure everyone hears it clearly.\n",
+  "hints": null,
+  "starter_code": "{\n  in_english: (number) ->\n    error 'Implement me'\n}\n",
+  "example_solution": "WORDS = {\n    [0]: 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',\n    'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen',\n    'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty',\n    [30]: 'thirty',  [40]: 'forty',  [50]: 'fifty', [60]: 'sixty',\n    [70]: 'seventy', [80]: 'eighty', [90]: 'ninety',\n}\n\n\nsay_small = (n) -> WORDS[n] or \"#{WORDS[n - n % 10]}-#{WORDS[n % 10]}\"\n\nlocal in_english\n\nsay_compound = (n, base, unit) ->\n  quotient, remainder = n // base, n % base\n  saying = \"#{in_english quotient} #{unit}\"\n  saying ..= \" #{in_english remainder}\" if remainder > 0\n  saying\n\n\nin_english = (n) ->\n  assert 0 <= n and n < 1e12, 'input out of range'\n\n  if     n < 100 then say_small n\n  elseif n < 1e3 then say_compound n, 100, 'hundred'\n  elseif n < 1e6 then say_compound n, 1e3, 'thousand'\n  elseif n < 1e9 then say_compound n, 1e6, 'million'\n  else                say_compound n, 1e9, 'billion'\n\n\n{ :in_english }\n",
+  "test_code": "Say = require './say'\n\ndescribe 'say:', ->\n  it 'zero', ->\n    result = Say.in_english 0\n    expected = 'zero'\n    assert.are.equal expected, result\n\n  pending 'one', ->\n    result = Say.in_english 1\n    expected = 'one'\n    assert.are.equal expected, result\n\n  pending 'fourteen', ->\n    result = Say.in_english 14\n    expected = 'fourteen'\n    assert.are.equal expected, result\n\n  pending 'twenty', ->\n    result = Say.in_english 20\n    expected = 'twenty'\n    assert.are.equal expected, result\n\n  pending 'twenty-two', ->\n    result = Say.in_english 22\n    expected = 'twenty-two'\n    assert.are.equal expected, result\n\n  pending 'thirty', ->\n    result = Say.in_english 30\n    expected = 'thirty'\n    assert.are.equal expected, result\n\n  pending 'ninety-nine', ->\n    result = Say.in_english 99\n    expected = 'ninety-nine'\n    assert.are.equal expected, result\n\n  pending 'one hundred', ->\n    result = Say.in_english 100\n    expected = 'one hundred'\n    assert.are.equal expected, result\n\n  pending 'one hundred twenty-three', ->\n    result = Say.in_english 123\n    expected = 'one hundred twenty-three'\n    assert.are.equal expected, result\n\n  pending 'two hundred', ->\n    result = Say.in_english 200\n    expected = 'two hundred'\n    assert.are.equal expected, result\n\n  pending 'nine hundred ninety-nine', ->\n    result = Say.in_english 999\n    expected = 'nine hundred ninety-nine'\n    assert.are.equal expected, result\n\n  pending 'one thousand', ->\n    result = Say.in_english 1000\n    expected = 'one thousand'\n    assert.are.equal expected, result\n\n  pending 'one thousand two hundred thirty-four', ->\n    result = Say.in_english 1234\n    expected = 'one thousand two hundred thirty-four'\n    assert.are.equal expected, result\n\n  pending 'one million', ->\n    result = Say.in_english 1000000\n    expected = 'one million'\n    assert.are.equal expected, result\n\n  pending 'one million two thousand three hundred forty-five', ->\n    result = Say.in_english 1002345\n    expected = 'one million two thousand three hundred forty-five'\n    assert.are.equal expected, result\n\n  pending 'one billion', ->\n    result = Say.in_english 1000000000\n    expected = 'one billion'\n    assert.are.equal expected, result\n\n  pending 'a big number', ->\n    result = Say.in_english 987654321123\n    expected = 'nine hundred eighty-seven billion six hundred fifty-four million three hundred twenty-one thousand one hundred twenty-three'\n    assert.are.equal expected, result\n\n  pending 'numbers below zero are out of range', ->\n    f = -> Say.in_english -1\n    assert.has.error f,'input out of range'\n\n  pending 'numbers above 999,999,999,999 are out of range', ->\n    f = -> Say.in_english 1000000000000\n    assert.has.error f,'input out of range'\n",
+  "source": "A variation on the JavaRanch CattleDrive, Assignment 4",
+  "source_url": "https://web.archive.org/web/20240907035912/https://coderanch.com/wiki/718804",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

@@ -1,0 +1,26 @@
+{
+  "id": "abap:reverse-string",
+  "trackSlug": "abap",
+  "slug": "reverse-string",
+  "name": "Reverse String",
+  "uuid": "fad4b5a6-6a15-4687-886c-34787df7b45e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Reverse a given string.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to reverse a given string.\n\nSome examples:\n\n- Turn `\"stressed\"` into `\"desserts\"`.\n- Turn `\"strops\"` into `\"sports\"`.\n- Turn `\"racecar\"` into `\"racecar\"`.\n",
+  "introduction": "# Introduction\n\nReversing strings (reading them from right to left, rather than from left to right) is a surprisingly common task in programming.\n\nFor example, in bioinformatics, reversing the sequence of DNA or RNA strings is often important for various analyses, such as finding complementary strands or identifying palindromic sequences that have biological significance.\n",
+  "hints": null,
+  "starter_code": "CLASS zcl_reverse_string DEFINITION PUBLIC.\n  PUBLIC SECTION.\n    METHODS reverse_string\n      IMPORTING\n        input         TYPE string\n      RETURNING\n        VALUE(result) TYPE string.\nENDCLASS.\n\nCLASS zcl_reverse_string IMPLEMENTATION.\n\n  METHOD reverse_string.\n    \" Please complete the implementation of the reverse_string method\n    result = input.\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "example_solution": "CLASS zcl_reverse_string DEFINITION PUBLIC.\n  PUBLIC SECTION.\n    METHODS reverse_string\n      IMPORTING\n        input         TYPE string\n      RETURNING\n        VALUE(result) TYPE string.\nENDCLASS.\n\nCLASS zcl_reverse_string IMPLEMENTATION.\n\n  METHOD reverse_string.\n    result = reverse( input ).\n  ENDMETHOD.\n\nENDCLASS.",
+  "test_code": "CLASS ltcl_reverse_string DEFINITION FOR TESTING RISK LEVEL HARMLESS DURATION SHORT FINAL.\n\n  PRIVATE SECTION.\n    DATA cut TYPE REF TO zcl_reverse_string.\n\n    METHODS:\n      setup,\n      test_empty_string FOR TESTING,\n      test_word FOR TESTING,\n      test_capitalized_word FOR TESTING,\n      test_sentence_with_punctuation FOR TESTING,\n      test_palindrome FOR TESTING,\n      test_even_sized_word FOR TESTING.\n\nENDCLASS.\n\nCLASS ltcl_reverse_string IMPLEMENTATION.\n\n  METHOD setup.\n    cut = NEW zcl_reverse_string( ).\n  ENDMETHOD.\n\n  METHOD test_empty_string.\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->reverse_string( '' )\n      exp = '' ).\n  ENDMETHOD.\n\n  METHOD test_word.\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->reverse_string( 'robot' )\n      exp = 'tobor' ).\n  ENDMETHOD.\n\n  METHOD test_capitalized_word.\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->reverse_string( 'Ramen' )\n      exp = 'nemaR' ).\n  ENDMETHOD.\n\n  METHOD test_sentence_with_punctuation.\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->reverse_string( `I'm hungry!` )\n      exp = `!yrgnuh m'I` ).\n  ENDMETHOD.\n\n  METHOD test_palindrome.\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->reverse_string( 'racecar' )\n      exp = 'racecar' ).\n  ENDMETHOD.\n\n  METHOD test_even_sized_word.\n    cl_abap_unit_assert=>assert_equals(\n      act = cut->reverse_string( 'drawer' )\n      exp = 'reward' ).\n  ENDMETHOD.\n\nENDCLASS.\n",
+  "source": "Introductory challenge to reverse an input string",
+  "source_url": "https://www.freecodecamp.org/news/how-to-reverse-a-string-in-javascript-in-3-different-ways-75e4763c68cb",
+  "authors": [
+    "mbtools"
+  ],
+  "contributors": null
+}

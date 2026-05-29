@@ -1,0 +1,29 @@
+{
+  "id": "clojure:darts",
+  "trackSlug": "clojure",
+  "slug": "darts",
+  "name": "Darts",
+  "uuid": "c5331fc2-54de-4ee8-b35c-d55b062d622e",
+  "type": "practice",
+  "status": null,
+  "blurb": "Calculate the points scored in a single toss of a Darts game.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [
+    "numbers",
+    "conditionals"
+  ],
+  "instructions": "# Instructions\n\nCalculate the points scored in a single toss of a Darts game.\n\n[Darts][darts] is a game where players throw darts at a [target][darts-target].\n\nIn our particular instance of the game, the target rewards 4 different amounts of points, depending on where the dart lands:\n\n![Our dart scoreboard with values from a complete miss to a bullseye](https://assets.exercism.org/images/exercises/darts/darts-scoreboard.svg)\n\n- If the dart lands outside the target, player earns no points (0 points).\n- If the dart lands in the outer circle of the target, player earns 1 point.\n- If the dart lands in the middle circle of the target, player earns 5 points.\n- If the dart lands in the inner circle of the target, player earns 10 points.\n\nThe outer circle has a radius of 10 units (this is equivalent to the total radius for the entire target), the middle circle a radius of 5 units, and the inner circle a radius of 1.\nOf course, they are all centered at the same point — that is, the circles are [concentric][] defined by the coordinates (0, 0).\n\nGiven a point in the target (defined by its [Cartesian coordinates][cartesian-coordinates] `x` and `y`, where `x` and `y` are [real][real-numbers]), calculate the correct score earned by a dart landing at that point.\n\n## Credit\n\nThe scoreboard image was created by [habere-et-dispertire][habere-et-dispertire] using [Inkscape][inkscape].\n\n[darts]: https://en.wikipedia.org/wiki/Darts\n[darts-target]: https://en.wikipedia.org/wiki/Darts#/media/File:Darts_in_a_dartboard.jpg\n[concentric]: https://mathworld.wolfram.com/ConcentricCircles.html\n[cartesian-coordinates]: https://www.mathsisfun.com/data/cartesian-coordinates.html\n[real-numbers]: https://www.mathsisfun.com/numbers/real-numbers.html\n[habere-et-dispertire]: https://exercism.org/profiles/habere-et-dispertire\n[inkscape]: https://en.wikipedia.org/wiki/Inkscape\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(ns darts)\n\n(defn score\n  \"Calculates the score of a dart throw.\"\n  [x y]\n  ;; function body\n  )\n",
+  "example_solution": "(ns darts\n  (:require [clojure.math :refer [hypot]]))\n\n(defn score\n  [x y]\n  (condp >= (hypot x y)\n    1 10\n    5 5\n    10 1\n    0))\n",
+  "test_code": "(ns darts-test\n  (:require [clojure.test :refer [deftest testing is]]\n            darts))\n\n(deftest score_test_1\n  (testing \"Missed target\"\n    (is (= 0 (darts/score -9 9)))))\n\n(deftest score_test_2\n  (testing \"On the outer circle\"\n    (is (= 1 (darts/score 0 10)))))\n\n(deftest score_test_3\n  (testing \"On the middle circle\"\n    (is (= 5 (darts/score -5 0)))))\n\n(deftest score_test_4\n  (testing \"On the inner circle\"\n    (is (= 10 (darts/score 0 -1)))))\n\n(deftest score_test_5\n  (testing \"Exactly on center\"\n    (is (= 10 (darts/score 0 0)))))\n\n(deftest score_test_6\n  (testing \"Near the center\"\n    (is (= 10 (darts/score -0.1 -0.1)))))\n\n(deftest score_test_7\n  (testing \"Just within the inner circle\"\n    (is (= 10 (darts/score 0.7 0.7)))))\n\n(deftest score_test_8\n  (testing \"Just outside the inner circle\"\n    (is (= 5 (darts/score 0.8 -0.8)))))\n\n(deftest score_test_9\n  (testing \"Just within the middle circle\"\n    (is (= 5 (darts/score -3.5 3.5)))))\n\n(deftest score_test_10\n  (testing \"Just outside the middle circle\"\n    (is (= 1 (darts/score -3.6 -3.6)))))\n\n(deftest score_test_11\n  (testing \"Just within the outer circle\"\n    (is (= 1 (darts/score -7.0 7.0)))))\n\n(deftest score_test_12\n  (testing \"Just outside the outer circle\"\n    (is (= 0 (darts/score 7.1 -7.1)))))\n\n(deftest score_test_13\n  (testing \"Asymmetric position between the inner and middle circles\"\n    (is (= 5 (darts/score 0.5 -4)))))\n",
+  "source": "Inspired by an exercise created by a professor Della Paolera in Argentina",
+  "source_url": null,
+  "authors": [
+    "erikschierboom"
+  ],
+  "contributors": null
+}

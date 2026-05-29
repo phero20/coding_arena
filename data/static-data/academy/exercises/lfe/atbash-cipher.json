@@ -1,0 +1,28 @@
+{
+  "id": "lfe:atbash-cipher",
+  "trackSlug": "lfe",
+  "slug": "atbash-cipher",
+  "name": "Atbash Cipher",
+  "uuid": "78c7360b-1460-4f16-8efe-5efcbd2cb863",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.\n\nThe Atbash cipher is a simple substitution cipher that relies on transposing all the letters in the alphabet such that the resulting alphabet is backwards.\nThe first letter is replaced with the last letter, the second with the second-last, and so on.\n\nAn Atbash cipher for the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: zyxwvutsrqponmlkjihgfedcba\n```\n\nIt is a very weak cipher because it only has one possible key, and it is a simple mono-alphabetic substitution cipher.\nHowever, this may not have been an issue in the cipher's time.\n\nCiphertext is written out in groups of fixed length, the traditional group size being 5 letters, leaving numbers unchanged, and punctuation is excluded.\nThis is to make it harder to guess things based on word boundaries.\nAll text will be encoded as lowercase letters.\n\n## Examples\n\n- Encoding `test` gives `gvhg`\n- Encoding `x123 yes` gives `c123b vh`\n- Decoding `gvhg` gives `test`\n- Decoding `gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt` gives `thequickbrownfoxjumpsoverthelazydog`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(defmodule atbash-cipher\n  (export (encode 1)\n          (decode 1)))\n\n; Please implement the exported function(s).\n",
+  "example_solution": "(defmodule atbash-cipher\n  (export (encode 1) (decode 1)))\n\n(defun encode (str)\n  (let ((chunks (split-by 5 (transcode str))))\n    (string:join chunks \" \")))\n\n(defun decode (str) (transcode str))\n\n(defun transcode (str) (lists:filtermap #'cipher/1 str))\n\n(defun cipher\n  ([char] (when (=< #\\A char) (=< char #\\Z))\n   `#(true ,(- #\\Z (- char #\\a))))\n  ([char] (when (=< #\\a char) (=< char #\\z))\n   `#(true ,(- #\\z (- char #\\a))))\n  ([char] (when (=< #\\0 char) (=< char #\\9))\n   `#(true ,char))\n  ([_char]\n   'false))\n\n;; See: https://github.com/lfex/clj/blob/0.3.0/src/clj-seq.lfe#L151-L160\n(defun split-by\n  ([0 data] data)\n  ([_ ()]  ())\n  ([x data] (when (> x (length data)))\n   (split-by (length data) data))\n  ([x data]\n   (cons (lists:sublist data x)\n         (split-by x (lists:nthtail x data)))))\n",
+  "test_code": "(defmodule atbash-cipher-tests\n  (behaviour ltest-unit)\n  (export all))\n\n(include-lib \"ltest/include/ltest-macros.lfe\")\n\n(deftest encode-yes\n  (is-equal \"bvh\" (atbash-cipher:encode \"yes\")))\n\n(deftest encode-no\n  (is-equal \"ml\" (atbash-cipher:encode \"no\")))\n\n(deftest encode-OMG\n  (is-equal \"lnt\" (atbash-cipher:encode \"OMG\")))\n\n(deftest encode-spaces\n  (is-equal \"lnt\" (atbash-cipher:encode \"O M G\")))\n\n(deftest encode-mindblowingly\n  (is-equal \"nrmwy oldrm tob\" (atbash-cipher:encode \"mindblowingly\")))\n\n(deftest encode-numbers\n  (is-equal \"gvhgr mt123 gvhgr mt\"\n            (atbash-cipher:encode \"Testing, 1 2 3, testing.\")))\n\n(deftest encode-deep-thought\n  (is-equal \"gifgs rhurx grlm\" (atbash-cipher:encode \"Truth is fiction.\")))\n\n(deftest encode-all-the-letters\n  (let ((plain-text  \"The quick brown fox jumps over the lazy dog.\")\n        (cipher-text \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\"))\n    (is-equal cipher-text (atbash-cipher:encode plain-text))))\n\n(deftest decode-exercism\n  (is-equal \"exercism\" (atbash-cipher:decode \"vcvix rhn\")))\n\n(deftest decode-a-sentence\n  (is-equal \"anobstacleisoftenasteppingstone\"\n            (atbash-cipher:decode \"zmlyh gzxov rhlug vmzhg vkkrm thglm v\")))\n\n(deftest decode-numbers\n  (is-equal \"testing123testing\"\n            (atbash-cipher:decode \"gvhgr mt123 gvhgr mt\")))\n\n(deftest decode-all-the-letters\n  (is-equal \"thequickbrownfoxjumpsoverthelazydog\"\n            (atbash-cipher:decode \"gsvjf rxpyi ldmul cqfnk hlevi gsvoz abwlt\")))\n\n(deftest decode-with-too-many-spaces\n  (is-equal \"exercism\"\n            (atbash-cipher:decode \"vc vix    r hn\")))\n\n(deftest decode-with-no-spaces\n  (is-equal \"anobstacleisoftenasteppingstone\"\n            (atbash-cipher:decode \"zmlyhgzxovrhlugvmzhgvkkrmthglmv\")))\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash",
+  "authors": [
+    "yurrriq"
+  ],
+  "contributors": [
+    "tmcgilchrist"
+  ]
+}

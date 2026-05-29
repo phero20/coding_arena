@@ -1,0 +1,32 @@
+{
+  "id": "common-lisp:hamming",
+  "trackSlug": "common-lisp",
+  "slug": "hamming",
+  "name": "Hamming",
+  "uuid": "c029678b-9b9f-4fb2-958f-3a118efa16a9",
+  "type": "practice",
+  "status": "beta",
+  "blurb": "Calculate the Hamming distance between two DNA strands.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [
+    "characters"
+  ],
+  "prerequisites": [
+    "functions",
+    "characters",
+    "strings"
+  ],
+  "instructions": "# Instructions\n\nCalculate the Hamming distance between two DNA strands.\n\nWe read DNA using the letters C, A, G and T.\nTwo strands might look like this:\n\n    GAGCCTACTAACGGGAT\n    CATCGTAATGACGGCCT\n    ^ ^ ^  ^ ^    ^^\n\nThey have 7 differences, and therefore the Hamming distance is 7.\n\n## Implementation notes\n\nThe Hamming distance is only defined for sequences of equal length, so an attempt to calculate it between sequences of different lengths should not work.\n",
+  "introduction": "# Introduction\n\nYour body is made up of cells that contain DNA.\nThose cells regularly wear out and need replacing, which they achieve by dividing into daughter cells.\nIn fact, the average human body experiences about 10 quadrillion cell divisions in a lifetime!\n\nWhen cells divide, their DNA replicates too.\nSometimes during this process mistakes happen and single pieces of DNA get encoded with the incorrect information.\nIf we compare two strands of DNA and count the differences between them, we can see how many mistakes occurred.\nThis is known as the \"Hamming distance\".\n\nThe Hamming distance is useful in many areas of science, not just biology, so it's a nice phrase to be familiar with :)\n",
+  "hints": null,
+  "starter_code": "(defpackage :hamming\n  (:use :cl)\n  (:export :distance))\n\n(in-package :hamming)\n\n(defun distance (strand1 strand2))\n",
+  "example_solution": "(defpackage :hamming\n  (:use :common-lisp)\n  (:export :distance))\n\n(in-package :hamming)\n\n(defun distance (str1 str2 &key (test #'char=))\n  \"Number of positional differences in two equal length strings.\"\n  (when (= (length str1) (length str2))\n    (count nil\n           (map 'list test str1 str2))))\n",
+  "test_code": ";; Ensures that hamming.lisp and the testing library are always loaded\n(eval-when (:compile-toplevel :load-toplevel :execute)\n  (load \"hamming\")\n  (quicklisp-client:quickload :fiveam))\n\n;; Defines the testing package with symbols from hamming and FiveAM in scope\n;; The `run-tests` function is exported for use by both the user and test-runner\n(defpackage :hamming-test\n  (:use :cl :fiveam)\n  (:export :run-tests))\n\n;; Enter the testing package\n(in-package :hamming-test)\n\n;; Define and enter a new FiveAM test-suite\n(def-suite* hamming-suite)\n\n(test empty-strands\n    (let ((strand1 \"\")\n          (strand2 \"\"))\n      (is (= 0 (hamming:distance strand1 strand2)))))\n\n(test single-letter-identical-strands\n    (let ((strand1 \"A\")\n          (strand2 \"A\"))\n      (is (= 0 (hamming:distance strand1 strand2)))))\n\n(test single-letter-different-strands\n    (let ((strand1 \"G\")\n          (strand2 \"T\"))\n      (is (= 1 (hamming:distance strand1 strand2)))))\n\n(test long-identical-strands\n    (let ((strand1 \"GGACTGAAATCTG\")\n          (strand2 \"GGACTGAAATCTG\"))\n      (is (= 0 (hamming:distance strand1 strand2)))))\n\n(test long-different-strands\n    (let ((strand1 \"GGACGGATTCTG\")\n          (strand2 \"AGGACGGATTCT\"))\n      (is (= 9 (hamming:distance strand1 strand2)))))\n\n(test disallow-first-strand-longer\n    (let ((strand1 \"AATG\")\n          (strand2 \"AAA\"))\n      (is (equal NIL (hamming:distance strand1 strand2)))))\n\n(test disallow-second-strand-longer\n    (let ((strand1 \"ATA\")\n          (strand2 \"AGTG\"))\n      (is (equal NIL (hamming:distance strand1 strand2)))))\n\n(test disallow-empty-first-strand\n    (let ((strand1 \"\")\n          (strand2 \"G\"))\n      (is (equal NIL (hamming:distance strand1 strand2)))))\n\n(test disallow-empty-second-strand\n    (let ((strand1 \"G\")\n          (strand2 \"\"))\n      (is (equal NIL (hamming:distance strand1 strand2)))))\n\n(defun run-tests (&optional (test-or-suite 'hamming-suite))\n  \"Provides human readable results of test run. Default to entire suite.\"\n  (run! test-or-suite))\n",
+  "source": "The Calculating Point Mutations problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/hamm/",
+  "authors": [
+    "wobh"
+  ],
+  "contributors": null
+}

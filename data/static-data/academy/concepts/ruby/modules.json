@@ -1,0 +1,6 @@
+{
+  "slug": "modules",
+  "name": "Modules",
+  "introduction": "# Introduction\n\nSome times you don't need the overhead of creating an object with state.\nIn these cases, a `module` can be used.\n\nA module is very similar to a class (in fact, `Module` is an ancestor of `Class` in the object hierarchy) - the main difference being that rather than using instance methods, we use class methods.\nClass methods start with `self.` and are directly called on a module. \nFor example:\n\n```ruby\nmodule Speaker\n  def self.echo(something)\n    \"#{something} ... #{something}\"\n  end\nend\n\nSpeaker.echo(\"Hello\")   #=> \"Hello ... Hello\"\n```",
+  "about": "# About\n\nSome times you don't need the overhead of creating an object with state.\nIn these cases, a `module` can be used.\n\nA module is very similar to a class (in fact, `Module` is `Classes` parent in the object hierarchy) - the main difference being that rather than using instance methods, we use class methods.\nClass methods start with `self.` and are directly called on a module. \nFor example:\n\n```ruby\nmodule Speaker\n  def self.echo(something)\n    \"#{something} ... #{something}\"\n  end\nend\n\nSpeaker.echo(\"Hello\")   #=> \"Hello ... Hello\"\n```"
+}

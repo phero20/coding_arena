@@ -1,0 +1,28 @@
+{
+  "id": "nim:roman-numerals",
+  "trackSlug": "nim",
+  "slug": "roman-numerals",
+  "name": "Roman Numerals",
+  "uuid": "91f1314c-5272-4a88-afee-747794236e2a",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert modern Arabic numbers into Roman numerals.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Introduction\n\nYour task is to convert a number from Arabic numerals to Roman numerals.\n\nFor this exercise, we are only concerned about traditional Roman numerals, in which the largest number is MMMCMXCIX (or 3,999).\n\n~~~~exercism/note\nThere are lots of different ways to convert between Arabic and Roman numerals.\nWe recommend taking a naive approach first to familiarise yourself with the concept of Roman numerals and then search for more efficient methods.\n\nMake sure to check out our Deep Dive video at the end to explore the different approaches you can take!\n~~~~\n",
+  "introduction": "# Description\n\nToday, most people in the world use Arabic numerals (0–9).\nBut if you travelled back two thousand years, you'd find that most Europeans were using Roman numerals instead.\n\nTo write a Roman numeral we use the following Latin letters, each of which has a value:\n\n| M    | D   | C   | L   | X   | V   | I   |\n| ---- | --- | --- | --- | --- | --- | --- |\n| 1000 | 500 | 100 | 50  | 10  | 5   | 1   |\n\nA Roman numeral is a sequence of these letters, and its value is the sum of the letters' values.\nFor example, `XVIII` has the value 18 (`10 + 5 + 1 + 1 + 1 = 18`).\n\nThere's one rule that makes things trickier though, and that's that **the same letter cannot be used more than three times in succession**.\nThat means that we can't express numbers such as 4 with the seemingly natural `IIII`.\nInstead, for those numbers, we use a subtraction method between two letters.\nSo we think of `4` not as `1 + 1 + 1 + 1` but instead as `5 - 1`.\nAnd slightly confusingly to our modern thinking, we write the smaller number first.\nThis applies only in the following cases: 4 (`IV`), 9 (`IX`), 40 (`XL`), 90 (`XC`), 400 (`CD`) and 900 (`CM`).\n\nOrder matters in Roman numerals!\nLetters (and the special compounds above) must be ordered by decreasing value from left to right.\n\nHere are some examples:\n\n```text\n 105 => CV\n---- => --\n 100 => C\n+  5 =>  V\n```\n\n```text\n 106 => CVI\n---- => --\n 100 => C\n+  5 =>  V\n+  1 =>   I\n```\n\n```text\n 104 => CIV\n---- => ---\n 100 => C\n+  4 =>  IV\n```\n\nAnd a final more complex example:\n\n```text\n 1996 => MCMXCVI\n----- => -------\n 1000 => M\n+ 900 =>  CM\n+  90 =>    XC\n+   5 =>      V\n+   1 =>       I\n```\n",
+  "hints": null,
+  "starter_code": "proc roman*(n: int): string =\n  discard\n",
+  "example_solution": "const arabicToRoman = {\n  1000: \"M\", 900: \"CM\", 500: \"D\", 400: \"CD\",\n   100: \"C\",  90: \"XC\",  50: \"L\",  40: \"XL\",\n    10: \"X\",   9: \"IX\",   5: \"V\",   4: \"IV\",\n     1: \"I\",\n}\n\nfunc roman*(n: int): string =\n  result = \"\"\n  var n = n\n  for (a, r) in arabicToRoman:\n    while n >= a:\n      result.add r\n      n -= a\n",
+  "test_code": "import unittest\nimport roman_numerals\n\nsuite \"Roman Numerals\":\n  test \"1 is I\":\n    check roman(1) == \"I\"\n\n  test \"2 is II\":\n    check roman(2) == \"II\"\n\n  test \"3 is III\":\n    check roman(3) == \"III\"\n\n  test \"4 is IV\":\n    check roman(4) == \"IV\"\n\n  test \"5 is V\":\n    check roman(5) == \"V\"\n\n  test \"6 is VI\":\n    check roman(6) == \"VI\"\n\n  test \"9 is IX\":\n    check roman(9) == \"IX\"\n\n  test \"16 is XVI\":\n    check roman(16) == \"XVI\"\n\n  test \"27 is XXVII\":\n    check roman(27) == \"XXVII\"\n\n  test \"48 is XLVIII\":\n    check roman(48) == \"XLVIII\"\n\n  test \"49 is XLIX\":\n    check roman(49) == \"XLIX\"\n\n  test \"59 is LIX\":\n    check roman(59) == \"LIX\"\n\n  test \"66 is LXVI\":\n    check roman(66) == \"LXVI\"\n\n  test \"93 is XCIII\":\n    check roman(93) == \"XCIII\"\n\n  test \"141 is CXLI\":\n    check roman(141) == \"CXLI\"\n\n  test \"163 is CLXIII\":\n    check roman(163) == \"CLXIII\"\n\n  test \"166 is CLXVI\":\n    check roman(166) == \"CLXVI\"\n\n  test \"402 is CDII\":\n    check roman(402) == \"CDII\"\n\n  test \"575 is DLXXV\":\n    check roman(575) == \"DLXXV\"\n\n  test \"666 is DCLXVI\":\n    check roman(666) == \"DCLXVI\"\n\n  test \"911 is CMXI\":\n    check roman(911) == \"CMXI\"\n\n  test \"1024 is MXXIV\":\n    check roman(1024) == \"MXXIV\"\n\n  test \"1666 is MDCLXVI\":\n    check roman(1666) == \"MDCLXVI\"\n\n  test \"3000 is MMM\":\n    check roman(3000) == \"MMM\"\n\n  test \"3001 is MMMI\":\n    check roman(3001) == \"MMMI\"\n\n  test \"3888 is MMMDCCCLXXXVIII\":\n    check roman(3888) == \"MMMDCCCLXXXVIII\"\n\n  test \"3999 is MMMCMXCIX\":\n    check roman(3999) == \"MMMCMXCIX\"\n",
+  "source": "The Roman Numeral Kata",
+  "source_url": "https://codingdojo.org/kata/RomanNumerals/",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": [
+    "ee7"
+  ]
+}

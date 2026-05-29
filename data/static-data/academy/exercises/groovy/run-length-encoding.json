@@ -1,0 +1,26 @@
+{
+  "id": "groovy:run-length-encoding",
+  "trackSlug": "groovy",
+  "slug": "run-length-encoding",
+  "name": "Run-Length Encoding",
+  "uuid": "87d17b76-4cd0-4e15-9f1a-a51907603b6d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Implement run-length encoding and decoding.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nImplement run-length encoding and decoding.\n\nRun-length encoding (RLE) is a simple form of data compression, where runs (consecutive data elements) are replaced by just one data value and count.\n\nFor example we can represent the original 53 characters with only 13.\n\n```text\n\"WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB\"  ->  \"12WB12W3B24WB\"\n```\n\nRLE allows the original data to be perfectly reconstructed from the compressed data, which makes it a lossless data compression.\n\n```text\n\"AABCCCDEEEE\"  ->  \"2AB3CD4E\"  ->  \"AABCCCDEEEE\"\n```\n\nFor simplicity, you can assume that the unencoded string will only contain the letters A through Z (either lower or upper case) and whitespace.\nThis way data to be encoded will never contain any numbers and numbers inside data to be decoded always represent the count for the following character.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "class RunLengthEncoding {\n\n    static encode(input) {\n        throw new UnsupportedOperationException('Method implementation is missing')\n    }\n\n    static decode(input) {\n        throw new UnsupportedOperationException('Method implementation is missing')\n    }\n}",
+  "example_solution": "class RunLengthEncoding {\n\n    static String encode(String input) {\n        input.replaceAll(/(.)\\1*/) { group, letter -> group.length() > 1 ? \"${group.length()}${letter}\" : letter }\n    }\n\n    static String decode(String input) {\n        input.replaceAll(/(\\d+)(\\D)/) { _, count, letter -> letter * (count as int) }\n    }\n}",
+  "test_code": "import spock.lang.*\n\nclass RunLengthEncodingSpec extends Specification {\n\n    @Unroll\n    def \"Run-length encode #string\"() {\n        expect:\n        new RunLengthEncoding().encode(string) == expected\n\n        where:\n        string                                                  || expected\n        ''                                                      || ''\n        'XYZ'                                                   || 'XYZ'\n        'AABBBCCCC'                                             || '2A3B4C'\n        'WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB' || '12WB12W3B24WB'\n        '  hsqq qww  '                                          || '2 hs2q q2w2 '\n        'aabbbcccc'                                             || '2a3b4c'\n    }\n\n    @Ignore\n    @Unroll\n    def \"Run-length decode #string\"() {\n        expect:\n        new RunLengthEncoding().decode(string) == expected\n\n        where:\n        string          || expected\n        ''              || ''\n        'XYZ'           || 'XYZ'\n        '2A3B4C'        || 'AABBBCCCC'\n        '12WB12W3B24WB' || 'WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB'\n        '2 hs2q q2w2 '  || '  hsqq qww  '\n        '2a3b4c'        || 'aabbbcccc'\n    }\n\n    @Ignore\n    def \"Encode followed by decode gives original string\"() {\n        setup:\n        RunLengthEncoding run = new RunLengthEncoding()\n\n        expect:\n        run.decode(run.encode(string)) == expected\n\n        where:\n        string       || expected\n        'zzz ZZ  zZ' || 'zzz ZZ  zZ'\n    }\n\n}",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Run-length_encoding",
+  "authors": [
+    "amscotti"
+  ],
+  "contributors": null
+}

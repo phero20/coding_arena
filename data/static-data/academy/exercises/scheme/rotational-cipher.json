@@ -1,0 +1,26 @@
+{
+  "id": "scheme:rotational-cipher",
+  "trackSlug": "scheme",
+  "slug": "rotational-cipher",
+  "name": "Rotational Cipher",
+  "uuid": "067ff4f0-df23-4a48-842c-65e375361f2b",
+  "type": "practice",
+  "status": null,
+  "blurb": "Create an implementation of the rotational cipher, also sometimes called the Caesar cipher.",
+  "difficulty": 3,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nCreate an implementation of the rotational cipher, also sometimes called the Caesar cipher.\n\nThe Caesar cipher is a simple shift cipher that relies on transposing all the letters in the alphabet using an integer key between `0` and `26`.\nUsing a key of `0` or `26` will always yield the same output due to modular arithmetic.\nThe letter is shifted for as many values as the value of the key.\n\nThe general notation for rotational ciphers is `ROT + <key>`.\nThe most commonly used rotational cipher is `ROT13`.\n\nA `ROT13` on the Latin alphabet would be as follows:\n\n```text\nPlain:  abcdefghijklmnopqrstuvwxyz\nCipher: nopqrstuvwxyzabcdefghijklm\n```\n\nIt is stronger than the Atbash cipher because it has 27 possible keys, and 25 usable keys.\n\nCiphertext is written out in the same formatting as the input including spaces and punctuation.\n\n## Examples\n\n- ROT5 `omg` gives `trl`\n- ROT0 `c` gives `c`\n- ROT26 `Cool` gives `Cool`\n- ROT13 `The quick brown fox jumps over the lazy dog.` gives `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.`\n- ROT13 `Gur dhvpx oebja sbk whzcf bire gur ynml qbt.` gives `The quick brown fox jumps over the lazy dog.`\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (rotate phrase dx)\n  'implement-me!)\n\n",
+  "example_solution": "(import (rnrs))\n\n(define (rotate phrase dx)\n  (list->string\n   (map (rotate-char dx)\n        (string->list phrase))))\n\n(define (rotate-char dx)\n  (lambda (char)\n    (let ((rotate-under (lambda (base)\n                          (integer->char\n                           (+ base\n                              (modulo (+ (char->integer char)\n                                         dx\n                                         (- base))\n                                      26))))))\n      (cond ((char-lower-case? char)\n             (rotate-under 97))\n            ((char-upper-case? char)\n             (rotate-under 65))\n            (else char)))))\n\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success \"rotate a by 0, same output as input\" equal?\n      rotate '(\"a\" 0) \"a\") (test-success \"rotate a by 1\" equal? rotate '(\"a\" 1) \"b\")\n     (test-success \"rotate a by 26, same output as input\" equal?\n       rotate '(\"a\" 26) \"a\")\n     (test-success \"rotate m by 13\" equal? rotate '(\"m\" 13) \"z\")\n     (test-success \"rotate n by 13 with wrap around alphabet\"\n       equal? rotate '(\"n\" 13) \"a\")\n     (test-success \"rotate capital letters\" equal? rotate\n       '(\"OMG\" 5) \"TRL\")\n     (test-success \"rotate spaces\" equal? rotate '(\"O M G\" 5)\n       \"T R L\")\n     (test-success \"rotate numbers\" equal? rotate\n       '(\"Testing 1 2 3 testing\" 4) \"Xiwxmrk 1 2 3 xiwxmrk\")\n     (test-success \"rotate punctuation\" equal? rotate\n       '(\"Let's eat, Grandma!\" 21) \"Gzo'n zvo, Bmviyhv!\")\n     (test-success \"rotate all letters\" equal? rotate\n       '(\"The quick brown fox jumps over the lazy dog.\" 13)\n       \"Gur dhvpx oebja sbk whzcf bire gur ynml qbt.\")))\n\n(run-with-cli \"rotational-cipher.scm\" (list test-cases))\n\n",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Caesar_cipher",
+  "authors": [
+    "jitwit"
+  ],
+  "contributors": null
+}

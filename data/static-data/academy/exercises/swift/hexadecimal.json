@@ -1,0 +1,30 @@
+{
+  "id": "swift:hexadecimal",
+  "trackSlug": "swift",
+  "slug": "hexadecimal",
+  "name": "Hexadecimal",
+  "uuid": "3a9f0e4d-a569-40ea-adb8-ded8d240c949",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a hexadecimal number, represented as a string (e.g. \"10af8c\"), to its decimal equivalent using first principles (i.e. no, you may not use built-in or external libraries to accomplish the conversion).\n\nOn the web we use hexadecimal to represent colors, e.g. green: 008000,\nteal: 008080, navy: 000080).\n\nThe program should handle invalid hexadecimal strings.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "//Solution goes in Sources\n",
+  "example_solution": "struct Hexadecimal {\n\n    let hexString: String\n    let intValue: Int?\n\n    private static let hexDigits = [\n        \"0\": 0,\n        \"1\": 1,\n        \"2\": 2,\n        \"3\": 3,\n        \"4\": 4,\n        \"5\": 5,\n        \"6\": 6,\n        \"7\": 7,\n        \"8\": 8,\n        \"9\": 9,\n        \"a\": 10,\n        \"b\": 11,\n        \"c\": 12,\n        \"d\": 13,\n        \"e\": 14,\n        \"f\": 15\n    ]\n\n    init(_ hexString: String) {\n        self.hexString = hexString\n        self.intValue = Hexadecimal.getIntFromHexString(hexString)\n    }\n\n    private static func getIntFromHexString(_ hexString: String) -> Int? {\n        var result = 0\n        var multiplier = 1\n\n        let digits = hexString.map { String($0).lowercased() }.reversed()\n\n        for digit in digits {\n            guard let intValue = hexDigits[digit] else {\n                // Invalid hex string\n                return nil\n            }\n\n            result += intValue * multiplier\n            multiplier *= 16\n        }\n\n        return result\n    }\n}\n\nextension Int {\n\n    init?(_ hex: Hexadecimal) {\n        guard let intValue = hex.intValue else {\n            return nil\n        }\n\n        self = intValue\n    }\n\n}\n",
+  "test_code": "import XCTest\n@testable import Hexadecimal\n\nclass HexadecimalTests: XCTestCase {\n\n    func testHex1IsDecimal1() {\n        XCTAssertEqual(1, Int(Hexadecimal(\"1\")))\n    }\n\n    func testHexCIsDecimal12() {\n        XCTAssertEqual(12, Int(Hexadecimal(\"c\")))\n    }\n\n    func testHex10IsDecimal16() {\n        XCTAssertEqual(16, Int(Hexadecimal(\"10\")))\n    }\n\n    func testHexAFIsDecimal175() {\n        XCTAssertEqual(175, Int(Hexadecimal(\"af\")))\n    }\n\n    func testHex100IsDecimal256() {\n        XCTAssertEqual(256, Int(Hexadecimal(\"100\")))\n    }\n\n    func testHex19aceIsDecimal105166() {\n        XCTAssertEqual(105_166, Int(Hexadecimal(\"19ace\")))\n    }\n\n    func testInvalidHexIsNil() {\n        XCTAssertNil(Int(Hexadecimal(\"carrot\")))\n    }\n\n    func testBlack() {\n        XCTAssertEqual(0, Int(Hexadecimal(\"000000\")))\n    }\n\n    func testWhite() {\n        XCTAssertEqual(16_777_215, Int(Hexadecimal(\"ffffff\")))\n    }\n\n    func testYellow() {\n        XCTAssertEqual(16_776_960, Int(Hexadecimal(\"ffff00\")))\n    }\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/examples/NumberBases.html",
+  "authors": [],
+  "contributors": [
+    "bhargavg",
+    "harquail",
+    "lyuha",
+    "masters3d",
+    "ThomasHaz"
+  ]
+}

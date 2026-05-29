@@ -25,6 +25,11 @@ export interface EvaluationResult {
   status: ExecutionVerdict | "PENDING" | "IDLE" | "ERROR";
   overallStatus: ExecutionVerdict | "PENDING" | "IDLE" | "ERROR"; // Alias for compatibility
   tests: ExecutionTestResult[];
+<<<<<<< HEAD
+=======
+  compileOutput?: string;
+  stderr?: string;
+>>>>>>> prod-deploy
   isLoading: boolean;
   error: string | null;
   type: "run" | "submit" | null;
@@ -67,6 +72,10 @@ export const useTaskEvaluation = ({
     onMutate: () => {
       setEvaluationType("run");
       setSubmissionId(null);
+<<<<<<< HEAD
+=======
+      setLastRunResult(null);
+>>>>>>> prod-deploy
     },
     onSuccess: (data) => {
       setLastRunResult(data);
@@ -88,6 +97,10 @@ export const useTaskEvaluation = ({
     onMutate: () => {
       setEvaluationType("submit");
       setLastRunResult(null);
+<<<<<<< HEAD
+=======
+      setSubmissionId(null);
+>>>>>>> prod-deploy
     },
     onSuccess: (data) => {
       setSubmissionId(data.submissionId);
@@ -104,8 +117,13 @@ export const useTaskEvaluation = ({
   const statusPolling = useMemo(() => {
     if (!pollingData) return null;
     return {
+<<<<<<< HEAD
       overallStatus: (pollingData.status as any) || "PENDING",
       tests: pollingData.details?.tests || [],
+=======
+      overallStatus: pollingData.status || "PENDING",
+      tests: pollingData.details?.tests ?? [],
+>>>>>>> prod-deploy
       isLoading: isPolling,
       error: pollingError ? (pollingError as Error).message : null,
     };
@@ -114,6 +132,7 @@ export const useTaskEvaluation = ({
   /**
    * Derived states
    */
+<<<<<<< HEAD
   const isLoading = runMutation.isPending || submitMutation.isPending || isPolling;
   const error = getErrorMessage(runMutation.error || submitMutation.error || pollingError);
 
@@ -126,19 +145,49 @@ export const useTaskEvaluation = ({
         overallStatus: status,
         tests: lastRunResult.tests || [],
         isLoading: runMutation.isPending,
+=======
+  const isLoading = 
+    runMutation.isPending || 
+    submitMutation.isPending || 
+    isPolling || 
+    ((pollingData?.status as string) === "PENDING");
+  const error = getErrorMessage(runMutation.error || submitMutation.error || pollingError);
+
+  const evaluation: EvaluationResult = useMemo(() => {
+    if (evaluationType === "run") {
+      const status = lastRunResult?.overallStatus || "PENDING";
+      return {
+        submissionId: lastRunResult?.submissionId ?? null,
+        status,
+        overallStatus: status,
+        tests: lastRunResult?.tests || [],
+        compileOutput: lastRunResult?.compileOutput,
+        stderr: lastRunResult?.stderr,
+        isLoading: runMutation.isPending || (status as string) === "PENDING",
+>>>>>>> prod-deploy
         error: getErrorMessage(runMutation.error),
         type: "run",
       };
     }
 
     if (evaluationType === "submit") {
+<<<<<<< HEAD
       const status = (statusPolling?.overallStatus as any) || "PENDING";
+=======
+      const status = statusPolling?.overallStatus || "PENDING";
+>>>>>>> prod-deploy
       return {
         submissionId: submissionId,
         status,
         overallStatus: status,
         tests: statusPolling?.tests || [],
+<<<<<<< HEAD
         isLoading: submitMutation.isPending || !!statusPolling?.isLoading,
+=======
+        compileOutput: pollingData?.details?.compileOutput,
+        stderr: pollingData?.details?.stderr,
+        isLoading: submitMutation.isPending || (status as string) === "PENDING" || !!statusPolling?.isLoading,
+>>>>>>> prod-deploy
         error: getErrorMessage(submitMutation.error || statusPolling?.error),
         type: "submit",
       };

@@ -1,0 +1,26 @@
+{
+  "id": "scheme:trinary",
+  "trackSlug": "scheme",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "05159700-b0d9-4d05-8ed3-9b461adbae35",
+  "type": "practice",
+  "status": null,
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 2,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "(import (rnrs))\n\n(define (to-decimal s)\n  'implement-me!)\n",
+  "example_solution": "(import (rnrs))\n\n(define (any f xs)\n  (fold-left (lambda (r x) (or r (f x))) #f xs))\n\n(define (every f xs)\n  (fold-left (lambda (r x) (and r (f x))) #t xs))\n\n(define (string-any f s)\n  (any f (string->list s)))\n\n(define (string-every f s)\n  (every f (string->list s)))\n\n(define (to-decimal s)\n  (call/cc\n   (lambda (fail)\n    (unless (string-every (lambda (c)\n                            (any (lambda (d) (char=? c d))\n                                 '(#\\0 #\\1 #\\2)))\n                          s)\n      (fail 0))\n    (apply +\n           (map (lambda (d e)\n                  (* (- (char->integer d) (char->integer #\\0)) (expt 3 e)))\n                (reverse (string->list s))\n                (iota (string-length s)))))))\n",
+  "test_code": "(load \"test-util.ss\")\n\n(define test-cases\n  `((test-success\n      \"returns the decimal representation of the input trinary value\"\n      equal? to-decimal '(\"1\") 1)\n     (test-success \"trinary 2 is decimal 2\" equal? to-decimal\n       '(\"2\") 2)\n     (test-success \"trinary 10 is decimal 3\" equal? to-decimal\n       '(\"10\") 3)\n     (test-success \"trinary 11 is decimal 4\" equal? to-decimal\n       '(\"11\") 4)\n     (test-success \"trinary 100 is decimal 9\" equal? to-decimal\n       '(\"100\") 9)\n     (test-success \"trinary 112 is decimal 14\" equal? to-decimal\n       '(\"112\") 14)\n     (test-success \"trinary 222 is decimal 26\" equal? to-decimal\n       '(\"222\") 26)\n     (test-success \"trinary 1122000120 is decimal 32091\" equal?\n       to-decimal '(\"1122000120\") 32091)\n     (test-success \"invalid trinary digits returns 0\" equal?\n       to-decimal '(\"1234\") 0)\n     (test-success \"invalid word as input returns 0\" equal?\n       to-decimal '(\"carrot\") 0)\n     (test-success\n       \"invalid numbers with letters as input returns 0\" equal?\n       to-decimal '(\"0a1b2c\") 0)))\n\n(run-with-cli \"trinary.scm\" (list test-cases))\n\n",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions",
+  "authors": [
+    "tongkiat"
+  ],
+  "contributors": null
+}

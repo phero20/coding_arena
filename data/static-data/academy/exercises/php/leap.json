@@ -1,0 +1,31 @@
+{
+  "id": "php:leap",
+  "trackSlug": "php",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "f2330729-2ddc-4a9b-b364-51f1197f69ff",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "<?php\n\n/*\n * By adding type hints and enabling strict type checking, code can become\n * easier to read, self-documenting and reduce the number of potential bugs.\n * By default, type declarations are non-strict, which means they will attempt\n * to change the original type to match the type specified by the\n * type-declaration.\n *\n * In other words, if you pass a string to a function requiring a float,\n * it will attempt to convert the string value to a float.\n *\n * To enable strict mode, a single declare directive must be placed at the top\n * of the file.\n * This means that the strictness of typing is configured on a per-file basis.\n * This directive not only affects the type declarations of parameters, but also\n * a function's return type.\n *\n * For more info review the Concept on strict type checking in the PHP track\n * <link>.\n *\n * To disable strict typing, comment out the directive below.\n */\n\ndeclare(strict_types=1);\n\nfunction isLeap(int $year): bool\n{\n    throw new \\BadFunctionCallException(\"Implement the isLeap function\");\n}\n",
+  "example_solution": "<?php\n\ndeclare(strict_types=1);\n\n/**\n * @return bool\n */\nfunction isLeap($year)\n{\n    return !($year % 4) && (!!($year % 100) || !($year % 400));\n}\n",
+  "test_code": "<?php\n\ndeclare(strict_types=1);\n\nuse PHPUnit\\Framework\\TestCase;\nuse PHPUnit\\Framework\\Attributes\\TestDox;\n\nclass LeapTest extends TestCase\n{\n    public static function setUpBeforeClass(): void\n    {\n        require_once 'Leap.php';\n    }\n\n    /**\n     * uuid 6466b30d-519c-438e-935d-388224ab5223\n     */\n    #[TestDox('Year not divisible by 4 in common year')]\n    public function testCommonYearNotDivisibleBy4(): void\n    {\n        $this->assertFalse(isLeap(2015));\n    }\n\n    /**\n     * uuid ac227e82-ee82-4a09-9eb6-4f84331ffdb0\n     */\n    #[TestDox('Year divisible by 2, not divisible by 4 in common year')]\n    public function testCommonYearDivisibleBy2Not4(): void\n    {\n        $this->assertFalse(isLeap(1970));\n    }\n\n    /**\n     * uuid 4fe9b84c-8e65-489e-970b-856d60b8b78e\n     */\n    #[TestDox('Year divisible by 4, not divisible by 100 in leap year')]\n    public function testLeapYearDivisibleBy4Not100(): void\n    {\n        $this->assertTrue(isLeap(1996));\n    }\n\n    /**\n     * uuid 7fc6aed7-e63c-48f5-ae05-5fe182f60a5d\n     */\n    #[TestDox('Year divisible by 4 and 5 is still a leap year')]\n    public function testLeapYearDivisibleBy4And5(): void\n    {\n        $this->assertTrue(isLeap(1960));\n    }\n\n    /**\n     * uuid 78a7848f-9667-4192-ae53-87b30c9a02dd\n     */\n    #[TestDox('Year divisible by 100, not divisible by 400 in common year')]\n    public function testCommonYearDivisibleBy100Not400(): void\n    {\n        $this->assertFalse(isLeap(2100));\n    }\n\n    /**\n     * uuid 9d70f938-537c-40a6-ba19-f50739ce8bac\n     */\n    #[TestDox('Year divisible by 100 but not by 3 is still not a leap year')]\n    public function testCommonYearDivisibleBy100Not3(): void\n    {\n        $this->assertFalse(isLeap(1900));\n    }\n\n    /**\n     * uuid 42ee56ad-d3e6-48f1-8e3f-c84078d916fc\n     */\n    #[TestDox('Year divisible by 400 is leap year')]\n    public function testLeapYearDivisibleBy400(): void\n    {\n        $this->assertTrue(isLeap(2000));\n    }\n\n    /**\n     * uuid 57902c77-6fe9-40de-8302-587b5c27121e\n     */\n    #[TestDox('Year divisible by 400 but not by 125 is still a leap year')]\n    public function testLeapYearDivisibleBy400Not125(): void\n    {\n        $this->assertTrue(isLeap(2400));\n    }\n\n    /**\n     * uuid c30331f6-f9f6-4881-ad38-8ca8c12520c1\n     */\n    #[TestDox('Year divisible by 200, not divisible by 400 in common year')]\n    public function testCommonYearDivisibleBy200Not400(): void\n    {\n        $this->assertFalse(isLeap(1800));\n    }\n}\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [],
+  "contributors": [
+    "arueckauer",
+    "dkinzer",
+    "kunicmarko20",
+    "kytrinyx",
+    "lafent",
+    "petemcfarlane"
+  ]
+}

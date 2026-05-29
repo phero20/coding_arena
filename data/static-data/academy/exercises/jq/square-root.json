@@ -1,0 +1,26 @@
+{
+  "id": "jq:square-root",
+  "trackSlug": "jq",
+  "slug": "square-root",
+  "name": "Square Root",
+  "uuid": "54421d36-c2d2-4c62-910c-536b0d08ccbe",
+  "type": "practice",
+  "status": null,
+  "blurb": "Given a natural radicand, return its square root.",
+  "difficulty": 5,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to calculate the square root of a given number.\n\n- Try to avoid using the pre-existing math libraries of your language.\n- As input you'll be given a positive whole number, i.e. 1, 2, 3, 4…\n- You are only required to handle cases where the result is a positive whole number.\n\nSome potential approaches:\n\n- Linear or binary search for a number that gives the input number when squared.\n- Successive approximation using Newton's or Heron's method.\n- Calculating one digit at a time or one bit at a time.\n\nYou can check out the Wikipedia pages on [integer square root][integer-square-root] and [methods of computing square roots][computing-square-roots] to help with choosing a method of calculation.\n\n[integer-square-root]: https://en.wikipedia.org/wiki/Integer_square_root\n[computing-square-roots]: https://en.wikipedia.org/wiki/Methods_of_computing_square_roots\n",
+  "introduction": "# Introduction\n\nWe are launching a deep space exploration rocket and we need a way to make sure the navigation system stays on target.\n\nAs the first step in our calculation, we take a target number and find its square root (that is, the number that when multiplied by itself equals the target number).\n\nThe journey will be very long.\nTo make the batteries last as long as possible, we had to make our rocket's onboard computer very power efficient.\nUnfortunately that means that we can't rely on fancy math libraries and functions, as they use more power.\nInstead we want to implement our own square root calculation.\n",
+  "hints": null,
+  "starter_code": "\"Remove this line and implement your solution\" | halt_error\n",
+  "example_solution": "# Using the Binary numeral system implementation from\n# https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Binary_numeral_system_(base_2)\n\ndef intdiv($numerator; $denominator):\n  ($numerator / $denominator) | trunc\n;\n\n# find b, the largest power of 4 <= radicand\ndef init_b:\n  pow(4; (((. | log) / (4 | log)) | floor))\n;\n\ndef find_root($root; $num; $b):\n  if $b == 0 then\n    $root\n  elif $num >= $root + $b then\n    find_root(intdiv($root; 2) + $b; $num - $root - $b; intdiv($b; 4))\n  else\n    find_root(intdiv($root; 2); $num; intdiv($b; 4))\n  end\n;\n  \nfind_root(0; .radicand; .radicand | init_b)\n",
+  "test_code": "#!/usr/bin/env bats\n# generated on 2022-11-02T20:59:50Z\nload bats-extra\nload bats-jq\n\n@test 'root of 1' {\n    #[[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f square-root.jq << 'END_INPUT'\n        {\n          \"radicand\": 1\n        }\nEND_INPUT\n\n    assert_success\n    expected=1\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'root of 4' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f square-root.jq << 'END_INPUT'\n        {\n          \"radicand\": 4\n        }\nEND_INPUT\n\n    assert_success\n    expected=2\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'root of 25' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f square-root.jq << 'END_INPUT'\n        {\n          \"radicand\": 25\n        }\nEND_INPUT\n\n    assert_success\n    expected=5\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'root of 81' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f square-root.jq << 'END_INPUT'\n        {\n          \"radicand\": 81\n        }\nEND_INPUT\n\n    assert_success\n    expected=9\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'root of 196' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f square-root.jq << 'END_INPUT'\n        {\n          \"radicand\": 196\n        }\nEND_INPUT\n\n    assert_success\n    expected=14\n    assert_equal \"$output\" \"$expected\"\n}\n\n@test 'root of 65025' {\n    [[ $BATS_RUN_SKIPPED == \"true\" ]] || skip\n\n    run jq -r -f square-root.jq << 'END_INPUT'\n        {\n          \"radicand\": 65025\n        }\nEND_INPUT\n\n    assert_success\n    expected=255\n    assert_equal \"$output\" \"$expected\"\n}\n\n",
+  "source": "wolf99",
+  "source_url": "https://github.com/exercism/problem-specifications/pull/1582",
+  "authors": [
+    "glennj"
+  ],
+  "contributors": null
+}

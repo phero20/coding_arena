@@ -1,0 +1,38 @@
+{
+  "id": "go:trinary",
+  "trackSlug": "go",
+  "slug": "trinary",
+  "name": "Trinary",
+  "uuid": "52af9f03-8b6b-4d75-a363-124f3269dccd",
+  "type": "practice",
+  "status": "deprecated",
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nConvert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.\n\nThe program should consider strings specifying an invalid trinary as the value 0.\n\nTrinary numbers contain three symbols: 0, 1, and 2.\n\nThe last place in a trinary number is the 1's place.\nThe second to last is the 3's place, the third to last is the 9's place, etc.\n\n```shell\n# \"102012\"\n    1       0       2       0       1       2    # the number\n1*3^5 + 0*3^4 + 2*3^3 + 0*3^2 + 1*3^1 + 2*3^0    # the value\n  243 +     0 +    54 +     0 +     3 +     2 =  302\n```\n\nIf your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "package trinary\n\nfunc ParseTrinary(arg string, want int64, ok bool) {\n\tpanic(\"Please implement the ParseTrinary function\")\n}\n",
+  "example_solution": "package trinary\n\nimport (\n\t\"fmt\"\n\t\"math\"\n)\n\nfunc ParseTrinary(s string) (int64, error) {\n\tconst third = math.MaxInt64 / 3\n\toverflow := false\n\tvar d int64\n\tfor _, r := range s {\n\t\tswitch r {\n\t\tcase '0', '1', '2':\n\t\t\tif overflow {\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tif d > third {\n\t\t\t\toverflow = true\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\td *= 3\n\t\t\tt := int64(r - '0')\n\t\t\tif t > math.MaxInt64-d {\n\t\t\t\toverflow = true\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\td += t\n\t\tdefault:\n\t\t\treturn 0, fmt.Errorf(\"invalid: %s\", s)\n\t\t}\n\t}\n\tif overflow {\n\t\treturn 0, fmt.Errorf(\"overflow: %s\", s)\n\t}\n\treturn d, nil\n}\n",
+  "test_code": "package trinary\n\nimport \"testing\"\n\nvar tests = []struct {\n\targ  string\n\twant int64\n\tok   bool\n}{\n\t{\"0\", 0, true},\n\t{\"1\", 1, true},\n\t{\"2\", 2, true},\n\t{\"10\", 3, true},\n\t{\"201\", 19, true},\n\t{\"0201\", 19, true},\n\t{\"0000000000000000000000000000000000000000201\", 19, true},\n\t{\"2021110011022210012102010021220101220221\", 9223372036854775807, true},\n\t{\"2021110011022210012102010021220101220222\", 0, false},\n}\n\nfunc TestParseTrinary(t *testing.T) {\n\tfor _, test := range tests {\n\t\tswitch res, err := ParseTrinary(test.arg); {\n\t\tcase err != nil:\n\t\t\tvar _ error = err\n\t\t\tif test.ok {\n\t\t\t\tt.Errorf(\"ParseTrinary(%q) returned error %q, Error not expected\",\n\t\t\t\t\ttest.arg, err)\n\t\t\t}\n\t\tcase !test.ok:\n\t\t\tt.Errorf(\"ParseTrinary(%q) = (%d, %v), expected error\", test.arg, res, err)\n\t\tcase res != test.want:\n\t\t\tt.Errorf(\"ParseTrinary(%q) = (%d, %v), want %d\", test.arg, res, err, test.want)\n\t\t}\n\t}\n}\n\nfunc BenchmarkParseTrinary(b *testing.B) {\n\tfor range b.N {\n\t\tfor _, test := range tests {\n\t\t\tParseTrinary(test.arg)\n\t\t}\n\t}\n}\n",
+  "source": "All of Computer Science",
+  "source_url": "http://www.wolframalpha.com/input/?i=binary&a=*C.binary-_*MathWorld-",
+  "authors": [
+    "soniakeys"
+  ],
+  "contributors": [
+    "alebaffa",
+    "bitfield",
+    "ekingery",
+    "ferhatelmas",
+    "hilary",
+    "kytrinyx",
+    "manavo",
+    "petertseng",
+    "robphoenix",
+    "sebito91",
+    "tleen"
+  ]
+}

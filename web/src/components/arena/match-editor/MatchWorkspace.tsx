@@ -6,8 +6,12 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+<<<<<<< HEAD
 import { DescriptionPanel } from "@/components/workspace-shared/DescriptionPanel";
 import { EditorPanel } from "@/components/workspace-shared/EditorPanel";
+=======
+import { DescriptionPanel, EditorPanel } from "@/components/workspace-shared";
+>>>>>>> prod-deploy
 import { Problem } from "@/types/api";
 import { BaseWorkspace } from "@/components/shared/BaseWorkspace";
 import type { MatchWorkspaceProps } from "@/types/component.types";
@@ -53,6 +57,10 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
       isSubmitting={!!evaluation?.isLoading && isFullSubmission}
       hasSubmitted={hasSubmitted}
       confirmSubmit={true}
+<<<<<<< HEAD
+=======
+      isArena={true}
+>>>>>>> prod-deploy
       descriptionSlot={
         <DescriptionPanel 
           mode="arena" 

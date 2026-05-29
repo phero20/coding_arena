@@ -1,0 +1,29 @@
+{
+  "id": "idris:leap",
+  "trackSlug": "idris",
+  "slug": "leap",
+  "name": "Leap",
+  "uuid": "2c7ab2e7-d87a-41ee-a81e-7572d7872562",
+  "type": "practice",
+  "status": null,
+  "blurb": "Determine whether a given year is a leap year.",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nYour task is to determine whether a given year is a leap year.\n",
+  "introduction": "# Introduction\n\nA leap year (in the Gregorian calendar) occurs:\n\n- In every year that is evenly divisible by 4.\n- Unless the year is evenly divisible by 100, in which case it's only a leap year if the year is also evenly divisible by 400.\n\nSome examples:\n\n- 1997 was not a leap year as it's not divisible by 4.\n- 1900 was not a leap year as it's not divisible by 400.\n- 2000 was a leap year!\n\n~~~~exercism/note\nFor a delightful, four-minute explanation of the whole phenomenon of leap years, check out [this YouTube video](https://www.youtube.com/watch?v=xX96xng7sAE).\n~~~~\n",
+  "hints": null,
+  "starter_code": "module Leap\n\nexport\nisLeap : Int -> Bool\nisLeap year = ?isLeap_rhs\n",
+  "example_solution": "module Leap\n\nexport\nisLeap : Int -> Bool\nisLeap year =\n  (divBy 4 && not (divBy 100)) || divBy 400\n  where divBy : Int -> Bool\n        divBy n = (year `mod` n) == 0\n\nexport\nversion : String\nversion = \"1.0.0\"\n",
+  "test_code": "module Main\n\nimport System\nimport Tester\nimport Tester.Runner\n\nimport Leap\n\ntests : List Test\ntests =\n  [ test \"year not divisible by 4 in common year\"                      (assert $ not $ isLeap 2015)\n  , test \"year divisible by 2, not divisible by 4 in common year\"      (assert $ not $ isLeap 1970)\n  , test \"year divisible by 4, not divisible by 100 in leap year\"      (assert $       isLeap 1996)\n  , test \"year divisible by 4 and 5 is still a leap year\"              (assert $       isLeap 1960)\n  , test \"year divisible by 100, not divisible by 400 in common year\"  (assert $ not $ isLeap 2100)\n  , test \"year divisible by 100 but not by 3 is still not a leap year\" (assert $ not $ isLeap 1900)\n  , test \"year divisible by 400 is leap year\"                          (assert $       isLeap 2000)\n  , test \"year divisible by 400 but not by 125 is still a leap year\"   (assert $       isLeap 2400)\n  , test \"year divisible by 200, not divisible by 400 in common year\"  (assert $ not $ isLeap 1800)\n  ]\n\nexport\nmain : IO ()\nmain = do\n  success <- runTests tests\n  if success\n     then putStrLn \"All tests passed\"\n     else exitFailure\n",
+  "source": "CodeRanch Cattle Drive, Assignment 3",
+  "source_url": "https://web.archive.org/web/20240907033714/https://coderanch.com/t/718816/Leap",
+  "authors": [
+    "stevejb71"
+  ],
+  "contributors": [
+    "NobbZ",
+    "yurrriq"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "c:hello-world",
+  "trackSlug": "c",
+  "slug": "hello-world",
+  "name": "Hello World",
+  "uuid": "ee307061-5bc2-439c-8815-abd730aedc2d",
+  "type": "practice",
+  "status": null,
+  "blurb": "Exercism's classic introductory exercise. Just say \"Hello, World!\".",
+  "difficulty": 1,
+  "concepts": null,
+  "practices": [],
+  "prerequisites": [],
+  "instructions": "# Instructions\n\nThe classical introductory exercise.\nJust say \"Hello, World!\".\n\n[\"Hello, World!\"][hello-world] is the traditional first program for beginning programming in a new language or environment.\n\nThe objectives are simple:\n\n- Modify the provided code so that it produces the string \"Hello, World!\".\n- Run the test suite and make sure that it succeeds.\n- Submit your solution and check it at the website.\n\nIf everything goes well, you will be ready to fetch your first real exercise.\n\n[hello-world]: https://en.wikipedia.org/wiki/%22Hello,_world!%22_program\n",
+  "introduction": null,
+  "hints": null,
+  "starter_code": "#include \"hello_world.h\"\n\n// Define the function itself.\nconst char *hello(void)\n{\n   return \"Goodbye, Mars!\";\n}\n",
+  "example_solution": "#include \"hello_world.h\"\n\nconst char *hello(void)\n{\n   return \"Hello, World!\";\n}\n",
+  "test_code": "// Include the test framework.\n#include \"test-framework/unity.h\"\n\n// Include the header file with the declarations of the functions you create.\n#include \"hello_world.h\"\n\n// Runs before every test.\nvoid setUp(void)\n{\n}\n\n// Runs after every test.\nvoid tearDown(void)\n{\n}\n\n// Defines a single test.\nstatic void test_say_hi(void)\n{\n   // Check if the 'hello()' function returns \"Hello, World!\"\n   // This test is expected to fail after first downloading this exercise.\n   // To make this test pass, fix the 'hello()' function definition in the\n   // source file hello_world.c.\n   TEST_ASSERT_EQUAL_STRING(\"Hello, World!\", hello());\n}\n\n// Runs the test(s)\nint main(void)\n{\n   UNITY_BEGIN();\n\n   RUN_TEST(test_say_hi);\n\n   return UNITY_END();\n}\n",
+  "source": "This is an exercise to introduce users to using Exercism",
+  "source_url": "https://en.wikipedia.org/wiki/%22Hello,_world!%22_program",
+  "authors": [
+    "JacobMikkelsen"
+  ],
+  "contributors": [
+    "bcc32",
+    "benkelaar",
+    "gea-migration",
+    "h-3-0",
+    "kytrinyx",
+    "patricksjackson",
+    "QLaille",
+    "RealBarrettBrown",
+    "ryanplusplus",
+    "siebenschlaefer",
+    "wolf99"
+  ]
+}
