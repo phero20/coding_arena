@@ -14,6 +14,7 @@ import { SolutionRepository } from "../../repositories/solutions/solution.reposi
 import { WorkspaceRepository } from "../../repositories/workspace/workspace.repository";
 import { ChatRepository } from "../../repositories/chat/chat.repository";
 import { AcademyRepository } from "../../repositories/academy/academy.repository";
+import { SystemDesignRepository } from "../../repositories/system-design/system-design.repository";
 
 /**
  * Repository layer registrations.
@@ -35,4 +36,6 @@ export const repositoriesRegistry = {
   workspaceRepository: asClass(WorkspaceRepository).singleton(),
   chatRepository: asClass(ChatRepository).singleton(),
   academyRepository: asClass(AcademyRepository).singleton(),
+  systemDesignRepository: asClass(SystemDesignRepository).singleton(),
 };
+

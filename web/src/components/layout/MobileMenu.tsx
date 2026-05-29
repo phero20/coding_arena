@@ -82,7 +82,7 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
                   Search Users
                 </span>
                 <div className="w-full">
-                  <UserSearch />
+                  <UserSearch onSelect={() => setIsOpen(false)} />
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
               <Show when="signed-in">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/40">
                   <Link
-                    href={`/u/${user?.username}`}
+                    href={`/u/${user?.username || user?.id}`}
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3"
                   >

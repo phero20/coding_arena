@@ -2,7 +2,7 @@
 
 import { useState, use } from "react";
 import Link from "next/link";
-import { Search, Folder, ChevronLeft, Info, FileText } from "lucide-react";
+import { Search, Folder, ChevronLeft, Info, FileText, ArrowLeft } from "lucide-react";
 import { useWorkspace, useWorkspaceDiagrams } from "@/hooks/queries/use-workspace.queries";
 import { CreateDiagramDialog } from "@/components/systemdesign-workspace/dialogs/create-diagram-dialog";
 import { DiagramTable } from "@/components/systemdesign-workspace/tables/diagram-table";
@@ -44,7 +44,7 @@ export default function WorkspaceDetailPage({ params }: WorkspaceDetailPageProps
           : (workspaceQuery.error as any)?.message || "Failed to load workspace."
       }
       onRetry={() => {
-        window.location.href = "/systemdesign-workspace";
+        window.location.href = "/systemdesign/workspace";
       }}
       retryText="Back to Workspaces"
       skeleton={
@@ -67,8 +67,8 @@ export default function WorkspaceDetailPage({ params }: WorkspaceDetailPageProps
           {/* Back Link Button */}
           <div className="flex items-center">
             <Button size="sm" asChild>
-              <Link href="/systemdesign-workspace">
-                <ChevronLeft className="size-3" />
+              <Link href="/systemdesign/workspace">
+                <ArrowLeft className="size-3" />
                 Back to Workspaces
               </Link>
             </Button>

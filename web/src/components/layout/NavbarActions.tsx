@@ -87,9 +87,9 @@ export const NavbarActions = () => {
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
-                variant="ghost"
+                variant="secondary"
                 className={cn(
-                  "relative h-9 w-9 rounded-full border transition-all duration-300 active:scale-95",
+                  "relative h-9 w-9 rounded-full bg-transparent border transition-all duration-300 active:scale-95",
                   open
                     ? "border-primary/40 bg-muted"
                     : "border-border/40 hover:border-primary/40",

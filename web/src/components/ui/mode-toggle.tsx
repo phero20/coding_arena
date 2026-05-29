@@ -77,10 +77,10 @@ export function ModeToggle() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="ghost"
+          variant="secondary"
           size="icon"
           className={cn(
-            "relative h-9 w-9 rounded-full border transition-all duration-300",
+            "relative h-9 w-9 rounded-full bg-transparent border transition-all duration-300",
             open
               ? "border-primary/40 bg-muted"
               : "border-border hover:border-primary/40",

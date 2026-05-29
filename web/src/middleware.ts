@@ -10,6 +10,12 @@ const isPublicRoute = createRouteMatcher([
   "/auth/register(.*)",
   "/auth/forgot-password(.*)",
   "/u/(.*)",
+  "/academy",
+  "/academy/tracks",
+  "/academy/tracks/:slug",
+  "/systemdesign",
+  "/systemdesign/learn",
+  "/systemdesign/learn/:slug",
   "/api/v1/auth/webhooks/clerk", // Always public
 ]);
 

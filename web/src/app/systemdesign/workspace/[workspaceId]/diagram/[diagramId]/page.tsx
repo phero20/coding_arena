@@ -207,7 +207,7 @@ export default function DiagramPage({ params }: DiagramPageProps) {
       errorTitle="Access Denied"
       errorMessage="You do not have access to this diagram, or the url is invalid."
       onRetry={() => {
-        window.location.href = `/systemdesign-workspace/${workspaceId}`;
+        window.location.href = `/systemdesign/workspace/${workspaceId}`;
       }}
       retryText="Back to Workspace"
       skeleton={
@@ -225,7 +225,7 @@ export default function DiagramPage({ params }: DiagramPageProps) {
         {/* Header — Clean, minimal like Eraser.io */}
         <header className="h-12 border-b flex items-center justify-between px-4 bg-card shrink-0 select-none">
           <div className="flex items-center gap-4 min-w-0">
-            <Link href={`/systemdesign-workspace/${workspaceId}`}>
+            <Link href={`/systemdesign/workspace/${workspaceId}`}>
               <Button
                 variant="outline"
                 size="sm"

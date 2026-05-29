@@ -59,7 +59,7 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
   return (
     <Card
       className={cn(
-        "flex flex-row items-center justify-center gap-12 p-3 py-4 pr-0",
+        "flex flex-row items-center justify-center gap-12 p-3 py-4",
         className,
       )}
     >
@@ -71,12 +71,11 @@ export function BadgeShowcase({ stats, className }: BadgeShowcaseProps) {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="currentColor"
+            stroke="var(--difficulty-easy)"
             strokeWidth={strokeWidth}
             fill="transparent"
             strokeDasharray={`${arcLength} ${circumference}`}
             strokeOpacity={0.1}
-            className="text-muted/10"
             strokeLinecap="round"
           />
 

@@ -126,7 +126,7 @@ export function WorkspaceTable({ workspaces }: WorkspaceTableProps) {
                       <Folder className="h-4 w-4 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
                       <div className="flex items-center gap-4 min-w-0 flex-1">
                         <Link
-                          href={`/systemdesign-workspace/${workspace.id}`}
+                          href={`/systemdesign/workspace/${workspace.id}`}
                           className="text-md font-bold"
                         >
                           <span className="text-foreground hover:text-primary transition-colors hover:underline truncate block flex-1">
@@ -162,7 +162,7 @@ export function WorkspaceTable({ workspaces }: WorkspaceTableProps) {
                         <DropdownMenuContent align="end" className="w-48">
                           <DropdownMenuItem asChild className="cursor-pointer">
                             <Link
-                              href={`/systemdesign-workspace/${workspace.id}`}
+                              href={`/systemdesign/workspace/${workspace.id}`}
                               className="flex items-center w-full"
                             >
                               <FolderOpen className="mr-2 h-3.5 w-3.5" />

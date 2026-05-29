@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Search, FolderKanban, Info } from "lucide-react";
+import Link from "next/link";
+import { Search, FolderKanban, Info, BookOpen, ArrowLeft } from "lucide-react";
 import { useWorkspaces } from "@/hooks/queries/use-workspace.queries";
 import { CreateWorkspaceDialog } from "@/components/systemdesign-workspace/dialogs/create-workspace-dialog";
 import { WorkspaceTable } from "@/components/systemdesign-workspace/tables/workspace-table";
 import { WorkspaceListSkeleton } from "@/components/skeletons";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function WorkspacesPage() {
   const { data: workspaces = [], isLoading, error } = useWorkspaces();
@@ -23,7 +25,16 @@ export default function WorkspacesPage() {
       <div className="max-w-7xl mx-auto space-y-10">
         
         {/* Header Block */}
+        <div className="flex items-center">
+            <Button size="sm" asChild>
+              <Link href="/systemdesign">
+                <ArrowLeft className="size-3" />
+                Back
+              </Link>
+            </Button>
+          </div>
         <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b border-border/40 pb-6">
+        
           <div className="space-y-1.5">
             <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl flex items-center gap-2">
               <FolderKanban className="h-8 w-8 text-primary shrink-0" />
@@ -37,7 +48,6 @@ export default function WorkspacesPage() {
             <CreateWorkspaceDialog />
           </div>
         </header>
-
         {/* Toolbar (Search filters) */}
         <div className="flex justify-between">
           <div className="relative flex-1 max-w-md">

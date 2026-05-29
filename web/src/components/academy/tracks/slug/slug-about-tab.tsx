@@ -40,7 +40,7 @@ export const SlugAboutTab = ({ config }: { config: TrackConfigResponse }) => {
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button size="lg" className="px-8 h-14 text-base rounded-lg" onClick={() => goToTab("learn")}>
-                <Plus className="mr-2 h-5 w-5" /> Join the {config.language} Track
+                Start Learning {config.language}
               </Button>
               <Button
                 variant="outline"

@@ -23,7 +23,11 @@ import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 
-export const UserSearch = () => {
+interface UserSearchProps {
+  onSelect?: () => void;
+}
+
+export const UserSearch = ({ onSelect }: UserSearchProps) => {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
@@ -34,6 +38,7 @@ export const UserSearch = () => {
     router.push(`/u/${username}`);
     setOpen(false);
     setQuery("");
+    onSelect?.();
   };
 
   return (

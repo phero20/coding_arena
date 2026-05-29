@@ -24,11 +24,13 @@ export class AuthService {
   private readonly userRepository: IUserRepository;
   private readonly clerkClient: ReturnType<typeof createClerkClient>;
   private readonly clock: IClockService;
+  private readonly statsService: ICradle["statsService"];
 
-  constructor({ userRepository, clerkClient, clockService }: ICradle) {
+  constructor({ userRepository, clerkClient, clockService, statsService }: ICradle) {
     this.userRepository = userRepository;
     this.clerkClient = clerkClient;
     this.clock = clockService;
+    this.statsService = statsService;
   }
 
   async ensureUser(payload: AuthUserPayload): Promise<User> {
@@ -48,15 +50,18 @@ export class AuthService {
 
     logger.info({ clerkId, username }, "User found or created via ensureUser");
 
-    return this.userRepository.create({
+    const created = await this.userRepository.create({
       clerkId,
       username,
-      fullName: payload.fullName,
       email: payload.email,
+      fullName: payload.fullName ?? null,
       avatarUrl: payload.avatarUrl ?? undefined,
       status: "active",
       role: "user",
     });
+
+    await this.statsService.invalidateProfile(created.id);
+    return created;
   }
 
   async ensureUserFromIdOnly(clerkId: string): Promise<User | null> {
@@ -77,6 +82,9 @@ export class AuthService {
         email: payload.email,
         avatarUrl: payload.avatarUrl ?? undefined,
       });
+      if (updated) {
+        await this.statsService.invalidateProfile(updated.id);
+      }
       return updated ?? existing;
     }
 
@@ -86,14 +94,18 @@ export class AuthService {
     // Back-sync to Clerk
     await this.pushUsernameToClerk(clerkId, username);
 
-    return this.userRepository.create({
+    const created = await this.userRepository.create({
       clerkId,
       username,
       email: payload.email,
+      fullName: payload.fullName ?? null,
       avatarUrl: payload.avatarUrl ?? undefined,
       status: "active",
       role: "user",
     });
+
+    await this.statsService.invalidateProfile(created.id);
+    return created;
   }
 
   async deleteUser(clerkId: string): Promise<void> {

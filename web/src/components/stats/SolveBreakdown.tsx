@@ -7,6 +7,7 @@ import { Card } from "../ui/card";
 import { useDifficultyMetrics } from "@/hooks/stats/use-difficulty-metrics";
 import { useSolvedExercisesQuery } from "@/hooks/queries/use-academy.queries";
 import { Button } from "../ui/button";
+import { ButtonGroup } from "../ui/button-group";
 
 interface SolveBreakdownProps {
   stats: UserStats;
@@ -16,7 +17,6 @@ interface SolveBreakdownProps {
 export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
   const [viewMode, setViewMode] = useState<"arena" | "academy">("arena");
   const { data: academySolved } = useSolvedExercisesQuery("all");
-  console.log(academySolved)
 
   const size = 155;
   const strokeWidth = 6;
@@ -56,11 +56,11 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
   return (
     <Card
       className={cn(
-        "flex flex-col items-center justify-center p-3 relative",
+        "flex flex-col items-center justify-center  p-3 pt-6 md:pt-3  relative",
         className,
       )}
     >
-      <Card className="absolute top-2 left-2 flex bg-muted/60 p-0.5 rounded-md items-center gap-0.5 z-10 shadow-none">
+      <ButtonGroup className="absolute top-2 left-2 flex bg-muted/60 p-0.5 rounded-md items-center gap-0.5 z-10 shadow">
         <Button
           variant="ghost"
           size="icon"
@@ -86,7 +86,7 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
         >
           <GraduationCap size={12} />
         </Button>
-      </Card>
+      </ButtonGroup>
 
       <div className="flex flex-row items-center justify-center gap-12 w-full pr-0 mt-2">
         {/* 1. The Tactical Arc System */}

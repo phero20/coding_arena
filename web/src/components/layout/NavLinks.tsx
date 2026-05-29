@@ -39,7 +39,7 @@ export const navItems = [
   { name: "Arena", href: "/arena", icon: Swords },
   { name: "Contests", href: "/contests", icon: Trophy },
   { name: "Roadmap", href: "/roadmap", icon: Mountain },
-  { name: "System Design", href: "/systemdesign-workspace", icon: Network },
+  { name: "System Design", href: "/systemdesign", icon: Network },
 ];
 
 export const NavLinks = () => {
@@ -101,7 +101,7 @@ export const NavLinks = () => {
               onMouseLeave={handleMouseLeave}
               variant="ghost"
               className={cn(
-                "relative h-9 px-4 py-2 flex items-center gap-1 bg-transparent hover:bg-transparent text-muted-foreground hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none",
+                "relative h-9 px-4 py-2 flex items-center gap-1 bg-transparent hover:bg-transparent text-muted-foreground hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none shadow-none",
                 (open || isMoreActive) && "text-primary font-semibold",
               )}
             >

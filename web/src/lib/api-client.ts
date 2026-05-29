@@ -34,7 +34,12 @@ export const setTokenGetter = (fn: typeof getToken) => {
 // --- Request Interceptor ---
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    // If auth hasn't loaded yet, pause the request in the queue
+    // If we are on the server, proceed immediately (Server Components don't have client auth)
+    if (typeof window === "undefined") {
+      return config;
+    }
+
+    // If auth hasn't loaded yet on the client, pause the request in the queue
     if (!isAuthLoaded) {
       await new Promise<void>((resolve) => {
         requestQueue.push(async (getter) => {

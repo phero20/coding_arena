@@ -53,9 +53,15 @@ export class AuthMiddleware {
       const username =
         clerkUser.username || (email ? email.split("@")[0] : `user_${clerkId}`);
 
+      const fullName = 
+        clerkUser.firstName && clerkUser.lastName 
+          ? `${clerkUser.firstName} ${clerkUser.lastName}` 
+          : clerkUser.firstName || clerkUser.lastName || null;
+
       user = await this.authService.ensureUser({
         clerkId,
         username,
+        fullName,
         email,
         avatarUrl: clerkUser.imageUrl,
       });

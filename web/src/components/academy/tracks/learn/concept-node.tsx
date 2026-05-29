@@ -88,7 +88,7 @@ export function ConceptNode({ label, id, toneSeed, progressData }: ConceptNodePr
     <Card
       id={id}
       className={cn(
-        "group relative w-fit flex flex-row items-center gap-4 py-4 px-6 md:px-8 bg-card border transition-all duration-300 hover:-translate-y-0.5 hover:ring-1",
+        "group relative w-fit flex flex-row items-center gap-4 py-4 px-6 md:px-8 bg-card border transition-all duration-300 hover:-translate-y-0.5 hover:ring-1 hover:border-2 hover:border-foreground",
         tone.chipBorder,
         isCompleted && "bg-difficulty-easy/15 hover:ring-1 hover:ring-difficulty-easy"
       )}

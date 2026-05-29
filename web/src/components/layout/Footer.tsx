@@ -5,16 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container } from "../shared/Container";
 import Image from "next/image";
-import { shouldHide } from "./shouldHide";
+import { shouldHide, shouldHidefooter } from "./shouldHide";
 
 export const Footer = () => {
   const pathname = usePathname();
 
 
-  if (shouldHide(pathname)) return null;
+  if (shouldHide(pathname) || shouldHidefooter(pathname)) return null;
 
   return (
-    <footer className="w-full border-t border-border bg-background py-10 md:py-16 mt-20">
+    <footer className="w-full border-t border-border bg-background py-10 md:py-16">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand & Description */}

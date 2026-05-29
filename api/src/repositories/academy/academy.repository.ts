@@ -16,26 +16,46 @@ export interface IAcademyRepository {
 export class AcademyRepository implements IAcademyRepository {
   async getTracks(): Promise<any> {
     const filePath = path.join(__dirname, "../../../../data/static-data/academy/tracks.json");
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
+    try {
+      const data = await fs.readFile(filePath, "utf-8");
+      return JSON.parse(data);
+    } catch (e: any) {
+      if (e.code === 'ENOENT') return null;
+      throw e;
+    }
   }
 
   async getTrackConfig(slug: string): Promise<any> {
     const filePath = path.join(__dirname, `../../../../data/static-data/academy/config/${slug}.json`);
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
+    try {
+      const data = await fs.readFile(filePath, "utf-8");
+      return JSON.parse(data);
+    } catch (e: any) {
+      if (e.code === 'ENOENT') return null;
+      throw e;
+    }
   }
 
   async getTrackConcept(trackSlug: string, conceptSlug: string): Promise<any> {
     const filePath = path.join(__dirname, `../../../../data/static-data/academy/concepts/${trackSlug}/${conceptSlug}.json`);
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
+    try {
+      const data = await fs.readFile(filePath, "utf-8");
+      return JSON.parse(data);
+    } catch (e: any) {
+      if (e.code === 'ENOENT') return null;
+      throw e;
+    }
   }
 
   async getTrackExercise(trackSlug: string, exerciseSlug: string): Promise<any> {
     const filePath = path.join(__dirname, `../../../../data/static-data/academy/exercises/${trackSlug}/${exerciseSlug}.json`);
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
+    try {
+      const data = await fs.readFile(filePath, "utf-8");
+      return JSON.parse(data);
+    } catch (e: any) {
+      if (e.code === 'ENOENT') return null;
+      throw e;
+    }
   }
 
   async markExerciseSolved(userId: string, trackSlug: string, exerciseSlug: string): Promise<boolean> {
