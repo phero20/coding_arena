@@ -113,12 +113,12 @@ export interface ProblemTableProps {
   problems: Problem[];
   isLoading: boolean;
   error: any;
-  isSelectPage: boolean;
-  onSelect: (problem: Problem) => void;
-  selectingId: string | null;
-  isHosting: boolean;
-  isUpdating: boolean;
-  topicFilter: string;
+  isSelectPage?: boolean;
+  onSelect?: (problem: Problem) => void;
+  selectingId?: string | null;
+  isHosting?: boolean;
+  isUpdating?: boolean;
+  topicFilter?: string;
   onRetry?: () => void;
   isFetchingNextPage?: boolean;
   hasNextPage?: boolean;

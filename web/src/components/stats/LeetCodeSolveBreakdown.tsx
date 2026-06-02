@@ -35,7 +35,7 @@ export function LeetCodeSolveBreakdown({ stats, username, className }: LeetCodeS
     >
       <Card
         className={cn(
-          "flex flex-row items-center justify-center gap-12 p-3 pt-6 pb-2 pr-0 relative cursor-pointer hover:bg-muted/40 transition-all active:scale-[0.99] group/card",
+          "flex flex-row items-center justify-center gap-12 p-3 pt-6 pb-2 relative cursor-pointer hover:bg-muted/40 transition-all active:scale-[0.99] group/card",
           className,
         )}
       >

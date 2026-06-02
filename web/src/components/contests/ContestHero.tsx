@@ -122,7 +122,7 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
   if (!featuredContest) return null;
 
   return (
-    <Card className="relative mb-10 overflow-hidden border-border bg-card shadow-md ring-1 ring-primary/5">
+    <Card className="relative mb-10 overflow-hidden border-border bg-transparent shadow-none border-none">
       <CardContent className="relative z-10 flex flex-col items-start gap-6 p-5 sm:p-6 lg:flex-row lg:items-start">
         <div className="flex w-full items-start gap-5">
           {/* Platform Icon and Info side-by-side on mobile */}
@@ -188,7 +188,7 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
       </div>
 
       {/* Animated Countdown Section */}
-        <Card className="flex w-full shrink-0 flex-col gap-4 bg-muted p-5 sm:p-6 lg:w-auto shadow-none">
+        <Card className="flex w-full shrink-0 flex-col gap-4 bg-card p-5 sm:p-6 lg:w-auto shadow-none">
           <div className="flex items-center justify-between lg:justify-center lg:gap-6">
             <SlidingNumber
               value={duration?.days || 0}
@@ -222,7 +222,7 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
           </div>
 
           <Button
-            className="h-11 w-full bg-primary text-xs font-bold uppercase tracking-widest hover:-translate-y-px  transition-all"
+            className="h-11 w-full shadow-none text-xs font-bold uppercase tracking-widest transition-all"
             size="sm"
             asChild
           >

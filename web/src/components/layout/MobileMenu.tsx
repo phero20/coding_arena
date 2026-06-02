@@ -75,7 +75,7 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="absolute top-full left-0 right-0 bg-background border-b border-border md:hidden overflow-hidden z-50"
           >
-            <div className="p-4 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+            <div className="p-4 flex flex-col gap-6 max-h-screen overflow-y-auto">
               {/* Search at the Top */}
               <div className="space-y-2">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 ml-1">

@@ -30,11 +30,11 @@ export const ProblemWorkspace: React.FC<ProblemWorkspaceProps> = ({
     if (from === "roadmap") {
       router.push("/roadmap");
     } else {
-      router.push("/problems");
+      router.back();
     }
   };
 
-  const exitText = from === "roadmap" ? "Roadmap" : "Problems";
+  const exitText = from === "roadmap" ? "Roadmap" : "Back";
 
   return (
     <BaseWorkspace

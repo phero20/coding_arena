@@ -16,6 +16,9 @@ const isPublicRoute = createRouteMatcher([
   "/systemdesign",
   "/systemdesign/learn",
   "/systemdesign/learn/:slug",
+  "/companies",
+  "/companies/:slug",
+  "/companies/:slug/problems",
   "/api/v1/auth/webhooks/clerk", // Always public
 ]);
 

@@ -33,14 +33,14 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
   return (
     <TableRow className="group border-t border-border/40 transition-colors hover:bg-muted/30">
       <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
-        {problem.problem_id}
+        {problem.problem_id || '-:-'} 
       </TableCell>
       <TableCell className="px-0 md:px-4 py-3 align-middle min-w-0">
         <div className="flex flex-col min-w-0">
           <div className="text-sm truncate font-bold text-foreground flex items-center gap-2 group-hover:text-primary transition-colors">
             
             {isSelectPage ? (
-              <Button className="p-0 text-left truncate flex" variant="link" onClick={onSelect}>
+              <Button className={cn("p-0 text-foreground/90 group-hover:text-primary", isSolved && "text-difficulty-easy"  )} variant="link" onClick={onSelect}>
                 {problem.title}
               </Button>
             ) : (
@@ -56,9 +56,6 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
               <CheckCircle2 className="h-4 w-4 text-difficulty-easy" />
             )}
           </div>
-          {/* <span className="mt-0.5 truncate text-[10px] uppercase font-bold tracking-tight text-muted-foreground/60 hidden sm:block">
-            {problem.problem_slug}
-          </span> */}
         </div>
       </TableCell>
       <TableCell className="px-4 py-3 align-middle">

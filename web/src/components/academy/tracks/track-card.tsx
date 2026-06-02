@@ -9,7 +9,7 @@ interface TrackCardProps {
 
 export function TrackCard({ track }: TrackCardProps) {
   return (
-    <Card className="group flex cursor-pointer flex-row items-center gap-6 overflow-hidden p-6 transition-all border-border bg-card duration-300 hover:border-primary/50 hover:shadow-md h-full">
+    <Card className="group flex cursor-pointer flex-row items-center gap-6 overflow-hidden p-6 transition-all border-border bg-card duration-300 hover:border-primary/50 h-full">
       {/* Icon Side */}
       <div className="flex h-20 w-20 shrink-0 items-center justify-center">
         {/* Exercism icons typically include the hexagon. We use object-contain to fit it properly. */}

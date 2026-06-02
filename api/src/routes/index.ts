@@ -20,6 +20,7 @@ import { registerWorkspaceRoutes } from "./workspace/workspace.routes";
 import { registerChatRoutes } from "./chat/chat.routes";
 import { registerAcademyRoutes } from "./academy/academy.routes";
 import { registerSystemDesignRoutes } from "./system-design/system-design.routes";
+import { registerCompanyRoutes } from "./company/company.routes";
 
 import { healthRoutes } from "./system/health.routes";
 
@@ -45,6 +46,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     academyController,
     academyExecutionController,
     systemDesignController,
+    companyController,
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -151,6 +153,10 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
 
   registerSystemDesignRoutes(v1, {
     systemDesignController,
+  });
+
+  registerCompanyRoutes(v1, {
+    companyController,
   });
  
   app.route("/api/v1", v1);

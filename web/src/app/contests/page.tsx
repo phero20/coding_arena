@@ -14,21 +14,26 @@ export default function ContestHubPage() {
 
   return (
     <div className="relative bg-background text-foreground">
-      <main className="mx-auto max-w-7xl px-4 2xl:px-0 py-28">
-        <div className="mb-10 flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight md:text-5xl">Global Competitions</h1>
-          <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
-            Track, filter, and join competitive programming contests from top platforms worldwide.
-          </p>
+      <main className="py-28">
+        <div className="border-b">
+          <div className="mb-10 flex flex-col gap-2 border-b pb-4 mx-auto max-w-7xl px-4 2xl:px-0 ">
+            <h1 className="text-3xl font-bold tracking-tight md:text-5xl">Global Competitions</h1>
+            <p className="mt-2 max-w-2xl text-lg text-muted-foreground">
+              Track, filter, and join competitive programming contests from top platforms worldwide.
+            </p>
+          </div>
+          <div className="mx-auto max-w-7xl px-4 2xl:px-0">
+{isLoading ? (
+            <ContestHeroSkeleton />
+          ) : (
+            <ContestHero featuredContest={featuredContest} />
+          )}
+          </div>
+          
+
         </div>
 
-        {isLoading ? (
-          <ContestHeroSkeleton />
-        ) : (
-          <ContestHero featuredContest={featuredContest} />
-        )}
-
-        <div className="flex flex-col space-y-6">
+        <div className="flex flex-col space-y-6 mx-auto max-w-7xl px-4 2xl:px-0 ">
           <ContestFilters />
           <ContestList />
         </div>
@@ -36,5 +41,4 @@ export default function ContestHubPage() {
     </div>
   );
 }
-
 

@@ -223,8 +223,8 @@ export default function DiagramPage({ params }: DiagramPageProps) {
     >
       <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
         {/* Header — Clean, minimal like Eraser.io */}
-        <header className="h-12 border-b flex items-center justify-between px-4 bg-card shrink-0 select-none">
-          <div className="flex items-center gap-4 min-w-0">
+        <header className="h-12 border-b flex items-center justify-between px-1 md:px-4 bg-card shrink-0 select-none">
+          <div className="flex items-center gap-1 md:gap-4 min-w-0">
             <Link href={`/systemdesign/workspace/${workspaceId}`}>
               <Button
                 variant="outline"

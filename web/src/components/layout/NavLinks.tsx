@@ -12,7 +12,9 @@ import {
   Mountain,
   Network,
   ChevronDown,
-  GraduationCap
+  GraduationCap,
+  CodeXml,
+  BriefcaseBusiness
 } from "lucide-react";
 
 import { motion } from "framer-motion";
@@ -39,6 +41,7 @@ export const navItems = [
   { name: "Arena", href: "/arena", icon: Swords },
   { name: "Contests", href: "/contests", icon: Trophy },
   { name: "Roadmap", href: "/roadmap", icon: Mountain },
+  { name: "Companies", href: "/companies", icon: BriefcaseBusiness },
   { name: "System Design", href: "/systemdesign", icon: Network },
 ];
 

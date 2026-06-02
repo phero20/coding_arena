@@ -102,16 +102,16 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
                   <ProblemRow
                     key={problem.problem_id}
                     problem={problem}
-                    isSelectPage={isSelectPage}
-                    onSelect={() => onSelect(problem)}
+                    isSelectPage={!!isSelectPage}
+                    onSelect={() => onSelect?.(problem)}
                     isHosting={
-                      (isHosting || isUpdating) && selectingId === problem.problem_id
+                      !!((isHosting || isUpdating) && selectingId === problem.problem_id)
                     }
-                    isSolved={solvedIds.has(problem.problem_id)}
+                    isSolved={solvedIds.has(problem.problem_id) || solvedIds.has(problem.problem_slug)}
                   />
                 ))}
                 {isFetchingNextPage && (
-                  <ProblemRowSkeleton count={5} fragment />
+                  <ProblemRowSkeleton count={10} fragment />
                 )}
               </TableBody>
             </Table>

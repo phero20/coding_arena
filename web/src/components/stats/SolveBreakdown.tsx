@@ -60,7 +60,7 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
         className,
       )}
     >
-      <ButtonGroup className="absolute top-2 left-2 flex bg-muted/60 p-0.5 rounded-md items-center gap-0.5 z-10 shadow">
+      <ButtonGroup className="absolute top-2 left-2 flex bg-muted/60 p-0.5 rounded-md items-center gap-0.5 z-10">
         <Button
           variant="ghost"
           size="icon"

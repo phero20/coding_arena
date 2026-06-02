@@ -17,8 +17,8 @@ import {
 
 /* sidebar is w-72 = 288px, minus 2*8px padding = 272px, 5 cols → each cell ~54px */
 const COLS = 5;
-const CELL_SIZE = 50; // px — icon button size
-const CELL_GAP = 4;   // px — gap between cells
+const CELL_SIZE = 52; // px — icon button size
+const CELL_GAP = 10;   // px — gap between cells
 const ROW_HEIGHT = CELL_SIZE + CELL_GAP;
 const GRID_PADDING = 8; // px each side
 

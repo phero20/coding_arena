@@ -10,6 +10,7 @@ import {
   Rocket,
   Loader2,
   Clock,
+  Swords,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -67,7 +68,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
         >
           <SelectTrigger
             className={cn(
-              "h-8 md:h-9 w-[120px] bg-card",
+              "h-8 md:h-9 w-[140px] bg-card",
               isHost ? "cursor-pointer" : "opacity-90",
             )}
           >
@@ -118,7 +119,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
       {/* Arena Header */}
       <div className="flex items-center justify-center gap-4">
         <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center border border-border/50">
-          <Sword className="w-6 h-6 text-primary-foreground" />
+          <Swords className="w-6 h-6 text-primary-foreground" />
         </div>
         <h1 className="text-3xl font-black tracking-tight uppercase opacity-90">
           Arena Lobby
@@ -203,7 +204,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
             </h3>
             <Badge
               variant="outline"
-              className="h-5 text-[10px] font-bold border-border/10 bg-muted/10"
+              className="h-5 text-xs font-bold border-border/10 bg-muted/10"
             >
               {players.length} / 50
             </Badge>

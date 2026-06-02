@@ -110,8 +110,9 @@ export function GraphView({ levels, edges, onConceptClick, conceptProgressMap = 
               dashness={
                 isEdgeConnected
                   ? { strokeLen: 8, nonStrokeLen: 4, animation: true }
-                  : { strokeLen: 6, nonStrokeLen: 6, animation: false }
+                  : { strokeLen: 6, nonStrokeLen: 6, animation: true }
               }
+              
               showHead={false}
               path="smooth"
               startAnchor="bottom"

@@ -126,13 +126,13 @@ export function RecentActivities({
             <Table className="table-fixed border-separate border-spacing-0">
               <TableHeader className="bg-muted/40">
                 <TableRow className="hover:bg-transparent border-b border-border/10">
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 w-[100px] sm:w-[160px] text-muted-foreground">
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-4 md:pl-6 w-[100px] sm:w-[160px] text-muted-foreground">
                     Status
                   </TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-0 text-muted-foreground">
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-2 text-muted-foreground">
                     Problem
                   </TableHead>
-                  <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-6 w-[80px] sm:w-[140px] text-muted-foreground">
+                  <TableHead className="text-right text-[10px] font-black uppercase tracking-widest pr-4 md:pr-6 w-[80px] sm:w-[140px] text-muted-foreground">
                     Time
                   </TableHead>
                 </TableRow>
@@ -153,7 +153,7 @@ export function RecentActivities({
                       >
                         <TableCell
                           className={cn(
-                            "py-4 pl-3 border-b transition-colors",
+                            "py-4 pl-2 md:pl-4 border-b transition-colors",
                             isExpanded
                               ? "border-primary/20"
                               : "border-border/40",
@@ -166,7 +166,7 @@ export function RecentActivities({
                         </TableCell>
                         <TableCell
                           className={cn(
-                            "py-4 pl-0 border-b transition-colors",
+                            "py-4 pl-2 border-b transition-colors",
                             isExpanded
                               ? "border-primary/20"
                               : "border-border/40",
@@ -179,7 +179,8 @@ export function RecentActivities({
                             </span>
                             <Badge
                               variant="secondary"
-                             className="uppercase"
+                              
+                             className="uppercase text-[10px] px-2"
                             >
                               {submission.formattedLang}
                             </Badge>
@@ -187,7 +188,7 @@ export function RecentActivities({
                         </TableCell>
                         <TableCell
                           className={cn(
-                            "py-4 text-right pr-6 border-b transition-colors text-[10px] font-bold text-muted-foreground/70",
+                            "py-4 text-right pr-2 md:pr-6 border-b transition-colors text-[10px] font-bold text-muted-foreground/70",
                             isExpanded
                               ? "border-primary/20"
                               : "border-border/40",

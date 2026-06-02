@@ -42,16 +42,16 @@ const TaxonomyNode = ({ data, selected }: NodeProps<TaxonomyNodeData>) => {
 
       <div
         className={cn(
-          "transition-all duration-500",
+          "transition-all duration-500 ",
           data.isActive ? "scale-110" : "scale-100",
         )}
       >
         <Card
           className={cn(
-            "min-w-[500px] transition-all duration-500 relative overflow-hidden border-2 border-border",
+            "min-w-[500px] transition-all duration-500 relative overflow-hidden border-2 border-border rounded-4xl!",
             data.isActive
               ? "border-primary bg-card"
-              : "hover:border-primary bg-card shadow-2xl",
+              : "hover:border-primary bg-card shadow-xl",
           )}
         >
           <CardContent className="p-8 relative z-10">
@@ -95,7 +95,7 @@ const TaxonomyNode = ({ data, selected }: NodeProps<TaxonomyNodeData>) => {
 
               {/* Tactical Progress Section */}
               <div className="flex items-center gap-6">
-                <div className="flex-1 h-6 bg-muted rounded-full overflow-hidden">
+                <div className="flex-1 h-4 bg-background rounded-full overflow-hidden">
                   <div
                     className={cn(
                       "h-full bg-primary transition-all duration-1000 ease-in-out",

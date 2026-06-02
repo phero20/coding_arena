@@ -35,18 +35,18 @@ export default function SystemDesignHubPage() {
                 <header className="flex flex-col items-center justify-center text-center space-y-12 py-8">
 
                     {/* Overlapping Hexagon Arc */}
-                    <div className="flex items-center justify-center -space-x-4 sm:-space-x-5">
+                    <div className="flex items-center justify-center -space-x-5 sm:-space-x-6">
                         {HEX_ICONS.map((icon, i) => (
                             <div
                                 key={icon.name}
                                 className="relative"
                                 style={{
                                     zIndex: 10 - Math.floor(Math.abs(3.5 - i)),
-                                    transform: `translateY(${Math.pow(i - 3.5, 2) * 2.5}px)`
+                                    transform: `translateY(${Math.pow(i - 3.5, 2) * 2}px)`
                                 }}
                                 title={icon.name}
                             >
-                                <icon.Component className="h-14 w-14 sm:h-20 sm:w-20 object-contain drop-shadow-sm" />
+                                <icon.Component className="h-14 w-14 sm:h-[5.3rem] sm:w-[5.3rem] object-contain drop-shadow-sm" />
                             </div>
                         ))}
                     </div>

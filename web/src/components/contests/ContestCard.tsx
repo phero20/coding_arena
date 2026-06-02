@@ -100,4 +100,3 @@ export const ContestCard: React.FC<ContestCardProps> = ({ contest }) => {
 };
 
 
-

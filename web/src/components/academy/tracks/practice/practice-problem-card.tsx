@@ -79,7 +79,7 @@ function PracticeProblemCardContent({
   return (
     <Link href={`/academy/tracks/${langSlug}/exercises/${slug}`} className="block h-full">
       <Card className={cn(
-        "group relative flex h-full min-h-32 rounded-md overflow-hidden px-5 py-4 hover:ring-1",
+        "group relative flex h-full min-h-32  overflow-hidden px-5 py-4 hover:ring-1",
         tone.chipBorder,
         completed && "bg-difficulty-easy/10 hover:ring-1 hover:ring-difficulty-easy"
       )}>
@@ -152,9 +152,9 @@ export function PracticeProblemsSection({ exercises, solvedExercises = [], class
 
   return (
     <section className={cn("space-y-6", className)}>
-      <div className="space-y-2">
+      <div className="space-y-1">
         <h3 className="text-2xl font-semibold tracking-tight text-foreground">Practice Challenges</h3>
-        <p className="text-sm text-muted-foreground">Pick a problem and open it with its track-specific icon.</p>
+        <p className="text-sm text-muted-foreground mb-4">Pick a problem and open it and solve it.</p>
 
         <div className="relative w-full">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">

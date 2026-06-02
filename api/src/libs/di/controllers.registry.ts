@@ -31,6 +31,7 @@ import { ChatController } from "../../controllers/chat/chat.controller";
 import { AcademyController } from "../../controllers/academy/academy.controller";
 import { AcademyExecutionController } from "../../controllers/academy/academy-execution.controller";
 import { SystemDesignController } from "../../controllers/system-design/system-design.controller";
+import { CompanyController } from "../../controllers/company/company.controller";
 
 /**
  * Controller and Middleware layer registrations.
@@ -68,4 +69,5 @@ export const controllersRegistry = {
   academyController: asClass(AcademyController).singleton(),
   academyExecutionController: asClass(AcademyExecutionController).singleton(),
   systemDesignController: asClass(SystemDesignController).singleton(),
+  companyController: asClass(CompanyController).singleton(),
 };

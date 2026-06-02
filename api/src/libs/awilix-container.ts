@@ -93,6 +93,9 @@ import { type AcademyExecutionController } from "../controllers/academy/academy-
 import { type ISystemDesignRepository } from "../repositories/system-design/system-design.repository";
 import { type ISystemDesignService } from "../services/system-design/system-design.service";
 import { type SystemDesignController } from "../controllers/system-design/system-design.controller";
+import { type ICompanyRepository } from "../repositories/company/company.repository";
+import { type ICompanyService } from "../services/company/company.service";
+import { type CompanyController } from "../controllers/company/company.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -140,6 +143,7 @@ export interface ICradle {
   chatRepository: IChatRepository;
   academyRepository: IAcademyRepository;
   systemDesignRepository: ISystemDesignRepository;
+  companyRepository: ICompanyRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
@@ -179,6 +183,7 @@ export interface ICradle {
   academyExecutionService: AcademyExecutionService;
   academyAiJudgeService: import("../services/academy/academy-ai-judge.service").AcademyAiJudgeService;
   systemDesignService: ISystemDesignService;
+  companyService: ICompanyService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -236,6 +241,7 @@ export interface ICradle {
   academyController: AcademyController;
   academyExecutionController: AcademyExecutionController;
   systemDesignController: SystemDesignController;
+  companyController: CompanyController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

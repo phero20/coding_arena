@@ -10,6 +10,8 @@ import {
   Image,
   ChevronRight,
   Code2,
+  LayoutTemplate,
+  ImageIcon,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -17,9 +19,9 @@ import { Button } from "@/components/ui/button";
 const MENU_CATEGORIES = [
   { id: "ai-chat", label: "AI Chat", desc: "Generate diagrams with AI", icon: Sparkles },
   { id: "code-diagram", label: "Diagram as Code", desc: "Create diagrams using code", icon: Code2 },
-  { id: "templates", label: "Diagram Catalog", desc: "A catalog of 100+ templates", icon: LayoutGrid },
+  { id: "templates", label: "Diagram Catalog", desc: "A catalog of 100+ templates", icon: LayoutTemplate },
   { id: "shapes", label: "Shape", desc: "Explore our various shapes", icon: Shapes },
-  { id: "icons", label: "Icon", desc: "3,900+ icons available", icon: Smile },
+  { id: "icons", label: "Icon", desc: "3,900+ icons available", icon: ImageIcon },
   { id: "devices", label: "Device Frame", desc: "Phone, tablet, browser frames", icon: Smartphone },
 ];
 

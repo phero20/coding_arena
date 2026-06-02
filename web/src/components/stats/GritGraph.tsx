@@ -121,7 +121,7 @@ export function GritGraph({
 
             {/* Year Navigator Select */}
             <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger className="h-7 w-[100px] text-[10px] bg-muted border-border hover:bg-muted/80 transition-all font-medium">
+              <SelectTrigger className="h-7 w-[100px] text-[10px] bg-muted border-border hover:bg-muted/80 transition-all font-medium shadow-none">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent className="bg-popover border-border">
