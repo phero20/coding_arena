@@ -4,7 +4,8 @@ export type ExecutionVerdict =
   | "TLE"
   | "RUNTIME_ERROR"
   | "COMPILATION_ERROR"
-  | "SYSTEM_ERROR";
+  | "SYSTEM_ERROR"
+  | "NOT_SUBMITTED";
 
 export interface ExecutionStatus {
   id: number;
@@ -71,6 +72,6 @@ export interface Submission {
 
 export interface SubmitCodeResponse {
   submissionId: string;
-  status: "PENDING" | "ACCEPTED" | "WRONG_ANSWER" | "COMPILATION_ERROR" | "RUNTIME_ERROR" | "TLE" | "SYSTEM_ERROR";
+  status: "PENDING" | "ACCEPTED" | "WRONG_ANSWER" | "COMPILATION_ERROR" | "RUNTIME_ERROR" | "TLE" | "SYSTEM_ERROR" | "NOT_SUBMITTED";
   message?: string;
 }
