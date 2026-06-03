@@ -37,7 +37,6 @@ export function useArenaLobby(roomId: string) {
     if (typeof navigator === "undefined" || !navigator.clipboard) return;
     navigator.clipboard.writeText(roomId);
     setCopied(true);
-    toast.success("Invite code copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   };
 
