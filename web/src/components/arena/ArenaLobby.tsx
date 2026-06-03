@@ -11,6 +11,7 @@ import {
   Loader2,
   Clock,
   Swords,
+  ArrowRight,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -26,6 +27,8 @@ import {
 import { useArenaLobby } from "@/hooks/arena/use-arena-lobby";
 import type { ArenaLobbyProps } from "@/types/component.types";
 import { useIsMounted } from "@/hooks/shared/use-is-mounted";
+import { ArenaLogo } from "./ArenaLogo";
+import { tones } from "@/lib/tones";
 
 export function ArenaLobby({ roomId }: ArenaLobbyProps) {
   const isMounted = useIsMounted();
@@ -93,12 +96,12 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
           >
             {isStartingMatch ? (
               <>
-                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 Starting...
               </>
             ) : (
               <>
-                <Rocket className="mr-2 h-3.5 w-3.5" />
+                <ArrowRight className="h-3.5 w-3.5" />
                 Start Match
               </>
             )}
@@ -111,15 +114,15 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
           className="h-8 md:h-9 px-3 md:px-4"
           onClick={leaveRoom}
         >
-          <LogOut className="mr-2 h-3.5 w-3.5 " />
+          <LogOut className="h-3.5 w-3.5 " />
           Leave
         </Button>
       </div>
 
       {/* Arena Header */}
-      <div className="flex items-center justify-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center border border-border/50">
-          <Swords className="w-6 h-6 text-primary-foreground" />
+      <div className="flex items-center justify-center gap-1">
+        <div className="w-10 h-10 shrink-0">
+          <ArenaLogo className="w-full h-full hover:scale-105 transition-transform duration-300" />
         </div>
         <h1 className="text-3xl font-black tracking-tight uppercase opacity-90">
           Arena Lobby
@@ -161,7 +164,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
               <Button
                 variant="default"
                 size="sm"
-                className="hover:bg-primary/10 hover:text-primary transition-all ml-1"
+                className=" transition-all ml-1"
                 asChild
               >
                 <Link href={`/arena/select?roomId=${roomId}`}>
@@ -188,7 +191,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
               onClick={copyInviteCode}
             >
               {copied ? (
-                <Check className="w-3 h-3 text-primary animate-in zoom-in duration-300" />
+                <Check className="w-3 h-3 text-primary  duration-300" />
               ) : (
                 <Copy className="w-3 h-3" />
               )}
@@ -200,7 +203,7 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
         <div className="flex items-center justify-between px-1 w-full">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-bold tracking-wider text-foreground/40">
-              Participants : 
+              Participants :
             </h3>
             <Badge
               variant="outline"
@@ -223,18 +226,22 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
 
         <div className="w-full">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {players.map((player) => (
-              <ArenaPlayerCard
-                key={player.userId}
-                player={player}
-                isHost={isHost}
-                canKick={isHost && !player.isCreator}
-                onKick={kickPlayer}
-              />
-            ))}
+            {players.map((player, index) => {
+              const playerTone = tones[index % tones.length];
+              return (
+                <ArenaPlayerCard
+                  key={player.userId}
+                  player={player}
+                  isHost={isHost}
+                  canKick={isHost && !player.isCreator}
+                  onKick={kickPlayer}
+                  tone={playerTone}
+                />
+              );
+            })}
             {players.length < 50 && (
-              <div className="flex items-center justify-center p-3 border border-dashed border-border/80 rounded-xl bg-muted/35 min-h-[50px] group hover:border-primary/20 transition-colors">
-                <span className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest group-hover:text-primary/30">
+              <div className="flex items-center justify-center p-3 border border-dashed border-border/80 rounded-xl bg-muted/35 min-h-[50px] group transition-colors">
+                <span className="text-[9px] font-bold text-foreground/40 uppercase tracking-widest">
                   {50 - players.length} more players can join
                 </span>
               </div>
