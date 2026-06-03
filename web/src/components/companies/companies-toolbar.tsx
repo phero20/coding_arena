@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { CompanyLogo } from "@/components/companies/CompanyLogo";
 
 interface CompaniesToolbarProps {
   searchQuery: string;
@@ -13,7 +14,10 @@ export function CompaniesToolbar({ searchQuery, setSearchQuery, totalVisible }: 
   return (
     <div className="flex flex-col gap-4 justify-between pb-2">
       <div className="space-y-1">
-       <h3 className="text-2xl font-semibold tracking-tight text-foreground">Companies</h3>
+        <div className="flex items-center gap-2">
+          <CompanyLogo className="w-8 h-8 md:w-10 md:h-10 shrink-0" />
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">Companies</h3>
+        </div>
         <p className="text-sm text-muted-foreground">Pick a company and solve its problems.</p>
       </div>
       <div className="relative w-full">
