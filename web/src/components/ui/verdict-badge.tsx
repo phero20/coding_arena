@@ -19,6 +19,7 @@ const VERDICT_MAP: Record<string, keyof typeof STATUS_CONFIG> = {
   RUNTIME_ERROR: "RUNTIME_ERROR",
   COMPILATION_ERROR: "COMPILATION_ERROR",
   SKIPPED: "PENDING",
+  NOT_SUBMITTED: "NOT_SUBMITTED",
 };
 
 export const VerdictBadge = ({
