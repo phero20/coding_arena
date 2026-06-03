@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RankIndicator } from "../stats/leaderboard/RankIndicator";
@@ -33,30 +33,38 @@ import { useMatchRanking } from "@/hooks/arena/use-match-ranking";
 
 import { VerdictBadge } from "@/components/ui/verdict-badge";
 
+import { tones } from "@/lib/tones";
+import { ArenaLogo } from "./ArenaLogo";
+
+
+
+
 export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
   const { sortedRankings, topThree, expandedUser, setExpandedUser } =
     useMatchRanking(rankings);
 
   return (
-    <div className="min-h-screen pb-24 flex flex-col items-center w-full max-w-4xl mx-auto px-0 py-10 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="relative min-h-screen pb-20 flex flex-col items-center w-full max-w-7xl mx-auto px-0 py-8 space-y-4">
+
+      
       {/* Header Section */}
-      <div className="w-full flex items-center justify-between py-2 border-b border-border pb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
-            <Trophy className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+      <div className="w-full flex items-center justify-between relative z-10">
+        <div className="flex items-center gap-1">
+          <div className="w-8 h-8 md:w-12 md:h-12  shrink-0">
+            <ArenaLogo className="w-full h-full hover:scale-105 transition-transform duration-300" />
           </div>
           <h1 className="text-2xl md:text-3xl font-black tracking-tight uppercase">
-            Match Results
+            Match Ranking
           </h1>
         </div>
 
         <Button variant="destructive" size="sm" onClick={onClose}>
-          <LogOut className="size-4 mr-2" /> <span>Exit Arena</span>
+          <LogOut className="size-4" /> <span className="hidden md:block">Exit Arena</span>
         </Button>
       </div>
 
       {/* Podium Section */}
-      <div className="flex flex-row items-center justify-center gap-2 w-full max-w-3xl">
+      <div className="flex flex-row items-center justify-center gap-2 w-full max-w-3xl relative z-10">
         {topThree[1] && (
           <div className="order-1">
             <PodiumProfile
@@ -90,10 +98,12 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
       </div>
 
       {/* Main Leaderboard Card */}
-      <Card className="overflow-hidden w-full">
-        <CardHeader className="border-b border-border/10 bg-muted/20 pb-4">
-          <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-primary" />
+      <Card className="overflow-hidden w-full relative z-10 bg-card">
+        <CardHeader className="py-4">
+          <div className="flex items-center gap-1">
+            <div className="w-6 h-6 shrink-0">
+            <ArenaLogo className="w-full h-full hover:scale-105 transition-transform duration-300" />
+          </div>
             <CardTitle className="text-sm font-black uppercase tracking-widest">
               Leaderboard
             </CardTitle>
@@ -284,34 +294,24 @@ function PodiumProfile({
     lg: "size-24 md:size-32",
   };
 
-  const rankThemes = {
-    1: "bg-rank-1-badge text-rank-1 border-rank-1",
-    2: "bg-rank-2-badge text-rank-2 border-rank-2",
-    3: "bg-rank-3-badge text-rank-3 border-rank-3",
-  }[rank as 1 | 2 | 3];
-
-  const borderThemes = {
-    1: "border-[var(--rank-1)] ",
-    2: "border-[var(--rank-2)] ",
-    3: "border-[var(--rank-3)] ",
-  }[rank as 1 | 2 | 3];
+  const tone = tones[rank - 1] || tones[0];
 
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-2 md:gap-3 shrink-0",
+        "flex flex-col items-center gap-2 md:gap-3 shrink-0 group",
         rank === 1 ? "mb-0 md:mb-6" : "mb-0",
       )}
     >
       <div
-        className="relative group cursor-pointer"
+        className={cn("relative cursor-pointer rounded-full p-1 transition-all", tone.ring)}
         onClick={() => onExpand(player.userId)}
       >
         <Avatar
           className={cn(
-            "border-4 border-card transition-all group-hover:scale-105",
+            "border-[3px] transition-all",
             sizes[size],
-            borderThemes,
+            tone.chipBorder
           )}
         >
           <AvatarImage src={player.avatarUrl} />
@@ -320,10 +320,11 @@ function PodiumProfile({
           </AvatarFallback>
         </Avatar>
         <Badge
-          variant="secondary"
           className={cn(
-            "absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1.5 text-[10px] md:text-[11px] font-black z-10 border rounded-full",
-            borderThemes,
+            "absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 text-[10px] md:text-[11px] font-black z-10 border hover:bg-transparent rounded-full backdrop-blur-md",
+            tone.chipBg,
+            tone.chipBorder,
+            tone.accent
           )}
         >
           {rank}
@@ -332,7 +333,11 @@ function PodiumProfile({
       <div className="text-center max-w-[120px] flex flex-col items-center gap-1 mt-2">
         <Link
           href={`/u/${player.username}`}
-          className="font-bold text-xs md:text-sm truncate w-full tracking-tight text-primary hover:underline"
+          className={cn(
+            "font-bold text-xs md:text-sm truncate w-full tracking-tight hover:underline transition-colors",
+            tone.accent,
+            tone.hoverAccent
+          )}
         >
           {player.fullName || player.username}
         </Link>
@@ -343,7 +348,9 @@ function PodiumProfile({
             </p>
           )}
           {player.timeTaken && (
-            <Badge className="flex gap-1">
+            <Badge className={cn("flex gap-1 hover:bg-transparent",tone.chipBg,
+            tone.chipBorder,
+            tone.accent )}>
               <Clock className="size-3" />
               <span className="text-xs font-bold tabular-nums mb-0.5">
                 {formatSolveTime(player.timeTaken)}
