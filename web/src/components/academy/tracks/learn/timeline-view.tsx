@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { CheckCircle2, CircleDashed } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { tones } from "@/lib/tones";
 
 interface TimelineViewProps {
   levels: { id: string; label: string }[][];
@@ -13,46 +14,6 @@ interface TimelineViewProps {
 
 export function TimelineView({ levels, onConceptClick, conceptProgressMap = {} }: TimelineViewProps) {
   // Gamified geometric shapes inspired by the About Tab
-
-
-
-const tones = [
-  {
-    accent: 'text-yellow-400',
-    hoverAccent: 'hover:text-yellow-400',
-    chipBg: 'bg-yellow-500/15',
-    chipBorder: 'border-yellow-400/50',
-    ring: 'hover:ring-yellow-400/40',
-    fill: '#facc15',
-    icon: 'circle' as const,
-  },
-  {
-    accent: 'text-emerald-400',
-    hoverAccent: 'hover:text-emerald-400',
-    chipBg: 'bg-emerald-500/15',
-    chipBorder: 'border-emerald-400/50',
-    ring: 'hover:ring-emerald-400/40',
-    fill: '#34d399',
-    icon: 'diamond' as const,
-  },
-  {
-    accent: 'text-sky-400',
-    hoverAccent: 'hover:text-sky-400',
-    chipBg: 'bg-sky-500/15',
-    chipBorder: 'border-sky-400/50',
-    ring: 'hover:ring-sky-400/40',
-    fill: '#60a5fa',
-    icon: 'hex' as const,
-  },
-];
-
-
-
-
-
-
-
-
 
 
   const getShape = (i: number) => {
@@ -126,7 +87,7 @@ const tones = [
                       key={node.id} 
                       variant="secondary"
                       className={cn(
-                        "font-normal text-sm px-3 py-1.5 cursor-pointer transition-colors flex items-center gap-1.5 hover:ring-1",
+                        "group font-normal text-sm px-3 py-1.5 cursor-pointer transition-colors flex items-center gap-1.5 hover:ring-1",
                         tone.hoverAccent,
                         tone.ring,
                         isCompleted 
