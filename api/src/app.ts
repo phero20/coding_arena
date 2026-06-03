@@ -2,10 +2,6 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { registerRoutes } from "./routes";
 import { container } from "./libs/awilix-container";
-import { AppError } from "./utils/app-error";
-import { ApiResponse } from "./utils/api-response";
-import { config } from "./configs/env";
-import { logger } from "./libs/utils/logger";
 import type { AppEnv } from "./types/infrastructure/hono.types";
 
 import { requestId } from "hono/request-id";
