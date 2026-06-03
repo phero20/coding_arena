@@ -256,11 +256,16 @@ export class ArenaMatchService implements IArenaMatchService {
     );
 
     // Update the scores in MongoDB to reflect the Rank-Based points
-    // Formula: (Total Participants - Rank + 1) * 25
-    const totalPlayers = finalRankings.length;
+    // Survivor Pool Formula: (Total Successful Participants - Rank + 1) * 25
+    const successfulPlayers = finalRankings.filter(p => p.verdict === "ACCEPTED").length;
+    
     finalRankings.forEach((player, index) => {
-      const rank = index + 1;
-      player.score = (totalPlayers - rank + 1) * 25;
+      if (player.verdict === "ACCEPTED") {
+        const rank = index + 1;
+        player.score = (successfulPlayers - rank + 1) * 25;
+      } else {
+        player.score = 0;
+      }
     });
 
     // Persist these final scores back to MongoDB
