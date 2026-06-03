@@ -11,35 +11,7 @@ interface ConceptNodeProps {
   progressData?: { status: "COMPLETED" | "IN_PROGRESS" | "LOCKED"; progress: number; total: number };
 }
 
-const tones = [
-  {
-    accent: 'text-yellow-400',
-    hoverAccent: 'group-hover:text-yellow-400',
-    chipBg: 'bg-yellow-500/15',
-    chipBorder: 'border-yellow-400/50',
-    ring: 'hover:ring-yellow-400/40',
-    fill: '#facc15',
-    icon: 'circle' as const,
-  },
-  {
-    accent: 'text-emerald-400',
-    hoverAccent: 'group-hover:text-emerald-400',
-    chipBg: 'bg-emerald-500/15',
-    chipBorder: 'border-emerald-400/50',
-    ring: 'hover:ring-emerald-400/40',
-    fill: '#34d399',
-    icon: 'diamond' as const,
-  },
-  {
-    accent: 'text-sky-400',
-    hoverAccent: 'group-hover:text-sky-400',
-    chipBg: 'bg-sky-500/15',
-    chipBorder: 'border-sky-400/50',
-    ring: 'hover:ring-sky-400/40',
-    fill: '#60a5fa',
-    icon: 'hex' as const,
-  },
-];
+import { tones } from "@/lib/tones";
 
 function hashSeed(seed: string) {
   let hash = 0;
