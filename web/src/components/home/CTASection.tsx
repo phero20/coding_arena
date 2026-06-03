@@ -16,13 +16,13 @@ export const CTASection = () => {
 
           {/* Heading */}
           <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-6">
-            Stop Thinking. <br className="hidden md:block" />
-            <span className="text-primary/90">Start Delivering.</span>
+            Ready to Level Up? <br className="hidden md:block" />
+            <span className="text-primary/90">Start Your Journey.</span>
           </h2>
 
           {/* Description */}
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
-            Master data structures and algorithms with our comprehensive problem set, or build a strong foundation through our step-by-step academy.
+          <p className="text-[15px] text-muted-foreground leading-relaxed mb-10 max-w-3xl mx-auto">
+            Master your skills with a comprehensive platform. Access over <Link href="/problems" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">11,000+ coding problems</Link>, explore our <Link href="/academy" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">Academy</Link> supporting 80 languages for beginners, and follow structured <Link href="/roadmap" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">DSA roadmaps</Link>. Prepare for interviews with <Link href="/companies" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">470 company-specific questions</Link>, dive into <Link href="/systemdesign" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">System Design</Link>, and more.
           </p>
 
           {/* Action Buttons */}
