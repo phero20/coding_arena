@@ -32,7 +32,7 @@ const JAVA_CODE = `class Solution {
 
 export const ArenaHomeEditorSection = () => {
   return (
-    <div className="w-full mt-12 md:mt-20 relative pointer-events-none">
+    <div className="w-full mt-12 relative pointer-events-none">
       <Card className="relative flex min-h-[600px] md:h-[700px] flex-col border border-border/40  bg-background shadow-none  rounded-xl opacity-90 pointer-events-none">
         <div className="flex flex-1 flex-col overflow-hidden border-b border-border/40">
           <header className="relative flex h-14 items-center border-b border-border/40 bg-card/20 px-4 shrink-0">
@@ -46,7 +46,7 @@ export const ArenaHomeEditorSection = () => {
             <Badge className="absolute left-1/2 -translate-x-1/2 text-foreground h-8 px-3 border border-border/40 bg-card flex items-center gap-1.5 shadow">
               <Clock className="size-3" />
               <span className="text-[10px] font-black tracking-widest ">
-                18:20
+                09:06
               </span>
             </Badge>
 
