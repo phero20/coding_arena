@@ -11,16 +11,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { KeyRound, ArrowRight, RefreshCw } from "lucide-react";
+import { tones } from "@/lib/tones";
 
 export function JoinArenaCard() {
   const { roomId, setRoomId, isJoining, handleSubmit, canSubmit } =
     useJoinArenaForm();
 
   return (
-    <Card className="border-border/40">
+    <Card className="border-none bg-transparent shadow-none">
       <CardHeader>
-        <div className="w-12 h-12 bg-secondary/10 flex items-center justify-center mb-4">
-          <KeyRound className="w-6 h-6 text-secondary" />
+        <div
+          className="w-12 h-12 rounded-xl border-[3px] border-foreground flex items-center justify-center mb-4 drop-shadow-sm"
+          style={{ backgroundColor: tones[1].fill }}
+        >
+          <KeyRound className="w-6 h-6 text-foreground" strokeWidth={2.5} />
         </div>
         <CardTitle className="text-2xl font-bold tracking-tight">
           Join Match
@@ -36,14 +40,14 @@ export function JoinArenaCard() {
             value={roomId}
             onChange={(e) => setRoomId(e.target.value)}
             disabled={isJoining}
-            className="h-12 bg-background/50 uppercase text-center font-bold"
+            className="h-12 text-center font-bold"
             maxLength={6}
           />
           <Button
             type="submit"
             disabled={!canSubmit}
             size="icon"
-            className="h-12 w-12 shrink-0 transition-all hover:opacity-90"
+            className="h-12 w-12 shrink-0 transition-all"
           >
             {isJoining ? (
               <RefreshCw className="w-5 h-5 animate-spin" />
