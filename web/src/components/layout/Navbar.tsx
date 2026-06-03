@@ -33,7 +33,7 @@ export const Navbar = () => {
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-background",
           scrolled
             ? "py-2  border-b border-border"
-            : "py-3 border-b border-transparent",
+            : "py-3 border-b border-transparent bg-transparent",
         )}
       >
         <Container className="flex items-center justify-between">
