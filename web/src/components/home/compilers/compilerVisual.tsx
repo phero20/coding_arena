@@ -79,7 +79,7 @@ const CompilerSection = () => {
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="hidden md:flex items-center gap-3 h-9 px-4 rounded-md border border-border/40 bg-card text-[13px] font-bold font-mono tracking-wider">
                   <Clock className="size-3.5 text-muted-foreground" /> 
-                  <span>00:00</span>
+                  <span>09:06</span>
                   <Play className="size-3.5 text-foreground hover:text-primary cursor-pointer transition-colors fill-current" />
                   <RotateCcw className="size-3.5 text-foreground hover:text-primary cursor-pointer transition-colors" />
                 </div>
@@ -115,7 +115,7 @@ const CompilerSection = () => {
                     <Settings className="size-4" />
                   </Button>
                 </div>
-                <div className="flex items-center shrink-0 gap-2 text-[11px] font-black tracking-widest text-primary h-full hidden md:block">
+                <div className="items-center shrink-0 gap-2 text-[11px] font-black tracking-widest text-primary h-full hidden md:flex">
                   <Code2 className="size-4" /> CODE
                 </div>
               </div>
