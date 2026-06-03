@@ -27,10 +27,10 @@ export const ArenaHomeSection = () => {
                 <Clock className="size-3 text-muted-foreground/60" />
                 <span className="text-[10px] font-bold text-foreground/60">20 mins</span>
               </div>
-              <Button className="flex h-7 items-center gap-2 px-4">
+              {/* <Button className="flex h-7 items-center gap-2 px-4">
                 <Rocket className="size-3" />
                 <span className="text-[10px] uppercase font-medium">Start Match</span>
-              </Button>
+              </Button> */}
               <Button className="h-7 p-3" variant="destructive" type="button">
                 <LogOut className="size-3" />
                 <span className="text-[10px] uppercase font-medium">Leave</span>
