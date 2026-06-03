@@ -15,7 +15,7 @@ import { logger } from "./libs/utils/logger";
  */
 async function bootstrap() {
   try {
-    logger.info("Starting Coding Arena Backend...");
+    logger.info("Starting SlaveCode Arena Backend...");
 
     // 1. Initialize DB Connections
     await connectMongo();
