@@ -57,17 +57,14 @@ const TAB_CLS =
 const JAVA_CODE = `class Solution {
     public int[] twoSum(int[] nums, int target) {
         HashMap<Integer, Integer> map = new HashMap<>();
-        
+
         for (int i = 0; i < nums.length; i++) {
             int complement = target - nums[i];
-            
             if (map.containsKey(complement)) {
                 return new int[] { map.get(complement), i };
             }
-            
             map.put(nums[i], i);
         }
-        
         return new int[] {};
     }
 }`;
@@ -115,7 +112,7 @@ export const HeroWorkspaceDemo = () => {
             <div className="ml-auto flex items-center gap-2 sm:gap-3 opacity-80">
               <div className="hidden md:flex items-center gap-3 h-8 px-3 rounded-md border border-border/40 bg-card text-[11px] font-bold font-mono tracking-wider">
                 <Clock className="size-3 text-muted-foreground" /> 
-                <span>00:00</span>
+                <span>09:06</span>
                 <Play className="size-3 text-foreground hover:text-primary transition-colors fill-current" />
                 <RotateCcw className="size-3 text-foreground hover:text-primary transition-colors" />
               </div>
