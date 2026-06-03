@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Company } from "@/types/company";
 import { Card } from "@/components/ui/card";
 import { Building2, BriefcaseBusiness } from "lucide-react";
+import { CompanyLogo } from "./CompanyLogo";
 
 export function CompanyCard({ company }: { company: Company }) {
   const [imgError, setImgError] = useState(false);
@@ -14,7 +15,7 @@ export function CompanyCard({ company }: { company: Company }) {
       <div className="flex h-12 w-12 shrink-0 items-center justify-center">
         {imgError ? (
           <div className="flex h-full w-full flex-col items-center justify-center space-y-1">
-            <Building2 className="h-10 w-10 text-muted-foreground" />
+             <CompanyLogo className="w-8 h-8 md:w-10 md:h-10 shrink-0" />
           </div>
         ) : (
           <img
