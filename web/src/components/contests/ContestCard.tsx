@@ -48,7 +48,7 @@ export const ContestCard: React.FC<ContestCardProps> = ({ contest }) => {
             </Badge>
           )}
         </div>
-        
+
         <h3 className="mb-5 line-clamp-3 text-lg font-bold leading-tight text-foreground transition-colors group-hover:text-primary">
           {contest.title}
         </h3>
@@ -85,8 +85,8 @@ export const ContestCard: React.FC<ContestCardProps> = ({ contest }) => {
             </span>
           </div>
 
-          <Button 
-            className="mt-4 w-full" 
+          <Button
+            className="mt-4 w-full"
             asChild
           >
             <a href={contest.href} target="_blank" rel="noopener noreferrer">
