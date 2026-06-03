@@ -38,6 +38,7 @@ export interface ArenaPlayerCardProps {
   isHost?: boolean;
   canKick?: boolean;
   onKick?: (userId: string) => void;
+  tone?: { fill: string; [key: string]: any };
 }
 
 // MatchWorkspace.tsx
