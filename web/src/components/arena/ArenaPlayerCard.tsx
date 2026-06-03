@@ -14,16 +14,26 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
   player, 
   isHost, 
   canKick, 
-  onKick 
+  onKick,
+  tone
 }: ArenaPlayerCardProps) {
   return (
-    <Card className={cn(
-      "transition-all duration-200 border-2",
-      player.isCreator ? "border-primary shadow-sm" : "border-border/50"
-    )}>
+    <Card 
+      className={cn(
+        "transition-all duration-200 border-2",
+        !tone && (player.isCreator ? "border-primary shadow-sm" : "border-border/50"),
+        tone && "shadow-sm"
+      )}
+      style={{
+        borderColor: tone ? tone.fill : undefined,
+      }}
+    >
       <CardContent className="p-2.5 flex items-center justify-between gap-3 min-w-0 relative group">
         <div className="flex items-center gap-2.5 min-w-0">
-          <Avatar className="h-8 w-8 border-2 border-background shadow-xs">
+          <Avatar 
+            className="h-8 w-8 border-2 shadow-xs bg-background"
+            style={{ borderColor: tone ? tone.fill : "var(--background)" }}
+          >
             <AvatarImage src={player.avatarUrl} alt={player.username} />
             <AvatarFallback className="text-[10px] font-black uppercase bg-muted">
               {player.username.substring(0, 2)}
@@ -35,7 +45,7 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
                 {player.fullName || player.username}
               </span>
               {player.isCreator && (
-                <Badge variant="secondary" className="h-4 px-1 text-[8px] font-black uppercase tracking-tighter bg-primary/20 text-primary border-none">
+                <Badge variant="outline" className="h-4 px-1 text-[8px] font-black uppercase -tracking-normal text-primary ">
                   Host
                 </Badge>
               )}
@@ -61,6 +71,7 @@ export const ArenaPlayerCard = memo(function ArenaPlayerCard({
             size="icon"
             variant="destructive"
             className="h-6 w-6"
+            title="Remove"
             onClick={() => onKick(player.userId)}
           >
             <X className="h-3 w-3" />
