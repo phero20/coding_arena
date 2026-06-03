@@ -16,9 +16,9 @@ export const ContestList: React.FC = () => {
   const filteredContests = React.useMemo(() => {
     if (!contests) return [];
     return contests.filter((contest) => {
-      const matchesPlatform = filters.platforms.length === 0 || 
+      const matchesPlatform = filters.platforms.length === 0 ||
         filters.platforms.some(p => contest.platform.toLowerCase().includes(p.toLowerCase()));
-      const matchesSearch = !filters.search || 
+      const matchesSearch = !filters.search ||
         contest.title.toLowerCase().includes(filters.search.toLowerCase()) ||
         contest.platform.toLowerCase().includes(filters.search.toLowerCase());
       return matchesPlatform && matchesSearch;
