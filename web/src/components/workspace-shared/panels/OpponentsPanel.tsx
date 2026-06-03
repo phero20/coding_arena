@@ -117,14 +117,14 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                         <div className="flex flex-col min-w-0">
                           <div className="flex items-center gap-1.5 overflow-hidden">
                             <span className={cn(
-                              "text-sm font-bold truncate leading-none",
+                              "text-sm font-bold truncate max-w-[100px] sm:max-w-[140px] leading-none",
                               isMe ? "text-primary" : "text-foreground"
                             )}>
                               {player.fullName || player.username}
                             </span>
                             {isMe && (
-                              <Badge className="text-[10px]">
-                                Me
+                              <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 border-none bg-primary/10 text-primary">
+                                ME
                               </Badge>
                             )}
                           </div>
@@ -153,9 +153,9 @@ export const OpponentsPanel = React.memo(({ roomId }: OpponentsPanelProps) => {
                           {player.status}
                         </Badge>
                         {player.timeTaken && (
-                          <Badge className="flex items-center gap-1">
-                            <Clock className="size-3" />
-                            <span className="text-xs font-bold tabular-nums tracking-tighter uppercase">
+                          <Badge variant="outline" className="flex items-center gap-1 px-1.5 py-1 h-5">
+                            <Clock className="size-2.5 opacity-70" />
+                            <span className="text-[9px] font-bold tabular-nums tracking-tighter uppercase">
                               {formatSolveTime(player.timeTaken)}
                             </span>
                           </Badge>
