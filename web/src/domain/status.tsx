@@ -7,6 +7,7 @@ import {
   Loader2,
   RefreshCw,
   Terminal,
+  CircleDashed,
 } from "lucide-react";
 import { type ExecutionVerdict } from "@/types/submission";
 
@@ -68,6 +69,13 @@ export const STATUS_CONFIG: Record<
       "bg-status-system-error text-status-system-error border-status-system-error",
     textColor: "text-status-system-error",
     variant: "secondary",
+  },
+  NOT_SUBMITTED: {
+    icon: CircleDashed,
+    label: "Not Submitted",
+    badgeClass: "bg-muted text-muted-foreground border-border",
+    textColor: "text-muted-foreground",
+    variant: "outline",
   },
   PENDING: {
     icon: Loader2,
