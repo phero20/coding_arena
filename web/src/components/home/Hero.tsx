@@ -2,28 +2,45 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/shared/Container";
-import { Code2, Terminal } from "lucide-react";
 import { HeroWorkspaceDemo } from "./HeroWorkspaceDemo";
+import SideRays from "./ParticleNetwork";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Subtle structural grid */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)`,
-          backgroundSize: "64px 64px",
-        }}
+    <section className="relative pt-24 md:pt-42 pb-20 overflow-hidden bg-background min-h-screen flex flex-col justify-center">
+      {/* Dynamic Background */}
+      <SideRays
+        speed={3}
+        rayColor1="#EAB308"
+        rayColor2="#96c8ff"
+        intensity={1.5}
+        spread={3}
+        origin="top-left"
+        tilt={-55}
+        saturation={0.2}
+        blend={0.75}
+        falloff={2.5}
+        opacity={0.2}
+      />
+      <SideRays
+        speed={3}
+        rayColor1="#EAB308"
+        rayColor2="#96c8ff"
+        intensity={1.5}
+        spread={3}
+        origin="top-right"
+        tilt={55}
+        saturation={0.2}
+        blend={0.75}
+        falloff={2.5}
+        opacity={0.2}
       />
 
-      <Container className="relative z-10 py-44">
+      <Container className="relative z-10 py-6">
         {/* ── Hero Copy ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -62,39 +79,16 @@ export const Hero = () => {
               is your master. <br className="hidden md:block" /> Serve it well.
             </motion.h2>
 
-            {/* Left-bordered section with paragraph and button */}
+            {/* Left-bordered section with paragraph */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3, ease }}
-              className="border-l-2 border-border/60 pl-3 max-w-md py-1"
+              className="border-l-2 border-border/60 pl-3 py-1"
             >
-              <p className="text-muted-foreground text-[15px] leading-relaxed mb-6">
-                Stop thinking and start delivering. The industry doesn&apos;t
-                want your creativity; it wants your total submission to the
-                roadmap. Survive the whip of the grind and prove you have the
-                grit to be a top-tier unit of labor.
+              <p className="text-muted-foreground text-[15px] leading-relaxed">
+                Master your skills with a comprehensive platform designed for growth. Access over <Link href="/problems" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">11,000+ coding problems</Link>, explore our <Link href="/academy" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">Academy</Link> supporting <Link href="/academy" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">80 languages</Link> for beginners, and follow structured <Link href="/roadmap" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">DSA roadmaps</Link>. Prepare for interviews with <Link href="/companies" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">470 company-specific questions</Link>, dive into <Link href="/systemdesign" className="text-foreground font-semibold underline decoration-primary underline-offset-4 hover:text-primary transition-colors">System Design</Link> with detailed concepts and a fully-featured workspace, and more.
               </p>
-
-              <div className="flex flex-row items-start gap-4 mt-2">
-                <Button asChild size="lg" className="h-11 px-6 font-semibold">
-                  <Link href="/problem">
-                    <Code2 className="mr-2 size-4" />
-                    Problems
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-11 px-6 font-semibold text-muted-foreground hover:text-foreground"
-                >
-                  <Link href="/compilers">
-                    <Terminal className="mr-2 size-4" />
-                    Compilers
-                  </Link>
-                </Button>
-              </div>
             </motion.div>
           </div>
         </motion.div>
