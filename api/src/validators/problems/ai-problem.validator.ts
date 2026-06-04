@@ -6,12 +6,15 @@ import { z } from "zod";
  */
 export const importedProblemSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  problem_id: z.string().min(1, "Problem ID is required"),
+  problem_id: z.string().optional(), // Made optional to support frontendQuestionId
   frontend_id: z.string().optional(),
-  difficulty: z.enum(["Easy", "Medium", "Hard"]),
-  problem_slug: z.string().min(1, "Problem Slug is required"),
+  difficulty: z.enum(["Easy", "Medium", "Hard"]).optional().default("Medium"),
+  problem_slug: z.string().optional(), // Made optional to support titleSlug
   topics: z.array(z.string()).optional(),
-  description: z.string().min(1, "Description is required"),
+  description: z.string().nullable().optional(), // Nullable for Premium problems
+  paidOnly: z.boolean().optional(),
+  frontendQuestionId: z.string().optional(),
+  titleSlug: z.string().optional(),
   function_signature: z.object({
     name: z.string(),
     return_type: z.string(),
