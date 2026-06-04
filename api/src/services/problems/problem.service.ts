@@ -11,16 +11,12 @@ export interface IProblemService {
   getAllProblems(
     page: number,
     limit: number,
-  ): Promise<{ problems: Problem[]; total: number }>;
+  ): Promise<{ problems: Problem[] }>;
   upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem>;
   getUserSolvedProblems(userId: string): Promise<string[]>;
 }
 
 import { type ICradle } from "../../libs/awilix-container";
-import {
-  validateServiceInput,
-  GetProblemsSchema,
-} from "../validation/problem.validator";
 
 export class ProblemService implements IProblemService {
   private readonly problemRepository: IProblemRepository;
@@ -44,7 +40,7 @@ export class ProblemService implements IProblemService {
   getAllProblems(
     page: number,
     limit: number,
-  ): Promise<{ problems: Problem[]; total: number }> {
+  ): Promise<{ problems: Problem[] }> {
     return this.problemRepository.findPaginated(page, limit);
   }
 
