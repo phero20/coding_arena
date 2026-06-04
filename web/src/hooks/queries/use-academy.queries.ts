@@ -57,7 +57,7 @@ export function useSolvedExercisesQuery(trackSlug: string) {
   return useQuery<string[], Error>({
     queryKey: ["academy-solved-exercises", trackSlug],
     queryFn: () => getSolvedExercises(trackSlug),
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    staleTime: 30 * 60 * 1000, // Cache for 30 minutes
     enabled: !!trackSlug,
   });
 }
