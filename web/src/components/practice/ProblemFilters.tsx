@@ -31,8 +31,8 @@ export const ProblemFilters: React.FC<ProblemFiltersProps> = ({
           </h1>
           <p className="text-sm text-muted-foreground mt-1 text-balance">
             {isSelectPage
-              ? "Browse and select a challenge for your arena match."
-              : "Solve curated problems to sharpen your skills before entering the arena."}
+              ? "Browse and select a problem to begin the session."
+              : "Solve curated problems to sharpen your skills."}
           </p>
         </div>
 
