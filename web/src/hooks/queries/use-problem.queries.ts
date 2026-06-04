@@ -50,9 +50,13 @@ export function useInfiniteProblemsQuery(limit = 20) {
     queryKey: ["problems", "infinite", limit],
     queryFn: ({ pageParam = 1 }) => getProblems(pageParam, limit),
     initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      const { currentPage, totalPages } = lastPage.meta;
-      return currentPage < totalPages ? currentPage + 1 : undefined;
+    getNextPageParam: (lastPage, allPages) => {
+      // API response structure: { problems: Problem[], meta: ... }
+      // If the backend returns fewer items than the requested limit, we are at the end!
+      if (lastPage?.problems && lastPage.problems.length < limit) {
+        return undefined;
+      }
+      return allPages.length + 1;
     },
   });
 }
@@ -87,5 +91,6 @@ export function useUserSolvedProblemsQuery(userId: string | undefined, enabled: 
     queryKey: ["user-solved-problems", userId],
     queryFn: () => getUserSolvedProblems(userId!),
     enabled: !!userId && enabled,
+    staleTime: 1000 * 60 * 30, // 30 minutes
   });
 }
