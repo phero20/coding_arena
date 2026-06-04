@@ -73,14 +73,6 @@ export function parseLeetcodeTypeString(typeStr: string): CanonicalType {
     throw new Error(`Empty type string`);
   }
 
-  const lowerFull = s.toLowerCase();
-  if (lowerFull.includes("listnode")) {
-    return { kind: "graph", variant: "listnode" };
-  }
-  if (lowerFull.includes("treenode")) {
-    return { kind: "graph", variant: "treenode" };
-  }
-
   let listDepth = 0;
   // Repeated List<...> wrappers => nested list / 2D
   for (;;) {
@@ -96,10 +88,20 @@ export function parseLeetcodeTypeString(typeStr: string): CanonicalType {
     s = s.slice(0, -2);
   }
 
-  const prim = parsePrimitive(s.toLowerCase());
+  const lowerInner = s.toLowerCase();
+  let prim: CanonicalType | null = null;
+
+  if (lowerInner.includes("listnode")) {
+    prim = { kind: "graph", variant: "listnode" };
+  } else if (lowerInner.includes("treenode")) {
+    prim = { kind: "graph", variant: "treenode" };
+  } else {
+    prim = parsePrimitive(lowerInner);
+  }
+
   if (!prim) {
     // Unknown named type (e.g. custom struct) — treat as opaque JSON
-    return { kind: "primitive", base: "string" };
+    prim = { kind: "primitive", base: "string" };
   }
 
   let t: CanonicalType = prim;
