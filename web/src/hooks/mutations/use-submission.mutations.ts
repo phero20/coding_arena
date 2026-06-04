@@ -28,6 +28,11 @@ export function useSubmitMutation() {
           queryKey: ["stats", "profile", user.username],
         });
       }
+      if (user?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["user-solved-problems", user.id],
+        });
+      }
     },
   });
 }
