@@ -150,7 +150,7 @@ export class StatsSubmissionService {
 
       // Point Mapping
       const points =
-        difficulty === "hard" ? 100 : difficulty === "medium" ? 30 : 10;
+        difficulty === "hard" ? 50 : difficulty === "medium" ? 30 : 10;
 
       logger.info(
         { userId: postgresUserId, difficulty, points },
