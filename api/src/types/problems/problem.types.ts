@@ -75,6 +75,7 @@ export interface Problem {
   class_signature?: ClassSignature;
   judging_policy?: JudgingPolicy;
   solutions?: string;
+  is_premium?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -97,6 +98,7 @@ export interface CreateOrUpdateProblemInput {
   class_signature?: ClassSignature;
   judging_policy?: JudgingPolicy;
   solutions?: string;
+  is_premium?: boolean;
 }
 
 export type ProblemTestType = 'public' | 'hidden' | 'stress' | 'ai_eval';
