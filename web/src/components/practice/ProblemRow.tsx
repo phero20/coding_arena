@@ -72,7 +72,7 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
       </TableCell>
       <TableCell className="px-4 py-3 align-middle text-[11px] text-muted-foreground hidden md:table-cell">
         <div className="flex flex-wrap gap-1.5">
-          {problem.topics.slice(0, 3).map((topic) => (
+          {problem.topics.slice(0, 2).map((topic) => (
             <span
               key={topic}
               className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground"
@@ -98,8 +98,8 @@ export const ProblemRow: React.FC<ProblemRowProps> = ({
           </Button>
         ) : (
           <Link href={`/problems/${problem.problem_slug}`}>
-            <Button key={problem.problem_id} size="sm">
-              {isSolved ? "Solved" : "Solve"}
+            <Button variant={isSolved ? "secondary" : "default"}  key={problem.problem_id} size="sm">
+              {isSolved ? <> <CheckCircle2 className="h-4 w-4 text-difficulty-easy" /> </> : "Solve"}
             </Button>
           </Link>
         )}
