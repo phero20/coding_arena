@@ -21,7 +21,7 @@ export interface IProblemRepository {
   findPaginated(
     page: number,
     limit: number,
-  ): Promise<{ problems: Problem[]; total: number }>;
+  ): Promise<{ problems: Problem[] }>;
   createOrUpdate(data: CreateOrUpdateProblemInput): Promise<Problem>;
   getUserSolvedProblems(userId: string): Promise<string[]>;
 }
@@ -77,25 +77,20 @@ export class ProblemRepository
   async findPaginated(
     page: number,
     limit: number,
-  ): Promise<{ problems: Problem[]; total: number }> {
+  ): Promise<{ problems: Problem[] }> {
     const skip = (page - 1) * limit;
 
-    const [docs, total] = await Promise.all([
-      this.model
+    const docs = await this.model
         .find()
         .sort({ problem_id: 1 })
-        .collation({ locale: "en", numericOrdering: true }) // Forces numeric sort on strings
+        .collation({ locale: "en", numericOrdering: true })
         .skip(skip)
         .limit(limit)
         .lean()
-        .exec(),
-      // countDocuments is more reliable than estimatedDocumentCount for exact pagination
-      this.model.countDocuments({}),
-    ]);
+        .exec();
 
     return {
       problems: this.toDomainArray(docs),
-      total,
     };
   }
 
