@@ -120,7 +120,7 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
                   Player
                 </TableHead>
                 <TableHead className="text-[10px] font-black uppercase text-muted-foreground text-center">
-                  Score
+                  Points
                 </TableHead>
                 <TableHead className="text-[10px] font-black uppercase text-muted-foreground text-center">
                   Precision
