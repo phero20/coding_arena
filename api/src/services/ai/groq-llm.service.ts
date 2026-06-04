@@ -25,7 +25,7 @@ export class GroqLlmService {
   private readonly clock: IClockService;
   private readonly apiKey: string = config.groqApiKey as string;
   private readonly baseUrl: string = "https://api.groq.com/openai/v1";
-  private readonly model: string = "openai/gpt-oss-120b";
+  private readonly model: string = "llama-3.3-70b-versatile";
   
   private circuitBreaker = new CircuitBreaker("Groq API", 3, 1, 60000);
 
