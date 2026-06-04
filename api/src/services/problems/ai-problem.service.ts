@@ -20,8 +20,6 @@ import type {
 
 export interface AiRewriteResult {
   problem: AiProblemOutput["problem"];
-  publicTests: AiProblemOutput["tests"]["public"];
-  hiddenTests: AiProblemOutput["tests"]["hidden"];
   rawLlmResponse: GeminiJsonResponse<AiProblemOutput>["raw"];
 }
 
@@ -56,15 +54,13 @@ function mergeSignature(
     fromInput?.name &&
     fromInput?.return_type;
 
-  const finalFunc = aiOk
-    ? (fromAi as FunctionSignature)
-    : inputOk
-      ? (fromInput as FunctionSignature)
-      : fromAi || fromInput;
+  let finalFunc: FunctionSignature | undefined;
 
-  if (!finalFunc) {
+  if (aiOk) finalFunc = fromAi as FunctionSignature;
+  else if (inputOk) finalFunc = fromInput as FunctionSignature;
+  else {
     throw new Error(
-      "AI response missing function_signature; cannot validate test cases.",
+      "AI response missing function_signature; cannot validate test cases. RAW AI OUTPUT: " + JSON.stringify(aiProblem, null, 2),
     );
   }
 
@@ -81,33 +77,66 @@ function mergeSignature(
 export class AiProblemService {
   private readonly llm: GeminiLlmService;
 
-  constructor({ llm }: ICradle) {
-    this.llm = llm;
+  constructor({ geminiLlmService }: ICradle) {
+    this.llm = geminiLlmService;
   }
 
   async rewriteAndGenerate(
-    input: ImportedProblemPayload,
+    input: any,
   ): Promise<AiRewriteResult> {
+    const problemId = input.problem_id || input.frontendQuestionId;
+    const problemSlug = input.problem_slug || input.titleSlug;
+
+    if (!problemId || !problemSlug) {
+      throw new Error("Missing problem_id or problem_slug (and no fallbacks provided).");
+    }
+
+    input.problem_id = problemId;
+    input.problem_slug = problemSlug;
+
+    const isPremium = input.paidOnly === true || !input.description;
+
+    if (isPremium) {
+      const shellProblem = {
+        title: input.title,
+        problem_id: problemId,
+        frontend_id: input.frontend_id || input.frontendQuestionId,
+        difficulty: input.difficulty || "Medium",
+        problem_slug: problemSlug,
+        topics: input.topics || [],
+        description: input.description || "",
+        examples: [],
+        constraints: [],
+        follow_ups: [],
+        hints: [],
+        code_snippets: {},
+        problem_type: "function",
+        is_premium: true,
+      };
+
+      return {
+        problem: shellProblem as any,
+        rawLlmResponse: {},
+      };
+    }
+
     const existingSolution = input.solutions || input.solution;
     const shouldGenerateSolution =
       !existingSolution || existingSolution.trim() === "";
 
     const systemPrompt = [
       "You are a Senior Technical Content Engineer specializing in Competitive Programming.",
-      "Your goal: Augment the provided problem data with hints, test cases, and solutions while PRESERVING the original narrative content.",
+      "Your goal: Augment the provided problem data with hints and accurate metadata while PRESERVING the original narrative content.",
       "",
       "=== MASTER PROTOCOL ===",
-      "1. PRESERVE ORIGINAL FIELDS (CRITICAL):",
-      "   - Return these exactly as they appear in input: 'title', 'difficulty', 'problem_slug', 'topics', 'description', 'examples', 'constraints', 'follow_ups', 'code_snippets'.",
-      "",
-      "2. SIGNATURE STRATEGY:",
+      "1. SIGNATURE STRATEGY:",
       "   - Identify problem_type: 'function' (standard) or 'class' (Design-style, e.g., LRU Cache).",
       "   - FOR 'function': Provide 'function_signature' { name, return_type, params, inplace_param_index? }.",
       "   - IN-PLACE TARGETING: If return_type is 'void' and the problem modifies a specific parameter in-place, set 'inplace_param_index' (number). Default is 0 (first param).",
       "   - FOR 'class': Provide 'class_signature' { class_name, constructor_params, methods: [{ name, return_type, params }] }.",
       "   - return_type guidelines: Use LeetCode-style strings: int, long, double, boolean, string, char, int[], int[][], string[], ListNode, TreeNode, or List<Integer> / vector<int> style wrappers.",
       "",
-      "3. JUDGING POLICY (MANDATORY):",
+      "2. JUDGING POLICY (MANDATORY):",
       "   - Always return problem.judging_policy with these fields:",
       '     * comparator_mode: "strict" | "problem_specific"',
       "     * multi_answer: boolean",
@@ -117,81 +146,17 @@ export class AiProblemService {
       "   - For single-correct deterministic problems, use strict policy.",
       "   - For multi-answer problems (Two Sum style), set comparator_mode=problem_specific and multi_answer=true.",
       "",
-      "4. TEST CASES — STRICT JSON (preferred):",
-      "   - FOR 'function': Each testcase 'input' is a JSON OBJECT whose keys match signature params.",
-      "   - FOR 'class': Each testcase 'input' is a JSON OBJECT: { \"commands\": [\"ClassName\", \"method1\", ...], \"arguments\": [[constructor_args], [method1_args], ...] }.",
-      "   - expected_output for 'class' is a JSON ARRAY matching the commands array, with null for constructor and void methods.",
-      "   - Use NATIVE JSON types:",
-      "     * int / long / double: JSON number",
-      "     * boolean: JSON true/false",
-      "     * string / char: JSON string",
-      "     * int[] / string[]: JSON array, e.g. [2,7,11,15]",
-      "     * int[][] / matrix: JSON array of arrays, e.g. [[1,2,3],[4,5,6]]",
-      "     * ListNode: JSON array of integers, e.g. [1,2,3]",
-      "     * TreeNode: level-order JSON array with nulls, e.g. [1,null,2,3] (use JSON null, not the string \"null\", inside arrays)",
-      "   - expected_output: SAME typing rules as return_type (e.g. int[] => JSON array; int => number; boolean => true/false).",
-      "",
-      "5. TEST QUALITY — DETERMINISM & FAIRNESS (CRITICAL):",
-      "   - Every testcase must be judge-safe under strict comparison unless explicitly marked as multi-answer.",
-      "   - expected_output must be deterministic for the given input.",
-      "   - If multiple outputs can be correct (e.g., Two Sum), do one of the following:",
-      "     A) Prefer generating inputs with a UNIQUE valid output.",
-      "     B) If uniqueness cannot be guaranteed, include testcase metadata:",
-      '        { "determinism_check": "multi_valid", "comparator_mode": "problem_specific" }',
-      "   - Do NOT create hidden tests that require one arbitrary output when multiple are valid.",
-      "   - expected_output must be mathematically/semantically valid for the provided input (never approximate).",
-      "   - If expected_output is indices/positions, ensure values at those indices actually satisfy target condition.",
-      "   - Perform a final self-check for each testcase before returning JSON; if any testcase fails, regenerate that testcase.",
-      "   - Avoid flaky/random tests; if randomness is used, seed must be fixed and deterministic.",
-      "   - Include edge cases: min/max bounds, duplicates, negatives, zeros, empty/singleton structures.",
-      "",
-      "6. EXAMPLE (Two Sum):",
-      '   signature: { "name": "twoSum", "return_type": "int[]", "params": [{ "name": "nums", "type": "int[]" }, { "name": "target", "type": "int" }] }',
-      '   testcase: { "input": { "nums": [2,7,11,15], "target": 9 }, "expected_output": [0,1] }',
-      "   multi-answer caution: if nums can produce multiple valid index pairs, either regenerate input for uniqueness or mark determinism_check='multi_valid'.",
-      "",
-      "7. Generate EXACTLY 3 public (is_sample true) and EXACTLY 7 hidden (is_sample false) tests.",
-      "   - Do not return fewer or more testcases than required.",
-      "   - Keep hidden tests harder than public tests and cover edge/boundary scenarios.",
-      "",
-      "8. SOLUTION HANDLING:",
-      `   - STATUS: ${shouldGenerateSolution ? "MISSING (Generate now)" : "PRESENT (Skip generation)"}`,
-      "   - If MISSING, generate a solution in this EXACT Markdown format:",
-      "     [TOC]",
-      "     ## Video Solution",
-      "     ---## Solution",
-      "     ---",
-      "     ### Overview",
-      "     ### Approach 1: (Name)",
-      "     #### Intuition",
-      "     #### Algorithm",
-      "     #### Implementation (Java Fenced Code)",
-      "     #### Complexity Analysis",
-      "",
-      "9. HINTS: at least 5 hints total.",
+      "3. HINTS: Generate at least 5 helpful hints for solving the problem.",
       "",
       "=== OUTPUT SCHEMA (JSON) ===",
       "{",
       '  "problem": {',
-      '    "title": "string",',
-      '    "problem_id": "string",',
-      '    "difficulty": "Easy" | "Medium" | "Hard",',
-      '    "problem_slug": "string",',
-      '    "topics": ["string"],',
-      '    "description": "string",',
-      '    "examples": [{ "example_num": number, "example_text": "string" }],',
-      '    "constraints": ["string"],',
+      '    "problem_type": "function" | "class",',
       '    "hints": ["string"],',
       '    "code_snippets": { "lang_id": "string" },',
-      '    "problem_type": "function" | "class" | "interactive",',
       '    "function_signature": { "name": "string", "return_type": "string", "params": [{ "name": "string", "type": "string" }] },',
       '    "class_signature": { "class_name": "string", "constructor_params": [], "methods": [] },',
-      '    "judging_policy": { "comparator_mode": "strict" | "problem_specific", "multi_answer": true | false, "validation_policy": "string", "output_order": "strict" | "any_order", "audit_hints": ["string"] },',
-      '    "solutions": "string (ONLY if generated)"',
-      "  },",
-      '  "tests": {',
-      '    "public": [{ "input": {}, "expected_output": null, "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": true, "determinism_check": "unique" | "multi_valid", "comparator_mode": "strict" | "problem_specific", "comparator_notes": "string" }],',
-      '    "hidden": [{ "input": {}, "expected_output": null, "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": false, "determinism_check": "unique" | "multi_valid", "comparator_mode": "strict" | "problem_specific", "comparator_notes": "string" }]',
+      '    "judging_policy": { "comparator_mode": "strict" | "problem_specific", "multi_answer": true | false, "validation_policy": "string", "output_order": "strict" | "any_order", "audit_hints": ["string"] }',
       "  }",
       "}",
     ].join("\n");
@@ -212,25 +177,15 @@ export class AiProblemService {
     for (let attempt = 0; attempt < 2; attempt++) {
       const userPromptParts = [
         "Process this problem JSON and return the augmented version in JSON mode.",
-        "1. Preserve original narrative fields.",
-        "2. GENERATE accurate signature (function or class) matching the problem.",
-        "3. SET problem_type accurately ('function' for standard, 'class' for design).",
-        shouldGenerateSolution
-          ? "4. GENERATE solution in [TOC] format."
-          : "4. Solution exists. Omit or null 'solutions' in output.",
-        "5. At least 5 hints.",
-        "6. Exactly 3 public + 7 hidden tests; inputs must match signature requirements.",
-        "7. Prefer NATIVE JSON arrays/matrices for all array-typed params and for expected_output.",
-        "8. Determinism rule: every testcase should be unique-answer under strict compare whenever possible.",
-        "9. For multi-answer problems (e.g. Two Sum), do NOT force one arbitrary expected output unless input guarantees uniqueness.",
-        "10. If a testcase is truly multi-answer, mark it with determinism_check='multi_valid' and comparator_mode='problem_specific'.",
-        "11. Verify every expected_output against its input before returning; invalid testcase labels are forbidden.",
-        "12. Always return problem.judging_policy with comparator_mode, multi_answer, validation_policy, output_order, and audit_hints.",
-        "",
+        "CRITICAL INSTRUCTIONS:",
+        "1. You MUST generate 'function_signature' (or 'class_signature' if it's a class problem) and 'judging_policy'. These are mandatory.",
+        "2. You MUST generate an array of at least 5 'hints'.",
+        "3. DO NOT output 'title', 'description', 'examples', or 'constraints'. Do not echo them back.",
+        "4. DO NOT output 'code_snippets'.",
         lastValidationError
           ? [
               "=== PREVIOUS ATTEMPT FAILED VALIDATION ===",
-              "Fix ONLY testcases and/or function_signature/return_type so every testcase passes structural typing.",
+              "Fix function_signature/return_type so it passes structural typing.",
               "Errors:",
               lastValidationError,
               "",
@@ -247,19 +202,12 @@ export class AiProblemService {
           systemPrompt,
           userPrompt,
           temperature: 0,
-          maxTokens: 16384,
         });
 
       rawAggregate = raw;
 
       if (!data.problem) {
         throw new Error("AI response did not include a problem object");
-      }
-
-      if (!data.tests?.public?.length || !data.tests?.hidden?.length) {
-        lastValidationError =
-          "AI failed to return both public and hidden test arrays with at least one case each.";
-        continue;
       }
 
       const finalProblemBase = {
@@ -286,32 +234,6 @@ export class AiProblemService {
 
       const mergedSig = mergeSignature(input, data.problem);
 
-      let publicTests: TestCase[];
-      let hiddenTests: TestCase[];
-
-      if (mergedSig.problem_type === "class") {
-        // For class problems, we trust the AI output for now without strict canonical normalization
-        publicTests = data.tests.public as TestCase[];
-        hiddenTests = data.tests.hidden as TestCase[];
-      } else {
-        const signature = enrichSignatureForDriver(
-          mergedSig.function_signature as FunctionSignature,
-        );
-        try {
-          const normalized = normalizeTestSuite(
-            data.tests.public as any[],
-            data.tests.hidden as any[],
-            signature,
-          );
-          publicTests = normalized.publicTests;
-          hiddenTests = normalized.hiddenTests;
-          mergedSig.function_signature = signature;
-        } catch (e: any) {
-          lastValidationError = e?.message ?? String(e);
-          continue;
-        }
-      }
-
       const mergedProblem = {
         ...finalProblemBase,
         ...mergedSig,
@@ -319,8 +241,6 @@ export class AiProblemService {
 
       return {
         problem: mergedProblem,
-        publicTests,
-        hiddenTests,
         rawLlmResponse: rawAggregate ?? raw,
       };
     }
