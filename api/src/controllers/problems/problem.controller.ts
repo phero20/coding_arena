@@ -61,11 +61,12 @@ export class ProblemController extends BaseController {
     const result = await this.problemService.getAllProblems(page, limit);
 
     // Return a pre-formatted paginated response
+    // We removed countDocuments for speed; passing dummy totals to satisfy PaginationMeta
     return ApiResponse.paginated(result.problems, {
-      totalItems: result.total,
+      totalItems: 0,
       itemCount: result.problems.length,
       perPage: limit,
-      totalPages: Math.ceil(result.total / limit),
+      totalPages: 0,
       currentPage: page,
     });
   }
