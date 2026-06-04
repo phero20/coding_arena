@@ -4,6 +4,7 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { workspaceMarkdownComponents } from "@/components/academy/editor/practice-markdown";
@@ -43,6 +44,9 @@ import {
   MainTab,
 } from "@/store/workspace/use-workspace-store";
 import { useWorkspaceSync } from "@/hooks/workspace/use-workspace-sync";
+import { useUser } from "@clerk/nextjs";
+import { useUserSolvedProblemsQuery } from "@/hooks/queries/use-problem.queries";
+import { useSolvedExercisesQuery } from "@/hooks/queries/use-academy.queries";
 
 const difficultyColor: Record<Problem["difficulty"], string> = {
   Easy: "text-difficulty-easy border-difficulty-easy bg-difficulty-easy",
@@ -55,6 +59,8 @@ export const DescriptionPanel = React.memo(
   ({ problem, mode = "practice", room, roomId, trackSlug }: DescriptionPanelProps) => {
     // 1. Sync Tabs with URL and Zustand
     useWorkspaceSync();
+    const { user } = useUser();
+
     const {
       mainTab: activeTab,
       setMainTab: setActiveTab,
@@ -110,6 +116,19 @@ export const DescriptionPanel = React.memo(
         setActiveTab(val as MainTab);
       }
     };
+
+    // Unconditionally call hooks, use enabled/args to control fetching
+    const { data: solvedExercises = [] } = useSolvedExercisesQuery(
+      mode === "exercise" ? trackSlug || "" : ""
+    );
+    const { data: solvedProblems = [] } = useUserSolvedProblemsQuery(
+      user?.id,
+      mode !== "exercise"
+    );
+
+    const isSolved = mode === "exercise"
+      ? solvedExercises.includes(problem.problem_slug)
+      : solvedProblems.includes(problem.problem_id);
 
     return (
       <div className="flex flex-col bg-card/10 w-full h-full overflow-hidden">
@@ -170,13 +189,16 @@ export const DescriptionPanel = React.memo(
                 value="description"
                 className="m-0 border-none outline-none"
               >
-                <div className="p-4 md:p-6 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 w-full overflow-hidden">
+
+                <div className="p-4 md:px-6 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 min-w-0 w-full overflow-hidden">
+
                   <header className="py-4 border-b border-border/40">
+
                     <div className="flex items-center justify-between mb-2">
                       <h1 className="text-xl font-bold tracking-tight text-foreground/90 flex items-center gap-2">
                         {mode === "exercise" ? (
-                          <img 
-                            src={`/assets/practice-icon/${trackSlug}/${problem.problem_slug}.svg`} 
+                          <img
+                            src={`/assets/practice-icon/${trackSlug}/${problem.problem_slug}.svg`}
                             alt={`${problem.title} icon`}
                             className="w-14 object-contain"
                           />
@@ -185,28 +207,61 @@ export const DescriptionPanel = React.memo(
                         )}
                         {problem.title}
                       </h1>
-                      {
-                        mode=="exercise" && problem.difficulty ? (
-                          <Badge
-                        variant="outline"
-                        className={cn(
-                          "border-none text-[10px] font-black uppercase tracking-widest",
-                          difficultyColor["Medium"],
-                        )}
-                      >
-                        Level {problem.difficulty}
-                      </Badge>
-                        ) : ( <Badge
-                        variant="outline"
-                        className={cn(
-                          "border-none text-[10px] font-black uppercase tracking-widest",
-                          difficultyColor[problem.difficulty],
-                        )}
-                      >
-                        {problem.difficulty}
-                      </Badge>
-                        )
-                      }
+                      <div className="flex flex-col flex-wrap lg:flex-row gap-1 items-center justify-center">
+                        {
+                          mode == "exercise" && problem.difficulty ? (
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "border-none text-[10px] font-black uppercase tracking-widest",
+                                difficultyColor["Medium"],
+                              )}
+                            >
+                              Level {problem.difficulty}
+                            </Badge>
+                          ) : (<Badge
+                            variant="outline"
+                            className={cn(
+                              "border-none text-[10px] font-black uppercase tracking-widest",
+                              difficultyColor[problem.difficulty],
+                            )}
+                          >
+                            {problem.difficulty}
+                          </Badge>
+                          )
+                        }
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "border-none text-[10px] font-black uppercase tracking-widest cursor-pointer",
+                                  isSolved && "text-difficulty-easy"
+                                )}
+                              >
+                                {
+                                  mode == "exercise" ? (
+                                    "10 Points"
+                                  ) : (
+                                    problem.difficulty == 'Easy' ? "10 Points" : problem.difficulty == 'Medium' ? "30 Points" : problem.difficulty == 'Hard' ? "50 Points" : "10 Points"
+                                  )
+                                }
+                                {isSolved && <CheckCircle2 className="ml-1 h-3 w-3 inline-block" />}
+                              </Badge>
+                            </TooltipTrigger>
+
+                            <TooltipContent side="top">
+                              {isSolved ? <p>Already solved and earned {mode === "exercise" ? "10" : problem.difficulty === "Hard" ? "50" : problem.difficulty === "Medium" ? "30" : "10"} points.</p> :
+                                <p>Solve this problem to earned {mode === "exercise" ? "10" : problem.difficulty === "Hard" ? "50" : problem.difficulty === "Medium" ? "30" : "10"} points.</p>
+                              }
+
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+
+
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {problem.topics.map((topic) => (
@@ -226,7 +281,7 @@ export const DescriptionPanel = React.memo(
                           {cleanedDescription}
                         </ReactMarkdown>
                       </div>
-                      
+
                       {problem.source && (
                         <div className="py-4 border-t border-border/60">
                           <h3 className="text-sm font-bold text-foreground mb-3">
@@ -234,9 +289,9 @@ export const DescriptionPanel = React.memo(
                           </h3>
                           <p className="text-sm">
                             {problem.source_url ? (
-                              <a  
-                                href={problem.source_url} 
-                                target="_blank" 
+                              <a
+                                href={problem.source_url}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-primary hover:underline font-medium inline-flex items-center gap-1.5"
                               >
@@ -320,7 +375,7 @@ export const DescriptionPanel = React.memo(
                     </div>
                   )}
                   {/* Source Attribution */}
-                  
+
                 </div>
               </TabsContent>
 
