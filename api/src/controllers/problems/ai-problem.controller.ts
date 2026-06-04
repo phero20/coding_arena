@@ -37,30 +37,14 @@ export class AiProblemController extends BaseController {
   ) {
     const body = c.req.valid("json");
 
-    const aiResult = await this.aiProblemService.rewriteAndGenerate(body);
+    const aiResult = await this.aiProblemService.rewriteAndGenerate(body as any);
 
     const savedProblem = await this.problemService.upsertProblem(
-      aiResult.problem,
+      aiResult.problem as any,
     );
-
-    await this.problemTestService.upsertTests({
-      problem_id: savedProblem.problem_id,
-      type: "public",
-      cases: aiResult.publicTests,
-    });
-
-    await this.problemTestService.upsertTests({
-      problem_id: savedProblem.problem_id,
-      type: "hidden",
-      cases: aiResult.hiddenTests,
-    });
 
     const response = ApiResponse.success({
       problem: savedProblem,
-      testCaseCounts: {
-        public: aiResult.publicTests.length,
-        hidden: aiResult.hiddenTests.length,
-      },
     });
 
     return c.json(response.toJSON(), 201);
