@@ -106,6 +106,7 @@ const ProblemSchema = new mongoose.Schema(
     class_signature: { type: ClassSignatureSchema },
     judging_policy: { type: JudgingPolicySchema, default: undefined },
     solutions: { type: String },
+    is_premium: { type: Boolean, default: false },
   },
   {
     timestamps: true,
