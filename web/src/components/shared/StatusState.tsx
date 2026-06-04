@@ -88,7 +88,7 @@ export const EmptyDisplay = ({
 }) => (
   <Card
     className={cn(
-      "flex flex-col items-center justify-center py-10 text-center border-dashed border-2 bg-muted/5 animate-in fade-in duration-500",
+      "flex flex-col items-center justify-center py-10 text-center border-dashed border-2 bg-muted/5 animate-in fade-in duration-500 m-3",
       className,
     )}
   >
@@ -148,14 +148,13 @@ export const ConnectionBadge = ({
   if (isConnected) return null;
 
   return (
-    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4 duration-500">
+    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50">
       <Badge
         variant="secondary"
         className="px-4 py-1.5"
       >
         <span className="relative flex h-2 w-2 mr-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+          <span className="absolute inline-flex h-full w-full bg-secondary"></span>
         </span>
         <span className="text-[10px] font-black uppercase tracking-widest text-secondary">
           {message}
