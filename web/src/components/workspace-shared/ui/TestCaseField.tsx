@@ -5,7 +5,7 @@ import { Check, Copy, AlertCircle } from "lucide-react";
 import type { TestCaseFieldProps } from "@/types/component.types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { beautifyTestCaseInput } from "@/lib/test-case";
+import { beautifyTestCaseInput, formatValue } from "@/lib/test-case";
 import { Card } from "@/components/ui/card";
 
 const CopyButton: React.FC<{ value: string }> = ({ value }) => {
@@ -41,7 +41,11 @@ const CopyButton: React.FC<{ value: string }> = ({ value }) => {
 export const TestCaseField: React.FC<
   TestCaseFieldProps & { isError?: boolean }
 > = ({ label, value, isOutput, isError }) => {
-  const displayValue = (!isOutput && !isError) ? beautifyTestCaseInput(value) : value;
+  const displayValue = isError 
+    ? value 
+    : isOutput 
+      ? formatValue(value)
+      : beautifyTestCaseInput(value);
 
   return (
     <Card className="space-y-1.5 group p-4 ">
