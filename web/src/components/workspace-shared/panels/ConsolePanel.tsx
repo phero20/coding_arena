@@ -53,7 +53,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
 
   return (
     <div className="flex flex-col h-full border-t border-border/20">
-      <div className="flex-1 overflow-y-auto px-4 py-0 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
         <Tabs
           defaultValue="testcase"
           value={activeTab}
