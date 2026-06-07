@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { DynamicEditor as Editor, LanguageSelector } from "@/components/workspace-shared";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
-import { useTheme } from "next-themes";
 import { useEditorStore } from "@/store/use-editor-store";
 import { WrapText, Code2, RefreshCw, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,6 @@ const TAB_CLS =
 export const CompilerEditor: React.FC<Props> = ({
   code, onChange, language, languages, onLanguageChange, onReset,
 }) => {
-  const { theme } = useTheme();
   const { preferences } = useEditorStore();
   const [wordWrap, setWordWrap] = useState(true);
   const monacoOptions = useMonacoConfig({ ...preferences, wordWrap });

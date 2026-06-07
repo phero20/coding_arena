@@ -1,11 +1,9 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 

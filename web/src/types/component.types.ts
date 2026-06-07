@@ -93,12 +93,6 @@ export interface PracticeProblemListProps {
   roomId?: string;
 }
 
-// ProblemPagination.tsx
-export interface ProblemPaginationProps {
-  page: number;
-  totalPages: number;
-  setPage: (page: number | ((p: number) => number)) => void;
-}
 
 // ProblemRow.tsx
 export interface ProblemRowProps {

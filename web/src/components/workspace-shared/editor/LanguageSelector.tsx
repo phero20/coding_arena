@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown, Terminal } from "lucide-react";
-import type { LanguageSelectorProps, LanguageOption } from "@/types/component.types";
+import type { LanguageSelectorProps } from "@/types/component.types";
 import { cn } from "@/lib/utils";
 
 export const LanguageSelector: React.FC<LanguageSelectorProps> = ({

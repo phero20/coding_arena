@@ -1,4 +1,3 @@
-import React from 'react'
 import { ArenaHomeSection } from './ArenaHomeSection'
 import { ArenaHomeEditorSection } from './ArenaHomeEditorSection'
 

@@ -7,7 +7,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
 } from "@/components/ui/sheet";
 import {
   Table,
@@ -22,10 +21,9 @@ import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Code2, CheckCircle2, GripVertical } from "lucide-react";
+import { Code2, CheckCircle2, GripVertical } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import Skeleton from "react-loading-skeleton";
 import { RoadmapSidebarSkeleton } from "@/components/skeletons/RoadmapSkeletons";
 import { Problem } from "@/types/api";
 

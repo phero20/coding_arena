@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { Container } from "@/components/shared/Container";
 import { HeroWorkspaceDemo } from "./HeroWorkspaceDemo";
 import SideRays from "./ParticleNetwork";
@@ -46,7 +45,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease }}
-          className="flex flex-col md:flex-row items-center md:items-center justify-between max-w-7xl mx-auto mb-20 gap-12 lg:gap-20 pb-10 px-2 md:px-4 lg:px-0"
+          className="flex flex-col xl:flex-row items-center md:items-center justify-between max-w-7xl mx-auto mb-20 gap-12 lg:gap-20 pb-10 px-2 md:px-4 lg:px-0"
         >
           {/* Left Side: Brand Name */}
           <motion.div
@@ -57,7 +56,7 @@ export const Hero = () => {
           >
             <h1 className="text-[clamp(2.75rem,14vw,7.5rem)] font-bold tracking-tight text-foreground leading-none flex items-baseline whitespace-nowrap max-w-full">
               SlaveCode
-              <span className="ml-1 text-[clamp(2.75rem,14vw,7.5rem)] leading-none text-primary/60">
+              <span className="ml-1 text-5xl md:text-7xl lg:text-8xl leading-none text-primary/60">
                 .
               </span>
             </h1>

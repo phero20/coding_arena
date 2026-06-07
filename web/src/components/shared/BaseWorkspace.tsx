@@ -6,7 +6,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import type { Problem } from "@/types/api";
 import type { BaseWorkspaceProps } from "@/types/component.types";
 import { WorkspaceHeader, Scratchpad } from "@/components/workspace-shared";
 import { useState } from "react";

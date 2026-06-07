@@ -2,10 +2,9 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { ChevronLeft, Play, Send, RefreshCw, X, Pencil } from "lucide-react";
 import type { WorkspaceHeaderProps } from "@/types/component.types";
-import { Problem } from "@/types/api";
 import { useAuth } from "@clerk/nextjs";
 import { MatchTimer } from "@/components/arena/MatchTimer";
 import {

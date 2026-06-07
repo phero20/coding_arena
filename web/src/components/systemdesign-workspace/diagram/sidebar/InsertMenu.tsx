@@ -1,9 +1,6 @@
 import {
   Sparkles,
-  Code,
-  LayoutGrid,
   Shapes,
-  Smile,
   Smartphone,
   Frame,
   Braces,

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+
 import Link from "next/link";
 import { Dumbbell, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -123,7 +123,7 @@ export const AcademyHomeSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 md:gap-12 items-center">
           
           {/* Left Side: The Hook & Content */}
-          <div className="flex flex-col items-start text-left max-w-2xl">
+          <div className="flex flex-col items-start text-left max-w-2xl mx-auto">
             
             {/* The Hexagon Wave and Header (Using real TracksHeader) */}
             <div className="mb-8 w-full  origin-left">

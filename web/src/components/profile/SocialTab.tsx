@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import {
   useFollowersQuery,
@@ -9,7 +8,6 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, User, Users, UserPlus, UserMinus, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 import { useSocialRegistry } from "@/hooks/queries/use-social-registry";

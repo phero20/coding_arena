@@ -3,17 +3,14 @@
 import { useState, useMemo } from "react";
 import {
 
-  LayoutGrid,
   Search,
   ArrowLeft,
-  Sparkles,
   ArrowRight,
   ChevronRight,
   Cpu,
   Layers,
   Database,
   Terminal,
-  Play,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

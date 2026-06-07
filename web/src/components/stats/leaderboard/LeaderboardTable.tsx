@@ -1,18 +1,14 @@
-import React from "react";
 import { 
   Table, 
   TableBody, 
   TableHead, 
   TableHeader, 
   TableRow,
-  TableCell
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { User } from "lucide-react";
 import { LeaderboardEntry, LeaderboardResponse } from "@/types/stats";
 import { LeaderboardRow } from "./LeaderboardRow";
 import { LeaderboardRowSkeleton } from "@/components/skeletons/LeaderboardSkeleton";
-import { SkeletonProvider } from "@/components/skeletons/BaseSkeleton";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 
 interface LeaderboardTableProps {

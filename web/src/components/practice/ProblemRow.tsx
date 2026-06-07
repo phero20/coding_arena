@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import type { ProblemRowProps } from "@/types/component.types";

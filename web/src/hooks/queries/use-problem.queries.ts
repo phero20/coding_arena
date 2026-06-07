@@ -45,10 +45,13 @@ export function useProblemsQuery(page = 1, limit = 20) {
 /**
  * Fetch an infinite list of problems (for infinite scroll).
  */
-export function useInfiniteProblemsQuery(limit = 20) {
+export function useInfiniteProblemsQuery(
+  limit = 20,
+  filters?: { search?: string; topic?: string; difficulty?: string }
+) {
   return useInfiniteQuery({
-    queryKey: ["problems", "infinite", limit],
-    queryFn: ({ pageParam = 1 }) => getProblems(pageParam, limit),
+    queryKey: ["problems", "infinite", limit, filters],
+    queryFn: ({ pageParam = 1 }) => getProblems(pageParam, limit, filters),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       // API response structure: { problems: Problem[], meta: ... }

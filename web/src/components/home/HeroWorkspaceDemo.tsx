@@ -28,7 +28,6 @@ import {
   Palette,
   User,
   ArrowRight,
-  ArrowDown,
   ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
@@ -93,12 +92,12 @@ export const HeroWorkspaceDemo = () => {
               </Button>
             </div>
 
-            <ButtonGroup className="absolute left-1/2 -translate-x-1/2 opacity-70">
-              <Button variant="outline" size="sm" className="hidden md:flex h-8 px-3 gap-1.5 border-border/40">
+            <ButtonGroup className="absolute left-1/2 -translate-x-1/2 opacity-80">
+              <Button variant="outline" size="sm" className="hidden md:flex h-8 px-3 gap-1.5 ">
                 <Pencil className="size-3.5" />
                 <span className="hidden md:inline">Scratchpad</span>
               </Button>
-              <Button variant="outline" size="sm" className="h-8 px-3 gap-1.5 border-border/40">
+              <Button variant="outline" size="sm" className="h-8 px-3 gap-1.5 ">
                 <Play className="size-3.5" />
                 <span className="hidden md:inline">Run</span>
               </Button>
@@ -110,7 +109,7 @@ export const HeroWorkspaceDemo = () => {
 
             {/* Right: Timer, Palette, Avatar */}
             <div className="ml-auto flex items-center gap-2 sm:gap-3 opacity-80">
-              <div className="hidden md:flex items-center gap-3 h-8 px-3 rounded-md border border-border/40 bg-card text-[11px] font-bold font-mono tracking-wider">
+              <div className="hidden lg:flex items-center gap-3 h-8 px-3 rounded-md border border-border/40 bg-card text-[11px] font-bold font-mono tracking-wider">
                 <Clock className="size-3 text-muted-foreground" /> 
                 <span>09:06</span>
                 <Play className="size-3 text-foreground hover:text-primary transition-colors fill-current" />
@@ -133,7 +132,7 @@ export const HeroWorkspaceDemo = () => {
             <div className="flex flex-col min-w-0 bg-card/10">
               {/* Tab bar */}
               <div className="px-4 border-b border-border/40 bg-muted/20 shrink-0">
-                <div className="flex items-center gap-4 w-max min-w-full h-10 overflow-x-auto hide-scrollbar">
+                <div className="flex items-center gap-4 w-max min-w-full h-10 overflow-x-auto">
                   {LEFT_TABS.map((tab) => (
                     <div
                       key={tab.id}
@@ -145,7 +144,7 @@ export const HeroWorkspaceDemo = () => {
                       )}
                     >
                       <tab.icon className="size-3.5" />
-                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span className="hidden lg:inline">{tab.label}</span>
                     </div>
                   ))}
                 </div>
@@ -275,7 +274,7 @@ export const HeroWorkspaceDemo = () => {
                         className={TAB_CLS}
                       >
                         <tab.icon className="size-3 mr-1.5" />
-                        <span className="hidden sm:inline">{tab.label}</span>
+                        <span className="hidden lg:inline">{tab.label}</span>
                       </TabsTrigger>
                     ))}
                   </TabsList>

@@ -9,7 +9,6 @@ import type { EditorPanelProps } from "@/types/component.types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Problem } from "@/types/api";
 import {
   RefreshCw,
   Code2,

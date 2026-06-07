@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { type UserStats } from "@/types/stats";
 import { cn } from "@/lib/utils";
-import { Code2, Trophy } from "lucide-react";
+import { Code2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface BadgeShowcaseProps {

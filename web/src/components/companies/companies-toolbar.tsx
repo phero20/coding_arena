@@ -7,10 +7,9 @@ import { CompanyLogo } from "@/components/companies/CompanyLogo";
 interface CompaniesToolbarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  totalVisible: number;
 }
 
-export function CompaniesToolbar({ searchQuery, setSearchQuery, totalVisible }: CompaniesToolbarProps) {
+export function CompaniesToolbar({ searchQuery, setSearchQuery }: CompaniesToolbarProps) {
   return (
     <div className="flex flex-col gap-4 justify-between pb-2">
       <div className="space-y-1">

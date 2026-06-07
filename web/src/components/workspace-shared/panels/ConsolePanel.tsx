@@ -2,9 +2,8 @@
 
 import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Terminal, AlertCircle, RefreshCw } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Terminal, RefreshCw } from "lucide-react";
+
 import {
   TestCaseSkeleton,
   ResultSkeleton,
@@ -14,8 +13,7 @@ import { QueryGuard } from "@/components/shared/QueryGuard";
 import { cn } from "@/lib/utils";
 import { TestCaseField } from "../ui/TestCaseField";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { Badge } from "@/components/ui/badge";
+
 import type { ConsolePanelProps } from "@/types/component.types";
 import { useConsoleViewState } from "@/hooks/workspace/use-console-view-state";
 import { type ExecutionVerdict } from "@/types/submission";
@@ -33,12 +31,10 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
     cases,
     activeCase,
     effectiveTestResults,
-    hasTestResults,
     isTabLoading,
     showResultsSection,
     isForbiddenError,
     activeResult,
-    currentStatus,
   } = useConsoleViewState(props);
 
   const { isLoading, error, runError, hasSubmitted, verdict, runResult } =

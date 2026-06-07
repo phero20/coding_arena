@@ -1,6 +1,5 @@
-import React from 'react';
 import { SystemDesignIcon } from './system-design-icon';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { SystemDesignHomeSection } from './SystemDesignHomeSection'
 import { SystemDesignWorkspaceDemo } from './SystemDesignWorkspaceDemo'
 

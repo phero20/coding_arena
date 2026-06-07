@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,16 +18,10 @@ import { ArenaPlayerResult } from "@/types/arena";
 import type { MatchResultsProps } from "@/types/component.types";
 import {
   LogOut,
-  Trophy,
-  Eye,
   Code2,
-  Terminal,
-  Info,
-  ChevronRight,
   Clock,
 } from "lucide-react";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 
 import { useMatchRanking } from "@/hooks/arena/use-match-ranking";
 

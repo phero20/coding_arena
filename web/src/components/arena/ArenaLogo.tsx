@@ -1,4 +1,3 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import { Swords } from "lucide-react";
 import { tones } from "@/lib/tones";

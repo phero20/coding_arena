@@ -1,30 +1,16 @@
 "use client";
 
-import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import { 
   Trophy, 
   Users, 
-  Code, 
   Clock, 
-  CheckCircle2, 
-  ChevronRight,
-  TrendingUp,
-  Award,
   ArrowRight,
-  Clock2
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
-} from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import type { ArenaMatch, ArenaPlayerResult } from "@/types/arena";
+import type { ArenaMatch } from "@/types/arena";
 import { Button } from "@/components/ui/button";
 
 interface ArenaMatchCardProps {

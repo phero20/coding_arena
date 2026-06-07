@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -30,17 +30,17 @@ export const Navbar = () => {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-background",
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-100 bg-background",
           scrolled
             ? "py-2  border-b border-border"
             : "py-3 border-b border-transparent bg-transparent",
         )}
       >
-        <Container className="flex items-center justify-between">
+        <Container className="flex px-2 items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center group">
             <Image
-              src="/logo.png"
+              src="/logos/logo.png"
               alt="SlaveCode Logo"
               width={50}
               height={40}
@@ -52,7 +52,7 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden xl:flex items-center gap-2 2xl:gap-5">
             <NavLinks />
             <div className="h-4 w-px bg-border/50" />
             <UserSearch />
@@ -60,7 +60,7 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Profile/Menu Trigger */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="xl:hidden flex items-center gap-2">
             <MobileMenu navItems={navItems} pathname={pathname} />
           </div>
         </Container>

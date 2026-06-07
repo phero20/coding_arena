@@ -1,9 +1,8 @@
 import { memo } from "react";
-import { ArenaPlayer } from "@/types/arena";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { ArenaPlayerCardProps } from "@/types/component.types";
-import { Crown, X, Clock } from "lucide-react";
+import { X, Clock } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn, formatSolveTime } from "@/lib/utils";

@@ -3,13 +3,11 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import type { SubmissionHistoryProps } from "@/types/component.types";
-import { Code2, Terminal, X, PenLine, Copy } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Terminal } from "lucide-react";
 import { SubmissionSkeleton } from "@/components/shared/Skeletons";
-import { EmptyDisplay } from "@/components/shared/StatusState";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { ExecutionVerdict, Submission } from "@/types/submission";
+import type { ExecutionVerdict } from "@/types/submission";
 import {
   Table,
   TableBody,
@@ -21,12 +19,6 @@ import {
 import { CodeViewer } from "@/components/ui/code-viewer";
 import { VerdictBadge } from "@/components/ui/verdict-badge";
 
-const languageMap: Record<string, string> = {
-  "63": "JavaScript",
-  "71": "Python",
-  "62": "Java",
-  "54": "C++",
-};
 
 import { QueryGuard } from "@/components/shared/QueryGuard";
 
@@ -81,10 +73,10 @@ export const SubmissionHistory: React.FC<SubmissionHistoryProps> = ({
                 // Extremely safe property access for legacy data
                 const rawLangId = sub.languageId || (sub as any).language_id;
                 const langLabel =
-                  languageMap[String(rawLangId)] ||
+                  String(rawLangId) ||
                   String(rawLangId || "Unknown");
                 const syntaxLang = (
-                  languageMap[String(rawLangId)] ||
+                  String(rawLangId) ||
                   String(rawLangId || "javascript")
                 ).toLowerCase();
                 const sourceCode =

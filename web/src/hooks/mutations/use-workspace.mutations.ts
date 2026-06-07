@@ -60,7 +60,6 @@ export function useDeleteWorkspace() {
     mutationFn: (id: string) => WorkspaceService.deleteWorkspace(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: workspaceKeys.lists() });
-      toast.success("Workspace deleted successfully!");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to delete workspace");
@@ -116,7 +115,6 @@ export function useDeleteDiagram(workspaceId: string) {
     mutationFn: (id: string) => WorkspaceService.deleteDiagram(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: workspaceKeys.diagrams(workspaceId) });
-      toast.success("Diagram deleted successfully!");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to delete diagram");

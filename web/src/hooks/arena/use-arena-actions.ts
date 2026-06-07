@@ -84,7 +84,6 @@ export function useCreateArena() {
       language?: string;
     }) => createRoom(params),
     onSuccess: (room) => {
-      toast.success("Arena Room Created!");
       router.push(`/arena/${room.roomId}`);
     },
     onError: (err) => {
@@ -117,7 +116,6 @@ export function useUpdateArenaProblem(roomId: string) {
       language?: string;
     }) => updateRoomProblem(roomId, params),
     onSuccess: () => {
-      toast.success("Problem updated successfully!");
       router.push(`/arena/${roomId}`);
     },
     onError: (err: any) => {

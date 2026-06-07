@@ -1,4 +1,3 @@
-import React from 'react'
 import { ContestsHomeSection } from './ContestsHomeSection'
 
 type Props = {}

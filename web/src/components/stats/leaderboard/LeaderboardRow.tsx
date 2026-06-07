@@ -2,12 +2,11 @@ import React from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Medal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LeaderboardEntry } from "@/types/stats";
 import Link from "next/link";
 
-interface LeaderboardRowProps {
+interface LeaderboardRowProps { 
   entry: LeaderboardEntry;
   isViewer?: boolean;
 }

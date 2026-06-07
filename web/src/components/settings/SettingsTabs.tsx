@@ -6,7 +6,7 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { AppearanceSection } from "./AppearanceSection";
 import { EditorSection } from "./EditorSection";
 import { ProfileSection } from "./ProfileSection";
-import { Paintbrush, Code, User, Code2 } from "lucide-react";
+import { Paintbrush, User, Code2 } from "lucide-react";
 import { useProfileStore } from "@/store/use-profile-store";
 import { cn } from "@/lib/utils";
 

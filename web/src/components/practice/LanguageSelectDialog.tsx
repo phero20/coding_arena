@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { LanguageSelector } from "@/components/workspace-shared";
-import type { Problem } from "@/types/api";
 import type { LanguageSelectDialogProps } from "@/types/component.types";
 
 export const LanguageSelectDialog: React.FC<LanguageSelectDialogProps> = ({

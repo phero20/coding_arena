@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { ArrowRight, Loader2, Search, User as UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUserSearchQuery } from "@/hooks/queries/use-user-search.queries";

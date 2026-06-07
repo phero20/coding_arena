@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Company } from "@/types/company";
 import { Card } from "@/components/ui/card";
-import { Building2, BriefcaseBusiness } from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
 import { CompanyLogo } from "./CompanyLogo";
 
 export function CompanyCard({ company }: { company: Company }) {

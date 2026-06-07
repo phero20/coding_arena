@@ -5,17 +5,7 @@ import {
   ArrowLeft,
   Trophy,
   Clock,
-  Timer,
   Code2,
-  ShieldCheck,
-  ChevronRight,
-  Eye,
-  CheckCircle2,
-  X,
-  AlertCircle,
-  Users,
-  ChevronDown,
-  ChevronUp
 } from "lucide-react";
 import { RankIndicator } from "../stats/leaderboard/RankIndicator";
 import { Button } from "@/components/ui/button";
@@ -25,7 +15,6 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import {
   Table,
@@ -42,7 +31,6 @@ import { format } from "date-fns";
 import { VerdictBadge } from "@/components/ui/verdict-badge";
 import { CodeViewer } from "@/components/ui/code-viewer";
 import Link from "next/link";
-import NotFound from "@/app/not-found";
 
 interface ArenaMatchDetailProps {
   match: ArenaMatch;

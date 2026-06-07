@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container } from "../shared/Container";
@@ -20,7 +19,7 @@ export const Footer = () => {
           {/* Brand & Description */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4 group">
-              <Image src="/logo.png" alt="SlaveCode Logo" width={32} height={32} className="rounded-md" />
+              <Image src="/logos/logo.png" alt="SlaveCode Logo" width={32} height={32} className="rounded-md" />
               <span className="font-bold text-xl tracking-tight text-foreground group-hover:text-primary transition-colors">
                 SlaveCode
               </span>

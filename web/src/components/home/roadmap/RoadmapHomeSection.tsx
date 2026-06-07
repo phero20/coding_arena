@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import Xarrow, { Xwrapper } from "react-xarrows";

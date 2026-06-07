@@ -1,7 +1,5 @@
-import React from 'react'
 import { AcademyHomeSection } from './AcademyHomeSection'
 import { RoadmapPracticeHomeSection } from './RoadmapPracticeHomeSection'
-import { Badge } from "@/components/ui/badge"
 
 type Props = {}
 

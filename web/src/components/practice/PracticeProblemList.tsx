@@ -1,30 +1,33 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { useRouter } from "next/navigation";
 import type { PracticeProblemListProps } from "@/types/component.types";
-import { toast } from "sonner";
-import { useProblemsQuery, useInfiniteProblemsQuery } from "@/hooks/queries/use-problem.queries";
+import { useInfiniteProblemsQuery } from "@/hooks/queries/use-problem.queries";
 import { useCreateArena, useUpdateArenaProblem } from "@/hooks/arena/use-arena-actions";
-import { useProblemFilters } from "@/hooks/practice/use-problem-filters";
+import { useDebounce } from "@/hooks/shared/use-debounce";
+import type { DifficultyFilter } from "@/components/practice/ProblemFilters";
 import { useProblemSelectionHandler } from "@/hooks/practice/use-problem-selection";
-import type { Problem } from "@/types/api";
 
 // Sub-components
 import { ArenaSelectionBanner } from "./ArenaSelectionBanner";
-import { ProblemFilters, type DifficultyFilter } from "./ProblemFilters";
+import { ProblemFilters } from "./ProblemFilters";
 import { ProblemTable } from "./ProblemTable";
-import { ProblemPagination } from "./ProblemPagination";
 import { LanguageSelectDialog } from "./LanguageSelectDialog";
 
 export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
   isSelectPage = false,
   roomId,
 }) => {
-  const router = useRouter();
   const { hostArena, isHosting } = useCreateArena();
   const { updateProblem, isUpdating } = useUpdateArenaProblem(roomId || "");
+
+  const [search, setSearch] = useState("");
+  const [topicFilter, setTopicFilter] = useState<string>("");
+  const [difficultyFilter, setDifficultyFilter] = useState<DifficultyFilter>("All");
+
+  const debouncedSearch = useDebounce(search, 500);
+  const debouncedTopic = useDebounce(topicFilter, 500);
 
   const { 
     data, 
@@ -34,7 +37,11 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage 
-  } = useInfiniteProblemsQuery(20);
+  } = useInfiniteProblemsQuery(20, { 
+    search: debouncedSearch, 
+    topic: debouncedTopic, 
+    difficulty: difficultyFilter 
+  });
 
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.1,
@@ -52,16 +59,11 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
     return problems;
   }, [data]);
 
-  const {
-    search,
-    setSearch,
-    topicFilter,
-    setTopicFilter,
-    difficultyFilter,
-    setDifficultyFilter,
-    filteredProblems,
-    resetFilters: handleResetFilters
-  } = useProblemFilters(allProblems, () => {}); 
+  const handleResetFilters = () => {
+    setSearch("");
+    setDifficultyFilter("All");
+    setTopicFilter("");
+  };
 
   const {
     selectingId,
@@ -94,7 +96,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
       />
 
       <ProblemTable
-        problems={filteredProblems}
+        problems={allProblems}
         isLoading={isLoading}
         error={error}
         isSelectPage={isSelectPage}

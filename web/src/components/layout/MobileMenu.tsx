@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useClerk } from "@clerk/nextjs";
-import { LogOut, ChevronRight } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRoadmapStore } from "@/store/use-roadmap-store";
@@ -55,7 +55,7 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
 
   return (
     <>
-      <div className="flex items-center md:hidden">
+      <div className="flex items-center xl:hidden">
         <Button
           variant="ghost"
           size="icon"
@@ -73,7 +73,7 @@ export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute top-full left-0 right-0 bg-background border-b border-border md:hidden overflow-hidden z-50"
+            className="absolute top-full left-0 right-0 bg-background border-b border-border xl:hidden overflow-hidden z-50"
           >
             <div className="p-4 flex flex-col gap-6 max-h-screen overflow-y-auto">
               {/* Search at the Top */}

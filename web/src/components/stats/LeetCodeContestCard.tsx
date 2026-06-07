@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import  { useMemo } from "react";
 import { type LeetCodeStats } from "@/types/stats";
 import { cn } from "@/lib/utils";
 import { Code2 } from "lucide-react";

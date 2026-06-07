@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { CalendarDays, ShieldCheck } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { type UserProfileData } from "@/types/stats";

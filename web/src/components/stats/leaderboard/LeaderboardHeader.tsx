@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
 import { Input } from "@/components/ui/input";
-import { Search, Trophy } from "lucide-react";
+import { Search } from "lucide-react";
 import { useLeaderboardStore } from "@/store/use-leaderboard-store";
 
 export function LeaderboardHeader() {

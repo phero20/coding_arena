@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { type UserStats } from "@/types/stats";
 import { cn } from "@/lib/utils";
-import { Check, Code2, Swords, GraduationCap } from "lucide-react";
+import { Check, Code2, GraduationCap } from "lucide-react";
 import { Card } from "../ui/card";
 import { useDifficultyMetrics } from "@/hooks/stats/use-difficulty-metrics";
 import { useSolvedExercisesQuery } from "@/hooks/queries/use-academy.queries";

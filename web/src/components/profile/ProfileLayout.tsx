@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useUser } from "@clerk/nextjs";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
@@ -12,8 +11,9 @@ import { SolutionsTab } from "./SolutionsTab";
 import { useProfileStore } from "@/store/use-profile-store";
 import { RecentActivities } from "../stats/RecentActivities";
 import { useActivityPagination } from "@/hooks/stats/use-activity-pagination";
-import { Code2, BookOpen } from "lucide-react";
+import { Code2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect } from "react";
 
 interface ProfileLayoutProps {
   username: string;
@@ -54,7 +54,7 @@ export function ProfileLayout({
   const { activeTab, initTab, syncTab } = useProfileStore();
 
   // Smart state management: Initial load and username changes
-  React.useEffect(() => {
+  useEffect(() => {
     initTab({ 
       tabParam, 
       router, 

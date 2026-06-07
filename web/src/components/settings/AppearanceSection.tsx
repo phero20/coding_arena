@@ -1,16 +1,9 @@
 "use client";
 
-import React from "react";
 import { useTheme } from "next-themes";
-import { Check, Zap, Terminal, Palette } from "lucide-react";
+import { Check, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 
 const THEMES = [
   {

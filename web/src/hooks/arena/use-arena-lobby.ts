@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { toast } from "sonner";
 import { useArenaRoom } from "./use-arena-room";
 import { useLeaveArena } from "./use-arena-actions";
 

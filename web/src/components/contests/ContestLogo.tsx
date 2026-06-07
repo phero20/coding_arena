@@ -1,9 +1,8 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import { Code2 } from "lucide-react";
 import { tones } from "@/lib/tones";
 
-export function ContestLogo({ className }: { className?: string; toneIndex?: number }) {
+export function ContestLogo({ className }: { className?: string }) {
 
   
   return (

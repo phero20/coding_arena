@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { SignInButton, useUser, useClerk } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";

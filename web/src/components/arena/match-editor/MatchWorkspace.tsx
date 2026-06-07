@@ -1,18 +1,12 @@
 "use client";
 
 import React from "react";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+
 import { DescriptionPanel, EditorPanel } from "@/components/workspace-shared";
-import { Problem } from "@/types/api";
 import { BaseWorkspace } from "@/components/shared/BaseWorkspace";
 import type { MatchWorkspaceProps } from "@/types/component.types";
 import { useArenaMatch } from "@/hooks/workspace/use-arena-match";
 
-import { useRouter } from "next/navigation";
 
 
 
@@ -37,7 +31,7 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
     isHost,
   } = useArenaMatch({ problem, roomId });
 
-  const router = useRouter();
+
 
   return (
     <BaseWorkspace

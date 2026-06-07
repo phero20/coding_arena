@@ -11,16 +11,11 @@ import { workspaceMarkdownComponents } from "@/components/academy/editor/practic
 import { Problem } from "@/types/api";
 import { cn } from "@/lib/utils";
 import {
-  BookOpen,
-  Code2,
   Lightbulb,
   CheckCircle2,
   HelpCircle,
-  Users,
-  PenLine,
   X,
   Edit,
-  Edit2,
   ExternalLink,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -36,7 +31,6 @@ import { OpponentsPanel } from "./OpponentsPanel";
 import { SolutionViewer } from "../solutions/SolutionViewer";
 import { SubmissionHistory } from "./SubmissionHistory";
 import type { DescriptionPanelProps } from "@/types/component.types";
-import { Button } from "@/components/ui/button";
 import { SolutionEditor } from "../solutions/SolutionEditor";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import {

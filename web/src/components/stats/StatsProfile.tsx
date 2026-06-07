@@ -10,7 +10,6 @@ import { type UserProfileData } from "@/types/stats";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Code2, ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { useProfileStore } from "@/store/use-profile-store";

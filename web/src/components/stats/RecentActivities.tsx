@@ -13,10 +13,7 @@ import { cn } from "@/lib/utils";
 import { 
   Code2, 
   ChevronRight,
-  ChevronLeft,
-  RefreshCw,
-  Terminal,
-  Activity
+
 } from "lucide-react";
 import {
   Pagination,

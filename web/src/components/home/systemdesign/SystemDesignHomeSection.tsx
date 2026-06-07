@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowLeft, Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SystemDesignIcon } from "@/components/systemdesign-workspace/about/system-design-icon";
+
 import {
     HexDatabaseIcon,
     HexLoadBalancerIcon,

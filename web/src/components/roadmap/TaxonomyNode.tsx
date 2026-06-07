@@ -1,16 +1,11 @@
 "use client";
 
-import React, { memo } from "react";
+import { memo } from "react";
 import { Handle, Position, NodeProps } from "reactflow";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
-  Code2,
   ChevronRight,
   ChevronDown,
-  FolderOpen,
-  Zap,
-  Lock,
   CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";

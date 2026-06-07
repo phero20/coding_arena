@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useArenaMatchDetailsQuery } from "@/hooks/queries/use-arena.queries";
 import { QueryGuard } from "@/components/shared/QueryGuard";
@@ -31,13 +30,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
 
 interface ArenaHistoryTabProps {  
   userId: string;
 }
 
 export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
-  const [selectedMatchId, setSelectedMatchId] = React.useState<string | null>(null);
+  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
   const { userId: currentClerkId } = useAuth();
   const isOwner = userId === currentClerkId;
 

@@ -1,23 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { createShapeId, createBindingId, TLShapeId } from "tldraw";
 import {
-  Play,
   RotateCcw,
   HelpCircle,
-  Code,
   Settings2,
   Layout,
   Sliders,
-  Code2,
   ArrowRight,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { generateDiagramFromCode } from "./utils/code-diagram-generator";
 import { Button } from "@/components/ui/button";
-import dagre from "@dagrejs/dagre";
-import { resolveDiagramAsset } from "@/utils/diagram-asset-matcher";
 import {
   Tooltip,
   TooltipContent,

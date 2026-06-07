@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Grid3X3, Eye, Zap, Keyboard, HelpCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 
 interface SettingsPanelProps {
   editor: any;
@@ -14,7 +13,6 @@ export function SettingsPanel({ editor }: SettingsPanelProps) {
   const [gridMode, setGridMode] = useState(false);
   const [snapMode, setSnapMode] = useState(false);
   const [handMode, setHandMode] = useState(false);
-  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 
   const getSnapModeValue = () => {
     if (!editor) return false;

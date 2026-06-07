@@ -13,7 +13,6 @@ export function useCreateSolution(problemId: string) {
     mutationFn: (data: Parameters<typeof createSolution>[1]) => createSolution(problemId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: solutionKeys.all });
-      toast.success("Solution submitted successfully!");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to submit solution");
@@ -51,7 +50,6 @@ export function useUpdateSolution(problemId: string) {
       updateSolution(solutionId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: solutionKeys.all });
-      toast.success("Solution updated successfully!");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update solution");
@@ -69,7 +67,6 @@ export function useDeleteSolution(problemId: string) {
     mutationFn: (solutionId: string) => deleteSolution(solutionId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: solutionKeys.all });
-      toast.success("Solution deleted successfully!");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to delete solution");

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Duration, format, intervalToDuration } from "date-fns";
-import { Calendar, Clock, Trophy, ExternalLink } from "lucide-react";
+import { Calendar, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Contest } from "@/types/contest";
 import { Card, CardContent } from "@/components/ui/card";

@@ -55,9 +55,17 @@ export async function getProblemsByTopic(topic: string, limit?: number): Promise
 export async function getProblems(
   page = 1,
   limit = 20,
+  filters?: { search?: string; topic?: string; difficulty?: string }
 ): Promise<{ problems: Problem[]; meta: PaginationMeta }> {
+  const params: Record<string, string | number> = { page, limit };
+  
+  if (filters?.search) params.search = filters.search;
+  if (filters?.topic) params.topic = filters.topic;
+  if (filters?.difficulty && filters.difficulty !== "All") params.difficulty = filters.difficulty;
+
+
   const response = await apiClient.get<ApiResponse<Problem[]>>("/problems", {
-    params: { page, limit },
+    params,
   });
 
   if (!response.data.success || !response.data.data) {

@@ -7,14 +7,12 @@ import ReactFlow, {
   Panel,
   useNodesState,
   useEdgesState,
-  MarkerType,
   Node,
   Edge,
   useReactFlow,
   ConnectionMode,
 } from "reactflow";
 import dagre from "@dagrejs/dagre";
-import { motion } from "framer-motion";
 import "reactflow/dist/style.css";
 
 import TaxonomyNode from "./TaxonomyNode";
@@ -25,13 +23,9 @@ import {
   RefreshCw,
   ZoomIn,
   ZoomOut,
-  MousePointer2,
-  Search,
-  BookOpen,
 } from "lucide-react";
 import { RoadmapSidebar } from "./RoadmapSidebar";
 import { cn } from "@/lib/utils";
-import { Card } from "../ui/card";
 import { ButtonGroup, ButtonGroupSeparator } from "../ui/button-group";
 
 const nodeTypes = {

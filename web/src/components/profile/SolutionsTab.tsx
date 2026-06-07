@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useAuth } from "@clerk/nextjs";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { formatDistanceToNow } from "date-fns";

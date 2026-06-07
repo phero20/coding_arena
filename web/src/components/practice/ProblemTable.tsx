@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import { useMemo } from "react";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -12,11 +11,11 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { ProblemRow } from "./ProblemRow";
 import { ProblemRowSkeleton } from "@/components/shared/Skeletons";
-import { EmptyDisplay } from "@/components/shared/StatusState";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import type { ProblemTableProps } from "@/types/component.types";
 import { useAuth } from "@clerk/nextjs";
 import { useUserSolvedProblemsQuery } from "@/hooks/queries/use-problem.queries";
+
 
 export const ProblemTable: React.FC<ProblemTableProps> = ({
   problems,
@@ -34,7 +33,7 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
 }) => {
   const { userId } = useAuth();
   const { data: solvedProblems } = useUserSolvedProblemsQuery(userId as string, !!userId);
-  const solvedIds = React.useMemo(() => new Set(solvedProblems || []), [solvedProblems]);
+  const solvedIds = useMemo(() => new Set(solvedProblems || []), [solvedProblems]);
 
 
   return (

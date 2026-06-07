@@ -1,4 +1,3 @@
-import React from "react";
 
 export const SystemDesignIcon = ({ className }: { className?: string }) => (
   <svg 

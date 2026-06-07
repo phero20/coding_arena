@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Skeleton } from "@/components/ui/skeleton";
 
 // Loading placeholder for the editor
 const EditorSkeleton = () => (

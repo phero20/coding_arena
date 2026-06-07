@@ -5,16 +5,13 @@ import { useChat } from "@/hooks/system-design/useChat";
 import { getActiveFrameInfo } from "@/hooks/system-design/canvasGraph";
 import { Button } from "@/components/ui/button";
 import {
-  Sparkles,
-  Send,
+
   Trash2,
   MessageSquare,
   Plus,
-  Brain,
   Loader2,
   History,
   MessageCircle,
-  ArrowLeft,
   ArrowUp,
   AlertTriangle,
   Info,
@@ -23,7 +20,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -371,8 +367,8 @@ export function ChatCopilotPanel({ editor }: ChatCopilotPanelProps) {
                         <TooltipTrigger asChild>
                           <Info className="h-3 w-3 shrink-0 cursor-help text-difficulty-medium transition-colors" />
                         </TooltipTrigger>
-                        <TooltipContent 
-                          side="top" 
+                        <TooltipContent
+                          side="top"
                           className="bg-popover text-popover-foreground border shadow-md max-w-xs text-xs p-2.5 rounded z-50 pointer-events-auto ml-2"
                         >
                           <p>This is the diagram the AI is currently focused on.</p>

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useUser } from "@clerk/nextjs";
 import { useProfileStatsQuery } from "@/hooks/queries/use-stats.queries";
 import { QueryGuard } from "@/components/shared/QueryGuard";

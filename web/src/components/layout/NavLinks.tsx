@@ -13,7 +13,6 @@ import {
   Network,
   ChevronDown,
   GraduationCap,
-  CodeXml,
   BriefcaseBusiness
 } from "lucide-react";
 
@@ -32,17 +31,19 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-import { Badge } from "@/components/ui/badge";
 
 export const navItems = [
   { name: "Academy", href: "/academy/tracks", icon: GraduationCap },
-  { name: "Problems", href: "/problems", icon: LayoutGrid },
-  { name: "Compilers", href: "/compilers", icon: Cpu },
-  { name: "Arena", href: "/arena", icon: Swords },
-  { name: "Contests", href: "/contests", icon: Trophy },
   { name: "Roadmap", href: "/roadmap", icon: Mountain },
-  { name: "Companies", href: "/companies", icon: BriefcaseBusiness },
+  { name: "Problems", href: "/problems", icon: LayoutGrid },
   { name: "System Design", href: "/systemdesign", icon: Network },
+  { name: "Companies", href: "/companies", icon: BriefcaseBusiness },
+  { name: "Arena", href: "/arena", icon: Swords },
+  { name: "Compilers", href: "/compilers", icon: Cpu },
+  { name: "Contests", href: "/contests", icon: Trophy },
+
+
+
 ];
 
 export const NavLinks = () => {
@@ -68,7 +69,7 @@ export const NavLinks = () => {
   const isMoreActive = moreItems.some((item) => pathname.startsWith(item.href));
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center">
       {visibleItems.map((item) => {
         const isActive = pathname.startsWith(item.href);
 

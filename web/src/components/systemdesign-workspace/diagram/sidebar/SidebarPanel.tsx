@@ -9,7 +9,6 @@ import {
   PanelLeftOpen,
   Plus,
   ArrowLeft,
-  HelpCircle,
   Search,
   X,
   Sparkles,

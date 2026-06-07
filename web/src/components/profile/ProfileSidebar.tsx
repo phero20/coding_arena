@@ -11,7 +11,6 @@ import {
   Users,
   BarChart3,
   Settings,
-  Code,
   Github,
   Linkedin,
   UserPlus,
@@ -20,7 +19,6 @@ import {
   Edit,
   Code2,
   Trophy,
-  BookOpen,
   CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";

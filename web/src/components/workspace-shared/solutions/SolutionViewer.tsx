@@ -2,14 +2,11 @@
 
 import React from "react";
 import type { SolutionViewerProps } from "@/types/component.types";
-import { cn } from "@/lib/utils";
 import {
-  ShieldCheck,
   Users,
   User,
   ArrowLeft,
   Edit,
-  CheckCircle,
   CheckCircle2,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
