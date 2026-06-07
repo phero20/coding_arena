@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+
 import { DynamicEditor as Editor } from "@/components/workspace-shared/editor/DynamicEditor";
-import { LanguageSelector } from "@/components/workspace-shared/editor/LanguageSelector";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
