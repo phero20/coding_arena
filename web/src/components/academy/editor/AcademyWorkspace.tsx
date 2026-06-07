@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { DescriptionPanel } from "@/components/workspace-shared";
 import { AcademyEditorPanel } from "./AcademyEditorPanel";
 import { BaseWorkspace } from "@/components/shared/BaseWorkspace";
@@ -9,7 +9,7 @@ import type { TrackExerciseResponse, ExerciseRunResult } from "@/types/academy";
 import type { Problem } from "@/types/api";
 import { useRunAcademyExerciseMutation } from "@/hooks/mutations/use-academy.mutations";
 import { useEditorStore } from "@/store/use-editor-store";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export interface AcademyWorkspaceProps {
   exercise: TrackExerciseResponse;
