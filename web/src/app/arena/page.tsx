@@ -1,10 +1,10 @@
 import { HostArenaCard } from "@/components/arena/HostArenaCard";
 import { JoinArenaCard } from "@/components/arena/JoinArenaCard";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Swords } from "lucide-react";
 import { ArenaLogo } from "@/components/arena/ArenaLogo";
 import { tones } from "@/lib/tones";
+
+export { arenaHubMeta as metadata } from "@/meta/arena/static";
 
 function ShapeIcon({ icon, fill, className }: { icon: string, fill: string, className?: string }) {
   if (icon === 'circle') return (
