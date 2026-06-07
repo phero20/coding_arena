@@ -2,7 +2,7 @@
 
 import { useState, use } from "react";
 import Link from "next/link";
-import { Search, Folder, ChevronLeft, Info, FileText, ArrowLeft } from "lucide-react";
+import { Search, Folder, Info, FileText, ArrowLeft } from "lucide-react";
 import { useWorkspace, useWorkspaceDiagrams } from "@/hooks/queries/use-workspace.queries";
 import { CreateDiagramDialog } from "@/components/systemdesign-workspace/dialogs/create-diagram-dialog";
 import { DiagramTable } from "@/components/systemdesign-workspace/tables/diagram-table";
