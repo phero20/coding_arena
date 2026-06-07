@@ -1,11 +1,5 @@
-import React from 'react';
+import { redirect } from 'next/navigation';
 
-const ProfilePage = () => {
-  return (
-    <div >
-      f
-    </div>
-  );
-};
-
-export default ProfilePage;
+export default function AcademyPage() {
+  redirect('/academy/tracks');
+}
