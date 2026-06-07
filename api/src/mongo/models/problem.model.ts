@@ -83,7 +83,6 @@ const ProblemSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     problem_id: { type: String, required: true, unique: true },
-    frontend_id: { type: String },
     difficulty: {
       type: String,
       enum: ["Easy", "Medium", "Hard"],
