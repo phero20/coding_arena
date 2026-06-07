@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+
 import { TrackConfigResponse } from "@/types/academy";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export const SlugAboutTab = ({ config }: { config: TrackConfigResponse }) => {
