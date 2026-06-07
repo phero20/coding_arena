@@ -1,15 +1,15 @@
 "use client";
 
-import React from "react";
-import { Terminal, AlertCircle } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+
+import { Terminal } from "lucide-react";
+
 import { ErrorDisplay, EmptyDisplay } from "@/components/shared/StatusState";
 import { DynamicEditor as Editor } from "@/components/workspace-shared/editor/DynamicEditor";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import type { TrackExerciseResponse, ExerciseRunResult } from "@/types/academy";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Code2 } from "lucide-react";
+
+import { CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TestCaseField } from "@/components/workspace-shared/ui/TestCaseField";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
