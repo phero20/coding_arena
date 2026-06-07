@@ -59,7 +59,6 @@ export default function CompaniesPage() {
           <CompaniesToolbar 
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-            totalVisible={filteredCompanies.length}
           />
 
           <QueryGuard
