@@ -1,6 +1,6 @@
 import type { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { createProblemSchema } from "../../validators/problems/problem.validator";
+import { createProblemSchema, problemSearchQuerySchema } from "../../validators/problems/problem.validator";
 import {
   SlugParamSchema,
   ProblemIdUnderscoreParamSchema,
@@ -33,7 +33,7 @@ export const registerProblemRoutes = (
   // Public problem list access
   app.get(
     "/problems",
-    zValidator("query", PaginationQuerySchema),
+    zValidator("query", problemSearchQuerySchema),
     problemController.action(problemController.getProblems, {
       requireAuth: false,
     }),
