@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Code } from "lucide-react";
 
 interface Feature {
