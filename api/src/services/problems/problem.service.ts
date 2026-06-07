@@ -11,6 +11,7 @@ export interface IProblemService {
   getAllProblems(
     page: number,
     limit: number,
+    filters?: { search?: string; difficulty?: string; topic?: string }
   ): Promise<{ problems: Problem[] }>;
   upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem>;
   getUserSolvedProblems(userId: string): Promise<string[]>;
@@ -40,8 +41,9 @@ export class ProblemService implements IProblemService {
   getAllProblems(
     page: number,
     limit: number,
+    filters?: { search?: string; difficulty?: string; topic?: string }
   ): Promise<{ problems: Problem[] }> {
-    return this.problemRepository.findPaginated(page, limit);
+    return this.problemRepository.findPaginated(page, limit, filters);
   }
 
   upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem> {
