@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
+import { GoogleGenerativeAI, SchemaType, Schema } from "@google/generative-ai";
 import { config } from "../../configs/env";
 import { metrics } from "../../libs/core/metrics";
 import { logger } from "../../libs/utils/logger";
@@ -14,8 +14,8 @@ export interface GeminiJsonResponse<T> {
 export class GeminiLlmService {
   private readonly clock: IClockService;
   private readonly genAI: GoogleGenerativeAI;
-  private readonly primaryModel = "gemini-3-pro-preview";
-  private readonly fallbackModel = "gemini-3-flash-preview";
+  private readonly primaryModel = "gemini-2.5-flash";
+  private readonly fallbackModel = "gemini-3.1-flash-lite";
   
   private circuitBreaker = new CircuitBreaker("Gemini API", 3, 1, 60000);
 
@@ -35,6 +35,7 @@ export class GeminiLlmService {
     userPrompt: string;
     temperature?: number;
     maxTokens?: number;
+    responseSchema?: Schema;
   }): Promise<GeminiJsonResponse<T>> {
     try {
       return await this._executeRequest<T>(this.primaryModel, opts);
@@ -43,7 +44,7 @@ export class GeminiLlmService {
       const isServerError = err.message?.includes("503") || err.status === 503 || err.cause?.status === 503;
 
       if (isQuotaError || isServerError) {
-        logger.warn({ error: err.message }, `Gemini 2.0 Flash quota exceeded. Falling back to ${this.fallbackModel}...`);
+        logger.warn({ error: err.message }, `${this.primaryModel} quota exceeded. Falling back to ${this.fallbackModel}...`);
         return await this._executeRequest<T>(this.fallbackModel, opts);
       }
       throw err;
@@ -57,6 +58,7 @@ export class GeminiLlmService {
       userPrompt: string;
       temperature?: number;
       maxTokens?: number;
+      responseSchema?: Schema;
     }
   ): Promise<GeminiJsonResponse<T>> {
     const model = this.genAI.getGenerativeModel(
@@ -75,6 +77,7 @@ export class GeminiLlmService {
         temperature: opts.temperature ?? 0,
         maxOutputTokens: opts.maxTokens ?? 8192,
         responseMimeType: "application/json",
+        ...(opts.responseSchema && { responseSchema: opts.responseSchema }),
       },
     }));
 
