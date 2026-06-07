@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useParams } from "next/navigation";
 import { ProblemWorkspace } from "@/components/problem-editor/ProblemWorkspace";
 import { useProblemQuery } from "@/hooks/queries/use-problem.queries";
