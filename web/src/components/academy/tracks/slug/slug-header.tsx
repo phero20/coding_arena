@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+
 import { TrackConfigResponse } from "@/types/academy";
 
 export const SlugHeader = ({ config }: { config: TrackConfigResponse }) => {
