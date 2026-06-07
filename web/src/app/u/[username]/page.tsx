@@ -1,6 +1,4 @@
 import { Container } from "@/components/shared/Container";
-import { SignOutButton } from "@clerk/nextjs";
-import { LogOut } from "lucide-react";
 import { ProfileWrapper } from "@/components/profile/ProfileWrapper";
 
 interface ProfilePageProps {
