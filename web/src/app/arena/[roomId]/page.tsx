@@ -1,19 +1,17 @@
 "use client";
 
-import { use, useEffect, useState, useMemo } from "react";
+import { use, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useArenaRoom } from "@/hooks/arena/use-arena-room";
 import { ArenaLobby } from "@/components/arena/ArenaLobby";
 import { LobbySkeleton } from "@/components/shared/Skeletons";
 import { toast } from "sonner";
-import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw } from "lucide-react";
 import { ConnectionBadge } from "@/components/shared/StatusState";
 import { useRouter } from "next/navigation";
 
 import { useArenaStore } from "@/store/useArenaStore";
 
-import { useAuth } from "@clerk/nextjs";
+
 
 interface ArenaRoomPageProps {
   params: Promise<{ roomId: string }>;
