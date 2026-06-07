@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import { useAcademyTracksQuery } from "@/hooks/queries/use-academy.queries";
 import { useTracksFilter } from "@/hooks/use-tracks-filter";
 import { TracksHeader } from "@/components/academy/tracks/tracks-header";
@@ -46,7 +45,6 @@ export default function AcademyTracksPage() {
             setSearchQuery={setSearchQuery}
             sortBy={sortBy}
             setSortBy={setSortBy}
-            totalVisible={filteredTracks.length}
             allTags={allTags}
             selectedTags={selectedTags}
             setSelectedTags={setSelectedTags}
