@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -7,8 +7,6 @@ import { Info } from 'lucide-react';
 export const SlugAboutContent = ({ content, language }: { content?: string, language?: string }) => {
   if (!content) return null;
 
-  // Extract h2 headings for the Table of Contents
-  const headings = Array.from(content.matchAll(/^##\s+(.*)$/gm)).map(m => m[1]);
 
   return (
     <div className="bg-background relative z-20 w-full">
