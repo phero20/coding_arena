@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import  { useEffect, useMemo } from "react";
 import { useTrackConceptQuery } from "@/hooks/queries/use-academy.queries";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
