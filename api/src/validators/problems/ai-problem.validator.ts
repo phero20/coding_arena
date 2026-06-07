@@ -5,16 +5,15 @@ import { z } from "zod";
  * Matches ImportedProblemPayload interface.
  */
 export const importedProblemSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  problem_id: z.string().optional(), // Made optional to support frontendQuestionId
-  frontend_id: z.string().optional(),
-  difficulty: z.enum(["Easy", "Medium", "Hard"]).optional().default("Medium"),
+  title: z.string().nullable().optional(),
+  problem_id: z.string().nullable().optional(), // Made optional to support frontendQuestionId
+  difficulty: z.enum(["Easy", "Medium", "Hard"]).nullable().optional().default("Medium" as any),
   problem_slug: z.string().optional(), // Made optional to support titleSlug
-  topics: z.array(z.string()).optional(),
+  topics: z.array(z.string()).nullable().optional(),
   description: z.string().nullable().optional(), // Nullable for Premium problems
-  paidOnly: z.boolean().optional(),
-  frontendQuestionId: z.string().optional(),
-  titleSlug: z.string().optional(),
+  paidOnly: z.boolean().nullable().optional(),
+  frontendQuestionId: z.string().nullable().optional(),
+  titleSlug: z.string().nullable().optional(),
   function_signature: z.object({
     name: z.string(),
     return_type: z.string(),
