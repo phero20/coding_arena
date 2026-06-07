@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+
 import { TrackConfigResponse } from "@/types/academy";
 import { useCurriculumLayout } from "@/components/academy/tracks/learn/use-curriculum-layout";
 import { GraphView } from "@/components/academy/tracks/learn/graph-view";
