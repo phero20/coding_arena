@@ -86,7 +86,14 @@ export class ProblemCache implements IProblemService {
   async getAllProblems(
     page: number,
     limit: number,
-  ): Promise<{ problems: Problem[]; total: number }> {
+    filters?: { search?: string; difficulty?: string; topic?: string }
+  ): Promise<{ problems: Problem[] }> {
+    const hasFilters = filters && (filters.search || (filters.difficulty && filters.difficulty !== "All") || filters.topic);
+
+    if (hasFilters) {
+      return this.rawProblemService.getAllProblems(page, limit, filters);
+    }
+
     const key = `problems:page:${page}:${limit}`;
 
     try {
@@ -106,7 +113,7 @@ export class ProblemCache implements IProblemService {
       logger.error({ page, limit, err }, "Redis set error");
     }
 
-    return result;
+    return result as any;
   }
 
   async upsertProblem(input: CreateOrUpdateProblemInput): Promise<Problem> {
