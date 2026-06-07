@@ -7,7 +7,6 @@ import { ArrowLeft, Building2 } from "lucide-react";
 import { useState } from "react";
 import type { Problem } from "@/types/api";
 import { Button } from "@/components/ui/button";
-import { Arrow } from "@radix-ui/react-popover";
 import Link from "next/link";
 
 export default function CompanyProblemsPage() {
@@ -21,7 +20,7 @@ export default function CompanyProblemsPage() {
   const { data: companyProblems = [], isLoading, error } = useCompanyProblemsQuery(slug);
 
   // Map the static CompanyProblem data to the standard Problem interface used by the Table
-  const mappedProblems = companyProblems.map((cp, index) => ({
+  const mappedProblems = companyProblems.map((cp) => ({
     problem_id: cp.problem_id, // Using slug to match user solved problems if backend uses slugs
     problem_slug: cp.slug || "",
     title: cp.title,
