@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PaginationQuerySchema } from "../common/common.validator";
 
 /**
  * Schema for creating or updating a Problem.
@@ -54,3 +55,9 @@ export const createProblemSchema = z.object({
   solutions: z.string().optional(),
 });
 export type CreateProblemInput = z.infer<typeof createProblemSchema>;
+
+export const problemSearchQuerySchema = PaginationQuerySchema.extend({
+  search: z.string().optional(),
+  topic: z.string().optional(),
+  difficulty: z.string().optional(),
+});
