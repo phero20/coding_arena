@@ -60,7 +60,6 @@ export type DriverReadyFunctionSignature = FunctionSignature & {
 export interface Problem {
   title: string;
   problem_id: string; // Keeping snake_case as requested
-  frontend_id?: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
   problem_slug: string;
   topics: string[];
@@ -83,7 +82,6 @@ export interface Problem {
 export interface CreateOrUpdateProblemInput {
   title: string;
   problem_id: string;
-  frontend_id?: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
   problem_slug: string;
   topics?: string[];
