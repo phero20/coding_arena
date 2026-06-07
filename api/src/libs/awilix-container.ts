@@ -96,6 +96,9 @@ import { type SystemDesignController } from "../controllers/system-design/system
 import { type ICompanyRepository } from "../repositories/company/company.repository";
 import { type ICompanyService } from "../services/company/company.service";
 import { type CompanyController } from "../controllers/company/company.controller";
+import { type SeoRepository } from "../repositories/seo/seo.repository";
+import { type SeoService } from "../services/seo/seo.service";
+import { type SeoController } from "../controllers/seo/seo.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -144,6 +147,7 @@ export interface ICradle {
   academyRepository: IAcademyRepository;
   systemDesignRepository: ISystemDesignRepository;
   companyRepository: ICompanyRepository;
+  seoRepository: SeoRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
@@ -184,6 +188,7 @@ export interface ICradle {
   academyAiJudgeService: import("../services/academy/academy-ai-judge.service").AcademyAiJudgeService;
   systemDesignService: ISystemDesignService;
   companyService: ICompanyService;
+  seoService: SeoService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -242,6 +247,7 @@ export interface ICradle {
   academyExecutionController: AcademyExecutionController;
   systemDesignController: SystemDesignController;
   companyController: CompanyController;
+  seoController: SeoController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;
