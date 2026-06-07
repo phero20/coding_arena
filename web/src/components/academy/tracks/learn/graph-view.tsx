@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import { ConceptNode } from "./concept-node";
 
