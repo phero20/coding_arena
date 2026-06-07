@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, FolderKanban, Info, BookOpen, ArrowLeft } from "lucide-react";
+import { Search, FolderKanban, Info, ArrowLeft } from "lucide-react";
 import { useWorkspaces } from "@/hooks/queries/use-workspace.queries";
 import { CreateWorkspaceDialog } from "@/components/systemdesign-workspace/dialogs/create-workspace-dialog";
 import { WorkspaceTable } from "@/components/systemdesign-workspace/tables/workspace-table";
