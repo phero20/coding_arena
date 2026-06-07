@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import { TrackConfigResponse } from "@/types/academy";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Network, ListTree, X, BookOpen } from "lucide-react";
@@ -16,7 +16,7 @@ export function SlugLearnTab({ config, solvedExercises = [] }: { config: TrackCo
   const [activeTab, setActiveTab] = useState<string>("timeline");
   const [activeConcepts, setActiveConcepts] = useState<{ slug: string; name: string }[]>([]);
 
-  const conceptProgressMap = React.useMemo(() => {
+  const conceptProgressMap = useMemo(() => {
     const map: Record<string, { status: "COMPLETED" | "IN_PROGRESS" | "LOCKED", progress: number, total: number }> = {};
     if (!config.concepts) return map;
 
