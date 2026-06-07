@@ -26,7 +26,6 @@ interface TracksToolbarProps {
   setSearchQuery: (query: string) => void;
   sortBy: string;
   setSortBy: (sort: string) => void;
-  totalVisible: number;
   allTags: string[];
   selectedTags: string[];
   setSelectedTags: (tags: string[]) => void;
@@ -37,7 +36,6 @@ export function TracksToolbar({
   setSearchQuery,
   sortBy,
   setSortBy,
-  totalVisible,
   allTags,
   selectedTags,
   setSelectedTags,
