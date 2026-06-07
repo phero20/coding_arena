@@ -21,6 +21,7 @@ export interface IProblemRepository {
   findPaginated(
     page: number,
     limit: number,
+    filters?: { search?: string; difficulty?: string; topic?: string }
   ): Promise<{ problems: Problem[] }>;
   createOrUpdate(data: CreateOrUpdateProblemInput): Promise<Problem>;
   getUserSolvedProblems(userId: string): Promise<string[]>;
@@ -50,7 +51,7 @@ export class ProblemRepository
     const docs = await this.model
       .find({ problem_id: { $in: problem_ids } })
       // Projection: only fetch fields needed for list/category views
-      .select('problem_id frontend_id title difficulty problem_slug topics')
+      .select('problem_id title difficulty problem_slug topics')
       .lean()
       .exec();
     // Restore the original ordered sequence from the junction table
@@ -77,13 +78,32 @@ export class ProblemRepository
   async findPaginated(
     page: number,
     limit: number,
+    filters?: { search?: string; difficulty?: string; topic?: string }
   ): Promise<{ problems: Problem[] }> {
     const skip = (page - 1) * limit;
+    
+    const query: any = {};
+
+    if (filters?.difficulty && filters.difficulty !== "All") {
+      query.difficulty = filters.difficulty;
+    }
+
+    if (filters?.topic) {
+      // Case-insensitive regex match for topics
+      query.topics = { $regex: new RegExp(filters.topic, "i") };
+    }
+
+    if (filters?.search) {
+      const searchRegex = new RegExp(filters.search, "i");
+      query.$or = [
+        { title: { $regex: searchRegex } },
+        { problem_slug: { $regex: searchRegex } },
+        { problem_id: filters.search },
+      ];
+    }
 
     const docs = await this.model
-        .find()
-        .sort({ problem_id: 1 })
-        .collation({ locale: "en", numericOrdering: true })
+        .find(query)
         .skip(skip)
         .limit(limit)
         .lean()
