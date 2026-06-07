@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import { config } from '../configs/env'
-
 let isConnected = false
 
 export const connectMongo = async () => {
