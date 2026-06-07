@@ -1,10 +1,9 @@
 "use client";
 
-import React, { Suspense } from "react";
+import  { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Container } from "@/components/shared/Container";
 import { PracticeProblemList } from "@/components/practice/PracticeProblemList";
-import { useArenaStore } from "@/store/useArenaStore";
 
 const SelectContent = () => {
   const searchParams = useSearchParams();
