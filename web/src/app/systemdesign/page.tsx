@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FolderKanban, BookOpen, Info } from "lucide-react";
-import { SystemDesignIcon } from "@/components/systemdesign-workspace/about/system-design-icon";
+
 import { SystemDesignAbout } from "@/components/systemdesign-workspace/about/system-design-about";
 import {
     HexDatabaseIcon,
