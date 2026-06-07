@@ -22,7 +22,7 @@ const MatchDetailPage = ({ params }: ArenaMatchPageProps) => {
     error: roomError,
   } = useArenaRoom(roomId);
 
-  const problemIdentifier = room?.problemSlug || room?.problemId;
+
   const {
     data: problem,
     isLoading: isLoadingProblem,
