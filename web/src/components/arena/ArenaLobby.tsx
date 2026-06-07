@@ -3,14 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Copy,
-  Sword,
   LogOut,
   Check,
   Edit2,
-  Rocket,
   Loader2,
   Clock,
-  Swords,
   ArrowRight,
 } from "lucide-react";
 
