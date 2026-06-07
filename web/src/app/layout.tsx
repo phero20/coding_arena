@@ -25,10 +25,11 @@ const fontMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-export const metadata: Metadata = {
-  title: "SlaveCode",
-  description: "Standardize your coding journey.",
-};
+import { globalMetadata, globalViewport } from "@/meta/global/layout";
+import type { Viewport } from "next";
+
+export const metadata: Metadata = globalMetadata;
+export const viewport: Viewport = globalViewport;
 
 export default function RootLayout({
   children,
