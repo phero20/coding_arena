@@ -1,24 +1,11 @@
 "use client";
 
-import React from "react";
 import { ReactFlowProvider } from "reactflow";
 import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
 import RoadmapCanvas from "@/components/roadmap/RoadmapCanvas";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { RoadmapSkeleton } from "@/components/skeletons/RoadmapSkeleton";
-import { 
-  Network, 
-  Search, 
-  Filter, 
-  MoreHorizontal,
-  Info,
-  Target,
-  Trophy,
-  Zap
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+
 
 const RoadmapPage = () => {
   const { data: tree, isLoading, error } = useRoadmapData();
