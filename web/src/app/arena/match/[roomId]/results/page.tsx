@@ -9,7 +9,6 @@ import { MatchResultsSkeleton } from "@/components/skeletons/ArenaSkeletons";
 import { useMatchResults } from "@/hooks/arena/use-match-results";
 import { Button } from "@/components/ui/button";
 import SideRays from "@/components/home/ParticleNetwork";
-import { tones } from "@/lib/tones";
 
 interface ArenaResultsPageProps {
   params: Promise<{ roomId: string }>;
