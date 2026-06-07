@@ -10,7 +10,6 @@ import type { TestCase } from "./problem.types";
 export interface ImportedProblemPayload {
   title: string;
   problem_id: string;
-  frontend_id?: string;
   difficulty: "Easy" | "Medium" | "Hard";
   problem_slug: string;
   topics?: string[];
