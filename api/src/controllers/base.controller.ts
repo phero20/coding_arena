@@ -83,10 +83,12 @@ export abstract class BaseController {
         // Fallback for non-JSON requests or optional bodies
       }
 
+      const query = (c.req as any).valid?.("query") || (c.req.query() as any);
+
       const controllerReq: ControllerRequest<TBody, TParams, TQuery> = {
         body,
         params: (c.req as any).valid?.("param") || (c.req.param() as any),
-        query: (c.req as any).valid?.("query") || (c.req.query() as any),
+        query,
         headers: c.req.header(),
         rawBody: options.captureRawBody ? await c.req.text() : undefined,
         user: auth?.user,
