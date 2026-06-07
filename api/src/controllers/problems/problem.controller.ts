@@ -54,11 +54,15 @@ export class ProblemController extends BaseController {
   }
 
   async getProblems(
-    req: ControllerRequest<never, any, { page?: number; limit?: number }>,
+    req: ControllerRequest<never, any, { page?: number; limit?: number; search?: string; topic?: string; difficulty?: string }>
   ) {
-    const { page = 1, limit = 20 } = req.query;
+    const { page = 1, limit = 20, search, topic, difficulty } = req.query;
 
-    const result = await this.problemService.getAllProblems(page, limit);
+    const result = await this.problemService.getAllProblems(page, limit, {
+      search,
+      topic,
+      difficulty,
+    });
 
     // Return a pre-formatted paginated response
     // We removed countDocuments for speed; passing dummy totals to satisfy PaginationMeta
