@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from '@/components/ui/card';
 
 import { CheckCircle2, CircleDashed } from "lucide-react";
