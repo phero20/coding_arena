@@ -1,12 +1,10 @@
 "use client";
 
-import React from "react";
 import { ContestHero } from "@/components/contests/ContestHero";
 import { ContestHeroSkeleton } from "@/components/skeletons";
 import { ContestFilters } from "@/components/contests/ContestFilters";
 import { ContestList } from "@/components/contests/ContestList";
 import { useUpcomingContestsQuery } from "@/hooks/queries/use-contest.queries";
-import { Trophy } from "lucide-react";
 import { ContestLogo } from "@/components/contests/ContestLogo";
 
 export default function ContestHubPage() {
