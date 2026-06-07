@@ -5,7 +5,7 @@ import { useTrackConfigQuery, useSolvedExercisesQuery } from '@/hooks/queries/us
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SlugHeader } from '@/components/academy/tracks/slug/slug-header';
 import { SlugAboutTab } from '@/components/academy/tracks/slug/slug-about-tab';
-import { Info, LayoutGrid, Dumbbell, ChevronLeft, ArrowLeft } from "lucide-react";
+import { Info, LayoutGrid, Dumbbell, ArrowLeft } from "lucide-react";
 import { SlugAboutContent } from '@/components/academy/tracks/slug/slug-about-content';
 import { SlugAboutFeatures } from '@/components/academy/tracks/slug/slug-about-features';
 import { SlugAboutGraphPreview } from '@/components/academy/tracks/slug/slug-about-graph-preview';
@@ -38,9 +38,9 @@ const Page = ({ params }: { params: Promise<{ slug: string }> }) => {
         const nextTab = allowedTabs.has(tab) ? tab : 'about';
         setActiveTab(nextTab);
 
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('tab', nextTab);
-        router.replace(`?${params.toString()}`, { scroll: false });
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.set('tab', nextTab);
+        router.replace(`?${newParams.toString()}`, { scroll: false });
     };
 
     return (
