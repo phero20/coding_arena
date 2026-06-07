@@ -1,4 +1,5 @@
 import { GeminiLlmService, type GeminiJsonResponse } from "../ai/gemini-llm.service";
+import { SchemaType, Schema } from "@google/generative-ai";
 import type {
   AiProblemOutput,
   ImportedProblemPayload,
@@ -48,9 +49,9 @@ function mergeSignature(
   const fromInput = input.function_signature;
 
   const aiOk =
-    (fromAi?.params?.length ?? 0) > 0 && fromAi?.name && fromAi?.return_type;
+    fromAi?.params !== undefined && fromAi?.name && fromAi?.return_type;
   const inputOk =
-    (fromInput?.params?.length ?? 0) > 0 &&
+    fromInput?.params !== undefined &&
     fromInput?.name &&
     fromInput?.return_type;
 
@@ -84,7 +85,7 @@ export class AiProblemService {
   async rewriteAndGenerate(
     input: any,
   ): Promise<AiRewriteResult> {
-    const problemId = input.problem_id || input.frontendQuestionId;
+    const problemId = input.frontend_id || input.frontendQuestionId || input.problem_id;
     const problemSlug = input.problem_slug || input.titleSlug;
 
     if (!problemId || !problemSlug) {
@@ -100,7 +101,6 @@ export class AiProblemService {
       const shellProblem = {
         title: input.title,
         problem_id: problemId,
-        frontend_id: input.frontend_id || input.frontendQuestionId,
         difficulty: input.difficulty || "Medium",
         problem_slug: problemSlug,
         topics: input.topics || [],
@@ -178,10 +178,11 @@ export class AiProblemService {
       const userPromptParts = [
         "Process this problem JSON and return the augmented version in JSON mode.",
         "CRITICAL INSTRUCTIONS:",
-        "1. You MUST generate 'function_signature' (or 'class_signature' if it's a class problem) and 'judging_policy'. These are mandatory.",
-        "2. You MUST generate an array of at least 5 'hints'.",
-        "3. DO NOT output 'title', 'description', 'examples', or 'constraints'. Do not echo them back.",
-        "4. DO NOT output 'code_snippets'.",
+        "1. You MUST generate 'function_signature' and 'judging_policy' for normal problems.",
+        "2. EXTREMELY IMPORTANT: If the problem asks to design a Class or Data Structure (like LRU Cache or Trie), you MUST set 'problem_type' to 'class' and generate a fully nested 'class_signature' object instead. DO NOT output 'function_signature' for class problems.",
+        "3. You MUST generate an array of at least 5 'hints'.",
+        "4. DO NOT output 'title', 'description', 'examples', or 'constraints'. Do not echo them back.",
+        "5. DO NOT output 'code_snippets'.",
         lastValidationError
           ? [
               "=== PREVIOUS ATTEMPT FAILED VALIDATION ===",
@@ -197,11 +198,85 @@ export class AiProblemService {
 
       const userPrompt = userPromptParts.filter(Boolean).join("\n");
 
+      const responseSchema: Schema = {
+        type: SchemaType.OBJECT,
+        properties: {
+          problem: {
+            type: SchemaType.OBJECT,
+            properties: {
+              problem_type: { type: SchemaType.STRING, description: "'function' or 'class'" },
+              hints: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+              function_signature: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  name: { type: SchemaType.STRING },
+                  return_type: { type: SchemaType.STRING },
+                  params: {
+                    type: SchemaType.ARRAY,
+                    items: {
+                      type: SchemaType.OBJECT,
+                      properties: {
+                        name: { type: SchemaType.STRING },
+                        type: { type: SchemaType.STRING }
+                      }
+                    }
+                  },
+                  inplace_param_index: { type: SchemaType.INTEGER }
+                }
+              },
+              class_signature: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  class_name: { type: SchemaType.STRING },
+                  constructor_params: {
+                    type: SchemaType.ARRAY,
+                    items: {
+                      type: SchemaType.OBJECT,
+                      properties: { name: { type: SchemaType.STRING }, type: { type: SchemaType.STRING } }
+                    }
+                  },
+                  methods: {
+                    type: SchemaType.ARRAY,
+                    items: {
+                      type: SchemaType.OBJECT,
+                      properties: {
+                        name: { type: SchemaType.STRING },
+                        return_type: { type: SchemaType.STRING },
+                        params: {
+                          type: SchemaType.ARRAY,
+                          items: {
+                            type: SchemaType.OBJECT,
+                            properties: { name: { type: SchemaType.STRING }, type: { type: SchemaType.STRING } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              judging_policy: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  comparator_mode: { type: SchemaType.STRING, description: "'strict' or 'problem_specific'" },
+                  multi_answer: { type: SchemaType.BOOLEAN },
+                  validation_policy: { type: SchemaType.STRING },
+                  output_order: { type: SchemaType.STRING, description: "'strict' or 'any_order'" },
+                  audit_hints: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } }
+                }
+              }
+            }
+          }
+        }
+      };
+
       const { data, raw } =
         await this.llm.generateJson<AiProblemOutput>({
           systemPrompt,
           userPrompt,
-          temperature: 0,
+          temperature: 0.1,
+          // We disable responseSchema here because Gemini's Structured Outputs enforces optional fields greedily
+          // which causes flash models to truncate the JSON prematurely when encountering complex branching (function vs class).
+          // Relying on responseMimeType: "application/json" and the text prompt works much better for conditional JSON.
         });
 
       rawAggregate = raw;
