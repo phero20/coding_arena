@@ -7,6 +7,7 @@ import { DeviceShapeUtil } from "./shapes/DeviceShape";
 import { CodeBlockShapeUtil } from "./shapes/CodeBlockShape";
 import { useEffect, useState } from "react";
 import { SidebarPanel } from "./sidebar/SidebarPanel";
+import { PUBLIC_CONFIG } from "@/config/public.config";
 
 const customShapeUtils = [
   SystemDesignShapeUtil,
@@ -194,6 +195,7 @@ export function DiagramCanvas({
           }
         `}</style>
         <Tldraw
+          licenseKey={PUBLIC_CONFIG.TLDRAW_LICENSE_KEY}
           shapeUtils={customShapeUtils}
           onMount={(ed) => {
             setEditor(ed);
