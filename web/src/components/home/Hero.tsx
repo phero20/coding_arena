@@ -16,11 +16,11 @@ export const Hero = () => {
         speed={3}
         rayColor1="#EAB308"
         rayColor2="#96c8ff"
-        intensity={1.5}
+        intensity={1.6}
         spread={3}
         origin="top-left"
         tilt={-55}
-        saturation={0.2}
+        saturation={0.3}
         blend={0.75}
         falloff={2.5}
         opacity={0.2}
@@ -29,11 +29,11 @@ export const Hero = () => {
         speed={3}
         rayColor1="#EAB308"
         rayColor2="#96c8ff"
-        intensity={1.5}
+        intensity={1.6}
         spread={3}
         origin="top-right"
         tilt={55}
-        saturation={0.2}
+        saturation={0.3}
         blend={0.75}
         falloff={2.5}
         opacity={0.2}
