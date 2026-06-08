@@ -13,6 +13,9 @@ export const PUBLIC_CONFIG = {
   // Visualizer API URL
   VISUALIZER_API_URL: process.env.NEXT_PUBLIC_VISUALIZER_API_URL,
 
+  // Tldraw License Key
+  TLDRAW_LICENSE_KEY: process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY,
+
   // GitHub Link
   REPO_URL: "https://github.com/phero20/slavecode",
 
