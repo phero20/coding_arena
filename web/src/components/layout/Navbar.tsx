@@ -14,6 +14,7 @@ import { shouldHide } from "./shouldHide";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -30,10 +31,11 @@ export const Navbar = () => {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-100 bg-background",
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-100",
+          pathname === "/" && !scrolled && !isMobileMenuOpen ? "bg-transparent" : "bg-background",
           scrolled
             ? "py-2  border-b border-border"
-            : "py-3 border-b border-transparent bg-transparent",
+            : "py-3 border-b border-transparent",
         )}
       >
         <Container className="flex px-2 items-center justify-between">
@@ -61,7 +63,12 @@ export const Navbar = () => {
 
           {/* Mobile Profile/Menu Trigger */}
           <div className="xl:hidden flex items-center gap-2">
-            <MobileMenu navItems={navItems} pathname={pathname} />
+            <MobileMenu 
+              navItems={navItems} 
+              pathname={pathname} 
+              isOpen={isMobileMenuOpen} 
+              setIsOpen={setIsMobileMenuOpen} 
+            />
           </div>
         </Container>
       </nav>
