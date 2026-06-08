@@ -19,6 +19,8 @@ import { UserSearch } from "./UserSearch";
 interface MobileMenuProps {
   navItems: { name: string; href: string; icon: any }[];
   pathname: string;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 const Show = ({
@@ -34,8 +36,7 @@ const Show = ({
   return isMatch ? <>{children}</> : null;
 };
 
-export const MobileMenu = ({ navItems, pathname }: MobileMenuProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const MobileMenu = ({ navItems, pathname, isOpen, setIsOpen }: MobileMenuProps) => {
   const { user } = useUser();
   const { signOut } = useClerk();
   const router = useRouter();
