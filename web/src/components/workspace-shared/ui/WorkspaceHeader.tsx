@@ -6,6 +6,7 @@ import { ButtonGroup } from "@/components/ui/button-group";
 import { ChevronLeft, Play, Send, RefreshCw, X, Pencil } from "lucide-react";
 import type { WorkspaceHeaderProps } from "@/types/component.types";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter, usePathname } from "next/navigation";
 import { MatchTimer } from "@/components/arena/MatchTimer";
 import {
   AlertDialog,
@@ -21,7 +22,6 @@ import {
 import { NavbarActions } from "@/components/layout/NavbarActions";
 import { cn } from "@/lib/utils";
 import { PracticeStopwatch } from "./PracticeStopwatch";
-import { useWorkspaceStore } from "@/store/workspace/use-workspace-store";
 
 
 
@@ -46,8 +46,20 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
   onToggleScratchpad,
   isScratchpadOpen,
   isArena: isArenaProp,
+  allowUnauthenticatedRun,
 }) => {
-  const { isLoaded } = useAuth();
+  const { isLoaded, userId } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleRun = () => {
+    if (!userId && !allowUnauthenticatedRun) {
+      router.push(`/auth/login?redirect_url=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    onRun?.();
+  };
+
   const isInteractionDisabled =
     !isLoaded || isLoading || isSubmitting || hasSubmitted;
 
@@ -67,14 +79,14 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         title="Toggle Scratchpad"
       >
         <Pencil className="size-3.5 md:mr-1" />
-        <span className="hidden md:inline">Scratchpad</span>
+        <span className="hidden lg:inline">Scratchpad</span>
       </Button>
       {!hideRun && (
         <Button
           variant="outline"
           size="sm"
           type="button"
-          onClick={onRun}
+          onClick={handleRun}
           disabled={isInteractionDisabled}
           className="px-2.5 md:px-3 h-8 md:h-9"
         >
@@ -83,7 +95,7 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
           ) : (
             <Play className="size-3.5 md:mr-1" />
           )}
-          <span className="hidden md:inline">Run</span>
+          <span className="hidden lg:inline">Run</span>
         </Button>
       )}
       
@@ -99,14 +111,21 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
         type="button"
         className="bg-primary text-primary-foreground hover:opacity-90 px-2.5 md:px-3 h-8 md:h-9"
         disabled={isInteractionDisabled}
-        onClick={!confirmSubmit ? onSubmit : undefined}
+        onClick={(e) => {
+          if (!userId) {
+            e.preventDefault();
+            router.push(`/auth/login?redirect_url=${encodeURIComponent(pathname)}`);
+            return;
+          }
+          if (!confirmSubmit && onSubmit) onSubmit();
+        }}
       >
         {isSubmitting ? (
           <RefreshCw className="size-3.5 md:mr-1 animate-spin" />
         ) : (
           <Send className="size-3.5 md:mr-1" />
         )}
-        <span className="inline">Submit</span>
+        <span className="hidden lg:inline">Submit</span>
       </Button>
     );
 
