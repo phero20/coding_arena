@@ -142,8 +142,7 @@ export class SubmissionController extends BaseController {
   ) {
     const { problemId } = req.params;
 
-    // 1. Logic Offloading: Validate problem existence
-    await this.problemValidatorService.validateProblemExists(problemId);
+
 
     return await this.submissionService.getUserSubmissions(
       req.user!.id,
