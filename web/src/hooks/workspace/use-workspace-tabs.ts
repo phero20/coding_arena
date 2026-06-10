@@ -9,6 +9,7 @@ import {
   Code2,
   LucideIcon
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 export interface WorkspaceTab {
   id: string;
@@ -17,14 +18,9 @@ export interface WorkspaceTab {
 }
 
 export function useWorkspaceTabs(mode: "practice" | "arena" | "exercise") {
+  const { isSignedIn } = useAuth();
+
   const tabs = useMemo(() => {
-    if (mode === "exercise") {
-      return [
-        { id: "description", label: "Description", icon: BookOpen },
-        { id: "hints", label: "Hints", icon: HelpCircle },
-        { id: "solutions", label: "Solutions", icon: CheckCircle2 },
-      ];
-    }
 
     const baseTabs: WorkspaceTab[] = [
       { id: "description", label: "Description", icon: BookOpen },
@@ -35,12 +31,17 @@ export function useWorkspaceTabs(mode: "practice" | "arena" | "exercise") {
       return [...baseTabs, { id: "opponents", label: "Participants", icon: Users }];
     }
     
-    return [
+    const practiceTabs = [
       ...baseTabs,
       { id: "solutions", label: "Solutions", icon: CheckCircle2 },
-      { id: "submissions", label: "Submissions", icon: Code2 },
     ];
-  }, [mode]);
+
+    if (isSignedIn) {
+      practiceTabs.push({ id: "submissions", label: "Submissions", icon: Code2 });
+    }
+
+    return practiceTabs;
+  }, [mode, isSignedIn]);
 
   return tabs;
 }
