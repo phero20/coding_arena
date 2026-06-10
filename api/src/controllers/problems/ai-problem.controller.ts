@@ -5,6 +5,7 @@ import type {
 } from "../../types/infrastructure/hono.types";
 import type { ImportedProblemInput } from "../../validators/problems/ai-problem.validator";
 import type { AiProblemService } from "../../services/problems/ai-problem.service";
+import type { AiAddSolveService } from "../../services/problems/ai-addsolve.service";
 import type { IProblemService } from "../../services/problems/problem.service";
 import type { IProblemTestService } from "../../services/problems/problem-test.service";
 import { ApiResponse } from "../../utils/api-response";
@@ -15,12 +16,14 @@ import { type ICradle } from "../../libs/awilix-container";
 
 export class AiProblemController extends BaseController {
   private readonly aiProblemService: AiProblemService;
+  private readonly aiAddSolveService: AiAddSolveService;
   private readonly problemService: IProblemService;
   private readonly problemTestService: IProblemTestService;
 
   constructor(cradle: ICradle) {
     super(cradle);
     this.aiProblemService = cradle.aiProblemService;
+    this.aiAddSolveService = cradle.aiAddSolveService;
     this.problemService = cradle.problemService;
     this.problemTestService = cradle.problemTestService;
   }
@@ -48,5 +51,23 @@ export class AiProblemController extends BaseController {
     });
 
     return c.json(response.toJSON(), 201);
+  }
+
+  /**
+   * Triggers the AI Solution & Signature Generation for a single problem
+   * This endpoint receives the problemId from the URL and runs the generation.
+   */
+  async generateAiSolution(
+    c: Context<AppEnv, any, ValidatedContext<never>>,
+  ) {
+    const { problemId } = c.req.param();
+
+    if (!problemId) {
+      throw AppError.badRequest("problemId is required");
+    }
+
+    await this.aiAddSolveService.processSingleProblem(problemId);
+
+    return c.json({ success: true }, 200);
   }
 }
