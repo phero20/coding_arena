@@ -10,6 +10,7 @@ import { GroqLlmService } from "../../services/ai/groq-llm.service";
 import { GeminiLlmService } from "../../services/ai/gemini-llm.service";
 import { SystemClockService } from "../../services/common/clock.service";
 import { AiProblemService } from "../../services/problems/ai-problem.service";
+import { AiAddSolveService } from "../../services/problems/ai-addsolve.service";
 import { ArenaService } from "../../services/arena/arena.service";
 import { ArenaMatchService } from "../../services/arena/arena-match.service";
 import { MatchValidatorService } from "../../services/arena/match-validator.service";
@@ -98,6 +99,7 @@ export const servicesRegistry = {
   wandboxService: asClass(WandboxService).singleton(),
   compilerService: asClass(CompilerService).singleton(),
   aiProblemService: asClass(AiProblemService).singleton(),
+  aiAddSolveService: asClass(AiAddSolveService).singleton(),
 
   // Caches/Decorators
   problemCache: asClass(ProblemCache).singleton(),
