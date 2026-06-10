@@ -172,21 +172,21 @@ export const SolutionViewer: React.FC<SolutionViewerProps> = ({
               className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-primary rounded-none h-10 px-0 text-xs font-bold transition-all flex items-center gap-2"
             >
               <CheckCircle2 className="size-4" />
-              <span className="hidden sm:block">Official</span>
+              <span className="hidden lg:block">Official</span>
             </TabsTrigger>
             <TabsTrigger
               value="community"
               className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-primary rounded-none h-10 px-0 text-xs font-bold transition-all flex items-center gap-2"
             >
               <Users className="size-4" />
-              <span className="hidden sm:block">Community</span>
+              <span className="hidden lg:block">Community</span>
             </TabsTrigger>
             <TabsTrigger
               value="my-solutions"
               className="data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-primary rounded-none h-10 px-0 text-xs font-bold transition-all flex items-center gap-2"
             >
               <User className="size-4" />
-              <span className="hidden sm:block">My Solutions</span>
+              <span className="hidden lg:block">My Solutions</span>
             </TabsTrigger>
           </TabsList>
           <Button size="sm" className="h-8 px-3" onClick={onAddSolution}>
