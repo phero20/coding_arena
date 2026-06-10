@@ -95,6 +95,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
   registerArenaRoutes(v1, {
     arenaController,
     authMiddleware,
+    rateLimitMiddleware,
   });
  
   registerStatsRoutes(v1, {
@@ -151,6 +152,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     academyController,
     academyExecutionController,
     authMiddleware,
+    rateLimitMiddleware,
   });
 
   registerSystemDesignRoutes(v1, {
