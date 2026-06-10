@@ -5,18 +5,20 @@ import { type AcademyExecutionController, RunAcademyExerciseSchema } from "../..
 import { zValidator } from "@hono/zod-validator";
 
 import type { AuthMiddleware } from "../../middlewares/security/auth.middleware";
+import type { RateLimitMiddleware } from "../../middlewares/security/rate-limit.middleware";
 
 export interface AcademyRouteDependencies {
   academyController: AcademyController;
   academyExecutionController: AcademyExecutionController;
   authMiddleware: AuthMiddleware;
+  rateLimitMiddleware: RateLimitMiddleware;
 }
 
 export const registerAcademyRoutes = (
   app: Hono<AppEnv>,
   deps: AcademyRouteDependencies
 ) => {
-  const { academyController, academyExecutionController, authMiddleware } = deps;
+  const { academyController, academyExecutionController, authMiddleware, rateLimitMiddleware } = deps;
   const academyApp = new Hono<AppEnv>();
 
   // GET /api/v1/academy/tracks
@@ -55,6 +57,11 @@ export const registerAcademyRoutes = (
   academyApp.post(
     "/tracks/:trackSlug/exercises/:exerciseSlug/run",
     authMiddleware.handle.bind(authMiddleware),
+    rateLimitMiddleware.limit({
+      windowMs: 60000,
+      max: 10,
+      keyPrefix: "rl:academy_run",
+    }),
     zValidator("json", RunAcademyExerciseSchema),
     academyExecutionController.action(academyExecutionController.runExercise, { requireAuth: true })
   );
