@@ -116,7 +116,7 @@ export class AcademyExecutionService {
       if (!user) return;
       
       await this.submissionService.createSubmission({
-        problemId: `academy-${trackSlug}-${exerciseSlug}`,
+        problemId: `${trackSlug}:${exerciseSlug}`,
         problemTitle: `Academy: ${exerciseSlug}`,
         userId: user.id,
         languageId: trackSlug,
