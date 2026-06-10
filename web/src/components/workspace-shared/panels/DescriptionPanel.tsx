@@ -99,7 +99,7 @@ export const DescriptionPanel = React.memo(
       isLoading: isSubmissionsLoading,
       error: submissionsError,
       refetch: refetchSubmissions,
-    } = useUserSubmissionsQuery(problem.problem_id, mode !== "exercise");
+    } = useUserSubmissionsQuery(problem.problem_id, true);
 
     const tabs = useWorkspaceTabs(mode);
 
