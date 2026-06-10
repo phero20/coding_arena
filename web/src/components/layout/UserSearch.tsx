@@ -42,7 +42,7 @@ export const UserSearch = ({ onSelect }: UserSearchProps) => {
   };
 
   return (
-    <div className="relative w-full lg:w-84">
+    <div className="relative w-full lg:w-80">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div className="relative group cursor-pointer w-full">
