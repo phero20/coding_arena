@@ -18,7 +18,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { LogOut, ChevronRight, User, BarChart2 } from "lucide-react";
+import { LogOut, ChevronRight, User, BarChart2, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRoadmapStore } from "@/store/use-roadmap-store";
@@ -69,15 +69,16 @@ export const NavbarActions = () => {
 
   return (
     <div className="flex items-center gap-4">
-      {/* <div className="hidden md:block">
-        <UserSearch />
-      </div> */}
+
       <ModeToggle />
 
       <Show when="signed-out">
         <div className="flex items-center gap-3">
           <SignInButton mode="modal">
-            <Button className="text-sm font-medium">Sign in</Button>
+            <Button className="text-sm font-medium px-2 md:px-4">
+              <LogIn className="size-4 " />
+              <span className="hidden lg:inline">Sign in</span>
+            </Button>
           </SignInButton>
         </div>
       </Show>
