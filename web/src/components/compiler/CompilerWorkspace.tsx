@@ -41,6 +41,7 @@ export const CompilerWorkspace: React.FC = () => {
         hideSubmit
         onToggleScratchpad={() => setIsScratchpadOpen(!isScratchpadOpen)}
         isScratchpadOpen={isScratchpadOpen}
+        allowUnauthenticatedRun
       />
 
       <Scratchpad 
