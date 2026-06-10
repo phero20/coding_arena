@@ -38,7 +38,7 @@ export const Navbar = () => {
             : "py-3 border-b border-transparent",
         )}
       >
-        <Container className="flex px-2 items-center justify-between">
+        <Container className="mx-auto flex px-2 items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center group">
             <Image
