@@ -8,6 +8,7 @@ export async function generateTrackMetadata({ params }: { params: Promise<{ slug
   return {
     title: `${title} Track`,
     description: `Master ${title} on SlaveCode. Learn the fundamentals, solve interactive exercises, and build a strong foundation.`,
+    alternates: { canonical: `/academy/tracks/${slug}` },
     openGraph: {
       title: `${title} Track | SlaveCode Academy`,
       description: `Master ${title} on SlaveCode. Learn the fundamentals, solve interactive exercises, and build a strong foundation.`,
