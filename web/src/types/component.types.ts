@@ -250,4 +250,6 @@ export interface WorkspaceHeaderProps {
   onToggleScratchpad?: () => void;
   isScratchpadOpen?: boolean;
   isArena?: boolean;
+  /** Allow unauthenticated users to use the Run button */
+  allowUnauthenticatedRun?: boolean;
 }
