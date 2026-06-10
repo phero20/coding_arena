@@ -11,17 +11,19 @@ import {
 import type { ArenaController } from "../../controllers/arena/arena.controller";
 import type { AppEnv } from "../../types/infrastructure/hono.types";
 import type { AuthMiddleware } from "../../middlewares/security/auth.middleware";
+import type { RateLimitMiddleware } from "../../middlewares/security/rate-limit.middleware";
 
 export interface ArenaRoutesDeps {
   arenaController: ArenaController;
   authMiddleware: AuthMiddleware;
+  rateLimitMiddleware: RateLimitMiddleware;
 }
 
 export const registerArenaRoutes = (
   app: Hono<AppEnv>,
   deps: ArenaRoutesDeps,
 ) => {
-  const { arenaController, authMiddleware } = deps;
+  const { arenaController, authMiddleware, rateLimitMiddleware } = deps;
 
   // REST endpoints for Arena - Secured with authMiddleware
   // Controllers now use context-free handlers via the .action() adapter
@@ -29,6 +31,11 @@ export const registerArenaRoutes = (
   app.post(
     "/arena/create",
     (c, next) => authMiddleware.handle(c, next),
+    rateLimitMiddleware.limit({
+      windowMs: 60000,
+      max: 5,
+      keyPrefix: "rl:arena_create",
+    }),
     zValidator("json", createRoomSchema),
     arenaController.action(arenaController.createRoom, { status: 201 }),
   );
@@ -51,6 +58,11 @@ export const registerArenaRoutes = (
   app.post(
     "/arena/:roomId/start",
     (c, next) => authMiddleware.handle(c, next),
+    rateLimitMiddleware.limit({
+      windowMs: 60000,
+      max: 5,
+      keyPrefix: "rl:arena_start",
+    }),
     zValidator("param", RoomIdParamSchema),
     arenaController.action(arenaController.startMatch),
   );
