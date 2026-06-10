@@ -40,6 +40,7 @@ export async function generateProblemMetadata({ params }: { params: Promise<{ pr
       title,
       description,
       keywords: [`${problem.title} solution`, "leetcode alternative", "algorithms", "data structures", "coding interview"],
+      alternates: { canonical: `/problems/${problemId}` },
       openGraph: {
         title,
         description,
