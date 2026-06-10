@@ -19,4 +19,8 @@ export const registerAiProblemRoutes = (
   app.post("/ai/import", zValidator("json", importedProblemSchema), (c) =>
     aiProblemController.import(c),
   );
+
+  app.post("/ai/problems/:problemId/generate", (c) =>
+    aiProblemController.generateAiSolution(c),
+  );
 };
