@@ -8,13 +8,15 @@ type Config struct {
 	RedisURL       string
 	Port           string
 	ClerkPublicKey string
+	ClientURL      string
 }
 
 func LoadConfig() *Config {
 	return &Config{
-		RedisURL:       getEnv("REDIS_URL", "redis://localhost:6379"),
+		RedisURL:       getEnv("REDIS_URL", ""),
 		Port:           getEnv("PORT", "8080"),
 		ClerkPublicKey: getEnv("CLERK_PEM_PUBLIC_KEY", ""),
+		ClientURL:      getEnv("CLIENT_URL", ""),
 	}
 }
 
