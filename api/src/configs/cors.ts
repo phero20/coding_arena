@@ -12,8 +12,7 @@ export const corsConfig = () =>
       if (origin && config.isDev) return origin;
 
       // In production, strictly whitelist allowed clients
-      return origin &&
-        [config.clientUrl, "http://127.0.0.1:3001"].includes(origin)
+      return origin && origin === config.clientUrl
         ? origin
         : config.clientUrl;
     },
