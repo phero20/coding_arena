@@ -8,6 +8,7 @@ import { useState } from "react";
 import type { Problem } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { CompanyLogo } from "@/components/companies/CompanyLogo";
 
 export default function CompanyProblemsPage() {
   const params = useParams();
@@ -43,7 +44,7 @@ export default function CompanyProblemsPage() {
     <div className="flex min-h-screen flex-col bg-background py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 w-full">
       {/* Header Section */}
       <Link href="/companies"><Button size="sm"><ArrowLeft /> Companies</Button></Link>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-6 border-b border-border/40">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 pb-6 border-b border-border/40">
         <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl">
           {company?.imageUrl && !imgError ? (
             <img 
@@ -53,7 +54,7 @@ export default function CompanyProblemsPage() {
               className="h-full w-full object-contain rounded-md"
             />
           ) : (
-            <Building2 className="h-10 w-10 text-muted-foreground" />
+             <CompanyLogo className="w-16 h-16 shrink-0" />
           )}
         </div>
         <div className="space-y-1">
