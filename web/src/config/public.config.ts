@@ -22,6 +22,9 @@ export const PUBLIC_CONFIG = {
   // Site Meta
   SITE_NAME: "SlaveCode",
   SITE_DESCRIPTION: "A complete platform for competitive programming and coding practice.",
+
+  // Analytics
+  GA_ID: process.env.NEXT_PUBLIC_GA_ID,
 } as const;
 
 // Safety check for critical production config
