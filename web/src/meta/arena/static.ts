@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const arenaHubMeta: Metadata = {
   title: "Arena Hub",
   description: "Host or join real-time coding matches. Compete against other developers and test your speed.",
+  alternates: { canonical: '/arena' },
   openGraph: {
     title: "Arena Hub | SlaveCode",
     description: "Host or join real-time coding matches. Compete against other developers and test your speed.",
