@@ -7,6 +7,7 @@ export async function generateCompanyMetadata({ params }: { params: Promise<{ sl
   return {
     title: `${companyName} Interview Questions`,
     description: `Master the most frequently asked coding problems and interview questions for ${companyName}.`,
+    alternates: { canonical: `/companies/${slug}/problems` },
     openGraph: {
       title: `${companyName} Interview Questions | SlaveCode`,
       description: `Master the most frequently asked coding problems and interview questions for ${companyName}.`,
