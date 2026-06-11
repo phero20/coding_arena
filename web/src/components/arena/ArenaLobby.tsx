@@ -9,6 +9,7 @@ import {
   Loader2,
   Clock,
   ArrowRight,
+  Bug,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -113,6 +114,14 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
         >
           <LogOut className="h-3.5 w-3.5 " />
           Leave
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8  text-difficulty-medium transition-colors"
+          title="Report an Issue"
+        >
+          <Bug className="size-4" />
         </Button>
       </div>
 

@@ -21,7 +21,14 @@ import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Code2, CheckCircle2, GripVertical, Lock, ExternalLink } from "lucide-react";
+import {
+  Code2,
+  CheckCircle2,
+  GripVertical,
+  Lock,
+  ExternalLink,
+  Bug,
+} from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { RoadmapSidebarSkeleton } from "@/components/skeletons/RoadmapSkeletons";
@@ -32,7 +39,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
 
 interface RoadmapSidebarProps {
   nodeId: string | null;
@@ -57,13 +63,16 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isResizing.current || isMobile) return;
-    const newWidth = window.innerWidth - e.clientX;
-    if (newWidth > 700 && newWidth < window.innerWidth * 0.95) {
-      setWidth(newWidth);
-    }
-  }, [isMobile]);
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizing.current || isMobile) return;
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth > 700 && newWidth < window.innerWidth * 0.95) {
+        setWidth(newWidth);
+      }
+    },
+    [isMobile],
+  );
 
   const stopResizing = useCallback(() => {
     isResizing.current = false;
@@ -73,14 +82,17 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
     document.body.style.userSelect = "auto";
   }, [handleMouseMove]);
 
-  const startResizing = useCallback((e: React.MouseEvent) => {
-    if (isMobile) return;
-    isResizing.current = true;
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", stopResizing);
-    document.body.style.cursor = "ew-resize";
-    document.body.style.userSelect = "none";
-  }, [handleMouseMove, stopResizing, isMobile]);
+  const startResizing = useCallback(
+    (e: React.MouseEvent) => {
+      if (isMobile) return;
+      isResizing.current = true;
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", stopResizing);
+      document.body.style.cursor = "ew-resize";
+      document.body.style.userSelect = "none";
+    },
+    [handleMouseMove, stopResizing, isMobile],
+  );
 
   useEffect(() => {
     return () => {
@@ -150,6 +162,7 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
                           </p>
                         )}
                       </div>
+                      
                     </SheetHeader>
 
                     <div
@@ -186,37 +199,71 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
                               return (
                                 <TableRow
                                   key={prob.problem_id}
-                                  className={cn("group border-t border-border/50 transition-colors hover:bg-muted/30",isSolved && "bg-difficulty-easy")}
+                                  className={cn(
+                                    "group border-t border-border/50 transition-colors hover:bg-muted/30",
+                                    isSolved && "bg-difficulty-easy",
+                                  )}
                                 >
                                   <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
-                                    {prob.problem_id || '-:-'}
+                                    {prob.problem_id || "-:-"}
                                   </TableCell>
                                   <TableCell className="px-0 md:px-4 py-3 align-middle min-w-0">
                                     <div className="flex flex-col min-w-0">
                                       <div className="text-sm font-bold text-foreground flex items-center gap-2 group-hover:text-primary transition-colors min-w-0">
                                         <Link
-                                          href={prob.is_premium ? `https://leetcode.com/problems/${prob.problem_slug}` : `/problems/${prob.problem_slug}?from=roadmap`}
-                                          target={prob.is_premium ? "_blank" : undefined}
-                                          rel={prob.is_premium ? "noopener noreferrer" : undefined}
+                                          href={
+                                            prob.is_premium
+                                              ? `https://leetcode.com/problems/${prob.problem_slug}`
+                                              : `/problems/${prob.problem_slug}?from=roadmap`
+                                          }
+                                          target={
+                                            prob.is_premium
+                                              ? "_blank"
+                                              : undefined
+                                          }
+                                          rel={
+                                            prob.is_premium
+                                              ? "noopener noreferrer"
+                                              : undefined
+                                          }
                                           className="flex min-w-0 max-w-full"
                                         >
                                           {" "}
                                           <Button
-                                            className={cn("p-0 text-foreground/90 group-hover:text-primary flex items-center max-w-full justify-start min-w-0", isSolved && "text-difficulty-easy")}
+                                            className={cn(
+                                              "p-0 text-foreground/90 group-hover:text-primary flex items-center max-w-full justify-start min-w-0",
+                                              isSolved &&
+                                                "text-difficulty-easy",
+                                            )}
                                             variant="link"
                                           >
-                                            <span className="truncate">{prob.title}</span>
+                                            <span className="truncate">
+                                              {prob.title}
+                                            </span>
                                             {prob.is_premium && (
-                                              <TooltipProvider delayDuration={0}>
+                                              <TooltipProvider
+                                                delayDuration={0}
+                                              >
                                                 <Tooltip>
                                                   <TooltipTrigger asChild>
-                                                    <span className="flex items-center ml-2 gap-1 text-difficulty-medium shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                    <span
+                                                      className="flex items-center ml-2 gap-1 text-difficulty-medium shrink-0"
+                                                      onClick={(e) =>
+                                                        e.stopPropagation()
+                                                      }
+                                                    >
                                                       <Lock className="h-3.5 w-3.5" />
                                                       <ExternalLink className="h-3 w-3 opacity-70 hidden lg:block" />
                                                     </span>
                                                   </TooltipTrigger>
                                                   <TooltipContent className="text-left">
-                                                    <p>We don't have this problem. Please click to visit LeetCode<br/> and solve. It's a premium LeetCode problem.</p>
+                                                    <p>
+                                                      We don't have this
+                                                      problem. Please click to
+                                                      visit LeetCode
+                                                      <br /> and solve. It's a
+                                                      premium LeetCode problem.
+                                                    </p>
                                                   </TooltipContent>
                                                 </Tooltip>
                                               </TooltipProvider>

@@ -17,6 +17,7 @@ import { AcademyRepository } from "../../repositories/academy/academy.repository
 import { SystemDesignRepository } from "../../repositories/system-design/system-design.repository";
 import { CompanyRepository } from "../../repositories/company/company.repository";
 import { SeoRepository } from "../../repositories/seo/seo.repository";
+import { ReportBugRepository } from "../../repositories/report-bug/report-bug.repository";
 
 /**
  * Repository layer registrations.
@@ -41,5 +42,6 @@ export const repositoriesRegistry = {
   systemDesignRepository: asClass(SystemDesignRepository).singleton(),
   companyRepository: asClass(CompanyRepository).singleton(),
   seoRepository: asClass(SeoRepository).singleton(),
+  reportBugRepository: asClass(ReportBugRepository).singleton(),
 };
 

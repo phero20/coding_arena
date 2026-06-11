@@ -82,6 +82,11 @@ interface EnvConfig {
   // Logging
   logLevel: string;
   logPretty: boolean;
+
+  // Cloudinary
+  cloudinaryCloudName: string;
+  cloudinaryApiKey: string;
+  cloudinaryApiSecret: string;
 }
 
 // ─── Config Export ───────────────────────────────────────────────────────────
@@ -134,4 +139,9 @@ export const config: EnvConfig = {
   // Logging
   logLevel: Bun.env.LOG_LEVEL || "info",
   logPretty: Bun.env.LOG_PRETTY === "true",
+
+  // Cloudinary
+  cloudinaryCloudName: requireEnv("CLOUDINARY_CLOUD_NAME"),
+  cloudinaryApiKey: requireEnv("CLOUDINARY_API_KEY"),
+  cloudinaryApiSecret: requireEnv("CLOUDINARY_API_SECRET"),
 };

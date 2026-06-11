@@ -48,8 +48,8 @@ export const Navbar = () => {
               height={40}
               className="object-contain -mr-1"
             />
-            <span className="text-xl font-black tracking-tighter">
-              SLAVECODE<span className="text-primary">.</span>
+            <span className="text-xl font-bold tracking-tight">
+              SlaveCode<span className="text-primary">.</span>
             </span>
           </Link>
 

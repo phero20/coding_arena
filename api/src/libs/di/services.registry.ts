@@ -43,6 +43,8 @@ import { AcademyAiJudgeService } from "../../services/academy/academy-ai-judge.s
 import { SystemDesignService } from "../../services/system-design/system-design.service";
 import { CompanyService } from "../../services/company/company.service";
 import { SeoService } from "../../services/seo/seo.service";
+import { CloudinaryService } from "../../services/common/cloudinary.service";
+import { ReportBugService } from "../../services/report-bug/report-bug.service";
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
 import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
@@ -162,4 +164,6 @@ export const servicesRegistry = {
   systemDesignService: asClass(SystemDesignService).singleton(),
   companyService: asClass(CompanyService).singleton(),
   seoService: asClass(SeoService).singleton(),
+  cloudinaryService: asClass(CloudinaryService).singleton(),
+  reportBugService: asClass(ReportBugService).singleton(),
 };

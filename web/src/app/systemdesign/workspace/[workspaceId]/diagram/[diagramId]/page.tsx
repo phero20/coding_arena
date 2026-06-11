@@ -7,7 +7,18 @@ import { DiagramCanvas } from "@/components/systemdesign-workspace/diagram/Diagr
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Download, Upload, Share2, Undo2, Redo2, ArrowLeftIcon, Cloud, Copy, Check } from "lucide-react";
+import {
+  Download,
+  Upload,
+  Share2,
+  Undo2,
+  Redo2,
+  ArrowLeftIcon,
+  Cloud,
+  Copy,
+  Check,
+  Bug,
+} from "lucide-react";
 import { useDiagram } from "@/hooks/queries/use-workspace.queries";
 import { useCloneDiagram } from "@/hooks/mutations/use-workspace.mutations";
 import { useDiagramAutoSave } from "@/hooks/workspace/use-diagram-auto-save";
@@ -62,14 +73,16 @@ export default function DiagramPage({ params }: DiagramPageProps) {
     editor,
     diagramId,
     workspaceId,
-    diagramQuery.data
+    diagramQuery.data,
   );
 
   const handleClone = async () => {
     try {
       const cloned = await cloneDiagramMutation.mutateAsync(diagramId);
       if (cloned && cloned.id) {
-        router.push(`/systemdesign-workspace/${cloned.workspaceId}/diagram/${cloned.id}`);
+        router.push(
+          `/systemdesign-workspace/${cloned.workspaceId}/diagram/${cloned.id}`,
+        );
       }
     } catch (err) {
       console.error("Cloning failed", err);
@@ -191,7 +204,9 @@ export default function DiagramPage({ params }: DiagramPageProps) {
         toast.success("Diagram imported successfully!");
       } catch (err) {
         console.error("Failed to parse snapshot", err);
-        toast.error("Invalid diagram JSON file. Please upload a valid template export.");
+        toast.error(
+          "Invalid diagram JSON file. Please upload a valid template export.",
+        );
       }
     };
     reader.readAsText(file);
@@ -243,8 +258,8 @@ export default function DiagramPage({ params }: DiagramPageProps) {
               <span className="text-sm font-bold text-foreground truncate max-w-[80px] xs:max-w-[150px] sm:max-w-[300px] md:max-w-[400px]">
                 {diagramQuery.data?.title || "Untitled Diagram"}
               </span>
-              {isOwner && (
-                saveStatus === "saving" ? (
+              {isOwner &&
+                (saveStatus === "saving" ? (
                   <Badge
                     variant="secondary"
                     className="text-[10px] font-bold tracking-wider select-none shrink-0"
@@ -259,14 +274,25 @@ export default function DiagramPage({ params }: DiagramPageProps) {
                     <Cloud className="h-3 w-3 shrink-0 text-primary" />
                     Saved
                   </Badge>
-                )
-              )}
+                ))}
             </div>
           </div>
 
           <div className="flex items-center gap-1">
             {isOwner && (
               <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 hidden lg:block text-difficulty-medium transition-colors"
+                  title="Report an Issue"
+                >
+                  <Bug className="size-4" />
+                </Button>
+                <Separator
+                  orientation="vertical"
+                  className="h-4 mx-1 shrink-0 hidden lg:block"
+                />
                 <Button
                   variant="ghost"
                   size="icon"
@@ -286,7 +312,10 @@ export default function DiagramPage({ params }: DiagramPageProps) {
                   <Redo2 className="h-3.5 w-3.5" />
                 </Button>
 
-                <Separator orientation="vertical" className="h-4 mx-1 shrink-0" />
+                <Separator
+                  orientation="vertical"
+                  className="h-4 mx-1 shrink-0"
+                />
 
                 <Button
                   variant="outline"
@@ -318,7 +347,9 @@ export default function DiagramPage({ params }: DiagramPageProps) {
                 disabled={cloneDiagramMutation.isPending}
               >
                 <Copy className="h-3.5 w-3.5" />
-                {cloneDiagramMutation.isPending ? "Cloning..." : "Clone to Workspace"}
+                {cloneDiagramMutation.isPending
+                  ? "Cloning..."
+                  : "Clone to Workspace"}
               </Button>
             )}
 
@@ -393,7 +424,9 @@ export default function DiagramPage({ params }: DiagramPageProps) {
               >
                 <div className="space-y-3.5">
                   <div className="space-y-1">
-                    <h4 className="text-xs font-bold leading-none">Share Diagram</h4>
+                    <h4 className="text-xs font-bold leading-none">
+                      Share Diagram
+                    </h4>
                     <p className="text-[10px] text-muted-foreground mt-0.5">
                       Invite others to view or duplicate this board.
                     </p>
@@ -401,7 +434,11 @@ export default function DiagramPage({ params }: DiagramPageProps) {
                   <div className="flex items-center gap-2">
                     <Input
                       readOnly
-                      value={typeof window !== "undefined" ? window.location.href : ""}
+                      value={
+                        typeof window !== "undefined"
+                          ? window.location.href
+                          : ""
+                      }
                       className="h-8 text-[11px] bg-background border px-2.5 flex-1"
                     />
                     <Button
@@ -418,7 +455,11 @@ export default function DiagramPage({ params }: DiagramPageProps) {
                     </Button>
                   </div>
                   <div className="rounded border bg-muted/40 p-2.5 text-[10px] text-muted-foreground leading-normal">
-                    <span className="font-semibold text-foreground">Access Permissions:</span> Other users will view this diagram in read-only mode, with the option to clone it to their workspace.
+                    <span className="font-semibold text-foreground">
+                      Access Permissions:
+                    </span>{" "}
+                    Other users will view this diagram in read-only mode, with
+                    the option to clone it to their workspace.
                   </div>
                 </div>
               </PopoverContent>

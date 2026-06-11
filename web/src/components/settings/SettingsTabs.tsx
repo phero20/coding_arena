@@ -6,7 +6,8 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { AppearanceSection } from "./AppearanceSection";
 import { EditorSection } from "./EditorSection";
 import { ProfileSection } from "./ProfileSection";
-import { Paintbrush, User, Code2 } from "lucide-react";
+import { Paintbrush, User, Code2, Bug, Palette } from "lucide-react";
+import Link from "next/link";
 import { useProfileStore } from "@/store/use-profile-store";
 import { cn } from "@/lib/utils";
 
@@ -31,11 +32,11 @@ export const SettingsTabs = () => {
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
         {/* Sidebar Navigation */}
         <aside className="md:w-64 shrink-0">
-          <div className="sticky top-24">
+          <div className="sticky top-24 space-y-6">
             <TabsList className="flex flex-col h-auto w-full bg-transparent p-0 gap-1">
               {[
                 { id: "profile", label: "Profile", icon: User },
-                { id: "appearance", label: "Appearance", icon: Paintbrush },
+                { id: "appearance", label: "Appearance", icon: Palette },
                 { id: "editor", label: "Editor", icon: Code2 },
               ].map((tab) => (
                 <TabsTrigger
@@ -52,6 +53,16 @@ export const SettingsTabs = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
+
+            <div className="border-t border-border/50 pt-4 px-1">
+              <Link
+                href="/report-bug"
+                className="flex items-center gap-4 px-3 py-3 h-auto text-xs font-bold tracking-wide text-muted-foreground hover:text-difficulty-medium  hover:bg-difficulty-medium/10 rounded-md transition-all"
+              >
+                <Bug size={14} className="not-italic shrink-0" />
+                Report a Bug
+              </Link>
+            </div>
           </div>
         </aside>
 

@@ -5,69 +5,100 @@ import { usePathname } from "next/navigation";
 import { Container } from "../shared/Container";
 import Image from "next/image";
 import { shouldHide, shouldHidefooter } from "./shouldHide";
+import { Bug } from "lucide-react";
+
+const footerLinks = [
+  {
+    title: "Learn & Practice",
+    links: [
+      { label: "Academy", href: "/academy/tracks" },
+      { label: "Problems", href: "/problems" },
+      { label: "Roadmap", href: "/roadmap" },
+      { label: "System Design", href: "/systemdesign-workspace" },
+    ],
+  },
+  {
+    title: "Compete & Tools",
+    links: [
+      { label: "Arena", href: "/arena" },
+      { label: "Contests", href: "/contests" },
+      { label: "Compilers", href: "/compilers" },
+    ],
+  },
+  {
+    title: "Legal & Support",
+    links: [
+      { label: "Report an Issue", href: "/report-bug", icon: <Bug className="w-4 h-4 text-difficulty-medium" /> },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Contact Us", href: "mailto:slavecode.codes@gmail.com" },
+    ],
+  },
+];
 
 export const Footer = () => {
   const pathname = usePathname();
-
 
   if (shouldHide(pathname) || shouldHidefooter(pathname)) return null;
 
   return (
     <footer className="w-full border-t border-border bg-background py-10 md:py-16">
-      <Container>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
+      <Container className="">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand & Description */}
-          <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4 group">
-              <Image src="/logos/logo.png" alt="SlaveCode Logo" width={32} height={32} className="rounded-md" />
-              <span className="font-bold text-xl tracking-tight text-foreground group-hover:text-primary transition-colors">
-                SlaveCode
-              </span>
-            </Link>
+          <div className="md:col-span-2 space-y-3">
+           <Link href="/" className="flex items-center group">
+            <Image
+              src="/logos/logo.png"
+              alt="SlaveCode Logo"
+              width={50}
+              height={40}
+              className="object-contain -mr-1"
+            />
+            <span className="text-xl font-bold tracking-tight">
+              SlaveCode<span className="text-primary">.</span>
+            </span>
+          </Link>
             <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-              The ultimate coding arena to practice, compete, and master your skills in modern programming languages.
+              Standardize your coding journey. From basic academy courses and
+              guided roadmaps to advanced system design, company interview prep,
+              and real-time coding arenas. The all-in-one platform to master
+              algorithms and prove your engineering excellence.
             </p>
           </div>
 
-          {/* Links: Learn & Practicee */}
-          <div>
-            <h4 className="font-semibold mb-4 text-foreground">Learn & Practice</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><Link href="/academy/tracks" className="hover:text-primary transition-colors">Academy</Link></li>
-              <li><Link href="/problems" className="hover:text-primary transition-colors">Problems</Link></li>
-              <li><Link href="/roadmap" className="hover:text-primary transition-colors">Roadmap</Link></li>
-              <li><Link href="/systemdesign-workspace" className="hover:text-primary transition-colors">System Design</Link></li>
-            </ul>
-          </div>
-
-          {/* Links: Compete & Tools */}
-          <div>
-            <h4 className="font-semibold mb-4 text-foreground">Compete & Tools</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><Link href="/arena" className="hover:text-primary transition-colors">Arena</Link></li>
-              <li><Link href="/contests" className="hover:text-primary transition-colors">Contests</Link></li>
-              <li><Link href="/compilers" className="hover:text-primary transition-colors">Compilers</Link></li>
-            </ul>
-          </div>
-
-          {/* Links: Legal & Contact */}
-          <div>
-            <h4 className="font-semibold mb-4 text-foreground">Legal & Support</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-              <li><Link href="mailto:support@slavecode.com" className="hover:text-primary transition-colors">Contact Us</Link></li>
-            </ul>
-          </div>
+          {footerLinks.map((section) => (
+            <div key={section.title}>
+              <h4 className="font-semibold mb-4 text-foreground">
+                {section.title}
+              </h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      title={link.label}
+                      className={`hover:text-primary transition-colors ${
+                        link.icon ? "flex items-center gap-2" : ""
+                      }`}
+                    >
+                      {link.icon && link.icon}
+                      {link.icon ? <span>{link.label}</span> : link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} SlaveCode. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-primary transition-colors font-medium">Twitter</Link>
-            <Link href="#" className="hover:text-primary transition-colors font-medium">GitHub</Link>
-            <Link href="#" className="hover:text-primary transition-colors font-medium">Discord</Link>
+            {/* <Link href="#" title="Twitter" className="hover:text-primary transition-colors font-medium">Twitter</Link>
+            <Link href="#" title="GitHub" className="hover:text-primary transition-colors font-medium">GitHub</Link>
+            <Link href="#" title="Discord" className="hover:text-primary transition-colors font-medium">Discord</Link> */}
           </div>
         </div>
       </Container>

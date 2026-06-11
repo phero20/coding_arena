@@ -100,6 +100,10 @@ import { type CompanyController } from "../controllers/company/company.controlle
 import { type SeoRepository } from "../repositories/seo/seo.repository";
 import { type SeoService } from "../services/seo/seo.service";
 import { type SeoController } from "../controllers/seo/seo.controller";
+import { type ReportBugRepository } from "../repositories/report-bug/report-bug.repository";
+import { type IReportBugService } from "../services/report-bug/report-bug.service";
+import { type ReportBugController } from "../controllers/report-bug/report-bug.controller";
+import { type ICloudinaryService } from "../services/common/cloudinary.service";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -149,6 +153,7 @@ export interface ICradle {
   systemDesignRepository: ISystemDesignRepository;
   companyRepository: ICompanyRepository;
   seoRepository: SeoRepository;
+  reportBugRepository: ReportBugRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
@@ -191,6 +196,8 @@ export interface ICradle {
   systemDesignService: ISystemDesignService;
   companyService: ICompanyService;
   seoService: SeoService;
+  cloudinaryService: ICloudinaryService;
+  reportBugService: IReportBugService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -250,6 +257,7 @@ export interface ICradle {
   systemDesignController: SystemDesignController;
   companyController: CompanyController;
   seoController: SeoController;
+  reportBugController: ReportBugController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;

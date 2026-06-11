@@ -3,10 +3,11 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { ChevronLeft, Play, Send, RefreshCw, X, Pencil } from "lucide-react";
+import { ChevronLeft, Play, Send, RefreshCw, X, Pencil, Bug } from "lucide-react";
 import type { WorkspaceHeaderProps } from "@/types/component.types";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { MatchTimer } from "@/components/arena/MatchTimer";
 import {
   AlertDialog,
@@ -205,7 +206,12 @@ export const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({
       </div>
 
       {/* Right: Mobile Buttons & Navbar Actions & Arena Actions */}
-      <div className="z-10 flex-1 flex justify-end items-center gap-4">
+      <div className="z-10 flex-1 flex justify-end items-center gap-2">
+        <Link href="/report-bug">
+          <Button variant="ghost" size="icon" className="h-8 w-8  text-difficulty-medium transition-colors" title="Report an Issue">
+            <Bug className="size-4" />
+          </Button>
+        </Link>
         {!isArena ? (
           <div className="flex items-center gap-4">
             <PracticeStopwatch />

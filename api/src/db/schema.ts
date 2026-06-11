@@ -264,3 +264,19 @@ export type ChatThread = typeof chatThreads.$inferSelect
 export type NewChatThread = typeof chatThreads.$inferInsert
 export type ChatMessage = typeof chatMessages.$inferSelect
 export type NewChatMessage = typeof chatMessages.$inferInsert
+
+// --- Bug Reports Layer ---
+
+export const bugReports = pgTable('bug_reports', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  type: text('type').notNull(), // 'bug' | 'ui' | 'feature' | 'feedback'
+  images: jsonb('images').default([]).$type<string[]>(), // Array of Cloudinary image URLs
+  status: text('status').notNull().default('open'), // 'open' | 'in_progress' | 'resolved' | 'closed'
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export type BugReport = typeof bugReports.$inferSelect
+export type NewBugReport = typeof bugReports.$inferInsert

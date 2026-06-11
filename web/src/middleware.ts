@@ -17,6 +17,9 @@ const isPublicRoute = createRouteMatcher([
   "/systemdesign/learn(.*)",
   "/companies(.*)",
   "/leaderboard(.*)",
+  "/report-bug",
+  "/terms",
+  "/privacy",
   "/api/v1/auth/webhooks/clerk", // Always public
 ]);
 

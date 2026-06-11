@@ -6,14 +6,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Swords,
-  LayoutGrid,
+  Code2,
   Cpu,
   Trophy,
-  Mountain,
+  Route,
   Network,
   ChevronDown,
   GraduationCap,
-  BriefcaseBusiness
+  Building2
 } from "lucide-react";
 
 import { motion } from "framer-motion";
@@ -34,16 +34,13 @@ import { Button } from "@/components/ui/button";
 
 export const navItems = [
   { name: "Academy", href: "/academy/tracks", icon: GraduationCap },
-  { name: "Roadmap", href: "/roadmap", icon: Mountain },
-  { name: "Problems", href: "/problems", icon: LayoutGrid },
+  { name: "Roadmap", href: "/roadmap", icon: Route },
+  { name: "Problems", href: "/problems", icon: Code2 },
   { name: "System Design", href: "/systemdesign", icon: Network },
-  { name: "Companies", href: "/companies", icon: BriefcaseBusiness },
+  { name: "Companies", href: "/companies", icon: Building2 },
   { name: "Arena", href: "/arena", icon: Swords },
   { name: "Compilers", href: "/compilers", icon: Cpu },
   { name: "Contests", href: "/contests", icon: Trophy },
-
-
-
 ];
 
 export const NavLinks = () => {

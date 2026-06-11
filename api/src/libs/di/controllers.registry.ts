@@ -33,6 +33,7 @@ import { AcademyExecutionController } from "../../controllers/academy/academy-ex
 import { SystemDesignController } from "../../controllers/system-design/system-design.controller";
 import { CompanyController } from "../../controllers/company/company.controller";
 import { SeoController } from "../../controllers/seo/seo.controller";
+import { ReportBugController } from "../../controllers/report-bug/report-bug.controller";
 
 /**
  * Controller and Middleware layer registrations.
@@ -72,4 +73,5 @@ export const controllersRegistry = {
   systemDesignController: asClass(SystemDesignController).singleton(),
   companyController: asClass(CompanyController).singleton(),
   seoController: asClass(SeoController).singleton(),
+  reportBugController: asClass(ReportBugController).singleton(),
 };

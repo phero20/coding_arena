@@ -19,14 +19,11 @@ import TaxonomyNode from "./TaxonomyNode";
 import { useRoadmapStore } from "@/store/use-roadmap-store";
 import type { CategoryTreeNode } from "@/types/taxonomy";
 import { Button } from "@/components/ui/button";
-import {
-  RefreshCw,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+import { Bug, RefreshCw, ZoomIn, ZoomOut } from "lucide-react";
 import { RoadmapSidebar } from "./RoadmapSidebar";
 import { cn } from "@/lib/utils";
 import { ButtonGroup, ButtonGroupSeparator } from "../ui/button-group";
+import Link from "next/link";
 
 const nodeTypes = {
   taxonomyNode: TaxonomyNode,
@@ -481,36 +478,58 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
               variant="ghost"
               size="icon"
               className="h-10 w-10"
+              title="Zoom In"
               onClick={() => zoomIn({ duration: 300 })}
             >
               <ZoomIn className="size-5" />
             </Button>
             <ButtonGroupSeparator
               orientation={isMobile ? "vertical" : "horizontal"}
-              className="bg-background/20"
+              className="bg-background/40"
             />
             <Button
               variant="ghost"
               size="icon"
               className="h-10 w-10"
+              title="Zoom Out"
               onClick={() => zoomOut({ duration: 300 })}
             >
               <ZoomOut className="size-5" />
             </Button>
             <ButtonGroupSeparator
               orientation={isMobile ? "vertical" : "horizontal"}
-              className="bg-background/20"
+              className="bg-background/40"
             />
             <Button
-              variant="secondary"
+              variant="ghost"
               size="icon"
               className="h-10 w-10"
+              title="Reset View"
               onClick={() => {
                 resetRoadmap();
-                setTimeout(() => fitView({ duration: 1000, padding: 0.12 }), 50);
+                setTimeout(
+                  () => fitView({ duration: 1000, padding: 0.12 }),
+                  50,
+                );
               }}
             >
               <RefreshCw className="size-4" />
+            </Button>
+            <ButtonGroupSeparator
+              orientation={isMobile ? "vertical" : "horizontal"}
+              className="bg-background/40"
+            />
+
+            <Button
+              variant="secondary"
+              size="icon"
+              className="h-10 w-10 text-difficulty-medium transition-colors"
+              title="Report an Issue"
+              asChild
+            >
+              <Link href="/report-bug">
+                <Bug className="size-4" />
+              </Link>
             </Button>
           </ButtonGroup>
         </Panel>

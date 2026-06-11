@@ -22,6 +22,7 @@ import { registerAcademyRoutes } from "./academy/academy.routes";
 import { registerSystemDesignRoutes } from "./system-design/system-design.routes";
 import { registerCompanyRoutes } from "./company/company.routes";
 import { registerSeoRoutes } from "./seo/seo.routes";
+import { registerReportBugRoutes } from "./report-bug/report-bug.routes";
 
 import { healthRoutes } from "./system/health.routes";
 
@@ -49,6 +50,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     systemDesignController,
     companyController,
     seoController,
+    reportBugController,
     authMiddleware,
     authorizationMiddleware,
     rateLimitMiddleware,
@@ -165,6 +167,10 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
 
   registerSeoRoutes(v1, {
     seoController,
+  });
+
+  registerReportBugRoutes(v1, {
+    reportBugController,
   });
  
   app.route("/api/v1", v1);
