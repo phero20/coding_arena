@@ -50,18 +50,29 @@ export class AuthService {
 
     logger.info({ clerkId, username }, "User found or created via ensureUser");
 
-    const created = await this.userRepository.create({
-      clerkId,
-      username,
-      email: payload.email,
-      fullName: payload.fullName ?? null,
-      avatarUrl: payload.avatarUrl ?? undefined,
-      status: "active",
-      role: "user",
-    });
+    try {
+      const created = await this.userRepository.create({
+        clerkId,
+        username,
+        email: payload.email,
+        fullName: payload.fullName ?? null,
+        avatarUrl: payload.avatarUrl ?? undefined,
+        status: "active",
+        role: "user",
+      });
 
-    await this.statsService.invalidateProfile(created.id);
-    return created;
+      await this.statsService.invalidateProfile(created.id);
+      return created;
+    } catch (err: any) {
+      if (err.code === "23505") {
+        logger.warn({ clerkId, email: payload.email }, "Duplicate key error on ensureUser, attempting to fetch existing user.");
+        const existingAfterRace = await this.userRepository.findByClerkId(clerkId);
+        if (existingAfterRace) {
+          return existingAfterRace;
+        }
+      }
+      throw err;
+    }
   }
 
   async ensureUserFromIdOnly(clerkId: string): Promise<User | null> {
@@ -94,18 +105,29 @@ export class AuthService {
     // Back-sync to Clerk
     await this.pushUsernameToClerk(clerkId, username);
 
-    const created = await this.userRepository.create({
-      clerkId,
-      username,
-      email: payload.email,
-      fullName: payload.fullName ?? null,
-      avatarUrl: payload.avatarUrl ?? undefined,
-      status: "active",
-      role: "user",
-    });
+    try {
+      const created = await this.userRepository.create({
+        clerkId,
+        username,
+        email: payload.email,
+        fullName: payload.fullName ?? null,
+        avatarUrl: payload.avatarUrl ?? undefined,
+        status: "active",
+        role: "user",
+      });
 
-    await this.statsService.invalidateProfile(created.id);
-    return created;
+      await this.statsService.invalidateProfile(created.id);
+      return created;
+    } catch (err: any) {
+      if (err.code === "23505") {
+        logger.warn({ clerkId, email: payload.email }, "Duplicate key error on syncUser, attempting to fetch existing user.");
+        const existingAfterRace = await this.userRepository.findByClerkId(clerkId);
+        if (existingAfterRace) {
+          return existingAfterRace;
+        }
+      }
+      throw err;
+    }
   }
 
   async deleteUser(clerkId: string): Promise<void> {

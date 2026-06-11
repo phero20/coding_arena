@@ -30,7 +30,7 @@ const clerkAppearance = {
   },
   elements: {
     rootBox: "flex items-center justify-center",
-    cardBox: "!min-h-[85vh] !my-auto !h-auto",
+    cardBox: "!max-h-[85vh] !my-auto !h-auto",
     card: "bg-card border border-border shadow-2xl mx-auto !my-auto !max-h-[90vh] !min-h-0 !h-auto overflow-hidden",
     scrollBox: "overflow-y-auto custom-scrollbar !max-h-[calc(90vh)]",
     navbar: "bg-transparent",
