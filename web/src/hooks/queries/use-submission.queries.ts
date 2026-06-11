@@ -43,8 +43,19 @@ export function useSubmissionStatusQuery(submissionId: string | null) {
       queryClient.invalidateQueries({
         queryKey: ["recent-submissions-paginated"],
       });
+      
+      if (user?.id) {
+        queryClient.invalidateQueries({
+          queryKey: ["user-solved-problems", user.id],
+        });
+      }
+      
+      // Also invalidate the submissions list for any problem to update history
+      queryClient.invalidateQueries({
+        queryKey: ["user-submissions"],
+      });
     }
-  }, [isFinished, user?.username, queryClient]);
+  }, [isFinished, user?.username, user?.id, queryClient]);
 
   return query;
 }
