@@ -1,6 +1,3 @@
-"use client";
-
-
 import Link from "next/link";
 import { Dumbbell, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -18,36 +18,28 @@ export const ProblemRowSkeleton = ({ count = 8, fragment = false }: { count?: nu
       {Array.from({ length: count }).map((_, i) => (
         <TableRow key={i} className="border-t border-border/40 hover:bg-transparent">
           {/* ID Column */}
-          <TableCell className="pl-4 pr-0 md:pr-4 py-3 w-12">
+          <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
             <Skeleton width={20} height={12} />
           </TableCell>
           
           {/* Title & Slug Column */}
-          <TableCell className="px-0 md:px-4 py-3 min-w-0">
+          <TableCell className="px-0 md:px-4 py-3 align-middle min-w-0">
             <div className="flex flex-col gap-1.5 min-w-0">
               <Skeleton width="85%" height={14} className="rounded-sm" />
-              <div className="hidden sm:block">
-                <Skeleton width="40%" height={10} className="rounded-sm opacity-50" />
-              </div>
             </div>
           </TableCell>
           
           {/* Difficulty Column */}
-          <TableCell className="px-4 py-3 w-24">
-            <Skeleton width={65} height={20} className="rounded-md" />
+          <TableCell className="px-4 py-3 align-middle text-right md:text-left">
+            <Skeleton width={65} height={20} className="rounded-md inline-block" />
           </TableCell>
           
           {/* Topics Column */}
-          <TableCell className="px-4 py-3 w-40 hidden md:table-cell">
-            <div className="flex gap-1.5">
-              <Skeleton width={42} height={16} className="rounded-sm" />
+          <TableCell className="px-4 py-3 align-middle hidden md:table-cell">
+            <div className="flex flex-col gap-1.5">
+              <Skeleton width={56} height={16} className="rounded-sm" />
               <Skeleton width={42} height={16} className="rounded-sm" />
             </div>
-          </TableCell>
-          
-          {/* Action Column */}
-          <TableCell className="px-4 py-3 text-right w-24 whitespace-nowrap">
-            <Skeleton width={56} height={32} className="rounded-md" />
           </TableCell>
         </TableRow>
       ))}

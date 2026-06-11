@@ -25,21 +25,9 @@ import { useRoadmapStore } from "@/store/use-roadmap-store";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 
-const Show = ({
-  when,
-  children,
-}: {
-  when: "signed-in" | "signed-out";
-  children: React.ReactNode;
-}) => {
-  const { isLoaded, isSignedIn } = useUser();
-  if (!isLoaded) return null;
-  const isMatch = when === "signed-in" ? isSignedIn : !isSignedIn;
-  return isMatch ? <>{children}</> : null;
-};
 
 export const NavbarActions = () => {
-  const { user } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -72,7 +60,11 @@ export const NavbarActions = () => {
 
       <ModeToggle />
 
-      <Show when="signed-out">
+      {!isLoaded && (
+        <div className="h-9 w-9 rounded-full bg-card/80 animate-pulse border border-border/40" />
+      )}
+
+      {isLoaded && !isSignedIn && (
         <div className="flex items-center gap-3">
           <SignInButton mode="modal">
             <Button className="text-sm font-medium px-2 md:px-4">
@@ -81,9 +73,9 @@ export const NavbarActions = () => {
             </Button>
           </SignInButton>
         </div>
-      </Show>
+      )}
 
-      <Show when="signed-in">
+      {isLoaded && isSignedIn && (
         <div className="flex items-center gap-4">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -180,7 +172,7 @@ export const NavbarActions = () => {
             </PopoverContent>
           </Popover>
         </div>
-      </Show>
+      )}
     </div>
   );
 };

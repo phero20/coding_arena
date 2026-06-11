@@ -1,4 +1,4 @@
-"use client";
+
 
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, Menu } from "lucide-react";

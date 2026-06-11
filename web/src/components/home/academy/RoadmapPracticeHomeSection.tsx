@@ -205,7 +205,7 @@ export const RoadmapPracticeHomeSection = () => {
                     end={e.target}
                     color="#60a5fa"
                     strokeWidth={2}
-                    dashness={{ strokeLen: 8, nonStrokeLen: 4, animation: true }}
+                    dashness={{ strokeLen: 8, nonStrokeLen: 4, animation: false }}
                     showHead={false}
                     path="smooth"
                     startAnchor="bottom"

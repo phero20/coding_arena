@@ -13,4 +13,5 @@ export interface CompanyProblem {
   acceptanceRate: number;
   link: string;
   topics: string[];
+  is_premium:boolean;
 }

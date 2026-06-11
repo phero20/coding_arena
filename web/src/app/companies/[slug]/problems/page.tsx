@@ -27,7 +27,7 @@ export default function CompanyProblemsPage() {
     title: cp.title,
     difficulty: cp.difficulty === "EASY" ? "Easy" : cp.difficulty === "MEDIUM" ? "Medium" : "Hard",
     topics: cp.topics || [],
-    
+    is_premium:cp.is_premium,
     // Fill required dummy fields for Problem interface
     description: "",
     examples: [],

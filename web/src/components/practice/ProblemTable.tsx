@@ -53,14 +53,11 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
                   <TableHead className="px-4 md:px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
                     Title
                   </TableHead>
-                  <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-20 sm:w-32">
+                  <TableHead className="px-4 py-3 h-12 text-right md:text-left font-bold text-xs uppercase tracking-widest w-28 sm:w-32">
                     Difficulty
                   </TableHead>
                   <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-40 hidden md:table-cell">
                     Topics
-                  </TableHead>
-                  <TableHead className="px-4 py-3 h-12 text-right font-bold text-xs uppercase tracking-widest w-24 sm:w-28">
-                    Action
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -85,14 +82,11 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
                   <TableHead className="px-4 md:px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
                     Title
                   </TableHead>
-                  <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-20 sm:w-32">
+                  <TableHead className="px-4 py-3 h-12 text-right md:text-left font-bold text-xs uppercase tracking-widest w-28 sm:w-32">
                     Difficulty
                   </TableHead>
                   <TableHead className="px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-40 hidden md:table-cell">
                     Topics
-                  </TableHead>
-                  <TableHead className="px-4 py-3 h-12 text-right font-bold text-xs uppercase tracking-widest w-24 sm:w-28">
-                    Action
                   </TableHead>
                 </TableRow>
               </TableHeader>

@@ -29,9 +29,13 @@ const clerkAppearance = {
     borderRadius: "var(--radius)",
   },
   elements: {
-    card: "bg-card border border-border shadow-2xl mx-auto !my-auto",
+    rootBox: "flex items-center justify-center",
+    cardBox: "!min-h-[85vh] !my-auto !h-auto",
+    card: "bg-card border border-border shadow-2xl mx-auto !my-auto !max-h-[90vh] !min-h-0 !h-auto overflow-hidden",
+    scrollBox: "overflow-y-auto custom-scrollbar !max-h-[calc(90vh)]",
     navbar: "bg-transparent",
-    headerTitle: "text-2xl font-bold tracking-tight text-foreground after:content-['SlaveCode'] after:text-primary after:ml-2",
+    headerTitle:
+      "text-2xl font-bold tracking-tight text-foreground after:content-['SlaveCode'] after:text-primary after:ml-2",
     headerSubtitle: "text-base text-muted-foreground",
     socialButtonsBlockButton:
       "bg-muted/50 border-border hover:bg-muted transition-all",
@@ -40,7 +44,12 @@ const clerkAppearance = {
     footerActionLink: "text-primary hover:text-primary/80",
     userButtonPopoverCard: "bg-card border border-border",
     modalContent: "flex items-center justify-center",
-    modalBackdrop: "!bg-background/60 backdrop-blur-[2px] fixed inset-0 flex items-center justify-center z-[9999]",
+    modalBackdrop:
+      "!bg-background/60 backdrop-blur-[2px] fixed inset-0 flex items-center justify-center z-[9999]",
+
+    footer: "!hidden",
+    footerInternal: "!hidden",
+    watermark: "hidden",
   },
 };
 

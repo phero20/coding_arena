@@ -21,11 +21,18 @@ import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Code2, CheckCircle2, GripVertical } from "lucide-react";
+import { Code2, CheckCircle2, GripVertical, Lock, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { RoadmapSidebarSkeleton } from "@/components/skeletons/RoadmapSkeletons";
 import { Problem } from "@/types/api";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 
 interface RoadmapSidebarProps {
   nodeId: string | null;
@@ -159,20 +166,17 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
                         emptyMessage="This node doesn't have any problems mapped to it yet."
                         emptyIcon={Code2}
                       >
-                        <Table>
+                        <Table className="table-fixed">
                           <TableHeader className="bg-muted/40">
-                            <TableRow className="hover:bg-transparent border-none">
-                              <TableHead className="w-[30px] pl-4 font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                            <TableRow className="border-b border-border/40 hover:bg-transparent">
+                              <TableHead className="pl-4 pr-0 md:pr-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest w-12">
                                 ID
                               </TableHead>
-                              <TableHead className="font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                              <TableHead className="px-4 md:px-4 py-3 h-12 text-left font-bold text-xs uppercase tracking-widest">
                                 Title
                               </TableHead>
-                              <TableHead className="w-[120px] font-black uppercase text-[10px] tracking-widest text-muted-foreground">
+                              <TableHead className="px-4 py-3 h-12 text-right md:text-left font-bold text-xs uppercase tracking-widest w-28 sm:w-32">
                                 Difficulty
-                              </TableHead>
-                              <TableHead className="w-[100px] text-right pr-6 font-black uppercase text-[10px] tracking-widest text-muted-foreground">
-                                Action
                               </TableHead>
                             </TableRow>
                           </TableHeader>
@@ -182,38 +186,50 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
                               return (
                                 <TableRow
                                   key={prob.problem_id}
-                                  className={cn(
-                                    "group border-b border-border transition-colors",
-                                    isSolved
-                                      ? "bg-primary/20 hover:bg-primary/15"
-                                      : "hover:bg-primary/5",
-                                  )}
+                                  className={cn("group border-t border-border/50 transition-colors hover:bg-muted/30",isSolved && "bg-difficulty-easy")}
                                 >
                                   <TableCell className="pl-4 pr-0 md:pr-4 py-3 align-middle text-xs text-muted-foreground">
-                                    {prob.problem_id.padStart(2, "0")}
+                                    {prob.problem_id || '-:-'}
                                   </TableCell>
                                   <TableCell className="px-0 md:px-4 py-3 align-middle min-w-0">
                                     <div className="flex flex-col min-w-0">
-                                      <div className="flex items-center gap-2">
-                                        <div className="text-sm truncate font-bold text-foreground group-hover:text-primary transition-colors">
-                                          <Link
-                                            href={`/problems/${prob.problem_slug}?from=roadmap`}
+                                      <div className="text-sm font-bold text-foreground flex items-center gap-2 group-hover:text-primary transition-colors min-w-0">
+                                        <Link
+                                          href={prob.is_premium ? `https://leetcode.com/problems/${prob.problem_slug}` : `/problems/${prob.problem_slug}?from=roadmap`}
+                                          target={prob.is_premium ? "_blank" : undefined}
+                                          rel={prob.is_premium ? "noopener noreferrer" : undefined}
+                                          className="flex min-w-0 max-w-full"
+                                        >
+                                          {" "}
+                                          <Button
+                                            className={cn("p-0 text-foreground/90 group-hover:text-primary flex items-center max-w-full justify-start min-w-0", isSolved && "text-difficulty-easy")}
+                                            variant="link"
                                           >
-                                            <Button
-                                              className="p-0 h-auto "
-                                              variant="link"
-                                            >
-                                              {prob.title}
-                                            </Button>
-                                          </Link>
-                                        </div>
+                                            <span className="truncate">{prob.title}</span>
+                                            {prob.is_premium && (
+                                              <TooltipProvider delayDuration={0}>
+                                                <Tooltip>
+                                                  <TooltipTrigger asChild>
+                                                    <span className="flex items-center ml-2 gap-1 text-difficulty-medium shrink-0" onClick={(e) => e.stopPropagation()}>
+                                                      <Lock className="h-3.5 w-3.5" />
+                                                      <ExternalLink className="h-3 w-3 opacity-70 hidden lg:block" />
+                                                    </span>
+                                                  </TooltipTrigger>
+                                                  <TooltipContent className="text-left">
+                                                    <p>We don't have this problem. Please click to visit LeetCode<br/> and solve. It's a premium LeetCode problem.</p>
+                                                  </TooltipContent>
+                                                </Tooltip>
+                                              </TooltipProvider>
+                                            )}
+                                          </Button>
+                                        </Link>
+                                        {isSolved && (
+                                          <CheckCircle2 className="h-4 w-4 text-difficulty-easy shrink-0" />
+                                        )}
                                       </div>
-                                      {/* <span className="mt-0.5 truncate text-[10px] uppercase font-bold tracking-tight text-muted-foreground/60">
-                                  {prob.problem_slug}
-                                </span> */}
                                     </div>
                                   </TableCell>
-                                  <TableCell className="px-4 py-3 align-middle">
+                                  <TableCell className="px-4 py-3 align-middle text-right md:text-left">
                                     <span
                                       className={cn(
                                         "inline-flex items-center rounded-md border px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest",
@@ -224,29 +240,6 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
                                     >
                                       {prob.difficulty}
                                     </span>
-                                  </TableCell>
-                                  <TableCell className="pr-6 py-4 text-right">
-                                    <Link
-                                      href={`/problems/${prob.problem_slug}?from=roadmap`}
-                                    >
-                                      <Button
-                                        size="sm"
-                                        variant={
-                                          isSolved ? "secondary" : "default"
-                                        }
-                                      >
-                                        {isSolved ? (
-                                          <div className="flex items-center gap-2 text-difficulty-easy">
-                                            <CheckCircle2 className="size-4 shrink-0" />
-                                            <span className="hidden sm:block">
-                                              Solved
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          "Solve"
-                                        )}
-                                      </Button>
-                                    </Link>
                                   </TableCell>
                                 </TableRow>
                               );

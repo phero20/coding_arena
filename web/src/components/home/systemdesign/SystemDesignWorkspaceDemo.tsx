@@ -1,4 +1,4 @@
-"use client";
+
 
 import {
     Cloud, ChevronDown, Undo2, Redo2, Download, Upload, Share2,

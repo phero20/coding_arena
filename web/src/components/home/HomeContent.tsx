@@ -1,5 +1,3 @@
-"use client";
-
 import { Hero } from "./Hero";
 import CompilerSection  from "./compilers/compilerVisual";
 import AcademyHome from "./academy/AcademyHome";
