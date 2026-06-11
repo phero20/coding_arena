@@ -1,6 +1,6 @@
 import type { IProblemService } from "../problems/problem.service";
-import type { GroqJsonResponse } from "../ai/groq-llm.service";
-import { GroqLlmService } from "../ai/groq-llm.service";
+import type { UnifiedJsonResponse } from "../ai/unified-llm.service";
+import { type UnifiedLlmService } from "../ai/unified-llm.service";
 import type { SubmissionStatus } from "../../mongo/models/submission.model";
 import type {
   ExecutionTestResult,
@@ -45,7 +45,7 @@ export interface AiRunSamplesResult {
   overallStatus: SubmissionStatus;
   tests: ExecutionTestResult[];
   compileOutput?: string;
-  rawLlmResponse: GroqJsonResponse<AiRunSamplesOutput>["raw"];
+  rawLlmResponse: UnifiedJsonResponse<AiRunSamplesOutput>["raw"];
   cached?: boolean;
 }
 
@@ -69,11 +69,11 @@ import { type ICradle } from "../../libs/awilix-container";
  * execution service uses.
  */
 export class AiCodeJudgeService implements IAiJudgeService {
-  private readonly groqLlmService: GroqLlmService;
+  private readonly unifiedLlmService: UnifiedLlmService;
   private readonly problemService: IProblemService;
 
-  constructor({ groqLlmService, problemService }: ICradle) {
-    this.groqLlmService = groqLlmService;
+  constructor({ unifiedLlmService, problemService }: ICradle) {
+    this.unifiedLlmService = unifiedLlmService;
     this.problemService = problemService;
   }
 
@@ -149,12 +149,11 @@ export class AiCodeJudgeService implements IAiJudgeService {
       "Then respond ONLY with the JSON object described above.",
     );
 
-    const { data, raw } =
-      await this.groqLlmService.generateJson<AiRunSamplesOutput>({
-        systemPrompt,
-        userPrompt: userPromptParts.join("\n"),
-        temperature: 0,
-      });
+    const { data, raw } = await this.unifiedLlmService.generateJson<AiRunSamplesOutput>({
+      systemPrompt,
+      userPrompt: userPromptParts.join("\n"),
+      temperature: 0,
+    });
 
     if (!Array.isArray(data.tests)) {
       throw new Error("AI execution response did not include tests array");

@@ -1,6 +1,5 @@
 import { type ICradle } from "../../libs/awilix-container";
-import { type GroqLlmService } from "./groq-llm.service";
-import { type GeminiLlmService } from "./gemini-llm.service";
+import { type UnifiedLlmService } from "./unified-llm.service";
 import { type IDiagramResolverService } from "./diagram-resolver.service";
 import type { CanvasGraph, CanvasFrame, SemanticNode } from "../../validators/chat.validator";
 import { createLogger } from "../../libs/utils/logger";
@@ -70,13 +69,11 @@ export interface IGroqDiagramService {
 // ─── Service implementation ──────────────────────────────────────────────────
 
 export class GroqDiagramService implements IGroqDiagramService {
-  private readonly llmService: GroqLlmService;
-  private readonly geminiLlmService: GeminiLlmService;
+  private readonly unifiedLlmService: UnifiedLlmService;
   private readonly diagramResolverService: IDiagramResolverService;
 
-  constructor({ groqLlmService, geminiLlmService, diagramResolverService }: ICradle) {
-    this.llmService = groqLlmService;
-    this.geminiLlmService = geminiLlmService;
+  constructor({ unifiedLlmService, diagramResolverService }: ICradle) {
+    this.unifiedLlmService = unifiedLlmService;
     this.diagramResolverService = diagramResolverService;
   }
 
@@ -241,29 +238,19 @@ Respond with the JSON object now.`;
     let response: any;
     
     try {
-      response = await this.llmService.generateJson<LLMResponse>({
+      response = await this.unifiedLlmService.generateJson<LLMResponse>({
         systemPrompt,
         userPrompt,
         temperature: 0.1,
       });
     } catch (err: any) {
-      logger.warn({ err: err.message }, "Groq API failed or Circuit Breaker is OPEN. Falling back to Gemini 2.0 Flash.");
+      logger.error({ err: err.message }, "All AI models are currently down.");
       
-      try {
-        response = await this.geminiLlmService.generateJson<LLMResponse>({
-          systemPrompt,
-          userPrompt,
-          temperature: 0.1,
-        });
-      } catch (geminiErr: any) {
-        logger.error({ err: geminiErr.message }, "Gemini Fallback ALSO failed. All AI models are currently down.");
-        
-        // Graceful Degradation Response
-        return {
-          textResponse: "All AI systems are currently under heavy load or unavailable. Please try again in 60 seconds.",
-          canvasActions: { action: "NONE" },
-        };
-      }
+      // Graceful Degradation Response
+      return {
+        textResponse: "All AI systems are currently under heavy load or unavailable. Please try again in 60 seconds.",
+        canvasActions: { action: "NONE" } as LLMCanvasActionNone,
+      };
     }
 
 

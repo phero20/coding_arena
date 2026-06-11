@@ -28,6 +28,11 @@ export function useRunAcademyExerciseMutation({
       queryClient.invalidateQueries({
         queryKey: ["recent-submissions-paginated"],
       });
+      
+      // Invalidate the problem-specific submission history
+      queryClient.invalidateQueries({
+        queryKey: ["user-submissions", `${trackSlug}:${exerciseSlug}`],
+      });
 
       // If the exercise passed, invalidate the solved exercises query to refresh the UI
       if (data.passed) {

@@ -44,7 +44,9 @@ export class AcademyExecutionService {
 
     const trackConfig = getTrackConfig(trackSlug);
     const languageId = trackConfig?.judge0Id || 0;
-    const isFullySupported = TEST_SUPPORTED_LANGUAGES.has(trackSlug.toLowerCase());
+    
+    // TEMPORARY: Force all execution through AI Judge until Mini-Judge0 is built
+    const isFullySupported = false; // TEST_SUPPORTED_LANGUAGES.has(trackSlug.toLowerCase());
 
     if (!isFullySupported) {
       logger.info({ trackSlug, exerciseSlug }, "Routing to AI Judge");

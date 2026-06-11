@@ -127,6 +127,7 @@ import { type LeetCodeCache } from "../cache/user/leetcode.cache";
 import { type LeaderboardCache } from "../cache/stats/leaderboard.cache";
 import { type TaxonomyCache } from "../cache/taxonomy/taxonomy.cache";
 import { GeminiLlmService } from "../services/ai/gemini-llm.service";
+import { UnifiedLlmService } from "../services/ai/unified-llm.service";
 
 export interface ICradle {
   // Infrastructure
@@ -164,6 +165,7 @@ export interface ICradle {
   statsService: IStatsService;
   groqLlmService: GroqLlmService;
   geminiLlmService: GeminiLlmService;
+  unifiedLlmService: UnifiedLlmService;
   llm: GeminiLlmService;
   aiProblemService: AiProblemService;
   aiAddSolveService: AiAddSolveService;

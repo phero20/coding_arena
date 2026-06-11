@@ -23,18 +23,15 @@ import { type IClockService } from "../common/clock.service";
  */
 export class GroqLlmService {
   private readonly clock: IClockService;
-  private readonly apiKey: string = config.groqApiKey as string;
+  private readonly apiKeys: string[];
   private readonly baseUrl: string = "https://api.groq.com/openai/v1";
-  private readonly model: string = "llama-3.3-70b-versatile";
   
   private circuitBreaker = new CircuitBreaker("Groq API", 3, 1, 60000);
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
-  }
-
-  private ensureConfigured() {
-    if (!this.apiKey) {
+    this.apiKeys = config.groqApiKeys || [];
+    if (this.apiKeys.length === 0) {
       throw new Error("GROQ_API_KEY is not configured");
     }
   }
@@ -52,10 +49,31 @@ export class GroqLlmService {
     model?: string;
     maxTokens?: number;
   }): Promise<GroqJsonResponse<T>> {
-    this.ensureConfigured();
+    if (!opts.model) {
+      throw new Error("Groq model must be explicitly provided in opts.model");
+    }
+    return await this._executeRequest<T>(opts.model, opts);
+  }
+
+  private async _executeRequest<T>(
+    modelName: string,
+    opts: {
+      systemPrompt: string;
+      userPrompt: string;
+      temperature?: number;
+      model?: string;
+      maxTokens?: number;
+    },
+    keyIndex: number = 0
+  ): Promise<GroqJsonResponse<T>> {
+    if (keyIndex >= this.apiKeys.length) {
+      throw new Error(`All ${this.apiKeys.length} Groq API keys failed (exhausted).`);
+    }
+
+    const apiKey = this.apiKeys[keyIndex];
 
     const body = {
-      model: opts.model ?? this.model,
+      model: opts.model ?? modelName,
       messages: [
         { role: "system", content: opts.systemPrompt },
         { role: "user", content: opts.userPrompt },
@@ -90,7 +108,7 @@ export class GroqLlmService {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${this.apiKey}`,
+        authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(30000), // 30 second timeout to prevent memory leaks/hangs
@@ -101,9 +119,17 @@ export class GroqLlmService {
 
     if (!response.ok) {
       const errText = await response.text().catch(() => "");
-      throw new Error(
-        `Groq request failed with status ${response.status}: ${errText}`,
-      );
+      
+      const isQuotaError = response.status === 429;
+      const isAuthError = response.status === 401 || response.status === 403;
+      const isServerError = response.status >= 500;
+
+      if (isQuotaError || isAuthError || isServerError) {
+        logger.warn({ status: response.status, errText, keyIndex }, `Groq API key at index ${keyIndex} failed. Rotating to next key...`);
+        return await this._executeRequest<T>(modelName, opts, keyIndex + 1);
+      }
+      
+      throw new Error(`Groq request failed with status ${response.status}: ${errText}`);
     }
 
     const json = (await response.json()) as any;

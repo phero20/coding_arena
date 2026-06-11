@@ -39,10 +39,8 @@ export const NavbarActions = () => {
     queryClient.clear();
     // 2. Reset UI state
     resetRoadmap();
-    // 3. Perform Sign Out
-    await signOut();
-    // 4. Redirect
-    router.push("/");
+    // 3. Perform Sign Out and Redirect
+    await signOut({ redirectUrl: "/" });
   };
 
   const username = user?.username || user?.id;

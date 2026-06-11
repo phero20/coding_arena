@@ -8,6 +8,7 @@ import { ProblemTestService } from "../../services/problems/problem-test.service
 import { SubmissionService } from "../../services/submissions/submission.service";
 import { GroqLlmService } from "../../services/ai/groq-llm.service";
 import { GeminiLlmService } from "../../services/ai/gemini-llm.service";
+import { UnifiedLlmService } from "../../services/ai/unified-llm.service";
 import { SystemClockService } from "../../services/common/clock.service";
 import { AiProblemService } from "../../services/problems/ai-problem.service";
 import { AiAddSolveService } from "../../services/problems/ai-addsolve.service";
@@ -69,6 +70,7 @@ export const servicesRegistry = {
   authService: asClass(AuthService).singleton(),
   groqLlmService: asClass(GroqLlmService).singleton(),
   geminiLlmService: asClass(GeminiLlmService).singleton(),
+  unifiedLlmService: asClass(UnifiedLlmService).singleton(),
 
   // Gemini is now the primary LLM for high accuracy
   llm: asFunction(({ geminiLlmService }: ICradle) => geminiLlmService).singleton(),

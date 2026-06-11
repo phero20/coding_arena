@@ -28,6 +28,15 @@ const parseStringList = (value: string | undefined): string[] | undefined => {
   return value.split(",").map((v) => v.trim()).filter((v) => v.length > 0);
 };
 
+const parseApiKeyArray = (value: string | undefined): string[] => {
+  if (!value) return [];
+  let cleaned = value.trim();
+  if (cleaned.startsWith("[") && cleaned.endsWith("]")) {
+    cleaned = cleaned.slice(1, -1);
+  }
+  return cleaned.split(",").map((v) => v.trim()).filter((v) => v.length > 0);
+};
+
 const parseAudience = (value: string | undefined): string | string[] | undefined => {
   if (!value) return undefined;
   if (value.includes(",")) return parseStringList(value) as string[];
@@ -66,8 +75,8 @@ interface EnvConfig {
   judge0ApiHost?: string;
 
   // AI
-  groqApiKey?: string;
-  geminiApiKey?: string;
+  groqApiKeys: string[];
+  geminiApiKeys: string[];
 
   // Redis
   redisUrl: string;
@@ -123,8 +132,8 @@ export const config: EnvConfig = {
   judge0ApiHost: Bun.env.JUDGE0_API_HOST,
 
   // AI
-  groqApiKey: Bun.env.GROQ_API_KEY,
-  geminiApiKey: Bun.env.GEMINI_API_KEY,
+  groqApiKeys: parseApiKeyArray(Bun.env.GROQ_API_KEY),
+  geminiApiKeys: parseApiKeyArray(Bun.env.GEMINI_API_KEY),
 
   // Redis
   redisUrl: Bun.env.REDIS_URL || "redis://localhost:6379",

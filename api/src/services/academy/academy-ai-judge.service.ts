@@ -1,9 +1,5 @@
 import { type ICradle } from "../../libs/awilix-container";
-import { createLogger } from "../../libs/utils/logger";
-import { type GeminiLlmService } from "../ai/gemini-llm.service";
-import { type GroqLlmService } from "../ai/groq-llm.service";
-
-const logger = createLogger("academy-ai-judge.service");
+import { type UnifiedLlmService } from "../ai/unified-llm.service";
 
 export interface AcademyExecutionResult {
   passed: boolean;
@@ -28,12 +24,10 @@ export interface AiJudgeEvaluationParams {
 }
 
 export class AcademyAiJudgeService {
-  private readonly geminiLlmService: GeminiLlmService;
-  private readonly groqLlmService: GroqLlmService;
+  private readonly unifiedLlmService: UnifiedLlmService;
 
   constructor(cradle: ICradle) {
-    this.geminiLlmService = cradle.geminiLlmService;
-    this.groqLlmService = cradle.groqLlmService;
+    this.unifiedLlmService = cradle.unifiedLlmService;
   }
 
   async evaluate(params: AiJudgeEvaluationParams): Promise<AcademyExecutionResult> {
@@ -79,38 +73,16 @@ ${testCode}
 
 Evaluate the user's solution against the test suite and instructions. Return ONLY valid JSON.`;
 
-    try {
-      logger.info({ trackSlug }, "Attempting AI evaluation via Groq");
-      const result = await this.groqLlmService.generateJson<Omit<AcademyExecutionResult, "isRawExecution" | "isAiEvaluation">>({
-        systemPrompt,
-        userPrompt,
-        temperature: 0,
-      });
+    const result = await this.unifiedLlmService.generateJson<Omit<AcademyExecutionResult, "isRawExecution" | "isAiEvaluation">>({
+      systemPrompt,
+      userPrompt,
+      temperature: 0,
+    });
 
-      return {
-        ...result.data,
-        isRawExecution: false,
-        isAiEvaluation: true,
-      };
-    } catch (error: any) {
-      logger.warn({ error: error.message }, "Groq evaluation failed. Falling back to Gemini.");
-
-      try {
-        const fallbackResult = await this.geminiLlmService.generateJson<Omit<AcademyExecutionResult, "isRawExecution" | "isAiEvaluation">>({
-          systemPrompt,
-          userPrompt,
-          temperature: 0,
-        });
-
-        return {
-          ...fallbackResult.data,
-          isRawExecution: false,
-          isAiEvaluation: true,
-        };
-      } catch (fallbackError: any) {
-        logger.error({ error: fallbackError.message }, "Gemini fallback evaluation also failed.");
-        throw new Error("Both primary and fallback AI evaluation services failed.");
-      }
-    }
+    return {
+      ...result.data,
+      isRawExecution: false,
+      isAiEvaluation: true,
+    };
   }
 }

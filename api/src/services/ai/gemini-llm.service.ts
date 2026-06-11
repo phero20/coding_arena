@@ -13,18 +13,18 @@ export interface GeminiJsonResponse<T> {
 
 export class GeminiLlmService {
   private readonly clock: IClockService;
-  private readonly genAI: GoogleGenerativeAI;
-  private readonly primaryModel = "gemini-2.5-flash";
-  private readonly fallbackModel = "gemini-3.1-flash-lite";
+  private readonly apiKeys: string[];
+  private readonly genAIs: GoogleGenerativeAI[];
   
   private circuitBreaker = new CircuitBreaker("Gemini API", 3, 1, 60000);
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
-    if (!config.geminiApiKey) {
+    this.apiKeys = config.geminiApiKeys || [];
+    if (this.apiKeys.length === 0) {
       throw new Error("GEMINI_API_KEY is not configured");
     }
-    this.genAI = new GoogleGenerativeAI(config.geminiApiKey);
+    this.genAIs = this.apiKeys.map(key => new GoogleGenerativeAI(key));
   }
 
   /**
@@ -36,19 +36,12 @@ export class GeminiLlmService {
     temperature?: number;
     maxTokens?: number;
     responseSchema?: Schema;
+    model?: string;
   }): Promise<GeminiJsonResponse<T>> {
-    try {
-      return await this._executeRequest<T>(this.primaryModel, opts);
-    } catch (err: any) {
-      const isQuotaError = err.message?.includes("429") || err.message?.includes("Quota exceeded");
-      const isServerError = err.message?.includes("503") || err.status === 503 || err.cause?.status === 503;
-
-      if (isQuotaError || isServerError) {
-        logger.warn({ error: err.message }, `${this.primaryModel} quota exceeded. Falling back to ${this.fallbackModel}...`);
-        return await this._executeRequest<T>(this.fallbackModel, opts);
-      }
-      throw err;
+    if (!opts.model) {
+      throw new Error("Gemini model must be explicitly provided in opts.model");
     }
+    return await this._executeRequest<T>(opts.model, opts);
   }
 
   private async _executeRequest<T>(
@@ -59,9 +52,15 @@ export class GeminiLlmService {
       temperature?: number;
       maxTokens?: number;
       responseSchema?: Schema;
-    }
+    },
+    keyIndex: number = 0
   ): Promise<GeminiJsonResponse<T>> {
-    const model = this.genAI.getGenerativeModel(
+    if (keyIndex >= this.genAIs.length) {
+      throw new Error(`All ${this.genAIs.length} Gemini API keys failed (exhausted).`);
+    }
+
+    const genAI = this.genAIs[keyIndex];
+    const model = genAI.getGenerativeModel(
       {
         model: modelName,
         systemInstruction: opts.systemPrompt,
@@ -71,15 +70,28 @@ export class GeminiLlmService {
 
     const startTime = this.clock.now();
 
-    const result = await this.circuitBreaker.execute(() => model.generateContent({
-      contents: [{ role: "user", parts: [{ text: opts.userPrompt }] }],
-      generationConfig: {
-        temperature: opts.temperature ?? 0,
-        maxOutputTokens: opts.maxTokens ?? 8192,
-        responseMimeType: "application/json",
-        ...(opts.responseSchema && { responseSchema: opts.responseSchema }),
-      },
-    }));
+    let result;
+    try {
+      result = await this.circuitBreaker.execute(() => model.generateContent({
+        contents: [{ role: "user", parts: [{ text: opts.userPrompt }] }],
+        generationConfig: {
+          temperature: opts.temperature ?? 0,
+          maxOutputTokens: opts.maxTokens ?? 8192,
+          responseMimeType: "application/json",
+          ...(opts.responseSchema && { responseSchema: opts.responseSchema }),
+        },
+      }));
+    } catch (err: any) {
+      const isQuotaError = err.message?.includes("429") || err.message?.includes("Quota exceeded");
+      const isAuthError = err.message?.includes("401") || err.message?.includes("API key not valid");
+      const isServerError = err.message?.includes("503") || err.status === 503 || err.cause?.status === 503;
+
+      if (isQuotaError || isAuthError || isServerError) {
+        logger.warn({ error: err.message, keyIndex }, `Gemini API key at index ${keyIndex} failed. Rotating to next key...`);
+        return await this._executeRequest<T>(modelName, opts, keyIndex + 1);
+      }
+      throw err;
+    }
 
     const duration = this.clock.now() - startTime;
     metrics.recordLlmLatency(duration);

@@ -284,7 +284,7 @@ export default function DiagramPage({ params }: DiagramPageProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 hidden lg:block text-difficulty-medium transition-colors"
+                  className="h-8 w-8 hidden lg:flex justify-center items-center text-difficulty-medium transition-colors"
                   title="Report an Issue"
                 >
                   <Bug className="size-4" />
