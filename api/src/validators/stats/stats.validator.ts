@@ -9,6 +9,7 @@ export const UpdateStatsSchema = z.object({
   difficulty: DifficultySchema.optional(),
   isMatch: z.boolean().default(false),
   languageId: z.string().optional(), // Language used in the winning submission
+  source: z.literal('academy').optional(),
 });
 
 export const LeaderboardQuerySchema = z.object({

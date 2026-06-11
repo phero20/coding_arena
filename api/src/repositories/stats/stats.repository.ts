@@ -32,7 +32,10 @@ export class StatsRepository implements IStatsRepository {
    * Increments points, solved counts, and match stats in one go.
    */
   async updateUserStats(input: Omit<UpdateStatsInput, 'isWin'>) {
-    const { userId, points, arenaPoints, difficulty, isMatch } = input;
+    const { userId, points, arenaPoints, difficulty, isMatch, source } = input;
+    
+    // If source is 'academy', skip incrementing global solved counters
+    const shouldCountSolve = source !== 'academy' && difficulty;
 
     return await db
       .insert(schema.userStats)
@@ -40,10 +43,10 @@ export class StatsRepository implements IStatsRepository {
         userId,
         totalPoints: points,
         arenaPoints: arenaPoints || 0,
-        totalSolved: difficulty ? 1 : 0,
-        easySolved: difficulty === 'easy' ? 1 : 0,
-        mediumSolved: difficulty === 'medium' ? 1 : 0,
-        hardSolved: difficulty === 'hard' ? 1 : 0,
+        totalSolved: shouldCountSolve ? 1 : 0,
+        easySolved: shouldCountSolve && difficulty === 'easy' ? 1 : 0,
+        mediumSolved: shouldCountSolve && difficulty === 'medium' ? 1 : 0,
+        hardSolved: shouldCountSolve && difficulty === 'hard' ? 1 : 0,
         arenaGames: isMatch ? 1 : 0,
       })
       .onConflictDoUpdate({
@@ -51,10 +54,10 @@ export class StatsRepository implements IStatsRepository {
         set: {
           totalPoints: sql`${schema.userStats.totalPoints} + ${points}`,
           arenaPoints: arenaPoints ? sql`${schema.userStats.arenaPoints} + ${arenaPoints}` : schema.userStats.arenaPoints,
-          totalSolved: difficulty ? sql`${schema.userStats.totalSolved} + 1` : schema.userStats.totalSolved,
-          easySolved: difficulty === 'easy' ? sql`${schema.userStats.easySolved} + 1` : schema.userStats.easySolved,
-          mediumSolved: difficulty === 'medium' ? sql`${schema.userStats.mediumSolved} + 1` : schema.userStats.mediumSolved,
-          hardSolved: difficulty === 'hard' ? sql`${schema.userStats.hardSolved} + 1` : schema.userStats.hardSolved,
+          totalSolved: shouldCountSolve ? sql`${schema.userStats.totalSolved} + 1` : schema.userStats.totalSolved,
+          easySolved: shouldCountSolve && difficulty === 'easy' ? sql`${schema.userStats.easySolved} + 1` : schema.userStats.easySolved,
+          mediumSolved: shouldCountSolve && difficulty === 'medium' ? sql`${schema.userStats.mediumSolved} + 1` : schema.userStats.mediumSolved,
+          hardSolved: shouldCountSolve && difficulty === 'hard' ? sql`${schema.userStats.hardSolved} + 1` : schema.userStats.hardSolved,
           arenaGames: isMatch ? sql`${schema.userStats.arenaGames} + 1` : schema.userStats.arenaGames,
         },
       })

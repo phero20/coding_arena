@@ -200,6 +200,7 @@ export class AcademyExecutionService {
             points,
             difficulty: 'easy',
             isMatch: false,
+            source: 'academy',
           });
 
           if (updatedStats) {
