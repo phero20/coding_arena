@@ -8,6 +8,7 @@ import type { AiProblemService } from "../../services/problems/ai-problem.servic
 import type { AiAddSolveService } from "../../services/problems/ai-addsolve.service";
 import type { IProblemService } from "../../services/problems/problem.service";
 import type { IProblemTestService } from "../../services/problems/problem-test.service";
+import type { TestcaseGeneratorService } from "../../services/problems/testcase-generator.service";
 import { ApiResponse } from "../../utils/api-response";
 import { AppError } from "../../utils/app-error";
 
@@ -19,6 +20,7 @@ export class AiProblemController extends BaseController {
   private readonly aiAddSolveService: AiAddSolveService;
   private readonly problemService: IProblemService;
   private readonly problemTestService: IProblemTestService;
+  private readonly testcaseGeneratorService: TestcaseGeneratorService;
 
   constructor(cradle: ICradle) {
     super(cradle);
@@ -26,6 +28,7 @@ export class AiProblemController extends BaseController {
     this.aiAddSolveService = cradle.aiAddSolveService;
     this.problemService = cradle.problemService;
     this.problemTestService = cradle.problemTestService;
+    this.testcaseGeneratorService = cradle.testcaseGeneratorService;
   }
 
   /**
@@ -67,6 +70,24 @@ export class AiProblemController extends BaseController {
     }
 
     await this.aiAddSolveService.processSingleProblem(problemId);
+
+    return c.json({ success: true }, 200);
+  }
+
+  /**
+   * Generates 10 testcases (3 public, 7 hidden) for a given problem
+   * using strictly Gemini 2.5 Flash and strict canonical type validation.
+   */
+  async generateTestcases(
+    c: Context<AppEnv, any, ValidatedContext<never>>,
+  ) {
+    const { problemId } = c.req.param();
+
+    if (!problemId) {
+      throw AppError.badRequest("problemId is required");
+    }
+
+    await this.testcaseGeneratorService.generateTestcases(problemId);
 
     return c.json({ success: true }, 200);
   }

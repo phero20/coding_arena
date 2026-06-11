@@ -289,6 +289,13 @@ function coerceGraph(
     return coerceArray(val, { kind: "array", element: { kind: "primitive", base: "int" } }, path);
   }
 
+  // Special case: Cycle detection problems or graph validations might return an index (number) or boolean
+  // Sometimes AI also tries to return an object (like {"val": 2, "next": ...}) which we should also pass through
+  // Additionally, if there is no cycle, the expected output is literally `null` (typeof null === "object")
+  if (typeof val === "number" || typeof val === "boolean" || typeof val === "object" || val === null) {
+    return { ok: true, value: val };
+  }
+
   return {
     ok: false,
     errors: [`${path}: ListNode/TreeNode expects JSON array or CSV string, got ${typeof val}`],

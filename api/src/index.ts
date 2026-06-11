@@ -47,4 +47,5 @@ const app = createApp();
 export default {
   port: 3000,
   fetch: app.fetch,
+  idleTimeout: 120, // 2 minutes (prevents sockets from dropping during long AI testcase generation)
 };

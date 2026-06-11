@@ -36,23 +36,23 @@ export class UnifiedLlmService {
 
   async generateJson<T>(opts: GenerateJsonOptions): Promise<UnifiedJsonResponse<T>> {
     try {
-      logger.info("Attempting AI evaluation via Groq (Primary: llama-3.3-70b-versatile)");
-      return await this.groqLlmService.generateJson<T>({ ...opts, model: "llama-3.3-70b-versatile" });
+      logger.info("Attempting AI evaluation via Gemini (Primary: gemini-2.5-flash)");
+      return await this.geminiLlmService.generateJson<T>({ ...opts, model: "gemini-2.5-flash" });
     } catch (err1: any) {
-      logger.warn({ error: err1.message }, "Groq 70b failed. Falling back to Gemini (gemini-2.5-flash).");
+      logger.warn({ error: err1.message }, "Gemini 2.5 Flash failed. Falling back to Groq (llama-3.3-70b-versatile).");
       
       try {
-        return await this.geminiLlmService.generateJson<T>({ ...opts, model: "gemini-2.5-flash" });
+        return await this.groqLlmService.generateJson<T>({ ...opts, model: "llama-3.3-70b-versatile" });
       } catch (err2: any) {
-        logger.warn({ error: err2.message }, "Gemini 2.5 Flash failed. Falling back to Groq (llama-3.1-8b-instant).");
+        logger.warn({ error: err2.message }, "Groq 70b failed. Falling back to Gemini (gemini-1.5-flash-8b).");
 
         try {
-          return await this.groqLlmService.generateJson<T>({ ...opts, model: "llama-3.1-8b-instant" });
+          return await this.geminiLlmService.generateJson<T>({ ...opts, model: "gemini-1.5-flash-8b" });
         } catch (err3: any) {
-          logger.warn({ error: err3.message }, "Groq 8b failed. Falling back to Gemini (gemini-3.1-flash-lite).");
+          logger.warn({ error: err3.message }, "Gemini 1.5 Flash 8B failed. Falling back to Groq (llama-3.1-8b-instant).");
 
           try {
-            return await this.geminiLlmService.generateJson<T>({ ...opts, model: "gemini-3.1-flash-lite" });
+            return await this.groqLlmService.generateJson<T>({ ...opts, model: "llama-3.1-8b-instant" });
           } catch (err4: any) {
             logger.error({ error: err4.message }, "All 4 LLM fallback stages failed.");
             throw new Error("All primary and fallback AI evaluation services failed.");

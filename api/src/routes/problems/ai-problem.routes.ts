@@ -23,4 +23,8 @@ export const registerAiProblemRoutes = (
   app.post("/ai/problems/:problemId/generate", (c) =>
     aiProblemController.generateAiSolution(c),
   );
+
+  app.post("/ai/problems/:problemId/testcases", (c) =>
+    aiProblemController.generateTestcases(c),
+  );
 };

@@ -29,6 +29,7 @@ import { ISubmissionService, type SubmissionService } from "../services/submissi
 import { type GroqLlmService } from "../services/ai/groq-llm.service";
 import { type AiProblemService } from "../services/problems/ai-problem.service";
 import { type AiAddSolveService } from "../services/problems/ai-addsolve.service";
+import { type TestcaseGeneratorService } from "../services/problems/testcase-generator.service";
 import { type ArenaService } from "../services/arena/arena.service";
 import {
   type ArenaMatchService,
@@ -169,6 +170,7 @@ export interface ICradle {
   llm: GeminiLlmService;
   aiProblemService: AiProblemService;
   aiAddSolveService: AiAddSolveService;
+  testcaseGeneratorService: TestcaseGeneratorService;
   arenaMatchService: ArenaMatchService;
   rawArenaMatchService: IArenaMatchService;
   arenaMatchCache: IArenaMatchService;
