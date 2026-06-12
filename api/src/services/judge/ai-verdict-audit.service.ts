@@ -33,6 +33,7 @@ export class AiVerdictAuditService {
       userPrompt,
       temperature: 0,
       maxTokens: 4096,
+      model: "gemini-2.5-flash",
     });
 
     const verdictMap = new Map<number, AuditVerdict>(
