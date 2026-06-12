@@ -42,13 +42,18 @@ const clerkAppearance = {
     socialButtonsBlockButton:
       "!bg-card !text-foreground !border-border !py-3 transition-all",
     formButtonPrimary:
-      "bg-primary text-primary-foreground hover:opacity-90 transition-opacity",
+      "bg-primary !text-primary-foreground hover:opacity-90 transition-opacity",
+    formFieldLabel: "!text-foreground",
+    formFieldInput: "!bg-input !text-foreground !border-border placeholder:!text-muted-foreground",
+    dividerText: "!text-muted-foreground",
+    dividerLine: "!bg-border",
     footerActionLink: "text-primary hover:text-primary/80",
     userButtonPopoverCard: "bg-card border border-border",
     modalContent: "flex items-center justify-center",
     modalBackdrop:
       "!bg-background/60 backdrop-blur-[2px] fixed inset-0 flex items-center justify-center z-[9999]",
     modalCloseButton: "!text-primary !hover:text-secondary transition-colors !border-none !ring-none",
+    badge: "!bg-primary/10 !text-primary !border !border-primary/30",
 
     footer: "!hidden",
     footerInternal: "!hidden",
