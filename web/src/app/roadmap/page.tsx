@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Hammer } from "lucide-react";
 import { ReactFlowProvider } from "reactflow";
 import { useRoadmapData } from "@/hooks/practice/use-roadmap-data";
 import RoadmapCanvas from "@/components/roadmap/RoadmapCanvas";
