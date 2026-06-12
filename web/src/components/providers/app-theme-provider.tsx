@@ -6,9 +6,10 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="dark"
+      defaultTheme="theme-cyber-yellow"
       enableSystem={false}
       themes={[
+        "theme-cyber-yellow",
         "dark",
         "theme-neutral",
         "theme-bubble-gum",
@@ -17,7 +18,6 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
         "theme-astro-vista",
         "theme-chalk",
         "theme-sandstone",
-        "theme-cyber-yellow",
         "theme-meridian",
         "theme-discord",
         "theme-royal-gold",

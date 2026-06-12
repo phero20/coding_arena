@@ -1,7 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun, Check, Zap, Terminal, Palette, Settings2, ArrowRight } from "lucide-react";
+import {
+  Moon,
+  Sun,
+  Check,
+  Zap,
+  Terminal,
+  Palette,
+  Settings2,
+  ArrowRight,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
@@ -25,9 +34,10 @@ export function ModeToggle() {
   const [open, setOpen] = React.useState(false);
 
   const DEFAULT_THEMES = [
+    { name: "Cyber Yellow", value: "theme-cyber-yellow", icon: Palette },
+    { name: "Bubble Gum", value: "theme-bubble-gum", icon: Palette },
     { name: "Lime Dark", value: "dark", icon: Palette },
     { name: "Neutral Zinc", value: "theme-neutral", icon: Palette },
-    { name: "Bubble Gum", value: "theme-bubble-gum", icon: Palette },
   ];
 
   const EXTRA_THEMES = [
@@ -36,21 +46,21 @@ export function ModeToggle() {
     { name: "Astro Vista", value: "theme-astro-vista", icon: Palette },
     { name: "Chalk", value: "theme-chalk", icon: Palette },
     { name: "Sandstone", value: "theme-sandstone", icon: Palette },
-    { name: "Cyber Yellow", value: "theme-cyber-yellow", icon: Palette },
     { name: "Meridian", value: "theme-meridian", icon: Palette },
     { name: "Discord", value: "theme-discord", icon: Palette },
     { name: "Royal Gold", value: "theme-royal-gold", icon: Palette },
   ];
 
   const allKnownThemes = [...DEFAULT_THEMES, ...EXTRA_THEMES];
-  
-  const currentThemeData = allKnownThemes.find((opt) => opt.value === theme) || 
-    { name: "Custom", value: theme || "dark", icon: Palette };
+
+  const currentThemeData = allKnownThemes.find(
+    (opt) => opt.value === theme,
+  ) || { name: "Custom", value: theme || "dark", icon: Palette };
 
   // Only show the active theme if it's NOT in the default list
-  const isDefaultTheme = DEFAULT_THEMES.some(t => t.value === theme);
-  const themeOptions = isDefaultTheme 
-    ? DEFAULT_THEMES 
+  const isDefaultTheme = DEFAULT_THEMES.some((t) => t.value === theme);
+  const themeOptions = isDefaultTheme
+    ? DEFAULT_THEMES
     : [...DEFAULT_THEMES, currentThemeData];
 
   const handleSetTheme = (newTheme: string) => {
@@ -99,7 +109,7 @@ export function ModeToggle() {
       >
         <Command className="bg-card/60">
           <CommandList>
-            <CommandGroup heading="Tactical Skins">
+            <CommandGroup heading="Website Themes">
               {themeOptions.map((item) => (
                 <CommandItem
                   key={item.value}
@@ -137,7 +147,10 @@ export function ModeToggle() {
             </CommandGroup>
             <CommandSeparator className="my-1 opacity-50" />
             <CommandGroup>
-              <Link href="/settings?tab=appearance" onClick={() => setOpen(false)}>
+              <Link
+                href="/settings?tab=appearance"
+                onClick={() => setOpen(false)}
+              >
                 <CommandItem className="flex items-center gap-3 p-2 cursor-pointer rounded-md group">
                   <div className="p-1 rounded-md bg-muted/50 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                     <Settings2 size={14} />
