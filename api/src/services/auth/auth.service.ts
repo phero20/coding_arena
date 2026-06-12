@@ -158,7 +158,11 @@ export class AuthService {
   }
 
   private async generateUniqueUsername(baseUsername: string): Promise<string> {
-    const sanitizedBase = baseUsername.trim().replace(/\s+/g, "_").toLowerCase();
+    const sanitizedBase = baseUsername
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9_-]/g, "")
+      .toLowerCase();
     let username = sanitizedBase;
     let isUnique = false;
     let attempts = 0;
