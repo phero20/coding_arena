@@ -18,7 +18,9 @@ import {
   Settings,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { AlertModal } from "@/components/shared/alert-modal";
 import { useProblemEditor } from "@/hooks/workspace/use-problem-editor";
 import { useProblemTestsQuery } from "@/hooks/queries/use-problem.queries";
 import { useEditorStore } from "@/store/use-editor-store";
@@ -99,6 +101,9 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   const preferences = useEditorStore((state) => state.preferences);
   const toggleWordWrap = useEditorStore((state) => state.toggleWordWrap);
 
+  const router = useRouter();
+  const hasNoTestcases = !isLoading && (!publicTests || !publicTests.cases || publicTests.cases.length === 0 || error);
+
   const [localTab, setLocalTab] = useState<"code" | "testcase" | "result">(
     "code",
   );
@@ -135,156 +140,168 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   };
 
   return (
-    <Tabs
-      value={activeTab as string}
-      onValueChange={handleTabChange}
-      className="flex flex-col h-full w-full overflow-hidden bg-background"
-    >
-      {/* ── Single header row: language selector (left) + tabs (right) ── */}
-      <header className="h-14 md:h-12 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto hide-scrollbar">
-        {/* Language selector — only meaningful on Code tab */}
-        {activeTab === "code" && (
-          <div className="flex items-center gap-2 shrink-0">
-            {mode === "arena" ? (
-              <Badge
-                variant="outline"
-                className="font-black tracking-widest text-[10px] uppercase py-1 px-3 border-border/40 text-primary bg-primary/5"
-              >
-                {enforcedLanguage}
-              </Badge>
-            ) : (
-              <LanguageSelector
-                value={language}
-                onChange={setLanguage}
-                languages={languageOptions}
-              />
-            )}
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn(
-                "size-7 transition-colors shrink-0",
-                preferences.wordWrap
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-primary",
+    <>
+      {hasNoTestcases && (
+        <AlertModal
+          isOpen={true}
+          onClose={() => router.push("/problems")}
+          title="Testcases Not Written Yet"
+          description="The testcases for this problem haven't been published yet. We are working on it and they should be ready in 1-2 days. Please check back later!"
+          primaryActionLabel="Go to Problems"
+          primaryAction={() => router.push("/problems")}
+          hideCancel={true}
+        />
+      )}
+      <Tabs
+        value={activeTab as string}
+        onValueChange={handleTabChange}
+        className="flex flex-col h-full w-full overflow-hidden bg-background"
+      >
+        {/* ── Single header row: language selector (left) + tabs (right) ── */}
+        <header className="h-14 md:h-12 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto hide-scrollbar">
+          {/* Language selector — only meaningful on Code tab */}
+          {activeTab === "code" && (
+            <div className="flex items-center gap-2 shrink-0">
+              {mode === "arena" ? (
+                <Badge
+                  variant="outline"
+                  className="font-black tracking-widest text-[10px] uppercase py-1 px-3 border-border/40 text-primary bg-primary/5"
+                >
+                  {enforcedLanguage}
+                </Badge>
+              ) : (
+                <LanguageSelector
+                  value={language}
+                  onChange={setLanguage}
+                  languages={languageOptions}
+                />
               )}
-              onClick={toggleWordWrap}
-              title="Toggle Word Wrap"
-              type="button"
-            >
-              <WrapText className="size-3.5" />
-            </Button>
 
-            {/* Reset Code Confirmation */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  "size-7 transition-colors shrink-0",
+                  preferences.wordWrap
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-primary",
+                )}
+                onClick={toggleWordWrap}
+                title="Toggle Word Wrap"
+                type="button"
+              >
+                <WrapText className="size-3.5" />
+              </Button>
+
+              {/* Reset Code Confirmation */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-7 text-muted-foreground hover:text-primary transition-colors shrink-0"
+                    type="button"
+                    disabled={hasSubmitted}
+                  >
+                    <RefreshCw className="size-3.5" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-card">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-md text-primary font-bold">
+                      Reset Code?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-sm text-muted-foreground">
+                      This will permanently delete your current progress for this
+                      language and restore the default boilerplate.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="h-8 text-xs font-bold border-border">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={resetCode}
+                      className="h-8 text-xs font-bold"
+                    >
+                      Reset Progress
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <Link href="/settings?tab=editor">
                 <Button
                   variant="ghost"
                   size="icon"
                   className="size-7 text-muted-foreground hover:text-primary transition-colors shrink-0"
-                  type="button"
-                  disabled={hasSubmitted}
+                  title="Editor Settings"
                 >
-                  <RefreshCw className="size-3.5" />
+                  <Settings className="size-3.5" />
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="bg-card">
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-md text-primary font-bold">
-                    Reset Code?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription className="text-sm text-muted-foreground">
-                    This will permanently delete your current progress for this
-                    language and restore the default boilerplate.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="h-8 text-xs font-bold border-border">
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={resetCode}
-                    className="h-8 text-xs font-bold"
-                  >
-                    Reset Progress
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              </Link>
+            </div>
+          )}
 
-            <Link href="/settings?tab=editor">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-7 text-muted-foreground hover:text-primary transition-colors shrink-0"
-                title="Editor Settings"
-              >
-                <Settings className="size-3.5" />
-              </Button>
-            </Link>
+          {/* Tabs — pushed to the right via ml-auto */}
+          <TabsList className="bg-transparent h-10 p-0 gap-0 md:gap-2 ml-auto shrink-0">
+            <TabsTrigger value="code" className={TAB_CLS}>
+              <Code2 className="size-4 md:mr-1 shrink-0" />
+              <span className="hidden sm:inline">Code</span>
+            </TabsTrigger>
+            <TabsTrigger value="testcase" className={TAB_CLS}>
+              <Terminal className="size-4 md:mr-1 shrink-0" />
+              <span className="hidden sm:inline">Tests</span>
+            </TabsTrigger>
+            <TabsTrigger value="result" className={TAB_CLS}>
+              <CheckCircle2 className="size-4 md:mr-1 shrink-0" />
+              <span className="hidden sm:inline">Result</span>
+            </TabsTrigger>
+          </TabsList>
+        </header>
+
+        {/* ── Code tab: Monaco editor ── */}
+        <TabsContent
+          value="code"
+          className="flex-1 m-0 min-h-0 data-[state=inactive]:hidden"
+        >
+          <div className="h-[990px] md:h-full w-full ">
+            <Editor
+              height="100%"
+              beforeMount={handleEditorWillMount}
+              defaultLanguage={
+                mode === "arena" ? enforcedLanguage : monacoLanguage
+              }
+              language={mode === "arena" ? enforcedLanguage : monacoLanguage}
+              theme="vs-dark"
+              value={code}
+              onChange={(value) => setCode(value ?? "")}
+              options={{
+                ...monacoOptions,
+                readOnly: hasSubmitted,
+              }}
+            />
           </div>
-        )}
+        </TabsContent>
 
-        {/* Tabs — pushed to the right via ml-auto */}
-        <TabsList className="bg-transparent h-10 p-0 gap-0 md:gap-2 ml-auto shrink-0">
-          <TabsTrigger value="code" className={TAB_CLS}>
-            <Code2 className="size-4 md:mr-1 shrink-0" />
-            <span className="hidden sm:inline">Code</span>
-          </TabsTrigger>
-          <TabsTrigger value="testcase" className={TAB_CLS}>
-            <Terminal className="size-4 md:mr-1 shrink-0" />
-            <span className="hidden sm:inline">Tests</span>
-          </TabsTrigger>
-          <TabsTrigger value="result" className={TAB_CLS}>
-            <CheckCircle2 className="size-4 md:mr-1 shrink-0" />
-            <span className="hidden sm:inline">Result</span>
-          </TabsTrigger>
-        </TabsList>
-      </header>
-
-      {/* ── Code tab: Monaco editor ── */}
-      <TabsContent
-        value="code"
-        className="flex-1 m-0 min-h-0 data-[state=inactive]:hidden"
-      >
-        <div className="h-[990px] md:h-full w-full ">
-          <Editor
-            height="100%"
-            beforeMount={handleEditorWillMount}
-            defaultLanguage={
-              mode === "arena" ? enforcedLanguage : monacoLanguage
-            }
-            language={mode === "arena" ? enforcedLanguage : monacoLanguage}
-            theme="vs-dark"
-            value={code}
-            onChange={(value) => setCode(value ?? "")}
-            options={{
-              ...monacoOptions,
-              readOnly: hasSubmitted,
-            }}
+        <TabsContent
+          value="testcase"
+          className="flex-1 m-0 min-h-0 overflow-hidden data-[state=inactive]:hidden"
+        >
+          <ConsolePanelAdapter
+            tests={publicTests}
+            isLoading={isLoading}
+            error={error}
+            defaultTab="testcase"
+            runResult={runResult ?? null}
+            isExecutionRunning={isExecutionRunning}
+            runError={runError}
+            verdict={verdict}
+            isEvaluating={isEvaluating}
+            pollingTests={pollingTests}
+            hasSubmitted={hasSubmitted}
           />
-        </div>
-      </TabsContent>
-
-      <TabsContent
-        value="testcase"
-        className="flex-1 m-0 min-h-0 overflow-hidden data-[state=inactive]:hidden"
-      >
-        <ConsolePanelAdapter
-          tests={publicTests}
-          isLoading={isLoading}
-          error={error}
-          defaultTab="testcase"
-          runResult={runResult ?? null}
-          isExecutionRunning={isExecutionRunning}
-          runError={runError}
-          verdict={verdict}
-          isEvaluating={isEvaluating}
-          pollingTests={pollingTests}
-          hasSubmitted={hasSubmitted}
-        />
-      </TabsContent>
+        </TabsContent>
 
       <TabsContent
         value="result"
@@ -304,7 +321,8 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
           hasSubmitted={hasSubmitted}
         />
       </TabsContent>
-    </Tabs>
+      </Tabs>
+    </>
   );
 };
 
