@@ -7,6 +7,7 @@ const logger = createLogger("auth-service");
 export interface AuthUserPayload {
   clerkId: string;
   username: string;
+  originalClerkUsername?: string | null;
   fullName?: string | null;
   email: string;
   avatarUrl?: string | null;
@@ -63,7 +64,7 @@ export class AuthService {
       await this.statsService.invalidateProfile(created.id);
       
       // Back-sync to Clerk only if creation succeeded and username was modified
-      if (payload.username !== username) {
+      if (!payload.originalClerkUsername || payload.originalClerkUsername !== username) {
         await this.pushUsernameToClerk(clerkId, username);
       }
 
@@ -122,7 +123,7 @@ export class AuthService {
       
       // Push username back to Clerk only after successful DB insertion
       // and only if we actually generated a new username
-      if (payload.username !== username) {
+      if (!payload.originalClerkUsername || payload.originalClerkUsername !== username) {
         await this.pushUsernameToClerk(clerkId, username);
       }
 

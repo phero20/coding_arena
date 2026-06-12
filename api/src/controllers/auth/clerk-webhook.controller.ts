@@ -59,6 +59,7 @@ export class ClerkWebhookController extends BaseController {
 
       await this.authService.syncUser({
         clerkId: user.id,
+        originalClerkUsername: user.username,
         username:
           user.username ||
           (primaryEmail ? primaryEmail.split("@")[0] : `user_${user.id}`),

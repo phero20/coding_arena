@@ -60,6 +60,7 @@ export class AuthMiddleware {
 
       user = await this.authService.ensureUser({
         clerkId,
+        originalClerkUsername: clerkUser.username,
         username,
         fullName,
         email,
