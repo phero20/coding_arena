@@ -45,8 +45,7 @@ export class AuthService {
     const username = await this.generateUniqueUsername(payload.username);
 
     // Back-sync to Clerk if the original payload didn't already have this username
-    // (This helps Google users get their first username into Clerk's world)
-    await this.pushUsernameToClerk(clerkId, username);
+    // We defer this until AFTER database creation to prevent webhook loops.
 
     logger.info({ clerkId, username }, "User found or created via ensureUser");
 
@@ -62,6 +61,12 @@ export class AuthService {
       });
 
       await this.statsService.invalidateProfile(created.id);
+      
+      // Back-sync to Clerk only if creation succeeded and username was modified
+      if (payload.username !== username) {
+        await this.pushUsernameToClerk(clerkId, username);
+      }
+
       return created;
     } catch (err: any) {
       if (err.code === "23505") {
@@ -80,7 +85,7 @@ export class AuthService {
     return this.userRepository.findByClerkId(trimmedId);
   }
 
-  async syncUser(payload: AuthUserPayload): Promise<User> {
+  async syncUser(payload: AuthUserPayload): Promise<User | null> {
     validateServiceInput(SyncUserSchema, payload);
     const clerkId = payload.clerkId.trim();
 
@@ -102,9 +107,6 @@ export class AuthService {
     // New user from webhook - ensure uniqueness
     const username = await this.generateUniqueUsername(payload.username);
 
-    // Back-sync to Clerk
-    await this.pushUsernameToClerk(clerkId, username);
-
     try {
       const created = await this.userRepository.create({
         clerkId,
@@ -117,6 +119,13 @@ export class AuthService {
       });
 
       await this.statsService.invalidateProfile(created.id);
+      
+      // Push username back to Clerk only after successful DB insertion
+      // and only if we actually generated a new username
+      if (payload.username !== username) {
+        await this.pushUsernameToClerk(clerkId, username);
+      }
+
       return created;
     } catch (err: any) {
       if (err.code === "23505") {
@@ -125,6 +134,12 @@ export class AuthService {
         if (existingAfterRace) {
           return existingAfterRace;
         }
+        
+        // This is an unrecoverable duplicate email/username for a DIFFERENT clerkId
+        // We log an error and swallow the exception so the Webhook returns 200 OK 
+        // and stops Clerk from infinitely retrying.
+        logger.error({ clerkId, email: payload.email }, "CRITICAL: Webhook tried to create user but email or username is already taken by another account. Swallowing error to stop webhook loops.");
+        return null;
       }
       throw err;
     }
