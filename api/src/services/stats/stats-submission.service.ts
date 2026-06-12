@@ -255,7 +255,7 @@ export class StatsSubmissionService {
    * Formula: (Total Participants - Rank + 1) * 25
    */
   async handleArenaMatchFinalization(
-    rankedPlayers: Array<{ userId: string }>,
+    rankedPlayers: Array<{ userId: string; score?: number }>,
   ): Promise<void> {
     const totalPlayers = rankedPlayers.length;
 
@@ -269,7 +269,7 @@ export class StatsSubmissionService {
       rankedPlayers.map(async (player, index) => {
         try {
           const rank = index + 1;
-          const arenaBonusPoints = (totalPlayers - rank + 1) * 25;
+          const arenaBonusPoints = player.score || 0;
 
           // Resolve identity (Clerk ID -> Postgres UUID)
           let user = await this.userRepository.findByClerkId(player.userId);
