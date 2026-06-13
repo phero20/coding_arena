@@ -38,7 +38,7 @@ export function MatchResults({ rankings, isHost, onClose }: MatchResultsProps) {
     useMatchRanking(rankings);
 
   return (
-    <div className="relative min-h-screen pb-20 flex flex-col items-center w-full max-w-7xl mx-auto px-0 py-8 space-y-4">
+    <div className="relative min-h-screen pb-20 flex flex-col items-center w-full max-w-6xl mx-auto px-0 py-8 space-y-4">
 
       
       {/* Header Section */}
