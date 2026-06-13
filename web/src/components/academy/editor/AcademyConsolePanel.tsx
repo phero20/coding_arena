@@ -13,6 +13,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TestCaseField } from "@/components/workspace-shared/ui/TestCaseField";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { AcademyResultSkeleton } from "@/components/skeletons/AcademySkeletons";
 
 export interface AcademyConsolePanelProps {
   exercise: TrackExerciseResponse;
@@ -75,7 +76,7 @@ export const AcademyConsolePanel: React.FC<AcademyConsolePanelProps> = ({
 
         {activeTab === "result" && (
           <div className="h-full flex flex-col space-y-4">
-             {runError && (
+             {!isExecutionRunning && runError && (
               <ErrorDisplay
                 title="Execution Error"
                 message={
@@ -98,12 +99,10 @@ export const AcademyConsolePanel: React.FC<AcademyConsolePanelProps> = ({
             )}
 
             {isExecutionRunning && (
-              <div className="flex-1 flex items-center justify-center text-muted-foreground animate-pulse">
-                Running tests...
-              </div>
+              <AcademyResultSkeleton />
             )}
 
-            {runResult && (
+            {!isExecutionRunning && runResult && (
               <div className="flex flex-col space-y-4 pb-10">
                 {/* Compilation Error Banner */}
                 {runResult.compileError && (

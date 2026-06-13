@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import { useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { 
-  getSubmissionStatus, 
+import {
+  useQuery,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  getSubmissionStatus,
   getUserSubmissions,
-  getRecentSubmissions
+  getRecentSubmissions,
 } from "@/services/queries/submission.queries";
 import { useUser } from "@clerk/nextjs";
 
@@ -27,7 +31,7 @@ export function useSubmissionStatusQuery(submissionId: string | null) {
         return 1000;
       }
       return false;
-    }
+    },
   });
 
   const isFinished = query.data && query.data.status !== "PENDING";
@@ -43,13 +47,15 @@ export function useSubmissionStatusQuery(submissionId: string | null) {
       queryClient.invalidateQueries({
         queryKey: ["recent-submissions-paginated"],
       });
-      
+      queryClient.invalidateQueries({
+        queryKey: ["user-roadmap-progress"],
+      });
       if (user?.id) {
         queryClient.invalidateQueries({
           queryKey: ["user-solved-problems", user.id],
         });
       }
-      
+
       // Also invalidate the submissions list for any problem to update history
       queryClient.invalidateQueries({
         queryKey: ["user-submissions"],
@@ -63,7 +69,10 @@ export function useSubmissionStatusQuery(submissionId: string | null) {
 /**
  * Fetch the history of code submissions for a specific user and problem.
  */
-export function useUserSubmissionsQuery(problemId: string, enabled: boolean = true) {
+export function useUserSubmissionsQuery(
+  problemId: string,
+  enabled: boolean = true,
+) {
   return useQuery({
     queryKey: ["user-submissions", problemId],
     queryFn: () => getUserSubmissions(problemId),
@@ -74,10 +83,14 @@ export function useUserSubmissionsQuery(problemId: string, enabled: boolean = tr
 /**
  * Fetch the chronological history of recent submissions across all problems with Infinite Scrolling support.
  */
-export function useRecentSubmissionsQuery(limit: number = 10, username?: string) {
+export function useRecentSubmissionsQuery(
+  limit: number = 10,
+  username?: string,
+) {
   return useInfiniteQuery({
     queryKey: ["recent-submissions-infinite", limit, username],
-    queryFn: ({ pageParam = 0 }) => getRecentSubmissions(limit, pageParam as number, username),
+    queryFn: ({ pageParam = 0 }) =>
+      getRecentSubmissions(limit, pageParam as number, username),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       const nextOffset = lastPage.pagination.offset + lastPage.pagination.limit;
@@ -88,7 +101,11 @@ export function useRecentSubmissionsQuery(limit: number = 10, username?: string)
 /**
  * Fetch the chronological history of recent submissions with standard pagination support.
  */
-export function useRecentSubmissionsPaginationQuery(limit: number = 10, offset: number = 0, username?: string) {
+export function useRecentSubmissionsPaginationQuery(
+  limit: number = 10,
+  offset: number = 0,
+  username?: string,
+) {
   return useQuery({
     queryKey: ["recent-submissions-paginated", limit, offset, username],
     queryFn: () => getRecentSubmissions(limit, offset, username),

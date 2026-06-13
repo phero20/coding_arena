@@ -188,22 +188,25 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
     [],
   );
 
-  // Build the visual graph from tree data
-  useEffect(() => {
-    // Lookup maps
-    const slugToId: Record<string, string> = {};
-    const idToNode: Record<string, CategoryTreeNode> = {};
+  const { idToNode, slugToId } = useMemo(() => {
+    const slugMap: Record<string, string> = {};
+    const idMap: Record<string, CategoryTreeNode> = {};
 
     const traverse = (n: CategoryTreeNode) => {
-      idToNode[n.id] = n;
+      idMap[n.id] = n;
       n.children?.forEach(traverse);
     };
 
     data.forEach((rootNode) => {
-      slugToId[rootNode.slug] = rootNode.id;
+      slugMap[rootNode.slug] = rootNode.id;
       traverse(rootNode);
     });
 
+    return { idToNode: idMap, slugToId: slugMap };
+  }, [data]);
+
+  // Build the visual graph from tree data
+  useEffect(() => {
     const graphParts: {
       nodes: Node[];
       localEdges: Edge[];
@@ -589,6 +592,7 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
       {/* Node Detail Sidebar */}
       <RoadmapSidebar
         nodeId={selectedLeafId}
+        selectedNode={selectedLeafId ? idToNode[selectedLeafId] : null}
         onClose={() => setSelectedLeafId(null)}
       />
     </div>

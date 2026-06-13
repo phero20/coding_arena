@@ -33,6 +33,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { RoadmapSidebarSkeleton } from "@/components/skeletons/RoadmapSkeletons";
 import { Problem } from "@/types/api";
+import type { CategoryTreeNode } from "@/types/taxonomy";
 import {
   Tooltip,
   TooltipContent,
@@ -42,15 +43,19 @@ import {
 
 interface RoadmapSidebarProps {
   nodeId: string | null;
+  selectedNode: CategoryTreeNode | null;
   onClose: () => void;
 }
 
 export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
   nodeId,
+  selectedNode,
   onClose,
 }) => {
   const { data: detail, isLoading, error } = useCategoryDetailByIdQuery(nodeId);
   const { solvedIds } = useRoadmapData();
+
+  const currentNode = selectedNode;
 
   const [width, setWidth] = useState(800);
   const [isMobile, setIsMobile] = useState(false);
@@ -148,18 +153,40 @@ export const RoadmapSidebar: React.FC<RoadmapSidebarProps> = ({
                   <>
                     <SheetHeader className="px-4 md:px-8 pt-8 pb-6 ">
                       <div className="flex flex-col gap-4 text-start">
-                        <div className="flex items-center justify-between">
-                          <Badge>
-                            Parent: {cat.parent?.name || "Main Topic"}
-                          </Badge>
+                        <div className="flex flex-row items-start justify-between gap-4">
+                          <div className="flex flex-col gap-3 items-start">
+                            <Badge>
+                              Parent: {cat.parent?.name || "Main Topic"}
+                            </Badge>
+                            <SheetTitle className="text-4xl font-black tracking-tighter text-foreground">
+                              {cat.name}
+                            </SheetTitle>
+                          </div>
                         </div>
-                        <SheetTitle className="text-4xl font-black tracking-tighter text-foreground">
-                          {cat.name}
-                        </SheetTitle>
                         {cat.description && (
                           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl text-start">
                             {cat.description}
                           </p>
+                        )}
+                        {currentNode && (currentNode.problemCount || 0) > 0 && (
+                          <div className="flex flex-col gap-1 w-full">
+                            <div className="flex items-center justify-end font-mono">
+                              <span className="text-xl font-bold tracking-tighter text-primary">
+                                {currentNode.solvedCount || 0}
+                              </span>
+                              <span className="text-sm text-muted-foreground font-medium ml-1">
+                                / {currentNode.problemCount}
+                              </span>
+                            </div>
+                            <div className="h-1.5 w-full bg-secondary overflow-hidden rounded-full">
+                              <div
+                                className="h-full bg-primary transition-all duration-1000 ease-out"
+                                style={{
+                                  width: `${Math.min(100, ((currentNode.solvedCount || 0) / currentNode.problemCount) * 100)}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
                         )}
                       </div>
                       

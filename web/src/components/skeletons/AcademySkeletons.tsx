@@ -119,3 +119,41 @@ export function ConceptViewSkeleton() {
     </SkeletonProvider>
   );
 }
+
+export function AcademyResultSkeleton() {
+  return (
+    <SkeletonProvider noWrapper>
+      <div className="flex flex-col space-y-4 pb-10 w-full animate-pulse mt-2">
+        {/* Header Summary Skeleton */}
+        <div className="border shadow-sm bg-card/10 border-border/40 rounded-xl">
+           <div className="p-4 flex flex-row items-center gap-3">
+             <Skeleton circle width={24} height={24} className="opacity-20" />
+             <div className="flex flex-col w-full max-w-[250px]">
+               <Skeleton width={150} height={16} className="rounded-sm opacity-40 mb-1" />
+               <Skeleton width={100} height={14} className="rounded-sm opacity-30" />
+             </div>
+           </div>
+        </div>
+
+        {/* List of failed tests skeleton */}
+        <div className="flex flex-col space-y-6 mt-2">
+           {Array.from({ length: 2 }).map((_, i) => (
+             <div key={i} className="flex flex-col space-y-4 border-b border-border/20 pb-6 last:border-0">
+               <div className="flex items-center gap-2 mb-1">
+                 <Skeleton circle width={14} height={14} className="opacity-20" />
+                 <Skeleton width={120} height={14} className="rounded-sm opacity-30" />
+               </div>
+               
+               <div className="space-y-4">
+                 <div className="space-y-2 p-4 border border-border/40 rounded-xl bg-card/10">
+                   <Skeleton width={100} height={12} />
+                   <Skeleton height={40} className="mt-2" />
+                 </div>
+               </div>
+             </div>
+           ))}
+        </div>
+      </div>
+    </SkeletonProvider>
+  );
+}
