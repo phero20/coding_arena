@@ -6,15 +6,17 @@ import { SkeletonProvider } from "./BaseSkeleton";
  * Follows the 8-level learning path standard with a clean, industrial look.
  */
 export const RoadmapSkeleton = () => {
-  const levels = [
-    { nodes: 1 }, // Level 1: Root (Array)
-    { nodes: 2 }, // Level 2: First Branch
-    { nodes: 3 }, // Level 3: Wide Spread
-    { nodes: 1 }, // Level 4: Convergence Hub (Trees)
-    { nodes: 2 }, // Level 5: Second Branch
-    { nodes: 3 }, // Level 6: Specialist Paths
-    { nodes: 4 }, // Level 7: Widest Row
-    { nodes: 1 }, // Level 8: Final Convergence (Math)
+  type ItemType = "node" | "spacer";
+  
+  const levels: { items: ItemType[] }[] = [
+    { items: ["node"] }, // Level 1: Arrays
+    { items: ["node", "spacer", "node"] }, // Level 2: Strings, Hash map
+    { items: ["node", "node", "node"] }, // Level 3: Sorting, Linked Lists, Stacks
+    { items: ["node"] }, // Level 4: Queue / Deque
+    { items: ["node", "spacer", "spacer", "node"] }, // Level 5: Recursion, Trees
+    { items: ["node", "node", "node", "node", "node"] }, // Level 6: Bit Manipulation, DP, Trie, Heap, Graphs
+    { items: ["spacer", "spacer", "spacer", "node", "node"] }, // Level 7: Greedy, Range Structures
+    { items: ["node"] }, // Level 8: Math & Geometry
   ];
 
   return (
@@ -29,11 +31,13 @@ export const RoadmapSkeleton = () => {
               )}
 
               {/* Horizontal Row of Nodes */}
-              <div className="flex flex-wrap justify-center gap-4 md:gap-12 w-full">
-                {Array.from({ length: level.nodes }).map((_, nIdx) => (
+              <div className="flex flex-wrap justify-center gap-4 w-full">
+                {level.items.map((item, nIdx) => (
                   <div
                     key={nIdx}
-                    className="p-1 border border-border/40 rounded bg-card/10 flex items-center gap-1.5 min-w-[60px] md:min-w-[120px] py-2"
+                    className={`p-1 border border-border/40 rounded bg-card/10 flex items-center gap-1.5 min-w-[60px] md:min-w-[120px] py-2 ${
+                      item === "spacer" ? "invisible pointer-events-none" : ""
+                    }`}
                   >
                     <Skeleton
                       circle
