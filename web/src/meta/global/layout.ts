@@ -67,8 +67,8 @@ export const globalMetadata: Metadata = {
     "code assessments",
     "problem solving",
   ],
-  authors: [{ name: "SlaveCode Team" }],
-  creator: "SlaveCode",
+  authors: [{ name: "phero20", url: "https://github.com/phero20/slavecode" }],
+  creator: "phero20",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -81,7 +81,6 @@ export const globalMetadata: Metadata = {
     card: "summary_large_image",
     title: "SlaveCode | The Ultimate Platform for Software Engineers",
     description: "Standardize your coding journey. From basic academy courses to advanced system design, company interviews, and real-time coding arenas.",
-    creator: "@slavecode", // Replace with your actual Twitter handle
   },
   robots: {
     index: true,
