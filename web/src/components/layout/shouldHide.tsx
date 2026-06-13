@@ -14,6 +14,7 @@ export const shouldHidefooter = (pathname: string) => {
         pathname.startsWith("/arena/match") ||
         pathname.startsWith("/compilers") ||
         pathname.startsWith("/systemdesign/learn") ||
+        pathname.startsWith("/roadmap") ||
         /^\/systemdesign\/workspace\/[^/]+\/diagram\//.test(pathname) ||
         /^\/systemdesign\/learn\/[^/]+\/diagram\//.test(pathname) ||
         /\/academy\/tracks\/[^/]+\/exercises\/[^/]+/.test(pathname);
