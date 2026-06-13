@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import ReactFlow, {
   Background,
   ConnectionLineType,
@@ -24,6 +24,7 @@ import { RoadmapSidebar } from "./RoadmapSidebar";
 import { cn } from "@/lib/utils";
 import { ButtonGroup, ButtonGroupSeparator } from "../ui/button-group";
 import Link from "next/link";
+import { Card, CardContent } from "../ui/card";
 
 const nodeTypes = {
   taxonomyNode: TaxonomyNode,
@@ -35,40 +36,45 @@ const nodeTypes = {
  * This is purely for the UI layout — no database changes needed.
  */
 const LEARNING_PATH: Record<string, string[]> = {
-  // Level 1 (1 node): The Root
-  array: ["string", "stack"],
+  // Foundations
+  array: ["hash-map", "string"],
 
-  // Level 2 (2 nodes): First Branch
-  string: ["hash-map", "queue-deque"],
-  stack: ["linked-list"],
+  // Early topics
+  "hash-map": ["stack", "linked-list"],
+  string: ["sorting-algorithms"],
 
-  // Level 3 (3 nodes): Wide Spread → all converge into Trees
-  "hash-map": ["trees"],
-  "queue-deque": ["trees"],
-  "linked-list": ["trees"],
+  // First convergence
+  stack: ["queue-deque"],
+  "linked-list": ["queue-deque"],
+  "sorting-algorithms": ["queue-deque"],
 
-  // Level 4 (1 node): The Convergence Hub
-  trees: ["trie", "recursion"],
+  // Major expansion
+  "queue-deque": ["trees", "recursion"],
 
-  // Level 5 (2 nodes): Second Branch
-  trie: ["heap-priority-queue"],
-  recursion: ["graphs", "dynamic-programming"],
+  // Recursion branch
+  recursion: ["dynamic-programming", "bit-manipulation"],
 
-  // Level 6 (3 nodes): Specialist Paths
-  "heap-priority-queue": ["greedy", "sorting-algorithms"],
+  // Tree branch
+  trees: ["graphs", "heap-priority-queue", "trie"],
+
+  // Specialized topics
+  trie: [],
+
+  // Heap applications
+  "heap-priority-queue": ["greedy"],
+
+  // Graph applications
   graphs: ["range-structures"],
-  "dynamic-programming": ["bit-manipulation"],
 
-  // Level 7 (4 nodes): Widest Row → all converge into Math
+  // Advanced topics
+  "dynamic-programming": ["math-geometry"],
   greedy: ["math-geometry"],
-  "sorting-algorithms": ["math-geometry"],
   "range-structures": ["math-geometry"],
   "bit-manipulation": ["math-geometry"],
 
-  // Level 8 (1 node): The Final Convergence
+  // Final destination
   "math-geometry": [],
 };
-
 interface RoadmapCanvasProps {
   data: CategoryTreeNode[];
   onNodeClick?: (category: CategoryTreeNode) => void;
@@ -80,6 +86,14 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { fitView, zoomIn, zoomOut } = useReactFlow();
   const [isMobile, setIsMobile] = useState(false);
+
+  const totalProblems = useMemo(() => {
+    return data.reduce((sum, node) => sum + (node.problemCount || 0), 0);
+  }, [data]);
+
+  const totalSolved = useMemo(() => {
+    return data.reduce((sum, node) => sum + (node.solvedCount || 0), 0);
+  }, [data]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -532,6 +546,43 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
               </Link>
             </Button>
           </ButtonGroup>
+        </Panel>
+
+        {/* Global Progress Hub */}
+        <Panel
+          position="top-right"
+          className="mr-2 transition-all duration-500 z-50 pointer-events-none"
+        >
+          <Card className="mt-8 min-w-[180px] md:min-w-[240px]">
+            <CardContent className="p-3 md:p-5 flex flex-col gap-2 ">
+              <div className="flex justify-between items-center gap-3 md:gap-4">
+                <span className="text-xs md:text-sm font-medium text-muted-foreground">
+                  Overall Progress
+                </span>
+                <span className="text-xs md:text-sm font-bold text-foreground">
+                  {totalProblems > 0 ? Math.round((totalSolved / totalProblems) * 100) : 0}%
+                </span>
+              </div>
+              
+              <div className="flex items-baseline gap-1 md:gap-1.5 font-mono">
+                <span className="text-xl md:text-xl font-bold tracking-tighter text-primary">
+                  {totalSolved}
+                </span>
+                <span className="text-xs md:text-sm text-muted-foreground font-medium">
+                  / {totalProblems}
+                </span>
+              </div>
+
+              <div className="h-1.5 md:h-2 w-full bg-secondary overflow-hidden rounded-full mt-0.5 md:mt-1">
+                <div
+                  className="h-full bg-primary transition-all duration-1000 ease-out"
+                  style={{
+                    width: `${totalProblems > 0 ? Math.min(100, (totalSolved / totalProblems) * 100) : 0}%`,
+                  }}
+                />
+              </div>
+            </CardContent>
+          </Card>
         </Panel>
       </ReactFlow>
 
