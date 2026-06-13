@@ -562,9 +562,7 @@ const RoadmapCanvas = ({ data, onNodeClick }: RoadmapCanvasProps) => {
                 <span className="text-xs md:text-sm font-medium text-muted-foreground">
                   Overall Progress
                 </span>
-                <span className="text-xs md:text-sm font-bold text-foreground">
-                  {totalProblems > 0 ? Math.round((totalSolved / totalProblems) * 100) : 0}%
-                </span>
+
               </div>
               
               <div className="flex items-baseline gap-1 md:gap-1.5 font-mono">
