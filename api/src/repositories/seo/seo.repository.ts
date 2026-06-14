@@ -1,8 +1,10 @@
 import { ProblemModel } from "../../mongo/models/problem.model";
 import { db } from "../../db";
 import { users } from "../../db/schema";
-import fs from "fs/promises";
-import path from "path";
+import { AcademyTrackModel } from "../../mongo/models/academymodels/academy-track.model";
+import { AcademyExerciseModel } from "../../mongo/models/academymodels/academy-exercise.model";
+import { SystemDesignTopicModel } from "../../mongo/models/system-design-topic.model";
+import { CompanyModel } from "../../mongo/models/company.model";
 
 export class SeoRepository {
   /**
@@ -22,17 +24,12 @@ export class SeoRepository {
    * Fetches all academy track slugs from the static JSON file.
    */
   async getAcademyTracksForSitemap() {
-    // Relative to dist/repositories/seo or src/repositories/seo
-    // Matches the path used in AcademyRepository
-    const filePath = path.join(__dirname, "../../../../data/static-data/academy/tracks.json");
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      const parsed = JSON.parse(data);
-      // parsed.tracks is an array of track objects { slug: "javascript", ... }
-      return parsed.tracks.map((track: any) => ({ slug: track.slug }));
+      const tracks = await AcademyTrackModel.find({}).select("slug").lean().exec();
+      return tracks;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return [];
-      throw e;
+      console.error("Error fetching tracks for sitemap:", e);
+      return [];
     }
   }
 
@@ -41,33 +38,12 @@ export class SeoRepository {
    * Returns { trackSlug: string, exerciseSlug: string }
    */
   async getAcademyExercisesForSitemap() {
-    const exercisesPath = path.join(__dirname, "../../../../data/static-data/academy/exercises");
     try {
-      const trackSlugs = await fs.readdir(exercisesPath);
-      const allExercises: { trackSlug: string, exerciseSlug: string }[] = [];
-
-      for (const trackSlug of trackSlugs) {
-        const trackDirPath = path.join(exercisesPath, trackSlug);
-        try {
-          const stat = await fs.stat(trackDirPath);
-          if (stat.isDirectory()) {
-            const exerciseFiles = await fs.readdir(trackDirPath);
-            for (const file of exerciseFiles) {
-              if (file.endsWith(".json")) {
-                const exerciseSlug = file.replace(".json", "");
-                allExercises.push({ trackSlug, exerciseSlug });
-              }
-            }
-          }
-        } catch (e) {
-          console.error(`Error reading exercises for track ${trackSlug}:`, e);
-        }
-      }
-
-      return allExercises;
+      const exercises = await AcademyExerciseModel.find({}).select("trackSlug exerciseSlug").lean().exec();
+      return exercises;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return [];
-      throw e;
+      console.error("Error fetching exercises for sitemap:", e);
+      return [];
     }
   }
 
@@ -75,15 +51,12 @@ export class SeoRepository {
    * Fetches all system design lesson slugs.
    */
   async getSystemDesignLessonsForSitemap() {
-    const filePath = path.join(__dirname, "../../../../data/static-data/system-design/topics.json");
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      const parsed = JSON.parse(data);
-      // parsed is an array of topic objects { slug: "ip", ... }
-      return parsed.map((topic: any) => ({ slug: topic.slug }));
+      const topics = await SystemDesignTopicModel.find({}).select("slug").lean().exec();
+      return topics;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return [];
-      throw e;
+      console.error("Error fetching system design topics for sitemap:", e);
+      return [];
     }
   }
 
@@ -91,15 +64,12 @@ export class SeoRepository {
    * Fetches all company tag slugs.
    */
   async getCompanyTagsForSitemap() {
-    const filePath = path.join(__dirname, "../../../../data/static-data/company-wise-problems/companies.json");
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      const parsed = JSON.parse(data);
-      // parsed is an array of company objects { id: "accenture", ... }
-      return parsed.map((company: any) => ({ slug: company.id }));
+      const companies = await CompanyModel.find({}).select("slug").lean().exec();
+      return companies;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return [];
-      throw e;
+      console.error("Error fetching companies for sitemap:", e);
+      return [];
     }
   }
 

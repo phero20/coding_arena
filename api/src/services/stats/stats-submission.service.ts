@@ -193,19 +193,19 @@ export class StatsSubmissionService {
 
       // Invalidate Roadmap Progress cache so the new solve shows up on the canvas
       await this.taxonomyService.invalidateUserProgress(postgresUserId);
-
-      // Invalidate the frontend solved problems cache so the problem grid checks update instantly
-      try {
-        await redis.del(`user:solved:${user.clerkId}`);
-        logger.info({ clerkId: user.clerkId }, "Invalidated user solved problems cache");
-      } catch (err) {
-        logger.error({ clerkId: user.clerkId, err }, "Failed to invalidate user solved problems cache");
-      }
     } else {
       logger.info(
         { userId: postgresUserId, problemId: submission.problemId },
         "User already solved this problem uniquely. No new points awarded.",
       );
+    }
+
+    // ALWAYS invalidate the frontend solved problems cache on ANY accepted submission to guarantee consistency
+    try {
+      await redis.del(`user:solved:${user.clerkId}`);
+      logger.info({ clerkId: user.clerkId }, "Invalidated user solved problems cache");
+    } catch (err) {
+      logger.error({ clerkId: user.clerkId, err }, "Failed to invalidate user solved problems cache");
     }
 
     // Update Solve Streak - runs on every ACCEPTED solve (any problem)

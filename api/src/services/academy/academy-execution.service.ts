@@ -53,11 +53,14 @@ export class AcademyExecutionService {
       
       let instructions = "Instructions not found.";
       try {
-        // Resolve from this file's location to be completely independent of process.cwd()
-        const instructionsPath = path.resolve(__dirname, "../../../../data/exercism", trackSlug, "exercises", exerciseSlug, ".docs", "instructions.md");
-        instructions = await fs.readFile(instructionsPath, "utf-8");
+        const exerciseData = await this.academyRepository.getTrackExercise(trackSlug, exerciseSlug);
+        if (exerciseData && exerciseData.instructions) {
+          instructions = exerciseData.instructions;
+        } else {
+          logger.warn({ trackSlug, exerciseSlug }, "Instructions missing from exercise JSON in database");
+        }
       } catch (err: any) {
-        logger.warn({ err: err.message, trackSlug, exerciseSlug }, "Failed to read instructions from disk for AI Judge");
+        logger.warn({ err: err.message, trackSlug, exerciseSlug }, "Failed to load instructions from database for AI Judge");
       }
 
       const aiResult = await this.academyAiJudgeService.evaluate({

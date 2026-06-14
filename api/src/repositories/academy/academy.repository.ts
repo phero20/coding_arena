@@ -3,6 +3,10 @@ import path from "path";
 import { and, eq } from "drizzle-orm";
 import { db } from "../../db";
 import { userAcademyExercises } from "../../db/schema";
+import { AcademyTrackModel } from "../../mongo/models/academymodels/academy-track.model";
+import { AcademyConfigModel } from "../../mongo/models/academymodels/academy-config.model";
+import { AcademyConceptModel } from "../../mongo/models/academymodels/academy-concept.model";
+import { AcademyExerciseModel } from "../../mongo/models/academymodels/academy-exercise.model";
 
 export interface IAcademyRepository {
   getTracks(): Promise<any>;
@@ -15,46 +19,43 @@ export interface IAcademyRepository {
 
 export class AcademyRepository implements IAcademyRepository {
   async getTracks(): Promise<any> {
-    const filePath = path.join(__dirname, "../../../../data/static-data/academy/tracks.json");
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      return JSON.parse(data);
+      const dbTracks = await AcademyTrackModel.find({}).lean();
+      if (!dbTracks || dbTracks.length === 0) {
+        // Fallback or just return empty format if not seeded yet
+        return { tracks: [] };
+      }
+      // Reconstruct the JSON structure that the frontend expects
+      return { tracks: dbTracks.map(doc => doc.data) };
     } catch (e: any) {
-      if (e.code === 'ENOENT') return null;
-      throw e;
+      return null;
     }
   }
 
   async getTrackConfig(slug: string): Promise<any> {
-    const filePath = path.join(__dirname, `../../../../data/static-data/academy/config/${slug}.json`);
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      return JSON.parse(data);
+      const doc = await AcademyConfigModel.findOne({ slug }).lean();
+      return doc ? doc.data : null;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return null;
-      throw e;
+      return null;
     }
   }
 
   async getTrackConcept(trackSlug: string, conceptSlug: string): Promise<any> {
-    const filePath = path.join(__dirname, `../../../../data/static-data/academy/concepts/${trackSlug}/${conceptSlug}.json`);
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      return JSON.parse(data);
+      const doc = await AcademyConceptModel.findOne({ trackSlug, conceptSlug }).lean();
+      return doc ? doc.data : null;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return null;
-      throw e;
+      return null;
     }
   }
 
   async getTrackExercise(trackSlug: string, exerciseSlug: string): Promise<any> {
-    const filePath = path.join(__dirname, `../../../../data/static-data/academy/exercises/${trackSlug}/${exerciseSlug}.json`);
     try {
-      const data = await fs.readFile(filePath, "utf-8");
-      return JSON.parse(data);
+      const doc = await AcademyExerciseModel.findOne({ trackSlug, exerciseSlug }).lean();
+      return doc ? doc.data : null;
     } catch (e: any) {
-      if (e.code === 'ENOENT') return null;
-      throw e;
+      return null;
     }
   }
 
