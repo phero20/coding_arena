@@ -1,23 +1,26 @@
 import { type ICompanyRepository } from "../../repositories/company/company.repository";
+import { type IProblemRepository } from "../../repositories/problems/problem.repository";
 import { AppError } from "../../utils/app-error";
 
 export interface ICompanyService {
   getCompanies(): Promise<any>;
   getCompanyProblems(slug: string): Promise<any>;
+  createCompany(data: any): Promise<any>;
 }
 
 export class CompanyService implements ICompanyService {
   private companyRepository: ICompanyRepository;
+  private problemRepository: IProblemRepository;
 
-  constructor({ companyRepository }: { companyRepository: ICompanyRepository }) {
+  constructor({ companyRepository, problemRepository }: { companyRepository: ICompanyRepository, problemRepository: IProblemRepository }) {
     this.companyRepository = companyRepository;
+    this.problemRepository = problemRepository;
   }
 
   async getCompanies(): Promise<any> {
     try {
       return await this.companyRepository.getCompanies();
     } catch (error: any) {
-      if (error.code === 'ENOENT') return [];
       throw new AppError("Failed to fetch companies", { statusCode: 500 });
     }
   }
@@ -28,13 +31,27 @@ export class CompanyService implements ICompanyService {
     }
 
     try {
-      const problems = await this.companyRepository.getCompanyProblems(slug);
-      return problems;
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
-        throw new AppError("Company not found or has no problems", { statusCode: 404 });
+      const company = await this.companyRepository.getCompanyBySlug(slug);
+      if (!company) {
+        throw new AppError("Company not found", { statusCode: 404 });
       }
+
+      // Automatically join the real problem data using the highly optimized bulk fetcher!
+      // This guarantees the UI always shows the single source of truth for problem titles/difficulties.
+      const problems = await this.problemRepository.findManyByProblemIds(company.problem_ids);
+      
+      // Return both the company details (name, logo) AND its hydrated problems array!
+      return {
+        company: { slug: company.slug, name: company.name, imageUrl: company.imageUrl },
+        problems
+      };
+    } catch (error: any) {
+      if (error instanceof AppError) throw error;
       throw new AppError("Failed to fetch company problems", { statusCode: 500 });
     }
+  }
+
+  async createCompany(data: any): Promise<any> {
+    return await this.companyRepository.createOrUpdate(data);
   }
 }
