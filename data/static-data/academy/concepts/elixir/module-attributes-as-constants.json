@@ -1,6 +1,0 @@
-{
-  "slug": "module-attributes-as-constants",
-  "name": "Module Attributes As Constants",
-  "introduction": "# Introduction\n\nIn Elixir, we can define module attributes which can be used as constants in our functions.\n\n```elixir\ndefmodule Example do\n  # Defines the attribute as the value 1\n  @constant_number 1\n\n  def example_value() do\n    # Returns the value 1\n    @constant_number\n  end\nend\n```\n\nWhen used to define module constants, attributes can be any expression which can be evaluated at compilation time. After compilation, module attributes are not accessible since they are expanded during compilation, similar to defined macros in languages like C.",
-  "about": "# About\n\n[Module attributes][module-attr] may be used like [\"constants\"][attr-as-const] which are evaluated at compile-time.\n\n```elixir\ndefmodule Example do\n  @number 2\n\n  def number(), do: @number\nend\n```\n\nHowever, they don't strictly behave like constants because they can be overwritten by redefining them in the module:\n\n```elixir\ndefmodule Example do\n  @standard_message \"Hello, World!\"\n  @standard_message \"Overwritten!\"\n\n  def message(), do: @standard_message\nend\n```\n\n[module-attr]: https://hexdocs.pm/elixir/module-attributes.html\n[attr-as-const]: https://hexdocs.pm/elixir/module-attributes.html#as-constants"
-}

@@ -1,6 +1,0 @@
-{
-  "slug": "try-rescue-else-after",
-  "name": "Try/Rescue/Else/After",
-  "introduction": "# Introduction\n\nUsing `try..rescue` is a powerful construct for catching errors when they occur. Rescuing errors allows functions to return defined values when it is necessary. The `try..rescue` construct also offers us two additional features we can make use of:\n\n- the `else` block\n  - When the try block succeeds, the result is matched to this block.\n- the `after` block\n  - Whether the try block succeeds or raises, the code in the `after` block is always executed as long as the program is running at that point.\n  - The result of the `after` block is not returned to the calling scope.\n\n```elixir\ntry do\n  :a\nrescue\n  _ -> :error\nelse\n  :a -> :success\nafter\n  :some_action\nend\n\n# => :success\n```",
-  "about": "# About\n\nThe basic `try .. rescue` concept can be extended to support `else` and `after` clauses:\n\n- The `else` block:\n  - Where a pattern match on the successful result from the try-block occurs.\n- The `after` block:\n  - Where functions are invoked whether the try-block succeeds or is rescued as long as the program is running.\n  - The result of the `after` block is not returned to the calling scope.\n\n```elixir\ntry do\n  :a\nrescue\n  _ -> :error\nelse\n  :a -> :success\nafter\n  :some_action\nend\n\n# => :success\n```"
-}

@@ -1,6 +1,0 @@
-{
-  "slug": "truthy-and-falsy",
-  "name": "Truthy And Falsy",
-  "introduction": "# Introduction\n\nIn Common Lisp all values are \"true\" except for `()` which is \"false\".\nThere are two special constant symbols `t` and `nil` whose values are true and false respectively.",
-  "about": "# About\n\nIn Common Lisp, false values are represented by the empty list – `()` – or the symbol `nil`.\nThese values can be quoted or unquoted.\n\n```lisp\n;; Equivalent False Values\n()   ; => NIL\nnil  ; => NIL\n'()  ; => NIL\n'nil ; => NIL\n```\n\nAll other values in Lisp represent truth.\nThere also exists the special constant symbol `t` that is always equal to `t` (and is therefore always true).\n\n```lisp\n;; Some Different True Values\n42                        ; => 42\n\"this statement is false\" ; => \"this statement is false\"\nt                         ; => T\n't                        ; => T\n```"
-}

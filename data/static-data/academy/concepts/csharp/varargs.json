@@ -1,6 +1,0 @@
-{
-  "slug": "varargs",
-  "name": "Varargs",
-  "introduction": "# Introduction\n\nMethods can have a varargs parameter which allows the caller to specify zero or more arguments like they were regular parameters. The method will receive these arguments in a single array.\n\nTo make a parameter a varargs parameter, add the `params` keyword to the parameter declaration:\n\n```csharp\npublic static void PrintNumbers(params int[] numbers)\n{\n    foreach (var number in numbers)\n    {\n        Console.Write(number)\n    }\n}\n\n// No values for a varags parameter is allowed\nPrintNumbers();\n\nPrintNumbers(1);\n// => 1\n\nPrintNumbers(1, 2, 3);\n// => 123\n```",
-  "about": "# About\n\nMethods can have a varargs parameter which allows the caller to specify zero or more arguments like they were regular parameters. The method will receive these arguments in a single array.\n\nTo make a parameter a varargs parameter, add the [`params` keyword](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/params) to the parameter declaration:\n\n```csharp\npublic static void PrintNumbers(params int[] numbers)\n{\n    foreach (var number in numbers)\n    {\n        Console.Write(number)\n    }\n}\n\n// No values for a varags parameter is allowed\nPrintNumbers();\n\nPrintNumbers(1);\n// => 1\n\nPrintNumbers(1, 2, 3);\n// => 123\n```"
-}

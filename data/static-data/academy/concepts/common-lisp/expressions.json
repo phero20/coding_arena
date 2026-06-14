@@ -1,6 +1,0 @@
-{
-  "slug": "expressions",
-  "name": "Expressions",
-  "introduction": "# Introduction\n\nAll Common Lisp code is made of S-Expressions (Symbolic Expressions). They are called sexprs for short. Every sexpr is either an atom or a cons. When S-Expressions are evaluated, they automatically return some value which takes the place of the expression. When writing your own functions (using `defun`), the last value within the body of the `defun` is automatically returned:\n\n```lisp\n;; Defining a new function\n(defun gimme-foo () 'foo)\n;; Calling the function as an S-Expression\n(gimme-foo) ; => FOO\n```",
-  "about": "# About\n\nEverything in Common Lisp is an expression. \nAn expression is either a single thing (called an atom) or a list of things (delimited with parenthesis: `()`).\n\n## Quoting\n\nAll S-Expressions, like symbols, can be quoted:\n\n```lisp\n;; This line is evaluated as code\n(gimme-foo)  ; => FOO\n\n;; This line is treated as data\n'(gimme-foo) ; => (GIMME-FOO)\n```\n\nThis quoting prevents the evaluation of an S-expression, instead treating it like data. \nHere is an excellent [Stack Overflow Answer][so-quoting] discussing quoting in a bit more detail.\n\n[so-quoting]: https://stackoverflow.com/questions/134887/when-to-use-or-quote-in-lisp"
-}

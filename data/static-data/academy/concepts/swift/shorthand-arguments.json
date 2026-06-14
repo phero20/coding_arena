@@ -1,6 +1,0 @@
-{
-  "slug": "shorthand-arguments",
-  "name": "Shorthand arguments",
-  "introduction": "# Introduction\n\nIf the types of the parameters can be inferred, Swift also allows the parameter names and the keyword `in` to be omitted from the closure definition. The parameters can instead be referred to using a special shorthand syntax, where `$0` refers to the first parameter, `$1` refers to the second, and so on.\n\n```swift\nlet mean: (Double, Double) -> Double = { $0 + $1 / 2.0 }\n\n[\"apple\", \"ball\", \"carrot\"].sorted(by: { $0.count < $1.count })\n```",
-  "about": "# About\n\nIf the types of the parameters can be inferred, Swift also allows the parameter names and the keyword `in` to be omitted from the closure definition. The parameters can instead be referred to using a [special shorthand syntax][shorthand-argument-names], where `$0` refers to the first parameter, `$1` refers to the second, and so on.\n\n```swift\nlet mean: (Double, Double) -> Double = { $0 + $1 / 2.0 }\n\n[\"apple\", \"ball\", \"carrot\"].sorted(by: { $0.count < $1.count })\n```\n\nThis style is most often used when passing closures into higher-order functions and brevity is valued.\n\n[shorthand-argument-names]: https://docs.swift.org/swift-book/LanguageGuide/Closures.html#ID100"
-}

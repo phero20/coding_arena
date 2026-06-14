@@ -1,6 +1,0 @@
-{
-  "slug": "union-types",
-  "name": "Union Types",
-  "introduction": "# Introduction\n\nAvailable as of `PHP 8.0.0`, **Union Type Declarations** accept values of multiple different types, rather than a single type. Union type definitions are made using the pipe (`|`) to separate types.\n\n```php\nfunction add(int|float $a, int|float $b): int|float\n{\n    return $a + $b;\n}\n```\n\nPHP will throw a `TypeError` in strict mode if the incoming parameters are not either a `float` or an `int`. In non-strict mode, a type error will be thrown if the incoming parameters cannot be coerced into a `float` or an `int`.\n\nSimilarly, if the function does not return one of the declared types, PHP will throw a `TypeError` at runtime.",
-  "about": "# About\n\nAvailable as of `PHP 8.0.0`, **Union Type Declarations** accept values of multiple different types, rather than a single type. Union type definitions are made using the pipe (`|`) to separate types.\n\n```php\nfunction add(int|float $a, int|float $b): int|float\n{\n    return $a + $b;\n}\n```\n\n## Nuances\n\n- `null` types may be declared _nullable_ by either using `?Type` or `Type1|Type2|null`.\n- declared duplicate or redundant types will result in a compile-time error.\n- `void` cannot be used as part of a union type declaration."
-}

@@ -1,6 +1,0 @@
-{
-  "slug": "loops",
-  "name": "Loops",
-  "introduction": "# Introduction\n\nThere are several ways to write loops in Ruby, one of them is the `while` loop:\n\n```ruby\ncounter = 0\n\nwhile counter < 5\n  counter += 1\nend\n```",
-  "about": "# About\n\n## `while`\n\n```ruby\ndef self.years_before_desired_balance(current_balance, desired_balance)\n  years = 0\n  while current_balance < desired_balance\n    current_balance = annual_balance_update(current_balance)\n    years += 1\n  end\n  years\nend\n```\n\n## `until`\n\n```ruby\ndef self.years_before_desired_balance(current_balance, desired_balance)\n  years = 0\n  until current_balance >= desired_balance\n    current_balance = annual_balance_update(current_balance)\n    years += 1\n  end\n  years\nend\n```\n\n## `loop`\n\n```ruby\ndef self.years_before_desired_balance(current_balance, desired_balance)\n  years = 0\n  loop do\n    current_balance = annual_balance_update(current_balance)\n    years += 1\n    return years if current_balance >= desired_balance\n  end\nend\n```\n\nAs you have probably noticed, Ruby has no increment operator (`i++`) like some other languages do. Instead, constructs like `i += 1` (which is equal to `i = i + 1`) can be used."
-}

@@ -1,6 +1,0 @@
-{
-  "slug": "pids",
-  "name": "PIDs",
-  "introduction": "# Introduction\n\nProcess identifiers are their own data type. They function as _mailbox addresses_ - if you have a process's PID, you can send a message to that process. PIDs are usually created indirectly, as a return value of functions that create new processes, like `spawn`.",
-  "about": "# About\n\nEach Elixir process has its own unique identifier - a _PID_ (process identifier).\n\n- PIDs are their own data type.\n  - You can check if a variable is a PID with [`is_pid/1`][kernel-is-pid]\n- You can get the current process's PID with `self()`.\n- PIDs function as _mailbox addresses_ - if you have a process's PID, you can send a message to that process.\n- PIDs are usually created indirectly, as a return value of functions that create new processes, like `spawn`.\n  - PIDs should not be created directly by the programmer. If it were required, Erlang has a [`list_to_pid/1`][erlang-list-to-pid] function.\n\n[kernel-is-pid]: https://hexdocs.pm/elixir/Kernel.html#is_pid/1\n[erlang-list-to-pid]: https://www.erlang.org/doc/man/erlang.html#list_to_pid-1"
-}

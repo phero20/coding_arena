@@ -1,6 +1,0 @@
-{
-  "slug": "throw-expressions",
-  "name": "Throw Expressions",
-  "introduction": "# Introduction\n\n`throw` expressions are an alternative to `throw` statements and in particular can add to the power of ternary and other compound expressions.\n\n```csharp\nstring trimmed = str == null ? throw new ArgumentException() : str.Trim();\n```",
-  "about": "# About\n\n[`throw` expressions][throw-expressions] are an alternative to `throw` statements and in particular can add to the power of ternary and other compound expressions.\n\n```csharp\nstring trimmed = str == null ? throw new ArgumentException() : str.Trim();\n```\n\nIf `str` is `null` in the above code an exception is thrown.\n\n[throw-expressions]: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/throw#the-throw-expression"
-}

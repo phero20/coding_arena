@@ -1,6 +1,0 @@
-{
-  "slug": "named-arguments",
-  "name": "Named Arguments",
-  "introduction": "# Introduction\n\nSo far we have seen that the arguments passed into a method are matched to the method's declared parameters based on position. An alternative approach, particularly where a routine takes a large number of arguments, the caller can match arguments by specifying the declared parameter's identifier.\n\nThe following illustrates the syntax:\n\n```csharp\nclass Card\n{\n    static string NewYear(int year, int month, int day)\n    {\n        return $\"Happy {year}-{month}-{day}!\";\n    }\n}\n\nCard.NewYear(month: 1, day: 1, year: 2020);  // => \"Happy 2020-1-1!\"\n```",
-  "about": "# About\n\nIf a method has multiple optional parameters, you can specify only some of them using [named arguments][named-arguments].\n\n```csharp\nclass Card\n{\n    static string NewYear(int year = 2020, string sender = \"me\")\n    {\n        return $\"Happy {year} from {sender}!\";\n    }\n}\n\nCard.NewYear();  // => \"Happy 2020 from me!\"\nCard.Card(1999); // => \"Happy 1999 from me!\"\nCard.Card(sender: \"mom\"); // => \"Happy 2020 from mom!\"\n```\n\n[named-arguments]: https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/named-and-optional-arguments#named-arguments"
-}

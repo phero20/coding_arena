@@ -1,6 +1,0 @@
-{
-  "slug": "blocks",
-  "name": "Blocks",
-  "introduction": "# Introduction\n\nBlocks are small groupings of statements that can be executed multiple times. \nThey can be thought of as closures or anonymous functions. \nBlocks are defined using the `do...end` syntax (above), or the `{}` (below). \nThe styles are interchangeable and differing opinions exist about when each should be used.",
-  "about": "# About\n\nBlocks are small groupings of statements that can be executed multiple times. \nThey can be thought of as closures or anonymous functions. \nBlocks are defined using the `do...end` syntax (above), or the `{}` (below). \nThe styles are interchangeable and differing opinions exist about when each should be used.\n\n## Shortcut Syntax\nIn situations where a block calls a single method, you can replace the block with `&:` followed by the method name. For example, these two lines are synonymous:\n\n```ruby\npeople.sum { |person| person.age }\npeople.sum(&:age)\n```"
-}
