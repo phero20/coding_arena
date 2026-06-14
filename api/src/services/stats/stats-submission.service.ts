@@ -1,5 +1,6 @@
 import { createLogger } from "../../libs/utils/logger";
 import { getLanguageName, normalizeLanguageId, getLanguageSlug } from "../../libs/utils/languages";
+import { redis } from "../../libs/core/redis";
 import { type ICradle } from "../../libs/awilix-container";
 import type { IStatsRepository } from "../../repositories/stats/stats.repository";
 import type { IProblemRepository } from "../../repositories/problems/problem.repository";
@@ -192,6 +193,14 @@ export class StatsSubmissionService {
 
       // Invalidate Roadmap Progress cache so the new solve shows up on the canvas
       await this.taxonomyService.invalidateUserProgress(postgresUserId);
+
+      // Invalidate the frontend solved problems cache so the problem grid checks update instantly
+      try {
+        await redis.del(`user:solved:${user.clerkId}`);
+        logger.info({ clerkId: user.clerkId }, "Invalidated user solved problems cache");
+      } catch (err) {
+        logger.error({ clerkId: user.clerkId, err }, "Failed to invalidate user solved problems cache");
+      }
     } else {
       logger.info(
         { userId: postgresUserId, problemId: submission.problemId },
