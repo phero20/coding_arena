@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useCompanyProblemsQuery, useCompaniesQuery } from "@/hooks/queries/use-company.queries";
+import { useCompanyProblemsQuery } from "@/hooks/queries/use-company.queries";
 import { ProblemTable } from "@/components/practice/ProblemTable";
 import { ArrowLeft, Building2 } from "lucide-react";
 import { useState } from "react";
@@ -15,17 +15,17 @@ export default function CompanyProblemsPage() {
   const slug = params.slug as string;
   const [imgError, setImgError] = useState(false);
 
-  const { data: companies = [] } = useCompaniesQuery();
-  const company = companies.find((c) => c.id === slug || c.id === slug.toLowerCase());
+  const { data, isLoading, error } = useCompanyProblemsQuery(slug);
 
-  const { data: companyProblems = [], isLoading, error } = useCompanyProblemsQuery(slug);
+  const company = data?.company;
+  const companyProblems = data?.problems || [];
 
   // Map the static CompanyProblem data to the standard Problem interface used by the Table
   const mappedProblems = companyProblems.map((cp) => ({
     problem_id: cp.problem_id, // Using slug to match user solved problems if backend uses slugs
     problem_slug: cp.slug || "",
     title: cp.title,
-    difficulty: cp.difficulty === "EASY" ? "Easy" : cp.difficulty === "MEDIUM" ? "Medium" : "Hard",
+    difficulty: cp.difficulty,
     topics: cp.topics || [],
     is_premium:cp.is_premium,
     // Fill required dummy fields for Problem interface
@@ -41,11 +41,11 @@ export default function CompanyProblemsPage() {
   })) as Problem[];
 
   return (
-    <div className="flex min-h-screen flex-col bg-background py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 w-full">
+    <div className="flex min-h-screen flex-col bg-background py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 w-full">
       {/* Header Section */}
       <Link href="/companies"><Button size="sm"><ArrowLeft /> Companies</Button></Link>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 pb-6 border-b border-border/40">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pb-6 border-b border-border/40">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center ">
           {company?.imageUrl && !imgError ? (
             <img 
               src={company.imageUrl} 

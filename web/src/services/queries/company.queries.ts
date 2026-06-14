@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import type { ApiResponse } from "@/types/api";
-import type { Company, CompanyProblem } from "@/types/company";
+import type { Company, CompanyProblem, CompanyProblemsResponse } from "@/types/company";
 
 /**
  * Fetch all available companies.
@@ -20,8 +20,8 @@ export async function getCompanies(): Promise<Company[]> {
 /**
  * Fetch the specific problems for a given company.
  */
-export async function getCompanyProblems(slug: string): Promise<CompanyProblem[]> {
-  const response = await apiClient.get<ApiResponse<CompanyProblem[]>>(
+export async function getCompanyProblems(slug: string): Promise<CompanyProblemsResponse> {
+  const response = await apiClient.get<ApiResponse<CompanyProblemsResponse>>(
     `/companies/${slug}/problems`
   );
 

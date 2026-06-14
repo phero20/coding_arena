@@ -34,7 +34,7 @@ export default function CompaniesPage() {
 
   // Find the company objects matching our curated list
   const sampleCompanies = famousCompanyIds
-    .map(id => companies.find(c => c.id === id || c.id === id.toLowerCase()))
+    .map(id => companies.find(c => c.slug === id || c.slug === id.toLowerCase()))
     .filter(Boolean)
     .slice(0, 8);
   
@@ -74,7 +74,7 @@ export default function CompaniesPage() {
             {(data) => (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 pb-20">
                 {data.map((company) => (
-                  <Link key={company.id} href={`/companies/${company.id}/problems`} className="block focus:outline-none h-full">
+                  <Link key={company.id} href={`/companies/${company.slug}/problems`} className="block focus:outline-none h-full">
                     <CompanyCard company={company} />
                   </Link>
                 ))}

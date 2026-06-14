@@ -17,7 +17,7 @@ export function CompaniesHeader({ totalCompanies, sampleCompanies }: CompaniesHe
         <div className="flex items-center justify-center -space-x-5 sm:-space-x-6">
           {sampleCompanies.slice(0, 8).map((company, i) => (
             <Link 
-              href={`/companies/${company.id}/problems`}
+              href={`/companies/${company.slug}/problems`}
               key={company.id}
               className="relative transition-transform cursor-pointer "
               style={{ 

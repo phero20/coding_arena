@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies, getCompanyProblems } from "@/services/queries/company.queries";
-import type { Company, CompanyProblem } from "@/types/company";
+import type { Company, CompanyProblemsResponse } from "@/types/company";
 
 /**
  * Hook to fetch the master list of all companies.
@@ -19,7 +19,7 @@ export function useCompaniesQuery() {
  * Hook to fetch the specific problems for a company.
  */
 export function useCompanyProblemsQuery(slug: string) {
-  return useQuery<CompanyProblem[], Error>({
+  return useQuery<CompanyProblemsResponse, Error>({
     queryKey: ["company-problems", slug],
     queryFn: () => getCompanyProblems(slug),
     staleTime: Infinity, // The static questions won't change during the session

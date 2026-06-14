@@ -35,7 +35,13 @@ export interface EvaluationResult {
 const getErrorMessage = (err: any): string | null => {
   if (!err) return null;
   if (typeof err === "string") return err;
-  return err.message || "An unexpected error occurred";
+  
+  const msg = err.message || "An unexpected error occurred";
+  if (msg.includes("500") || msg.includes("Network Error")) {
+    return "Internal Server Error: We could not evaluate your code due to high load. Please try again.";
+  }
+  
+  return msg;
 };
 
 /**
@@ -128,6 +134,11 @@ export const useTaskEvaluation = ({
   const evaluation: EvaluationResult = useMemo(() => {
     if (evaluationType === "run") {
       const status = lastRunResult?.overallStatus || "PENDING";
+      const isSystemError = status === "SYSTEM_ERROR";
+      const systemErrorMessage = isSystemError 
+        ? "Internal Server Error: We could not evaluate your code due to high load. Please try running again." 
+        : null;
+
       return {
         submissionId: lastRunResult?.submissionId ?? null,
         status,
@@ -136,13 +147,18 @@ export const useTaskEvaluation = ({
         compileOutput: lastRunResult?.compileOutput,
         stderr: lastRunResult?.stderr,
         isLoading: runMutation.isPending || (status as string) === "PENDING",
-        error: getErrorMessage(runMutation.error),
+        error: getErrorMessage(runMutation.error) || systemErrorMessage,
         type: "run",
       };
     }
 
     if (evaluationType === "submit") {
       const status = statusPolling?.overallStatus || "PENDING";
+      const isSystemError = status === "SYSTEM_ERROR";
+      const systemErrorMessage = isSystemError 
+        ? "Internal Server Error: We could not evaluate your code due to high load. Please try submitting again." 
+        : null;
+
       return {
         submissionId: submissionId,
         status,
@@ -151,7 +167,7 @@ export const useTaskEvaluation = ({
         compileOutput: pollingData?.details?.compileOutput,
         stderr: pollingData?.details?.stderr,
         isLoading: submitMutation.isPending || (status as string) === "PENDING" || !!statusPolling?.isLoading,
-        error: getErrorMessage(submitMutation.error || statusPolling?.error),
+        error: getErrorMessage(submitMutation.error || statusPolling?.error) || systemErrorMessage,
         type: "submit",
       };
     }
@@ -181,13 +197,17 @@ export const useTaskEvaluation = ({
    */
   const run = useCallback((code: string) => {
     if (isLoading) return;
+    submitMutation.reset();
+    runMutation.reset();
     runMutation.mutate(code);
-  }, [isLoading, runMutation]);
+  }, [isLoading, runMutation, submitMutation]);
 
   const submit = useCallback((code: string) => {
     if (isLoading) return;
+    runMutation.reset();
+    submitMutation.reset();
     submitMutation.mutate(code);
-  }, [isLoading, submitMutation]);
+  }, [isLoading, submitMutation, runMutation]);
 
   const reset = useCallback(() => {
     runMutation.reset();
@@ -213,7 +233,7 @@ export const useTaskEvaluation = ({
     reset,
     evaluation,
     isLoading,
-    error,
+    error: evaluation.error,
     isArena: mode === "arena",
   };
 };
