@@ -14,7 +14,9 @@ const isSecure = redisUrl.protocol === "rediss:";
 const redisConnection = {
   host: redisUrl.hostname || "localhost",
   port: parseInt(redisUrl.port || "6379"),
-  password: redisUrl.password ? decodeURIComponent(redisUrl.password) : undefined,
+  password: redisUrl.password
+    ? decodeURIComponent(redisUrl.password)
+    : undefined,
   tls: isSecure ? {} : undefined,
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
@@ -29,17 +31,13 @@ const redisConnection = {
 export const submissionQueue = new Queue("submission-evaluation", {
   connection: redisConnection,
   defaultJobOptions: {
-    attempts: 5,
+    attempts: 3,
     backoff: {
-      type: "exponential",
-      delay: 2000,
+      type: "fixed",
+      delay: 1000,
     },
-    removeOnComplete: {
-      age: 3600, // Keep completed jobs for 1 hour
-    },
-    removeOnFail: {
-      age: 86400, // Keep failed jobs for 24 hours (for debugging)
-    },
+    removeOnComplete: true,
+    removeOnFail: true,
   },
 });
 
