@@ -23,7 +23,9 @@ interface AiSolution {
   time_complexity: string;
   space_complexity: string;
   editorial_explanation: string;
-  implementations: AiImplementation[];
+  implementations?: AiImplementation[];
+  language?: string;
+  code?: string;
 }
 
 interface OfficialSolutionProps {
@@ -124,7 +126,18 @@ export const OfficialSolution: React.FC<OfficialSolutionProps> = ({
     if (!officialSolution) return [];
     try {
       const parsed = JSON.parse(officialSolution);
-      if (Array.isArray(parsed)) return parsed as AiSolution[];
+      if (Array.isArray(parsed)) {
+        return parsed.map((app: AiSolution) => {
+          // Normalize flat structure to implementations array
+          if (app.language && app.code && !app.implementations) {
+            return {
+              ...app,
+              implementations: [{ language: app.language, code: app.code }],
+            };
+          }
+          return app;
+        });
+      }
     } catch {
       // Not JSON — not supported in this component
     }

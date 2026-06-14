@@ -9,7 +9,7 @@ Understanding where the logic lives is the first step to mastery.
 
 | Folder | Name | Tech Stack | Role & Responsibility |
 | :--- | :--- | :--- | :--- |
-| **`/api`** | The Brain | Bun, Hono, Drizzle, Mongo | **Central REST API**: Manages user authentication (Clerk), problem banks, and persistent analytics. |
+| **`/api`** | The Brain | Bun, Hono, Drizzle,Postgress, Mongo,redis | **Central REST API**: Manages user authentication (Clerk), problem banks, and persistent analytics. |
 | **`/arena`** | The Heart | Go, Fiber, Redis | **Real-time Engine**: A high-performance WebSocket hub that manages live match state and lobby broadcasting. |
 | **`/web`** | The Face | Next.js 15+, Zustand | **Frontend UI**: The React-based platform featuring Monaco Editor and real-time dashboards. |
 | **`/driver`** | The Bridge | Java,c++,c,go,rust... | **Execution Logic**: Wraps user code into language-specific test packages before sending to Judge0. |
@@ -86,28 +86,30 @@ Ensure these ports are open and not occupied by other services:
 
 ---
 
-## 🏗 6. The Database Stack (Deep Dive)
-SlaveCode uses a hybrid persistence strategy to balance flexibility with relational integrity:
+## 🏗 6. The Infrastructure & Integrations (Deep Dive)
+SlaveCode uses a hybrid infrastructure strategy to balance flexibility, relational integrity, and heavy computational requirements:
 
-1.  **PostgreSQL (Neon/Relational)**:
-    - **Purpose**: High-integrity data including user profiles, points/stats, and activity tracking.
-    - **Logic**: Managed via **Drizzle ORM** for type-safe relational queries.
-2.  **MongoDB (Document)**:
-    - **Purpose**: Operational flexibility. Stores the vast problem bank, complex test cases, and archived match logs.
-    - **Logic**: Managed via **Mongoose** for schema validation.
-3.  **Redis / Valkey (In-Memory)**:
-    - **Purpose**: The "glue" for real-time. Manages lobby states, match timers, and inter-service messaging via Pub/Sub.
-    - **Note**: Supports high-performance alternatives like **Valkey** for production-grade concurrency.
-4.  **Judge0 (Execution)**:
-    - **Purpose**: The sandboxed engine that actually runs user code in a safe environment.
+### 🗄️ Databases & Caching
+1.  **PostgreSQL (Neon/Relational)**: Managed via **Drizzle ORM**. High-integrity data (user profiles, points/stats, activity tracking).
+2.  **MongoDB (Document - Atlas Cloud)**: Managed via **Mongoose**. Stores the vast competitive programming problem bank, complex test cases, archived match logs, and the migrated Academy curriculum.
+3.  **Redis / Valkey (In-Memory)**: The "glue" for real-time. Manages lobby states, match timers, and inter-service messaging via Pub/Sub.
+
+### 🛡️ Authentication
+4.  **Clerk (Identity Management)**: Handles all user authentication, login, and session management. The Next.js frontend utilizes Clerk's React SDK, while the Node (Hono) API and Go WebSockets protect their routes by cryptographically validating Clerk JWTs using the `CLERK_PEM_PUBLIC_KEY`.
+
+### ⚙️ Execution Engine
+5.  **Judge0 (Dockerized Sandbox)**: The core code execution engine. It safely compiles and runs user submissions against hidden test cases inside isolated sandboxes to prevent malicious code from harming the server. 
+
+### 🧠 AI Integrations
+6.  **Amazon Bedrock (Claude 3.5 Sonnet)**: Acts as the **AI Judge Fallback**. If Judge0 fails a submission due to a strict formatting difference (like trailing whitespace) or doesn't support the language, Bedrock acts as a highly-intelligent secondary evaluator to determine logical correctness.
+7.  **Groq & Google Gemini (LLMs)**: Powers the interactive **System Design Workspaces**, allowing users to chat with AI to generate, analyze, and debug their architecture diagrams in real-time.
 
 ---
 
 ## 🧪 7. Verification
 Once everything is up, run the health check to verify the entire "Handshake" between services:
 ```bash
-cd testings
-bun run health.test.ts
+bun --env-file=api/.env run testings/health.test.ts
 ```
 **Expected Results**:
 - `API [3000]` -> `HEALTHY`

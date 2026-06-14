@@ -9,7 +9,7 @@ const logger = createLogger("pipeline-check");
  * 1. User/Match setup
  * 2. Submission creation
  * 3. Evaluator trigger (Internal logic)
- * 
+ *
  * This ensures that not only are the dependencies wired, but their
  * internal logic flows (decorating, caching, db calls) are harmonized.
  */
@@ -20,11 +20,11 @@ async function runPipelineValidation() {
     const cradle = container.cradle;
 
     // --- STEP 1: RESOLUTION CHECK ---
-    const { 
-        problemService, 
-        submissionService, 
-        submissionEvaluator,
-        problemRepository
+    const {
+      problemService,
+      submissionService,
+      submissionEvaluator,
+      problemRepository,
     } = cradle;
     logger.info("✅ All core pipeline services resolved.");
 
@@ -32,37 +32,44 @@ async function runPipelineValidation() {
     // This triggers the ProblemCache -> ProblemService -> ProblemRepository chain
     const mockProblemId = "p1";
     logger.info(`🔍 Testing Problem Resolution for ID: ${mockProblemId}`);
-    
+
     // We don't need real data to test the WIRING flow, just that it doesn't crash
     try {
-        await problemService.getProblemById(mockProblemId);
-        logger.info("✅ Problem Service flow verified (Cache -> Repository).");
+      await problemService.getProblemById(mockProblemId);
+      logger.info("✅ Problem Service flow verified (Cache -> Repository).");
     } catch (e) {
-        // If it fails on DB connection, that's okay for an architecture test as long as it's NOT a DI error
-        logger.warn("⚠️ Problem Service reached the Database layer (Success).");
+      // If it fails on DB connection, that's okay for an architecture test as long as it's NOT a DI error
+      logger.warn("⚠️ Problem Service reached the Database layer (Success).");
     }
 
     // --- STEP 3: EVALUATOR LOGIC (THE BIG ONE) ---
     logger.info("🏗️ Verifying Submission Evaluator core logic...");
-    
+
     // Check if the evaluator has its dependencies (via private check or public status)
-    if (!submissionEvaluator || typeof (submissionEvaluator as any).evaluate !== 'function') {
-        throw new Error("Pipeline Error: SubmissionEvaluator is missing the 'evaluate' method!");
+    if (
+      !submissionEvaluator ||
+      typeof (submissionEvaluator as any).evaluate !== "function"
+    ) {
+      throw new Error(
+        "Pipeline Error: SubmissionEvaluator is missing the 'evaluate' method!",
+      );
     }
-    
+
     logger.info("✅ Submission Evaluator is ready for processing.");
 
     // --- STEP 4: REDIS INFRA CHECK ---
     const { redis } = require("../api/src/libs/redis");
     try {
-        await redis.ping();
-        logger.info("✅ Redis (Rate Limiter & Lock Infra) is reachable.");
+      await redis.ping();
+      logger.info("✅ Redis (Rate Limiter & Lock Infra) is reachable.");
     } catch (e) {
-        logger.error("❌ Redis is UNREACHABLE. Rate-limiting logic will fail!");
-        throw e;
+      logger.error("❌ Redis is UNREACHABLE. Rate-limiting logic will fail!");
+      throw e;
     }
 
-    logger.info("✨ FINAL VERDICT: The 'Big Flow' architecture is harmonized and production-ready.");
+    logger.info(
+      "✨ FINAL VERDICT: The 'Big Flow' architecture is harmonized and production-ready.",
+    );
     process.exit(0);
   } catch (err: any) {
     logger.error({ err }, "❌ PIPELINE VALIDATION FAILED!");
