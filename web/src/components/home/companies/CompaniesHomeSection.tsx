@@ -8,23 +8,23 @@ import { Company } from "@/types/company";
 
 // 8 Companies specifically for the top overlapping header
 const headerCompanies: Company[] = [
-  { id: "google", name: "Google", imageUrl: "/assets/companies-logos/google.png" },
-  { id: "meta", name: "Meta", imageUrl: "/assets/companies-logos/meta.png" },
-  { id: "amazon", name: "Amazon", imageUrl: "/assets/companies-logos/amazon.png" },
-  { id: "apple", name: "Apple", imageUrl: "/assets/companies-logos/apple.png" },
-  { id: "microsoft", name: "Microsoft", imageUrl: "/assets/companies-logos/microsoft.png" },
-  { id: "oracle", name: "Oracle", imageUrl: "/assets/companies-logos/oracle.png" },
-  { id: "tcs", name: "TCS", imageUrl: "/assets/companies-logos/tcs.png" },
-  { id: "infosys", name: "Infosys", imageUrl: "/assets/companies-logos/infosys.png" },
+  { id: "google", slug: "google", name: "Google", imageUrl: "/assets/companies-logos/google.png" },
+  { id: "meta", slug: "meta", name: "Meta", imageUrl: "/assets/companies-logos/meta.png" },
+  { id: "amazon", slug: "amazon", name: "Amazon", imageUrl: "/assets/companies-logos/amazon.png" },
+  { id: "apple", slug: "apple", name: "Apple", imageUrl: "/assets/companies-logos/apple.png" },
+  { id: "microsoft", slug: "microsoft", name: "Microsoft", imageUrl: "/assets/companies-logos/microsoft.png" },
+  { id: "oracle", slug: "oracle", name: "Oracle", imageUrl: "/assets/companies-logos/oracle.png" },
+  { id: "tcs", slug: "tcs", name: "TCS", imageUrl: "/assets/companies-logos/tcs.png" },
+  { id: "infosys", slug: "infosys", name: "Infosys", imageUrl: "/assets/companies-logos/infosys.png" },
 ];
 
 // 12 Companies for the 3-row grid below
 const gridCompanies: Company[] = [
   ...headerCompanies,
-  { id: "netflix", name: "Netflix", imageUrl: "/assets/companies-logos/netflix.png" },
-  { id: "uber", name: "Uber", imageUrl: "/assets/companies-logos/uber.png" },
-  { id: "airbnb", name: "Airbnb", imageUrl: "/assets/companies-logos/airbnb.png" },
-  { id: "adobe", name: "Adobe", imageUrl: "/assets/companies-logos/adobe.png" },
+  { id: "netflix", slug: "netflix", name: "Netflix", imageUrl: "/assets/companies-logos/netflix.png" },
+  { id: "uber", slug: "uber", name: "Uber", imageUrl: "/assets/companies-logos/uber.png" },
+  { id: "airbnb", slug: "airbnb", name: "Airbnb", imageUrl: "/assets/companies-logos/airbnb.png" },
+  { id: "adobe", slug: "adobe", name: "Adobe", imageUrl: "/assets/companies-logos/adobe.png" },
 ];
 
 export const CompaniesHomeSection = () => {
