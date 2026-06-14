@@ -1,12 +1,14 @@
 import { type ISystemDesignRepository } from "../../repositories/system-design/system-design.repository";
 import { AppError } from "../../utils/app-error";
 import { createLogger } from "../../libs/utils/logger";
+import type { CreateSystemDesignTopicInput } from "../../validators/system-design.validator";
 
 const logger = createLogger("system-design.service");
 
 export interface ISystemDesignService {
   getTopics(): Promise<any>;
   getTopicContent(slug: string): Promise<any>;
+  createTopic(data: CreateSystemDesignTopicInput): Promise<any>;
 }
 
 export class SystemDesignService implements ISystemDesignService {
@@ -43,6 +45,15 @@ export class SystemDesignService implements ISystemDesignService {
       
       logger.error({ err: error, slug }, "Failed to fetch topic");
       throw new AppError("Failed to fetch topic", { statusCode: 500 });
+    }
+  }
+
+  async createTopic(data: CreateSystemDesignTopicInput): Promise<any> {
+    try {
+      return await this.systemDesignRepository.createTopic(data);
+    } catch (error: any) {
+      logger.error({ err: error, slug: data.slug }, "Failed to create topic");
+      throw new AppError("Failed to create topic", { statusCode: 500 });
     }
   }
 }
