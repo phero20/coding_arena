@@ -92,7 +92,7 @@ const buildDefaultElements = (problem: any, publicTests: any) => {
       type: "text",
       x: 50,
       y: 50,
-      width: 260,
+      width: 560,
       height: 200,
       text: inputText,
       fontSize: 32, 
