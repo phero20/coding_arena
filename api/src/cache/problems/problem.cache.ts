@@ -137,6 +137,24 @@ export class ProblemCache implements IProblemService {
   }
 
   async getUserSolvedProblems(userId: string): Promise<string[]> {
-    return this.rawProblemService.getUserSolvedProblems(userId);
+    const key = `user:solved:${userId}`;
+
+    try {
+      const cached = await redis.get(key);
+      if (cached) return JSON.parse(cached);
+    } catch (err) {
+      logger.error({ userId, err }, "Redis get error for user solved problems");
+    }
+
+    const solved = await this.rawProblemService.getUserSolvedProblems(userId);
+
+    try {
+      // Cache for 1 day (86400s) for memory management (e.g. if user deletes account)
+      await redis.set(key, JSON.stringify(solved), "EX", 86400);
+    } catch (err) {
+      logger.error({ userId, err }, "Redis set error for user solved problems");
+    }
+
+    return solved;
   }
 }
