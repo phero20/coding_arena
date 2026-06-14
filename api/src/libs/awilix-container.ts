@@ -62,6 +62,8 @@ import { type AiJudgeCache } from "../cache/judge/ai-judge.cache";
 import { SubmissionCache } from "../cache/submissions/submission.cache";
 import { SolutionCache } from "../cache/solutions/solution.cache";
 import { type AcademyCache } from "../cache/academy/academy.cache";
+import { type SystemDesignCache } from "../cache/system-design/system-design.cache";
+import { type CompanyCache } from "../cache/company/company.cache";
 
 import { type AuthMiddleware } from "../middlewares/security/auth.middleware";
 import { type AuthorizationMiddleware } from "../middlewares/security/authorization.middleware";
@@ -214,6 +216,8 @@ export interface ICradle {
   rawSolutionService: import("../services/solutions/solution.service").SolutionService;
   rawWorkspaceService: WorkspaceService;
   rawAcademyService: AcademyService;
+  rawSystemDesignService: import("../services/system-design/system-design.service").SystemDesignService;
+  rawCompanyService: import("../services/company/company.service").CompanyService;
 
   // Middlewares
   authMiddleware: AuthMiddleware;
@@ -239,6 +243,8 @@ export interface ICradle {
   solutionCache: SolutionCache;
   workspaceCache: WorkspaceCache;
   academyCache: AcademyCache;
+  systemDesignCache: SystemDesignCache;
+  companyCache: CompanyCache;
 
   // Controllers
   authController: AuthController;
