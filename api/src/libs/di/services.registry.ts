@@ -61,6 +61,8 @@ import { SubmissionCache } from "../../cache/submissions/submission.cache";
 import { SolutionCache } from "../../cache/solutions/solution.cache";
 import { WorkspaceCache } from "../../cache/workspace/workspace.cache";
 import { AcademyCache } from "../../cache/academy/academy.cache";
+import { SystemDesignCache } from "../../cache/system-design/system-design.cache";
+import { CompanyCache } from "../../cache/company/company.cache";
 
 /**
  * Service layer registrations.
@@ -88,6 +90,8 @@ export const servicesRegistry = {
   rawSolutionService: asClass(SolutionService).singleton(),
   rawWorkspaceService: asClass(WorkspaceService).singleton(),
   rawAcademyService: asClass(AcademyService).singleton(),
+  rawSystemDesignService: asClass(SystemDesignService).singleton(),
+  rawCompanyService: asClass(CompanyService).singleton(),
   chatService: asClass(ChatService).singleton(),
   diagramResolverService: asClass(DiagramResolverService).singleton(),
   groqDiagramService: asClass(GroqDiagramService).singleton(),
@@ -121,6 +125,8 @@ export const servicesRegistry = {
   solutionCache: asClass(SolutionCache).singleton(),
   workspaceCache: asClass(WorkspaceCache).singleton(),
   academyCache: asClass(AcademyCache).singleton(),
+  systemDesignCache: asClass(SystemDesignCache).singleton(),
+  companyCache: asClass(CompanyCache).singleton(),
 
   // Primary service endpoints (pointing to caches)
   problemService: asFunction(
@@ -165,8 +171,12 @@ export const servicesRegistry = {
   ).singleton(),
   academyExecutionService: asClass(AcademyExecutionService).singleton(),
   academyAiJudgeService: asClass(AcademyAiJudgeService).singleton(),
-  systemDesignService: asClass(SystemDesignService).singleton(),
-  companyService: asClass(CompanyService).singleton(),
+  systemDesignService: asFunction(
+    ({ systemDesignCache }: ICradle) => systemDesignCache,
+  ).singleton(),
+  companyService: asFunction(
+    ({ companyCache }: ICradle) => companyCache,
+  ).singleton(),
   seoService: asClass(SeoService).singleton(),
   cloudinaryService: asClass(CloudinaryService).singleton(),
   reportBugService: asClass(ReportBugService).singleton(),
