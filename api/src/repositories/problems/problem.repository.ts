@@ -51,7 +51,7 @@ export class ProblemRepository
     const docs = await this.model
       .find({ problem_id: { $in: problem_ids } })
       // Projection: only fetch fields needed for list/category views
-      .select('problem_id title difficulty problem_slug topics')
+      .select('problem_id title difficulty problem_slug topics is_premium')
       .lean()
       .exec();
     // Restore the original ordered sequence from the junction table
