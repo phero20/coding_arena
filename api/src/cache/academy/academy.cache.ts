@@ -6,7 +6,7 @@ import { type ICradle } from "../../libs/awilix-container";
 const logger = createLogger("academy-cache");
 
 export class AcademyCache implements IAcademyService {
-  private readonly CACHE_TTL = 3600; // 1 hour
+  private readonly CACHE_TTL = 86400; // 1 day (24 hours)
   private readonly rawAcademyService: AcademyService;
 
   constructor({ rawAcademyService }: ICradle) {
