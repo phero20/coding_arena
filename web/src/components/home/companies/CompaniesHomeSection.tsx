@@ -56,7 +56,7 @@ export const CompaniesHomeSection = () => {
         {/* Text & CTA Button placed so it overlaps the fade */}
         <div className="flex flex-col items-center justify-center text-center relative z-20 -mt-16 gap-6">
           <p className="text-sm md:text-base text-muted-foreground">
-            Explore 470+ top tech companies. Each profile features real <br className="hidden sm:block" /> interview questions that you can solve directly in our built-in editor while tracking your success stats over time.
+            Explore 460+ top tech companies. Each profile features real <br className="hidden sm:block" /> interview questions that you can solve directly in our built-in editor while tracking your success stats over time.
           </p>
           <Button
             variant="link"

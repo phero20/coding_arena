@@ -224,6 +224,7 @@ export const useTaskEvaluation = ({
     if (evaluation.status !== "PENDING" && evaluation.type === "submit" && evaluation.submissionId) {
       queryClient.invalidateQueries({ queryKey: ["submissions", problemId] });
       queryClient.invalidateQueries({ queryKey: ["user-submissions", problemId] });
+      queryClient.invalidateQueries({ queryKey: ["user-solved-problems"] });
     }
   }, [evaluation.status, evaluation.type, evaluation.submissionId, problemId, queryClient]);
 
