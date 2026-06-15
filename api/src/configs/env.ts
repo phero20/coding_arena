@@ -73,6 +73,7 @@ interface EnvConfig {
   judge0BaseUrl?: string;
   judge0ApiKey?: string;
   judge0ApiHost?: string;
+  judge0VmName?: string;
 
   // AI
   groqApiKeys: string[];
@@ -130,6 +131,7 @@ export const config: EnvConfig = {
   judge0BaseUrl: Bun.env.JUDGE0_BASE_URL,
   judge0ApiKey: Bun.env.JUDGE0_API_KEY,
   judge0ApiHost: Bun.env.JUDGE0_API_HOST,
+  judge0VmName: Bun.env.JUDGE0_VM_NAME,
 
   // AI
   groqApiKeys: parseApiKeyArray(Bun.env.GROQ_API_KEY),

@@ -31,10 +31,9 @@ const redisConnection = {
 export const submissionQueue = new Queue("submission-evaluation", {
   connection: redisConnection,
   defaultJobOptions: {
-    attempts: 3,
+    attempts: 5,
     backoff: {
-      type: "fixed",
-      delay: 1000,
+      type: "smartRetry",
     },
     removeOnComplete: true,
     removeOnFail: true,

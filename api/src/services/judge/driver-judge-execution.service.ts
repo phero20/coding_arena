@@ -1,9 +1,9 @@
-import { generateExecutionPackage } from "../../../../driver/index";
+import { generateExecutionPackage } from "@slavecode/driver/index";
 import {
   parseDriverResult,
   type RawJudge0Result,
   type TestCaseResult as DriverTestCaseResult,
-} from "../../../../driver/core/result-parser";
+} from "@slavecode/driver/core/result-parser";
 import type { SubmissionStatus } from "../../mongo/models/submission.model";
 import type { IProblemRepository } from "../../repositories/problems/problem.repository";
 import type { IProblemTestRepository } from "../../repositories/problems/problem-test.repository";

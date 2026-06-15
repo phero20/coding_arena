@@ -1,4 +1,5 @@
 import { config } from "../../configs/env";
+import { handleCloudWakeOnNetworkError } from "../../libs/utils/cloud-wake.util";
 
 export interface Judge0SubmissionPayload {
   source_code: string;
@@ -76,7 +77,9 @@ export class Judge0Service {
       }
 
       return (await response.json()) as T;
-    } catch (error) {
+    } catch (error: any) {
+      await handleCloudWakeOnNetworkError(error);
+
       if (error instanceof Error && error.name === "AbortError") {
         throw new Error("Judge0 request timed out");
       }

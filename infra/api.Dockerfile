@@ -7,6 +7,7 @@ COPY package.json bun.lock ./
 COPY api/package.json ./api/
 COPY driver/package.json ./driver/
 COPY web/package.json ./web/
+COPY cloud/package.json ./cloud/
 
 # 2. Install dependencies for the entire workspace
 # (This ensures the @slavecode/driver link is created)
@@ -15,6 +16,7 @@ RUN bun install
 # 3. Copy source code for both the API and the shared Driver
 COPY api/src ./api/src
 COPY driver ./driver
+COPY cloud ./cloud
 
 # 4. Final step: run from the API directory
 WORKDIR /app/api

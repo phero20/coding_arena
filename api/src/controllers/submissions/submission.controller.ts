@@ -17,6 +17,8 @@ import type { ProblemValidatorService } from "../../services/problems/problem-va
 import { type IClockService } from "../../services/common/clock.service";
 import { type IUserRepository } from "../../repositories/user/user.repository";
 import { type ICradle } from "../../libs/awilix-container";
+import { CloudFactory } from "@slavecode/cloud";
+import { config } from "../../configs/env";
 
 /**
  * SubmissionController handles code execution runs and official match submissions.
@@ -112,9 +114,28 @@ export class SubmissionController extends BaseController {
       throw AppError.from(ERRORS.SUBMISSION.QUEUE_FAILED);
     }
 
+    // Pre-check Azure VM Status for Wake-on-Demand (Option 1)
+    let isWakingUp = false;
+    if (config.judge0VmName) {
+      try {
+        const cloud = CloudFactory.getProvider();
+        const vmStatus = await cloud.getVmStatus(config.judge0VmName);
+        if (vmStatus === "OFF" || vmStatus === "STOPPING" || vmStatus === "UNKNOWN") {
+          isWakingUp = true;
+          // Send start command just in case worker hasn't yet
+          await cloud.startVm(config.judge0VmName).catch(() => {});
+        } else if (vmStatus === "STARTING") {
+          isWakingUp = true;
+        }
+      } catch (err) {
+        this.logger.warn({ err }, "Failed to pre-check VM status");
+      }
+    }
+
     return {
       submissionId: submission.id,
       status: "PENDING",
+      isWakingUp,
       message:
         "Submission queued for evaluation. Check status with submission ID.",
     };

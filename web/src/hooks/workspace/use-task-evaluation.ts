@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState, useMemo } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { runSubmission, submitCode } from "@/services/mutations/submission.mutations";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSubmissionStatusQuery } from "@/hooks/queries/use-submission.queries";
+import { useRunMutation, useSubmitMutation } from "@/hooks/mutations/use-submission.mutations";
+import { toast } from "sonner";
 import type { 
   ExecutionVerdict, 
   ExecutionTestResult,
@@ -36,6 +37,11 @@ const getErrorMessage = (err: any): string | null => {
   if (!err) return null;
   if (typeof err === "string") return err;
   
+  const apiMessage = err?.response?.data?.error?.message;
+  if (apiMessage === "VM_WAKING_UP") {
+    return "VM_WAKING_UP";
+  }
+
   const msg = err.message || "An unexpected error occurred";
   if (msg.includes("500") || msg.includes("Network Error")) {
     return "Internal Server Error: We could not evaluate your code due to high load. Please try again.";
@@ -61,48 +67,10 @@ export const useTaskEvaluation = ({
   const [lastRunResult, setLastRunResult] = useState<RunSubmissionResponse | null>(null);
 
   /**
-   * Mutation for "Run" (Sample Tests)
+   * Modularized Mutations (Logic moved to use-submission.mutations.ts)
    */
-  const runMutation = useMutation({
-    mutationKey: ["run-code", problemId, languageId],
-    mutationFn: (sourceCode: string) =>
-      runSubmission({
-        problemId,
-        languageId,
-        sourceCode,
-        arenaMatchId: mode === "arena" ? arenaMatchId : undefined,
-      }),
-    onMutate: () => {
-      setEvaluationType("run");
-      setSubmissionId(null);
-      setLastRunResult(null);
-    },
-    onSuccess: (data) => {
-      setLastRunResult(data);
-    },
-  });
-
-  /**
-   * Mutation for "Submit" (Full Evaluation)
-   */
-  const submitMutation = useMutation({
-    mutationKey: ["submit-code", problemId, languageId, mode],
-    mutationFn: (sourceCode: string) =>
-      submitCode({
-        problemId,
-        languageId,
-        sourceCode,
-        arenaMatchId: mode === "arena" ? (arenaMatchId || undefined) : undefined,
-      }),
-    onMutate: () => {
-      setEvaluationType("submit");
-      setLastRunResult(null);
-      setSubmissionId(null);
-    },
-    onSuccess: (data) => {
-      setSubmissionId(data.submissionId);
-    },
-  });
+  const runMutation = useRunMutation();
+  const submitMutation = useSubmitMutation();
 
   /**
    * Polling for "Submit" status
@@ -199,15 +167,39 @@ export const useTaskEvaluation = ({
     if (isLoading) return;
     submitMutation.reset();
     runMutation.reset();
-    runMutation.mutate(code);
-  }, [isLoading, runMutation, submitMutation]);
+    
+    setEvaluationType("run");
+    setSubmissionId(null);
+    setLastRunResult(null);
+
+    runMutation.mutate({
+      problemId,
+      languageId,
+      sourceCode: code,
+      arenaMatchId: mode === "arena" ? arenaMatchId : undefined,
+    }, {
+      onSuccess: (data) => setLastRunResult(data),
+    });
+  }, [isLoading, runMutation, submitMutation, problemId, languageId, mode, arenaMatchId]);
 
   const submit = useCallback((code: string) => {
     if (isLoading) return;
     runMutation.reset();
     submitMutation.reset();
-    submitMutation.mutate(code);
-  }, [isLoading, submitMutation, runMutation]);
+
+    setEvaluationType("submit");
+    setLastRunResult(null);
+    setSubmissionId(null);
+
+    submitMutation.mutate({
+      problemId,
+      languageId,
+      sourceCode: code,
+      arenaMatchId: mode === "arena" ? (arenaMatchId || undefined) : undefined,
+    }, {
+      onSuccess: (data) => setSubmissionId(data.submissionId),
+    });
+  }, [isLoading, submitMutation, runMutation, problemId, languageId, mode, arenaMatchId]);
 
   const reset = useCallback(() => {
     runMutation.reset();
@@ -222,6 +214,7 @@ export const useTaskEvaluation = ({
    */
   useEffect(() => {
     if (evaluation.status !== "PENDING" && evaluation.type === "submit" && evaluation.submissionId) {
+      toast.dismiss("vm-waking-up"); // Dismiss wake-up toast if it was showing
       queryClient.invalidateQueries({ queryKey: ["submissions", problemId] });
       queryClient.invalidateQueries({ queryKey: ["user-submissions", problemId] });
       queryClient.invalidateQueries({ queryKey: ["user-solved-problems"] });

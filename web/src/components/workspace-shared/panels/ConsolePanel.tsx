@@ -116,10 +116,12 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                 message={
                   isForbiddenError
                     ? "Your final submission has been recorded and the editor is now locked."
-                    : typeof runError === "string"
-                      ? runError
-                      : (runError as Error)?.message ||
-                        "An unexpected error occurred during execution."
+                    : runError === "VM_WAKING_UP"
+                      ? "The compiler engine took too long to boot. Please try again."
+                      : typeof runError === "string"
+                        ? runError
+                        : (runError as Error)?.message ||
+                          "An unexpected error occurred during execution."
                 }
                 className="h-full border-none shadow-none bg-transparent"
               />

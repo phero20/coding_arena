@@ -1,11 +1,9 @@
 import { type ICradle } from "../../libs/awilix-container";
 import { TEST_SUPPORTED_LANGUAGES } from "./constants";
-import { combine, getParser, getTrackConfig } from "../../../../driver/exercise-drivers";
+import { combine, getParser, getTrackConfig } from "@slavecode/driver/exercise-drivers";
 import { AppError } from "../../utils/app-error";
 import { createLogger } from "../../libs/utils/logger";
 import { type Judge0SubmissionResult } from "../judge/judge0.service";
-import fs from "fs/promises";
-import path from "path";
 import { redis } from "../../libs/core/redis";
 
 const logger = createLogger("academy-execution.service");
