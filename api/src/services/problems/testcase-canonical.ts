@@ -17,7 +17,8 @@ export type PrimitiveBase =
   | "float"
   | "bool"
   | "string"
-  | "char";
+  | "char"
+  | "void";
 
 export type CanonicalType =
   | { kind: "primitive"; base: PrimitiveBase }
@@ -59,11 +60,15 @@ function stripCollectionWrapper(s: string): { inner: string; isList: boolean } {
 
 function parsePrimitive(lower: string): CanonicalType | null {
   const l = lower.toLowerCase();
-  if (INT_LIKE.has(l) || l === "bigint") return { kind: "primitive", base: "int" };
+  if (INT_LIKE.has(l) || l === "bigint")
+    return { kind: "primitive", base: "int" };
   if (FLOAT_LIKE.has(l)) return { kind: "primitive", base: "double" };
-  if (l === "bool" || l === "boolean") return { kind: "primitive", base: "bool" };
-  if (l === "string" || l === "str") return { kind: "primitive", base: "string" };
+  if (l === "bool" || l === "boolean")
+    return { kind: "primitive", base: "bool" };
+  if (l === "string" || l === "str")
+    return { kind: "primitive", base: "string" };
   if (l === "char") return { kind: "primitive", base: "char" };
+  if (l === "void") return { kind: "primitive", base: "void" };
   return null;
 }
 
@@ -123,6 +128,9 @@ function coercePrimitive(
   base: PrimitiveBase,
   path: string,
 ): { ok: true; value: unknown } | { ok: false; errors: string[] } {
+  if (base === "void") {
+    return { ok: true, value: val };
+  }
   if (val === null || val === undefined) {
     return { ok: false, errors: [`${path}: null not allowed for ${base}`] };
   }
@@ -133,16 +141,25 @@ function coercePrimitive(
       if (l === "true") return { ok: true, value: true };
       if (l === "false") return { ok: true, value: false };
     }
-    return { ok: false, errors: [`${path}: expected boolean, got ${typeof val}`] };
+    return {
+      ok: false,
+      errors: [`${path}: expected boolean, got ${typeof val}`],
+    };
   }
   if (base === "string" || base === "char") {
     if (typeof val === "string") {
       if (base === "char" && val.length > 1) {
-        return { ok: false, errors: [`${path}: char must be length 0-1 string`] };
+        return {
+          ok: false,
+          errors: [`${path}: char must be length 0-1 string`],
+        };
       }
       return { ok: true, value: val };
     }
-    return { ok: false, errors: [`${path}: expected string, got ${typeof val}`] };
+    return {
+      ok: false,
+      errors: [`${path}: expected string, got ${typeof val}`],
+    };
   }
   if (base === "int" || base === "long") {
     if (typeof val === "number") {
@@ -154,22 +171,34 @@ function coercePrimitive(
     if (typeof val === "string") {
       const t = val.trim().toLowerCase();
       if (t === "null") {
-        return { ok: false, errors: [`${path}: null string not valid for int`] };
+        return {
+          ok: false,
+          errors: [`${path}: null string not valid for int`],
+        };
       }
       const n = Number(t);
       if (!Number.isFinite(n) || !isInt(n)) {
-        return { ok: false, errors: [`${path}: invalid int from string "${val}"`] };
+        return {
+          ok: false,
+          errors: [`${path}: invalid int from string "${val}"`],
+        };
       }
       return { ok: true, value: n };
     }
-    return { ok: false, errors: [`${path}: expected number for int, got ${typeof val}`] };
+    return {
+      ok: false,
+      errors: [`${path}: expected number for int, got ${typeof val}`],
+    };
   }
   // double / float
   if (typeof val === "number") return { ok: true, value: val };
   if (typeof val === "string") {
     const n = Number(val.trim());
     if (!Number.isFinite(n)) {
-      return { ok: false, errors: [`${path}: invalid number from string "${val}"`] };
+      return {
+        ok: false,
+        errors: [`${path}: invalid number from string "${val}"`],
+      };
     }
     return { ok: true, value: n };
   }
@@ -204,7 +233,10 @@ function coerceArray(
   if (typeof val === "string") {
     // 2D+: semicolon-separated rows, comma inside row
     if (element.kind === "array") {
-      const rows = val.split(";").map((r) => r.trim()).filter(Boolean);
+      const rows = val
+        .split(";")
+        .map((r) => r.trim())
+        .filter(Boolean);
       const out: unknown[] = [];
       for (let i = 0; i < rows.length; i++) {
         const parts = splitCsvRow(rows[i]);
@@ -249,7 +281,11 @@ function coerceGraph(
     if (variant === "listnode") {
       const out: unknown[] = [];
       for (let i = 0; i < val.length; i++) {
-        const r = coerceValueForType(val[i], { kind: "primitive", base: "int" }, `${path}[${i}]`);
+        const r = coerceValueForType(
+          val[i],
+          { kind: "primitive", base: "int" },
+          `${path}[${i}]`,
+        );
         if (!r.ok) return r;
         out.push(r.value);
       }
@@ -262,7 +298,11 @@ function coerceGraph(
         out.push(null);
         continue;
       }
-      const r = coerceValueForType(v, { kind: "primitive", base: "int" }, `${path}[${i}]`);
+      const r = coerceValueForType(
+        v,
+        { kind: "primitive", base: "int" },
+        `${path}[${i}]`,
+      );
       if (!r.ok) return r;
       out.push(r.value);
     }
@@ -286,19 +326,30 @@ function coerceGraph(
       }
       return { ok: true, value: out };
     }
-    return coerceArray(val, { kind: "array", element: { kind: "primitive", base: "int" } }, path);
+    return coerceArray(
+      val,
+      { kind: "array", element: { kind: "primitive", base: "int" } },
+      path,
+    );
   }
 
   // Special case: Cycle detection problems or graph validations might return an index (number) or boolean
   // Sometimes AI also tries to return an object (like {"val": 2, "next": ...}) which we should also pass through
   // Additionally, if there is no cycle, the expected output is literally `null` (typeof null === "object")
-  if (typeof val === "number" || typeof val === "boolean" || typeof val === "object" || val === null) {
+  if (
+    typeof val === "number" ||
+    typeof val === "boolean" ||
+    typeof val === "object" ||
+    val === null
+  ) {
     return { ok: true, value: val };
   }
 
   return {
     ok: false,
-    errors: [`${path}: ListNode/TreeNode expects JSON array or CSV string, got ${typeof val}`],
+    errors: [
+      `${path}: ListNode/TreeNode expects JSON array or CSV string, got ${typeof val}`,
+    ],
   };
 }
 
@@ -354,7 +405,10 @@ export function normalizeTestCase(
   const prefix = `${bucket}[${index}]`;
 
   if (!signature?.params?.length) {
-    return { ok: false, errors: [`${prefix}: missing function_signature.params`] };
+    return {
+      ok: false,
+      errors: [`${prefix}: missing function_signature.params`],
+    };
   }
 
   const inputObj = raw.input;
@@ -367,17 +421,25 @@ export function normalizeTestCase(
   for (const param of signature.params) {
     const key = param.name;
     if (!(key in inputObj)) {
-      errors.push(`${prefix}.input: missing key "${key}" (required by signature)`);
+      errors.push(
+        `${prefix}.input: missing key "${key}" (required by signature)`,
+      );
       continue;
     }
     let canon: CanonicalType;
     try {
       canon = parseLeetcodeTypeString(param.type);
     } catch (e: any) {
-      errors.push(`${prefix}.input.${key}: bad type "${param.type}": ${e?.message ?? e}`);
+      errors.push(
+        `${prefix}.input.${key}: bad type "${param.type}": ${e?.message ?? e}`,
+      );
       continue;
     }
-    const r = coerceValueForType(inputObj[key], canon, `${prefix}.input.${key}`);
+    const r = coerceValueForType(
+      inputObj[key],
+      canon,
+      `${prefix}.input.${key}`,
+    );
     if (r.ok) expandedInput[key] = r.value;
     else mergeErrors(errors, r);
   }
@@ -386,7 +448,9 @@ export function normalizeTestCase(
   try {
     outCanon = parseLeetcodeTypeString(signature.return_type);
   } catch (e: any) {
-    errors.push(`${prefix}: bad return_type "${signature.return_type}": ${e?.message ?? e}`);
+    errors.push(
+      `${prefix}: bad return_type "${signature.return_type}": ${e?.message ?? e}`,
+    );
     return { ok: false, errors };
   }
 
