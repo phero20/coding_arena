@@ -1,29 +1,35 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import { ProblemWorkspace } from "@/components/problem-editor/ProblemWorkspace";
-import { useProblemQuery } from "@/hooks/queries/use-problem.queries";
-import { WorkspaceSkeleton } from "@/components/shared/Skeletons";
+import { getProblemBySlug } from "@/services/queries/problem.queries";
 import { ErrorDisplay } from "@/components/shared/StatusState";
+import { cache } from "react";
 
-const ProblemDetailPage = () => {
-  const { problemId } = useParams() as { problemId: string };
-  const { data: problem, isLoading, error } = useProblemQuery(problemId);
+export { generateProblemMetadata as generateMetadata } from "@/meta/problems/dynamic";
 
-  if (isLoading) {
-    return <WorkspaceSkeleton />;
+// Cache the problem fetch to avoid duplicate DB calls between generateMetadata and the Page
+const getProblem = cache(async (slug: string) => {
+  try {
+    return await getProblemBySlug(slug);
+  } catch (error: any) {
+    return null;
   }
+});
 
-  if (error || !problem) {
+type Props = {
+  params: Promise<{ problemId: string }>;
+};
+
+const ProblemDetailPage = async ({ params }: Props) => {
+  const resolvedParams = await params;
+  const problem = await getProblem(resolvedParams.problemId);
+
+  if (!problem) {
     return (
       <ErrorDisplay
         title="Error Loading Problem"
-        message={error?.message || "Something went wrong while fetching the problem details."}
-        onRetry={() => window.location.reload()}
+        message="The problem you are looking for does not exist or could not be loaded."
       />
     );
   }
-
 
   return (
     <main className="min-h-screen bg-background">
