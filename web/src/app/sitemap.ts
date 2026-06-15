@@ -61,6 +61,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/companies`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/arena`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/report-bug`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/academy/tracks`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
   ];
 
   let dynamicPages: MetadataRoute.Sitemap = [];
@@ -123,6 +159,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
 
+    // Company Problems Pages
+    const companyProblemPages: MetadataRoute.Sitemap = companyTags.map((company) => ({
+      url: `${baseUrl}/companies/${company.slug}/problems`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7, // Higher priority than base company page since it contains the actual content
+    }));
+
     // User Profiles
     const userPages: MetadataRoute.Sitemap = users.map((user) => ({
       url: `${baseUrl}/u/${user.username}`,
@@ -137,6 +181,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...exercisePages,
       ...systemDesignPages,
       ...companyPages,
+      ...companyProblemPages,
       ...userPages,
     ];
 
