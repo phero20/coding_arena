@@ -6,11 +6,12 @@ import { LeaderboardResponse, LeaderboardEntry } from "@/types/stats";
  * Hook to fetch and manage global leaderboard data.
  * Supports limit and offset for pagination.
  */
-export function useLeaderboard(limit = 50, offset = 0) {
+export function useLeaderboard(limit = 50, offset = 0, initialData?: LeaderboardResponse) {
   return useQuery<LeaderboardResponse>({
     queryKey: ["leaderboard", { limit, offset }],
     queryFn: () => getLeaderboard(limit, offset),
     staleTime: 1000 * 60 * 5, // 5 minutes
+    initialData: initialData,
   });
 }
 
