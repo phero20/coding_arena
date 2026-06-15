@@ -47,7 +47,8 @@ export function useProblemsQuery(page = 1, limit = 20) {
  */
 export function useInfiniteProblemsQuery(
   limit = 20,
-  filters?: { search?: string; topic?: string; difficulty?: string }
+  filters?: { search?: string; topic?: string; difficulty?: string },
+  initialData?: any
 ) {
   return useInfiniteQuery({
     queryKey: ["problems", "infinite", limit, filters],
@@ -61,6 +62,7 @@ export function useInfiniteProblemsQuery(
       }
       return allPages.length + 1;
     },
+    initialData: initialData ? { pages: [initialData], pageParams: [1] } : undefined,
   });
 }
 
