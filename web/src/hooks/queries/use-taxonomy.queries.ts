@@ -11,11 +11,12 @@ import {
 /**
  * Hook to fetch the full hierarchical taxonomy tree.
  */
-export function useTaxonomyTreeQuery() {
+export function useTaxonomyTreeQuery(initialData?: any) {
   return useQuery({
     queryKey: ["taxonomy-tree"],
     queryFn: getTaxonomyTree,
     staleTime: 1000 * 60 * 30, // 30 minutes cache for static tree
+    initialData,
   });
 }
 
