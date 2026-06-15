@@ -1,33 +1,47 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useCompanyProblemsQuery } from "@/hooks/queries/use-company.queries";
+import { getCompanyProblems } from "@/services/queries/company.queries";
 import { ProblemTable } from "@/components/practice/ProblemTable";
-import { ArrowLeft, Building2 } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import type { Problem } from "@/types/api";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CompanyLogo } from "@/components/companies/CompanyLogo";
+import { CompanyLogoWithFallback } from "@/components/companies/CompanyLogoWithFallback";
+import { ErrorDisplay } from "@/components/shared/StatusState";
 
-export default function CompanyProblemsPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const [imgError, setImgError] = useState(false);
+export { generateCompanyMetadata as generateMetadata } from "@/meta/companies/dynamic";
 
-  const { data, isLoading, error } = useCompanyProblemsQuery(slug);
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function CompanyProblemsPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
+
+  let data;
+  try {
+    data = await getCompanyProblems(slug);
+  } catch (error) {
+    return (
+      <ErrorDisplay 
+        title="Failed to Load Problems" 
+        message="We couldn't retrieve the interview problems for this company. Please try again later."
+      />
+    );
+  }
 
   const company = data?.company;
   const companyProblems = data?.problems || [];
 
   // Map the static CompanyProblem data to the standard Problem interface used by the Table
   const mappedProblems = companyProblems.map((cp) => ({
-    problem_id: cp.problem_id, // Using slug to match user solved problems if backend uses slugs
+    problem_id: cp.problem_id, 
     problem_slug: cp.slug || "",
     title: cp.title,
     difficulty: cp.difficulty,
     topics: cp.topics || [],
-    is_premium:cp.is_premium,
+    is_premium: cp.is_premium,
     // Fill required dummy fields for Problem interface
     description: "",
     examples: [],
@@ -43,19 +57,12 @@ export default function CompanyProblemsPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 w-full">
       {/* Header Section */}
-      <Link href="/companies"><Button size="sm"><ArrowLeft /> Companies</Button></Link>
+      <Link href="/companies">
+        <Button size="sm"><ArrowLeft /> Companies</Button>
+      </Link>
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pb-6 border-b border-border/40">
-        <div className="flex h-20 w-20 shrink-0 items-center justify-center ">
-          {company?.imageUrl && !imgError ? (
-            <img 
-              src={company.imageUrl} 
-              alt={company.name} 
-              onError={() => setImgError(true)}
-              className="h-full w-full object-contain rounded-md"
-            />
-          ) : (
-             <CompanyLogo className="w-16 h-16 shrink-0" />
-          )}
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center">
+          <CompanyLogoWithFallback imageUrl={company?.imageUrl} name={company?.name || "Company"} />
         </div>
         <div className="space-y-1">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -71,8 +78,8 @@ export default function CompanyProblemsPage() {
       <div className="w-full">
         <ProblemTable 
           problems={mappedProblems} 
-          isLoading={isLoading} 
-          error={error} 
+          isLoading={false} 
+          error={null}
         />
       </div>
     </div>
