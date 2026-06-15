@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function CompanyPage({ params }: PageProps) {
-  redirect(`/companies/${params.slug}/problems`);
+export default async function CompanyPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  redirect(`/companies/${resolvedParams.slug}/problems`);
 }
