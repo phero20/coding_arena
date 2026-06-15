@@ -15,9 +15,10 @@ import { ProblemFilters } from "./ProblemFilters";
 import { ProblemTable } from "./ProblemTable";
 import { LanguageSelectDialog } from "./LanguageSelectDialog";
 
-export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
+export const PracticeProblemList: React.FC<PracticeProblemListProps & { initialData?: any }> = ({
   isSelectPage = false,
   roomId,
+  initialData,
 }) => {
   const { hostArena, isHosting } = useCreateArena();
   const { updateProblem, isUpdating } = useUpdateArenaProblem(roomId || "");
@@ -41,7 +42,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps> = ({
     search: debouncedSearch, 
     topic: debouncedTopic, 
     difficulty: difficultyFilter 
-  });
+  }, initialData);
 
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0.1,
