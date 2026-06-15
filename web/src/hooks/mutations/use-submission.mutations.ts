@@ -13,7 +13,7 @@ const submissionRetryConfig = {
     const apiMessage = error?.response?.data?.error?.message || error?.message;
     if (apiMessage === "VM_WAKING_UP" && failureCount < 5) {
       if (failureCount === 0) {
-        toast.loading("Waking up the Judge0 System from sleep... This first run will take ~30 seconds, but all future runs will be instant!", {
+        toast.loading("Waking up the Judge0 System from sleep... This first run will take ~30 to ~40 seconds, but all future runs will be instant!", {
           id: "vm-waking-up",
           duration: 30000,
         });
@@ -52,7 +52,7 @@ export function useSubmitMutation() {
     onSuccess: (data: any) => {
       // Show the Toast if the backend detected the VM is waking up
       if (data?.isWakingUp) {
-        toast.loading("Waking up the Judge0 System from sleep... This first run will take ~30 seconds, but all future runs will be instant!", {
+        toast.loading("Waking up the Judge0 System from sleep... This first run will take ~30 to ~40 seconds, but all future runs will be instant!", {
           id: "vm-waking-up",
           duration: 30000,
         });
