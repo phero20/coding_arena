@@ -1,28 +1,22 @@
-"use client";
-
-import { useAcademyTracksQuery } from "@/hooks/queries/use-academy.queries";
-import { useTracksFilter } from "@/hooks/use-tracks-filter";
+import { getAcademyTracks } from "@/services/queries/academy.queries";
 import { TracksHeader } from "@/components/academy/tracks/tracks-header";
-import { TracksToolbar } from "@/components/academy/tracks/tracks-toolbar";
-import { TrackCard } from "@/components/academy/tracks/track-card";
-import { QueryGuard } from "@/components/shared/QueryGuard";
-import { AcademyTracksSkeleton } from "@/components/skeletons";
-import { SearchX } from "lucide-react";
-import Link from "next/link";
+import { AcademyTracksClient } from "@/components/academy/tracks/AcademyTracksClient";
+import { ErrorDisplay } from "@/components/shared/StatusState";
 
-export default function AcademyTracksPage() {
-  const { data: tracks = [], isLoading, error } = useAcademyTracksQuery();
+
+export default async function AcademyTracksPage() {
+  let tracks = [];
   
-  const {
-    searchQuery,
-    setSearchQuery,
-    sortBy,
-    setSortBy,
-    selectedTags,
-    setSelectedTags,
-    allTags,
-    filteredTracks,
-  } = useTracksFilter(tracks);
+  try {
+    tracks = await getAcademyTracks();
+  } catch (error) {
+    return (
+      <ErrorDisplay 
+        title="Failed to Load Tracks" 
+        message="We couldn't retrieve the language tracks from the server. Please try again later."
+      />
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -38,40 +32,7 @@ export default function AcademyTracksPage() {
 
       {/* Main Content Area */}
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-        <div className="space-y-8">
-          {/* Toolbar Section */}
-          <TracksToolbar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            allTags={allTags}
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-          />
-
-          {/* Content Section via QueryGuard */}
-          <QueryGuard
-            loading={isLoading}
-            error={error}
-            data={filteredTracks}
-            skeleton={<AcademyTracksSkeleton />}
-            errorTitle="Failed to load language tracks"
-            emptyIcon={SearchX}
-            emptyTitle="No tracks found"
-            emptyMessage={`No programming languages match "${searchQuery}". Try a different term or clear your filters.`}
-          >
-            {(data) => (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                {data.map((track) => (
-                  <Link key={track.slug} href={`/academy/tracks/${track.slug}`} className="block focus:outline-none h-full">
-                    <TrackCard track={track} />
-                  </Link>
-                ))}
-              </div>
-            )}
-          </QueryGuard>
-        </div>
+        <AcademyTracksClient tracks={tracks} />
       </div>
     </div>
   );
