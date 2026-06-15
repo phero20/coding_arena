@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    staleTimes: {
+      dynamic: 300, // Cache dynamic pages in the browser for 5 minutes
+      static: 1800, // Cache static pages for 30 minutes
+    },
+  },
 };
 
 export default withSentryConfig(nextConfig, {
