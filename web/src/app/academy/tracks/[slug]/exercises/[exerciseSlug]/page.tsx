@@ -1,37 +1,34 @@
-"use client";
-
-import React from "react";
-import { useParams, useRouter } from "next/navigation";
-import { useTrackExerciseQuery } from "@/hooks/queries/use-academy.queries";
 import { AcademyWorkspace } from "@/components/academy/editor/AcademyWorkspace";
-import { QueryGuard } from "@/components/shared/QueryGuard";
-import { WorkspaceSkeleton } from "@/components/skeletons/WorkspaceSkeletons";
+import { getTrackExercise } from "@/services/queries/academy.queries";
+import { ErrorDisplay } from "@/components/shared/StatusState";
+import { cache } from "react";
 
-export default function AcademyExercisePage() {
-  const params = useParams<{ slug: string; exerciseSlug: string }>();
-  const router = useRouter();
+const getExercise = cache(async (trackSlug: string, exerciseSlug: string) => {
+  try {
+    return await getTrackExercise(trackSlug, exerciseSlug);
+  } catch (error: any) {
+    return null;
+  }
+});
 
-  const { data: exercise, isLoading, error } = useTrackExerciseQuery(
-    params?.slug || "",
-    params?.exerciseSlug || ""
-  );
+type Props = {
+  params: Promise<{ slug: string; exerciseSlug: string }>;
+};
+
+export default async function AcademyExercisePage({ params }: Props) {
+  const resolvedParams = await params;
+  const exercise = await getExercise(resolvedParams.slug, resolvedParams.exerciseSlug);
+
+  if (!exercise) {
+    return (
+      <ErrorDisplay
+        title="Exercise Not Found"
+        message="Failed to load the exercise environment. It might not exist."
+      />
+    );
+  }
 
   return (
-    <QueryGuard
-      loading={isLoading}
-      error={error}
-      data={exercise}
-      skeleton={<WorkspaceSkeleton />}
-      errorTitle="Exercise Not Found"
-      errorMessage="Failed to load the exercise environment. It might not exist."
-      onRetry={() => router.push(`/academy/tracks/${params?.slug}?tab=practice`)}
-      retryText="Back to Track"
-      emptyTitle="Exercise Not Found"
-      emptyMessage="This exercise could not be found."
-    >
-      {(exerciseData) => (
-        <AcademyWorkspace exercise={exerciseData} trackSlug={params!.slug} />
-      )}
-    </QueryGuard>
+    <AcademyWorkspace exercise={exercise} trackSlug={resolvedParams.slug} />
   );
 }
