@@ -1,14 +1,26 @@
-"use client";
-
 import { ContestHero } from "@/components/contests/ContestHero";
-import { ContestHeroSkeleton } from "@/components/skeletons";
 import { ContestFilters } from "@/components/contests/ContestFilters";
 import { ContestList } from "@/components/contests/ContestList";
-import { useUpcomingContestsQuery } from "@/hooks/queries/use-contest.queries";
+import { getUpcomingContests } from "@/services/queries/contest.queries";
 import { ContestLogo } from "@/components/contests/ContestLogo";
+import { ErrorDisplay } from "@/components/shared/StatusState";
 
-export default function ContestHubPage() {
-  const { data: contests, isLoading } = useUpcomingContestsQuery(200);
+export default async function ContestHubPage() {
+  let contests = [];
+
+  try {
+    contests = await getUpcomingContests(200);
+  } catch (error) {
+    return (
+      <div className="pt-28">
+        <ErrorDisplay 
+          title="Failed to Load Contests" 
+          message="We couldn't retrieve the global competitions from the server. Please try again later."
+        />
+      </div>
+    );
+  }
+
   const featuredContest = contests && contests.length > 0 ? contests[0] : null;
 
   return (
@@ -24,23 +36,16 @@ export default function ContestHubPage() {
               Track, filter, and join competitive programming contests from top platforms worldwide.
             </p>
           </div>
-          <div className="mx-auto max-w-7xl px-4 2xl:px-0">
-            {isLoading ? (
-              <ContestHeroSkeleton />
-            ) : (
-              <ContestHero featuredContest={featuredContest} />
-            )}
+          <div className="mx-auto max-w-7xl px-4 2xl:px-0 pb-10">
+             <ContestHero featuredContest={featuredContest} />
           </div>
-
-
         </div>
 
-        <div className="flex flex-col space-y-6 mx-auto max-w-7xl px-4 2xl:px-0 ">
+        <div className="flex flex-col space-y-6 mx-auto max-w-7xl px-4 2xl:px-0 pt-10">
           <ContestFilters />
-          <ContestList />
+          <ContestList contests={contests} />
         </div>
       </main>
     </div>
   );
 }
-
