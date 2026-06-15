@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { FolderKanban, BookOpen, Info } from "lucide-react";
 
