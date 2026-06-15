@@ -9,9 +9,9 @@ import type { CategoryTreeNode } from "@/types/taxonomy";
  * Custom hook to fetch and hydrate the roadmap tree with user progress.
  * Performs recursive bottom-up aggregation of solved counts in-memory.
  */
-export function useRoadmapData() {
+export function useRoadmapData(initialTreeData?: CategoryTreeNode[]) {
   const { isSignedIn } = useUser();
-  const { data: tree, isLoading: isTreeLoading, error: treeError } = useTaxonomyTreeQuery();
+  const { data: tree, isLoading: isTreeLoading, error: treeError } = useTaxonomyTreeQuery(initialTreeData);
   const { data: progressMap, isLoading: isProgressLoading } = useUserRoadmapProgressQuery(!!isSignedIn);
 
   const hydratedTree = useMemo(() => {
@@ -48,7 +48,7 @@ export function useRoadmapData() {
     };
 
     const currentProgress = progressMap?.counts || {};
-    return tree.map((root) => hydrateNode(root, currentProgress).node);
+    return tree.map((root: CategoryTreeNode) => hydrateNode(root, currentProgress).node);
   }, [tree, progressMap]);
 
   const solvedIdsSet = useMemo(() => new Set(progressMap?.solvedIds || []), [progressMap]);
