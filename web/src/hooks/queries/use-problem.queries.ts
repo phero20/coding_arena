@@ -50,6 +50,14 @@ export function useInfiniteProblemsQuery(
   filters?: { search?: string; topic?: string; difficulty?: string },
   initialData?: any
 ) {
+  // Only use SSR initialData if there are no active filters
+  const hasFilters = 
+    !!filters?.search || 
+    !!filters?.topic || 
+    (!!filters?.difficulty && filters.difficulty !== "All");
+
+  const effectiveInitialData = hasFilters ? undefined : initialData;
+
   return useInfiniteQuery({
     queryKey: ["problems", "infinite", limit, filters],
     queryFn: ({ pageParam = 1 }) => getProblems(pageParam, limit, filters),
@@ -62,7 +70,7 @@ export function useInfiniteProblemsQuery(
       }
       return allPages.length + 1;
     },
-    initialData: initialData ? { pages: [initialData], pageParams: [1] } : undefined,
+    initialData: effectiveInitialData ? { pages: [effectiveInitialData], pageParams: [1] } : undefined,
   });
 }
 
