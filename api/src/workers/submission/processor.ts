@@ -10,6 +10,7 @@ import { createLogger } from "../../libs/utils/logger";
 import { metrics } from "../../libs/core/metrics";
 import type { EvaluationResultData } from "../../types/submissions/submission.types";
 import { type StatsSubmissionService } from "../../services/stats/stats-submission.service";
+import { redis } from "../../libs/core/redis";
 
 const logger = createLogger("submission-processor");
 let jobsProcessed = 0;
@@ -100,6 +101,14 @@ export function createSubmissionProcessor(
         { status: evaluation.status, duration: executionTime },
         "Submission evaluation complete",
       );
+
+      // 3.8 VM Heartbeat
+      // Refresh the idle timer so the VM isn't shut down while active
+      try {
+        await redis.set("judge0:last_active", Date.now().toString());
+      } catch (err) {
+        tracedLogger.warn({ err }, "Failed to update judge0 heartbeat");
+      }
 
       // 4. Metrics & Monitoring
       metrics.recordVerdict(evaluation.status);
