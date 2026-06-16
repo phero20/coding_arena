@@ -75,6 +75,23 @@ export const contestSyncQueue = new Queue("contest-sync", {
 });
 
 /**
+ * VM Shutdown Queue
+ * - Periodically checks if the Judge0 VM has been idle
+ * - Deallocates the VM to save Azure costs
+ */
+export const vmShutdownQueue = new Queue("vm-shutdown", {
+  connection: redisConnection,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: {
+      type: "exponential",
+      delay: 5000,
+    },
+    removeOnComplete: true,
+  },
+});
+
+/**
  * Event listeners for queue monitoring
  * Using type casting to handle strict BullMQ event types
  */
