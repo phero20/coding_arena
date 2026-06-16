@@ -32,7 +32,7 @@ export class TestcaseGeneratorService {
 
     // 1. Fetch lightweight problem data
     const problem = await ProblemModel.findOne({ problem_id: problemId })
-      .select("title description constraints examples function_signature is_premium")
+      .select("title description constraints examples function_signature class_signature is_premium topics")
       .lean();
 
     if (!problem) {
@@ -44,11 +44,14 @@ export class TestcaseGeneratorService {
       throw new Error(`Problem ${problemId} is premium and cannot be auto-generated.`);
     }
 
-    if (!problem.function_signature || !problem.function_signature.name) {
-      throw new Error(`Problem ${problemId} is missing a valid function_signature.`);
+    if (!problem.function_signature && !problem.class_signature) {
+      throw new Error(`Problem ${problemId} is missing a valid function_signature or class_signature.`);
     }
 
-    const signature = problem.function_signature as FunctionSignature;
+    const isClass = !!problem.class_signature;
+    const isDatabase = problem.topics?.includes("Database") || problem.topics?.includes("Pandas");
+    const signature = problem.function_signature as FunctionSignature | undefined;
+    const classSignature = problem.class_signature as any | undefined;
 
     // 2. Prepare the prompt protocol
     const systemPrompt = [
@@ -57,13 +60,24 @@ export class TestcaseGeneratorService {
       "Generate exactly 10 test cases (3 public, 7 hidden).",
       "",
       "=== MASTER PROTOCOL ===",
+      ...(isDatabase ? [
+        "CRITICAL WARNING FOR DATABASE/PANDAS PROBLEMS:",
+        "   - You MUST read the problem description to find the required SQL/Pandas tables.",
+        "   - The 'input' JSON object MUST contain the full table data (keys=table names, values={\"headers\": [...], \"values\": [...]}).",
+        "   - Do NOT just generate function parameters (like 'N'). The parameters are useless without the tables!",
+        "   - If the function signature has parameters, include them alongside the tables in the 'input' object.",
+        "",
+      ] : []),
       "1. TEST CASES — STRICT JSON:",
-      "   - Each testcase must have an 'input' object whose keys match the param names in the function signature.",
+      "   - If it is a Standard Problem, each testcase must have an 'input' object whose keys match the param names in the function signature.",
+      "   - If it is a Class Design Problem (e.g. LRU Cache), 'input' MUST have exactly two keys: 'methods' (array of strings, first being the class name) and 'args' (array of arrays containing the arguments for each method).",
       "   - Use NATIVE JSON types for basic types (int: number, boolean: true/false, string: string).",
       "   - For arrays (int[], string[]), return a standard JSON array: [1, 2, 3].",
       "   - For matrices (int[][]), return an array of arrays: [[1, 2], [3, 4]].",
       "   - For ListNode or TreeNode, return the exact JSON format that LeetCode expects in its testcases (usually a flat array, but follow LeetCode's standard for this specific problem).",
-      "   - 'expected_output' must match the exact LeetCode output format for this problem. IMPORTANT: If the problem is an in-place modification (return type is 'void'), 'expected_output' MUST contain the final modified state of the array/matrix, NOT null.",
+      "   - 'expected_output' must match the exact LeetCode output format for this problem. IMPORTANT: If the problem is an in-place modification (return type is 'void'), 'expected_output' MUST contain the final modified state of the array/matrix, NOT null. For Class Problems, expected_output MUST be an array of return values (null for void methods).",
+      "   - CRITICAL WARNING FOR CLASS PROBLEMS: You must strictly align `expected_output` with the `methods` array. If a method returns an `int`, you MUST return an integer. If it returns a `boolean`, you MUST return a boolean. NEVER return `null` unless the method specifically has a `void` return type (like the constructor). Do not generate invalid out-of-bounds method calls that would result in null.",
+      "   - WARNING FOR TREE/GRAPH INPUTS IN CLASSES: If a class method (like the constructor) takes a TreeNode or ListNode as an argument (which is formatted as an array), you MUST wrap that array inside the `args` array! (e.g., if the tree is [1, 2, 3], the args array for that method must be `[[1, 2, 3]]`, NOT `[1, 2, 3]`).",
       "",
       "2. CONSTRAINTS & TOKEN LIMITS (CRITICAL):",
       "   - ALL testcases must strictly adhere to the problem constraints.",
@@ -84,6 +98,7 @@ export class TestcaseGeneratorService {
       constraints: problem.constraints,
       examples: problem.examples,
       function_signature: problem.function_signature,
+      class_signature: problem.class_signature,
     });
 
     let lastValidationError: string | null = null;
@@ -142,7 +157,10 @@ export class TestcaseGeneratorService {
         const { publicTests, hiddenTests } = normalizeTestSuite(
           data.tests.public,
           data.tests.hidden,
-          signature as any
+          {
+            functionSignature: signature,
+            classSignature: classSignature
+          }
         );
 
         // 5. Upsert to Database
