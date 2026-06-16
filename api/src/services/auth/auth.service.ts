@@ -27,7 +27,12 @@ export class AuthService {
   private readonly clock: IClockService;
   private readonly statsService: ICradle["statsService"];
 
-  constructor({ userRepository, clerkClient, clockService, statsService }: ICradle) {
+  constructor({
+    userRepository,
+    clerkClient,
+    clockService,
+    statsService,
+  }: ICradle) {
     this.userRepository = userRepository;
     this.clerkClient = clerkClient;
     this.clock = clockService;
@@ -62,17 +67,24 @@ export class AuthService {
       });
 
       await this.statsService.invalidateProfile(created.id);
-      
+
       // Back-sync to Clerk only if creation succeeded and username was modified
-      if (!payload.originalClerkUsername || payload.originalClerkUsername !== username) {
+      if (
+        !payload.originalClerkUsername ||
+        payload.originalClerkUsername !== username
+      ) {
         await this.pushUsernameToClerk(clerkId, username);
       }
 
       return created;
     } catch (err: any) {
       if (err.code === "23505") {
-        logger.warn({ clerkId, email: payload.email }, "Duplicate key error on ensureUser, attempting to fetch existing user.");
-        const existingAfterRace = await this.userRepository.findByClerkId(clerkId);
+        logger.warn(
+          { clerkId, email: payload.email },
+          "Duplicate key error on ensureUser, attempting to fetch existing user.",
+        );
+        const existingAfterRace =
+          await this.userRepository.findByClerkId(clerkId);
         if (existingAfterRace) {
           return existingAfterRace;
         }
@@ -120,26 +132,36 @@ export class AuthService {
       });
 
       await this.statsService.invalidateProfile(created.id);
-      
+
       // Push username back to Clerk only after successful DB insertion
       // and only if we actually generated a new username
-      if (!payload.originalClerkUsername || payload.originalClerkUsername !== username) {
+      if (
+        !payload.originalClerkUsername ||
+        payload.originalClerkUsername !== username
+      ) {
         await this.pushUsernameToClerk(clerkId, username);
       }
 
       return created;
     } catch (err: any) {
       if (err.code === "23505") {
-        logger.warn({ clerkId, email: payload.email }, "Duplicate key error on syncUser, attempting to fetch existing user.");
-        const existingAfterRace = await this.userRepository.findByClerkId(clerkId);
+        logger.warn(
+          { clerkId, email: payload.email },
+          "Duplicate key error on syncUser, attempting to fetch existing user.",
+        );
+        const existingAfterRace =
+          await this.userRepository.findByClerkId(clerkId);
         if (existingAfterRace) {
           return existingAfterRace;
         }
-        
+
         // This is an unrecoverable duplicate email/username for a DIFFERENT clerkId
-        // We log an error and swallow the exception so the Webhook returns 200 OK 
+        // We log an error and swallow the exception so the Webhook returns 200 OK
         // and stops Clerk from infinitely retrying.
-        logger.error({ clerkId, email: payload.email }, "CRITICAL: Webhook tried to create user but email or username is already taken by another account. Swallowing error to stop webhook loops.");
+        logger.error(
+          { clerkId, email: payload.email },
+          "CRITICAL: Webhook tried to create user but email or username is already taken by another account. Swallowing error to stop webhook loops.",
+        );
         return null;
       }
       throw err;
@@ -149,9 +171,12 @@ export class AuthService {
   async deleteUser(clerkId: string): Promise<void> {
     logger.info({ clerkId }, "Processing user deletion request...");
     const deleted = await this.userRepository.deleteByClerkId(clerkId);
-    
+
     if (deleted) {
-      logger.info({ clerkId }, "User and all associated data purged successfully ✅");
+      logger.info(
+        { clerkId },
+        "User and all associated data purged successfully ✅",
+      );
     } else {
       logger.warn({ clerkId }, "User not found for deletion, skipping.");
     }
@@ -188,18 +213,24 @@ export class AuthService {
   }
 
   /**
-   * Pushes a username back to Clerk. 
+   * Pushes a username back to Clerk.
    * Useful for Google signups where Clerk doesn't have a username initially.
    */
   private async pushUsernameToClerk(clerkId: string, username: string) {
     try {
-      logger.info({ clerkId, username }, "Pushing generated username to Clerk...");
+      logger.info(
+        { clerkId, username },
+        "Pushing generated username to Clerk...",
+      );
       await this.clerkClient.users.updateUser(clerkId, { username });
       logger.info({ clerkId }, "Clerk username updated successfully");
     } catch (err) {
       // We don't want to crash the whole sync if Clerk update fails (e.g. rate limits)
       // but we log it as an error for visibility.
-      logger.error({ clerkId, username, err }, "Failed to push username back to Clerk");
+      logger.error(
+        { clerkId, username, err },
+        "Failed to push username back to Clerk",
+      );
     }
   }
 }
