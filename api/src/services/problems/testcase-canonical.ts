@@ -7,6 +7,7 @@
 import type {
   DriverReadyFunctionSignature,
   FunctionSignature,
+  ClassSignature,
   TestCase,
 } from "../../types/problems/problem.types";
 
@@ -18,12 +19,13 @@ export type PrimitiveBase =
   | "bool"
   | "string"
   | "char"
-  | "void";
+  | "void"
+  | "json";
 
 export type CanonicalType =
   | { kind: "primitive"; base: PrimitiveBase }
   | { kind: "array"; element: CanonicalType }
-  | { kind: "graph"; variant: "listnode" | "treenode" };
+  | { kind: "graph"; variant: "listnode" | "treenode" | "node" };
 
 const INT_LIKE = new Set([
   "int",
@@ -100,13 +102,15 @@ export function parseLeetcodeTypeString(typeStr: string): CanonicalType {
     prim = { kind: "graph", variant: "listnode" };
   } else if (lowerInner.includes("treenode")) {
     prim = { kind: "graph", variant: "treenode" };
+  } else if (lowerInner === "node") {
+    prim = { kind: "graph", variant: "node" };
   } else {
     prim = parsePrimitive(lowerInner);
   }
 
   if (!prim) {
-    // Unknown named type (e.g. custom struct) — treat as opaque JSON
-    prim = { kind: "primitive", base: "string" };
+    // Unknown named type (e.g. pd.DataFrame, custom struct) — treat as opaque JSON
+    prim = { kind: "primitive", base: "json" };
   }
 
   let t: CanonicalType = prim;
@@ -128,12 +132,49 @@ function coercePrimitive(
   base: PrimitiveBase,
   path: string,
 ): { ok: true; value: unknown } | { ok: false; errors: string[] } {
+  // Database table bypass: LeetCode SQL problems return table objects even if signature says int/varchar
+  let parsedObj = val;
+  let isParsedString = false;
+  if (typeof parsedObj === "string") {
+    try {
+      parsedObj = JSON.parse(parsedObj);
+      isParsedString = true;
+    } catch {}
+  }
+  
+  if (parsedObj && typeof parsedObj === "object" && !Array.isArray(parsedObj)) {
+    const pObj = parsedObj as any;
+    const hasHeaders = "headers" in pObj && (Array.isArray(pObj.headers) || typeof pObj.headers === "object");
+    const hasData = "data" in pObj && Array.isArray(pObj.data);
+    const hasValues = "values" in pObj && Array.isArray(pObj.values);
+    if (hasHeaders && (hasData || hasValues)) {
+      return { ok: true, value: isParsedString ? parsedObj : val };
+    }
+  }
+
   if (base === "void") {
     return { ok: true, value: val };
   }
+  
   if (val === null || val === undefined) {
-    return { ok: false, errors: [`${path}: null not allowed for ${base}`] };
+    // LeetCode loosely uses null for many types (e.g., SQL INT returning null, Tree nodes).
+    return { ok: true, value: null };
   }
+
+  if (base === "json") {
+    if (typeof val === "object" && val !== null) {
+      return { ok: true, value: val };
+    }
+    if (typeof val === "string") {
+      try {
+        return { ok: true, value: JSON.parse(val) };
+      } catch (e) {
+        return { ok: true, value: val };
+      }
+    }
+    return { ok: false, errors: [`${path}: expected JSON object/string for opaque type, got ${typeof val}`] };
+  }
+
   if (base === "bool") {
     if (typeof val === "boolean") return { ok: true, value: val };
     if (typeof val === "string") {
@@ -273,9 +314,17 @@ function coerceArray(
 
 function coerceGraph(
   val: unknown,
-  variant: "listnode" | "treenode",
+  variant: "listnode" | "treenode" | "node",
   path: string,
 ): { ok: true; value: unknown } | { ok: false; errors: string[] } {
+  // Generic "Node" usually means an N-ary tree or graph adjacency list. 
+  // We blindly trust the LLM's valid JSON array or object for generic nodes.
+  if (variant === "node") {
+    if (typeof val === "object" && val !== null) {
+      return { ok: true, value: val };
+    }
+  }
+
   // LeetCode-style serialization: ListNode <=> number[], TreeNode <=> (number|null)[]
   if (Array.isArray(val)) {
     if (variant === "listnode") {
@@ -404,44 +453,44 @@ export function normalizeTestCase(
   const errors: string[] = [];
   const prefix = `${bucket}[${index}]`;
 
-  if (!signature?.params?.length) {
-    return {
-      ok: false,
-      errors: [`${prefix}: missing function_signature.params`],
-    };
-  }
-
-  const inputObj = raw.input;
+  const inputObj = raw.input as Record<string, unknown>;
   if (!inputObj || typeof inputObj !== "object" || Array.isArray(inputObj)) {
     return { ok: false, errors: [`${prefix}: input must be a JSON object`] };
   }
 
-  const expandedInput: Record<string, unknown> = {};
+  // Initialize with all keys so we don't drop SQL tables that aren't in the function params
+  const expandedInput: Record<string, unknown> = { ...inputObj };
 
-  for (const param of signature.params) {
-    const key = param.name;
-    if (!(key in inputObj)) {
-      errors.push(
-        `${prefix}.input: missing key "${key}" (required by signature)`,
+  // For database problems without parameters (or missing signatures), bypass the strict param check
+  if (!signature?.params?.length) {
+    // We assume the inputObj is just a collection of SQL tables.
+    // We will validate expected_output below.
+  } else {
+    for (const param of signature.params) {
+      const key = param.name;
+      if (!(key in inputObj)) {
+        errors.push(
+          `${prefix}.input: missing key "${key}" (required by signature)`,
+        );
+        continue;
+      }
+      let canon: CanonicalType;
+      try {
+        canon = parseLeetcodeTypeString(param.type);
+      } catch (e: any) {
+        errors.push(
+          `${prefix}.input.${key}: bad type "${param.type}": ${e?.message ?? e}`,
+        );
+        continue;
+      }
+      const r = coerceValueForType(
+        inputObj[key],
+        canon,
+        `${prefix}.input.${key}`,
       );
-      continue;
+      if (r.ok) expandedInput[key] = r.value;
+      else mergeErrors(errors, r);
     }
-    let canon: CanonicalType;
-    try {
-      canon = parseLeetcodeTypeString(param.type);
-    } catch (e: any) {
-      errors.push(
-        `${prefix}.input.${key}: bad type "${param.type}": ${e?.message ?? e}`,
-      );
-      continue;
-    }
-    const r = coerceValueForType(
-      inputObj[key],
-      canon,
-      `${prefix}.input.${key}`,
-    );
-    if (r.ok) expandedInput[key] = r.value;
-    else mergeErrors(errors, r);
   }
 
   let outCanon: CanonicalType;
@@ -475,23 +524,137 @@ export function normalizeTestCase(
   };
 }
 
+export function normalizeClassTestCase(
+  raw: RawTestCase,
+  index: number,
+  bucket: "public" | "hidden",
+  classSignature: ClassSignature,
+): { ok: true; case: RawTestCase } | { ok: false; errors: string[] } {
+  const errors: string[] = [];
+  const prefix = `${bucket}[${index}]`;
+
+  const inputObj = raw.input as { methods?: string[]; args?: any[][] } | undefined;
+  if (!inputObj || !Array.isArray(inputObj.methods) || !Array.isArray(inputObj.args)) {
+    return { ok: false, errors: [`${prefix}: class testcase input must have 'methods' and 'args' arrays`] };
+  }
+
+  if (inputObj.methods.length !== inputObj.args.length) {
+    return { ok: false, errors: [`${prefix}: 'methods' array length must match 'args' array length`] };
+  }
+
+  const expectedOut = raw.expected_output;
+  if (!Array.isArray(expectedOut) || expectedOut.length !== inputObj.methods.length) {
+    errors.push(`${prefix}: expected_output must be an array of same length as methods`);
+  }
+
+  const coercedArgs: any[][] = [];
+  const coercedOutput: any[] = [];
+
+  for (let i = 0; i < inputObj.methods.length; i++) {
+    const methodName = inputObj.methods[i];
+    const args = inputObj.args[i];
+    
+    if (!Array.isArray(args)) {
+      errors.push(`${prefix}.args[${i}]: arguments must be an array`);
+      continue;
+    }
+
+    let methodSig = classSignature.methods.find(m => m.name === methodName);
+    let isConstructor = false;
+
+    if (methodName === classSignature.class_name) {
+      isConstructor = true;
+      methodSig = { name: classSignature.class_name, return_type: "void", params: classSignature.constructor_params };
+    }
+
+    if (!methodSig) {
+      errors.push(`${prefix}.methods[${i}]: method '${methodName}' not found in class signature`);
+      continue;
+    }
+
+    if (args.length !== methodSig.params.length) {
+      errors.push(`${prefix}.args[${i}]: expected ${methodSig.params.length} arguments for '${methodName}', got ${args.length}`);
+      continue;
+    }
+
+    const coercedMethodArgs: any[] = [];
+    for (let j = 0; j < methodSig.params.length; j++) {
+      const param = methodSig.params[j];
+      let canon: CanonicalType;
+      try {
+        canon = parseLeetcodeTypeString(param.type);
+      } catch (e: any) {
+        errors.push(`${prefix}.args[${i}][${j}]: bad type "${param.type}": ${e?.message ?? e}`);
+        continue;
+      }
+      const r = coerceValueForType(args[j], canon, `${prefix}.args[${i}][${j}]`);
+      if (r.ok) coercedMethodArgs.push(r.value);
+      else mergeErrors(errors, r);
+    }
+    coercedArgs.push(coercedMethodArgs);
+
+    // Check output
+    if (Array.isArray(expectedOut)) {
+      const outVal = expectedOut[i];
+      let outCanon: CanonicalType;
+      try {
+        outCanon = parseLeetcodeTypeString(methodSig.return_type);
+      } catch (e: any) {
+        errors.push(`${prefix}: bad return_type "${methodSig.return_type}": ${e?.message ?? e}`);
+        continue;
+      }
+      
+      if (outCanon.kind === "primitive" && outCanon.base === "void") {
+        coercedOutput.push(null);
+      } else {
+        const outR = coerceValueForType(outVal, outCanon, `${prefix}.expected_output[${i}]`);
+        if (outR.ok) coercedOutput.push(outR.value);
+        else mergeErrors(errors, outR);
+      }
+    }
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, errors };
+  }
+
+  return {
+    ok: true,
+    case: {
+      ...raw,
+      input: { methods: inputObj.methods, args: coercedArgs },
+      expected_output: coercedOutput,
+    },
+  };
+}
+
 export function normalizeTestSuite(
   publicCases: RawTestCase[],
   hiddenCases: RawTestCase[],
-  signature: FunctionSignature,
+  signatures: { functionSignature?: FunctionSignature; classSignature?: ClassSignature },
 ): { publicTests: TestCase[]; hiddenTests: TestCase[] } {
   const allErrors: string[] = [];
 
+  const isClass = !!signatures.classSignature;
+  
+  if (!isClass && !signatures.functionSignature) {
+    throw new Error("Must provide either functionSignature or classSignature");
+  }
+
   const pub: TestCase[] = [];
   publicCases.forEach((t, i) => {
-    const r = normalizeTestCase(t, i, "public", signature);
+    const r = isClass 
+      ? normalizeClassTestCase(t, i, "public", signatures.classSignature!)
+      : normalizeTestCase(t, i, "public", signatures.functionSignature!);
     if (r.ok) pub.push(r.case as TestCase);
     else allErrors.push(...r.errors);
   });
 
   const hid: TestCase[] = [];
   hiddenCases.forEach((t, i) => {
-    const r = normalizeTestCase(t, i, "hidden", signature);
+    const r = isClass 
+      ? normalizeClassTestCase(t, i, "hidden", signatures.classSignature!)
+      : normalizeTestCase(t, i, "hidden", signatures.functionSignature!);
     if (r.ok) hid.push(r.case as TestCase);
     else allErrors.push(...r.errors);
   });
