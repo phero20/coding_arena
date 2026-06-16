@@ -4,6 +4,7 @@ import type { ExecutionTestResult } from "../../libs/utils/verdict.util";
 import type { IAiJudgeService } from "../judge/ai-code-judge.service";
 import type { DriverJudgeExecutionService } from "../judge/driver-judge-execution.service";
 import { getLanguageName } from "../../libs/utils/languages";
+import { redis } from "../../libs/core/redis";
 
 export interface RunSamplesInput {
   problemId: string;
@@ -83,6 +84,13 @@ export class ExecutionService implements IExecutionService {
     const overallStatus: SubmissionStatus = result.overallStatus;
     const compileOutput = "compileOutput" in result ? (result.compileOutput as string) : undefined;
     const stderr = "stderr" in result ? (result.stderr as string) : undefined;
+
+    // VM Heartbeat: Reset auto-shutdown timer on "Run"
+    try {
+      await redis.set("judge0:last_active", Date.now().toString());
+    } catch (e) {
+      // non-blocking
+    }
 
     return {
       overallStatus,
@@ -164,6 +172,13 @@ export class ExecutionService implements IExecutionService {
     const overallStatus: SubmissionStatus = result.overallStatus;
     const compileOutput = "compileOutput" in result ? (result.compileOutput as string) : undefined;
     const stderr = "stderr" in result ? (result.stderr as string) : undefined;
+
+    // VM Heartbeat: Reset auto-shutdown timer on full submission bypass
+    try {
+      await redis.set("judge0:last_active", Date.now().toString());
+    } catch (e) {
+      // non-blocking
+    }
 
     return {
       overallStatus,
