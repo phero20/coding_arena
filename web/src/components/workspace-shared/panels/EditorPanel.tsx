@@ -300,6 +300,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
             isEvaluating={isEvaluating}
             pollingTests={pollingTests}
             hasSubmitted={hasSubmitted}
+            problemTopics={problem.topics}
           />
         </TabsContent>
 
@@ -319,6 +320,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
           isEvaluating={isEvaluating}
           pollingTests={pollingTests}
           hasSubmitted={hasSubmitted}
+          problemTopics={problem.topics}
         />
       </TabsContent>
       </Tabs>
@@ -338,6 +340,7 @@ const ConsolePanelAdapter: React.FC<{
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;
+  problemTopics?: string[];
 }> = ({
   tests,
   isLoading,
@@ -350,6 +353,7 @@ const ConsolePanelAdapter: React.FC<{
   isEvaluating,
   pollingTests,
   hasSubmitted,
+  problemTopics,
 }) => (
   <ConsolePanel
     tests={tests}
@@ -363,5 +367,6 @@ const ConsolePanelAdapter: React.FC<{
     isEvaluating={isEvaluating}
     pollingTests={pollingTests}
     hasSubmitted={hasSubmitted}
+    problemTopics={problemTopics}
   />
 );
