@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Check, Copy, AlertCircle } from "lucide-react";
 import type { TestCaseFieldProps } from "@/types/component.types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { beautifyTestCaseInput, formatValue } from "@/lib/test-case";
 import { Card } from "@/components/ui/card";
+import { MultiTableRenderer, safeJsonParse, getTableFormat } from "./DataFrameRenderer";
+
 
 const CopyButton: React.FC<{ value: string }> = ({ value }) => {
   const [copied, setCopied] = useState(false);
@@ -39,8 +41,16 @@ const CopyButton: React.FC<{ value: string }> = ({ value }) => {
 };
 
 export const TestCaseField: React.FC<
-  TestCaseFieldProps & { isError?: boolean }
-> = ({ label, value, isOutput, isError }) => {
+  TestCaseFieldProps & { isError?: boolean; problemTopics?: string[] }
+> = ({ label, value, isOutput, isError, problemTopics = [] }) => {
+  const parsedValue = safeJsonParse(value);
+
+  const isDatabaseProblem = useMemo(() => {
+    return problemTopics?.includes("Database") || problemTopics?.includes("Pandas");
+  }, [problemTopics]);
+
+  const isTableLayout = !isError && isDatabaseProblem && (getTableFormat(parsedValue) !== null || (typeof parsedValue === "object" && parsedValue !== null && !Array.isArray(parsedValue) && Object.values(parsedValue).some(v => getTableFormat(safeJsonParse(v)) !== null)));
+
   const displayValue = isError 
     ? value 
     : isOutput 
@@ -61,7 +71,7 @@ export const TestCaseField: React.FC<
             {label}
           </label>
         </div>
-        <CopyButton value={displayValue} />
+        <CopyButton value={typeof value === 'string' ? value : JSON.stringify(value)} />
       </div>
       <div
         className={cn(
@@ -74,7 +84,7 @@ export const TestCaseField: React.FC<
           !isOutput && !isError ? "text-primary/90" : "",
         )}
       >
-        {displayValue}
+        {isTableLayout ? <MultiTableRenderer value={parsedValue} /> : displayValue}
       </div>
     </Card>
   );
