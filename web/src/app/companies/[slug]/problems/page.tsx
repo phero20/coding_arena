@@ -35,23 +35,25 @@ export default async function CompanyProblemsPage({ params }: PageProps) {
   const companyProblems = data?.problems || [];
 
   // Map the static CompanyProblem data to the standard Problem interface used by the Table
-  const mappedProblems = companyProblems.map((cp) => ({
+  // Note: Backend might send full Problem objects, so we spread the original and safely handle the slug.
+  const mappedProblems = companyProblems.map((cp: any) => ({
+    ...cp,
     problem_id: cp.problem_id, 
-    problem_slug: cp.slug || "",
+    problem_slug: cp.problem_slug || cp.slug || "",
     title: cp.title,
     difficulty: cp.difficulty,
     topics: cp.topics || [],
     is_premium: cp.is_premium,
-    // Fill required dummy fields for Problem interface
-    description: "",
-    examples: [],
-    constraints: [],
-    follow_ups: [],
-    hints: [],
-    code_snippets: {},
-    function_signature: { name: "", return_type: "", params: [] },
-    createdAt: "",
-    updatedAt: "",
+    // Fill required dummy fields for Problem interface if they are missing
+    description: cp.description || "",
+    examples: cp.examples || [],
+    constraints: cp.constraints || [],
+    follow_ups: cp.follow_ups || [],
+    hints: cp.hints || [],
+    code_snippets: cp.code_snippets || {},
+    function_signature: cp.function_signature || { name: "", return_type: "", params: [] },
+    createdAt: cp.createdAt || "",
+    updatedAt: cp.updatedAt || "",
   })) as Problem[];
 
   return (
