@@ -46,6 +46,8 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
     | "PENDING"
     | "RUNNING"
     | "IDLE";
+    
+  const { problemTopics } = props;
 
   return (
     <div className="flex flex-col h-full border-t border-border/20">
@@ -90,11 +92,12 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                   <div className="space-y-5">
                     {activeCase && (
                       <>
-                        <TestCaseField label="Input" value={activeCase.input} />
+                        <TestCaseField label="Input" value={activeCase.input} problemTopics={problemTopics} />
                         <TestCaseField
                           label="Expected Output"
                           value={activeCase.expected_output}
                           isOutput
+                          problemTopics={problemTopics}
                         />
                       </>
                     )}
@@ -169,6 +172,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                     value={runResult?.compileOutput || runResult?.stderr || ""}
                     isOutput
                     isError={true}
+                    problemTopics={problemTopics}
                   />
                 )}
 
@@ -233,6 +237,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                           <TestCaseField
                             label="Input"
                             value={activeResult.input}
+                            problemTopics={problemTopics}
                           />
                           <TestCaseField
                             label={
@@ -242,12 +247,14 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                             }
                             value={activeResult.expected_output}
                             isOutput
+                            problemTopics={problemTopics}
                           />
                           {activeResult.stdout !== null && (
                             <TestCaseField
                               label="Your Output"
                               value={activeResult.stdout ?? ""}
                               isOutput
+                              problemTopics={problemTopics}
                             />
                           )}
                           {activeResult.compile_output && (
@@ -255,6 +262,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                               label="Compiler Output"
                               value={activeResult.compile_output ?? ""}
                               isOutput
+                              problemTopics={problemTopics}
                             />
                           )}
                           {activeResult.message &&
@@ -263,6 +271,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                                 label="Message"
                                 value={activeResult.message ?? ""}
                                 isOutput
+                                problemTopics={problemTopics}
                               />
                             )}
                         </div>
