@@ -156,6 +156,7 @@ export interface ConsolePanelProps {
   isEvaluating?: boolean;
   pollingTests?: ExecutionTestResult[] | null;
   hasSubmitted?: boolean;
+  problemTopics?: string[];
 }
 
 // DescriptionPanel.tsx
@@ -228,6 +229,7 @@ export interface TestCaseFieldProps {
   label: string;
   value: any;
   isOutput?: boolean;
+  problemTopics?: string[];
 }
 
 // WorkspaceHeader.tsx
