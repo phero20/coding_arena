@@ -2,7 +2,7 @@ import { getLeaderboard } from "@/services/queries/stats.queries";
 import { LeaderboardClient } from "@/components/stats/leaderboard/LeaderboardClient";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 
-
+export const dynamic = "force-dynamic";
 
 export default async function LeaderboardPage() {
   let initialData;
