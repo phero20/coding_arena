@@ -15,11 +15,14 @@ import { registerUserRoutes } from "./user/user.routes";
 import { registerCompilerRoutes } from "./compiler.routes";
 import { registerContestRoutes } from "./contest/contest.routes";
 import { registerTaxonomyRoutes } from "./taxonomy/taxonomy.routes";
+import { registerTaxonomyAdminRoutes } from "./taxonomy/taxonomy.admin.routes";
 import { registerSolutionRoutes } from "./solutions/solution.routes";
 import { registerWorkspaceRoutes } from "./workspace/workspace.routes";
 import { registerChatRoutes } from "./chat/chat.routes";
 import { registerAcademyRoutes } from "./academy/academy.routes";
+import { registerAcademyAdminRoutes } from "./academy/academy.admin.routes";
 import { registerSystemDesignRoutes } from "./system-design/system-design.routes";
+import { registerSystemDesignAdminRoutes } from "./system-design/system-design.admin.routes";
 import { registerCompanyRoutes } from "./company/company.routes";
 import { registerSeoRoutes } from "./seo/seo.routes";
 import { registerReportBugRoutes } from "./report-bug/report-bug.routes";
@@ -42,12 +45,15 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     compilerController,
     contestController,
     taxonomyController,
+    taxonomyAdminController,
     solutionController,
     workspaceController,
     chatController,
     academyController,
     academyExecutionController,
+    academyAdminController,
     systemDesignController,
+    systemDesignAdminController,
     companyController,
     seoController,
     reportBugController,
@@ -135,6 +141,12 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     authorizationMiddleware,
   });
  
+  registerTaxonomyAdminRoutes(v1, {
+    taxonomyAdminController,
+    authMiddleware,
+    authorizationMiddleware,
+  });
+
   registerSolutionRoutes(v1, {
     solutionController,
     authMiddleware,
@@ -157,8 +169,20 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     rateLimitMiddleware,
   });
 
+  registerAcademyAdminRoutes(v1, {
+    academyAdminController,
+    authMiddleware,
+    authorizationMiddleware,
+  });
+
   registerSystemDesignRoutes(v1, {
     systemDesignController,
+  });
+
+  registerSystemDesignAdminRoutes(v1, {
+    systemDesignAdminController,
+    authMiddleware,
+    authorizationMiddleware,
   });
 
   registerCompanyRoutes(v1, {

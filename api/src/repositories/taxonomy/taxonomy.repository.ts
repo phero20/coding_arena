@@ -9,10 +9,6 @@ export interface ITaxonomyRepository {
   findCategoryById(id: string): Promise<Category | null>;
   findChildren(parentId: string): Promise<Category[]>;
   getProblemMappings(categoryId: string): Promise<CategoryProblem[]>;
-  createCategory(category: NewCategory): Promise<Category>;
-  mapProblem(mapping: CategoryProblem): Promise<void>;
-  batchMapProblems(mappings: CategoryProblem[]): Promise<void>;
-  unmapProblem(categoryId: string, problemId: string): Promise<void>;
   getProblemCount(categoryId: string): Promise<number>;
   getProblemCountRecursive(categoryId: string): Promise<number>;
   /** Batch: returns a map of categoryId -> recursive problem count in ONE query. */
@@ -61,44 +57,6 @@ export class TaxonomyRepository implements ITaxonomyRepository {
       .from(schema.categoryProblems)
       .where(eq(schema.categoryProblems.categoryId, categoryId))
       .orderBy(schema.categoryProblems.order);
-  }
-
-  async createCategory(category: NewCategory): Promise<Category> {
-    const [created] = await db.insert(schema.categories).values(category).returning();
-    return created;
-  }
-
-  async mapProblem(mapping: CategoryProblem): Promise<void> {
-    await db
-      .insert(schema.categoryProblems)
-      .values(mapping)
-      .onConflictDoUpdate({
-        target: [schema.categoryProblems.categoryId, schema.categoryProblems.problemId],
-        set: { order: mapping.order },
-      });
-  }
-
-  async batchMapProblems(mappings: CategoryProblem[]): Promise<void> {
-    if (mappings.length === 0) return;
-    
-    await db
-      .insert(schema.categoryProblems)
-      .values(mappings)
-      .onConflictDoUpdate({
-        target: [schema.categoryProblems.categoryId, schema.categoryProblems.problemId],
-        set: { order: sql`EXCLUDED.order` },
-      });
-  }
-
-  async unmapProblem(categoryId: string, problemId: string): Promise<void> {
-    await db
-      .delete(schema.categoryProblems)
-      .where(
-        and(
-          eq(schema.categoryProblems.categoryId, categoryId),
-          eq(schema.categoryProblems.problemId, problemId),
-        ),
-      );
   }
 
   async getProblemCount(categoryId: string): Promise<number> {

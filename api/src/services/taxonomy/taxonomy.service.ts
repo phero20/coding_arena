@@ -1,15 +1,10 @@
 import { type ICradle } from '../../libs/awilix-container';
 import { type ITaxonomyRepository } from '../../repositories/taxonomy/taxonomy.repository';
 import { type IProblemRepository } from '../../repositories/problems/problem.repository';
-import {
-  type CategoryTreeNode,
+  import { type CategoryTreeNode,
   type CategoryDetail,
-  type CreateCategoryPayload,
-  type MapProblemPayload,
-  BatchMapProblemPayload,
 } from '../../types/taxonomy/taxonomy.types';
 import { AppError } from '../../utils/app-error';
-import { ERRORS } from '../../constants/errors';
 
 export interface ITaxonomyService {
   getTaxonomyTree(): Promise<CategoryTreeNode[]>;
@@ -17,10 +12,6 @@ export interface ITaxonomyService {
   getCategoryDetail(slug: string, userId?: string): Promise<CategoryDetail>;
   getCategoryDetailById(id: string, userId?: string): Promise<CategoryDetail>;
   invalidateUserProgress(userId: string): Promise<void>;
-  createCategory(payload: CreateCategoryPayload): Promise<any>;
-  mapProblemToCategory(payload: MapProblemPayload): Promise<void>;
-  batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void>;
-  unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void>;
 }
 
 export class TaxonomyService implements ITaxonomyService {
@@ -104,14 +95,19 @@ export class TaxonomyService implements ITaxonomyService {
       userId ? this.taxonomyRepo.getSolvedProblemIds(userId, problemIds) : Promise.resolve(new Set<string>()),
     ]);
 
+    const mappingDict = new Map(mappings.map(m => [m.problemId, m.order]));
+
+    const enrichedProblems = problems.map(p => ({
+      ...p,
+      isSolved: solvedIds.has(p.problem_id),
+      order: mappingDict.get(p.problem_id) ?? 0,
+    })).sort((a, b) => a.order - b.order);
+
     return {
       ...category,
       parent: parent ?? null,
       children,
-      problems: problems.map(p => ({
-        ...p,
-        isSolved: solvedIds.has(p.problem_id)
-      })),
+      problems: enrichedProblems,
     };
   }
 
@@ -135,59 +131,23 @@ export class TaxonomyService implements ITaxonomyService {
       userId ? this.taxonomyRepo.getSolvedProblemIds(userId, problemIds) : Promise.resolve(new Set<string>()),
     ]);
 
+    const mappingDict = new Map(mappings.map(m => [m.problemId, m.order]));
+
+    const enrichedProblems = problems.map(p => ({
+      ...p,
+      isSolved: solvedIds.has(p.problem_id),
+      order: mappingDict.get(p.problem_id) ?? 0,
+    })).sort((a, b) => a.order - b.order);
+
     return {
       ...category,
       parent: parent ?? null,
       children,
-      problems: problems.map(p => ({
-        ...p,
-        isSolved: solvedIds.has(p.problem_id)
-      })),
+      problems: enrichedProblems,
     };
-  }
-
-  async createCategory(payload: CreateCategoryPayload): Promise<any> {
-    const existing = await this.taxonomyRepo.findCategoryBySlug(payload.slug);
-    if (existing) {
-      throw AppError.conflict(`A category with slug "${payload.slug}" already exists`);
-    }
-    return this.taxonomyRepo.createCategory(payload);
-  }
-
-  async mapProblemToCategory(payload: MapProblemPayload): Promise<void> {
-    const [category, problem] = await Promise.all([
-      this.taxonomyRepo.findCategoryById(payload.categoryId),
-      this.problemRepo.findByProblemId(payload.problemId),
-    ]);
-
-    if (!category) throw AppError.notFound('Category not found');
-    if (!problem) throw AppError.from(ERRORS.PROBLEM.NOT_FOUND);
-
-    await this.taxonomyRepo.mapProblem({
-      categoryId: payload.categoryId,
-      problemId: payload.problemId,
-      order: payload.order ?? 0,
-    });
-  }
-
-  async batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void> {
-    const category = await this.taxonomyRepo.findCategoryById(payload.categoryId);
-    if (!category) throw AppError.notFound('Category not found');
-
-    const mappings = payload.mappings.map((m: { problemId: string; order?: number }) => ({
-      categoryId: payload.categoryId,
-      problemId: m.problemId,
-      order: m.order ?? 0,
-    }));
-
-    await this.taxonomyRepo.batchMapProblems(mappings);
   }
 
   async invalidateUserProgress(_userId: string): Promise<void> {
     // No-op in the raw service, implemented in the Cache layer
-  }
-
-  async unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void> {
-    await this.taxonomyRepo.unmapProblem(categoryId, problemId);
   }
 }

@@ -34,6 +34,7 @@ import { ClistService } from "../../services/contest/clist.service";
 import { ContestService } from "../../services/contest/contest.service";
 import { LeetCodeService } from "../../services/stats/leetcode.service";
 import { TaxonomyService } from "../../services/taxonomy/taxonomy.service";
+import { TaxonomyAdminService } from "../../services/taxonomy/taxonomy.admin.service";
 import { SolutionService } from "../../services/solutions/solution.service";
 import { WorkspaceService } from "../../services/workspace/workspace.service";
 import { ChatService } from "../../services/chat/chat.service";
@@ -43,10 +44,12 @@ import { AcademyService } from "../../services/academy/academy.service";
 import { AcademyExecutionService } from "../../services/academy/academy-execution.service";
 import { AcademyAiJudgeService } from "../../services/academy/academy-ai-judge.service";
 import { SystemDesignService } from "../../services/system-design/system-design.service";
+import { SystemDesignAdminService } from "../../services/system-design/system-design.admin.service";
 import { CompanyService } from "../../services/company/company.service";
 import { SeoService } from "../../services/seo/seo.service";
 import { CloudinaryService } from "../../services/common/cloudinary.service";
 import { ReportBugService } from "../../services/report-bug/report-bug.service";
+import { AcademyAdminService } from "../../services/academy/academy.admin.service";
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
 import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
@@ -91,6 +94,7 @@ export const servicesRegistry = {
   rawWorkspaceService: asClass(WorkspaceService).singleton(),
   rawAcademyService: asClass(AcademyService).singleton(),
   rawSystemDesignService: asClass(SystemDesignService).singleton(),
+  systemDesignAdminService: asClass(SystemDesignAdminService).singleton(),
   rawCompanyService: asClass(CompanyService).singleton(),
   chatService: asClass(ChatService).singleton(),
   diagramResolverService: asClass(DiagramResolverService).singleton(),
@@ -180,4 +184,6 @@ export const servicesRegistry = {
   seoService: asClass(SeoService).singleton(),
   cloudinaryService: asClass(CloudinaryService).singleton(),
   reportBugService: asClass(ReportBugService).singleton(),
+  academyAdminService: asClass(AcademyAdminService).singleton(),
+  taxonomyAdminService: asClass(TaxonomyAdminService).singleton(),
 };

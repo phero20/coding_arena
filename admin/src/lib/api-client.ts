@@ -1,0 +1,104 @@
+import { PUBLIC_CONFIG } from "@/config/public.config";
+import axios, { InternalAxiosRequestConfig } from "axios";
+
+/**
+ * Modular API client with automated Clerk authentication for Admin Panel.
+ */
+const baseURL = (PUBLIC_CONFIG.API_URL ?? "http://localhost:3000") + "/api/v1";
+
+export const apiClient = axios.create({
+  baseURL,
+  withCredentials: true,
+});
+
+// Singleton storage for the token getter function (provided by AuthInitializer)
+let getToken: (() => Promise<string | null>) | null = null;
+let isAuthLoaded = false;
+let requestQueue: Array<(tokenGetter: () => Promise<string | null>) => void> = [];
+
+/**
+ * Injects the Clerk token getter into the API client.
+ * Called by AuthInitializer component.
+ */
+export const setTokenGetter = (fn: typeof getToken) => {
+  getToken = fn;
+  isAuthLoaded = true;
+  
+  // Flush queued requests now that we have the token getter
+  if (getToken) {
+    requestQueue.forEach((resolve) => resolve(getToken as () => Promise<string | null>));
+  }
+  requestQueue = [];
+};
+
+// --- Request Interceptor ---
+apiClient.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
+    // If we are on the server, proceed immediately (Server Components don't have client auth)
+    if (typeof window === "undefined") {
+      return config;
+    }
+
+    // If auth hasn't loaded yet on the client, pause the request in the queue
+    if (!isAuthLoaded) {
+      await new Promise<void>((resolve) => {
+        requestQueue.push(async (getter) => {
+          try {
+            const token = await getter();
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+          } catch (err) {
+            console.error("[API Client] Error fetching auth token from queue:", err);
+          }
+          resolve();
+        });
+      });
+      return config;
+    }
+
+    // If auth is already loaded, proceed normally
+    if (getToken) {
+      try {
+        const token = await getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (err) {
+        console.error("[API Client] Error fetching auth token:", err);
+      }
+    }
+    return config;
+  },
+);
+
+// --- Response Interceptor ---
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Retry once on 401 Unauthorized if a token getter exists
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.status === 401 &&
+      !originalRequest?._retry &&
+      getToken
+    ) {
+      if (originalRequest) {
+        originalRequest._retry = true;
+        try {
+          const token = await getToken();
+          if (token) {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return apiClient(originalRequest);
+          }
+        } catch (retryError) {
+          console.error("[API Client] Token refresh retry failed:", retryError);
+        }
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);

@@ -25,12 +25,15 @@ import { UserController } from "../../controllers/user/user.controller";
 import { CompilerController } from "../../controllers/compiler/compiler.controller";
 import { ContestController } from "../../controllers/contest/contest.controller";
 import { TaxonomyController } from "../../controllers/taxonomy/taxonomy.controller";
+import { TaxonomyAdminController } from "../../controllers/taxonomy/taxonomy.admin.controller";
 import { SolutionController } from "../../controllers/solutions/solution.controller";
 import { WorkspaceController } from "../../controllers/workspace/workspace.controller";
 import { ChatController } from "../../controllers/chat/chat.controller";
 import { AcademyController } from "../../controllers/academy/academy.controller";
 import { AcademyExecutionController } from "../../controllers/academy/academy-execution.controller";
+import { AcademyAdminController } from "../../controllers/academy/academy.admin.controller";
 import { SystemDesignController } from "../../controllers/system-design/system-design.controller";
+import { SystemDesignAdminController } from "../../controllers/system-design/system-design.admin.controller";
 import { CompanyController } from "../../controllers/company/company.controller";
 import { SeoController } from "../../controllers/seo/seo.controller";
 import { ReportBugController } from "../../controllers/report-bug/report-bug.controller";
@@ -71,7 +74,10 @@ export const controllersRegistry = {
   academyController: asClass(AcademyController).singleton(),
   academyExecutionController: asClass(AcademyExecutionController).singleton(),
   systemDesignController: asClass(SystemDesignController).singleton(),
+  systemDesignAdminController: asClass(SystemDesignAdminController).singleton(),
   companyController: asClass(CompanyController).singleton(),
   seoController: asClass(SeoController).singleton(),
   reportBugController: asClass(ReportBugController).singleton(),
+  academyAdminController: asClass(AcademyAdminController).singleton(),
+  taxonomyAdminController: asClass(TaxonomyAdminController).singleton(),
 };

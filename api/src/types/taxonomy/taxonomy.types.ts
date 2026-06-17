@@ -46,6 +46,14 @@ export interface CreateCategoryPayload {
   order?: number;
 }
 
+export interface UpdateCategoryPayload {
+  name?: string;
+  slug?: string;
+  parentId?: string | null;
+  description?: string;
+  order?: number;
+}
+
 // Route param shapes for controller typing
 export interface SlugParams {
   slug: string;

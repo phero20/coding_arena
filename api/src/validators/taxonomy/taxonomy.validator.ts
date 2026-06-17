@@ -12,6 +12,17 @@ export const createCategorySchema = z.object({
 });
 
 /**
+ * Validator for updating a category node.
+ */
+export const updateCategorySchema = z.object({
+  name: z.string().min(1, 'Name cannot be empty').optional(),
+  slug: z.string().min(1, 'Slug cannot be empty').regex(/^[a-z0-9-]+$/, 'Slug must be kebab-case').optional(),
+  parentId: z.string().uuid().nullable().optional(),
+  description: z.string().optional(),
+  order: z.number().int().optional(),
+});
+
+/**
  * Validator for mapping a problem to a category.
  */
 export const mapProblemSchema = z.object({
@@ -32,5 +43,6 @@ export const batchMapProblemSchema = z.object({
 });
 
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
 export type MapProblemInput = z.infer<typeof mapProblemSchema>;
 export type BatchMapProblemInput = z.infer<typeof batchMapProblemSchema>;

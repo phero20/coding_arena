@@ -3,11 +3,6 @@ import { zValidator } from "@hono/zod-validator";
 import { type TaxonomyController } from "../../controllers/taxonomy/taxonomy.controller";
 import { type AuthMiddleware } from "../../middlewares/security/auth.middleware";
 import { type AuthorizationMiddleware } from "../../middlewares/security/authorization.middleware";
-import {
-  createCategorySchema,
-  mapProblemSchema,
-  batchMapProblemSchema,
-} from "../../validators/taxonomy/taxonomy.validator";
 import type { AppEnv } from "../../types/infrastructure/hono.types";
 
 export interface TaxonomyRouteDeps {
@@ -72,62 +67,6 @@ export const registerTaxonomyRoutes = (
     taxonomyController.action(
       taxonomyController.getCategoryDetailById.bind(taxonomyController),
       { requireAuth: false },
-    ),
-  );
-
-  /**
-   * POST /api/v1/taxonomy/categories
-   * Admin only: Creates a new category node.
-   */
-  app.post(
-    "/taxonomy/categories",
-    (c, next) => authMiddleware.handle(c, next),
-    (c, next) => authorizationMiddleware.requireRoles("admin")(c, next),
-    zValidator("json", createCategorySchema),
-    taxonomyController.action(
-      taxonomyController.createCategory.bind(taxonomyController),
-      { status: 201 },
-    ),
-  );
-
-  /**
-   * POST /api/v1/taxonomy/map
-   * Admin only: Maps a problem to a category.
-   */
-  app.post(
-    "/taxonomy/map",
-    (c, next) => authMiddleware.handle(c, next),
-    (c, next) => authorizationMiddleware.requireRoles("admin")(c, next),
-    zValidator("json", mapProblemSchema),
-    taxonomyController.action(
-      taxonomyController.mapProblem.bind(taxonomyController),
-    ),
-  );
-
-  /**
-   * POST /api/v1/taxonomy/map/batch
-   * Admin only: Bulk maps problems to a category.
-   */
-  app.post(
-    "/taxonomy/map/batch",
-    (c, next) => authMiddleware.handle(c, next),
-    (c, next) => authorizationMiddleware.requireRoles("admin")(c, next),
-    zValidator("json", batchMapProblemSchema),
-    taxonomyController.action(
-      taxonomyController.batchMapProblems.bind(taxonomyController),
-    ),
-  );
-
-  /**
-   * DELETE /api/v1/taxonomy/map/:categoryId/:problemId
-   * Admin only: Removes a problem-to-category mapping.
-   */
-  app.delete(
-    "/taxonomy/map/:categoryId/:problemId",
-    (c, next) => authMiddleware.handle(c, next),
-    (c, next) => authorizationMiddleware.requireRoles("admin")(c, next),
-    taxonomyController.action(
-      taxonomyController.unmapProblem.bind(taxonomyController),
     ),
   );
 };

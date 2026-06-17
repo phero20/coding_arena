@@ -24,7 +24,8 @@ export class AuthorizationMiddleware {
       }
 
       if (!roles.includes(auth.user.role)) {
-        throw AppError.forbidden('Insufficient permissions', {
+        const userRole = auth.user.role || "user";
+        throw AppError.forbidden(`Insufficient permissions: Your current role '${userRole}' does not have access. Required role(s): '${roles.join(", ")}'`, {
           requiredRoles: roles,
           userRole: auth.user.role,
         });

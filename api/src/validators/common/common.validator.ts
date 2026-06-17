@@ -15,10 +15,17 @@ const ObjectIdSchema = z
   );
 
 /**
- * Standard ID parameter validator (e.g. :submissionId, :matchId)
+ * Standard ID parameter validator (e.g. :submissionId, :matchId) - MongoDB 24 hex
  */
 export const IdParamSchema = z.object({
   id: ObjectIdSchema,
+});
+
+/**
+ * Standard UUID parameter validator (for Postgres IDs)
+ */
+export const UuidParamSchema = z.object({
+  id: z.string().uuid("Invalid UUID format."),
 });
 
 /**
