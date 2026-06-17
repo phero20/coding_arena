@@ -12,7 +12,8 @@ export const corsConfig = () =>
       if (origin && config.isDev) return origin;
 
       // In production, strictly whitelist allowed clients
-      return origin && origin === config.clientUrl
+      const allowedOrigins = [config.clientUrl, config.adminUrl];
+      return origin && allowedOrigins.includes(origin)
         ? origin
         : config.clientUrl;
     },

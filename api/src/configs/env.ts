@@ -57,6 +57,7 @@ interface EnvConfig {
   // URLs
   apiUrl: string;
   clientUrl: string;
+  adminUrl: string;
 
   // Clerk Auth
   clerkSecretKey: string;
@@ -115,6 +116,7 @@ export const config: EnvConfig = {
   // URLs
   apiUrl: Bun.env.API_URL || "http://localhost:3000",
   clientUrl: Bun.env.CLIENT_URL || "http://localhost:3001",
+  adminUrl: Bun.env.ADMIN_URL || "http://localhost:3002",
 
   // Clerk Auth
   clerkSecretKey: requireEnv("CLERK_SECRET_KEY"),
