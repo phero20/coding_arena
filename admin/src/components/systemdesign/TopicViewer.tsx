@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { QueryState } from "@/components/ui/query-state";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useSystemDesignAdmin } from "@/hooks/useSystemDesign";
 
@@ -36,37 +36,28 @@ export function TopicViewer({ slug, onBack }: TopicViewerProps) {
           <Button onClick={onBack}>Go Back</Button>
         </div>
       ) : (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between border-b pb-4 sticky top-0 bg-card z-10 pt-4 -mt-4">
-            <div>
-              <h3 className="text-lg font-medium tracking-tight">
-                {topic.title}
-              </h3>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs font-mono bg-muted px-2 py-0.5 rounded text-muted-foreground">
-                  ID: {topic.topic_id}
-                </span>
-                <span className="text-xs font-mono bg-muted px-2 py-0.5 rounded text-muted-foreground">
-                  Order: {topic.order}
-                </span>
+        <div className="flex flex-col h-full min-h-0 space-y-4">
+          <div className="flex items-center justify-between pb-4 sticky top-0 bg-transparent z-10 pt-4 -mt-4 shrink-0">
+            <div className="flex items-center gap-4">
+              <Button variant="secondary" size="icon-lg" onClick={onBack} title="Go Back" className="gap-1 rounded-full shrink-0">
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <div>
+                <h3 className="text-lg font-medium tracking-tight">
+                  Topic Information: {topic.slug}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Title: {topic.title} | ID: {topic.topic_id} | Order: {topic.order}
+                </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={handleCopy} className="h-8">
-                {copied ? (
-                  <Check className="mr-2 h-4 w-4 text-green-500" />
-                ) : (
-                  <Copy className="mr-2 h-4 w-4" />
-                )}
-                {copied ? "Copied Content!" : "Copy Content"}
-              </Button>
-              <Button variant="outline" size="sm" onClick={onBack} className="h-8">
-                Back to Topics
-              </Button>
-            </div>
+            <Button variant="outline" size="lg" onClick={handleCopy} className="gap-2 px-4 shrink-0">
+              {copied ? <Check className="text-green-500 w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Copied!" : "Copy Content"}
+            </Button>
           </div>
 
-          <div className="rounded-md border bg-muted/30 p-6 overflow-auto min-h-[400px]">
+          <div className="rounded-md border bg-muted/20 p-4 flex-1 overflow-auto min-h-0 relative">
             <pre className="text-sm font-mono whitespace-pre-wrap break-words">
               {topic.content}
             </pre>

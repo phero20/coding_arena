@@ -14,7 +14,7 @@ const footerLinks = [
       { label: "Academy", href: "/academy/tracks" },
       { label: "Problems", href: "/problems" },
       { label: "Roadmap", href: "/roadmap" },
-      { label: "System Design", href: "/systemdesign-workspace" },
+      { label: "System Design", href: "/systemdesign" },
     ],
   },
   {

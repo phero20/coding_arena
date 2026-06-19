@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { type SystemDesignTopic } from "@/services/system-design.service";
 import { useSystemDesignAdmin } from "@/hooks/useSystemDesign";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronLeft, Save } from "lucide-react";
 
 interface TopicEditorProps {
   slug?: string;
@@ -82,88 +82,98 @@ export function TopicEditor({ slug, onSuccess, onCancel }: TopicEditorProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 relative">
-      <div className="flex items-center justify-between border-b pb-4 sticky top-0 bg-card z-10 pt-4 -mt-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight">{initialData ? "Edit Topic" : "Create Topic"}</h2>
-          <p className="text-sm text-muted-foreground">
-            {initialData
-              ? "Update the details of the system design topic."
-              : "Add a new topic to the system design roadmap."}
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button 
-            type="button" 
-            variant="outline" 
+    <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-0 space-y-6 p-1">
+      <div className="flex items-center justify-between pb-4 sticky top-0 bg-transparent z-10 pt-4 -mt-4 shrink-0">
+        <div className="flex items-center gap-4">
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon-lg"
             onClick={onCancel}
-            disabled={isSubmitting}
+            title="Go Back"
+            className="gap-1 rounded-full shrink-0"
           >
-            Cancel
+            <ChevronLeft className="w-4 h-4" />
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <div>
+            <h3 className="text-lg font-medium tracking-tight">
+              {initialData ? `Edit Topic: ${initialData.slug}` : `Create New Topic`}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {initialData
+                ? "Update the details of the system design topic."
+                : "Add a new topic to the system design roadmap."}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Button type="submit" disabled={isSubmitting} size="lg" className="px-6 gap-2">
+            <Save className="w-4 h-4" />
             {isSubmitting ? "Saving..." : "Save Topic"}
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-4 py-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              placeholder="e.g. Distributed Caching"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
-            />
+      <div className="flex-1 overflow-auto min-h-0 rounded-md border bg-muted/20 p-6">
+        <div className="grid gap-8">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2 flex flex-col">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                placeholder="e.g. Distributed Caching"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2 flex flex-col">
+              <Label htmlFor="topic_id">Topic ID (Internal)</Label>
+              <Input
+                id="topic_id"
+                placeholder="e.g. intro-caching"
+                value={formData.topic_id}
+                onChange={(e) => setFormData({ ...formData, topic_id: e.target.value })}
+                required
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="topic_id">Topic ID (Internal)</Label>
-            <Input
-              id="topic_id"
-              placeholder="e.g. intro-caching"
-              value={formData.topic_id}
-              onChange={(e) => setFormData({ ...formData, topic_id: e.target.value })}
-              required
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="slug">Slug (URL)</Label>
-            <Input
-              id="slug"
-              placeholder="e.g. distributed-caching"
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2 flex flex-col" >
+              <Label htmlFor="slug">Slug (URL)</Label>
+              <Input
+                id="slug"
+                placeholder="e.g. distributed-caching"
+                value={formData.slug}
+                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2 flex flex-col">
+              <Label htmlFor="order">Order Index</Label>
+              <Input
+                id="order"
+                type="number"
+                value={formData.order}
+                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
+                required
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="order">Order Index</Label>
-            <Input
-              id="order"
-              type="number"
-              value={formData.order}
-              onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-              required
-            />
-          </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="content">Markdown Content</Label>
-          <Textarea
-            id="content"
-            placeholder="Write your markdown content here..."
-            className="min-h-[400px] font-mono text-sm"
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            required
-          />
+          <div className="space-y-2 flex flex-col min-h-[400px]">
+            <Label htmlFor="content">Markdown Content</Label>
+            <Textarea
+              id="content"
+              placeholder="Write your markdown content here..."
+              className="flex-1 font-mono text-sm resize-none"
+              autoResize={false}
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              required
+            />
+          </div>
         </div>
       </div>
     </form>

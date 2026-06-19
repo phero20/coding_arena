@@ -121,6 +121,8 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
 
   if (!featuredContest) return null;
 
+  const isOngoing = new Date(featuredContest.startTime) <= new Date() && new Date(featuredContest.endTime) >= new Date();
+
   return (
     <Card className="relative mb-10 overflow-hidden border-border bg-transparent shadow-none border-none">
       <CardContent className="relative z-10 flex flex-col items-start gap-6 p-5 sm:p-6 lg:flex-row lg:items-start">
@@ -140,6 +142,11 @@ export const ContestHero: React.FC<ContestHeroProps> = ({ featuredContest }) => 
               >
                 {featuredContest.platform}
               </Badge>
+              {isOngoing && (
+                <Badge variant="destructive" className="uppercase text-[10px] tracking-wider font-bold">
+                  Live
+                </Badge>
+              )}
             </div>
 
           <h2 className="text-xl font-bold leading-tight tracking-tight sm:text-2xl md:text-3xl">

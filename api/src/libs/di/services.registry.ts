@@ -4,6 +4,7 @@ import { type ICradle } from "../awilix-container";
 // --- Services ---
 import { AuthService } from "../../services/auth/auth.service";
 import { ProblemService } from "../../services/problems/problem.service";
+import { ProblemAdminService } from "../../services/problems/problem.admin.service";
 import { ProblemTestService } from "../../services/problems/problem-test.service";
 import { SubmissionService } from "../../services/submissions/submission.service";
 import { GroqLlmService } from "../../services/ai/groq-llm.service";
@@ -30,8 +31,10 @@ import { StatsSubmissionService } from "../../services/stats/stats-submission.se
 import { StatsService } from "../../services/stats/stats.service";
 import { FollowService } from "../../services/user/follow.service";
 import { UserService } from "../../services/user/user.service";
+import { UserAdminService } from "../../services/user/user.admin.service";
 import { ClistService } from "../../services/contest/clist.service";
 import { ContestService } from "../../services/contest/contest.service";
+import { ContestAdminService } from "../../services/contest/contest.admin.service";
 import { LeetCodeService } from "../../services/stats/leetcode.service";
 import { TaxonomyService } from "../../services/taxonomy/taxonomy.service";
 import { TaxonomyAdminService } from "../../services/taxonomy/taxonomy.admin.service";
@@ -46,10 +49,13 @@ import { AcademyAiJudgeService } from "../../services/academy/academy-ai-judge.s
 import { SystemDesignService } from "../../services/system-design/system-design.service";
 import { SystemDesignAdminService } from "../../services/system-design/system-design.admin.service";
 import { CompanyService } from "../../services/company/company.service";
+import { CompanyAdminService } from "../../services/company/company.admin.service";
 import { SeoService } from "../../services/seo/seo.service";
 import { CloudinaryService } from "../../services/common/cloudinary.service";
 import { ReportBugService } from "../../services/report-bug/report-bug.service";
+import { ReportBugAdminService } from "../../services/report-bug/report-bug.admin.service";
 import { AcademyAdminService } from "../../services/academy/academy.admin.service";
+import { CacheAdminService } from "../../services/system/cache.admin.service";
 // --- Caches (Decorators) ---
 import { ProblemCache } from "../../cache/problems/problem.cache";
 import { ProblemTestCache } from "../../cache/problems/problem-test.cache";
@@ -83,12 +89,16 @@ export const servicesRegistry = {
 
   // Raw services for cache decoration
   rawProblemService: asClass(ProblemService).singleton(),
+  problemAdminService: asClass(ProblemAdminService).singleton(),
   rawProblemTestService: asClass(ProblemTestService).singleton(),
   rawAiCodeJudgeService: asClass(AiCodeJudgeService).singleton(),
   rawStatsService: asClass(StatsService).singleton(),
   rawArenaMatchService: asClass(ArenaMatchService).singleton(),
   rawLeetCodeService: asClass(LeetCodeService).singleton(),
   rawTaxonomyService: asClass(TaxonomyService).singleton(),
+  statsSubmissionService: asClass(StatsSubmissionService).singleton(),
+  userService: asClass(UserService).singleton(),
+  userAdminService: asClass(UserAdminService).singleton(),
   rawSubmissionService: asClass(SubmissionService).singleton(),
   rawSolutionService: asClass(SolutionService).singleton(),
   rawWorkspaceService: asClass(WorkspaceService).singleton(),
@@ -96,6 +106,7 @@ export const servicesRegistry = {
   rawSystemDesignService: asClass(SystemDesignService).singleton(),
   systemDesignAdminService: asClass(SystemDesignAdminService).singleton(),
   rawCompanyService: asClass(CompanyService).singleton(),
+  companyAdminService: asClass(CompanyAdminService).singleton(),
   chatService: asClass(ChatService).singleton(),
   diagramResolverService: asClass(DiagramResolverService).singleton(),
   groqDiagramService: asClass(GroqDiagramService).singleton(),
@@ -142,7 +153,6 @@ export const servicesRegistry = {
   aiCodeJudgeService: asFunction(
     ({ aiJudgeCache }: ICradle) => aiJudgeCache,
   ).singleton(),
-  statsSubmissionService: asClass(StatsSubmissionService).singleton(),
   statsService: asFunction(
     ({ userStatsCache }: ICradle) => userStatsCache,
   ).singleton(),
@@ -154,9 +164,9 @@ export const servicesRegistry = {
     ({ arenaMatchCache }: ICradle) => arenaMatchCache,
   ).singleton(),
 
-  userService: asClass(UserService).singleton(),
   clistService: asClass(ClistService).singleton(),
   contestService: asClass(ContestService).singleton(),
+  contestAdminService: asClass(ContestAdminService).singleton(),
   workspaceService: asFunction(
     ({ workspaceCache }: ICradle) => workspaceCache,
   ).singleton(),
@@ -184,6 +194,8 @@ export const servicesRegistry = {
   seoService: asClass(SeoService).singleton(),
   cloudinaryService: asClass(CloudinaryService).singleton(),
   reportBugService: asClass(ReportBugService).singleton(),
+  reportBugAdminService: asClass(ReportBugAdminService).singleton(),
   academyAdminService: asClass(AcademyAdminService).singleton(),
   taxonomyAdminService: asClass(TaxonomyAdminService).singleton(),
+  cacheAdminService: asClass(CacheAdminService).singleton(),
 };

@@ -85,12 +85,9 @@ export const DescriptionPanel = React.memo(
       if (!problem.description) return "";
       // Exercise mode: raw Markdown — don't strip HTML tags, pass as-is
       if (mode === "exercise") return problem.description;
-      // Practice/Arena mode: HTML content — strip example/constraints sections
+      // Practice/Arena mode: HTML content — strip example/constraints sections at the end
       return problem.description
-        .replace(/(?:<p>)?<strong>Example\s*\d+:?[\s\S]*$/i, "")
-        .replace(/(?:<p>)?Example\s*\d+:?[\s\S]*$/i, "")
-        .replace(/(?:<p>)?<strong>Constraints:?[\s\S]*$/i, "")
-        .replace(/(?:<p>)?Constraints:?[\s\S]*$/i, "")
+        .replace(/(\n|<br\s*\/?>|<\/?p>|^)\s*(?:<strong>|<b>)?(?:Example\s*\d*|Constraints)\s*(?:<\/strong>|<\/b>)?\s*:[\s\S]*$/i, "")
         .trim();
     }, [problem.description, mode]);
 
@@ -368,6 +365,28 @@ export const DescriptionPanel = React.memo(
                       </ul>
                     </div>
                   )}
+
+                  {/* Follow Ups */}
+                  {problem.follow_ups && problem.follow_ups.length > 0 && (
+                    <div className="space-y-4 pt-4 border-t border-border/10">
+                      <h3 className="text-sm font-bold flex items-center gap-2 text-foreground/90">
+                        <Lightbulb className="size-4 text-primary" />
+                        Follow Up
+                      </h3>
+                      <ul className="space-y-2">
+                        {problem.follow_ups.map((followUp, idx) => (
+                          <li
+                            key={idx}
+                            className="text-xs text-muted-foreground flex items-start gap-2 leading-relaxed font-medium"
+                          >
+                            <div className="size-1 rounded-full bg-primary/40 mt-1.5 shrink-0" />
+                            <span className="text-foreground/90">{followUp}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                   {/* Source Attribution */}
 
                 </div>

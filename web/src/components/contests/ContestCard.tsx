@@ -1,31 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { format, formatDistanceToNow, intervalToDuration } from "date-fns";
 import { Calendar, Clock, ExternalLink, Timer } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { type Contest } from "@/types/contest";
+import { ContestLogo } from "./ContestLogo";
 
 interface ContestCardProps {
   contest: Contest;
 }
 
 const PlatformIcon = ({ platform, icon }: { platform: string; icon?: string | null }) => {
-  if (icon) {
+  const [imgError, setImgError] = useState(false);
+
+  if (icon && !imgError) {
     return (
       <div className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden">
-        <img src={icon} alt={platform} className="h-full w-full object-contain" />
+        <img 
+          src={icon} 
+          alt={platform} 
+          className="h-full w-full object-contain" 
+          onError={() => setImgError(true)}
+        />
       </div>
     );
   }
-  const initial = platform.charAt(0).toUpperCase() || "?";
-  return (
-    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-primary/10 text-[10px] font-bold text-primary shadow-sm">
-      {initial}
-    </div>
-  );
+  
+  return <ContestLogo className="h-6 w-6 shrink-0" />;
 };
 
 export const ContestCard: React.FC<ContestCardProps> = ({ contest }) => {
@@ -43,8 +47,8 @@ export const ContestCard: React.FC<ContestCardProps> = ({ contest }) => {
             </span>
           </div>
           {isOngoing && (
-            <Badge variant="destructive" className="animate-pulse shadow-sm">
-              Live Now
+            <Badge variant="destructive" className="absolute right-3 top-3 z-10 uppercase text-[10px] tracking-wider font-bold animate-pulse">
+              Live
             </Badge>
           )}
         </div>

@@ -14,6 +14,7 @@ import { SubmissionEvaluator } from "../../workers/submission/evaluator";
 import { AuthController } from "../../controllers/auth/auth.controller";
 import { ClerkWebhookController } from "../../controllers/auth/clerk-webhook.controller";
 import { ProblemController } from "../../controllers/problems/problem.controller";
+import { ProblemAdminController } from "../../controllers/problems/problem.admin.controller";
 import { ProblemTestController } from "../../controllers/problems/problem-test.controller";
 import { SubmissionController } from "../../controllers/submissions/submission.controller";
 import { AiProblemController } from "../../controllers/problems/ai-problem.controller";
@@ -22,8 +23,10 @@ import { StatsController } from "../../controllers/stats/stats.controller";
 import { FollowController } from "../../controllers/user/follow.controller";
 import { ProfileController } from "../../controllers/user/profile.controller";
 import { UserController } from "../../controllers/user/user.controller";
+import { UserAdminController } from "../../controllers/user/user.admin.controller";
 import { CompilerController } from "../../controllers/compiler/compiler.controller";
 import { ContestController } from "../../controllers/contest/contest.controller";
+import { ContestAdminController } from "../../controllers/contest/contest.admin.controller";
 import { TaxonomyController } from "../../controllers/taxonomy/taxonomy.controller";
 import { TaxonomyAdminController } from "../../controllers/taxonomy/taxonomy.admin.controller";
 import { SolutionController } from "../../controllers/solutions/solution.controller";
@@ -35,8 +38,11 @@ import { AcademyAdminController } from "../../controllers/academy/academy.admin.
 import { SystemDesignController } from "../../controllers/system-design/system-design.controller";
 import { SystemDesignAdminController } from "../../controllers/system-design/system-design.admin.controller";
 import { CompanyController } from "../../controllers/company/company.controller";
+import { CompanyAdminController } from "../../controllers/company/company.admin.controller";
 import { SeoController } from "../../controllers/seo/seo.controller";
 import { ReportBugController } from "../../controllers/report-bug/report-bug.controller";
+import { ReportBugAdminController } from "../../controllers/report-bug/report-bug.admin.controller";
+import { CacheAdminController } from "../../controllers/system/cache.admin.controller";
 
 /**
  * Controller and Middleware layer registrations.
@@ -57,6 +63,7 @@ export const controllersRegistry = {
   authController: asClass(AuthController).singleton(),
   clerkWebhookController: asClass(ClerkWebhookController).singleton(),
   problemController: asClass(ProblemController).singleton(),
+  problemAdminController: asClass(ProblemAdminController).singleton(),
   problemTestController: asClass(ProblemTestController).singleton(),
   submissionController: asClass(SubmissionController).singleton(),
   aiProblemController: asClass(AiProblemController).singleton(),
@@ -65,8 +72,10 @@ export const controllersRegistry = {
   followController: asClass(FollowController).singleton(),
   profileController: asClass(ProfileController).singleton(),
   userController: asClass(UserController).singleton(),
+  userAdminController: asClass(UserAdminController).singleton(),
   compilerController: asClass(CompilerController).singleton(),
   contestController: asClass(ContestController).singleton(),
+  contestAdminController: asClass(ContestAdminController).singleton(),
   taxonomyController: asClass(TaxonomyController).singleton(),
   solutionController: asClass(SolutionController).singleton(),
   workspaceController: asClass(WorkspaceController).singleton(),
@@ -76,8 +85,11 @@ export const controllersRegistry = {
   systemDesignController: asClass(SystemDesignController).singleton(),
   systemDesignAdminController: asClass(SystemDesignAdminController).singleton(),
   companyController: asClass(CompanyController).singleton(),
+  companyAdminController: asClass(CompanyAdminController).singleton(),
   seoController: asClass(SeoController).singleton(),
   reportBugController: asClass(ReportBugController).singleton(),
+  reportBugAdminController: asClass(ReportBugAdminController).singleton(),
   academyAdminController: asClass(AcademyAdminController).singleton(),
   taxonomyAdminController: asClass(TaxonomyAdminController).singleton(),
+  cacheAdminController: asClass(CacheAdminController).singleton(),
 };

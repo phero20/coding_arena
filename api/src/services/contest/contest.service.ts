@@ -29,6 +29,9 @@ export class ContestService {
     try {
       logger.info("Starting external contest synchronization...");
       
+      // 0. Clean up ALL contests from DB to ensure fresh state
+      await this.contestRepository.deleteAll();
+      
       // 1. Fetch from CLIST (Looking ahead 15 days)
       const fifteenDaysFromNow = new Date();
       fifteenDaysFromNow.setDate(fifteenDaysFromNow.getDate() + 15);
@@ -82,11 +85,10 @@ export class ContestService {
         processedContests.push(saved);
       }
 
-      // 3. Sync Upcoming to Redis (Performance Layer)
-      const upcoming = processedContests.filter(c => new Date(c.startTime) > new Date());
-      await this.contestCache.setUpcomingContests(upcoming);
+      // 3. Sync all to Redis (Performance Layer)
+      await this.contestCache.setUpcomingContests(processedContests);
 
-      logger.info({ total: processedContests.length, upcoming: upcoming.length }, "Contest synchronization complete");
+      logger.info({ total: processedContests.length }, "Contest synchronization complete");
     } catch (err) {
       logger.error({ err }, "Sync Engine failed");
       throw err;
@@ -98,21 +100,17 @@ export class ContestService {
    */
   async getUpcomingContests(limit: number = 200): Promise<Contest[]> {
     try {
-      const maxDate = new Date();
-      maxDate.setDate(maxDate.getDate() + 15);
-
       // 1. Check Redis Cache
       let contests = await this.contestCache.getUpcomingContests(limit);
       
       if (contests.length > 0) {
         logger.info({ count: contests.length }, "🔥 Serving contests from Redis cache");
-        // Filter cache to match the 15-day window
-        return contests.filter(c => new Date(c.startTime) <= maxDate).slice(0, limit);
+        return contests.slice(0, limit);
       }
 
       // 2. Fallback to PostgreSQL
       logger.info("❄️ Cache miss: Serving contests from PostgreSQL");
-      contests = await this.contestRepository.findUpcoming(limit, maxDate);
+      contests = await this.contestRepository.findUpcoming(limit);
       
       // 3. Re-prime the cache if we found data in the DB
       if (contests.length > 0) {

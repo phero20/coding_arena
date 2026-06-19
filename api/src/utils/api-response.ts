@@ -6,31 +6,31 @@ import { merge, omit, isObject } from "lodash-es";
 const FORBIDDEN_FIELDS = ["__v", "password", "clerkId"];
 
 export interface PaginationMeta {
-  totalItems: number
-  itemCount: number
-  perPage: number
-  totalPages: number
-  currentPage: number
+  totalItems: number;
+  itemCount: number;
+  perPage: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface ApiErrorPayload {
-  code: string
-  message: string
-  details?: unknown
+  code: string;
+  message: string;
+  details?: unknown;
 }
 
 export interface ApiResponsePayload<T> {
-  success: boolean
-  data?: T
-  error?: ApiErrorPayload
-  meta?: PaginationMeta | Record<string, unknown>
+  success: boolean;
+  data?: T;
+  error?: ApiErrorPayload;
+  meta?: PaginationMeta | Record<string, unknown>;
 }
 
 export class ApiResponse<T = unknown> {
-  private payload: ApiResponsePayload<T>
+  private payload: ApiResponsePayload<T>;
 
   private constructor(payload: ApiResponsePayload<T>) {
-    this.payload = payload
+    this.payload = payload;
   }
 
   static success<T>(
@@ -41,7 +41,7 @@ export class ApiResponse<T = unknown> {
       success: true,
       data,
       meta,
-    })
+    });
   }
 
   static paginated<T>(
@@ -53,7 +53,7 @@ export class ApiResponse<T = unknown> {
       success: true,
       data,
       meta: merge({}, pagination, extraMeta),
-    })
+    });
   }
 
   static failure(
@@ -68,7 +68,7 @@ export class ApiResponse<T = unknown> {
         message,
         details,
       },
-    })
+    });
   }
 
   private static sanitize<T>(data: T): T {
@@ -89,4 +89,3 @@ export class ApiResponse<T = unknown> {
     return payload;
   }
 }
-

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { QueryState } from "@/components/ui/query-state";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, ChevronLeft } from "lucide-react";
 
 interface AcademyDataViewerProps {
   slug: string;
@@ -44,37 +44,38 @@ export function AcademyDataViewer({
       {!item ? (
         <div className="space-y-4">
           <p className="text-destructive font-medium">{itemName} not found.</p>
-          <Button onClick={onBack}>Go Back</Button>
+          <Button title="Go Back" onClick={onBack}>Go Back</Button>
         </div>
       ) : (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between border-b pb-4 sticky top-0 bg-card z-10 pt-4 -mt-4">
-            <div>
-              <h3 className="text-lg font-medium tracking-tight">
-                {itemName} Information: {item.slug}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Detailed JSON configuration for this {itemName.toLowerCase()}.
-              </p>
+        <div className="flex flex-col h-full min-h-0 space-y-4">
+          <div className="flex items-center justify-between pb-4 sticky top-0 bg-transparent z-10 pt-4 -mt-4 shrink-0">
+            <div className="flex items-center gap-4">
+              <Button variant="secondary" size="icon-lg" onClick={onBack} title="Go Back" className="gap-1 rounded-full">
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+              <div>
+                <h3 className="text-lg font-medium tracking-tight">
+                  {itemName} Information: {item.slug}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Detailed JSON configuration for this {itemName.toLowerCase()}.
+                </p>
+              </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleCopy} className="h-8">
+            <Button variant="outline" size="lg" onClick={handleCopy}  className="gap-2 px-4">
               {copied ? (
-                <Check className="mr-2 h-4 w-4 text-green-500" />
+                <Check className=" text-green-500" />
               ) : (
-                <Copy className="mr-2 h-4 w-4" />
+                <Copy />
               )}
               {copied ? "Copied!" : "Copy JSON"}
             </Button>
           </div>
 
-          <div className="rounded-md border bg-muted/50 p-4 overflow-auto">
+          <div className="rounded-md border bg-muted/20 p-4 flex-1 overflow-auto min-h-0 relative">
             <pre className="text-sm font-mono whitespace-pre-wrap break-all">
               {JSON.stringify(item.data, null, 2)}
             </pre>
-          </div>
-
-          <div className="flex justify-end">
-            <Button onClick={onBack}>Back to {itemName}s</Button>
           </div>
         </div>
       )}

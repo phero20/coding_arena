@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Edit, Edit2, Search } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -24,6 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface AcademyDataTableProps {
   data: any[];
@@ -79,25 +80,25 @@ export function AcademyDataTable({
       errorTitle={errorTitle}
     >
       {(!data || data.length === 0) ? (
-        <div className="py-6 text-center text-muted-foreground">No {itemName}s found.</div>
+        <EmptyState message={`No ${itemName}s found.`} className="border-0" />
       ) : (
-        <div className="space-y-4 mt-4">
-          <div className="relative max-w-sm">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="flex flex-col h-full min-h-0 space-y-4 p-1">
+          <div className="relative max-w-sm shrink-0">
+            <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder={`Search by slug...`}
-              className="pl-8"
+              className="pl-8 bg-transparent"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           {filteredData.length === 0 ? (
-            <div className="py-6 text-center text-muted-foreground border rounded-md">No matching {itemName}s found.</div>
+            <EmptyState message={`No matching ${itemName}s found.`} />
           ) : (
-            <div className="rounded-md border">
+            <div className="rounded-md border flex-1 min-h-0 overflow-auto">
               <Table>
-                <TableHeader>
+                <TableHeader className="sticky top-0 z-10">
                   <TableRow>
                     <TableHead>Slug</TableHead>
                     <TableHead>Title / Name</TableHead>
@@ -110,33 +111,35 @@ export function AcademyDataTable({
                       <TableCell className="font-medium">{item.slug}</TableCell>
                       {/* If the data has a title or name, we show it, otherwise N/A */}
                       <TableCell>{item.data?.title || item.data?.name || item.data.language || "N/A"}</TableCell>
-                      <TableCell className="text-right space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => onView(item.slug)}
-                          title="View"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => onEdit(item.slug)}
-                          title="Edit"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                          onClick={() => setItemToDelete(item.slug)}
-                          disabled={isDeleting && itemToDelete === item.slug}
-                          title="Delete"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onView(item.slug)}
+                            title="View"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onEdit(item.slug)}
+                            title="Edit"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            onClick={() => setItemToDelete(item.slug)}
+                            disabled={isDeleting && itemToDelete === item.slug}
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -8,9 +10,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowUp, Edit, Trash2, Eye } from "lucide-react";
+import { Edit, Trash2, Eye } from "lucide-react";
 import { useSystemDesignAdmin } from "@/hooks/useSystemDesign";
 import { QueryState } from "@/components/ui/query-state";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,32 +34,17 @@ export function TopicList({
   onEdit,
   onView,
 }: TopicListProps) {
-  const { topics, isLoading, isError, error, deleteTopic, isDeleting, reorderTopics, isReordering } = useSystemDesignAdmin();
+  const { topics, isLoading, isError, error, deleteTopic, isDeleting } = useSystemDesignAdmin();
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleMoveUp = (index: number) => {
-    if (index === 0) return;
-    const newTopics = [...topics];
-    const currentOrder = newTopics[index].order;
-    const prevOrder = newTopics[index - 1].order;
-    
-    reorderTopics([
-      { id: newTopics[index].id, order: prevOrder },
-      { id: newTopics[index - 1].id, order: currentOrder },
-    ]);
-  };
-
-  const handleMoveDown = (index: number) => {
-    if (index === topics.length - 1) return;
-    const newTopics = [...topics];
-    const currentOrder = newTopics[index].order;
-    const nextOrder = newTopics[index + 1].order;
-
-    reorderTopics([
-      { id: newTopics[index].id, order: nextOrder },
-      { id: newTopics[index + 1].id, order: currentOrder },
-    ]);
-  };
+  const filteredTopics = topics?.filter(topic => {
+    const query = searchQuery.toLowerCase();
+    return (
+      topic.slug.toLowerCase().includes(query) ||
+      topic.title.toLowerCase().includes(query)
+    );
+  }) || [];
 
   const handleDeleteConfirm = async () => {
     if (itemToDelete) {
@@ -70,52 +58,36 @@ export function TopicList({
 
   return (
     <QueryState isLoading={isLoading} isError={isError} error={error} loadingMessage="Loading topics...">
-      <div className="border rounded-md mt-4">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[80px]">Order</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Topic ID</TableHead>
-              <TableHead>Slug</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {(!topics || topics.length === 0) ? (
+      <div className="flex flex-col h-full min-h-0 space-y-4 p-1">
+        <div className="relative max-w-sm shrink-0">
+          <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search by title or slug..."
+            className="pl-8 bg-transparent"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        
+        {filteredTopics.length === 0 ? (
+          <EmptyState message="No matching topics found." />
+        ) : (
+          <div className="rounded-md border flex-1 min-h-0 overflow-auto">
+            <Table>
+            <TableHeader className="sticky top-0 z-10">
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
-                  No topics found. Create one to get started.
-                </TableCell>
+                <TableHead className="w-[80px]">Order</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Slug</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ) : (
-              topics.map((topic, index) => (
+            </TableHeader>
+            <TableBody>
+              {filteredTopics.map((topic, index) => (
                 <TableRow key={topic.id}>
-                  <TableCell>
-                    <div className="flex flex-col items-center justify-center space-y-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6"
-                        disabled={index === 0 || isReordering}
-                        onClick={() => handleMoveUp(index)}
-                      >
-                        <ArrowUp className="h-4 w-4" />
-                      </Button>
-                      <span className="text-xs text-muted-foreground font-mono">{topic.order}</span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6"
-                        disabled={index === topics.length - 1 || isReordering}
-                        onClick={() => handleMoveDown(index)}
-                      >
-                        <ArrowDown className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                  <TableCell className="font-mono text-xs">{topic.order}</TableCell>
                   <TableCell className="font-medium">{topic.title}</TableCell>
-                  <TableCell className="font-mono text-xs">{topic.topic_id}</TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">{topic.slug}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
@@ -138,7 +110,7 @@ export function TopicList({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                         onClick={() => setItemToDelete(topic.slug)}
                         disabled={isDeleting && itemToDelete === topic.slug}
                         title="Delete"
@@ -148,10 +120,11 @@ export function TopicList({
                     </div>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        )}
       </div>
 
       <AlertDialog open={!!itemToDelete} onOpenChange={(open) => !open && setItemToDelete(null)}>

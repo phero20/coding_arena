@@ -13,6 +13,7 @@ export interface IContestRepository {
   findUpcoming(limit?: number, maxDate?: Date): Promise<Contest[]>;
   upsert(contest: NewContest): Promise<Contest>;
   deleteOld(before: Date): Promise<number>;
+  deleteAll(): Promise<void>;
 }
 
 export class ContestRepository implements IContestRepository {
@@ -40,17 +41,10 @@ export class ContestRepository implements IContestRepository {
     return contest ?? null;
   }
 
-  async findUpcoming(limit: number = 200, maxDate?: Date): Promise<Contest[]> {
-    const conditions = [gte(schema.contests.startTime, this.clock.nowDate())];
-    
-    if (maxDate) {
-      conditions.push(lte(schema.contests.startTime, maxDate));
-    }
-
+  async findUpcoming(limit: number = 200): Promise<Contest[]> {
     return await db
       .select()
       .from(schema.contests)
-      .where(and(...conditions))
       .orderBy(schema.contests.startTime)
       .limit(limit);
   }
@@ -86,5 +80,9 @@ export class ContestRepository implements IContestRepository {
 
     // Drizzle doesn't return row count easily on all drivers, but this is the intent
     return 1;
+  }
+
+  async deleteAll(): Promise<void> {
+    await db.delete(schema.contests);
   }
 }

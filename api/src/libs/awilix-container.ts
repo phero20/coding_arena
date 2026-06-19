@@ -11,7 +11,9 @@ import { type SystemClockService } from "../services/common/clock.service";
 import { type ILogger } from "./utils/logger";
 import { type ErrorMiddleware } from "../middlewares/observability/error.middleware";
 import { type UserRepository } from "../repositories/user/user.repository";
+import { type UserAdminRepository } from "../repositories/user/user.admin.repository";
 import { type ProblemRepository } from "../repositories/problems/problem.repository";
+import { type ProblemAdminRepository } from "../repositories/problems/problem.admin.repository";
 import { type ProblemTestRepository } from "../repositories/problems/problem-test.repository";
 import { type SubmissionRepository } from "../repositories/submissions/submission.repository";
 import { type ArenaRepository } from "../repositories/arena/arena.repository";
@@ -19,12 +21,14 @@ import { type ArenaMatchRepository } from "../repositories/arena/arena-match.rep
 import { type ArenaSubmissionRepository } from "../repositories/arena/arena-submission.repository";
 import { type StatsRepository } from "../repositories/stats/stats.repository";
 import { type ContestRepository } from "../repositories/contest/contest.repository";
+import { type ContestAdminRepository } from "../repositories/contest/contest.admin.repository";
 import { type TaxonomyRepository } from "../repositories/taxonomy/taxonomy.repository";
 import { type TaxonomyAdminRepository } from "../repositories/taxonomy/taxonomy.admin.repository";
 import { type SolutionRepository } from "../repositories/solutions/solution.repository";
 import { type WorkspaceRepository } from "../repositories/workspace/workspace.repository";
 import { type AuthService } from "../services/auth/auth.service";
 import { type ProblemService } from "../services/problems/problem.service";
+import { type ProblemAdminService } from "../services/problems/problem.admin.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
 import { ISubmissionService, type SubmissionService } from "../services/submissions/submission.service";
 import { type GroqLlmService } from "../services/ai/groq-llm.service";
@@ -51,10 +55,12 @@ import { type WandboxService } from "../services/judge/wandbox.service";
 import { type CompilerService } from "../services/compiler/compiler.service";
 import { type ClistService } from "../services/contest/clist.service";
 import { type ContestService } from "../services/contest/contest.service";
+import { type ContestAdminService } from "../services/contest/contest.admin.service";
 import { type TaxonomyService } from "../services/taxonomy/taxonomy.service";
 import { type TaxonomyAdminService } from "../services/taxonomy/taxonomy.admin.service";
 import { type StatsController } from "../controllers/stats/stats.controller";
 import { type ContestController } from "../controllers/contest/contest.controller";
+import { type ContestAdminController } from "../controllers/contest/contest.admin.controller";
 import { type SolutionController } from "../controllers/solutions/solution.controller";
 import { type ILeetCodeService } from "../services/stats/leetcode.service";
 
@@ -75,12 +81,14 @@ import { type SubmissionEvaluator } from "../workers/submission/evaluator";
 
 import { type AuthController } from "../controllers/auth/auth.controller";
 import { type ClerkWebhookController } from "../controllers/auth/clerk-webhook.controller";
-import { type ProblemController } from "../controllers/problems/problem.controller";
-import { type ProblemTestController } from "../controllers/problems/problem-test.controller";
+import type { ProblemController } from "../controllers/problems/problem.controller";
+import type { ProblemAdminController } from "../controllers/problems/problem.admin.controller";
+import type { ProblemTestController } from "../controllers/problems/problem-test.controller";
 import { type SubmissionController } from "../controllers/submissions/submission.controller";
 import { type AiProblemController } from "../controllers/problems/ai-problem.controller";
 import { type ArenaController } from "../controllers/arena/arena.controller";
 import { type UserController } from "../controllers/user/user.controller";
+import { type UserAdminController } from "../controllers/user/user.admin.controller";
 import { type CompilerController } from "../controllers/compiler/compiler.controller";
 import { type TaxonomyController } from "../controllers/taxonomy/taxonomy.controller";
 import { type TaxonomyAdminController } from "../controllers/taxonomy/taxonomy.admin.controller";
@@ -107,15 +115,23 @@ import { type ISystemDesignAdminService } from "../services/system-design/system
 import { type SystemDesignController } from "../controllers/system-design/system-design.controller";
 import { type SystemDesignAdminController } from "../controllers/system-design/system-design.admin.controller";
 import { type ICompanyRepository } from "../repositories/company/company.repository";
+import { type ICompanyAdminRepository } from "../repositories/company/company.admin.repository";
 import { type ICompanyService } from "../services/company/company.service";
+import { type CompanyAdminService } from "../services/company/company.admin.service";
 import { type CompanyController } from "../controllers/company/company.controller";
+import { type CompanyAdminController } from "../controllers/company/company.admin.controller";
 import { type SeoRepository } from "../repositories/seo/seo.repository";
 import { type SeoService } from "../services/seo/seo.service";
 import { type SeoController } from "../controllers/seo/seo.controller";
 import { type ReportBugRepository } from "../repositories/report-bug/report-bug.repository";
+import { type ReportBugAdminRepository } from "../repositories/report-bug/report-bug.admin.repository";
 import { type IReportBugService } from "../services/report-bug/report-bug.service";
+import { type ReportBugAdminService } from "../services/report-bug/report-bug.admin.service";
 import { type ReportBugController } from "../controllers/report-bug/report-bug.controller";
+import { type ReportBugAdminController } from "../controllers/report-bug/report-bug.admin.controller";
 import { type ICloudinaryService } from "../services/common/cloudinary.service";
+import { type CacheAdminService } from "../services/system/cache.admin.service";
+import { type CacheAdminController } from "../controllers/system/cache.admin.controller";
 
 // --- Infrastructure ---
 import { submissionQueue, arenaCleanupQueue } from "./core/queue";
@@ -133,6 +149,7 @@ import { type IFollowService } from "../services/user/follow.service";
 import { FollowController } from "../controllers/user/follow.controller";
 import { ProfileController } from "../controllers/user/profile.controller";
 import { type IUserService } from "../services/user/user.service";
+import { type UserAdminService } from "../services/user/user.admin.service";
 import { type ContestCache } from "../cache/contest/contest.cache";
 import { type UserStatsCache } from "../cache/user/user-stats.cache";
 import { type LeetCodeCache } from "../cache/user/leetcode.cache";
@@ -150,7 +167,9 @@ export interface ICradle {
 
   // Repositories
   userRepository: UserRepository;
+  userAdminRepository: UserAdminRepository;
   problemRepository: ProblemRepository;
+  problemAdminRepository: ProblemAdminRepository;
   problemTestRepository: ProblemTestRepository;
   submissionRepository: SubmissionRepository;
   arenaRepository: ArenaRepository;
@@ -158,6 +177,7 @@ export interface ICradle {
   arenaSubmissionRepository: ArenaSubmissionRepository;
   statsRepository: StatsRepository;
   contestRepository: ContestRepository;
+  contestAdminRepository: ContestAdminRepository;
   taxonomyRepository: TaxonomyRepository;
   taxonomyAdminRepository: TaxonomyAdminRepository;
   solutionRepository: SolutionRepository;
@@ -168,12 +188,15 @@ export interface ICradle {
   systemDesignRepository: ISystemDesignRepository;
   systemDesignAdminRepository: ISystemDesignAdminRepository;
   companyRepository: ICompanyRepository;
+  companyAdminRepository: ICompanyAdminRepository;
   seoRepository: SeoRepository;
   reportBugRepository: ReportBugRepository;
+  reportBugAdminRepository: ReportBugAdminRepository;
 
   // Services (Primary/Cached)
   authService: AuthService;
   problemService: ProblemService;
+  problemAdminService: ProblemAdminService;
   problemTestService: ProblemTestService;
   submissionService: ISubmissionService;
   statsSubmissionService: StatsSubmissionService;
@@ -201,6 +224,7 @@ export interface ICradle {
   compilerService: CompilerService;
   clistService: ClistService;
   contestService: ContestService;
+  contestAdminService: ContestAdminService;
   taxonomyService: TaxonomyService;
   taxonomyAdminService: TaxonomyAdminService;
   solutionService: import("../services/solutions/solution.service").ISolutionService;
@@ -216,9 +240,12 @@ export interface ICradle {
   systemDesignService: ISystemDesignService;
   systemDesignAdminService: ISystemDesignAdminService;
   companyService: ICompanyService;
+  companyAdminService: CompanyAdminService;
   seoService: SeoService;
   cloudinaryService: ICloudinaryService;
   reportBugService: IReportBugService;
+  reportBugAdminService: ReportBugAdminService;
+  cacheAdminService: CacheAdminService;
 
   // Raw Services
   rawProblemService: ProblemService;
@@ -265,6 +292,7 @@ export interface ICradle {
   authController: AuthController;
   clerkWebhookController: ClerkWebhookController;
   problemController: ProblemController;
+  problemAdminController: ProblemAdminController;
   problemTestController: ProblemTestController;
   submissionController: SubmissionController;
   aiProblemController: AiProblemController;
@@ -273,6 +301,7 @@ export interface ICradle {
   userController: UserController;
   compilerController: CompilerController;
   contestController: ContestController;
+  contestAdminController: ContestAdminController;
   taxonomyController: TaxonomyController;
   taxonomyAdminController: TaxonomyAdminController;
   solutionController: SolutionController;
@@ -284,8 +313,11 @@ export interface ICradle {
   systemDesignController: SystemDesignController;
   systemDesignAdminController: SystemDesignAdminController;
   companyController: CompanyController;
+  companyAdminController: CompanyAdminController;
   seoController: SeoController;
   reportBugController: ReportBugController;
+  reportBugAdminController: ReportBugAdminController;
+  cacheAdminController: CacheAdminController;
 
   // Third Party
   clerkClient: ReturnType<typeof createClerkClient>;
@@ -294,6 +326,8 @@ export interface ICradle {
   followController: FollowController;
   profileController: ProfileController;
   userService: IUserService;
+  userAdminService: UserAdminService;
+  userAdminController: UserAdminController;
 }
 
 const container = createContainer<ICradle>({

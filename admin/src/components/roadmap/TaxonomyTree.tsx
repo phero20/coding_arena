@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTaxonomyTree } from "@/hooks/useTaxonomy";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit2, Trash2, FolderOpen, FileCode2, Loader2, File, Folder, ChevronRight, ChevronDown } from "lucide-react";
+import { Plus, Edit2, Trash2, FolderOpen, FileCode2, Loader2, FileText, Folder, ChevronRight, ChevronDown, PlusCircle, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -97,10 +97,10 @@ export function TaxonomyTree({ selectedCategory, onSelect }: TaxonomyTreeProps) 
             <li key={node.id} className="relative group">
               <div 
                 className={cn(
-                  "flex items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors cursor-pointer",
+                  "flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-all cursor-pointer group/item border border-transparent",
                   isSelected 
-                    ? "bg-primary/10 text-primary font-medium" 
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-primary/10 text-primary font-medium border-primary/10 shadow-sm" 
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:border-border/50"
                 )}
                 onClick={() => {
                   onSelect(node);
@@ -125,37 +125,44 @@ export function TaxonomyTree({ selectedCategory, onSelect }: TaxonomyTreeProps) 
                     <div className="w-5" /> // Spacer for alignment
                   )}
                   {hasChildren ? (
-                    <Folder className={cn("h-4 w-4 shrink-0", isSelected ? "text-primary" : "text-muted-foreground")} />
+                    expandedNodes[node.id] ? (
+                      <FolderOpen className={cn("h-4 w-4 shrink-0", isSelected ? "text-primary" : "text-muted-foreground")} />
+                    ) : (
+                      <Folder className={cn("h-4 w-4 shrink-0", isSelected ? "text-primary" : "text-muted-foreground")} />
+                    )
                   ) : (
-                    <File className={cn("h-4 w-4 shrink-0", isSelected ? "text-primary/70" : "text-muted-foreground/70")} />
+                    <FileText className={cn("h-4 w-4 shrink-0", isSelected ? "text-primary/70" : "text-muted-foreground/70")} />
                   )}
                   <span className="truncate">{node.name}</span>
                 </div>
                 
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2 shrink-0 bg-inherit pl-2">
+                <div className={cn("flex items-center gap-0.5 transition-opacity ml-2 shrink-0 pl-2")}>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 rounded-sm text-muted-foreground hover:text-foreground"
+                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
                     onClick={(e) => { e.stopPropagation(); openModal("create", null, node.id); }}
+                    title="Add Subcategory"
                   >
-                    <Plus className="h-3 w-3" />
+                    <Plus className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 rounded-sm text-muted-foreground hover:text-primary"
+                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10"
                     onClick={(e) => { e.stopPropagation(); openModal("edit", node); }}
+                    title="Edit Category"
                   >
-                    <Edit2 className="h-3 w-3" />
+                    <Edit className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 rounded-sm text-muted-foreground hover:text-destructive"
+                    className="h-7 w-7 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     onClick={(e) => { e.stopPropagation(); openModal("delete", node); }}
+                    title="Delete Category"
                   >
-                    <Trash2 className="h-3 w-3" />
+                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
                   </Button>
                 </div>
               </div>
@@ -169,13 +176,13 @@ export function TaxonomyTree({ selectedCategory, onSelect }: TaxonomyTreeProps) 
 
   return (
     <QueryState isLoading={isLoading} isError={isError} error={error} loadingMessage="Loading taxonomy tree...">
-      <div className="space-y-1">
+      <div className="space-y-4">
         <Button 
         variant="outline" 
-        className="w-full justify-start text-muted-foreground hover:text-foreground border-dashed"
+        className="w-full justify-start text-muted-foreground hover:text-foreground border-dashed border-2 h-10 hover:border-primary/50 hover:bg-primary/5 transition-all"
         onClick={() => openModal("create", null, null)}
       >
-        <Plus className="mr-2 h-4 w-4" />
+        <PlusCircle className="mr-2 h-4 w-4" />
         Create Root Category
       </Button>
 
