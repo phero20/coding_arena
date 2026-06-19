@@ -20,9 +20,6 @@ export class ContestCache {
     const pipeline = redis.multi();
     const now = Math.floor(Date.now() / 1000);
 
-    // 1. Prune old entries from the timeline sorted set
-    pipeline.zremrangebyscore(this.TIMELINE_KEY, "-inf", now.toString());
-
     for (const contest of contests) {
       const startTime = Math.floor(new Date(contest.startTime).getTime() / 1000);
       const endTime = Math.floor(new Date(contest.endTime).getTime() / 1000);
@@ -30,15 +27,12 @@ export class ContestCache {
 
       // Only cache contests that haven't ended yet
       if (ttl > 0) {
-        // 2. Store individual contest details with an expiry (TTL)
-        // This ensures the contest self-deletes from Redis once it's over
         pipeline.setex(
           `${this.CONTEST_PREFIX}${contest.clistId}`,
           ttl,
           JSON.stringify(contest)
         );
 
-        // 3. Update the timeline index
         pipeline.zadd(this.TIMELINE_KEY, startTime, contest.clistId.toString());
       }
     }

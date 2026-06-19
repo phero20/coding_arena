@@ -29,8 +29,9 @@ export class ContestService {
     try {
       logger.info("Starting external contest synchronization...");
       
-      // 0. Clean up ALL contests from DB to ensure fresh state
+      // 0. Clean up ALL contests from DB and Cache to ensure fresh state
       await this.contestRepository.deleteAll();
+      await this.contestCache.clear();
       
       // 1. Fetch from CLIST (Looking ahead 15 days)
       const fifteenDaysFromNow = new Date();
