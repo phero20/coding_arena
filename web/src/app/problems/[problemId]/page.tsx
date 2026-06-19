@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { ProblemWorkspace } from "@/components/problem-editor/ProblemWorkspace";
 import { getProblemBySlug } from "@/services/queries/problem.queries";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 import { cache } from "react";
+import ProblemWorkspaceSkeleton from "./ProblemWorkspaceSkeleton";
 
 export { generateProblemMetadata as generateMetadata } from "@/meta/problems/dynamic";
 
@@ -18,8 +20,8 @@ type Props = {
   params: Promise<{ problemId: string }>;
 };
 
-const ProblemDetailPage = async ({ params }: Props) => {
-  const resolvedParams = await params;
+async function ProblemData({ paramsPromise }: { paramsPromise: Promise<{ problemId: string }> }) {
+  const resolvedParams = await paramsPromise;
   const problem = await getProblem(resolvedParams.problemId);
 
   if (!problem) {
@@ -31,11 +33,15 @@ const ProblemDetailPage = async ({ params }: Props) => {
     );
   }
 
+  return <ProblemWorkspace problem={problem} />;
+}
+
+export default function ProblemDetailPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-background">
-      <ProblemWorkspace problem={problem} />
+      <Suspense fallback={<ProblemWorkspaceSkeleton />}>
+        <ProblemData paramsPromise={params} />
+      </Suspense>
     </main>
   );
-};
-
-export default ProblemDetailPage;
+}

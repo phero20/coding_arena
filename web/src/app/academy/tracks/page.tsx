@@ -1,11 +1,15 @@
+import { Suspense } from "react";
 import { getAcademyTracks } from "@/services/queries/academy.queries";
 import { TracksHeader } from "@/components/academy/tracks/tracks-header";
 import { AcademyTracksClient } from "@/components/academy/tracks/AcademyTracksClient";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 import { academyTracksMeta } from "@/meta/academy/static";
+import TracksSkeleton from "./TracksSkeleton";
+import { ScrollToTop } from "@/components/shared/ScrollToTop";
 
 export const metadata = academyTracksMeta;
-export default async function AcademyTracksPage() {
+
+async function TracksData() {
   let tracks = [];
   
   try {
@@ -20,7 +24,7 @@ export default async function AcademyTracksPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <>
       {/* Full-width container for Header */}
       <div className="w-full border-b border-border/40 pt-24 pb-8 lg:pt-28 lg:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -35,6 +39,16 @@ export default async function AcademyTracksPage() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <AcademyTracksClient tracks={tracks} />
       </div>
+    </>
+  );
+}
+
+export default function AcademyTracksPage() {
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <Suspense fallback={<TracksSkeleton />}>
+        <TracksData />
+      </Suspense>
     </div>
   );
 }

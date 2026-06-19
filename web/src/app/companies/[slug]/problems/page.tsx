@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getCompanyProblems } from "@/services/queries/company.queries";
 import { ProblemTable } from "@/components/practice/ProblemTable";
 import { ArrowLeft } from "lucide-react";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CompanyLogoWithFallback } from "@/components/companies/CompanyLogoWithFallback";
 import { ErrorDisplay } from "@/components/shared/StatusState";
+import CompanyProblemsSkeleton from "./CompanyProblemsSkeleton";
 
 export { generateCompanyMetadata as generateMetadata } from "@/meta/companies/dynamic";
 
@@ -15,8 +17,8 @@ interface PageProps {
   }>;
 }
 
-export default async function CompanyProblemsPage({ params }: PageProps) {
-  const resolvedParams = await params;
+async function CompanyProblemsData({ paramsPromise }: { paramsPromise: Promise<{ slug: string }> }) {
+  const resolvedParams = await paramsPromise;
   const slug = resolvedParams.slug;
 
   let data;
@@ -57,7 +59,7 @@ export default async function CompanyProblemsPage({ params }: PageProps) {
   })) as Problem[];
 
   return (
-    <div className="flex min-h-screen flex-col bg-background py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 w-full">
+    <>
       {/* Header Section */}
       <Link href="/companies">
         <Button size="sm"><ArrowLeft /> Companies</Button>
@@ -84,6 +86,16 @@ export default async function CompanyProblemsPage({ params }: PageProps) {
           error={null}
         />
       </div>
+    </>
+  );
+}
+
+export default function CompanyProblemsPage({ params }: PageProps) {
+  return (
+    <div className="flex min-h-screen flex-col bg-background py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 w-full">
+      <Suspense fallback={<CompanyProblemsSkeleton />}>
+        <CompanyProblemsData paramsPromise={params} />
+      </Suspense>
     </div>
   );
 }

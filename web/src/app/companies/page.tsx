@@ -1,10 +1,13 @@
+import { Suspense } from "react";
 import { getCompanies } from "@/services/queries/company.queries";
 import { CompaniesHeader } from "@/components/companies/companies-header";
 import { CompaniesClient } from "@/components/companies/CompaniesClient";
 import { ErrorDisplay } from "@/components/shared/StatusState";
+import CompaniesPageSkeleton from "./CompaniesPageSkeleton";
 
 export { companiesHubMeta as metadata } from "@/meta/companies/static";
-export default async function CompaniesPage() {
+
+async function CompaniesData() {
   let companies = [];
   
   try {
@@ -37,7 +40,7 @@ export default async function CompaniesPage() {
     .slice(0, 8);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <>
       {/* Full-width container for Header */}
       <div className="w-full border-b border-border/90 pt-24 pb-8 lg:pt-28 lg:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -52,6 +55,16 @@ export default async function CompaniesPage() {
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <CompaniesClient companies={companies} />
       </div>
+    </>
+  );
+}
+
+export default function CompaniesPage() {
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <Suspense fallback={<CompaniesPageSkeleton />}>
+        <CompaniesData />
+      </Suspense>
     </div>
   );
 }

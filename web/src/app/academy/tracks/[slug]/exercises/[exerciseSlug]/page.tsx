@@ -1,7 +1,8 @@
 import { AcademyWorkspace } from "@/components/academy/editor/AcademyWorkspace";
 import { getTrackExercise } from "@/services/queries/academy.queries";
 import { ErrorDisplay } from "@/components/shared/StatusState";
-import { cache } from "react";
+import { cache, Suspense } from "react";
+import ExerciseSkeleton from "./ExerciseSkeleton";
 
 export { generateExerciseMetadata as generateMetadata } from "@/meta/academy/dynamic";
 
@@ -17,8 +18,8 @@ type Props = {
   params: Promise<{ slug: string; exerciseSlug: string }>;
 };
 
-export default async function AcademyExercisePage({ params }: Props) {
-  const resolvedParams = await params;
+async function ExerciseData({ paramsPromise }: { paramsPromise: Promise<{ slug: string; exerciseSlug: string }> }) {
+  const resolvedParams = await paramsPromise;
   const exercise = await getExercise(resolvedParams.slug, resolvedParams.exerciseSlug);
 
   if (!exercise) {
@@ -32,5 +33,15 @@ export default async function AcademyExercisePage({ params }: Props) {
 
   return (
     <AcademyWorkspace exercise={exercise} trackSlug={resolvedParams.slug} />
+  );
+}
+
+export default function AcademyExercisePage({ params }: Props) {
+  return (
+    <main className="min-h-screen bg-background">
+      <Suspense fallback={<ExerciseSkeleton />}>
+        <ExerciseData paramsPromise={params} />
+      </Suspense>
+    </main>
   );
 }

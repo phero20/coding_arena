@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { getTrackConfig } from '@/services/queries/academy.queries';
 import { TrackOverviewTabs } from '@/components/academy/tracks/TrackOverviewTabs';
 import { ErrorDisplay } from '@/components/shared/StatusState';
 import { cache } from 'react';
+import TrackSkeleton from './TrackSkeleton';
 
 export { generateTrackMetadata as generateMetadata } from "@/meta/academy/dynamic";
 
@@ -18,10 +19,8 @@ type Props = {
     params: Promise<{ slug: string }>;
 };
 
-
-
-const Page = async ({ params }: Props) => {
-    const resolvedParams = await params;
+async function TrackData({ paramsPromise }: { paramsPromise: Promise<{ slug: string }> }) {
+    const resolvedParams = await paramsPromise;
     const config = await getConfig(resolvedParams.slug);
 
     if (!config) {
@@ -36,6 +35,14 @@ const Page = async ({ params }: Props) => {
     return (
         <TrackOverviewTabs config={config} slug={resolvedParams.slug} />
     );
-};
+}
 
-export default Page;
+export default function Page({ params }: Props) {
+    return (
+        <div className="flex flex-col min-h-screen bg-background">
+            <Suspense fallback={<TrackSkeleton />}>
+                <TrackData paramsPromise={params} />
+            </Suspense>
+        </div>
+    );
+}
