@@ -22,15 +22,17 @@ export default function Loading() {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-                  <Skeleton className="h-8 w-[240px] rounded-lg opacity-60" />
+                  <Skeleton height={32} width={240} className="rounded-lg opacity-60" />
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:items-center mb-6">
-                <Skeleton className="h-10 w-full rounded-md opacity-40" />
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center mb-6 w-full">
+                <div className="flex-1 w-full">
+                  <Skeleton height={40} className="rounded-md opacity-40 w-full" />
+                </div>
                 <div className="flex items-center gap-2">
-                  <Skeleton className="h-10 w-40 rounded-md opacity-40" />
-                  <Skeleton className="h-10 w-[72px] rounded-md opacity-40" />
+                  <Skeleton height={40} width={160} className="rounded-md opacity-40" />
+                  <Skeleton height={40} width={72} className="rounded-md opacity-40" />
                 </div>
               </div>
 

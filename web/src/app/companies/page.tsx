@@ -3,7 +3,7 @@ import { CompaniesHeader } from "@/components/companies/companies-header";
 import { CompaniesClient } from "@/components/companies/CompaniesClient";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 
-
+export { companiesHubMeta as metadata } from "@/meta/companies/static";
 export default async function CompaniesPage() {
   let companies = [];
   

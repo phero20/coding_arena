@@ -2,8 +2,9 @@ import { getAcademyTracks } from "@/services/queries/academy.queries";
 import { TracksHeader } from "@/components/academy/tracks/tracks-header";
 import { AcademyTracksClient } from "@/components/academy/tracks/AcademyTracksClient";
 import { ErrorDisplay } from "@/components/shared/StatusState";
+import { academyTracksMeta } from "@/meta/academy/static";
 
-
+export const metadata = academyTracksMeta;
 export default async function AcademyTracksPage() {
   let tracks = [];
   

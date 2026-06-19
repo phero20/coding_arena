@@ -4,6 +4,8 @@ import { TrackOverviewTabs } from '@/components/academy/tracks/TrackOverviewTabs
 import { ErrorDisplay } from '@/components/shared/StatusState';
 import { cache } from 'react';
 
+export { generateTrackMetadata as generateMetadata } from "@/meta/academy/dynamic";
+
 const getConfig = cache(async (slug: string) => {
     try {
         return await getTrackConfig(slug);

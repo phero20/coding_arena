@@ -3,6 +3,8 @@ import { getTrackExercise } from "@/services/queries/academy.queries";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 import { cache } from "react";
 
+export { generateExerciseMetadata as generateMetadata } from "@/meta/academy/dynamic";
+
 const getExercise = cache(async (trackSlug: string, exerciseSlug: string) => {
   try {
     return await getTrackExercise(trackSlug, exerciseSlug);
