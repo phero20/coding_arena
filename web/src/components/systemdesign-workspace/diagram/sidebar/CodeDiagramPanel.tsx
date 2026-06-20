@@ -195,7 +195,12 @@ export function CodeDiagramPanel({ editor }: CodeDiagramPanelProps) {
               </Button>
             </div>
 
-            <div className="h-84 w-full rounded-md border border-input overflow-hidden focus-within:ring-1 focus-within:ring-ring">
+            <div 
+              className="h-84 w-full rounded-md border border-input overflow-hidden focus-within:ring-1 focus-within:ring-ring"
+              onKeyDownCapture={(e) => e.stopPropagation()}
+              onKeyUpCapture={(e) => e.stopPropagation()}
+              onKeyPressCapture={(e) => e.stopPropagation()}
+            >
               <Editor
                 height="100%"
                 defaultLanguage="system-diagram"

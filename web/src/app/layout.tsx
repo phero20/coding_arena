@@ -33,6 +33,7 @@ import type { Viewport } from "next";
 
 export const metadata: Metadata = globalMetadata;
 export const viewport: Viewport = globalViewport;
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({
   children,
