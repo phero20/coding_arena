@@ -10,6 +10,7 @@ import {
 } from "../../validators/system-design/system-design.admin.validator";
 import { IdParamSchema } from "../../validators/common/common.validator";
 import type { AppEnv } from "../../types/infrastructure/hono.types";
+import { z } from "zod";
 
 export interface SystemDesignAdminRouteDeps {
   systemDesignAdminController: SystemDesignAdminController;
@@ -27,6 +28,35 @@ export const registerSystemDesignAdminRoutes = (
   // Ensure all routes require Auth and Admin role
   adminApp.use("*", authMiddleware.handle.bind(authMiddleware));
   adminApp.use("*", authorizationMiddleware.requireRoles("admin"));
+
+  adminApp.get(
+    "/stats",
+    systemDesignAdminController.action(systemDesignAdminController.getStats.bind(systemDesignAdminController))
+  );
+
+  adminApp.get(
+    "/workspaces/user/:userId",
+    zValidator("param", z.object({ userId: z.string().uuid() })),
+    systemDesignAdminController.action(systemDesignAdminController.getWorkspacesByUserId.bind(systemDesignAdminController))
+  );
+
+  adminApp.get(
+    "/diagrams/user/:userId",
+    zValidator("param", z.object({ userId: z.string().uuid() })),
+    systemDesignAdminController.action(systemDesignAdminController.getDiagramsByUserId.bind(systemDesignAdminController))
+  );
+
+  adminApp.delete(
+    "/workspaces/:id",
+    zValidator("param", z.object({ id: z.string().uuid() })),
+    systemDesignAdminController.action(systemDesignAdminController.deleteWorkspace.bind(systemDesignAdminController))
+  );
+
+  adminApp.delete(
+    "/diagrams/:id",
+    zValidator("param", z.object({ id: z.string().uuid() })),
+    systemDesignAdminController.action(systemDesignAdminController.deleteDiagram.bind(systemDesignAdminController))
+  );
 
   adminApp.get(
     "",

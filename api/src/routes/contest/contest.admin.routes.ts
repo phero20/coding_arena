@@ -28,6 +28,11 @@ export const registerContestAdminRoutes = (
   adminApp.use("*", authorizationMiddleware.requireRoles("admin"));
 
   adminApp.get(
+    "/stats",
+    contestAdminController.action(contestAdminController.getStats.bind(contestAdminController))
+  );
+
+  adminApp.get(
     "/",
     contestAdminController.action(contestAdminController.getAllContests.bind(contestAdminController))
   );

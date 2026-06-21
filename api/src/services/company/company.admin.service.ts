@@ -11,7 +11,9 @@ export interface ICompanyAdminService {
   createCompany(payload: CreateCompanyPayload): Promise<Company>;
   getAllCompanies(): Promise<Company[]>;
   updateCompany(id: string, payload: UpdateCompanyPayload): Promise<Company>;
+  updateCompany(id: string, payload: UpdateCompanyPayload): Promise<Company>;
   deleteCompany(id: string): Promise<void>;
+  getStats(): Promise<any>;
 }
 
 export class CompanyAdminService implements ICompanyAdminService {
@@ -50,5 +52,9 @@ export class CompanyAdminService implements ICompanyAdminService {
 
   async deleteCompany(id: string): Promise<void> {
     await this.companyAdminRepo.deleteCompany(id);
+  }
+
+  async getStats(): Promise<any> {
+    return this.companyAdminRepo.getStats();
   }
 }

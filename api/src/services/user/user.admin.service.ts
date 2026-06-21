@@ -10,6 +10,10 @@ export class UserAdminService {
     return this.deps.userAdminRepository.findAll();
   }
 
+  async getCounts() {
+    return this.deps.userAdminRepository.getCounts();
+  }
+
   async createUser(data: any) {
     return this.deps.userAdminRepository.create(data);
   }
@@ -123,6 +127,18 @@ export class UserAdminService {
     const deleted = await this.deps.userAdminRepository.deleteSolvedLanguage(userId, problemId, languageId);
     if (!deleted) {
       throw AppError.notFound(`Solved language '${languageId}' for problem '${problemId}' for user '${userId}' not found`);
+    }
+    return deleted;
+  }
+
+  async getUserSolutions(userId: string) {
+    return this.deps.userAdminRepository.findSolutionsByUserId(userId);
+  }
+
+  async deleteUserSolution(userId: string, solutionId: string) {
+    const deleted = await this.deps.userAdminRepository.deleteSolution(userId, solutionId);
+    if (!deleted) {
+      throw AppError.notFound(`Solution '${solutionId}' for user '${userId}' not found`);
     }
     return deleted;
   }

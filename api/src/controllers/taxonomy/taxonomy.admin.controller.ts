@@ -1,7 +1,7 @@
-import { BaseController } from '../base.controller';
-import { type ITaxonomyAdminService } from '../../services/taxonomy/taxonomy.admin.service';
-import { type ICradle } from '../../libs/awilix-container';
-import { type ControllerRequest } from '../../types/infrastructure/hono.types';
+import { BaseController } from "../base.controller";
+import { type ITaxonomyAdminService } from "../../services/taxonomy/taxonomy.admin.service";
+import { type ICradle } from "../../libs/awilix-container";
+import { type ControllerRequest } from "../../types/infrastructure/hono.types";
 import {
   type CreateCategoryPayload,
   type UpdateCategoryPayload,
@@ -9,7 +9,7 @@ import {
   type BatchMapProblemPayload,
   type IdParams,
   type MapParams,
-} from '../../types/taxonomy/taxonomy.types';
+} from "../../types/taxonomy/taxonomy.types";
 
 export class TaxonomyAdminController extends BaseController {
   private readonly taxonomyAdminService: ITaxonomyAdminService;
@@ -23,29 +23,41 @@ export class TaxonomyAdminController extends BaseController {
     return this.taxonomyAdminService.getAdminTree();
   }
 
-  async getCategoryProblems(req: ControllerRequest<never, IdParams>): Promise<any> {
+  async getCategoryProblems(
+    req: ControllerRequest<never, IdParams>,
+  ): Promise<any> {
     return this.taxonomyAdminService.getCategoryProblems(req.params.id);
   }
 
-  async createCategory(req: ControllerRequest<CreateCategoryPayload>): Promise<any> {
+  async createCategory(
+    req: ControllerRequest<CreateCategoryPayload>,
+  ): Promise<any> {
     return this.taxonomyAdminService.createCategory(req.body);
   }
 
-  async updateCategory(req: ControllerRequest<UpdateCategoryPayload, IdParams>): Promise<any> {
+  async updateCategory(
+    req: ControllerRequest<UpdateCategoryPayload, IdParams>,
+  ): Promise<any> {
     return this.taxonomyAdminService.updateCategory(req.params.id, req.body);
   }
 
-  async deleteCategory(req: ControllerRequest<never, IdParams>): Promise<{ success: boolean }> {
+  async deleteCategory(
+    req: ControllerRequest<never, IdParams>,
+  ): Promise<{ success: boolean }> {
     await this.taxonomyAdminService.deleteCategory(req.params.id);
     return { success: true };
   }
 
-  async mapProblem(req: ControllerRequest<MapProblemPayload>): Promise<{ success: boolean }> {
+  async mapProblem(
+    req: ControllerRequest<MapProblemPayload>,
+  ): Promise<{ success: boolean }> {
     await this.taxonomyAdminService.mapProblemToCategory(req.body);
     return { success: true };
   }
 
-  async unmapProblem(req: ControllerRequest<never, MapParams>): Promise<{ success: boolean }> {
+  async unmapProblem(
+    req: ControllerRequest<never, MapParams>,
+  ): Promise<{ success: boolean }> {
     await this.taxonomyAdminService.unmapProblemFromCategory(
       req.params.categoryId,
       req.params.problemId,
@@ -53,8 +65,14 @@ export class TaxonomyAdminController extends BaseController {
     return { success: true };
   }
 
-  async batchMapProblems(req: ControllerRequest<BatchMapProblemPayload>): Promise<{ success: boolean }> {
+  async batchMapProblems(
+    req: ControllerRequest<BatchMapProblemPayload>,
+  ): Promise<{ success: boolean }> {
     await this.taxonomyAdminService.batchMapProblemsToCategory(req.body);
     return { success: true };
+  }
+
+  async getRoadmapStats(req: ControllerRequest<never>): Promise<any> {
+    return this.taxonomyAdminService.getRoadmapStats();
   }
 }

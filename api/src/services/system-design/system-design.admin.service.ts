@@ -14,6 +14,11 @@ export interface ISystemDesignAdminService {
   updateTopic(id: string, payload: UpdateSystemDesignTopicPayload): Promise<SystemDesignTopic>;
   deleteTopic(id: string): Promise<void>;
   bulkReorderTopics(payload: BulkReorderSystemDesignTopicsPayload): Promise<void>;
+  getStats(): Promise<{ topics: number; workspaces: number; diagrams: number }>;
+  getWorkspacesByUserId(userId: string): Promise<any[]>;
+  getDiagramsByUserId(userId: string): Promise<any[]>;
+  deleteWorkspace(id: string): Promise<void>;
+  deleteDiagram(id: string): Promise<void>;
 }
 
 export class SystemDesignAdminService implements ISystemDesignAdminService {
@@ -45,5 +50,25 @@ export class SystemDesignAdminService implements ISystemDesignAdminService {
 
   async bulkReorderTopics(payload: BulkReorderSystemDesignTopicsPayload): Promise<void> {
     await this.systemDesignAdminRepo.bulkUpdateOrder(payload.mappings);
+  }
+
+  async getStats(): Promise<{ topics: number; workspaces: number; diagrams: number }> {
+    return this.systemDesignAdminRepo.getStats();
+  }
+
+  async getWorkspacesByUserId(userId: string): Promise<any[]> {
+    return this.systemDesignAdminRepo.getWorkspacesByUserId(userId);
+  }
+
+  async getDiagramsByUserId(userId: string): Promise<any[]> {
+    return this.systemDesignAdminRepo.getDiagramsByUserId(userId);
+  }
+
+  async deleteWorkspace(id: string): Promise<void> {
+    await this.systemDesignAdminRepo.deleteWorkspace(id);
+  }
+
+  async deleteDiagram(id: string): Promise<void> {
+    await this.systemDesignAdminRepo.deleteDiagram(id);
   }
 }

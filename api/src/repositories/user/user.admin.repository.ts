@@ -1,6 +1,9 @@
 import { db } from "../../db";
-import { users, userStats, userActivity, userSolvedProblems, userAcademyExercises, userSolvedLanguages } from "../../db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { users, userStats, userActivity, userSolvedProblems, userAcademyExercises, userSolvedLanguages, solutions } from "../../db/schema";
+import { eq, desc, and, count, countDistinct, sql } from "drizzle-orm";
+import { SubmissionModel } from "../../mongo/models/submission.model";
+import { ArenaMatchModel } from "../../mongo/models/arena-match.model";
+import { ArenaSubmissionModel } from "../../mongo/models/arena-submission.model";
 
 export class UserAdminRepository {
   async findAll() {
@@ -35,6 +38,39 @@ export class UserAdminRepository {
   async createStats(data: any) {
     const [stats] = await db.insert(userStats).values(data).returning().execute();
     return stats;
+  }
+
+  async getCounts() {
+    const [
+      usersCount,
+      solvedProblemsCount,
+      solvedLanguagesCount,
+      academyExercisesCount,
+      solutionsCount,
+      totalSubmissionsCount,
+      arenaMatchesCount,
+      arenaSubmissionsCount,
+    ] = await Promise.all([
+      db.select({ count: count() }).from(users).then((res) => res[0]?.count || 0),
+      db.select({ count: countDistinct(userSolvedProblems.problemId) }).from(userSolvedProblems).then((res) => res[0]?.count || 0),
+      db.select({ count: countDistinct(userSolvedLanguages.languageId) }).from(userSolvedLanguages).then((res) => res[0]?.count || 0),
+      db.select({ count: countDistinct(sql`${userAcademyExercises.trackSlug} || '-' || ${userAcademyExercises.exerciseSlug}`) }).from(userAcademyExercises).then((res) => res[0]?.count || 0),
+      db.select({ count: count() }).from(solutions).then((res) => res[0]?.count || 0),
+      SubmissionModel.countDocuments(),
+      ArenaMatchModel.countDocuments(),
+      ArenaSubmissionModel.countDocuments(),
+    ]);
+
+    return {
+      users: usersCount,
+      userSolvedProblems: solvedProblemsCount,
+      userSolvedLanguages: solvedLanguagesCount,
+      userAcademyExercises: academyExercisesCount,
+      solutions: solutionsCount,
+      totalSubmissions: totalSubmissionsCount,
+      arenaMatches: arenaMatchesCount,
+      arenaSubmissions: arenaSubmissionsCount,
+    };
   }
 
   async updateStats(userId: string, data: any) {
@@ -116,5 +152,14 @@ export class UserAdminRepository {
   async deleteSolvedLanguage(userId: string, problemId: string, languageId: string) {
     const [solvedLanguage] = await db.delete(userSolvedLanguages).where(and(eq(userSolvedLanguages.userId, userId), eq(userSolvedLanguages.problemId, problemId), eq(userSolvedLanguages.languageId, languageId))).returning().execute();
     return solvedLanguage;
+  }
+
+  async findSolutionsByUserId(userId: string) {
+    return db.select().from(solutions).where(eq(solutions.userId, userId)).orderBy(desc(solutions.createdAt)).execute();
+  }
+
+  async deleteSolution(userId: string, solutionId: string) {
+    const [solution] = await db.delete(solutions).where(and(eq(solutions.userId, userId), eq(solutions.id, solutionId))).returning().execute();
+    return solution;
   }
 }

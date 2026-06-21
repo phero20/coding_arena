@@ -12,6 +12,29 @@ export interface SystemDesignTopic {
 }
 
 export const systemDesignAdminService = {
+  getStats: async (): Promise<{ topics: number; workspaces: number; diagrams: number }> => {
+    const { data } = await apiClient.get("/admin/system-design/stats");
+    return data?.data || { topics: 0, workspaces: 0, diagrams: 0 };
+  },
+
+  getUserWorkspaces: async (userId: string): Promise<any[]> => {
+    const { data } = await apiClient.get(`/admin/system-design/workspaces/user/${userId}`);
+    return data?.data || data || [];
+  },
+
+  getUserDiagrams: async (userId: string): Promise<any[]> => {
+    const { data } = await apiClient.get(`/admin/system-design/diagrams/user/${userId}`);
+    return data?.data || data || [];
+  },
+
+  deleteWorkspace: async (id: string): Promise<void> => {
+    await apiClient.delete(`/admin/system-design/workspaces/${id}`);
+  },
+
+  deleteDiagram: async (id: string): Promise<void> => {
+    await apiClient.delete(`/admin/system-design/diagrams/${id}`);
+  },
+
   getAllTopics: async (): Promise<SystemDesignTopic[]> => {
     const { data } = await apiClient.get("/admin/system-design");
     // Hono sometimes wraps array responses in data.data or returns it directly based on the route wrapper

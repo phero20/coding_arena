@@ -73,5 +73,10 @@ export const registerTaxonomyAdminRoutes = (
     taxonomyAdminController.action(taxonomyAdminController.unmapProblem.bind(taxonomyAdminController))
   );
 
+  adminApp.get(
+    "/stats",
+    taxonomyAdminController.action(taxonomyAdminController.getRoadmapStats.bind(taxonomyAdminController))
+  );
+
   app.route("/admin/taxonomy", adminApp);
 };

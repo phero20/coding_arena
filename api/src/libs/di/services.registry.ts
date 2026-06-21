@@ -16,6 +16,7 @@ import { AiAddSolveService } from "../../services/problems/ai-addsolve.service";
 import { TestcaseGeneratorService } from "../../services/problems/testcase-generator.service";
 import { ArenaService } from "../../services/arena/arena.service";
 import { ArenaMatchService } from "../../services/arena/arena-match.service";
+import { ArenaAdminService } from "../../services/arena/arena.admin.service";
 import { MatchValidatorService } from "../../services/arena/match-validator.service";
 import { AiCodeJudgeService } from "../../services/judge/ai-code-judge.service";
 import { AiVerdictAuditService } from "../../services/judge/ai-verdict-audit.service";
@@ -112,6 +113,7 @@ export const servicesRegistry = {
   groqDiagramService: asClass(GroqDiagramService).singleton(),
 
   arenaService: asClass(ArenaService).singleton(),
+  arenaAdminService: asClass(ArenaAdminService).singleton(),
   matchValidatorService: asClass(MatchValidatorService).singleton(),
   problemValidatorService: asClass(ProblemValidatorService).singleton(),
   matchDomainEngine: asClass(MatchDomainEngine).singleton(),

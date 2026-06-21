@@ -9,6 +9,7 @@ import { registerProblemTestRoutes } from "./problems/problem-test.routes";
 import { registerSubmissionRoutes } from "./submissions/submission.routes";
 import { registerAiProblemRoutes } from "./problems/ai-problem.routes";
 import { registerArenaRoutes } from "./arena/arena.routes";
+import { registerArenaAdminRoutes } from "./arena/arena.admin.routes";
 import { registerStatsRoutes } from "./stats/stats.routes";
 import { registerFollowRoutes } from "./user/follow.routes";
 import { registerProfileRoutes } from "./user/profile.routes";
@@ -45,6 +46,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     submissionController,
     aiProblemController,
     arenaController,
+    arenaAdminController,
     statsController,
     followController,
     profileController,
@@ -122,6 +124,12 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
     arenaController,
     authMiddleware,
     rateLimitMiddleware,
+  });
+
+  registerArenaAdminRoutes(v1, {
+    arenaAdminController,
+    authMiddleware,
+    authorizationMiddleware,
   });
  
   registerReportBugRoutes(v1, {

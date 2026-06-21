@@ -25,6 +25,11 @@ export const registerUserAdminRoutes = (
   adminApp.use("*", authorizationMiddleware.requireRoles("admin"));
 
   adminApp.get(
+    "/counts", 
+    userAdminController.action(userAdminController.getCounts, { requireAuth: true })
+  );
+
+  adminApp.get(
     "/", 
     userAdminController.action(userAdminController.getAllUsers, { requireAuth: true })
   );
@@ -171,6 +176,23 @@ export const registerUserAdminRoutes = (
     "/solved-languages/:id/:problemId/:languageId",
     zValidator("param", SolvedLanguageParamSchema),
     userAdminController.action(userAdminController.deleteUserSolvedLanguage, { requireAuth: true })
+  );
+
+  adminApp.get(
+    "/solutions/:id",
+    zValidator("param", UuidParamSchema),
+    userAdminController.action(userAdminController.getUserSolutions, { requireAuth: true })
+  );
+
+  const SolutionParamSchema = z.object({
+    id: z.string().uuid(),
+    solutionId: z.string().uuid(),
+  });
+
+  adminApp.delete(
+    "/solutions/:id/:solutionId",
+    zValidator("param", SolutionParamSchema),
+    userAdminController.action(userAdminController.deleteUserSolution, { requireAuth: true })
   );
 
   app.route("/admin/users", adminApp);

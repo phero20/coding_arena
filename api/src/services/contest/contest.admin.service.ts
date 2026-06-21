@@ -8,7 +8,7 @@ export interface IContestAdminService {
   create(payload: NewContest): Promise<Contest>;
   update(id: string, payload: Partial<Contest>): Promise<Contest>;
   delete(id: string): Promise<void>;
-
+  getStats(): Promise<{ contests: number }>;
 }
 
 export class ContestAdminService implements IContestAdminService {
@@ -38,5 +38,7 @@ export class ContestAdminService implements IContestAdminService {
     await this.repo.delete(id);
   }
 
-
+  async getStats(): Promise<{ contests: number }> {
+    return this.repo.getStats();
+  }
 }

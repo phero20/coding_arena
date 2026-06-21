@@ -11,7 +11,7 @@ export interface IContestAdminRepository {
   create(payload: NewContest): Promise<Contest>;
   update(id: string, payload: Partial<Contest>): Promise<Contest | null>;
   delete(id: string): Promise<void>;
-
+  getStats(): Promise<{ contests: number }>;
 }
 
 export class ContestAdminRepository implements IContestAdminRepository {
@@ -46,5 +46,13 @@ export class ContestAdminRepository implements IContestAdminRepository {
 
   async delete(id: string): Promise<void> {
     await db.delete(schema.contests).where(eq(schema.contests.id, id));
+  }
+
+  async getStats(): Promise<{ contests: number }> {
+    const [{ count: total }] = await db
+      .select({ count: count() })
+      .from(schema.contests);
+    
+    return { contests: total };
   }
 }

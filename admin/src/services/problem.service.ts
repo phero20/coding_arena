@@ -39,7 +39,37 @@ export interface PaginatedResponse<T> {
   };
 }
 
+export interface ProblemStats {
+  problems: number;
+  testcases: number;
+  difficulty: {
+    easy: number;
+    medium: number;
+    hard: number;
+    total: number;
+  };
+  userSolvedProblems: {
+    easy: number;
+    medium: number;
+    hard: number;
+    total: number;
+  };
+  userSolvedLanguages: Record<string, number>;
+  totalSubmissions: number;
+  submissionStatus: Record<string, number>;
+}
+
 export const problemAdminService = {
+  getStats: async (): Promise<ProblemStats> => {
+    const { data } = await apiClient.get("/admin/problems/stats");
+    return data?.data || { 
+      problems: 0, 
+      testcases: 0,
+      difficulty: { easy: 0, medium: 0, hard: 0, total: 0 },
+      userSolvedProblems: { easy: 0, medium: 0, hard: 0, total: 0 },
+      userSolvedLanguages: {}
+    };
+  },
   getProblems: async (params: { page?: number; limit?: number; search?: string }): Promise<PaginatedResponse<Problem>> => {
     const { data } = await apiClient.get("/admin/problems", { params });
     return data;

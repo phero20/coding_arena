@@ -31,4 +31,8 @@ export class CompanyAdminController extends BaseController {
     await this.companyAdminService.deleteCompany(req.params.id);
     return { success: true };
   }
+
+  async getStats(req: ControllerRequest<never>): Promise<any> {
+    return this.companyAdminService.getStats();
+  }
 }
