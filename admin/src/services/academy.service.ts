@@ -6,10 +6,6 @@ export const academyAdminService = {
 
 
 
-
-
-
-
   
   // --- TRACKS ---
   getAllTracks: async () => {
