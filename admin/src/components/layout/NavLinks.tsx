@@ -29,7 +29,15 @@ export const navItems = [
   },
   { name: "Roadmap", href: "/roadmap" },
   { name: "Problems", href: "/problems" },
-  { name: "System Design", href: "/systemdesign" },
+  { 
+    name: "System Design", 
+    href: "/systemdesign",
+    subpages: [
+      { name: "Topics", href: "/systemdesign" },
+      { name: "Workspaces", href: "/systemdesign/workspaces" },
+      { name: "Diagrams", href: "/systemdesign/diagrams" },
+    ],
+  },
   { name: "Companies", href: "/companies" },
 
   {
@@ -46,6 +54,7 @@ export const navItems = [
       { name: "Solved Problems", href: "/users/solved-problems" },
       { name: "Academy Exercises", href: "/users/academy-exercises" },
       { name: "Solved Languages", href: "/users/solved-languages" },
+      { name: "Code Solutions", href: "/users/solutions" },
     ],
   },
   {
