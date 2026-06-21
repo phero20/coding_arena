@@ -3,7 +3,7 @@
 import { AcademyDataPage } from "@/components/academy/shared/AcademyDataPage";
 import { ContestList } from "./ContestList";
 import { ContestEditor } from "./ContestEditor";
-import { ContestViewer } from "./ContestViewer";
+import { ContestViewer } from "./ContestsViewer";
 
 export function ContestClient() {
   return (
