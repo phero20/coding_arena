@@ -1,11 +1,27 @@
 import { apiClient } from "@/lib/api-client";
 
+export interface AcademyStats {
+  tracks: number;
+  configs: number;
+  concepts: number;
+  exercises: number;
+  conceptsPerTrack: { trackSlug: string; count: number }[];
+  exercisesPerTrack: { trackSlug: string; count: number }[];
+  difficultyDistribution: { difficulty: number | null; count: number }[];
+  userSolvesPerTrack: { trackSlug: string; count: number }[];
+}
+
 export const academyAdminService = {
 
 
 
 
 
+  
+  getStats: async (): Promise<AcademyStats> => {
+    const { data } = await apiClient.get<{ success: boolean; data: AcademyStats }>("/admin/academy/stats");
+    return data.data;
+  },
   
   // --- TRACKS ---
   getAllTracks: async () => {

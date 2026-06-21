@@ -56,6 +56,12 @@ export const registerAcademyAdminRoutes = (
     academyAdminController.action(academyAdminController.getAllTracks, { requireAuth: true })
   );
 
+  // GET /api/v1/admin/academy/stats
+  adminApp.get(
+    "/stats",
+    academyAdminController.action(academyAdminController.getStats, { requireAuth: true })
+  );
+
   // POST /api/v1/admin/academy/tracks
   adminApp.post(
     "/tracks",

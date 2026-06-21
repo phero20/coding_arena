@@ -59,4 +59,8 @@ export class ProblemAdminController extends BaseController {
       cases: req.body.cases,
     });
   }
+
+  async getStats(req: ControllerRequest<never>): Promise<any> {
+    return this.problemAdminService.getStats();
+  }
 }

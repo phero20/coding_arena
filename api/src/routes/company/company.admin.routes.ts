@@ -28,6 +28,11 @@ export const registerCompanyAdminRoutes = (
   adminApp.use("*", authorizationMiddleware.requireRoles("admin"));
 
   adminApp.get(
+    "/stats",
+    companyAdminController.action(companyAdminController.getStats.bind(companyAdminController))
+  );
+
+  adminApp.get(
     "",
     companyAdminController.action(companyAdminController.getAllCompanies.bind(companyAdminController))
   );

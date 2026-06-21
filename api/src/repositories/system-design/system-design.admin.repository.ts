@@ -1,5 +1,8 @@
 import { MongoBaseRepository } from "../base.repository";
 import { SystemDesignTopicModel, type SystemDesignTopicDocument, type SystemDesignTopic } from "../../mongo/models/system-design-topic.model";
+import { db, schema } from "../../db";
+import { sql, eq } from "drizzle-orm";
+import type { Workspace, Diagram } from "../../db/schema";
 import type {
   CreateSystemDesignTopicPayload,
   UpdateSystemDesignTopicPayload,
@@ -12,6 +15,11 @@ export interface ISystemDesignAdminRepository {
   updateTopic(id: string, payload: UpdateSystemDesignTopicPayload): Promise<SystemDesignTopic | null>;
   deleteTopic(id: string): Promise<void>;
   bulkUpdateOrder(mappings: Array<{ id: string; order: number }>): Promise<void>;
+  getStats(): Promise<{ topics: number; workspaces: number; diagrams: number }>;
+  getWorkspacesByUserId(userId: string): Promise<Workspace[]>;
+  getDiagramsByUserId(userId: string): Promise<Partial<Diagram>[]>;
+  deleteWorkspace(id: string): Promise<void>;
+  deleteDiagram(id: string): Promise<void>;
 }
 
 export class SystemDesignAdminRepository
@@ -54,5 +62,44 @@ export class SystemDesignAdminRepository
     if (bulkOps.length > 0) {
       await this.model.bulkWrite(bulkOps);
     }
+  }
+
+  async getStats(): Promise<{ topics: number; workspaces: number; diagrams: number }> {
+    const [topics, workspacesCount, diagramsCount] = await Promise.all([
+      this.model.countDocuments(),
+      db.select({ count: sql<number>`cast(count(*) as integer)` }).from(schema.workspaces),
+      db.select({ count: sql<number>`cast(count(*) as integer)` }).from(schema.diagrams),
+    ]);
+    return {
+      topics,
+      workspaces: workspacesCount[0].count,
+      diagrams: diagramsCount[0].count
+    };
+  }
+
+  async getWorkspacesByUserId(userId: string): Promise<Workspace[]> {
+    return db.select().from(schema.workspaces).where(eq(schema.workspaces.userId, userId));
+  }
+
+  async getDiagramsByUserId(userId: string): Promise<Partial<Diagram>[]> {
+    const result = await db.select({
+      id: schema.diagrams.id,
+      title: schema.diagrams.title,
+      workspaceId: schema.diagrams.workspaceId,
+      createdAt: schema.diagrams.createdAt,
+      updatedAt: schema.diagrams.updatedAt,
+    })
+      .from(schema.diagrams)
+      .innerJoin(schema.workspaces, eq(schema.diagrams.workspaceId, schema.workspaces.id))
+      .where(eq(schema.workspaces.userId, userId));
+    return result;
+  }
+
+  async deleteWorkspace(id: string): Promise<void> {
+    await db.delete(schema.workspaces).where(eq(schema.workspaces.id, id));
+  }
+
+  async deleteDiagram(id: string): Promise<void> {
+    await db.delete(schema.diagrams).where(eq(schema.diagrams.id, id));
   }
 }

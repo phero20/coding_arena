@@ -2,6 +2,26 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { taxonomyAdminService } from "@/services/taxonomy.service";
 import { toast } from "sonner";
 
+export const useTaxonomyStats = () => {
+  const statsQuery = useQuery({
+    queryKey: ["admin-taxonomy-stats"],
+    queryFn: async () => {
+      return await taxonomyAdminService.getStats();
+    },
+  });
+
+  return {
+    stats: statsQuery.data || {
+      categories: 0,
+      traffic: [],
+    },
+    isLoading: statsQuery.isLoading,
+    isError: statsQuery.isError,
+    error: statsQuery.error,
+    refetch: statsQuery.refetch,
+  };
+};
+
 export const useTaxonomyTree = () => {
   const queryClient = useQueryClient();
 
@@ -19,18 +39,27 @@ export const useTaxonomyTree = () => {
       toast.success("Category created successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || error.message || "Failed to create category");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to create category",
+      );
     },
   });
 
   const updateCategoryMutation = useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: any }) => taxonomyAdminService.updateCategory(id, payload),
+    mutationFn: ({ id, payload }: { id: string; payload: any }) =>
+      taxonomyAdminService.updateCategory(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-taxonomy-tree"] });
       toast.success("Category updated successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || error.message || "Failed to update category");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update category",
+      );
     },
   });
 
@@ -41,7 +70,11 @@ export const useTaxonomyTree = () => {
       toast.success("Category deleted successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || error.message || "Failed to delete category");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to delete category",
+      );
     },
   });
 
@@ -85,35 +118,64 @@ export const useTaxonomyCategoryDetail = (category: any) => {
   });
 
   const mapProblemMutation = useMutation({
-    mutationFn: (payload: { categoryId: string, problemId: string, order?: number }) => taxonomyAdminService.mapProblem(payload),
+    mutationFn: (payload: {
+      categoryId: string;
+      problemId: string;
+      order?: number;
+    }) => taxonomyAdminService.mapProblem(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-taxonomy-problems", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-taxonomy-problems", id],
+      });
       toast.success("Problem mapped successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || error.message || "Failed to map problem");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to map problem",
+      );
     },
   });
 
   const batchMapProblemsMutation = useMutation({
-    mutationFn: (payload: { categoryId: string, mappings: any[] }) => taxonomyAdminService.batchMapProblems(payload),
+    mutationFn: (payload: { categoryId: string; mappings: any[] }) =>
+      taxonomyAdminService.batchMapProblems(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-taxonomy-problems", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-taxonomy-problems", id],
+      });
       toast.success("Problems mapped successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || error.message || "Failed to map problems");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to map problems",
+      );
     },
   });
 
   const unmapProblemMutation = useMutation({
-    mutationFn: ({ categoryId, problemId }: { categoryId: string, problemId: string }) => taxonomyAdminService.unmapProblem(categoryId, problemId),
+    mutationFn: ({
+      categoryId,
+      problemId,
+    }: {
+      categoryId: string;
+      problemId: string;
+    }) => taxonomyAdminService.unmapProblem(categoryId, problemId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-taxonomy-problems", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-taxonomy-problems", id],
+      });
       toast.success("Problem unmapped successfully!");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || error.message || "Failed to unmap problem");
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to unmap problem",
+      );
     },
   });
 

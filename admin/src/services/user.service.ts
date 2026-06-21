@@ -7,6 +7,20 @@ export const userAdminService = {
     return data.data || data;
   },
 
+  getCounts: async (): Promise<{
+    users: number;
+    userSolvedProblems: number;
+    userSolvedLanguages: number;
+    userAcademyExercises: number;
+    solutions: number;
+    totalSubmissions: number;
+    arenaMatches: number;
+    arenaSubmissions: number;
+  }> => {
+    const { data } = await apiClient.get("/admin/users/counts");
+    return data?.data || data;
+  },
+
   createUser: async (payload: Partial<User>): Promise<User> => {
     const { data } = await apiClient.post("/admin/users", payload);
     return data.data || data;
@@ -104,6 +118,16 @@ export const userAdminService = {
 
   deleteUserSolvedLanguage: async (userId: string, problemId: string, languageId: string): Promise<void> => {
     const { data } = await apiClient.delete(`/admin/users/solved-languages/${userId}/${problemId}/${languageId}`);
+    return data;
+  },
+
+  getUserSolutions: async (userId: string): Promise<any[]> => {
+    const { data } = await apiClient.get(`/admin/users/solutions/${userId}`);
+    return data.data || data;
+  },
+
+  deleteUserSolution: async (userId: string, solutionId: string): Promise<void> => {
+    const { data } = await apiClient.delete(`/admin/users/solutions/${userId}/${solutionId}`);
     return data;
   },
 };

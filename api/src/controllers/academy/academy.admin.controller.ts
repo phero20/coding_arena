@@ -109,4 +109,8 @@ export class AcademyAdminController extends BaseController {
     const { trackSlug } = req.params;
     return await this.academyAdminService.getExercisesByTrack(trackSlug);
   }
+
+  async getStats(_req: ControllerRequest<never, never, never>) {
+    return await this.academyAdminService.getStats();
+  }
 }

@@ -38,4 +38,26 @@ export class SystemDesignAdminController extends BaseController {
     await this.systemDesignAdminService.bulkReorderTopics(req.body);
     return { success: true };
   }
+
+  async getStats(req: ControllerRequest<never>): Promise<any> {
+    return this.systemDesignAdminService.getStats();
+  }
+
+  async getWorkspacesByUserId(req: ControllerRequest<never, { userId: string }>): Promise<any> {
+    return this.systemDesignAdminService.getWorkspacesByUserId(req.params.userId);
+  }
+
+  async getDiagramsByUserId(req: ControllerRequest<never, { userId: string }>): Promise<any> {
+    return this.systemDesignAdminService.getDiagramsByUserId(req.params.userId);
+  }
+
+  async deleteWorkspace(req: ControllerRequest<never, { id: string }>): Promise<{ success: boolean }> {
+    await this.systemDesignAdminService.deleteWorkspace(req.params.id);
+    return { success: true };
+  }
+
+  async deleteDiagram(req: ControllerRequest<never, { id: string }>): Promise<{ success: boolean }> {
+    await this.systemDesignAdminService.deleteDiagram(req.params.id);
+    return { success: true };
+  }
 }

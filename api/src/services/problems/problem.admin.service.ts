@@ -14,6 +14,15 @@ export interface IProblemAdminService {
   getProblemById(id: string): Promise<Problem>;
   getProblemTests(problem_id: string): Promise<ProblemTest[]>;
   updateProblemTests(payload: UpsertProblemTestInput): Promise<ProblemTest>;
+  getStats(): Promise<{ 
+    problems: number; 
+    testcases: number; 
+    difficulty: { easy: number; medium: number; hard: number; total: number };
+    userSolvedProblems: { easy: number; medium: number; hard: number; total: number };
+    userSolvedLanguages: Record<string, number>;
+    totalSubmissions: number;
+    submissionStatus: Record<string, number>;
+  }>;
 }
 
 export class ProblemAdminService implements IProblemAdminService {
@@ -59,5 +68,17 @@ export class ProblemAdminService implements IProblemAdminService {
 
   async updateProblemTests(payload: UpsertProblemTestInput): Promise<ProblemTest> {
     return this.problemTestRepository.upsertTests(payload);
+  }
+
+  async getStats(): Promise<{ 
+    problems: number; 
+    testcases: number; 
+    difficulty: { easy: number; medium: number; hard: number; total: number };
+    userSolvedProblems: { easy: number; medium: number; hard: number; total: number };
+    userSolvedLanguages: Record<string, number>;
+    totalSubmissions: number;
+    submissionStatus: Record<string, number>;
+  }> {
+    return this.problemAdminRepository.getStats();
   }
 }

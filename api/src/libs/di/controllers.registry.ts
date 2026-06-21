@@ -19,6 +19,7 @@ import { ProblemTestController } from "../../controllers/problems/problem-test.c
 import { SubmissionController } from "../../controllers/submissions/submission.controller";
 import { AiProblemController } from "../../controllers/problems/ai-problem.controller";
 import { ArenaController } from "../../controllers/arena/arena.controller";
+import { ArenaAdminController } from "../../controllers/arena/arena.admin.controller";
 import { StatsController } from "../../controllers/stats/stats.controller";
 import { FollowController } from "../../controllers/user/follow.controller";
 import { ProfileController } from "../../controllers/user/profile.controller";
@@ -68,6 +69,7 @@ export const controllersRegistry = {
   submissionController: asClass(SubmissionController).singleton(),
   aiProblemController: asClass(AiProblemController).singleton(),
   arenaController: asClass(ArenaController).singleton(),
+  arenaAdminController: asClass(ArenaAdminController).singleton(),
   statsController: asClass(StatsController).singleton(),
   followController: asClass(FollowController).singleton(),
   profileController: asClass(ProfileController).singleton(),

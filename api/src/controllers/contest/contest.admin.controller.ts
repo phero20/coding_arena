@@ -32,5 +32,7 @@ export class ContestAdminController extends BaseController {
     return { success: true };
   }
 
-
+  async getStats(req: ControllerRequest<never>): Promise<{ contests: number }> {
+    return this.contestAdminService.getStats();
+  }
 }

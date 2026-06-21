@@ -2,6 +2,33 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { problemAdminService, type Problem } from "@/services/problem.service";
 import { toast } from "sonner";
 
+export const useProblemStats = () => {
+  const statsQuery = useQuery({
+    queryKey: ["admin-problem-stats"],
+    queryFn: async () => {
+      return await problemAdminService.getStats();
+    },
+  });
+
+  const data = statsQuery.data;
+
+  return {
+    stats: {
+      problems: data?.problems || 0,
+      testcases: data?.testcases || 0,
+      difficulty: data?.difficulty || { easy: 0, medium: 0, hard: 0, total: 0 },
+      userSolvedProblems: data?.userSolvedProblems || { easy: 0, medium: 0, hard: 0, total: 0 },
+      userSolvedLanguages: data?.userSolvedLanguages || {},
+      totalSubmissions: data?.totalSubmissions || 0,
+      submissionStatus: data?.submissionStatus || {},
+    },
+    isLoading: statsQuery.isLoading,
+    isError: statsQuery.isError,
+    error: statsQuery.error,
+    refetch: statsQuery.refetch,
+  };
+};
+
 export const useProblemsAdmin = (page: number, limit: number, search: string) => {
   const query = useQuery({
     queryKey: ["admin-problems", page, limit, search],

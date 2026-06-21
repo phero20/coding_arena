@@ -23,6 +23,11 @@ export const contestAdminService = {
     return data.data || data;
   },
 
+  getStats: async (): Promise<{ contests: number }> => {
+    const { data } = await apiClient.get("/admin/contests/stats");
+    return data?.data || data || { contests: 0 };
+  },
+
 
 
   createContest: async (payload: Partial<Contest>): Promise<Contest> => {

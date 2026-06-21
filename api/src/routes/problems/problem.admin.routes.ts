@@ -36,6 +36,11 @@ export const registerProblemAdminRoutes = (
   adminRouter.use("*", authorizationMiddleware.requireRoles("admin"));
 
   adminRouter.get(
+    "/stats",
+    problemAdminController.action(problemAdminController.getStats),
+  );
+
+  adminRouter.get(
     "/",
     zValidator("query", problemSearchQuerySchema),
     problemAdminController.action(problemAdminController.getAllPaginated),

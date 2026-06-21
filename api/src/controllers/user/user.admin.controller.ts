@@ -15,6 +15,10 @@ export class UserAdminController extends BaseController {
     return await this.userAdminService.getAllUsers();
   }
 
+  async getCounts(_req: ControllerRequest<never, never, never>) {
+    return await this.userAdminService.getCounts();
+  }
+
   async createUser(req: ControllerRequest<any, never, never>) {
     return await this.userAdminService.createUser(req.body);
   }
@@ -98,6 +102,15 @@ export class UserAdminController extends BaseController {
 
   async deleteUserSolvedLanguage(req: ControllerRequest<never, { id: string; problemId: string; languageId: string }, never>) {
     await this.userAdminService.deleteUserSolvedLanguage(req.params.id, req.params.problemId, req.params.languageId);
+    return { success: true };
+  }
+
+  async getUserSolutions(req: ControllerRequest<never, { id: string }, never>) {
+    return await this.userAdminService.getUserSolutions(req.params.id);
+  }
+
+  async deleteUserSolution(req: ControllerRequest<never, { id: string; solutionId: string }, never>) {
+    await this.userAdminService.deleteUserSolution(req.params.id, req.params.solutionId);
     return { success: true };
   }
 }

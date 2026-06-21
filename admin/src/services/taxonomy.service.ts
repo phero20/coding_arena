@@ -5,7 +5,23 @@ export const taxonomyAdminService = {
     const { data } = await apiClient.get("/admin/taxonomy/tree");
     return data;
   },
-  
+
+  getStats: async () => {
+    const { data } = await apiClient.get<{
+      success: boolean;
+      data: {
+        categories: number;
+        traffic: {
+          name: string;
+          slug: string;
+          count: number;
+          difficulty: { easy: number; medium: number; hard: number };
+        }[];
+      };
+    }>("/admin/taxonomy/stats");
+    return data.data;
+  },
+
   // Category Problems
   getCategoryProblems: async (id: string) => {
     const { data } = await apiClient.get(`/admin/taxonomy/${id}/problems`);
@@ -14,12 +30,18 @@ export const taxonomyAdminService = {
 
   // Categories
   createCategory: async (payload: any) => {
-    const { data } = await apiClient.post("/admin/taxonomy/categories", payload);
+    const { data } = await apiClient.post(
+      "/admin/taxonomy/categories",
+      payload,
+    );
     return data;
   },
 
   updateCategory: async (id: string, payload: any) => {
-    const { data } = await apiClient.put(`/admin/taxonomy/categories/${id}`, payload);
+    const { data } = await apiClient.put(
+      `/admin/taxonomy/categories/${id}`,
+      payload,
+    );
     return data;
   },
 
@@ -29,18 +51,27 @@ export const taxonomyAdminService = {
   },
 
   // Problem Mapping
-  mapProblem: async (payload: { categoryId: string, problemId: string, order?: number }) => {
+  mapProblem: async (payload: {
+    categoryId: string;
+    problemId: string;
+    order?: number;
+  }) => {
     const { data } = await apiClient.post("/admin/taxonomy/map", payload);
     return data;
   },
 
-  batchMapProblems: async (payload: { categoryId: string, mappings: any[] }) => {
+  batchMapProblems: async (payload: {
+    categoryId: string;
+    mappings: any[];
+  }) => {
     const { data } = await apiClient.post("/admin/taxonomy/map/batch", payload);
     return data;
   },
 
   unmapProblem: async (categoryId: string, problemId: string) => {
-    const { data } = await apiClient.delete(`/admin/taxonomy/map/${categoryId}/${problemId}`);
+    const { data } = await apiClient.delete(
+      `/admin/taxonomy/map/${categoryId}/${problemId}`,
+    );
     return data;
-  }
+  },
 };

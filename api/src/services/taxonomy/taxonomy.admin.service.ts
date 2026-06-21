@@ -1,16 +1,16 @@
-import { type ICradle } from '../../libs/awilix-container';
-import { type ITaxonomyAdminRepository } from '../../repositories/taxonomy/taxonomy.admin.repository';
-import { type ITaxonomyRepository } from '../../repositories/taxonomy/taxonomy.repository';
-import { type IProblemRepository } from '../../repositories/problems/problem.repository';
+import { type ICradle } from "../../libs/awilix-container";
+import { type ITaxonomyAdminRepository } from "../../repositories/taxonomy/taxonomy.admin.repository";
+import { type ITaxonomyRepository } from "../../repositories/taxonomy/taxonomy.repository";
+import { type IProblemRepository } from "../../repositories/problems/problem.repository";
 import {
   type CreateCategoryPayload,
   type UpdateCategoryPayload,
   type MapProblemPayload,
   type BatchMapProblemPayload,
   type CategoryTreeNode,
-} from '../../types/taxonomy/taxonomy.types';
-import { AppError } from '../../utils/app-error';
-import { ERRORS } from '../../constants/errors';
+} from "../../types/taxonomy/taxonomy.types";
+import { AppError } from "../../utils/app-error";
+import { ERRORS } from "../../constants/errors";
 
 export interface ITaxonomyAdminService {
   getAdminTree(): Promise<CategoryTreeNode[]>;
@@ -20,7 +20,11 @@ export interface ITaxonomyAdminService {
   deleteCategory(id: string): Promise<void>;
   mapProblemToCategory(payload: MapProblemPayload): Promise<void>;
   batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void>;
-  unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void>;
+  unmapProblemFromCategory(
+    categoryId: string,
+    problemId: string,
+  ): Promise<void>;
+  getRoadmapStats(): Promise<any>;
 }
 
 export class TaxonomyAdminService implements ITaxonomyAdminService {
@@ -28,7 +32,11 @@ export class TaxonomyAdminService implements ITaxonomyAdminService {
   private readonly taxonomyRepo: ITaxonomyRepository;
   private readonly problemRepo: IProblemRepository;
 
-  constructor({ taxonomyAdminRepository, taxonomyRepository, problemRepository }: ICradle) {
+  constructor({
+    taxonomyAdminRepository,
+    taxonomyRepository,
+    problemRepository,
+  }: ICradle) {
     this.taxonomyAdminRepo = taxonomyAdminRepository;
     this.taxonomyRepo = taxonomyRepository;
     this.problemRepo = problemRepository;
@@ -69,26 +77,35 @@ export class TaxonomyAdminService implements ITaxonomyAdminService {
   async createCategory(payload: CreateCategoryPayload): Promise<any> {
     const existing = await this.taxonomyRepo.findCategoryBySlug(payload.slug);
     if (existing) {
-      throw AppError.conflict(`A category with slug "${payload.slug}" already exists`);
+      throw AppError.conflict(
+        `A category with slug "${payload.slug}" already exists`,
+      );
     }
     return this.taxonomyAdminRepo.createCategory(payload);
   }
 
-  async updateCategory(id: string, payload: UpdateCategoryPayload): Promise<any> {
+  async updateCategory(
+    id: string,
+    payload: UpdateCategoryPayload,
+  ): Promise<any> {
     const existing = await this.taxonomyRepo.findCategoryById(id);
     if (!existing) {
-      throw AppError.notFound('Category not found');
+      throw AppError.notFound("Category not found");
     }
 
     if (payload.slug && payload.slug !== existing.slug) {
-      const existingSlug = await this.taxonomyRepo.findCategoryBySlug(payload.slug);
+      const existingSlug = await this.taxonomyRepo.findCategoryBySlug(
+        payload.slug,
+      );
       if (existingSlug) {
-        throw AppError.conflict(`A category with slug "${payload.slug}" already exists`);
+        throw AppError.conflict(
+          `A category with slug "${payload.slug}" already exists`,
+        );
       }
     }
 
     if (payload.parentId === id) {
-      throw AppError.badRequest('A category cannot be its own parent');
+      throw AppError.badRequest("A category cannot be its own parent");
     }
 
     return this.taxonomyAdminRepo.updateCategory(id, payload);
@@ -97,7 +114,7 @@ export class TaxonomyAdminService implements ITaxonomyAdminService {
   async deleteCategory(id: string): Promise<void> {
     const existing = await this.taxonomyRepo.findCategoryById(id);
     if (!existing) {
-      throw AppError.notFound('Category not found');
+      throw AppError.notFound("Category not found");
     }
 
     await this.taxonomyAdminRepo.deleteCategory(id);
@@ -109,7 +126,7 @@ export class TaxonomyAdminService implements ITaxonomyAdminService {
       this.problemRepo.findByProblemId(payload.problemId),
     ]);
 
-    if (!category) throw AppError.notFound('Category not found');
+    if (!category) throw AppError.notFound("Category not found");
     if (!problem) throw AppError.from(ERRORS.PROBLEM.NOT_FOUND);
 
     await this.taxonomyAdminRepo.mapProblem({
@@ -119,20 +136,33 @@ export class TaxonomyAdminService implements ITaxonomyAdminService {
     });
   }
 
-  async batchMapProblemsToCategory(payload: BatchMapProblemPayload): Promise<void> {
-    const category = await this.taxonomyRepo.findCategoryById(payload.categoryId);
-    if (!category) throw AppError.notFound('Category not found');
+  async batchMapProblemsToCategory(
+    payload: BatchMapProblemPayload,
+  ): Promise<void> {
+    const category = await this.taxonomyRepo.findCategoryById(
+      payload.categoryId,
+    );
+    if (!category) throw AppError.notFound("Category not found");
 
-    const mappings = payload.mappings.map((m: { problemId: string; order?: number }) => ({
-      categoryId: payload.categoryId,
-      problemId: m.problemId,
-      order: m.order ?? 0,
-    }));
+    const mappings = payload.mappings.map(
+      (m: { problemId: string; order?: number }) => ({
+        categoryId: payload.categoryId,
+        problemId: m.problemId,
+        order: m.order ?? 0,
+      }),
+    );
 
     await this.taxonomyAdminRepo.batchMapProblems(mappings);
   }
 
-  async unmapProblemFromCategory(categoryId: string, problemId: string): Promise<void> {
+  async unmapProblemFromCategory(
+    categoryId: string,
+    problemId: string,
+  ): Promise<void> {
     await this.taxonomyAdminRepo.unmapProblem(categoryId, problemId);
+  }
+
+  async getRoadmapStats(): Promise<any> {
+    return this.taxonomyAdminRepo.getRoadmapStats();
   }
 }

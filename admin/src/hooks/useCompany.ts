@@ -2,6 +2,29 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { companyAdminService, type Company } from "@/services/company.service";
 import { toast } from "sonner";
 
+export const useCompanyStats = () => {
+  const statsQuery = useQuery({
+    queryKey: ["admin-company-stats"],
+    queryFn: async () => {
+      return await companyAdminService.getStats();
+    },
+  });
+
+  return {
+    stats: statsQuery.data || { 
+      companies: 0, 
+      totalQuestions: 0,
+      topCompaniesBySolves: [],
+      totalDifficultyBreakdown: { easy: 0, medium: 0, hard: 0 },
+      solvedDifficultyBreakdown: { easy: 0, medium: 0, hard: 0 }
+    },
+    isLoading: statsQuery.isLoading,
+    isError: statsQuery.isError,
+    error: statsQuery.error,
+    refetch: statsQuery.refetch,
+  };
+};
+
 export const useCompanyAdmin = () => {
   const queryClient = useQueryClient();
 

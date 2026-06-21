@@ -2,6 +2,23 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { contestAdminService, type Contest } from "@/services/contest.service";
 import { toast } from "sonner";
 
+export const useContestStats = () => {
+  const statsQuery = useQuery({
+    queryKey: ["admin-contest-stats"],
+    queryFn: async () => {
+      return await contestAdminService.getStats();
+    },
+  });
+
+  return {
+    stats: statsQuery.data || { contests: 0 },
+    isLoading: statsQuery.isLoading,
+    isError: statsQuery.isError,
+    error: statsQuery.error,
+    refetch: statsQuery.refetch,
+  };
+};
+
 export const useContestAdmin = () => {
   const queryClient = useQueryClient();
 
@@ -62,5 +79,4 @@ export const useContestAdmin = () => {
     isDeleting: deleteMutation.isPending,
   };
 };
-
 

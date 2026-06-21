@@ -1,4 +1,4 @@
-import { type IAcademyAdminRepository } from "../../repositories/academy/academy.admin.repository";
+import { type IAcademyAdminRepository, type AcademyStats } from "../../repositories/academy/academy.admin.repository";
 import { AppError } from "../../utils/app-error";
 
 export interface IAcademyAdminService {
@@ -21,6 +21,7 @@ export interface IAcademyAdminService {
   updateExercise(trackSlug: string, exerciseSlug: string, data: any): Promise<any>;
   deleteExercise(trackSlug: string, exerciseSlug: string): Promise<boolean>;
   getExercisesByTrack(trackSlug: string): Promise<any[]>;
+  getStats(): Promise<AcademyStats>;
 }
 
 export class AcademyAdminService implements IAcademyAdminService {
@@ -155,5 +156,9 @@ export class AcademyAdminService implements IAcademyAdminService {
 
   async getExercisesByTrack(trackSlug: string): Promise<any[]> {
     return await this.academyAdminRepository.getExercisesByTrack(trackSlug);
+  }
+
+  async getStats(): Promise<AcademyStats> {
+    return await this.academyAdminRepository.getStats();
   }
 }

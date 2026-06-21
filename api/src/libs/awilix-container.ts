@@ -19,6 +19,7 @@ import { type SubmissionRepository } from "../repositories/submissions/submissio
 import { type ArenaRepository } from "../repositories/arena/arena.repository";
 import { type ArenaMatchRepository } from "../repositories/arena/arena-match.repository";
 import { type ArenaSubmissionRepository } from "../repositories/arena/arena-submission.repository";
+import { type IArenaAdminRepository } from "../repositories/arena/arena.admin.repository";
 import { type StatsRepository } from "../repositories/stats/stats.repository";
 import { type ContestRepository } from "../repositories/contest/contest.repository";
 import { type ContestAdminRepository } from "../repositories/contest/contest.admin.repository";
@@ -36,6 +37,7 @@ import { type AiProblemService } from "../services/problems/ai-problem.service";
 import { type AiAddSolveService } from "../services/problems/ai-addsolve.service";
 import { type TestcaseGeneratorService } from "../services/problems/testcase-generator.service";
 import { type ArenaService } from "../services/arena/arena.service";
+import { type IArenaAdminService } from "../services/arena/arena.admin.service";
 import {
   type ArenaMatchService,
   type IArenaMatchService,
@@ -87,6 +89,7 @@ import type { ProblemTestController } from "../controllers/problems/problem-test
 import { type SubmissionController } from "../controllers/submissions/submission.controller";
 import { type AiProblemController } from "../controllers/problems/ai-problem.controller";
 import { type ArenaController } from "../controllers/arena/arena.controller";
+import { type ArenaAdminController } from "../controllers/arena/arena.admin.controller";
 import { type UserController } from "../controllers/user/user.controller";
 import { type UserAdminController } from "../controllers/user/user.admin.controller";
 import { type CompilerController } from "../controllers/compiler/compiler.controller";
@@ -175,6 +178,7 @@ export interface ICradle {
   arenaRepository: ArenaRepository;
   arenaMatchRepository: ArenaMatchRepository;
   arenaSubmissionRepository: ArenaSubmissionRepository;
+  arenaAdminRepository: IArenaAdminRepository;
   statsRepository: StatsRepository;
   contestRepository: ContestRepository;
   contestAdminRepository: ContestAdminRepository;
@@ -212,6 +216,7 @@ export interface ICradle {
   rawArenaMatchService: IArenaMatchService;
   arenaMatchCache: IArenaMatchService;
   arenaService: ArenaService;
+  arenaAdminService: IArenaAdminService;
   matchValidatorService: MatchValidatorService;
   problemValidatorService: ProblemValidatorService;
   aiCodeJudgeService: AiCodeJudgeService;
@@ -297,6 +302,7 @@ export interface ICradle {
   submissionController: SubmissionController;
   aiProblemController: AiProblemController;
   arenaController: ArenaController;
+  arenaAdminController: ArenaAdminController;
   statsController: StatsController;
   userController: UserController;
   compilerController: CompilerController;

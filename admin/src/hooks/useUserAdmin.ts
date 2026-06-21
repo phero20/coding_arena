@@ -1,7 +1,30 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userAdminService } from "@/services/user.service";
-import type { User, UserStats, UserActivity, UserSolvedProblem, UserSolvedLanguage, UserAcademyExercise } from "@/types/user";
+import type { User, UserStats, UserActivity, UserSolvedProblem, UserAcademyExercise, UserSolvedLanguage } from "@/types/user";
 import { toast } from "sonner";
+
+export const useUserCounts = () => {
+  const query = useQuery({
+    queryKey: ["admin-user-counts"],
+    queryFn: () => userAdminService.getCounts(),
+  });
+
+  return {
+    counts: query.data || {
+      users: 0,
+      userSolvedProblems: 0,
+      userSolvedLanguages: 0,
+      userAcademyExercises: 0,
+      solutions: 0,
+      totalSubmissions: 0,
+      arenaMatches: 0,
+      arenaSubmissions: 0,
+    },
+    isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+  };
+};
 
 export const useUserAdmin = () => {
   const queryClient = useQueryClient();
@@ -313,6 +336,37 @@ export const useUserSolvedLanguagesAdmin = (userId?: string) => {
     isCreating: createMutation.isPending,
 
     deleteSolvedLanguage: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isPending,
+  };
+};
+
+export const useUserSolutionsAdmin = (userId?: string) => {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["admin-user-solutions", userId],
+    queryFn: () => userId ? userAdminService.getUserSolutions(userId) : null,
+    enabled: !!userId,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: ({ id, solutionId }: { id: string; solutionId: string }) => userAdminService.deleteUserSolution(id, solutionId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-user-solutions", variables.id] });
+      toast.success("Solution deleted successfully!");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || error.message || "Failed to delete solution");
+    },
+  });
+
+  return {
+    solutions: query.data || [],
+    isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+
+    deleteSolution: deleteMutation.mutateAsync,
     isDeleting: deleteMutation.isPending,
   };
 };
