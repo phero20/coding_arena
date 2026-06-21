@@ -24,7 +24,7 @@ export function UserSection() {
   ];
 
   return (
-    <div className="space-y-4 py-28 border-b">
+    <div className="space-y-4 py-20">
       <DashboardSectionHeader title="Users & Engagement" description="Overall statistics on user registrations and platform activity" />
 
       <QueryState isLoading={isLoading} isError={isError} error={error} loadingMessage="Loading user metrics...">
