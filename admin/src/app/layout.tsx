@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { AuthInitializer } from "@/components/providers/AuthInitializer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -55,11 +56,12 @@ export default function RootLayout({
               disableTransitionOnChange
               forcedTheme="dark"
             >
-              <div className="min-h-full">
+              <div className="flex flex-col min-h-screen relative">
                 <Navbar />
-                <main className="flex-1 w-full mx-auto p-2 md:p-6">
+                <main className="flex-1 w-full mx-auto p-2 md:p-6 z-10 relative">
                   {children}
                 </main>
+                <Footer />
               </div>
             </ThemeProvider>
           </QueryProvider>
