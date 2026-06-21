@@ -4,7 +4,7 @@ import { SignInButton, useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LogIn, LogOut, Menu } from "lucide-react";
@@ -24,10 +24,28 @@ export function Navbar() {
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check on mount
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="flex items-center justify-between px-6 py-4 border-b border-border bg-background transition-all duration-100 sticky top-0 z-50">
+    <nav 
+      className={cn(
+        "flex items-center justify-between px-6 transition-all duration-200 sticky top-0 z-50",
+        pathname === "/" && !scrolled && !mobileMenuOpen ? "bg-transparent" : "bg-background",
+        scrolled
+          ? "py-4 border-b border-border shadow-sm"
+          : "py-6 border-b border-transparent"
+      )}
+    >
       <div className="flex items-center gap-2 md:gap-4">
         {/* Mobile Menu Trigger */}
         <div className="lg:hidden">
