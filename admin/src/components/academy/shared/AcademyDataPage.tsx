@@ -74,7 +74,7 @@ export function AcademyDataPage({
   };
 
   return (
-    <div className="h-[calc(100vh-7.5rem)] overflow-hidden px-2">
+    <div className="h-[calc(100vh-7.5rem)] overflow-hidden p-2 md:p-6">
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
