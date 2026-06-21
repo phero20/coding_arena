@@ -1,6 +1,32 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { academyAdminService } from "@/services/academy.service";
+import { academyAdminService, type AcademyStats } from "@/services/academy.service";
 import { toast } from "sonner";
+
+export const useAcademyStats = () => {
+  const statsQuery = useQuery({
+    queryKey: ["admin-academy-stats"],
+    queryFn: async () => {
+      return await academyAdminService.getStats();
+    },
+  });
+
+  return {
+    stats: (statsQuery.data || { 
+      tracks: 0, 
+      configs: 0, 
+      concepts: 0, 
+      exercises: 0,
+      conceptsPerTrack: [],
+      exercisesPerTrack: [],
+      difficultyDistribution: [],
+      userSolvesPerTrack: []
+    }) as AcademyStats,
+    isLoading: statsQuery.isLoading,
+    isError: statsQuery.isError,
+    error: statsQuery.error,
+    refetch: statsQuery.refetch,
+  };
+};
 
 export const useAcademyTracks = () => {
   const queryClient = useQueryClient();
