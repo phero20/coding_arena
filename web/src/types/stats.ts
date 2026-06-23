@@ -11,6 +11,7 @@ export interface UserStats {
   bestStreak: number;
   languageCounts?: Record<string, number>; // e.g. { java: 12, python: 5 }
   rank?: number | null;
+  academySolvedCount?: number;
 }
 
 export interface UserActivityLog {

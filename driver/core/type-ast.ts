@@ -13,7 +13,7 @@ export type TypeNode =
   | { kind: "list"; element: TypeNode }
   | { kind: "set"; element: TypeNode }
   | { kind: "map"; key: TypeNode; value: TypeNode }
-  | { kind: "node"; nodeType: "ListNode" | "TreeNode" }
+  | { kind: "node"; nodeType: "ListNode" | "TreeNode" | "RandomListNode" | "NaryTreeNode" | "GraphNode" | "DoublyLinkedListNode" }
   | { kind: "custom"; name: string };
 
 function normalize(raw: string): string {
@@ -69,6 +69,10 @@ export function parseType(type: string): TypeNode {
   const low = s.toLowerCase();
   if (low === "listnode") return { kind: "node", nodeType: "ListNode" };
   if (low === "treenode") return { kind: "node", nodeType: "TreeNode" };
+  if (low === "randomlistnode" || low === "node") return { kind: "node", nodeType: "RandomListNode" };
+  if (low === "narytreenode") return { kind: "node", nodeType: "NaryTreeNode" };
+  if (low === "graphnode") return { kind: "node", nodeType: "GraphNode" };
+  if (low === "doublylinkedlistnode") return { kind: "node", nodeType: "DoublyLinkedListNode" };
 
   const listInner = unwrapList(s);
   if (listInner) {
@@ -117,6 +121,10 @@ export function javaType(node: TypeNode): string {
     case "map":
       return `Map<${boxIfPrimitive(javaType(node.key))}, ${boxIfPrimitive(javaType(node.value))}>`;
     case "node":
+      if (node.nodeType === "RandomListNode" || node.nodeType === "NaryTreeNode" || 
+          node.nodeType === "GraphNode" || node.nodeType === "DoublyLinkedListNode") {
+        return "Node";
+      }
       return node.nodeType;
     case "custom":
       return node.name;

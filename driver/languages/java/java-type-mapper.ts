@@ -35,8 +35,19 @@ export class JavaTypeMapper extends BaseTypeMapper {
       const n = `n${this.varCounter++}`;
       if (type.nodeType === "ListNode") {
         return `${indent}int ${n} = sc.nextInt();\n${indent}ListNode ${name} = buildList(${n}, sc);`;
+      } else if (type.nodeType === "TreeNode") {
+        return `${indent}int ${n} = sc.nextInt();\n${indent}TreeNode ${name} = buildTree(${n}, sc);`;
+      } else if (type.nodeType === "RandomListNode") {
+        return `${indent}int ${n} = sc.nextInt();\n${indent}Node ${name} = buildRandomList(${n}, sc);`;
+      } else if (type.nodeType === "GraphNode") {
+        return `${indent}int ${n} = sc.nextInt();\n${indent}Node ${name} = buildGraph(${n}, sc);`;
+      } else if (type.nodeType === "DoublyLinkedListNode") {
+        return `${indent}int ${n} = sc.nextInt();\n${indent}DoublyLinkedListNode ${name} = buildDoublyList(${n}, sc);`;
+      } else if (type.nodeType === "NaryTreeNode") {
+        return `${indent}int ${n} = sc.nextInt();\n${indent}Node ${name} = buildNaryTree(${n}, sc);`;
+      } else {
+        throw new Error(`Data structure ${type.nodeType} is currently unsupported in the Java driver.`);
       }
-      return `${indent}int ${n} = sc.nextInt();\n${indent}TreeNode ${name} = buildTree(${n}, sc);`;
     }
 
     if (type.kind === "list") {
@@ -141,15 +152,15 @@ export class JavaTypeMapper extends BaseTypeMapper {
     const inPlaceExpr =
       inPlaceIndices.length === 1
         ? sig.params[inPlaceIndices[0]]?.name ?? "null"
-        : `Arrays.asList(${inPlaceIndices
+        : `new Object[]{${inPlaceIndices
             .map((idx) => sig.params[idx]?.name)
             .filter(Boolean)
-            .join(", ")})`;
+            .join(", ")}}`;
     const resultSource = isVoid ? inPlaceExpr : "result";
 
     const executionCall = isVoid 
       ? `solution.${sig.name}(${argList});`
-      : `${this.mapToJavaType(sig.return_type)} result = solution.${sig.name}(${argList});`;
+      : `Object result = solution.${sig.name}(${argList});`;
 
     return [
       `                __phase = "parse_expected";`,
@@ -166,8 +177,29 @@ export class JavaTypeMapper extends BaseTypeMapper {
   }
 
   private generateExpectedExtractionLine(sig: FunctionSignature): string {
-    const t = parseType(sig.return_type);
-    const decl = this.mapToJavaType(sig.return_type);
+    let returnTypeStr = sig.return_type;
+    if (returnTypeStr.toLowerCase() === "void") {
+      const inPlaceIndices = sig.inplace_param_indices && sig.inplace_param_indices.length > 0 
+        ? sig.inplace_param_indices 
+        : [sig.inplace_param_index ?? 0];
+      
+      if (inPlaceIndices.length > 1) {
+        const parts = [];
+        parts.push(`Object[] __expected = new Object[${inPlaceIndices.length}];`);
+        inPlaceIndices.forEach((idx, i) => {
+          const pType = sig.params[idx].type;
+          const t = parseType(pType);
+          const line = this.generateReadLogic(t, `__expected_${i}`, "");
+          parts.push(line);
+          parts.push(`__expected[${i}] = __expected_${i};`);
+        });
+        return parts.join("\n                ");
+      }
+      
+      returnTypeStr = sig.params[inPlaceIndices[0]]?.type ?? "void";
+    }
+    const t = parseType(returnTypeStr);
+    const decl = this.mapToJavaType(returnTypeStr);
     if (t.kind === "primitive") {
       if (t.primitive === "string") return `String __expected = decodeString(sc.next());`;
       if (t.primitive === "char") return `char __expected = decodeString(sc.next()).charAt(0);`;
@@ -181,8 +213,19 @@ export class JavaTypeMapper extends BaseTypeMapper {
       const n = `n${this.varCounter++}`;
       if (t.nodeType === "ListNode") {
         return `int ${n} = sc.nextInt(); ListNode __expected = buildList(${n}, sc);`;
+      } else if (t.nodeType === "TreeNode") {
+        return `int ${n} = sc.nextInt(); TreeNode __expected = buildTree(${n}, sc);`;
+      } else if (t.nodeType === "RandomListNode") {
+        return `int ${n} = sc.nextInt(); Node __expected = buildRandomList(${n}, sc);`;
+      } else if (t.nodeType === "GraphNode") {
+        return `int ${n} = sc.nextInt(); Node __expected = buildGraph(${n}, sc);`;
+      } else if (t.nodeType === "DoublyLinkedListNode") {
+        return `int ${n} = sc.nextInt(); DoublyLinkedListNode __expected = buildDoublyList(${n}, sc);`;
+      } else if (t.nodeType === "NaryTreeNode") {
+        return `int ${n} = sc.nextInt(); Node __expected = buildNaryTree(${n}, sc);`;
+      } else {
+        throw new Error(`Data structure ${t.nodeType} is currently unsupported in the Java driver.`);
       }
-      return `int ${n} = sc.nextInt(); TreeNode __expected = buildTree(${n}, sc);`;
     }
     // array/list/set/map/custom -> reuse generic reader
     // declare and read into temp var name "__expected"
@@ -195,7 +238,7 @@ export class JavaTypeMapper extends BaseTypeMapper {
   public generateClassExecutionBlock(sig: ClassSignature): string {
     const lines: string[] = [];
     lines.push(`                int numCommands = sc.nextInt();`);
-    lines.push(`                Object[] results = new Object[numCommands];`);
+    lines.push(`                String[] results = new String[numCommands];`);
     lines.push(`                ${sig.class_name} obj = null;`);
     lines.push(`                long start = System.nanoTime();`);
     lines.push(`                for (int j = 0; j < numCommands; j++) {`);
@@ -210,7 +253,7 @@ export class JavaTypeMapper extends BaseTypeMapper {
     lines.push(...constructorArgs);
     const constructorCallArgs = sig.constructor_params.map(p => `arg_${p.name}`).join(", ");
     lines.push(`                        obj = new ${sig.class_name}(${constructorCallArgs});`);
-    lines.push(`                        results[j] = null;`);
+    lines.push(`                        results[j] = "null";`);
 
     // Methods handling
     for (const method of sig.methods) {
@@ -224,9 +267,15 @@ export class JavaTypeMapper extends BaseTypeMapper {
         const isVoid = method.return_type.toLowerCase() === "void";
         if (isVoid) {
             lines.push(`                        obj.${method.name}(${methodCallArgs});`);
-            lines.push(`                        results[j] = null;`);
+            lines.push(`                        results[j] = "null";`);
         } else {
-            lines.push(`                        results[j] = obj.${method.name}(${methodCallArgs});`);
+            if (method.return_type === "TreeNode" || method.return_type === "ListNode") {
+                const javaTypeStr = this.mapToJavaType(method.return_type);
+                lines.push(`                        ${javaTypeStr} __res = obj.${method.name}(${methodCallArgs});`);
+                lines.push(`                        results[j] = __res == null ? "[]" : serialize(__res);`);
+            } else {
+                lines.push(`                        results[j] = serialize(obj.${method.name}(${methodCallArgs}));`);
+            }
         }
     }
 
@@ -247,7 +296,7 @@ export class JavaTypeMapper extends BaseTypeMapper {
     lines.push(`                StringBuilder __resSb = new StringBuilder("[");`);
     lines.push(`                StringBuilder __expSb = new StringBuilder("[");`);
     lines.push(`                for (int __j = 0; __j < numCommands; __j++) {`);
-    lines.push(`                    String __actual = serialize(results[__j]);`);
+    lines.push(`                    String __actual = results[__j];`);
     lines.push(`                    String __expected = (__j < __exp.length) ? (__exp[__j].equals("null") ? "null" : decodeString(__exp[__j])) : "null";`);
     lines.push(`                    if (!__actual.equals(__expected)) __allPass = false;`);
     lines.push(`                    __resSb.append(__actual); if (__j < numCommands - 1) __resSb.append(",");`);

@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Check, Code2, GraduationCap } from "lucide-react";
 import { Card } from "../ui/card";
 import { useDifficultyMetrics } from "@/hooks/stats/use-difficulty-metrics";
-import { useSolvedExercisesQuery } from "@/hooks/queries/use-academy.queries";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
 
@@ -16,7 +15,6 @@ interface SolveBreakdownProps {
 
 export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
   const [viewMode, setViewMode] = useState<"arena" | "academy">("arena");
-  const { data: academySolved } = useSolvedExercisesQuery("all");
 
   const size = 155;
   const strokeWidth = 6;
@@ -29,7 +27,7 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
       return arenaMetrics.segments;
     }
 
-    const count = academySolved?.length || 0;
+    const count = stats.academySolvedCount || 0;
     const total = 7787;
     const progress = total > 0 ? (count / total) * arenaMetrics.arcLength : 0;
 
@@ -46,10 +44,10 @@ export function SolveBreakdown({ stats, className }: SolveBreakdownProps) {
         rotate: 0,
       },
     ];
-  }, [viewMode, arenaMetrics, academySolved]);
+  }, [viewMode, arenaMetrics, stats.academySolvedCount]);
 
   const currentTotalSolved =
-    viewMode === "arena" ? arenaMetrics.totalSolved : academySolved?.length || 0;
+    viewMode === "arena" ? arenaMetrics.totalSolved : stats.academySolvedCount || 0;
   const currentGlobalTotal = viewMode === "arena" ? arenaMetrics.globalTotal : 7787;
   const bottomLabel = viewMode === "arena" ? "SlaveCode" : "Academy";
 

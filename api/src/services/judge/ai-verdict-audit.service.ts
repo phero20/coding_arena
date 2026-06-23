@@ -1,6 +1,6 @@
 import type { SubmissionStatus } from "../../mongo/models/submission.model";
 import type { ExecutionTestResult } from "../../libs/utils/verdict.util";
-import { GeminiLlmService } from "../ai/gemini-llm.service";
+import { UnifiedLlmService } from "../ai/unified-llm.service";
 import type { IProblemService } from "../problems/problem.service";
 import {
   type AiVerdictAuditInput,
@@ -16,11 +16,11 @@ import {
 import { type ICradle } from "../../libs/awilix-container";
 
 export class AiVerdictAuditService {
-  private readonly llm: GeminiLlmService;
+  private readonly llm: UnifiedLlmService;
   private readonly problemService: IProblemService;
 
-  constructor({ llm, problemService }: ICradle) {
-    this.llm = llm;
+  constructor({ unifiedLlmService, problemService }: ICradle) {
+    this.llm = unifiedLlmService;
     this.problemService = problemService;
   }
 

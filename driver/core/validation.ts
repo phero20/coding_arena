@@ -30,19 +30,22 @@ function validateFunctionTestCase(tc: TestCase, sig: FunctionSignature, idx: num
 function validateClassTestCase(tc: TestCase, sig: ClassSignature, idx: number): void {
   const input = tc.input as any;
   assert(input && typeof input === "object", `testCases[${idx}].input must be object`);
-  assert(Array.isArray(input.commands), `testCases[${idx}].input.commands must be array`);
-  assert(Array.isArray(input.arguments), `testCases[${idx}].input.arguments must be array`);
+  const cmds = input.commands || input.operations || input.methods;
+  const args = input.arguments || input.parameters || input.args;
+
+  assert(Array.isArray(cmds), `testCases[${idx}].input.commands must be array`);
+  assert(Array.isArray(args), `testCases[${idx}].input.arguments must be array`);
   assert(
-    input.commands.length === input.arguments.length,
+    cmds.length === args.length,
     `testCases[${idx}] commands/arguments length mismatch`,
   );
   assert(
-    input.commands[0] === sig.class_name,
+    cmds[0] === sig.class_name,
     `testCases[${idx}] first command must be constructor ${sig.class_name}`,
   );
 
-  for (let i = 0; i < input.commands.length; i++) {
-    const cmd = input.commands[i];
+  for (let i = 0; i < cmds.length; i++) {
+    const cmd = cmds[i];
     if (i === 0) continue;
     const exists = sig.methods.some((m) => m.name === cmd);
     assert(

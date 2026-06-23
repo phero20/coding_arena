@@ -54,7 +54,7 @@ export const TestCaseField: React.FC<
   const displayValue = isError 
     ? value 
     : isOutput 
-      ? formatValue(value)
+      ? formatValue(parsedValue)
       : beautifyTestCaseInput(value);
 
   return (

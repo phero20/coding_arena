@@ -1,6 +1,7 @@
 import { type IStatsRepository } from "../../repositories/stats/stats.repository";
 import { type IUserRepository } from "../../repositories/user/user.repository";
 import { type IFollowRepository } from "../../repositories/user/follow.repository";
+import { type IAcademyRepository } from "../../repositories/academy/academy.repository";
 import { type ICradle } from "../../libs/awilix-container";
 import { createLogger } from "../../libs/utils/logger";
 
@@ -26,6 +27,7 @@ export class StatsService implements IStatsService {
   private readonly followRepository: IFollowRepository;
   private readonly leetcodeService: ILeetCodeService;
   private readonly leaderboardCache: import("../../cache/stats/leaderboard.cache").LeaderboardCache;
+  private readonly academyRepository: IAcademyRepository;
 
   constructor({
     statsRepository,
@@ -33,12 +35,14 @@ export class StatsService implements IStatsService {
     followRepository,
     leetcodeService,
     leaderboardCache,
+    academyRepository,
   }: ICradle) {
     this.statsRepository = statsRepository;
     this.userRepository = userRepository;
     this.followRepository = followRepository;
     this.leetcodeService = leetcodeService;
     this.leaderboardCache = leaderboardCache;
+    this.academyRepository = academyRepository;
   }
 
   /**
@@ -106,7 +110,7 @@ export class StatsService implements IStatsService {
     }
 
     // 2. Fetch parallel data for efficiency
-    const [stats, activityLog, followStats, leetcodeStats, rankData] = await Promise.all([
+    const [stats, activityLog, followStats, leetcodeStats, rankData, academySolvedCount] = await Promise.all([
       this.statsRepository.getUserStats(user.id),
       this.statsRepository.getUserActivityLog(user.id),
       this.getFollowContext(user.id, viewerClerkId),
@@ -114,6 +118,7 @@ export class StatsService implements IStatsService {
         ? this.leetcodeService.getUserStats(user.leetcodeUsername)
         : Promise.resolve(null),
       this.leaderboardCache.getUserRank(user.id),
+      this.academyRepository.getAcademySolvedCount(user.id),
     ]);
 
     return {
@@ -140,6 +145,7 @@ export class StatsService implements IStatsService {
           currentStreak: 0,
           bestStreak: 0,
         }),
+        academySolvedCount: academySolvedCount || 0,
         rank: rankData?.rank || null,
       },
       activityLog: activityLog || [],

@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "../../db";
 import { userAcademyExercises } from "../../db/schema";
 import { AcademyTrackModel } from "../../mongo/models/academymodels/academy-track.model";
@@ -15,6 +15,7 @@ export interface IAcademyRepository {
   getTrackExercise(trackSlug: string, exerciseSlug: string): Promise<any>;
   markExerciseSolved(userId: string, trackSlug: string, exerciseSlug: string): Promise<boolean>;
   getSolvedExercises(userId: string, trackSlug: string): Promise<string[]>;
+  getAcademySolvedCount(userId: string): Promise<number>;
 }
 
 export class AcademyRepository implements IAcademyRepository {
@@ -92,5 +93,13 @@ export class AcademyRepository implements IAcademyRepository {
       .where(and(...filters));
 
     return solved.map((s) => s.exerciseSlug);
+  }
+
+  async getAcademySolvedCount(userId: string): Promise<number> {
+    const [result] = await db
+      .select({ count: sql<number>`cast(count(*) as integer)` })
+      .from(userAcademyExercises)
+      .where(eq(userAcademyExercises.userId, userId));
+    return result?.count || 0;
   }
 }

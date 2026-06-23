@@ -16,7 +16,27 @@ export interface GenerateJsonOptions {
   temperature?: number;
   model?: string;
   maxTokens?: number;
+  order?: "order1" | "order2";
 }
+
+interface LlmStep {
+  provider: "groq" | "gemini";
+  model: string;
+}
+
+const ORDER1: LlmStep[] = [
+  { provider: "groq", model: "llama-3.3-70b-versatile" },
+  { provider: "gemini", model: "gemini-2.5-flash" },
+  { provider: "groq", model: "llama-3.1-8b-instant" },
+  { provider: "gemini", model: "gemini-1.5-flash-8b" }
+];
+
+const ORDER2: LlmStep[] = [
+  { provider: "gemini", model: "gemini-2.5-flash" },
+  { provider: "groq", model: "llama-3.3-70b-versatile" },
+  { provider: "gemini", model: "gemini-1.5-flash-8b" },
+  { provider: "groq", model: "llama-3.1-8b-instant" }
+];
 
 /**
  * Unified LLM Gateway Service
@@ -35,30 +55,31 @@ export class UnifiedLlmService {
   }
 
   async generateJson<T>(opts: GenerateJsonOptions): Promise<UnifiedJsonResponse<T>> {
-    try {
-      logger.info("Attempting AI evaluation via Gemini (Primary: gemini-2.5-flash)");
-      return await this.geminiLlmService.generateJson<T>({ ...opts, model: "gemini-2.5-flash" });
-    } catch (err1: any) {
-      logger.warn({ error: err1.message }, "Gemini 2.5 Flash failed. Falling back to Groq (llama-3.3-70b-versatile).");
-      
+    const order = opts.order || "order1";
+    const steps = order === "order2" ? ORDER2 : ORDER1;
+
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
       try {
-        return await this.groqLlmService.generateJson<T>({ ...opts, model: "llama-3.3-70b-versatile" });
-      } catch (err2: any) {
-        logger.warn({ error: err2.message }, "Groq 70b failed. Falling back to Gemini (gemini-1.5-flash-8b).");
-
-        try {
-          return await this.geminiLlmService.generateJson<T>({ ...opts, model: "gemini-1.5-flash-8b" });
-        } catch (err3: any) {
-          logger.warn({ error: err3.message }, "Gemini 1.5 Flash 8B failed. Falling back to Groq (llama-3.1-8b-instant).");
-
-          try {
-            return await this.groqLlmService.generateJson<T>({ ...opts, model: "llama-3.1-8b-instant" });
-          } catch (err4: any) {
-            logger.error({ error: err4.message }, "All 4 LLM fallback stages failed.");
-            throw new Error("All primary and fallback AI evaluation services failed.");
-          }
+        if (i === 0) {
+          logger.info(`Attempting AI evaluation via ${step.provider === "groq" ? "Groq" : "Gemini"} (Primary: ${step.model})`);
+        }
+        
+        if (step.provider === "groq") {
+          return await this.groqLlmService.generateJson<T>({ ...opts, model: step.model });
+        } else {
+          return await this.geminiLlmService.generateJson<T>({ ...opts, model: step.model });
+        }
+      } catch (err: any) {
+        if (i < steps.length - 1) {
+          const nextStep = steps[i + 1];
+          logger.warn({ error: err.message }, `${step.provider === "groq" ? "Groq" : "Gemini"} ${step.model} failed. Falling back to ${nextStep.provider === "groq" ? "Groq" : "Gemini"} (${nextStep.model}).`);
+        } else {
+          logger.error({ error: err.message }, `All ${steps.length} LLM fallback stages failed.`);
         }
       }
     }
+
+    throw new Error("All primary and fallback AI evaluation services failed.");
   }
 }

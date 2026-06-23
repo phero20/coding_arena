@@ -19,11 +19,16 @@ export abstract class BaseTypeMapper {
     const parts: string[] = [];
     
     sig.params.forEach(param => {
-      this.flattenValue(input[param.name], parseType(param.type), parts);
+      this.flattenValue(input[param.name], parseType(param.type), parts, input);
     });
 
     // expected output
-    this.flattenValue((input as any).__expected_output ?? (input as any).expected_output, parseType(sig.return_type), parts);
+    let returnTypeStr = sig.return_type;
+    if (returnTypeStr.toLowerCase() === "void") {
+      const inplaceIdx = sig.inplace_param_indices?.[0] ?? sig.inplace_param_index ?? 0;
+      returnTypeStr = sig.params[inplaceIdx]?.type ?? "void";
+    }
+    this.flattenValue((input as any).__expected_output ?? (input as any).expected_output, parseType(returnTypeStr), parts, input);
 
     parts.push("@@CASE_END@@");
 
@@ -32,24 +37,25 @@ export abstract class BaseTypeMapper {
 
   public flattenClassInput(input: Record<string, any>, sig: ClassSignature, expectedOutput?: any[]): string {
     const parts: string[] = [];
-    const commands = (input.commands || input.operations || []) as string[];
-    const args = (input.arguments || input.parameters || []) as any[][];
+    const commands = (input.commands || input.operations || input.methods || []) as string[];
+    const args = (input.arguments || input.parameters || input.args || []) as any[][];
 
     parts.push(String(commands.length));
 
     for (let i = 0; i < commands.length; i++) {
         const cmd = commands[i];
-        parts.push(Buffer.from(cmd).toString("base64"));
+        const b64 = Buffer.from(cmd).toString("base64");
+        parts.push(b64 === "" ? "-" : b64);
 
         if (cmd === sig.class_name) {
             sig.constructor_params.forEach((p, idx) => {
-                this.flattenValue(args[i]?.[idx] ?? null, parseType(p.type), parts);
+                this.flattenValue(args[i]?.[idx] ?? null, parseType(p.type), parts, input);
             });
         } else {
             const method = sig.methods.find(m => m.name === cmd);
             if (method) {
                 method.params.forEach((p, idx) => {
-                    this.flattenValue(args[i]?.[idx] ?? null, parseType(p.type), parts);
+                    this.flattenValue(args[i]?.[idx] ?? null, parseType(p.type), parts, input);
                 });
             } else {
                 throw new Error(`Unknown class command in testcase: ${cmd}`);
@@ -60,11 +66,21 @@ export abstract class BaseTypeMapper {
     // Append expected output array
     const exp = expectedOutput ?? [];
     parts.push(String(exp.length));
-    for (const v of exp) {
+    for (let i = 0; i < exp.length; i++) {
+      const v = exp[i];
       if (v === null || v === undefined) {
         parts.push("null");
       } else {
-        parts.push(Buffer.from(String(v)).toString("base64"));
+        let strVal = JSON.stringify(v);
+        const cmd = commands[i];
+        if (cmd && cmd !== sig.class_name) {
+          const method = sig.methods.find(m => m.name === cmd);
+          if (method && (method.return_type === "double" || method.return_type === "float") && typeof v === "number" && Number.isInteger(v)) {
+            strVal = v.toFixed(1);
+          }
+        }
+        const b64 = Buffer.from(strVal).toString("base64");
+        parts.push(b64 === "" ? "-" : b64);
       }
     }
 
@@ -72,7 +88,7 @@ export abstract class BaseTypeMapper {
     return parts.join(" ");
   }
 
-  protected flattenValue(val: any, type: TypeNode, parts: string[]): void {
+  protected flattenValue(val: any, type: TypeNode, parts: string[], fullInput: Record<string, any>): void {
     const MAX_COLLECTION_ITEMS = 200000;
     
     if (val === null || val === undefined) {
@@ -86,6 +102,9 @@ export abstract class BaseTypeMapper {
         }
       } else {
         parts.push("0");
+        if (type.kind === "node" && type.nodeType === "ListNode") {
+            parts.push("-1"); // push pos for null list
+        }
       }
       return;
     }
@@ -105,6 +124,26 @@ export abstract class BaseTypeMapper {
       parts.push(String(arr.length));
       if (type.nodeType === "TreeNode") {
         parts.push(...arr.map((v: any) => (v === null ? "null" : String(v))));
+      } else if (type.nodeType === "RandomListNode") {
+        for (const pair of arr) {
+          if (Array.isArray(pair) && pair.length >= 2) {
+            parts.push(String(pair[0]));
+            parts.push(pair[1] === null ? "null" : String(pair[1]));
+          } else {
+            parts.push("null", "null");
+          }
+        }
+      } else if (type.nodeType === "GraphNode") {
+        for (const v of arr) {
+          if (Array.isArray(v)) {
+            parts.push(v.length === 0 ? "empty" : v.join(","));
+          } else {
+            parts.push("empty");
+          }
+        }
+      } else if (type.nodeType === "ListNode") {
+        parts.push(...arr.map((v: any) => String(v)));
+        parts.push(String(fullInput?.pos ?? "-1"));
       } else {
         parts.push(...arr.map((v: any) => String(v)));
       }

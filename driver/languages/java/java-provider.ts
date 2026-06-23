@@ -48,15 +48,43 @@ export class JavaProvider extends LanguageProvider {
     validateDriverOptions(options);
     this.mapper.reset(); // Fix #3: reset varCounter so mapper can be safely reused
 
+    let inferredNode = "RandomListNode"; // Default fallback
+    const userCode = options.userCode || "";
+    if (userCode.includes("Node random;") || userCode.includes(".random")) {
+      inferredNode = "RandomListNode";
+    } else if (userCode.includes("List<Node> neighbors;") || userCode.includes(".neighbors")) {
+      inferredNode = "GraphNode";
+    } else if (userCode.includes("List<Node> children;") || userCode.includes(".children")) {
+      inferredNode = "NaryTreeNode";
+    } else if (userCode.includes("Node child;") || userCode.includes("Node prev;")) {
+      inferredNode = "DoublyLinkedListNode";
+    }
+
+    let signature = JSON.parse(JSON.stringify(options.signature));
+    
+    // Carefully replace "Node" or "node" with the inferredNode in return_type and param types
+    if (signature.return_type && signature.return_type.toLowerCase() === "node") {
+      signature.return_type = inferredNode;
+    }
+    if (signature.params) {
+      signature.params.forEach((p: any) => {
+        if (p.type && p.type.toLowerCase() === "node") {
+          p.type = inferredNode;
+        }
+      });
+    }
+    
+    let sigStr = JSON.stringify(signature);
+
     const template = await loadTemplate();
 
-    const isClassProblem = "class_name" in options.signature;
+    const isClassProblem = "class_name" in signature;
 
     let driverLogic = "";
     let stdinLines: string[] = [];
 
     if (isClassProblem) {
-      const sig = options.signature as any; // Cast to ClassSignature
+      const sig = signature as any; // Cast to ClassSignature
       driverLogic = this.mapper.generateClassExecutionBlock(sig);
       stdinLines = [
         options.testCases.length.toString(),
@@ -65,7 +93,7 @@ export class JavaProvider extends LanguageProvider {
         ),
       ];
     } else {
-      const sig = options.signature as any; // Cast to FunctionSignature
+      const sig = signature as any; // Cast to FunctionSignature
       const extractionLines = sig.params
         .map((p: any) => this.mapper.generateExtractionLine(p))
         .join("\n");
@@ -107,19 +135,35 @@ export class JavaProvider extends LanguageProvider {
       sourceCode = sourceCode.replace(/^\s*Solution\s+solution\s+=\s+new\s+Solution\(\);/m, (match) => "// " + match.trim());
     }
 
-    // Fix Duplicate Class conflict: If user provides their own ListNode or TreeNode, comment out the platform defaults
-    const codeWithoutComments = stripComments(cleanUserCode);
-    
-    if (/\bclass\s+ListNode\b/.test(codeWithoutComments)) {
-      sourceCode = sourceCode.replace(/\/\* \[\[LIST_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[LIST_NODE_END\]\] \*\//, "// ListNode overridden by user");
-      // Also remove builders that depend on the default ListNode
-      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_LIST_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_LIST_END\]\] \*\//, "// buildList removed (ListNode overridden)");
+    const targetClass = isClassProblem ? (signature as any).class_name : "Solution";
+    sourceCode = sourceCode.replace(/\{\{TARGET_CLASS\}\}/g, targetClass);
+
+    // Dynamically inject platform data structures only if the problem actually requires them
+    if (!sigStr.includes("ListNode")) {
+      sourceCode = sourceCode.replace(/\/\* \[\[LIST_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[LIST_NODE_END\]\] \*\//g, "");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_LIST_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_LIST_END\]\] \*\//g, "");
     }
-    if (/\bclass\s+TreeNode\b/.test(codeWithoutComments)) {
-      sourceCode = sourceCode.replace(/\/\* \[\[TREE_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[TREE_NODE_END\]\] \*\//, "// TreeNode overridden by user");
-      // Also remove builders that depend on the default TreeNode
-      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_TREE_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_TREE_END\]\] \*\//, "// buildTree removed (TreeNode overridden)");
+    if (!sigStr.includes("TreeNode")) {
+      sourceCode = sourceCode.replace(/\/\* \[\[TREE_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[TREE_NODE_END\]\] \*\//g, "");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_TREE_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_TREE_END\]\] \*\//g, "");
     }
+    if (!sigStr.includes("RandomListNode") && !sigStr.includes(`"Node"`) && !driverLogic.includes("buildRandomList")) {
+      sourceCode = sourceCode.replace(/\/\* \[\[RANDOM_LIST_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[RANDOM_LIST_NODE_END\]\] \*\//g, "");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_RANDOM_LIST_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_RANDOM_LIST_END\]\] \*\//g, "");
+    }
+    if (!sigStr.includes("GraphNode") && !driverLogic.includes("buildGraph")) {
+      sourceCode = sourceCode.replace(/\/\* \[\[GRAPH_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[GRAPH_NODE_END\]\] \*\//g, "");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_GRAPH_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_GRAPH_END\]\] \*\//g, "");
+    }
+    if (!sigStr.includes("DoublyLinkedListNode")) {
+      sourceCode = sourceCode.replace(/\/\* \[\[DOUBLY_LIST_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[DOUBLY_LIST_NODE_END\]\] \*\//g, "");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_DOUBLY_LIST_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_DOUBLY_LIST_END\]\] \*\//g, "");
+    }
+    if (!sigStr.includes("NaryTreeNode") && !driverLogic.includes("buildNaryTree")) {
+      sourceCode = sourceCode.replace(/\/\* \[\[NARY_TREE_NODE_START\]\] \*\/[\s\S]*?\/\* \[\[NARY_TREE_NODE_END\]\] \*\//g, "");
+      sourceCode = sourceCode.replace(/\/\* \[\[BUILD_NARY_TREE_START\]\] \*\/[\s\S]*?\/\* \[\[BUILD_NARY_TREE_END\]\] \*\//g, "");
+    }
+
 
     return {
       sourceCode,
@@ -129,10 +173,3 @@ export class JavaProvider extends LanguageProvider {
   }
 }
 
-function stripComments(code: string): string {
-  // Remove multi-line comments first
-  let result = code.replace(/\/\*[\s\S]*?\*\//g, "");
-  // Remove single-line comments
-  result = result.replace(/\/\/.*$/gm, "");
-  return result;
-}

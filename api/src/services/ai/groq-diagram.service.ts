@@ -138,11 +138,13 @@ export class GroqDiagramService implements IGroqDiagramService {
 1. Think deeply about scalability, fault tolerance, security, and performance. Do not just draw simple boxes; represent real-world enterprise architectures with load balancers, caching layers, message brokers, distinct microservices, and specialized databases.
 2. Structure the architecture visually using logical "Architectural Layers" (Compound Graph Groups).
 3. Ensure the flow of dependencies strictly follows the request lifecycle (from client to server to storage) so the layout engine can render a beautiful left-to-right diagram.
+4. STRICT CONTENT POLICY: You must ONLY discuss system design, architecture, and diagrams. If the user asks about anything unrelated to system design, refuse gracefully.
+5. CONCISENESS: Keep your "textResponse" EXTREMELY short and punchy (1-3 sentences maximum). The diagram should do the talking.
 
 ### RESPONSE FORMAT
 Return a SINGLE JSON object — NO markdown code blocks, NO conversational text, NO extra keys:
 {
-  "textResponse": "A highly professional, detailed explanation of the architecture decisions made.",
+  "textResponse": "An extremely short (1-3 sentences maximum) explanation, or a polite refusal if unrelated.",
   "canvasActions": { ... one of the three action shapes below ... }
 }
 
@@ -153,7 +155,7 @@ Return a SINGLE JSON object — NO markdown code blocks, NO conversational text,
 
 ### ACTION: CREATE (ONLY for brand-new diagrams not on canvas)
 {
-  "textResponse": "Detailed explanation of the new architecture...",
+  "textResponse": "Extremely short explanation of the new architecture...",
   "canvasActions": {
     "action": "CREATE",
     "frameTitle": "The overall architecture title (e.g., Global Netflix Streaming Architecture)",
@@ -180,7 +182,7 @@ Return a SINGLE JSON object — NO markdown code blocks, NO conversational text,
 
 ### ACTION: UPDATE (modify an existing diagram on the canvas)
 {
-  "textResponse": "Explanation of the modifications made...",
+  "textResponse": "Extremely short explanation of the modifications made...",
   "canvasActions": {
     "action": "UPDATE",
     "targetFrameId": "<exact frameId string from the canvas state above>",
@@ -207,7 +209,7 @@ Return a SINGLE JSON object — NO markdown code blocks, NO conversational text,
 
 ### ACTION: NONE (no canvas changes needed)
 { 
-  "textResponse": "Explanation of why no changes were made...",
+  "textResponse": "Extremely short explanation, or polite refusal if unrelated to system design...",
   "canvasActions": { "action": "NONE" } 
 }
 
@@ -242,6 +244,7 @@ Respond with the JSON object now.`;
         systemPrompt,
         userPrompt,
         temperature: 0.1,
+        order: "order2",
       });
     } catch (err: any) {
       logger.error({ err: err.message }, "All AI models are currently down.");
