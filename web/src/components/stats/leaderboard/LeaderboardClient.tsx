@@ -101,9 +101,7 @@ export function LeaderboardClient({ initialData }: LeaderboardClientProps) {
                   <PaginationContent className="border border-border/60 rounded-lg p-1 bg-card/40 backdrop-blur-sm">
                     <PaginationItem>
                       <PaginationPrevious
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
+                        onClick={() => {
                           handlePrevPage();
                         }}
                         className={cn(
@@ -129,10 +127,8 @@ export function LeaderboardClient({ initialData }: LeaderboardClientProps) {
                           pages.push(
                             <PaginationItem key={i}>
                               <PaginationLink
-                                href="#"
                                 isActive={currentPage === i}
-                                onClick={(e) => {
-                                  e.preventDefault();
+                                onClick={() => {
                                   setOffset((i - 1) * limit);
                                 }}
                               >
@@ -156,9 +152,7 @@ export function LeaderboardClient({ initialData }: LeaderboardClientProps) {
 
                     <PaginationItem>
                       <PaginationNext
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
+                        onClick={() => {
                           handleNextPage();
                         }}
                         className={cn(

@@ -226,9 +226,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       if (currentPage > 1) setCurrentPage(p => p - 1);
                     }}
                     className={cn(currentPage === 1 && "pointer-events-none opacity-50")}
@@ -245,10 +243,8 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
                     return (
                       <PaginationItem key={page}>
                         <PaginationLink 
-                          href="#" 
                           isActive={currentPage === page}
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={() => {
                             setCurrentPage(page);
                           }}
                         >
@@ -269,9 +265,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
 
                 <PaginationItem>
                   <PaginationNext 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       if (currentPage < totalPages) setCurrentPage(p => p + 1);
                     }}
                     className={cn(currentPage === totalPages && "pointer-events-none opacity-50")}

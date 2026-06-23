@@ -173,9 +173,7 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       if (currentPage > 1) setCurrentPage(p => p - 1);
                     }}
                     className={cn(currentPage === 1 && "pointer-events-none opacity-50")}
@@ -192,10 +190,8 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
                     return (
                       <PaginationItem key={page}>
                         <PaginationLink 
-                          href="#" 
                           isActive={currentPage === page}
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={() => {
                             setCurrentPage(page);
                           }}
                         >
@@ -216,9 +212,7 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
 
                 <PaginationItem>
                   <PaginationNext 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       if (currentPage < totalPages) setCurrentPage(p => p + 1);
                     }}
                     className={cn(currentPage === totalPages && "pointer-events-none opacity-50")}

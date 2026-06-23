@@ -95,11 +95,6 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} SlaveCode. All rights reserved.</p>
-          <div className="flex gap-6">
-            {/* <Link href="#" title="Twitter" className="hover:text-primary transition-colors font-medium">Twitter</Link>
-            <Link href="#" title="GitHub" className="hover:text-primary transition-colors font-medium">GitHub</Link>
-            <Link href="#" title="Discord" className="hover:text-primary transition-colors font-medium">Discord</Link> */}
-          </div>
         </div>
       </Container>
     </footer>

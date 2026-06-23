@@ -214,7 +214,7 @@ const CompilerSection = () => {
               className="text-lg font-bold text-primary hover:text-primary/80 gap-2 h-auto p-0"
               asChild
             >
-              <Link href="/compiler">
+              <Link href="/compilers">
                 Open Compiler <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>

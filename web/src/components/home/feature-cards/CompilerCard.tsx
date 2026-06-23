@@ -14,7 +14,7 @@ int main() {
 
 export function CompilerCard() {
   return (
-    <BentoCard href="/compiler" className="min-h-[340px] group/card relative">
+    <BentoCard href="/compilers" className="min-h-[340px] group/card relative">
       <div className="flex-1 flex flex-col overflow-hidden bg-background/20 h-full">
         {/* Simple Header */}
         <div className="h-12 px-4 flex items-center border-b border-border/40 bg-card/40 backdrop-blur-md shrink-0">

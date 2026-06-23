@@ -55,9 +55,9 @@ export default function RootLayout({
             </Providers>
           </AppThemeProvider>
         </body>
-        {/* {PUBLIC_CONFIG.GA_ID && <GoogleAnalytics gaId={PUBLIC_CONFIG.GA_ID} />}
+        {PUBLIC_CONFIG.GA_ID && <GoogleAnalytics gaId={PUBLIC_CONFIG.GA_ID} />}
         <Analytics />
-        <SpeedInsights /> */}
+        <SpeedInsights />
       </html>
     </AppClerkProvider>
   );

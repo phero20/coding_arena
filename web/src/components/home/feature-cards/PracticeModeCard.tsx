@@ -15,7 +15,7 @@ const PYTHON_CODE = `def two_sum(nums, target):
 
 export function PracticeModeCard() {
   return (
-    <BentoCard href="/problem" className="min-h-[360px]">
+    <BentoCard href="/problems" className="min-h-[360px]">
       <div className="flex-1 flex flex-col h-full bg-background relative overflow-hidden group">
         {/* Global Toolbar mimicking Hero */}
         <div className="h-12 px-4 flex items-center justify-between border-b border-border/40 bg-card/20 shrink-0">

@@ -253,9 +253,7 @@ export function RecentActivities({
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       if (currentPage > 1) setCurrentPage((p) => p - 1);
                     }}
                     className={cn(
@@ -274,10 +272,8 @@ export function RecentActivities({
                     return (
                       <PaginationItem key={page}>
                         <PaginationLink
-                          href="#"
                           isActive={page === currentPage}
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={() => {
                             setCurrentPage(page);
                           }}
                         >
@@ -298,9 +294,7 @@ export function RecentActivities({
 
                 <PaginationItem>
                   <PaginationNext
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
+                    onClick={() => {
                       if (currentPage < totalPages)
                         setCurrentPage((p) => p + 1);
                     }}
