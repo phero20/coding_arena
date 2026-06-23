@@ -188,7 +188,7 @@ export const DescriptionPanel = React.memo(
                     <div className="flex items-center justify-between mb-2">
                       <h1 className="text-xl font-bold tracking-tight text-foreground/90 flex items-center gap-2">
                         {mode === "exercise" ? (
-                          <img
+                          <img width={100} height={100}
                             src={`/assets/practice-icon/${trackSlug}/${problem.problem_slug}.svg`}
                             alt={`${problem.title} icon`}
                             className="w-14 object-contain"
@@ -325,7 +325,7 @@ export const DescriptionPanel = React.memo(
                                   key={imgIdx}
                                   className="overflow-hidden border-border/20"
                                 >
-                                  <img
+                                  <img width={100} height={100}
                                     src={imgUrl}
                                     alt={`Example ${example.example_num} visualization`}
                                     className="max-h-[300px] w-auto block object-contain"

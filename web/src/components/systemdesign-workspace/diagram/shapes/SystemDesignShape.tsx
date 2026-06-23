@@ -73,7 +73,7 @@ export class SystemDesignShapeUtil extends BaseBoxShapeUtil<any> {
         }}
       >
         {asset ? (
-          <img
+          <img width={100} height={100}
             src={asset.path}
             alt={asset.name}
             style={{ 

@@ -221,7 +221,7 @@ export function GlobalSearchResultsPanel({
                   className="flex flex-col items-center gap-1.5 p-2 h-auto w-full min-w-0 bg-muted/10 hover:bg-accent border shadow-none select-none overflow-hidden"
                 >
                   <Card className="h-8 w-8 flex items-center justify-center shrink-0 p-1 bg-background rounded border shadow-none">
-                    <img
+                    <img width={100} height={100}
                       src={asset.path}
                       alt={asset.name}
                       className="h-full w-full object-contain"
@@ -308,7 +308,7 @@ export function GlobalSearchResultsPanel({
                   className="flex flex-col items-center gap-1.5 p-2 h-auto w-full min-w-0 bg-muted/10 hover:bg-accent border shadow-none select-none overflow-hidden"
                 >
                   <Card className="h-8 w-8 flex items-center justify-center shrink-0 p-1 bg-background rounded border shadow-none">
-                    <img
+                    <img width={100} height={100}
                       src={asset.path}
                       alt={asset.name}
                       className="h-full w-full object-contain"
@@ -338,7 +338,7 @@ export function GlobalSearchResultsPanel({
                   className="flex flex-col items-center gap-1.5 p-2 h-auto w-full min-w-0 bg-muted/10 hover:bg-accent border shadow-none select-none overflow-hidden"
                 >
                   <Card className="h-8 w-8 flex items-center justify-center shrink-0 p-1 bg-background rounded border shadow-none">
-                    <img
+                    <img width={100} height={100}
                       src={asset.path}
                       alt={asset.name}
                       className="h-full w-full object-contain"
@@ -383,7 +383,7 @@ export function GlobalSearchResultsPanel({
                   className="flex flex-col items-center gap-1.5 p-2 h-auto w-full min-w-0 bg-muted/10 hover:bg-accent border shadow-none select-none overflow-hidden"
                 >
                   <Card className="h-8 w-8 flex items-center justify-center shrink-0 p-1 bg-background rounded border shadow-none">
-                    <img
+                    <img width={100} height={100}
                       src={asset.path}
                       alt={asset.name}
                       className="h-full w-full object-contain"

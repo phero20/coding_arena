@@ -57,7 +57,7 @@ export const SlugAboutTab = ({ config }: { config: TrackConfigResponse }) => {
 
             {/* The glowing central icon */}
             <div className="relative z-10 flex items-center justify-center w-64 h-64">
-              <img
+              <img width={100} height={100}
                 src={config.icon_url}
                 alt={config.language}
                 className="w-full h-full object-contain relative z-20 transition-transform duration-500"

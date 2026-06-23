@@ -251,52 +251,52 @@ export const SystemDesignWorkspaceDemo = () => {
 
                             {/* Nodes */}
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 50, top: 340, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-api-gateway_48.svg" alt="API gateway" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-api-gateway_48.svg" alt="API gateway" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">API gateway</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 210, top: 340, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_aws-lambda_48.svg" alt="Lambda" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_aws-lambda_48.svg" alt="Lambda" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Lambda</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 430, top: 340, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Server" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Server" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Server</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 610, top: 340, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-rds_48.svg" alt="Data" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-rds_48.svg" alt="Data" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Data</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 600, top: 130, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-simple-queue-service_48.svg" alt="Queue" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-simple-queue-service_48.svg" alt="Queue" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Queue</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10 mt-4" style={{ left: 840, top: 40, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Worker3" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Worker3" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Worker1</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10 mt-2" style={{ left: 840, top: 140, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Worker2" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Worker2" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Worker2</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 840, top: 240, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Worker1" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-ec2_48.svg" alt="Worker1" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Worker1</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 840, top: 440, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-simple-storage-service_48.svg" alt="S3" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-simple-storage-service_48.svg" alt="S3" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">S3</span>
                             </div>
 
                             <div className="absolute flex flex-col items-center gap-1.5 z-10" style={{ left: 1040, top: 220, width: 80 }}>
-                                <img src="/assets/diagram/system/arch_amazon-athena_48.svg" alt="Analytics" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
+                                <img width={100} height={100} src="/assets/diagram/system/arch_amazon-athena_48.svg" alt="Analytics" className="w-[44px] h-[44px] object-contain drop-shadow-lg" />
                                 <span className="text-[10px] font-bold text-zinc-100 font-mono tracking-tight">Analytics</span>
                             </div>
                         </div>

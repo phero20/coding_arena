@@ -113,7 +113,7 @@ const MockPracticeCard = ({ card }: { card: typeof MOCK_PRACTICE_CARDS[0] }) => 
     )}>
       {/* Icon */}
       <div className={cn("h-14 w-14 sm:h-16 sm:w-16 shrink-0 rounded-full flex items-center justify-center p-1")}>
-        <img
+        <img width={100} height={100}
           src={card.icon_url}
           alt={card.title}
           className="h-full w-full object-contain rounded-full"

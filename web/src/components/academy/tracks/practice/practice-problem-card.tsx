@@ -55,7 +55,7 @@ function PracticeProblemCardContent({
       )}>
         <div className="relative flex h-full w-full items-start gap-4">
           <div className="relative mt-1 shrink-0">
-            <img
+            <img width={100} height={100}
               src={imageSrc}
               onError={handleImageError}
               alt={name}

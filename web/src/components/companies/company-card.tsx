@@ -18,7 +18,7 @@ export function CompanyCard({ company }: { company: Company }) {
              <CompanyLogo className="w-8 h-8 md:w-10 md:h-10 shrink-0" />
           </div>
         ) : (
-          <img
+          <img width={100} height={100}
             src={company.imageUrl}
             alt={company.name}
             onError={() => setImgError(true)}

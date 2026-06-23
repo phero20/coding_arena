@@ -152,7 +152,7 @@ export function ReportBugForm() {
                   key={f.id} 
                   className="relative w-24 h-24 rounded-xl overflow-hidden border border-border/50 shadow-sm shrink-0 bg-background/50"
                 >
-                  <img 
+                  <img width={100} height={100} 
                     src={f.preview} 
                     alt="Screenshot preview" 
                     className="w-full h-full object-cover" 

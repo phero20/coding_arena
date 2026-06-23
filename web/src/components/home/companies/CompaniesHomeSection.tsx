@@ -33,7 +33,7 @@ export const CompaniesHomeSection = () => {
       <div className="mx-auto max-w-7xl px-4 md:px-8 relative z-10 flex flex-col gap-16">
 
         {/* Header using the real CompaniesHeader component */}
-        <CompaniesHeader totalCompanies={470} sampleCompanies={headerCompanies} />
+        <CompaniesHeader totalCompanies={470} sampleCompanies={headerCompanies} as="h2" />
 
         {/* 3-Row Grid with Bottom Overlay */}
         <div className="relative mt-8 pb-4 pointer-events-none">

@@ -19,7 +19,7 @@ const PlatformIcon = ({ platform, icon }: { platform: string; icon?: string | nu
   if (icon && !imgError) {
     return (
       <div className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden">
-        <img 
+        <img width={100} height={100} 
           src={icon} 
           alt={platform} 
           className="h-full w-full object-contain" 

@@ -85,7 +85,7 @@ const PlatformIcon = ({ platform, icon, size = "md" }: { platform: string; icon?
   if (icon) {
     return (
       <div className={`flex shrink-0 items-center justify-center overflow-hidden`}>
-        <img src={icon} alt={platform} className="h-full w-full object-contain" />
+        <img width={100} height={100} src={icon} alt={platform} className="h-full w-full object-contain" />
       </div>
     );
   }

@@ -88,7 +88,7 @@ export function SlugAboutFeatures({
             }}
           >
             {icon ? (
-              <img src={icon} alt="Track icon" className="w-full h-full object-contain relative z-10" />
+              <img width={100} height={100} src={icon} alt="Track icon" className="w-full h-full object-contain relative z-10" />
             ) : (
               <Code className="w-full text-primary relative z-10" />
             )}

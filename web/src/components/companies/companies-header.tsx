@@ -7,9 +7,11 @@ import { useState } from "react";
 interface CompaniesHeaderProps {
   totalCompanies: number;
   sampleCompanies: Company[];
+  as?: 'h1' | 'h2';
 }
 
-export function CompaniesHeader({ totalCompanies, sampleCompanies }: CompaniesHeaderProps) {
+export function CompaniesHeader({ totalCompanies, sampleCompanies, as = 'h1' }: CompaniesHeaderProps) {
+  const Heading = as;
   return (
     <section className="flex flex-col items-center justify-center text-center space-y-12">
       {/* Overlapping Hexagon Icons (fallback applied if image fails) */}
@@ -24,7 +26,7 @@ export function CompaniesHeader({ totalCompanies, sampleCompanies }: CompaniesHe
                 zIndex: 10 - Math.floor(Math.abs(3.5 - i)),
                 transform: `translateY(${Math.pow(i - 3.5, 2) * 2}px)`
               }}
-              title={company.name}
+              aria-label={company.name}
             >
               <CompanyIcon company={company} index={i} />
             </Link>
@@ -34,9 +36,9 @@ export function CompaniesHeader({ totalCompanies, sampleCompanies }: CompaniesHe
 
       {/* Typography */}
       <div className="space-y-4 max-w-3xl flex flex-col items-center">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground">
+        <Heading className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground">
           <span className="text-primary">{totalCompanies} companies</span> for you to master
-        </h1>
+        </Heading>
         <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl">
           Master your preferred company questions through curated, 
           structured learning tracks designed for deliberate practice.
@@ -89,7 +91,7 @@ function CompanyIcon({ company, index }: { company: Company; index: number }) {
             {company.name.charAt(0).toUpperCase()}
           </div>
         ) : (
-          <img
+          <img width={100} height={100}
             src={company.imageUrl}
             alt={company.name}
             onError={() => setImgError(true)}

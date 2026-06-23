@@ -13,7 +13,7 @@ export function TrackCard({ track }: TrackCardProps) {
       {/* Icon Side */}
       <div className="flex h-20 w-20 shrink-0 items-center justify-center">
         {/* Exercism icons typically include the hexagon. We use object-contain to fit it properly. */}
-        <img
+        <img width={100} height={100}
           src={track.icon_url}
           alt={`${track.title} icon`}
           className="h-full w-full object-contain"

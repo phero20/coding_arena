@@ -8,7 +8,7 @@ export const SlugHeader = ({ config }: { config: TrackConfigResponse }) => {
     <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10 py-6">
       {/* Left side: Icon and Title */}
       <div className="flex items-center gap-3 shrink-0">
-        <img
+        <img width={100} height={100}
           src={config.icon_url}
           alt={config.language}
           className="w-16 object-contain relative z-10"

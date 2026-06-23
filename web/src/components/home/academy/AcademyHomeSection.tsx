@@ -74,7 +74,7 @@ const MockTrackCard = ({ track }: { track: typeof MOCK_TRACKS[0] }) => (
   <Card className="group flex flex-row items-center gap-4 overflow-hidden p-4 transition-all duration-300 hover:border-primary/50 w-full">
     {/* Icon Side */}
     <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center p-1.5">
-      <img
+      <img width={100} height={100}
         src={track.icon_url}
         alt={`${track.title} icon`}
         className="h-full w-full object-contain drop-shadow-sm"
@@ -127,6 +127,7 @@ export const AcademyHomeSection = () => {
               <TracksHeader 
                 totalTracks={totalTracks} 
                 sampleTracks={MOCK_TRACKS as any} 
+                as="h2"
               />
             </div>
           </div>

@@ -55,7 +55,7 @@ export const SlugAboutContent = ({ content, language }: { content?: string, lang
                 <blockquote className="border-l-[4px] border-primary/50 pl-6 bg-secondary/5 rounded-r-xl italic text-muted-foreground/90 my-8 py-3 pr-4 text-[17px]" {...props} />
               ),
               img: ({ node, ...props }) => (
-                <img className="rounded-xl border border-border/50 my-8 max-w-full h-auto shadow-sm" {...props} />
+                <img width={100} height={100} className="rounded-xl border border-border/50 my-8 max-w-full h-auto shadow-sm" {...props} />
               ),
               hr: ({ node, ...props }) => <hr className="my-12 border-border/40" {...props} />,
               table: ({ node, ...props }) => (

@@ -96,7 +96,7 @@ function VirtualizedIconGrid({
                       size="icon"
                       onClick={() => onIconClick(asset.id, asset.name)}
                     >
-                      <img
+                      <img width={100} height={100}
                         src={asset.path}
                         alt={asset.name}
                         className="w-full h-full object-contain rounded"
