@@ -1,11 +1,8 @@
-import fs from "fs";
-import path from "path";
 import React from "react";
 
 export function OGLayout({ children }: { children: React.ReactNode }) {
-  // We read the logo once and convert it so it can be passed to Satori
-  const logoData = fs.readFileSync(path.join(process.cwd(), "public", "logos", "logo.png"));
-  const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
+  // We use an absolute URL so Vercel's Satori can fetch it automatically without file system errors
+  const logoSrc = "https://slavecode.codes/logos/logo.png";
 
   return (
     <div
