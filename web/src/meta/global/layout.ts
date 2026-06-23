@@ -11,7 +11,7 @@ export const globalMetadata: Metadata = {
     template: "%s | SlaveCode",
   },
   description:
-    "Standardize your coding journey. From basic academy courses and guided roadmaps to advanced system design, company interview prep, and real-time coding arenas. The all-in-one platform to master algorithms and prove your engineering excellence.",
+    "Master algorithms, system design, and interview prep. Join the ultimate all-in-one coding academy and real-time arena to prove your engineering excellence.",
   applicationName: "SlaveCode",
   alternates: {
     canonical: "/",

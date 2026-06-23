@@ -56,6 +56,7 @@ export const Hero = () => {
           >
             <h1 className="text-[clamp(2.75rem,14vw,7.5rem)] font-bold tracking-tight text-foreground leading-none flex items-baseline whitespace-nowrap max-w-full">
               SlaveCode
+              <span className="sr-only">The Ultimate Platform for Software Engineers</span>
               <span className="ml-1 text-5xl md:text-7xl lg:text-8xl leading-none text-primary/60">
                 .
               </span>

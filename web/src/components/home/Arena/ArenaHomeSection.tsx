@@ -41,9 +41,9 @@ export const ArenaHomeSection = () => {
               <div className="flex h-8 w-8  items-center rounded-xl justify-center border border-border/50 bg-primary">
                 <Swords className="size-4 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-black tracking-tight uppercase opacity-90 text-foreground">
+              <h2 className="text-xl font-black tracking-tight uppercase opacity-90 text-foreground">
                 Arena Lobby
-              </h1>
+              </h2>
             </div>
 
             <div className="mb-6 grid w-full grid-cols-1 gap-3 md:grid-cols-2">

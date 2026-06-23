@@ -21,7 +21,7 @@ export function IdentityCard() {
           </Avatar>
           
           <div className="flex flex-col justify-center gap-1 min-w-0">
-            <h1 className="text-xl font-bold text-foreground">XYZ XYZ</h1>
+            <div className="text-xl font-bold text-foreground">XYZ XYZ</div>
             <p className="text-xs font-bold text-muted-foreground tracking-wider lowercase truncate">
               xyz11
             </p>
