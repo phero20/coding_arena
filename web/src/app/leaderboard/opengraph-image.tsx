@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { ImageResponse } from "next/og";
 import { OGLayout } from "@/meta/og/OGLayout";
 
