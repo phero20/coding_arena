@@ -88,10 +88,11 @@ export const CompilerConsole: React.FC<Props> = ({
                     label="Output"
                     value={result.output}
                     isOutput
+                    isRaw
                   />
                 )}
                 {result.error && (
-                  <TestCaseField label="Error" value={result.error} />
+                  <TestCaseField label="Error" value={result.error} isRaw />
                 )}
                 {!result.output && !result.error && (
                   <Empty label="Program finished — no output" />

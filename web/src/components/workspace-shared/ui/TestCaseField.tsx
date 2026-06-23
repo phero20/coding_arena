@@ -41,8 +41,8 @@ const CopyButton: React.FC<{ value: string }> = ({ value }) => {
 };
 
 export const TestCaseField: React.FC<
-  TestCaseFieldProps & { isError?: boolean; problemTopics?: string[] }
-> = ({ label, value, isOutput, isError, problemTopics = [] }) => {
+  TestCaseFieldProps & { isError?: boolean; problemTopics?: string[]; isRaw?: boolean }
+> = ({ label, value, isOutput, isError, problemTopics = [], isRaw }) => {
   const parsedValue = safeJsonParse(value);
 
   const isDatabaseProblem = useMemo(() => {
@@ -51,7 +51,7 @@ export const TestCaseField: React.FC<
 
   const isTableLayout = !isError && isDatabaseProblem && (getTableFormat(parsedValue) !== null || (typeof parsedValue === "object" && parsedValue !== null && !Array.isArray(parsedValue) && Object.values(parsedValue).some(v => getTableFormat(safeJsonParse(v)) !== null)));
 
-  const displayValue = isError 
+  const displayValue = isRaw || isError 
     ? value 
     : isOutput 
       ? formatValue(parsedValue)

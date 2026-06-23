@@ -230,6 +230,7 @@ export interface TestCaseFieldProps {
   value: any;
   isOutput?: boolean;
   problemTopics?: string[];
+  isRaw?: boolean;
 }
 
 // WorkspaceHeader.tsx
