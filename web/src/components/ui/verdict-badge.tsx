@@ -38,7 +38,7 @@ export const VerdictBadge = ({
     <Badge
       variant="outline"
       className={cn(
-        "text-[9px] md:text-[10px] font-bold uppercase tracking-wider border-none whitespace-nowrap flex items-center gap-1 w-fit leading-none p-2",
+        "text-[9px] md:text-[10px] font-bold uppercase tracking-wider border-none whitespace-nowrap flex items-center gap-1 w-[80px] md:w-fit p-1.5 md:p-2 overflow-hidden",
         config.badgeClass,
         className
       )}
@@ -50,7 +50,7 @@ export const VerdictBadge = ({
         )} 
         size={iconSize}
       />
-      <span className="translate-y-[0.5px]">
+      <span className="truncate">
         {config.label}
       </span>
     </Badge>

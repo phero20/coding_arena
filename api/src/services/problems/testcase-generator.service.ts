@@ -1,4 +1,4 @@
-import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
+import { GeminiLlmService } from "../ai/gemini-llm.service";
 import { type ICradle } from "../../libs/awilix-container";
 import { ProblemModel } from "../../mongo/models/problem.model";
 import { ProblemTestModel } from "../../mongo/models/problem-test.model";
@@ -8,8 +8,8 @@ import { type FunctionSignature } from "../../types/problems/problem.types";
 
 const logger = createLogger("testcase-generator.service");
 
-const PRIMARY_MODEL_ID = "deepseek.v3.2";
-const FALLBACK_MODEL_ID = "openai.gpt-oss-120b-1:0";
+const PRIMARY_MODEL_ID = "gemini-2.5-flash";
+const FALLBACK_MODEL_ID = "gemini-3-flash-preview";
 
 export interface TestCaseGeneratorResult {
   problemId: string;
@@ -19,16 +19,14 @@ export interface TestCaseGeneratorResult {
 }
 
 export class TestcaseGeneratorService {
-  private readonly bedrockClient: BedrockRuntimeClient;
+  private readonly geminiLlmService: GeminiLlmService;
 
-  constructor(_cradle: ICradle) {
-    this.bedrockClient = new BedrockRuntimeClient({
-      region: process.env.AWS_REGION || "us-east-1",
-    });
+  constructor({ geminiLlmService }: ICradle) {
+    this.geminiLlmService = geminiLlmService;
   }
 
   async generateTestcases(problemId: string): Promise<TestCaseGeneratorResult> {
-    logger.info({ problemId }, "Initiating AI test case generation via Amazon Bedrock");
+    logger.info({ problemId }, "Initiating AI test case generation via Google Gemini");
 
     // 1. Fetch lightweight problem data
     const problem = await ProblemModel.findOne({ problem_id: problemId })
@@ -124,22 +122,67 @@ export class TestcaseGeneratorService {
       ];
 
       const userPrompt = userPromptParts.filter(Boolean).join("\n");
-      const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
 
       let data: any = null;
-      let rawResponse = "";
+      let rawResponse: any = null;
+      let publicTests: any[] = [];
+      let hiddenTests: any[] = [];
 
       try {
-        logger.info({ problemId, attempt }, "Invoking PRIMARY model (DeepSeek) for testcase generation");
-        rawResponse = await this.invokeModelOnBedrock(problemId, fullPrompt, PRIMARY_MODEL_ID);
-        data = this.extractAndParseJSON(rawResponse);
+        logger.info({ problemId, attempt, model: PRIMARY_MODEL_ID }, `Invoking PRIMARY model (${PRIMARY_MODEL_ID}) for testcase generation`);
+        const res = await this.geminiLlmService.generateJson<any>({
+          systemPrompt,
+          userPrompt,
+          temperature: 0.1,
+          model: PRIMARY_MODEL_ID,
+        });
+
+        if (!res.data?.tests?.public?.length || !res.data?.tests?.hidden?.length) {
+          throw new Error("PRIMARY model failed to return both public and hidden test arrays.");
+        }
+
+        // Validate immediately
+        const normalized = normalizeTestSuite(
+          res.data.tests.public,
+          res.data.tests.hidden,
+          {
+            functionSignature: signature,
+            classSignature: classSignature
+          }
+        );
+        publicTests = normalized.publicTests;
+        hiddenTests = normalized.hiddenTests;
+        data = res.data;
+        rawResponse = res.raw;
       } catch (err: any) {
-        logger.warn({ problemId, attempt, error: err.message }, "Primary model failed. Falling back to FALLBACK model (GPT)");
+        logger.warn({ problemId, attempt, error: err.message }, `Primary Gemini model failed (API or validation). Falling back to ${FALLBACK_MODEL_ID}`);
         try {
-          rawResponse = await this.invokeModelOnBedrock(problemId, fullPrompt, FALLBACK_MODEL_ID);
-          data = this.extractAndParseJSON(rawResponse);
+          const res = await this.geminiLlmService.generateJson<any>({
+            systemPrompt,
+            userPrompt,
+            temperature: 0.1,
+            model: FALLBACK_MODEL_ID,
+          });
+
+          if (!res.data?.tests?.public?.length || !res.data?.tests?.hidden?.length) {
+            throw new Error("Fallback model failed to return both public and hidden test arrays.");
+          }
+
+          // Validate fallback response
+          const normalized = normalizeTestSuite(
+            res.data.tests.public,
+            res.data.tests.hidden,
+            {
+              functionSignature: signature,
+              classSignature: classSignature
+            }
+          );
+          publicTests = normalized.publicTests;
+          hiddenTests = normalized.hiddenTests;
+          data = res.data;
+          rawResponse = res.raw;
         } catch (fallbackErr: any) {
-          logger.error({ problemId, error: fallbackErr.message }, "Fallback model also failed");
+          logger.error({ problemId, error: fallbackErr.message }, "Fallback Gemini model also failed (API or validation)");
           lastValidationError = fallbackErr.message;
           continue;
         }
@@ -147,22 +190,7 @@ export class TestcaseGeneratorService {
 
       rawAggregate = rawResponse;
 
-      if (!data.tests?.public?.length || !data.tests?.hidden?.length) {
-        lastValidationError = "AI failed to return both public and hidden test arrays.";
-        continue;
-      }
-
       try {
-        // 4. Validate through the canonical parser
-        const { publicTests, hiddenTests } = normalizeTestSuite(
-          data.tests.public,
-          data.tests.hidden,
-          {
-            functionSignature: signature,
-            classSignature: classSignature
-          }
-        );
-
         // 5. Upsert to Database
         await ProblemTestModel.updateOne(
           { problem_id: problemId, type: "public" },
@@ -204,68 +232,12 @@ export class TestcaseGeneratorService {
         };
       } catch (e: any) {
         lastValidationError = e?.message ?? String(e);
-        logger.warn({ problemId, attempt, error: lastValidationError }, "Validation failed. Retrying...");
+        logger.warn({ problemId, attempt, error: lastValidationError }, "Database save failed. Retrying...");
       }
     }
 
     throw new Error(
       lastValidationError ?? "Test case generation failed after retries: validation did not pass."
     );
-  }
-
-  private extractAndParseJSON(raw: string): any {
-    const stripped = raw.replace(/```json/g, "").replace(/```/g, "");
-    const firstBrace = stripped.indexOf("{");
-    const lastBrace = stripped.lastIndexOf("}");
-
-    if (firstBrace === -1 || lastBrace === -1) {
-      throw new Error("No JSON object found in response");
-    }
-
-    const jsonOnly = stripped.slice(firstBrace, lastBrace + 1);
-    return JSON.parse(jsonOnly);
-  }
-
-  private async invokeModelOnBedrock(
-    problemId: string,
-    prompt: string,
-    modelId: string,
-  ): Promise<string> {
-    const payload = {
-      max_completion_tokens: 8000,
-      temperature: 0.1,
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: prompt,
-            },
-          ],
-        },
-      ],
-    };
-
-    const command = new InvokeModelCommand({
-      modelId: modelId,
-      contentType: "application/json",
-      accept: "application/json",
-      body: JSON.stringify(payload),
-    });
-
-    try {
-      const response = await this.bedrockClient.send(command);
-      const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-
-      return responseBody.choices?.[0]?.message?.content ?? "";
-    } catch (error: any) {
-      logger.error(
-        { problemId, errorName: error.name, errorMessage: error.message },
-        "Amazon Bedrock invocation failed",
-      );
-
-      throw new Error(`Bedrock request failed [${error.name ?? "UnknownError"}]: ${error.message}`);
-    }
   }
 }

@@ -3,6 +3,7 @@
 import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Terminal, RefreshCw } from "lucide-react";
+import Link from "next/link";
 
 import {
   TestCaseSkeleton,
@@ -19,6 +20,7 @@ import { useConsoleViewState } from "@/hooks/workspace/use-console-view-state";
 import { type ExecutionVerdict } from "@/types/submission";
 import { VerdictBadge } from "@/components/ui/verdict-badge";
 import { STATUS_CONFIG } from "@/domain/status";
+import { Card } from "@/components/ui/card";
 
 export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
   const {
@@ -234,6 +236,20 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                             <VerdictBadge verdict={activeResultVerdict} />
                           </div>
 
+                          {activeResultVerdict !== "ACCEPTED" &&
+                            activeResultVerdict !== "PENDING" &&
+                            activeResultVerdict !== "RUNNING" && (
+                              <Card className="p-3 text-sm text-muted-foreground leading-relaxed">
+                                Think any testcase or expected output is wrong?{" "}
+                                <Link
+                                  href="/report-bug"
+                                  className="text-primary underline font-semibold underline-offset-1"
+                                >
+                                  Report here
+                                </Link>
+                              </Card>
+                            )}
+
                           <TestCaseField
                             label="Input"
                             value={activeResult.input}
@@ -273,7 +289,7 @@ export const ConsolePanel: React.FC<ConsolePanelProps> = (props) => {
                                 isOutput
                                 problemTopics={problemTopics}
                               />
-                            )}
+                             )}
                         </div>
                       );
                     })()}

@@ -29,14 +29,14 @@ import {
 
 const SUPPORTED_LANGUAGE_IDS = new Set([
   "62",
-  "71",
-  "54",
-  "50",
-  "63",
-  "74",
-  "51",
-  "73",
-  "60",
+  // "71",
+  // "54",
+  // "50",
+  // "63",
+  // "74",
+  // "51",
+  // "73",
+  // "60",
 ]);
 
 export class DriverJudgeExecutionService {

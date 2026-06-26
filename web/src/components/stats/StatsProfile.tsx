@@ -46,7 +46,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
           </>
         ) : isOwner ? (
           <div className="xl:col-span-12">
-            <Card className="flex flex-row items-center justify-between p-3 px-5 border-dashed bg-muted/5 group/connect hover:bg-muted/10 transition-all cursor-pointer border-muted-foreground/20">
+            <Card className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-3 sm:px-5 gap-4 border-dashed bg-muted/5 group/connect hover:bg-muted/10 transition-all cursor-pointer border-muted-foreground/20">
               <div className="flex items-center gap-4">
                 <div className=" shrink-0">
                   <Code2 className="w-5 h-5 text-difficulty-medium" />
@@ -62,7 +62,7 @@ export function StatsProfile({ data }: StatsProfileProps) {
               <Button 
                 variant="default" 
                 size="default"
-                className="shrink-0"
+                className="w-full sm:w-auto shrink-0"
                 onClick={() => router.push("/settings?tab=profile")}
               >
                 Link Account

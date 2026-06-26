@@ -157,7 +157,7 @@ export abstract class BaseTypeMapper {
       }
       parts.push(String(arr.length));
       for (const item of arr) {
-        this.flattenValue(item, type.element, parts);
+        this.flattenValue(item, type.element, parts, fullInput);
       }
       return;
     }
@@ -166,8 +166,8 @@ export abstract class BaseTypeMapper {
       const entries = Array.isArray(val) ? val : Object.entries(val ?? {});
       parts.push(String(entries.length));
       for (const [k, v] of entries as [any, any][]) {
-        this.flattenValue(k, type.key, parts);
-        this.flattenValue(v, type.value, parts);
+        this.flattenValue(k, type.key, parts, fullInput);
+        this.flattenValue(v, type.value, parts, fullInput);
       }
       return;
     }

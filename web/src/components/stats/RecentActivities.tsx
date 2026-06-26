@@ -176,8 +176,7 @@ export function RecentActivities({
                             </span>
                             <Badge
                               variant="secondary"
-                              
-                             className="uppercase text-[10px] px-2"
+                              className="uppercase text-[10px] px-2 hidden sm:inline-flex"
                             >
                               {submission.formattedLang}
                             </Badge>

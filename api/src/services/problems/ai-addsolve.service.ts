@@ -1,7 +1,4 @@
-import {
-  BedrockRuntimeClient,
-  InvokeModelCommand,
-} from "@aws-sdk/client-bedrock-runtime";
+import { GeminiLlmService } from "../ai/gemini-llm.service";
 import { createLogger } from "../../libs/utils/logger";
 import { AppError } from "../../utils/app-error";
 import { ERRORS } from "../../constants/errors";
@@ -9,20 +6,14 @@ import { type ICradle } from "../../libs/awilix-container";
 import type { IProblemRepository } from "../../repositories/problems/problem.repository";
 import type { Problem } from "../../types/problems/problem.types";
 
-const PRIMARY_MODEL_ID = "deepseek.v3.2";
-const FALLBACK_MODEL_ID = "openai.gpt-oss-120b-1:0";
-
 export class AiAddSolveService {
   private readonly logger = createLogger("ai-addsolve-service");
   private readonly problemRepo: IProblemRepository;
-  private readonly bedrockClient: BedrockRuntimeClient;
+  private readonly geminiLlmService: GeminiLlmService;
 
-  constructor({ problemRepository }: ICradle & any) {
+  constructor({ problemRepository, geminiLlmService }: ICradle) {
     this.problemRepo = problemRepository;
-    // AWS SDK automatically picks up AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_REGION from .env
-    this.bedrockClient = new BedrockRuntimeClient({
-      region: process.env.AWS_REGION || "us-east-1",
-    });
+    this.geminiLlmService = geminiLlmService;
   }
 
   /**
@@ -58,11 +49,10 @@ export class AiAddSolveService {
     );
 
     // 1. Build the prompt
-    const prompt = this.buildPrompt(problem);
+    const { systemPrompt, userPrompt } = this.buildPrompt(problem);
 
-    // 2. Call Amazon Bedrock with Retries and Fallback
+    // 2. Call Gemini Llm Service with Retries and Fallback
     const MAX_RETRIES = 3;
-    let rawResponse = "";
     let parsedOutput: any = null;
     let success = false;
     let lastError: any = null;
@@ -71,21 +61,22 @@ export class AiAddSolveService {
       try {
         this.logger.info(
           { problemId, attempt },
-          "Invoking PRIMARY model (DeepSeek)",
+          "Invoking PRIMARY model (gemini-2.5-pro)",
         );
-        rawResponse = await this.invokeModelOnBedrock(
-          problemId,
-          prompt,
-          PRIMARY_MODEL_ID,
-        );
-        parsedOutput = this.extractAndParseJSON(rawResponse);
+        const res = await this.geminiLlmService.generateJson<any>({
+          systemPrompt,
+          userPrompt,
+          temperature: 0.1,
+          model: "gemini-2.5-pro",
+        });
+        parsedOutput = res.data;
         success = true;
         break;
       } catch (err: any) {
         lastError = err;
         this.logger.warn(
           { problemId, attempt, error: err.message },
-          "Primary model failed or returned invalid JSON",
+          "Primary Gemini model failed or returned invalid JSON",
         );
       }
     }
@@ -93,21 +84,22 @@ export class AiAddSolveService {
     if (!success) {
       this.logger.info(
         { problemId },
-        "Primary model failed all retries. Falling back to FALLBACK model (GPT)",
+        "Primary Gemini model failed all retries. Falling back to FALLBACK model (gemini-2.5-flash)",
       );
       try {
-        rawResponse = await this.invokeModelOnBedrock(
-          problemId,
-          prompt,
-          FALLBACK_MODEL_ID,
-        );
-        parsedOutput = this.extractAndParseJSON(rawResponse);
+        const res = await this.geminiLlmService.generateJson<any>({
+          systemPrompt,
+          userPrompt,
+          temperature: 0.1,
+          model: "gemini-2.5-flash",
+        });
+        parsedOutput = res.data;
         success = true;
       } catch (err: any) {
         lastError = err;
         this.logger.error(
           { problemId, error: err.message },
-          "Fallback model also failed",
+          "Fallback Gemini model also failed",
         );
       }
     }
@@ -170,7 +162,7 @@ export class AiAddSolveService {
   /**
    * Builds the structured prompt sent to Claude 3.5 Sonnet on Bedrock.
    */
-  private buildPrompt(problem: Problem): string {
+  private buildPrompt(problem: Problem): { systemPrompt: string; userPrompt: string } {
     const jsonStructureExample = {
       is_signature_inaccurate: false,
       fixed_judging_policy: {
@@ -205,23 +197,12 @@ export class AiAddSolveService {
       problem.description?.replace(/<[^>]*>?/gm, "") ||
       "No description provided.";
 
-    return `
+    const systemPrompt = `
 You are an expert competitive programmer and algorithmic engineer.
 Review the following problem, its current signature, and its judging policy.
 
 IMPORTANT: The problem description below is the absolute source of truth.
 If the problem title matches a well-known competitive programming problem, you MAY use that background knowledge ONLY if it is fully consistent with the provided description. If there is any conflict, always defer to the description.
-
-PROBLEM TITLE: ${problem.title}
-PROBLEM DIFFICULTY: ${problem.difficulty}
-PROBLEM DESCRIPTION:
-${cleanDescription}
-
-CURRENT SIGNATURE:
-${JSON.stringify({ func: problem.function_signature, cls: problem.class_signature }, null, 2)}
-
-CURRENT JUDGING POLICY:
-${JSON.stringify(problem.judging_policy || {}, null, 2)}
 
 CRITICAL RULES:
 1. Do NOT suggest changes to the problem title, description, hints, or any other fields.
@@ -253,87 +234,20 @@ TASK 3: Generate ONE or TWO distinct solution approaches depending on the proble
 CRITICAL INSTRUCTION: You MUST return your response as a raw, valid JSON object. Do NOT wrap the JSON in markdown code blocks (\`\`\`json). Return purely the JSON text, following this exact structure:
 ${JSON.stringify(jsonStructureExample, null, 2)}
 `;
-  }
 
-  /**
-   * Helper to strip reasoning and markdown fences, then extract JSON
-   */
-  private extractAndParseJSON(rawResponse: string): any {
-    const stripped = rawResponse
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/```$/i, "")
-      .trim();
+    const userPrompt = `
+PROBLEM TITLE: ${problem.title}
+PROBLEM DIFFICULTY: ${problem.difficulty}
+PROBLEM DESCRIPTION:
+${cleanDescription}
 
-    const reasoningEnd = stripped.lastIndexOf("</reasoning>");
+CURRENT SIGNATURE:
+${JSON.stringify({ func: problem.function_signature, cls: problem.class_signature }, null, 2)}
 
-    const firstBrace =
-      reasoningEnd !== -1
-        ? stripped.indexOf("{", reasoningEnd)
-        : stripped.indexOf("{");
+CURRENT JUDGING POLICY:
+${JSON.stringify(problem.judging_policy || {}, null, 2)}
+`;
 
-    const lastBrace = stripped.lastIndexOf("}");
-
-    if (firstBrace === -1 || lastBrace === -1) {
-      throw new Error("Response contained no JSON object");
-    }
-
-    const jsonOnly = stripped.slice(firstBrace, lastBrace + 1);
-    return JSON.parse(jsonOnly);
-  }
-
-  /**
-   * Invokes a given model through Amazon Bedrock.
-   * Throws a descriptive AppError on any AWS failure so the caller can surface it.
-   */
-  private async invokeModelOnBedrock(
-    problemId: string,
-    prompt: string,
-    modelId: string,
-  ): Promise<string> {
-    const payload = {
-      max_completion_tokens: 8192,
-      temperature: 0.1,
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: prompt,
-            },
-          ],
-        },
-      ],
-    };
-
-    const command = new InvokeModelCommand({
-      modelId: modelId,
-      contentType: "application/json",
-      accept: "application/json",
-      body: JSON.stringify(payload),
-    });
-
-    try {
-      const response = await this.bedrockClient.send(command);
-      const responseBody = JSON.parse(new TextDecoder().decode(response.body));
-
-      console.log(
-        "GPT-OSS FULL RESPONSE:",
-        JSON.stringify(responseBody, null, 2),
-      );
-
-      return responseBody.choices?.[0]?.message?.content ?? "";
-    } catch (error: any) {
-      this.logger.error(
-        { problemId, errorName: error.name, errorMessage: error.message },
-        "Amazon Bedrock invocation failed",
-      );
-
-      throw AppError.serviceUnavailable(
-        `Bedrock request failed [${error.name ?? "UnknownError"}]: ${error.message}`,
-        { problemId },
-      );
-    }
+    return { systemPrompt, userPrompt };
   }
 }

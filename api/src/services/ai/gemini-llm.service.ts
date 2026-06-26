@@ -15,7 +15,7 @@ export class GeminiLlmService {
   private readonly clock: IClockService;
   private readonly apiKeys: string[];
   private readonly genAIs: GoogleGenerativeAI[];
-  private readonly circuitBreakers: CircuitBreaker[];
+  private readonly circuitBreakers: Map<string, CircuitBreaker>;
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
@@ -24,7 +24,17 @@ export class GeminiLlmService {
       throw new Error("GEMINI_API_KEY is not configured");
     }
     this.genAIs = this.apiKeys.map(key => new GoogleGenerativeAI(key));
-    this.circuitBreakers = this.apiKeys.map((_, i) => new CircuitBreaker(`Gemini API Key ${i}`, 3, 1, 60000));
+    this.circuitBreakers = new Map<string, CircuitBreaker>();
+  }
+
+  private getCircuitBreaker(keyIndex: number, modelName: string): CircuitBreaker {
+    const key = `${keyIndex}:${modelName}`;
+    let breaker = this.circuitBreakers.get(key);
+    if (!breaker) {
+      breaker = new CircuitBreaker(`Gemini Key ${keyIndex} - ${modelName}`, 3, 1, 60000);
+      this.circuitBreakers.set(key, breaker);
+    }
+    return breaker;
   }
 
   /**
@@ -72,7 +82,8 @@ export class GeminiLlmService {
 
     let result;
     try {
-      result = await this.circuitBreakers[keyIndex].execute(() => model.generateContent({
+      const breaker = this.getCircuitBreaker(keyIndex, modelName);
+      result = await breaker.execute(() => model.generateContent({
         contents: [{ role: "user", parts: [{ text: opts.userPrompt }] }],
         generationConfig: {
           temperature: opts.temperature ?? 0,
@@ -82,13 +93,18 @@ export class GeminiLlmService {
         },
       }));
     } catch (err: any) {
-      const isQuotaError = err.message?.includes("429") || err.message?.includes("Quota exceeded");
-      const isAuthError = err.message?.includes("401") || err.message?.includes("API key not valid");
-      const isServerError = err.message?.includes("503") || err.status === 503 || err.cause?.status === 503;
-      const isCircuitOpen = err.message?.includes("CircuitBreaker") && err.message?.includes("is OPEN");
+      const message = err.message || "";
+      const status = err.status || err.cause?.status || 0;
 
-      if (isQuotaError || isAuthError || isServerError || isCircuitOpen) {
-        logger.warn({ error: err.message, keyIndex }, `Gemini API key at index ${keyIndex} failed. Rotating to next key...`);
+      const isQuotaError = message.includes("429") || message.includes("Quota exceeded") || message.includes("RESOURCE_EXHAUSTED");
+      const isAuthError = message.includes("401") || message.includes("403") || message.includes("API key") || message.includes("API_KEY_INVALID") || message.includes("Forbidden") || message.includes("Unauthorized");
+      const isServerError = message.includes("500") || message.includes("502") || message.includes("503") || message.includes("504") || (status >= 500 && status < 600);
+      const isNetworkError = message.includes("fetch failed") || message.includes("timeout") || message.includes("NetworkError") || err.code === "ETIMEDOUT";
+      const isLocationOrBillingError = message.toLowerCase().includes("location") || message.toLowerCase().includes("billing") || message.toLowerCase().includes("not supported") || message.toLowerCase().includes("not enabled");
+      const isCircuitOpen = message.includes("CircuitBreaker") && message.includes("is OPEN");
+
+      if (isQuotaError || isAuthError || isServerError || isNetworkError || isLocationOrBillingError || isCircuitOpen) {
+        logger.warn({ error: message, keyIndex }, `Gemini API key at index ${keyIndex} failed. Rotating to next key...`);
         return await this._executeRequest<T>(modelName, opts, keyIndex + 1);
       }
       throw err;
