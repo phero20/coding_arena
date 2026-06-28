@@ -68,7 +68,7 @@ export function GritGraph({
     >
       <TooltipProvider delayDuration={0}>
         {/* Tactical Header Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold tracking-tight flex items-center gap-1">
               <span className="bg-muted px-2 py-0.5 rounded border border-border text-foreground font-bold">

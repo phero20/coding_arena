@@ -141,7 +141,7 @@ export const DescriptionPanel = React.memo(
                   )}
                 >
                   <tab.icon className="size-4" />
-                  <span className="hidden lg:inline-block">{tab.label}</span>
+                  <span className="hidden xl:inline-block">{tab.label}</span>
                 </TabsTrigger>
               ))}
 
