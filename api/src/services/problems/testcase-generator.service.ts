@@ -9,7 +9,6 @@ import { type FunctionSignature } from "../../types/problems/problem.types";
 const logger = createLogger("testcase-generator.service");
 
 const PRIMARY_MODEL_ID = "gemini-2.5-flash";
-const FALLBACK_MODEL_ID = "gemini-3-flash-preview";
 
 export interface TestCaseGeneratorResult {
   problemId: string;
@@ -129,7 +128,7 @@ export class TestcaseGeneratorService {
       let hiddenTests: any[] = [];
 
       try {
-        logger.info({ problemId, attempt, model: PRIMARY_MODEL_ID }, `Invoking PRIMARY model (${PRIMARY_MODEL_ID}) for testcase generation`);
+        logger.info({ problemId, attempt, model: PRIMARY_MODEL_ID }, `Invoking model (${PRIMARY_MODEL_ID}) for testcase generation`);
         const res = await this.geminiLlmService.generateJson<any>({
           systemPrompt,
           userPrompt,
@@ -138,7 +137,7 @@ export class TestcaseGeneratorService {
         });
 
         if (!res.data?.tests?.public?.length || !res.data?.tests?.hidden?.length) {
-          throw new Error("PRIMARY model failed to return both public and hidden test arrays.");
+          throw new Error("Model failed to return both public and hidden test arrays.");
         }
 
         // Validate immediately
@@ -155,37 +154,9 @@ export class TestcaseGeneratorService {
         data = res.data;
         rawResponse = res.raw;
       } catch (err: any) {
-        logger.warn({ problemId, attempt, error: err.message }, `Primary Gemini model failed (API or validation). Falling back to ${FALLBACK_MODEL_ID}`);
-        try {
-          const res = await this.geminiLlmService.generateJson<any>({
-            systemPrompt,
-            userPrompt,
-            temperature: 0.1,
-            model: FALLBACK_MODEL_ID,
-          });
-
-          if (!res.data?.tests?.public?.length || !res.data?.tests?.hidden?.length) {
-            throw new Error("Fallback model failed to return both public and hidden test arrays.");
-          }
-
-          // Validate fallback response
-          const normalized = normalizeTestSuite(
-            res.data.tests.public,
-            res.data.tests.hidden,
-            {
-              functionSignature: signature,
-              classSignature: classSignature
-            }
-          );
-          publicTests = normalized.publicTests;
-          hiddenTests = normalized.hiddenTests;
-          data = res.data;
-          rawResponse = res.raw;
-        } catch (fallbackErr: any) {
-          logger.error({ problemId, error: fallbackErr.message }, "Fallback Gemini model also failed (API or validation)");
-          lastValidationError = fallbackErr.message;
-          continue;
-        }
+        logger.error({ problemId, attempt, error: err.message }, "Model generation or validation failed");
+        lastValidationError = err.message;
+        continue;
       }
 
       rawAggregate = rawResponse;

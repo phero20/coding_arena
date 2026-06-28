@@ -15,20 +15,16 @@ class Scanner:
         try:
             return next(self.tokens)
         except StopIteration:
-            return None
+            raise RuntimeError("Unexpected end of input")
 
     def next_int(self):
-        val = self.next()
-        return int(val) if val is not None else 0
+        return int(self.next())
 
     def next_float(self):
-        val = self.next()
-        return float(val) if val is not None else 0.0
+        return float(self.next())
 
     def next_bool(self):
-        val = self.next()
-        if val is None: return False
-        return val.lower() == "true"
+        return self.next().lower() == "true"
 
 def decode_string(s):
     if s == "null": return None
