@@ -1,4 +1,4 @@
-import { merge, omit, isObject } from "lodash-es";
+import { merge, omit, isPlainObject } from "lodash-es";
 
 /**
  * Standard fields to omit from all API responses to prevent data leaks.
@@ -75,8 +75,13 @@ export class ApiResponse<T = unknown> {
     if (Array.isArray(data)) {
       return data.map((item) => this.sanitize(item)) as unknown as T;
     }
-    if (isObject(data)) {
-      return omit(data as object, FORBIDDEN_FIELDS) as unknown as T;
+    if (isPlainObject(data)) {
+      const omitted = omit(data as object, FORBIDDEN_FIELDS);
+      const sanitized: Record<string, any> = {};
+      for (const [key, value] of Object.entries(omitted)) {
+        sanitized[key] = this.sanitize(value);
+      }
+      return sanitized as unknown as T;
     }
     return data;
   }

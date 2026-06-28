@@ -21,7 +21,7 @@ const footerLinks = [
     title: "Compete & Tools",
     links: [
       { label: "Arena", href: "/arena" },
-      { label: "Contests", href: "/contests" },
+      // { label: "Contests", href: "/contests" },
       { label: "Compilers", href: "/compilers" },
     ],
   },
