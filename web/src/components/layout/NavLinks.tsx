@@ -40,7 +40,7 @@ export const navItems = [
   { name: "Companies", href: "/companies", icon: Building2 },
   { name: "Arena", href: "/arena", icon: Swords },
   { name: "Compilers", href: "/compilers", icon: Cpu },
-  // { name: "Contests", href: "/contests", icon: Trophy },
+  { name: "Contests", href: "/contests", icon: Trophy },
 ];
 
 export const NavLinks = () => {

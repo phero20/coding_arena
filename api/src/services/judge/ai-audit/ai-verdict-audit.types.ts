@@ -1,6 +1,6 @@
 import type { SubmissionStatus } from "../../../mongo/models/submission.model";
 import type { ExecutionTestResult } from "../../../libs/utils/verdict.util";
-import type { GeminiJsonResponse } from "../../ai/gemini-llm.service";
+import type { LlmJsonResponse } from "../../ai/llm.service";
 
 export type AuditVerdict =
   | "ACCEPTED"
@@ -41,5 +41,5 @@ export interface AiVerdictAuditResult {
   confidence: number;
   summary: string;
   tests: ExecutionTestResult[];
-  rawLlmResponse: GeminiJsonResponse<AuditOutput>["raw"];
+  rawLlmResponse: LlmJsonResponse<AuditOutput>["raw"];
 }

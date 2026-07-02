@@ -40,7 +40,7 @@ export const HomeContent = () => {
         <ArenaHome />
 
         {/* 4.1 — Contests Section */}
-        {/* <ContestsHome /> */}
+        <ContestsHome />
 
         {/* 4.5 — Deep Dive: Alternating feature rows with live visuals */}
         {/* <DeepDive /> */}

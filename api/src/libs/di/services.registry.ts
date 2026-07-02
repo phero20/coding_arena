@@ -7,8 +7,8 @@ import { ProblemService } from "../../services/problems/problem.service";
 import { ProblemAdminService } from "../../services/problems/problem.admin.service";
 import { ProblemTestService } from "../../services/problems/problem-test.service";
 import { SubmissionService } from "../../services/submissions/submission.service";
-import { GroqLlmService } from "../../services/ai/groq-llm.service";
-import { GeminiLlmService } from "../../services/ai/gemini-llm.service";
+import { LlmService } from "../../services/ai/llm.service";
+import { LlmCache } from "../../cache/ai/llm.cache";
 import { UnifiedLlmService } from "../../services/ai/unified-llm.service";
 import { SystemClockService } from "../../services/common/clock.service";
 import { AiProblemService } from "../../services/problems/ai-problem.service";
@@ -43,7 +43,7 @@ import { SolutionService } from "../../services/solutions/solution.service";
 import { WorkspaceService } from "../../services/workspace/workspace.service";
 import { ChatService } from "../../services/chat/chat.service";
 import { DiagramResolverService } from "../../services/ai/diagram-resolver.service";
-import { GroqDiagramService } from "../../services/ai/groq-diagram.service";
+import { AiDiagramService } from "../../services/ai/ai-diagram.service";
 import { AcademyService } from "../../services/academy/academy.service";
 import { AcademyExecutionService } from "../../services/academy/academy-execution.service";
 import { AcademyAiJudgeService } from "../../services/academy/academy-ai-judge.service";
@@ -81,12 +81,14 @@ import { CompanyCache } from "../../cache/company/company.cache";
 export const servicesRegistry = {
   clockService: asClass(SystemClockService).singleton(),
   authService: asClass(AuthService).singleton(),
-  groqLlmService: asClass(GroqLlmService).singleton(),
-  geminiLlmService: asClass(GeminiLlmService).singleton(),
+  rawLlmService: asClass(LlmService).singleton(),
+  llmService: asClass(LlmCache).singleton(),
+  groqLlmService: asClass(LlmCache).singleton(),
+  geminiLlmService: asClass(LlmCache).singleton(),
   unifiedLlmService: asClass(UnifiedLlmService).singleton(),
 
-  // Gemini is now the primary LLM for high accuracy
-  llm: asFunction(({ geminiLlmService }: ICradle) => geminiLlmService).singleton(),
+  // Gemini was the primary LLM, now mapped to unified LlmService
+  llm: asFunction(({ llmService }: ICradle) => llmService).singleton(),
 
   // Raw services for cache decoration
   rawProblemService: asClass(ProblemService).singleton(),
@@ -110,7 +112,7 @@ export const servicesRegistry = {
   companyAdminService: asClass(CompanyAdminService).singleton(),
   chatService: asClass(ChatService).singleton(),
   diagramResolverService: asClass(DiagramResolverService).singleton(),
-  groqDiagramService: asClass(GroqDiagramService).singleton(),
+  groqDiagramService: asClass(AiDiagramService).singleton(),
 
   arenaService: asClass(ArenaService).singleton(),
   arenaAdminService: asClass(ArenaAdminService).singleton(),

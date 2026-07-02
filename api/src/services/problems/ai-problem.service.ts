@@ -1,4 +1,4 @@
-import { GeminiLlmService, type GeminiJsonResponse } from "../ai/gemini-llm.service";
+import { type ILlmService, type LlmJsonResponse } from "../ai/llm.service";
 import type {
   AiProblemOutput,
   ImportedProblemPayload,
@@ -20,7 +20,7 @@ import type {
 
 export interface AiRewriteResult {
   problem: AiProblemOutput["problem"];
-  rawLlmResponse: GeminiJsonResponse<AiProblemOutput>["raw"];
+  rawLlmResponse: LlmJsonResponse<AiProblemOutput>["raw"];
 }
 
 import { type ICradle } from "../../libs/awilix-container";
@@ -75,7 +75,7 @@ function mergeSignature(
  * Test cases are validated against a canonical type engine; on failure, one retry is attempted.
  */
 export class AiProblemService {
-  private readonly llm: GeminiLlmService;
+  private readonly llm: ILlmService;
 
   constructor({ geminiLlmService }: ICradle) {
     this.llm = geminiLlmService;
@@ -171,7 +171,7 @@ export class AiProblemService {
     });
 
     let lastValidationError: string | null = null;
-    let rawAggregate: GeminiJsonResponse<AiProblemOutput>["raw"] | undefined;
+    let rawAggregate: LlmJsonResponse<AiProblemOutput>["raw"] | undefined;
 
     for (let attempt = 0; attempt < 2; attempt++) {
       const userPromptParts = [

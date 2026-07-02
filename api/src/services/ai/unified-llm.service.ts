@@ -1,6 +1,5 @@
 import { type ICradle } from "../../libs/awilix-container";
-import { type GroqLlmService } from "./groq-llm.service";
-import { type GeminiLlmService } from "./gemini-llm.service";
+import { type ILlmService } from "./llm.service";
 import { createLogger } from "../../libs/utils/logger";
 
 const logger = createLogger("unified-llm.service");
@@ -50,12 +49,10 @@ const ORDER2: LlmStep[] = [
  * upon failure or rate limiting.
  */
 export class UnifiedLlmService {
-  private readonly groqLlmService: GroqLlmService;
-  private readonly geminiLlmService: GeminiLlmService;
+  private readonly llmService: ILlmService;
 
   constructor(cradle: ICradle) {
-    this.groqLlmService = cradle.groqLlmService;
-    this.geminiLlmService = cradle.geminiLlmService;
+    this.llmService = cradle.llmService;
   }
 
   async generateJson<T>(
@@ -73,17 +70,10 @@ export class UnifiedLlmService {
           );
         }
 
-        if (step.provider === "groq") {
-          return await this.groqLlmService.generateJson<T>({
-            ...opts,
-            model: step.model,
-          });
-        } else {
-          return await this.geminiLlmService.generateJson<T>({
-            ...opts,
-            model: step.model,
-          });
-        }
+        return await this.llmService.generateJson<T>({
+          ...opts,
+          model: step.model,
+        });
       } catch (err: any) {
         if (i < steps.length - 1) {
           const nextStep = steps[i + 1];

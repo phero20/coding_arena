@@ -1,4 +1,4 @@
-import { GeminiLlmService } from "../ai/gemini-llm.service";
+import { type ILlmService } from "../ai/llm.service";
 import { type ICradle } from "../../libs/awilix-container";
 import { ProblemModel } from "../../mongo/models/problem.model";
 import { ProblemTestModel } from "../../mongo/models/problem-test.model";
@@ -18,7 +18,7 @@ export interface TestCaseGeneratorResult {
 }
 
 export class TestcaseGeneratorService {
-  private readonly geminiLlmService: GeminiLlmService;
+  private readonly geminiLlmService: ILlmService;
 
   constructor({ geminiLlmService }: ICradle) {
     this.geminiLlmService = geminiLlmService;

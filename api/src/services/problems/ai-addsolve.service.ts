@@ -1,4 +1,4 @@
-import { GeminiLlmService } from "../ai/gemini-llm.service";
+import { type ILlmService } from "../ai/llm.service";
 import { createLogger } from "../../libs/utils/logger";
 import { AppError } from "../../utils/app-error";
 import { ERRORS } from "../../constants/errors";
@@ -9,7 +9,7 @@ import type { Problem } from "../../types/problems/problem.types";
 export class AiAddSolveService {
   private readonly logger = createLogger("ai-addsolve-service");
   private readonly problemRepo: IProblemRepository;
-  private readonly geminiLlmService: GeminiLlmService;
+  private readonly geminiLlmService: ILlmService;
 
   constructor({ problemRepository, geminiLlmService }: ICradle) {
     this.problemRepo = problemRepository;

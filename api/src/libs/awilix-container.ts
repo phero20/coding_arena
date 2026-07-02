@@ -32,7 +32,8 @@ import { type ProblemService } from "../services/problems/problem.service";
 import { type ProblemAdminService } from "../services/problems/problem.admin.service";
 import { type ProblemTestService } from "../services/problems/problem-test.service";
 import { ISubmissionService, type SubmissionService } from "../services/submissions/submission.service";
-import { type GroqLlmService } from "../services/ai/groq-llm.service";
+import { type LlmService, type ILlmService } from "../services/ai/llm.service";
+import { type LlmCache } from "../cache/ai/llm.cache";
 import { type AiProblemService } from "../services/problems/ai-problem.service";
 import { type AiAddSolveService } from "../services/problems/ai-addsolve.service";
 import { type TestcaseGeneratorService } from "../services/problems/testcase-generator.service";
@@ -101,7 +102,7 @@ import { type WorkspaceCache } from "../cache/workspace/workspace.cache";
 import { type ChatController } from "../controllers/chat/chat.controller";
 import { type ChatService, type IChatService } from "../services/chat/chat.service";
 import { type DiagramResolverService, type IDiagramResolverService } from "../services/ai/diagram-resolver.service";
-import { type GroqDiagramService, type IGroqDiagramService } from "../services/ai/groq-diagram.service";
+import { type AiDiagramService, type IAiDiagramService } from "../services/ai/ai-diagram.service";
 import { type ChatRepository, type IChatRepository } from "../repositories/chat/chat.repository";
 import { type IAcademyRepository } from "../repositories/academy/academy.repository";
 import { type IAcademyAdminRepository } from "../repositories/academy/academy.admin.repository";
@@ -158,7 +159,7 @@ import { type UserStatsCache } from "../cache/user/user-stats.cache";
 import { type LeetCodeCache } from "../cache/user/leetcode.cache";
 import { type LeaderboardCache } from "../cache/stats/leaderboard.cache";
 import { type TaxonomyCache } from "../cache/taxonomy/taxonomy.cache";
-import { GeminiLlmService } from "../services/ai/gemini-llm.service";
+
 import { UnifiedLlmService } from "../services/ai/unified-llm.service";
 
 export interface ICradle {
@@ -205,10 +206,12 @@ export interface ICradle {
   submissionService: ISubmissionService;
   statsSubmissionService: StatsSubmissionService;
   statsService: IStatsService;
-  groqLlmService: GroqLlmService;
-  geminiLlmService: GeminiLlmService;
+  rawLlmService: LlmService;
+  llmService: ILlmService;
+  groqLlmService: ILlmService;
+  geminiLlmService: ILlmService;
   unifiedLlmService: UnifiedLlmService;
-  llm: GeminiLlmService;
+  llm: ILlmService;
   aiProblemService: AiProblemService;
   aiAddSolveService: AiAddSolveService;
   testcaseGeneratorService: TestcaseGeneratorService;
@@ -236,7 +239,7 @@ export interface ICradle {
   workspaceService: IWorkspaceService;
   chatService: IChatService;
   diagramResolverService: IDiagramResolverService;
-  groqDiagramService: IGroqDiagramService;
+  groqDiagramService: IAiDiagramService;
   leetcodeService: ILeetCodeService;
   academyService: IAcademyService;
   academyAdminService: IAcademyAdminService;

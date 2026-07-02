@@ -4,7 +4,7 @@ import { type IDiagramResolverService } from "./diagram-resolver.service";
 import type { CanvasGraph, CanvasFrame, SemanticNode } from "../../validators/chat.validator";
 import { createLogger } from "../../libs/utils/logger";
 
-const logger = createLogger("groq-diagram.service");
+const logger = createLogger("ai-diagram.service");
 
 // ─── LLM response types ──────────────────────────────────────────────────────
 
@@ -58,7 +58,7 @@ interface LLMResponse {
 
 // ─── Service interface ───────────────────────────────────────────────────────
 
-export interface IGroqDiagramService {
+export interface IAiDiagramService {
   generateDiagram(
     prompt: string,
     pastMessages: Array<{ role: "user" | "assistant"; content: string }>,
@@ -68,7 +68,7 @@ export interface IGroqDiagramService {
 
 // ─── Service implementation ──────────────────────────────────────────────────
 
-export class GroqDiagramService implements IGroqDiagramService {
+export class AiDiagramService implements IAiDiagramService {
   private readonly unifiedLlmService: UnifiedLlmService;
   private readonly diagramResolverService: IDiagramResolverService;
 
@@ -251,7 +251,7 @@ Respond with the JSON object now.`;
       
       // Graceful Degradation Response
       return {
-        textResponse: "All AI systems are currently under heavy load or unavailable. Please try again in 60 seconds.",
+        textResponse: "All AI systems are currently under load or unavailable. Please try again in 60 seconds.",
         canvasActions: { action: "NONE" } as LLMCanvasActionNone,
       };
     }

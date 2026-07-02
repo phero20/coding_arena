@@ -1,6 +1,6 @@
 import { type IChatRepository } from "../../repositories/chat/chat.repository";
 import { type IWorkspaceService } from "../../services/workspace/workspace.service";
-import { type IGroqDiagramService } from "../ai/groq-diagram.service";
+import { type IAiDiagramService } from "../ai/ai-diagram.service";
 import { type ICradle } from "../../libs/awilix-container";
 import { AppError } from "../../utils/app-error";
 import {
@@ -32,7 +32,7 @@ export interface IChatService {
 export class ChatService implements IChatService {
   private readonly chatRepository: IChatRepository;
   private readonly workspaceService: IWorkspaceService;
-  private readonly groqDiagramService: IGroqDiagramService;
+  private readonly aiDiagramService: IAiDiagramService;
 
   constructor({
     chatRepository,
@@ -41,7 +41,7 @@ export class ChatService implements IChatService {
   }: ICradle) {
     this.chatRepository = chatRepository;
     this.workspaceService = workspaceService;
-    this.groqDiagramService = groqDiagramService;
+    this.aiDiagramService = groqDiagramService;
   }
 
   // Verification Helper for Diagram Access
@@ -166,7 +166,7 @@ export class ChatService implements IChatService {
     // 2. Execute dynamic LLM completion using the active canvas layout context
     // Prefer the new canvasGraph (semantic frame graph) over the legacy canvasState
     const canvasGraph: CanvasGraph | undefined = input.canvasGraph ?? undefined;
-    const result = await this.groqDiagramService.generateDiagram(
+    const result = await this.aiDiagramService.generateDiagram(
       input.prompt,
       formattedHistory,
       canvasGraph,
