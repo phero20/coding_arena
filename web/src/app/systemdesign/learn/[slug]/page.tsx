@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache lesson content for 24 hours
+
 import { getSystemDesignTopicContent } from "@/services/queries/system-design.queries";
 import { LearnMarkdown } from "@/components/systemdesign-workspace/learn/LearnMarkdown";
 

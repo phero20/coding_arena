@@ -41,7 +41,7 @@ flowchart TB
 
     %% Execution & AI Tier
     subgraph Execution ["Execution & AI Tier"]
-        AIProvider["«External Component»\nLLM Orchestrator\n(Bedrock / Gemini / Groq)"]:::external
+        AIProvider["«External Component»\nOne API Gateway\n(Gemini / Groq)"]:::external
         Judge0["«External Component»\nJudge0 API\n(Primary Code Execution)"]:::external
         Wandbox["«External Component»\nWandbox API\n(Fallback Sandbox)"]:::external
     end
@@ -106,6 +106,6 @@ flowchart TB
    - **System Design Engine**: Manages Excalidraw JSON schemas and interacts with AI for layout resolution.
 5. **Job Queue Manager (BullMQ)**: A critical component that decouples slow tasks (code compilation) from the fast API response cycle.
 6. **Execution APIs (Judge0 & Wandbox)**: External sandboxed environments that securely compile and run untrusted user code against hidden test cases.
-7. **LLM Orchestrator**: The abstraction layer over Amazon Bedrock, Gemini, and Groq used for AI-judging, chat tutoring, and diagram generation.
+7. **One API Gateway**: The centralized gateway over Gemini and Groq used for AI-judging, chat tutoring, and diagram generation.
 8. **Golang Multiplayer Hub**: A standalone, highly-concurrent engine dedicated solely to managing live WebSocket traffic for the Arena mode.
 9. **Databases**: Postgres (structured social data), Mongo (large JSON documents/test cases), and Redis (pub/sub state and caching).

@@ -1,4 +1,3 @@
-import { GoogleGenerativeAI, SchemaType, Schema } from "@google/generative-ai";
 import { config } from "../../configs/env";
 import { metrics } from "../../libs/core/metrics";
 import { logger } from "../../libs/utils/logger";
@@ -13,39 +12,23 @@ export interface GeminiJsonResponse<T> {
 
 export class GeminiLlmService {
   private readonly clock: IClockService;
-  private readonly apiKeys: string[];
-  private readonly genAIs: GoogleGenerativeAI[];
-  private readonly circuitBreakers: Map<string, CircuitBreaker>;
+  private readonly apiKey: string;
+  private readonly baseUrl: string = config.oneApiBaseUrl;
+  private circuitBreaker = new CircuitBreaker("Gemini API Gateway", 3, 1, 60000);
 
   constructor({ clockService }: ICradle) {
     this.clock = clockService;
-    this.apiKeys = config.geminiApiKeys || [];
-    if (this.apiKeys.length === 0) {
-      throw new Error("GEMINI_API_KEY is not configured");
-    }
-    this.genAIs = this.apiKeys.map(key => new GoogleGenerativeAI(key));
-    this.circuitBreakers = new Map<string, CircuitBreaker>();
-  }
-
-  private getCircuitBreaker(keyIndex: number, modelName: string): CircuitBreaker {
-    const key = `${keyIndex}:${modelName}`;
-    let breaker = this.circuitBreakers.get(key);
-    if (!breaker) {
-      breaker = new CircuitBreaker(`Gemini Key ${keyIndex} - ${modelName}`, 3, 1, 60000);
-      this.circuitBreakers.set(key, breaker);
-    }
-    return breaker;
+    this.apiKey = config.oneApiToken;
   }
 
   /**
-   * Calls Gemini via official SDK with fallback logic.
+   * Calls Gemini via One API gateway with the standard chat completions endpoint.
    */
   async generateJson<T>(opts: {
     systemPrompt: string;
     userPrompt: string;
     temperature?: number;
     maxTokens?: number;
-    responseSchema?: Schema;
     model?: string;
   }): Promise<GeminiJsonResponse<T>> {
     if (!opts.model) {
@@ -61,60 +44,40 @@ export class GeminiLlmService {
       userPrompt: string;
       temperature?: number;
       maxTokens?: number;
-      responseSchema?: Schema;
-    },
-    keyIndex: number = 0
-  ): Promise<GeminiJsonResponse<T>> {
-    if (keyIndex >= this.genAIs.length) {
-      throw new Error(`All ${this.genAIs.length} Gemini API keys failed (exhausted).`);
     }
-
-    const genAI = this.genAIs[keyIndex];
-    const model = genAI.getGenerativeModel(
-      {
-        model: modelName,
-        systemInstruction: opts.systemPrompt,
-      },
-      { apiVersion: "v1beta", timeout: 120000 },
-    );
+  ): Promise<GeminiJsonResponse<T>> {
+    const body = {
+      model: modelName,
+      messages: [
+        { role: "system", content: opts.systemPrompt },
+        { role: "user", content: opts.userPrompt },
+      ],
+      temperature: opts.temperature ?? 0,
+      max_tokens: opts.maxTokens ?? 8192,
+    };
 
     const startTime = this.clock.now();
 
-    let result;
-    try {
-      const breaker = this.getCircuitBreaker(keyIndex, modelName);
-      result = await breaker.execute(() => model.generateContent({
-        contents: [{ role: "user", parts: [{ text: opts.userPrompt }] }],
-        generationConfig: {
-          temperature: opts.temperature ?? 0,
-          maxOutputTokens: opts.maxTokens ?? 8192,
-          responseMimeType: "application/json",
-          ...(opts.responseSchema && { responseSchema: opts.responseSchema }),
-        },
-      }));
-    } catch (err: any) {
-      const message = err.message || "";
-      const status = err.status || err.cause?.status || 0;
-
-      const isQuotaError = message.includes("429") || message.includes("Quota exceeded") || message.includes("RESOURCE_EXHAUSTED");
-      const isAuthError = message.includes("401") || message.includes("403") || message.includes("API key") || message.includes("API_KEY_INVALID") || message.includes("Forbidden") || message.includes("Unauthorized");
-      const isServerError = message.includes("500") || message.includes("502") || message.includes("503") || message.includes("504") || (status >= 500 && status < 600);
-      const isNetworkError = message.includes("fetch failed") || message.includes("timeout") || message.includes("NetworkError") || err.code === "ETIMEDOUT";
-      const isLocationOrBillingError = message.toLowerCase().includes("location") || message.toLowerCase().includes("billing") || message.toLowerCase().includes("not supported") || message.toLowerCase().includes("not enabled");
-      const isCircuitOpen = message.includes("CircuitBreaker") && message.includes("is OPEN");
-
-      if (isQuotaError || isAuthError || isServerError || isNetworkError || isLocationOrBillingError || isCircuitOpen) {
-        logger.warn({ error: message, keyIndex }, `Gemini API key at index ${keyIndex} failed. Rotating to next key...`);
-        return await this._executeRequest<T>(modelName, opts, keyIndex + 1);
-      }
-      throw err;
-    }
+    const response = await this.circuitBreaker.execute(() => fetch(`${this.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(120000), // 120 second timeout
+    }));
 
     const duration = this.clock.now() - startTime;
     metrics.recordLlmLatency(duration);
 
-    const response = result.response;
-    const content = response.text();
+    if (!response.ok) {
+      const errText = await response.text().catch(() => "");
+      throw new Error(`Gemini request failed with status ${response.status}: ${errText}`);
+    }
+
+    const json = (await response.json()) as any;
+    const content = json.choices?.[0]?.message?.content;
 
     if (!content) {
       throw new Error("Gemini response did not contain any content");
@@ -184,7 +147,7 @@ export class GeminiLlmService {
       const parsed = JSON.parse(cleaned) as T;
       return {
         data: parsed,
-        raw: result,
+        raw: json,
       };
     } catch (err) {
       logger.error({ content, model: modelName }, "CRITICAL: Gemini returned invalid JSON");
@@ -192,55 +155,3 @@ export class GeminiLlmService {
     }
   }
 }
-
-
-// - models/gemini-2.5-flash
-// - models/gemini-2.5-pro
-// - models/gemini-2.0-flash
-// - models/gemini-2.0-flash-001
-// - models/gemini-2.0-flash-lite-001
-// - models/gemini-2.0-flash-lite
-// - models/gemini-2.5-flash-preview-tts
-// - models/gemini-2.5-pro-preview-tts
-// - models/gemma-4-26b-a4b-it
-// - models/gemma-4-31b-it
-// - models/gemini-flash-latest
-// - models/gemini-flash-lite-latest
-// - models/gemini-pro-latest
-// - models/gemini-2.5-flash-lite
-// - models/gemini-2.5-flash-image
-// - models/gemini-3-pro-preview
-// - models/gemini-3-flash-preview
-// - models/gemini-3.1-pro-preview
-// - models/gemini-3.1-pro-preview-customtools
-// - models/gemini-3.1-flash-lite-preview
-// - models/gemini-3.1-flash-lite
-// - models/gemini-3-pro-image-preview
-// - models/nano-banana-pro-preview
-// - models/gemini-3.1-flash-image-preview
-// - models/lyria-3-clip-preview
-// - models/lyria-3-pro-preview
-// - models/gemini-3.1-flash-tts-preview
-// - models/gemini-robotics-er-1.5-preview
-// - models/gemini-robotics-er-1.6-preview
-// - models/gemini-2.5-computer-use-preview-10-2025
-// - models/deep-research-max-preview-04-2026
-// - models/deep-research-preview-04-2026
-// - models/deep-research-pro-preview-12-2025
-// - models/gemini-embedding-001
-// - models/gemini-embedding-2-preview
-// - models/gemini-embedding-2
-// - models/aqa
-// - models/imagen-4.0-generate-001
-// - models/imagen-4.0-ultra-generate-001
-// - models/imagen-4.0-fast-generate-001
-// - models/veo-2.0-generate-001
-// - models/veo-3.0-generate-001
-// - models/veo-3.0-fast-generate-001
-// - models/veo-3.1-generate-preview
-// - models/veo-3.1-fast-generate-preview
-// - models/veo-3.1-lite-generate-preview
-// - models/gemini-2.5-flash-native-audio-latest
-// - models/gemini-2.5-flash-native-audio-preview-09-2025
-// - models/gemini-2.5-flash-native-audio-preview-12-2025
-// - models/gemini-3.1-flash-live-preview

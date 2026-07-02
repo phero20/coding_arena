@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache each problem page for 24 hours
+
 import { Suspense } from "react";
 import { ProblemWorkspace } from "@/components/problem-editor/ProblemWorkspace";
 import { getProblemBySlug } from "@/services/queries/problem.queries";

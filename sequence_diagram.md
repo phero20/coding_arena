@@ -22,7 +22,7 @@ sequenceDiagram
     participant Worker as Submission Worker
     participant ExecSvc as Execution Service
     participant Judge0 as Judge0 Engine
-    participant Bedrock as AWS Bedrock AI
+    participant OneAPI as One API Gateway
     participant Postgres as PostgreSQL
 
     %% 1. Initial Submission Phase (Synchronous)
@@ -60,8 +60,8 @@ sequenceDiagram
 
     %% AI Audit (Conditional)
     alt Driver Verdict is Suspicious (e.g. Partial Match)
-        ExecSvc->>Bedrock: Audit Output using LLM
-        Bedrock-->>ExecSvc: Return Audited Status (e.g. ACCEPTED or WRONG_ANSWER)
+        ExecSvc->>OneAPI: Audit Output using LLM (Gemini / Groq)
+        OneAPI-->>ExecSvc: Return Audited Status (e.g. ACCEPTED or WRONG_ANSWER)
     end
     
     ExecSvc-->>Worker: Return ExecutionResults (overallStatus)

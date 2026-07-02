@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache sitemap for 24 hours
+
 import { MetadataRoute } from "next";
 import {
   getSitemapProblems,

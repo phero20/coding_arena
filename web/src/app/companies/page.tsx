@@ -1,3 +1,7 @@
+export const revalidate = 86400; // Cache company List for 24 hours
+
+
+
 import { Suspense } from "react";
 import { getCompanies } from "@/services/queries/company.queries";
 import { CompaniesHeader } from "@/components/companies/companies-header";

@@ -1,5 +1,4 @@
 import { GeminiLlmService, type GeminiJsonResponse } from "../ai/gemini-llm.service";
-import { SchemaType, Schema } from "@google/generative-ai";
 import type {
   AiProblemOutput,
   ImportedProblemPayload,
@@ -198,76 +197,7 @@ export class AiProblemService {
 
       const userPrompt = userPromptParts.filter(Boolean).join("\n");
 
-      const responseSchema: Schema = {
-        type: SchemaType.OBJECT,
-        properties: {
-          problem: {
-            type: SchemaType.OBJECT,
-            properties: {
-              problem_type: { type: SchemaType.STRING, description: "'function' or 'class'" },
-              hints: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-              function_signature: {
-                type: SchemaType.OBJECT,
-                properties: {
-                  name: { type: SchemaType.STRING },
-                  return_type: { type: SchemaType.STRING },
-                  params: {
-                    type: SchemaType.ARRAY,
-                    items: {
-                      type: SchemaType.OBJECT,
-                      properties: {
-                        name: { type: SchemaType.STRING },
-                        type: { type: SchemaType.STRING }
-                      }
-                    }
-                  },
-                  inplace_param_index: { type: SchemaType.INTEGER }
-                }
-              },
-              class_signature: {
-                type: SchemaType.OBJECT,
-                properties: {
-                  class_name: { type: SchemaType.STRING },
-                  constructor_params: {
-                    type: SchemaType.ARRAY,
-                    items: {
-                      type: SchemaType.OBJECT,
-                      properties: { name: { type: SchemaType.STRING }, type: { type: SchemaType.STRING } }
-                    }
-                  },
-                  methods: {
-                    type: SchemaType.ARRAY,
-                    items: {
-                      type: SchemaType.OBJECT,
-                      properties: {
-                        name: { type: SchemaType.STRING },
-                        return_type: { type: SchemaType.STRING },
-                        params: {
-                          type: SchemaType.ARRAY,
-                          items: {
-                            type: SchemaType.OBJECT,
-                            properties: { name: { type: SchemaType.STRING }, type: { type: SchemaType.STRING } }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              judging_policy: {
-                type: SchemaType.OBJECT,
-                properties: {
-                  comparator_mode: { type: SchemaType.STRING, description: "'strict' or 'problem_specific'" },
-                  multi_answer: { type: SchemaType.BOOLEAN },
-                  validation_policy: { type: SchemaType.STRING },
-                  output_order: { type: SchemaType.STRING, description: "'strict' or 'any_order'" },
-                  audit_hints: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } }
-                }
-              }
-            }
-          }
-        }
-      };
+
 
       const { data, raw } =
         await this.llm.generateJson<AiProblemOutput>({

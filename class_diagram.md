@@ -29,7 +29,7 @@ classDiagram
     }
     class AiAddSolveService {
         -problemRepo
-        -bedrockClient
+        -geminiLlmService
     }
     class AiProblemService {
         -llm
@@ -352,9 +352,9 @@ classDiagram
     }
     class GeminiLlmService {
         -clock
-        -apiKeys
-        -genAIs
-        -circuitBreakers
+        -apiKey
+        -baseUrl
+        -circuitBreaker
     }
     class GroqDiagramService {
         -unifiedLlmService
@@ -362,8 +362,9 @@ classDiagram
     }
     class GroqLlmService {
         -clock
-        -apiKeys
+        -apiKey
         -baseUrl
+        -circuitBreaker
     }
     class UnifiedLlmService {
         -groqLlmService

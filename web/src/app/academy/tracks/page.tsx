@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache tracks list for 24 hours
+
 import { Suspense } from "react";
 import { getAcademyTracks } from "@/services/queries/academy.queries";
 import { TracksHeader } from "@/components/academy/tracks/tracks-header";

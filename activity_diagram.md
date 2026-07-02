@@ -24,7 +24,7 @@ flowchart TD
     FetchMongo --> LangCheck{"Is Language Supported\nby Judge0/Wandbox?"}:::decision
     
     %% AI Code Judge Path
-    LangCheck -- No --> RunAIJudge["Run via AiCodeJudgeService\n(Bedrock DeepSeek/Claude)"]:::process
+    LangCheck -- No --> RunAIJudge["Run via AiCodeJudgeService\n(One API Gemini/Groq)"]:::process
     RunAIJudge --> SaveResult
     
     %% Standard Execution Path

@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache dynamic exercise page for 24 hours
+
 import { AcademyWorkspace } from "@/components/academy/editor/AcademyWorkspace";
 import { getTrackExercise } from "@/services/queries/academy.queries";
 import { ErrorDisplay } from "@/components/shared/StatusState";

@@ -54,7 +54,7 @@ flowchart TB
     %% --------------------------------
     subgraph SaaS ["Third-Party SaaS"]
         Clerk("Clerk\n(Identity & Auth)"):::saas
-        AWSBedrock("AWS Bedrock\n(DeepSeek / Claude LLMs)"):::saas
+        OneAPIGateway("One API Gateway\n(Gemini & Groq)"):::saas
     end
 
     %% ==========================================
@@ -87,8 +87,8 @@ flowchart TB
     Workers -- "HTTP Post (Untrusted Code)" --> Judge0
 
     %% Backend to AI SaaS
-    HonoAPI -- "AWS SDK (HTTPS)" --> AWSBedrock
-    Workers -- "AWS SDK (HTTPS)" --> AWSBedrock
+    HonoAPI -- "HTTPS REST API" --> OneAPIGateway
+    Workers -- "HTTPS REST API" --> OneAPIGateway
 
 ```
 
@@ -116,4 +116,4 @@ Rather than hosting databases manually on VMs, the data layer uses specialized m
 
 ### 5. Third-Party SaaS
 - **Clerk**: Handles all user authentication and identity verification at the edge.
-- **AWS Bedrock**: The managed AI service hosted by Amazon Web Services, providing API access to DeepSeek and Claude LLMs without needing to provision expensive GPU clusters.
+- **One API Gateway**: The unified AI proxy dashboard that routes LLM requests to Google Gemini and Groq Cloud, allowing key rotation, load-balancing, and caching.

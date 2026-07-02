@@ -47,6 +47,6 @@ These diagrams explain how data flows over time, the branching logic of backgrou
 - **Frontend**: Next.js, React, TailwindCSS, Zustand, Monaco Editor
 - **Core API Backend**: Node.js, Hono, Drizzle ORM, Mongoose, BullMQ
 - **Real-Time Multiplayer**: Golang, Fiber WebSockets
-- **Execution & AI Engine**: Judge0 (Dockerized), Amazon Bedrock/Claude, Groq, Gemini (AI Fallbacks & Chat)
+- **Execution & AI Engine**: Judge0 (Dockerized), One API Gateway (Gemini & Groq AI Fallbacks & Chat)
 - **Databases**: PostgreSQL (Relational), MongoDB (Document/NoSQL), Redis (Pub/Sub & Caching)
 

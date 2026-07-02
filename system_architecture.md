@@ -21,7 +21,7 @@ flowchart TB
     %% --------------------------------
     subgraph ThirdParty ["External Services (3rd Party)"]
         Clerk("Clerk\n(Auth & Webhooks)")
-        Bedrock("Amazon Bedrock\n(DeepSeek / Claude AI)")
+        OneAPI("One API Gateway\n(Gemini & Groq)")
         Cloudinary("Cloudinary\n(Image Hosting)")
         ExternalContests("Codeforces / LeetCode\n(External APIs)")
         Judge0("Judge0 API\n(Code Execution Sandbox)")
@@ -84,7 +84,7 @@ flowchart TB
     SubWorker -- "1. Fetch Hidden Tests" --> Mongo
     SubWorker -- "2. Evaluate Code" --> Judge0
     SubWorker -- "2b. Fallback Compile" --> Wandbox
-    SubWorker -- "3. Fallback AI Judge" --> Bedrock
+    SubWorker -- "3. Fallback AI Judge" --> OneAPI
     SubWorker -- "4. Save Results" --> Mongo
     SubWorker -- "5. Update Stats" --> Postgres
     SubWorker -- "6. Publish Event" --> Redis
@@ -101,7 +101,7 @@ flowchart TB
     Redis -- "PubSub Updates (LEADERBOARD)" --> GoArena
     
     %% AI Flows (Excalidraw / Chat)
-    API -- "Chat History / Diagrams" --> Bedrock
+    API -- "Chat History / Diagrams" --> OneAPI
 ```
 
 ---
@@ -113,7 +113,7 @@ The frontend is a monolithic Next.js App Router application. It serves the React
 
 ### 2. External Services
 - **Clerk**: Handles all user authentication. The frontend gets JWT tokens from Clerk, and the Hono API verifies them. Clerk also sends background Webhooks to the API to sync user creations/deletions into our PostgreSQL database.
-- **Amazon Bedrock**: The LLM provider. Used heavily by the `AiAddSolveService` (DeepSeek primary, GPT/Claude fallback) to evaluate text-based code, generate educational solutions, and power the System Design AI Chat assistant.
+- **One API Gateway**: The central AI proxy. Used heavily by `AiAddSolveService` (routing to Gemini and Groq) to evaluate text-based code, generate educational solutions, and power the System Design AI Chat assistant.
 - **Cloudinary**: Used to store images (like bug report screenshots or user avatars).
 - **Codeforces/LeetCode**: APIs scraped by the background Contest worker to populate the global event calendar.
 - **Judge0 & Wandbox**: External Remote Code Execution (RCE) sandbox APIs. The workers send untrusted user code to these services securely, and they return the `stdout`, `stderr`, and `compile_output`.

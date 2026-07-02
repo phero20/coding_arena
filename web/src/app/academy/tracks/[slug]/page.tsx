@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache track detail for 24 hours
+
 import React, { Suspense } from 'react';
 import { getTrackConfig } from '@/services/queries/academy.queries';
 import { TrackOverviewTabs } from '@/components/academy/tracks/TrackOverviewTabs';

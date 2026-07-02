@@ -1,3 +1,5 @@
+export const revalidate = 86400; // Cache company problems list for 24 hours
+
 import { Suspense } from "react";
 import { getCompanyProblems } from "@/services/queries/company.queries";
 import { ProblemTable } from "@/components/practice/ProblemTable";

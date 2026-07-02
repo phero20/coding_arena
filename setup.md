@@ -100,9 +100,11 @@ SlaveCode uses a hybrid infrastructure strategy to balance flexibility, relation
 ### ⚙️ Execution Engine
 5.  **Judge0 (Dockerized Sandbox)**: The core code execution engine. It safely compiles and runs user submissions against hidden test cases inside isolated sandboxes to prevent malicious code from harming the server. 
 
-### 🧠 AI Integrations
-6.  **Amazon Bedrock (Claude 3.5 Sonnet)**: Acts as the **AI Judge Fallback**. If Judge0 fails a submission due to a strict formatting difference (like trailing whitespace) or doesn't support the language, Bedrock acts as a highly-intelligent secondary evaluator to determine logical correctness.
-7.  **Groq & Google Gemini (LLMs)**: Powers the interactive **System Design Workspaces**, allowing users to chat with AI to generate, analyze, and debug their architecture diagrams in real-time.
+### 🧠 AI Integrations (One API Gateway)
+6.  **One API Gateway (Gemini & Groq)**: Acts as the centralized, unified router for all AI features in the system. It load-balances and manages API credentials, routing requests to:
+    - **Gemini (gemini-2.5-flash / gemini-1.5-flash)**: Primary models used for heavy operations like system design diagram analysis, chat history, and problem importing/rewriting.
+    - **Groq (llama-3.3-70b-versatile / llama-3.1-8b-instant)**: High-speed fallback models for instant evaluations.
+7.  **Unified AI Judging**: If Judge0 fails a submission due to strict formatting differences (e.g. trailing whitespaces) or does not support a specific language, the Hono API falls back to evaluating logical correctness using these gateway models with an automated multi-stage fallback queue.
 
 ---
 

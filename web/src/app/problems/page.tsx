@@ -1,3 +1,5 @@
+export const revalidate = 3600; // Cache listing for 1 hour
+
 import { Suspense } from "react";
 import { Container } from "@/components/shared/Container";
 import { PracticeProblemList } from "@/components/practice/PracticeProblemList";
