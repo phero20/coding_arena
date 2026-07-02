@@ -18,6 +18,7 @@ export function useProblemQuery(slug: string) {
     queryKey: ["problem", slug],
     queryFn: () => getProblemBySlug(slug),
     enabled: !!slug,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
@@ -29,6 +30,7 @@ export function useProblemByIdQuery(id: string) {
     queryKey: ["problem-id", id],
     queryFn: () => getProblemById(id),
     enabled: !!id,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
@@ -39,6 +41,7 @@ export function useProblemsQuery(page = 1, limit = 20) {
   return useQuery({
     queryKey: ["problems", page, limit],
     queryFn: () => getProblems(page, limit),
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
@@ -71,6 +74,7 @@ export function useInfiniteProblemsQuery(
       return allPages.length + 1;
     },
     initialData: effectiveInitialData ? { pages: [effectiveInitialData], pageParams: [1] } : undefined,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
@@ -82,6 +86,7 @@ export function useProblemsByTopicQuery(topic: string, limit?: number) {
     queryKey: ["problems-topic", topic, limit],
     queryFn: () => getProblemsByTopic(topic, limit),
     enabled: !!topic,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 
@@ -93,6 +98,7 @@ export function useProblemTestsQuery(problemId: string, type: any = "PUBLIC", en
     queryKey: ["problem-tests", problemId, type],
     queryFn: () => getTestsForProblemAndType(problemId, type),
     enabled: !!problemId && enabled,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
 

@@ -2,21 +2,20 @@ export const revalidate = 86400; // Cache each problem page for 24 hours
 
 import { Suspense } from "react";
 import { ProblemWorkspace } from "@/components/problem-editor/ProblemWorkspace";
-import { getProblemBySlug } from "@/services/queries/problem.queries";
+import { getCachedProblem } from "@/meta/problems/dynamic";
 import { ErrorDisplay } from "@/components/shared/StatusState";
-import { cache } from "react";
 import ProblemWorkspaceSkeleton from "./ProblemWorkspaceSkeleton";
 
 export { generateProblemMetadata as generateMetadata } from "@/meta/problems/dynamic";
 
-// Cache the problem fetch to avoid duplicate DB calls between generateMetadata and the Page
-const getProblem = cache(async (slug: string) => {
+// Uses the shared cached problem fetch to reuse the same request promise as generateMetadata
+const getProblem = async (slug: string) => {
   try {
-    return await getProblemBySlug(slug);
+    return await getCachedProblem(slug);
   } catch (error: any) {
     return null;
   }
-});
+};
 
 type Props = {
   params: Promise<{ problemId: string }>;

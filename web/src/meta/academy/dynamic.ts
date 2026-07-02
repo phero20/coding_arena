@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import { PUBLIC_CONFIG } from "@/config/public.config";
+import { getTrackExercise } from "@/services/queries/academy.queries";
+import { cache } from "react";
+
+// Share this cached function to deduplicate calls between Metadata and Page render
+export const getCachedTrackExercise = cache(async (slug: string, exerciseSlug: string) => {
+  return await getTrackExercise(slug, exerciseSlug);
+});
 
 export async function generateTrackMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -24,17 +31,10 @@ export async function generateExerciseMetadata({ params }: { params: Promise<{ s
   const fallbackDescription = `Solve the ${exerciseTitle} interactive exercise in the ${trackTitle} track on SlaveCode.`;
   
   try {
-    const baseUrl = PUBLIC_CONFIG.API_URL;
-    const res = await fetch(`${baseUrl}/api/v1/academy/tracks/${slug}/exercises/${exerciseSlug}`, {
-      next: { revalidate: 3600 }
-    });
-    
+    const exercise = await getCachedTrackExercise(slug, exerciseSlug);
     let description = fallbackDescription;
     
-    if (res.ok) {
-      const responseJson = await res.json();
-      const exercise = responseJson.data;
-      
+    if (exercise) {
       // Prefer blurb, then instructions, then introduction
       const rawDesc = exercise?.blurb || exercise?.instructions || exercise?.introduction || "";
       const cleanDesc = rawDesc
@@ -68,17 +68,12 @@ export async function generateExerciseMetadata({ params }: { params: Promise<{ s
         card: "summary_large_image",
         title: `${exerciseTitle} - ${trackTitle}`,
         description,
-      }
+      },
     };
   } catch (error) {
-    console.error("METADATA GENERATION ERROR (Academy Exercise):", error);
+    console.error("METADATA GENERATION ERROR:", error);
     return {
-      title: `${exerciseTitle} - ${trackTitle}`,
-      description: fallbackDescription,
-      openGraph: {
-        title: `${exerciseTitle} | ${trackTitle} Track`,
-        description: fallbackDescription,
-      }
+      title: `${exerciseTitle} - ${trackTitle} | SlaveCode`,
     };
   }
 }

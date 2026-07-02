@@ -1,20 +1,20 @@
 export const revalidate = 86400; // Cache dynamic exercise page for 24 hours
 
 import { AcademyWorkspace } from "@/components/academy/editor/AcademyWorkspace";
-import { getTrackExercise } from "@/services/queries/academy.queries";
+import { getCachedTrackExercise } from "@/meta/academy/dynamic";
 import { ErrorDisplay } from "@/components/shared/StatusState";
-import { cache, Suspense } from "react";
+import { Suspense } from "react";
 import ExerciseSkeleton from "./ExerciseSkeleton";
 
 export { generateExerciseMetadata as generateMetadata } from "@/meta/academy/dynamic";
 
-const getExercise = cache(async (trackSlug: string, exerciseSlug: string) => {
+const getExercise = async (trackSlug: string, exerciseSlug: string) => {
   try {
-    return await getTrackExercise(trackSlug, exerciseSlug);
+    return await getCachedTrackExercise(trackSlug, exerciseSlug);
   } catch (error: any) {
     return null;
   }
-});
+};
 
 type Props = {
   params: Promise<{ slug: string; exerciseSlug: string }>;

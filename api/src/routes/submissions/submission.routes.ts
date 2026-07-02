@@ -78,7 +78,7 @@ export const registerSubmissionRoutes = (
     "/submissions/problem/:problemId",
     zValidator("param", ProblemIdParamSchema),
     submissionController.action(submissionController.getUserSubmissions, {
-      requireAuth: false,
+      requireAuth: true,
     }),
   );
 };

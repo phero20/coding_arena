@@ -1,27 +1,22 @@
 import type { Metadata } from "next";
-import { PUBLIC_CONFIG } from "@/config/public.config";
+import { getProblemBySlug } from "@/services/queries/problem.queries";
+import { cache } from "react";
+
+// Share this cached function to deduplicate calls between Metadata and Page render
+export const getCachedProblem = cache(async (slug: string) => {
+  return await getProblemBySlug(slug);
+});
 
 export async function generateProblemMetadata({ params }: { params: Promise<{ problemId: string }> }): Promise<Metadata> {
   try {
     const { problemId } = await params;
-    
-    // We bypass Axios here and use native Next.js fetch for maximum SSR compatibility & caching
-    const baseUrl = PUBLIC_CONFIG.API_URL;
-    const res = await fetch(`${baseUrl}/api/v1/problems/${problemId}`, { 
-      next: { revalidate: 3600 } 
-    });
-    
-    if (!res.ok) return {};
-    
-    const { data: problem } = await res.json();
+    const problem = await getCachedProblem(problemId);
     
     if (!problem) return {};
 
     // Build the dynamic SEO tags to beat LeetCode
     const title = `${problem.title} - Practice Coding`;
     
-    // Some descriptions might have markdown, we ideally strip it, 
-    // but taking the first 160 chars is a great start.
     const rawDescription = problem.description || "";
     const cleanDescription = rawDescription
       .replace(/<[^>]*>?/gm, '') // Remove HTML tags

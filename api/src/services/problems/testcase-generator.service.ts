@@ -8,7 +8,7 @@ import { type FunctionSignature } from "../../types/problems/problem.types";
 
 const logger = createLogger("testcase-generator.service");
 
-const PRIMARY_MODEL_ID = "gemini-2.5-flash";
+const PRIMARY_MODEL_ID = "llama-3.3-70b-versatile";
 
 export interface TestCaseGeneratorResult {
   problemId: string;
