@@ -94,3 +94,5 @@ export const globalMetadata: Metadata = {
     },
   },
 };
+
+
