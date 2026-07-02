@@ -28,21 +28,25 @@ const ORDER1: LlmStep[] = [
   { provider: "groq", model: "llama-3.3-70b-versatile" },
   { provider: "gemini", model: "gemini-2.5-flash" },
   { provider: "groq", model: "llama-3.1-8b-instant" },
-  { provider: "gemini", model: "gemini-1.5-flash-8b" }
+  { provider: "gemini", model: "gemini-2.5-flash-lite" },
+  { provider: "gemini", model: "gemini-3-flash-preview" },
+  { provider: "gemini", model: "gemini-3.1-flash-lite" },
 ];
 
 const ORDER2: LlmStep[] = [
   { provider: "gemini", model: "gemini-2.5-flash" },
   { provider: "groq", model: "llama-3.3-70b-versatile" },
-  { provider: "gemini", model: "gemini-1.5-flash-8b" },
-  { provider: "groq", model: "llama-3.1-8b-instant" }
+  { provider: "gemini", model: "gemini-2.5-flash-lite" },
+  { provider: "groq", model: "llama-3.1-8b-instant" },
+  { provider: "gemini", model: "gemini-3-flash-preview" },
+  { provider: "gemini", model: "gemini-3.1-flash-lite" },
 ];
 
 /**
  * Unified LLM Gateway Service
- * 
- * Provides a resilient, centralized interface for generating structured JSON responses 
- * from LLMs. Attempts Groq first for speed, and transparently falls back to Gemini 
+ *
+ * Provides a resilient, centralized interface for generating structured JSON responses
+ * from LLMs. Attempts Groq first for speed, and transparently falls back to Gemini
  * upon failure or rate limiting.
  */
 export class UnifiedLlmService {
@@ -54,7 +58,9 @@ export class UnifiedLlmService {
     this.geminiLlmService = cradle.geminiLlmService;
   }
 
-  async generateJson<T>(opts: GenerateJsonOptions): Promise<UnifiedJsonResponse<T>> {
+  async generateJson<T>(
+    opts: GenerateJsonOptions,
+  ): Promise<UnifiedJsonResponse<T>> {
     const order = opts.order || "order1";
     const steps = order === "order2" ? ORDER2 : ORDER1;
 
@@ -62,20 +68,34 @@ export class UnifiedLlmService {
       const step = steps[i];
       try {
         if (i === 0) {
-          logger.info(`Attempting AI evaluation via ${step.provider === "groq" ? "Groq" : "Gemini"} (Primary: ${step.model})`);
+          logger.info(
+            `Attempting AI evaluation via ${step.provider === "groq" ? "Groq" : "Gemini"} (Primary: ${step.model})`,
+          );
         }
-        
+
         if (step.provider === "groq") {
-          return await this.groqLlmService.generateJson<T>({ ...opts, model: step.model });
+          return await this.groqLlmService.generateJson<T>({
+            ...opts,
+            model: step.model,
+          });
         } else {
-          return await this.geminiLlmService.generateJson<T>({ ...opts, model: step.model });
+          return await this.geminiLlmService.generateJson<T>({
+            ...opts,
+            model: step.model,
+          });
         }
       } catch (err: any) {
         if (i < steps.length - 1) {
           const nextStep = steps[i + 1];
-          logger.warn({ error: err.message }, `${step.provider === "groq" ? "Groq" : "Gemini"} ${step.model} failed. Falling back to ${nextStep.provider === "groq" ? "Groq" : "Gemini"} (${nextStep.model}).`);
+          logger.warn(
+            { error: err.message },
+            `${step.provider === "groq" ? "Groq" : "Gemini"} ${step.model} failed. Falling back to ${nextStep.provider === "groq" ? "Groq" : "Gemini"} (${nextStep.model}).`,
+          );
         } else {
-          logger.error({ error: err.message }, `All ${steps.length} LLM fallback stages failed.`);
+          logger.error(
+            { error: err.message },
+            `All ${steps.length} LLM fallback stages failed.`,
+          );
         }
       }
     }
