@@ -79,6 +79,7 @@ interface EnvConfig {
   // AI
   oneApiToken: string;
   oneApiBaseUrl: string;
+  geminiApiKeys: string[];
 
   // Redis
   redisUrl: string;
@@ -141,6 +142,7 @@ export const config: EnvConfig = {
     const url = Bun.env.ONE_API_BASE_URL || "http://localhost:3000";
     return url.endsWith("/v1") ? url : `${url.replace(/\/$/, "")}/v1`;
   })(),
+  geminiApiKeys: parseStringList(Bun.env.GEMINI_API_KEYS) || (Bun.env.GEMINI_API_KEY ? [Bun.env.GEMINI_API_KEY] : []),
 
   // Redis
   redisUrl: Bun.env.REDIS_URL || "redis://localhost:6379",

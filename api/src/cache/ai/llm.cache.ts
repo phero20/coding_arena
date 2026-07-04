@@ -41,7 +41,7 @@ export class LlmCache implements ILlmService {
       if (cached) {
         logger.info(
           { cacheKey, model: modelName },
-          "🚀 CACHE HIT: Served LLM response from Redis"
+          "🚀 CACHE HIT: Served LLM response from Redis",
         );
         return {
           data: JSON.parse(cached),

@@ -8,7 +8,10 @@ import { type FunctionSignature } from "../../types/problems/problem.types";
 
 const logger = createLogger("testcase-generator.service");
 
-const PRIMARY_MODEL_ID = "llama-3.3-70b-versatile";
+const PRIMARY_MODEL_ID = "gemini-3.1-flash-lite";
+
+
+
 
 export interface TestCaseGeneratorResult {
   problemId: string;
@@ -50,11 +53,21 @@ export class TestcaseGeneratorService {
     const signature = problem.function_signature as FunctionSignature | undefined;
     const classSignature = problem.class_signature as any | undefined;
 
+    const isLongProblem =
+      isClass ||
+      isDatabase ||
+      signature?.params?.some(p => p.type.includes("[][]")) ||
+      problem.constraints?.includes("256") ||
+      problem.description?.includes("256");
+
+    const publicCount = isLongProblem ? 2 : 3;
+    const hiddenCount = isLongProblem ? 3 : 7;
+
     // 2. Prepare the prompt protocol
     const systemPrompt = [
       "You are the Official LeetCode Testcase Generation Engine.",
       "The provided problem is directly from the LeetCode dataset. Your goal is to generate testcases EXACTLY like LeetCode does for this specific problem.",
-      "Generate exactly 10 test cases (3 public, 7 hidden).",
+      `Generate exactly ${publicCount + hiddenCount} test cases (${publicCount} public, ${hiddenCount} hidden).`,
       "",
       "=== MASTER PROTOCOL ===",
       ...(isDatabase ? [
@@ -78,13 +91,15 @@ export class TestcaseGeneratorService {
       "",
       "2. CONSTRAINTS & TOKEN LIMITS (CRITICAL):",
       "   - ALL testcases must strictly adhere to the problem constraints.",
-      "   - WARNING: To prevent token limits, NEVER generate an array or string longer than 40 elements, even if the constraints allow up to 10^4. Keep them reasonably sized.",
+      "   - WARNING: To prevent token limits, NEVER generate a 1D array or string longer than 40 elements, even if the constraints allow up to 10^4.",
+      "   - WARNING FOR 2D ARRAYS/MATRICES: Keep their dimensions small to prevent token truncation. The grid size of any generated 2D array or matrix MUST NEVER exceed 6x6 or 8x8, even if the problem constraints specify larger dimensions.",
+      "   - WARNING FOR COMPACT FORMATTING: Output your JSON in a minified, single-line format. Do not use newlines, indentation, or unnecessary spaces. Write the entire JSON output as a single compressed string to avoid timeout truncation.",
       "",
       "=== OUTPUT SCHEMA (JSON) ===",
       "{",
       '  "tests": {',
-      '    "public": [{ "input": {}, "expected_output": "ANY_VALID_JSON", "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": true }],',
-      '    "hidden": [{ "input": {}, "expected_output": "ANY_VALID_JSON", "timeout_ms": 2000, "memory_limit_mb": 128, "is_sample": false }]',
+      '    "public": [{ "input": {}, "expected_output": "ANY_VALID_JSON" }],',
+      '    "hidden": [{ "input": {}, "expected_output": "ANY_VALID_JSON" }]',
       "  }",
       "}"
     ].join("\n");
@@ -105,7 +120,7 @@ export class TestcaseGeneratorService {
     for (let attempt = 0; attempt < 2; attempt++) {
       const userPromptParts = [
         "Process this problem JSON and return the generated testcases in JSON mode.",
-        "Exactly 3 public + 7 hidden tests; inputs must match signature param names and types.",
+        `Exactly ${publicCount} public + ${hiddenCount} hidden tests; inputs must match signature param names and types.`,
         "",
         lastValidationError
           ? [
@@ -193,7 +208,7 @@ export class TestcaseGeneratorService {
           { upsert: true }
         );
 
-        logger.info({ problemId }, "Successfully generated and saved 10 test cases.");
+        logger.info({ problemId }, `Successfully generated and saved ${publicTests.length + hiddenTests.length} test cases.`);
 
         return {
           problemId,

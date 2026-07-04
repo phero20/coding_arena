@@ -8,6 +8,7 @@ import { ProblemAdminService } from "../../services/problems/problem.admin.servi
 import { ProblemTestService } from "../../services/problems/problem-test.service";
 import { SubmissionService } from "../../services/submissions/submission.service";
 import { LlmService } from "../../services/ai/llm.service";
+import { GeminiLlmService } from "../../services/ai/gemini-llm.service";
 import { LlmCache } from "../../cache/ai/llm.cache";
 import { UnifiedLlmService } from "../../services/ai/unified-llm.service";
 import { SystemClockService } from "../../services/common/clock.service";
@@ -84,7 +85,7 @@ export const servicesRegistry = {
   rawLlmService: asClass(LlmService).singleton(),
   llmService: asClass(LlmCache).singleton(),
   groqLlmService: asClass(LlmCache).singleton(),
-  geminiLlmService: asClass(LlmCache).singleton(),
+  geminiLlmService: asClass(GeminiLlmService).singleton(),
   unifiedLlmService: asClass(UnifiedLlmService).singleton(),
 
   // Gemini was the primary LLM, now mapped to unified LlmService

@@ -25,20 +25,20 @@ interface LlmStep {
 
 const ORDER1: LlmStep[] = [
   { provider: "groq", model: "llama-3.3-70b-versatile" },
+  { provider: "gemini", model: "gemini-3.1-flash-lite" },
   { provider: "gemini", model: "gemini-2.5-flash" },
-  { provider: "groq", model: "llama-3.1-8b-instant" },
   { provider: "gemini", model: "gemini-2.5-flash-lite" },
   { provider: "gemini", model: "gemini-3-flash-preview" },
-  { provider: "gemini", model: "gemini-3.1-flash-lite" },
+  { provider: "groq", model: "llama-3.1-8b-instant" },
 ];
 
 const ORDER2: LlmStep[] = [
   { provider: "gemini", model: "gemini-2.5-flash" },
   { provider: "groq", model: "llama-3.3-70b-versatile" },
-  { provider: "gemini", model: "gemini-2.5-flash-lite" },
-  { provider: "groq", model: "llama-3.1-8b-instant" },
-  { provider: "gemini", model: "gemini-3-flash-preview" },
   { provider: "gemini", model: "gemini-3.1-flash-lite" },
+  { provider: "gemini", model: "gemini-2.5-flash-lite" },
+  { provider: "gemini", model: "gemini-3-flash-preview" },
+  { provider: "groq", model: "llama-3.1-8b-instant" },
 ];
 
 /**

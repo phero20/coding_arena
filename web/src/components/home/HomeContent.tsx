@@ -1,5 +1,5 @@
 import { Hero } from "./Hero";
-import CompilerSection  from "./compilers/compilerVisual";
+import CompilerSection from "./compilers/compilerVisual";
 import AcademyHome from "./academy/AcademyHome";
 import { RoadmapHomeSection } from "./roadmap/RoadmapHomeSection";
 import { CompaniesHomeSection } from "./companies/CompaniesHomeSection";
@@ -14,10 +14,10 @@ export const HomeContent = () => {
       <main>
         {/* 1.0 — Hero: Full-viewport centerpiece with beam glow + product preview */}
         <Hero />
-        
+
         {/* 2.0 — Academy & Roadmap Section */}
         <AcademyHome />
-        
+
         {/* 2.5 — Interactive Roadmap Mimic */}
         <RoadmapHomeSection />
 
