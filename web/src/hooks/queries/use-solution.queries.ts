@@ -4,7 +4,7 @@ import { getSolutionsForProblem, getSolutionsByUser } from "@/services/queries/s
 export const solutionKeys = {
   all: ["solutions"] as const,
   problem: (problemId: string) => [...solutionKeys.all, "problem", problemId] as const,
-  user: (userId: string) => [...solutionKeys.all, "user", userId] as const,
+  user: (username: string) => [...solutionKeys.all, "user", username] as const,
 };
 
 /**
@@ -21,10 +21,10 @@ export function useProblemSolutions(problemId: string) {
 /**
  * Hook to fetch all solutions authored by a specific user.
  */
-export function useUserSolutions(userId: string, limit: number = 10, offset: number = 0) {
+export function useUserSolutions(username: string, limit: number = 10, offset: number = 0) {
   return useQuery({
-    queryKey: [...solutionKeys.user(userId), limit, offset],
-    queryFn: () => getSolutionsByUser(userId, limit, offset),
-    enabled: !!userId,
+    queryKey: [...solutionKeys.user(username), limit, offset],
+    queryFn: () => getSolutionsByUser(username, limit, offset),
+    enabled: !!username,
   });
 }

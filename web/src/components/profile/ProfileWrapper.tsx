@@ -60,7 +60,6 @@ export function ProfileWrapper({ username }: ProfileWrapperProps) {
           joinedAt={profileData.user.joinedAt}
           followerCount={profileData.social.followers}
           followingCount={profileData.social.following}
-          clerkUserId={profileData.user.clerkId}
           stats={profileData.stats}
         >
           <StatsProfile data={profileData} />

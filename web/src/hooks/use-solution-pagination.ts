@@ -4,7 +4,7 @@ import { useUserSolutions } from "./queries/use-solution.queries";
 /**
  * Custom hook to manage user solutions pagination state and queries.
  */
-export function useSolutionPagination(userId: string, limit: number = 10) {
+export function useSolutionPagination(username: string, limit: number = 10) {
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * limit;
 
@@ -14,7 +14,7 @@ export function useSolutionPagination(userId: string, limit: number = 10) {
     isFetching,
     error,
     refetch 
-  } = useUserSolutions(userId, limit, offset);
+  } = useUserSolutions(username, limit, offset);
 
   const totalCount = data?.total || 0;
   const totalPages = Math.ceil(totalCount / limit);

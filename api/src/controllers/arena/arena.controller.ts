@@ -11,6 +11,8 @@ import { ERRORS } from "../../constants/errors";
 import { type ICradle } from "../../libs/awilix-container";
 import { ArenaMatchService } from "../../services/arena/arena-match.service";
 
+import { type IUserRepository } from "../../repositories/user/user.repository";
+
 /**
  * ArenaController manages the lifecycle of arena rooms and matches.
  * Refactored to use standard DTOs for improved testability and decoupling.
@@ -18,21 +20,28 @@ import { ArenaMatchService } from "../../services/arena/arena-match.service";
 export class ArenaController extends BaseController {
   private readonly arenaService: ArenaService;
   private readonly arenaMatchService: ArenaMatchService;
+  private readonly userRepository: IUserRepository;
 
   constructor(cradle: ICradle) {
     super(cradle);
     this.arenaService = cradle.arenaService;
     this.arenaMatchService = cradle.arenaMatchService;
+    this.userRepository = cradle.userRepository;
   }
 
-  async getUserHistory(req: ControllerRequest<never, { userId: string }>) {
-    const userId = req.params.userId;
-    if (!userId) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
+  async getUserHistory(req: ControllerRequest<never, { username: string }>) {
+    const username = req.params.username;
+    if (!username) throw AppError.from(ERRORS.COMMON.MISSING_PARAMETER);
+
+    const user = await this.userRepository.findByUsername(username);
+    if (!user) {
+      throw AppError.notFound(`User with username ${username} not found`);
+    }
     
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
     const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
 
-    const result = await this.arenaMatchService.getMatchHistory(userId, limit, offset);
+    const result = await this.arenaMatchService.getMatchHistory(user.clerkId, limit, offset);
     
     return {
       ...result,

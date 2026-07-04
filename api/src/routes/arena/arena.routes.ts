@@ -86,7 +86,7 @@ export const registerArenaRoutes = (
   );
 
   app.get(
-    "/arena/u/:userId/history",
+    "/arena/u/:username/history",
     (c, next) => authMiddleware.handle(c, next),
     arenaController.action(arenaController.getUserHistory, {
       requireAuth: false,

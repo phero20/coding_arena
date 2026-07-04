@@ -47,22 +47,22 @@ export function useArenaMatchDetailsQuery(matchId: string | null) {
 /**
  * Fetch the match history for a specific user with pagination.
  */
-export function useArenaHistoryPaginationQuery(userId: string, limit: number = 10, offset: number = 0) {
+export function useArenaHistoryPaginationQuery(username: string, limit: number = 10, offset: number = 0) {
   return useQuery({
-    queryKey: ["arena-history-paginated", userId, limit, offset],
-    queryFn: () => getArenaHistory(userId, limit, offset),
-    enabled: !!userId,
+    queryKey: ["arena-history-paginated", username, limit, offset],
+    queryFn: () => getArenaHistory(username, limit, offset),
+    enabled: !!username,
   });
 }
 
 /**
  * Legacy: Fetch the match history for a specific user (Infinite scroll or simple list)
  */
-export function useArenaHistoryQuery(userId: string) {
+export function useArenaHistoryQuery(username: string) {
   return useQuery({
-    queryKey: ["arena-history", userId],
-    queryFn: () => getArenaHistory(userId, 50, 0).then(res => res.matches),
-    enabled: !!userId,
+    queryKey: ["arena-history", username],
+    queryFn: () => getArenaHistory(username, 50, 0).then(res => res.matches),
+    enabled: !!username,
     staleTime: 60000, // History is relatively fresh but cached
   });
 }

@@ -257,7 +257,7 @@ export class DriverJudgeExecutionService {
     }
 
     if (judgeRaw.compile_output) {
-      logger.error(
+      logger.info(
         { traceId: input.traceId, compileOutput: judgeRaw.compile_output },
         "Judge0 compilation error detected",
       );

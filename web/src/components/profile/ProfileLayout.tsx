@@ -25,7 +25,6 @@ interface ProfileLayoutProps {
   joinedAt: string;
   followerCount: number;
   followingCount: number;
-  clerkUserId: string;
   stats?: UserStats;
   children: React.ReactNode;
 }
@@ -40,7 +39,6 @@ export function ProfileLayout({
   joinedAt,
   followerCount,
   followingCount,
-  clerkUserId,
   stats,
   children,
 }: ProfileLayoutProps) {
@@ -102,11 +100,11 @@ export function ProfileLayout({
         </TabsContent>
 
         <TabsContent value="arena" className="mt-0 focus-visible:ring-0">
-          <ArenaHistoryTab userId={clerkUserId} />
+          <ArenaHistoryTab username={username} />
         </TabsContent>
 
         <TabsContent value="solutions" className="mt-0 focus-visible:ring-0">
-          <SolutionsTab userId={clerkUserId} />
+          <SolutionsTab username={username} />
         </TabsContent>
 
         <TabsContent value="submissions" className="mt-0 focus-visible:ring-0">

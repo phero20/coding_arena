@@ -19,9 +19,9 @@ export async function getSolutionsForProblem(problemId: string): Promise<Solutio
 /**
  * Fetch all solutions authored by a specific user.
  */
-export async function getSolutionsByUser(userId: string, limit: number = 10, offset: number = 0): Promise<{ items: Solution[]; total: number; limit: number; offset: number }> {
+export async function getSolutionsByUser(username: string, limit: number = 10, offset: number = 0): Promise<{ items: Solution[]; total: number; limit: number; offset: number }> {
   const response = await apiClient.get<ApiResponse<{ items: Solution[]; total: number; limit: number; offset: number }>>(
-    `/solutions/user/${userId}`,
+    `/solutions/user/${username}`,
     { params: { limit, offset } }
   );
 

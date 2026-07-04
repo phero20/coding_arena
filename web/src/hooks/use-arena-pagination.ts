@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useArenaHistoryPaginationQuery } from "./queries/use-arena.queries";
 
-export function useArenaPagination(userId: string, limit: number = 10) {
+export function useArenaPagination(username: string, limit: number = 10) {
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * limit;
 
@@ -12,7 +12,7 @@ export function useArenaPagination(userId: string, limit: number = 10) {
     isError, 
     error,
     refetch 
-  } = useArenaHistoryPaginationQuery(userId, limit, offset);
+  } = useArenaHistoryPaginationQuery(username, limit, offset);
 
   const totalCount = data?.pagination?.total || 0;
   const totalPages = Math.ceil(totalCount / limit);

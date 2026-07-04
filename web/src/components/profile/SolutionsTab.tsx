@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { formatDistanceToNow } from "date-fns";
 import { 
@@ -32,12 +32,12 @@ import {
 } from "@/components/ui/table";
 
 interface SolutionsTabProps {
-  userId: string;
+  username: string;
 }
 
-export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
-  const { userId: currentClerkId } = useAuth();
-  const isOwner = userId === currentClerkId;
+export const SolutionsTab: React.FC<SolutionsTabProps> = ({ username }) => {
+  const { user: currentUser } = useUser();
+  const isOwner = username === currentUser?.username;
   
   const { 
     items: solutions, 
@@ -49,7 +49,7 @@ export const SolutionsTab: React.FC<SolutionsTabProps> = ({ userId }) => {
     setCurrentPage,
     totalPages,
     totalCount
-  } = useSolutionPagination(userId, 10);
+  } = useSolutionPagination(username, 10);
 
   const expectedCount = totalCount > 0 
     ? Math.min(10, totalCount - (currentPage - 1) * 10)

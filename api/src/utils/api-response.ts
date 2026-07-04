@@ -72,11 +72,19 @@ export class ApiResponse<T = unknown> {
   }
 
   private static sanitize<T>(data: T): T {
+    if (data === null || data === undefined) {
+      return data;
+    }
     if (Array.isArray(data)) {
       return data.map((item) => this.sanitize(item)) as unknown as T;
     }
-    if (isObject(data)) {
-      return omit(data as object, FORBIDDEN_FIELDS) as unknown as T;
+    if (isObject(data) && !(data instanceof Date) && !(data instanceof RegExp)) {
+      const omitted = omit(data as object, FORBIDDEN_FIELDS);
+      const result: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(omitted)) {
+        result[key] = this.sanitize(val);
+      }
+      return result as unknown as T;
     }
     return data;
   }

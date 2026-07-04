@@ -4,13 +4,16 @@ import type { ControllerRequest } from "../../types/infrastructure/hono.types";
 import type { CreateSolutionInput, VoteSolutionInput } from "../../validators/solution.validator";
 import { type ICradle } from "../../libs/awilix-container";
 import { AppError } from "../../utils/app-error";
+import { type IUserRepository } from "../../repositories/user/user.repository";
 
 export class SolutionController extends BaseController {
   private readonly solutionService: ISolutionService;
+  private readonly userRepository: IUserRepository;
 
   constructor(cradle: ICradle) {
     super(cradle);
     this.solutionService = cradle.solutionService;
+    this.userRepository = cradle.userRepository;
   }
 
   /**
@@ -40,15 +43,13 @@ export class SolutionController extends BaseController {
    */
   async voteForSolution(req: ControllerRequest<VoteSolutionInput, { id: string }>) {
     const { id: solutionId } = req.params;
-    const { voteType } = req.body;
     const userId = req.user?.id;
 
     if (!userId) {
       throw AppError.unauthorized();
     }
 
-    await this.solutionService.voteForSolution(solutionId, userId, voteType);
-    return { success: true };
+    return await this.solutionService.voteForSolution(solutionId, userId, req.body.voteType);
   }
 
   /**
@@ -81,12 +82,18 @@ export class SolutionController extends BaseController {
   }
 
   /**
-   * GET /solutions/user/:userId
+   * GET /solutions/user/:username
    */
-  async getSolutionsByUser(req: ControllerRequest<never, { userId: string }>) {
-    const { userId } = req.params;
+  async getSolutionsByUser(req: ControllerRequest<never, { username: string }>) {
+    const { username } = req.params;
     const limit = Number(req.query.limit || 10);
     const offset = Number(req.query.offset || 0);
-    return await this.solutionService.getSolutionsByUser(userId, limit, offset);
+
+    const user = await this.userRepository.findByUsername(username);
+    if (!user) {
+      throw AppError.notFound(`User with username ${username} not found`);
+    }
+
+    return await this.solutionService.getSolutionsByUser(user.id, limit, offset);
   }
 }

@@ -56,9 +56,9 @@ export const registerSolutionRoutes = (
     solutionController.action(solutionController.deleteSolution)
   );
   
-  // GET /solutions/user/:userId
+  // GET /solutions/user/:username
   solutions.get(
-    "/user/:userId",
+    "/user/:username",
     solutionController.action(solutionController.getSolutionsByUser, { requireAuth: false })
   );
 

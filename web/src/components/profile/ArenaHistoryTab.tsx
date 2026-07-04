@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useArenaMatchDetailsQuery } from "@/hooks/queries/use-arena.queries";
 import { QueryGuard } from "@/components/shared/QueryGuard";
 import { ArenaMatchDetail } from "./ArenaMatchDetail";
@@ -33,13 +33,13 @@ import {
 import { useState } from "react";
 
 interface ArenaHistoryTabProps {  
-  userId: string;
+  username: string;
 }
 
-export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
+export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ username }) => {
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
-  const { userId: currentClerkId } = useAuth();
-  const isOwner = userId === currentClerkId;
+  const { user: currentUser } = useUser();
+  const isOwner = username === currentUser?.username;
 
   const { 
     matches, 
@@ -51,7 +51,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
     setCurrentPage,
     totalPages,
     totalCount
-  } = useArenaPagination(userId, 10);
+  } = useArenaPagination(username, 10);
   
   const { 
     data: detailedMatch, 
@@ -147,7 +147,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ userId }) => {
               </TableHeader>
               <TableBody>
                 {matchList.map((match) => {
-                  const myResult = match.players.find((p) => p.userId === userId);
+                  const myResult = match.players.find((p) => p.username === username);
                   return (
                     <TableRow
                       key={match.id}
