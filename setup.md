@@ -9,14 +9,18 @@ Understanding where the logic lives is the first step to mastery.
 
 | Folder | Name | Tech Stack | Role & Responsibility |
 | :--- | :--- | :--- | :--- |
-| **`/api`** | The Brain | Bun, Hono, Drizzle,Postgress, Mongo,redis | **Central REST API**: Manages user authentication (Clerk), problem banks, and persistent analytics. |
-| **`/arena`** | The Heart | Go, Fiber, Redis | **Real-time Engine**: A high-performance WebSocket hub that manages live match state and lobby broadcasting. |
-| **`/web`** | The Face | Next.js 15+, Zustand | **Frontend UI**: The React-based platform featuring Monaco Editor and real-time dashboards. |
-| **`/driver`** | The Bridge | Java,c++,c,go,rust... | **Execution Logic**: Wraps user code into language-specific test packages before sending to Judge0. |
-| **`/infra`** | The Blueprint | Docker | **Environment Recipes**: Contains production-ready Dockerfiles for the backend services. |
-| **`/envexamples`** | The Vault | Config | **Templates**: Master `.env` templates to ensure consistent configuration across environments. |
-| **`/docs`** | The Source | Markdown, PNG | **Encyclopedia**: Architectural blueprints, UML diagrams, and system flow references. |
-| **`/testings`** | The Guard | TS/JS | **Quality Assurance**: Automated health-check scripts to verify inter-service connectivity. |
+| **[`/api`](api)** | The Brain | Bun, Hono, Drizzle, Postgres, Mongo, Redis | **Central REST API**: Manages user authentication (Clerk), problem banks, and persistent analytics. |
+| **[`/arena`](arena)** | The Heart | Go, Fiber, Redis | **Real-time Engine**: A high-performance WebSocket hub that manages live match state and lobby broadcasting. |
+| **[`/web`](web)** | The Face | Next.js 15+, Zustand | **Frontend UI**: The React-based user platform featuring Monaco Editor and real-time dashboards. |
+| **[`/admin`](admin)** | The Operator | Next.js, TailwindCSS | **Admin Portal**: Interface for managing contest problems, system design topics, and user suspensions. |
+| **[`/driver`](driver)** | The Bridge | Java, C++, C, Go, Rust... | **Execution Logic**: Wraps user code into language-specific test packages before sending to Judge0. |
+| **[`/cloud`](cloud)** | The Orchestrator | TypeScript | **VM Control Layer**: Orchestrates Judge0 execution VMs and sandboxes on cloud providers (Azure VM controls). |
+| **[`/infra`](infra)** | The Blueprint | Docker | **Environment Recipes**: Contains production-ready Dockerfiles for the backend services. |
+| **[`/envexamples`](envexamples)** | The Vault | Config | **Templates**: Master `.env` templates to ensure consistent configuration across environments. |
+| **[`/docs`](docs)** | The Source | Markdown, PNG | **Encyclopedia**: Architectural blueprints, UML diagrams, and system flow references. |
+| **[`/testings`](testings)** | The Guard | TS/JS | **Quality Assurance**: Automated health-check scripts to verify inter-service connectivity. |
+| **[`/scratch`](scratch)** | The Scratchpad | Markdown | **Developer Workspace**: Houses temporary scratch files, local experiments, and developer notes. |
+| **[`/scripts`](scripts)** | The Tools | Bash / Node | **DevOps Utilities**: Contains local db migration, seeding, and docker maintenance utilities. |
 
 ---
 
@@ -63,11 +67,11 @@ The frontend is run manually to allow for rapid HMR (Hot Module Replacement) and
 ## 🔑 4. Environment Configuration
 The ecosystem relies on three core `.env` files. You MUST copy these from `/envexamples` and populate them with your secrets.
 
-| Target Path | Source Template | Critical Keys to Set |
-| :--- | :--- | :--- |
-| `api/.env` | `envexamples/.env.api.example` | `DATABASE_URL` (Postgres), `MONGODB_URI`, `CLERK_SECRET_KEY` |
-| `web/.env` | `envexamples/.env.web.example` | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_API_URL` |
-| `arena/.env` | `envexamples/.env.arena.example` | `CLERK_PEM_PUBLIC_KEY` |
+| Target Path | Source Template |
+| :--- | :--- |
+| **[`api/.env`](api/.env)** | **[`envexamples/.env.api.example`](envexamples/.env.api.example)** |
+| **[`web/.env`](web/.env)** | **[`envexamples/.env.web.example`](envexamples/.env.web.example)** |
+| **[`arena/.env`](arena/.env)** | **[`envexamples/.env.arena.example`](envexamples/.env.arena.example)** |
 
 ---
 
@@ -109,7 +113,7 @@ SlaveCode uses a hybrid infrastructure strategy to balance flexibility, relation
 ---
 
 ## 🧪 7. Verification
-Once everything is up, run the health check to verify the entire "Handshake" between services:
+Once everything is up, run the **[health check](testings/health.test.ts)** to verify the entire "Handshake" between services:
 ```bash
 bun --env-file=api/.env run testings/health.test.ts
 ```
