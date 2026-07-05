@@ -4,108 +4,18 @@
 </h1>
 
 <p align="center">
-  High-Performance Competitive Programming & System Design Platform
+  <b>The Ultimate Platform for Software Engineers</b><br/>
+  <i>Your code is your master. Serve it well.</i>
 </p>
 
-SlaveCode is a comprehensive, modern platform built for real-time multiplayer competitive programming matches, structured computer science curricula, and interactive system design workspaces. 
+Master algorithms, system design, and interview prep. Join the ultimate all-in-one coding academy and real-time arena to prove your engineering excellence.
 
-The architecture features a hybrid microservices layout, combining a high-performance **Golang WebSocket match engine** with a lightweight **Hono REST API** (running on Bun), asynchronous **BullMQ background workers**, and a sandboxed **Judge0 code execution engine** with automatic **LLM-based AI judging fallbacks**.
-
----
-
-## 🏗️ System Architecture & Data Flow
-
-Below is the high-level infrastructure map illustrating the physical network relationships between the Client Layer, Microservices, Data Stores, and Sandbox Execution engines.
-
-```mermaid
-flowchart TB
-    %% --------------------------------
-    %% Client Tier
-    %% --------------------------------
-    subgraph ClientLayer ["Client Layer"]
-        Browser("Web Browser\n(Next.js React Client)")
-    end
-
-    %% --------------------------------
-    %% Third-Party APIs
-    %% --------------------------------
-    subgraph ThirdParty ["External Services (3rd Party)"]
-        Clerk("Clerk\n(Auth & Webhooks)")
-        OneAPI("One API Gateway\n(Gemini & Groq)")
-        Cloudinary("Cloudinary\n(Image Hosting)")
-        ExternalContests("Codeforces / LeetCode\n(External APIs)")
-        Judge0("Judge0 API\n(Code Execution Sandbox)")
-        Wandbox("Wandbox API\n(Compiler Alternative)")
-    end
-
-    %% --------------------------------
-    %% Service Tier
-    %% --------------------------------
-    subgraph Services ["Microservices (Backend)"]
-        API["Hono API Server\n(Bun + Awilix)"]
-        GoArena["Golang Arena Server\n(WebSockets + Hub)"]
-        
-        subgraph Workers ["BullMQ Background Workers"]
-            SubWorker("Submission Worker\n(Evaluator)")
-            ArenaWorker("Arena Worker\n(Match Enforcer/Cleanup)")
-            ContestWorker("Contest Worker\n(Cron Jobs)")
-        end
-    end
-
-    %% --------------------------------
-    %% Persistence / Database Tier
-    %% --------------------------------
-    subgraph DataLayer ["Data Layer"]
-        Postgres[("PostgreSQL\n(Relational Data)")]
-        Mongo[("MongoDB\n(Document Data)")]
-        Redis[("Redis\n(In-Memory Cache & PubSub)")]
-    end
-
-    %% User interactions
-    Browser -- "HTTP REST (JSON)" --> API
-    Browser -- "Persistent WebSocket" --> GoArena
-    Browser -- "JWT / OAuth" --> Clerk
-
-    %% Auth Webhooks
-    Clerk -- "User Sync Webhooks" --> API
-
-    %% API to Databases
-    API -- "User Profiles, Stats, Categories, Solutions" --> Postgres
-    API -- "Problems, Submissions, System Design, Academy" --> Mongo
-    API -- "Caching" --> Redis
-    API -- "Upload Images" --> Cloudinary
-    API -- "Enqueue Job" --> Redis
-
-    %% Workers pull from Redis Queue
-    Redis -- "BullMQ Jobs" --> Workers
-
-    %% Submission Worker Flow
-    SubWorker -- "1. Fetch Hidden Tests" --> Mongo
-    SubWorker -- "2. Evaluate Code" --> Judge0
-    SubWorker -- "2b. Fallback Compile" --> Wandbox
-    SubWorker -- "3. Fallback AI Judge" --> OneAPI
-    SubWorker -- "4. Save Results" --> Mongo
-    SubWorker -- "5. Update Stats" --> Postgres
-    SubWorker -- "6. Publish Event" --> Redis
-
-    %% Arena Worker Flow
-    ArenaWorker -- "Delayed GC / Timeouts" --> Redis
-
-    %% Contest Worker Flow
-    ContestWorker -- "Polls" --> ExternalContests
-    ContestWorker -- "Save Contests" --> Postgres
-
-    %% Go Arena Server Flow
-    GoArena -- "Atomic Scripts & Join Logic" --> Redis
-    Redis -- "PubSub Updates (LEADERBOARD)" --> GoArena
-    
-    %% AI Flows (Excalidraw / Chat)
-    API -- "Chat History / Diagrams" --> OneAPI
-```
+Master your skills with a comprehensive platform designed for growth. Access over **11,000+ coding problems**, explore our **Academy** supporting **80 languages**, and follow structured **DSA roadmaps**. Prepare for interviews with **460+ company-specific questions**, dive into **System Design** with detailed concepts and a fully-featured AI-Powered Workspace, and more.
 
 ---
 
-## 🛠️ Technology Stack Matrix
+
+## 🛠️ Technology Stack
 
 *   **Frontend UI**: Next.js 15+ (App Router), React, TailwindCSS, Zustand, Monaco Editor, Tldraw Infinite Whiteboard
 *   **REST API Gateway**: Hono (running on Bun), Awilix for Dependency Injection (DI)
@@ -120,7 +30,54 @@ flowchart TB
 
 ---
 
+## 💻 Platform Features
+
+SlaveCode is more than just a code submission site — it is a complete competitive programmer's ecosystem. Here is every feature available from the platform navigation, in order:
+
+---
+
+### 🎓 Academy — [slavecode.codes/academy/tracks](https://slavecode.codes/academy/tracks)
+Master programming languages through structured, exercise-driven learning tracks. The Academy hosts **82+ language tracks** spanning everything from beginner-friendly Gleam, Go, and Haskell to advanced functional and compiled languages. Each track is tagged by paradigm (Compiled, Functional, Declarative, Imperative, etc.) and contains hundreds of progressive exercises. Every language has a properly structured track roadmap with detailed concepts and exercises — from "Hello World" to advanced algorithm implementations.
+
+---
+
+### 🗺️ Roadmap — [slavecode.codes/roadmap](https://slavecode.codes/roadmap)
+Stop guessing what to learn next. The interactive DSA Roadmap guides you through every concept of Data Structures and Algorithms in a highly structured, logical sequence. Navigate through clearly defined subtopics from basic Arrays to complex Trees and Tries, with each topic paired with targeted practice problems. Track your true mastery as you conquer every node on the path — from basics through Booleans, Strings, If-Else Statements, to Numbers and beyond.
+
+---
+
+### 💻 Problems — [slavecode.codes/problems](https://slavecode.codes/problems)
+A curated bank of algorithmic and language-specific problems ranging from introductory exercises to advanced competitive programming challenges. Each problem is paired with hidden test cases evaluated by Judge0 sandboxes, with automatic AI judging fallbacks for edge cases. Track your solutions, language performance, and solution votes. Problems are filterable by difficulty, category, company, and programming language.
+
+---
+
+### 🏗️ System Design — [slavecode.codes/systemdesign](https://slavecode.codes/systemdesign)
+Master system design through structured, in-depth learning tracks covering **56 essential topics** designed for deliberate practice. Topics span core infrastructure concepts including: Databases, Load Balancers, Caches, CDNs, Microservices, Message Queues, API Gateways, and Blob Storage. Each topic is paired with an interactive whiteboard workspace (powered by Tldraw) where you can sketch architecture diagrams, generate visual system maps from code, and chat with an AI assistant to deepen your understanding.
+
+---
+
+### 🏢 Companies — [slavecode.codes/companies](https://slavecode.codes/companies)
+Explore **460+ top tech company profiles** including Google, Meta, Amazon, Apple, Microsoft, Oracle, Netflix, Uber, Airbnb, Adobe, TCS, Infosys, and many more. Each company profile surfaces real interview questions that you can solve directly in the built-in code editor while tracking your solve history and success stats per company over time.
+
+---
+
+### ⚔️ Arena — [slavecode.codes/arena](https://slavecode.codes/arena)
+The multiplayer competitive battleground. **Host or join a coding match** in real time — select problems from the extensive catalog to host a custom coding match, or enter a pin code to join an active match. Compete against up to 50 challengers simultaneously with a live leaderboard. Arena Points and global rankings are awarded based on your final rank and execution speed. The real-time match state is powered by a dedicated Golang WebSocket server using Redis Pub/Sub for instant leaderboard broadcasting.
+
+---
+
+### ⚡ Compilers — [slavecode.codes/compilers](https://slavecode.codes/compilers)
+A **high-performance multi-language compiler playground** where you can write and execute code scripts instantly in a distraction-free environment. Features include a Monaco code editor with syntax highlighting, a built-in Excalidraw scratchpad for sketching, a countdown timer, theme switching, and real-time output panels. Supports all major programming languages through the Judge0 sandboxed execution engine.
+
+---
+
+### 🏆 Contests — [slavecode.codes/contests](https://slavecode.codes/contests)
+A **unified global contest calendar** that aggregates upcoming coding competitions from across the web into a single dashboard. Tracks events from LeetCode Weekly Contests, Codeforces Rounds, AtCoder Beginner Contests, CodeChef Starters, and more — with live countdown timers, contest durations, and direct registration links. Never miss a competition again.
+
+---
+
 ## 📁 Repository Directory Structure
+
 
 The codebase is organized into key folders for modular development:
 
