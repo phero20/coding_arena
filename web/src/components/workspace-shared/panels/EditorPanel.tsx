@@ -265,7 +265,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
           value="code"
           className="flex-1 m-0 min-h-0 data-[state=inactive]:hidden"
         >
-          <div className="h-[990px] md:h-full w-full ">
+          <div className="h-[590px] md:h-full w-full ">
             <Editor
               height="100%"
               beforeMount={handleEditorWillMount}

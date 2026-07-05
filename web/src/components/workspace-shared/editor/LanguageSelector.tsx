@@ -35,15 +35,15 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-8 w-[140px] justify-between bg-muted/40 border-border/40 text-[11px] font-bold hover:bg-muted/60"
+          className="h-8 w-[130px] justify-between bg-muted/40 border-border/40 text-[11px] font-bold hover:bg-muted/60 px-2"
         >
-          <div className="flex items-center gap-2 overflow-hidden">
+          <div className="flex items-center gap-1 overflow-hidden">
             <Terminal className="size-3 text-primary shrink-0" />
             <span className="truncate">
               {selectedLanguage ? selectedLanguage.name : "Select language..."}
             </span>
           </div>
-          <ChevronsUpDown className="ml-1 size-3 shrink-0 opacity-50" />
+          <ChevronsUpDown className="size-3 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent

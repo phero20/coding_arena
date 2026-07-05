@@ -102,8 +102,8 @@ SlaveCode uses a hybrid infrastructure strategy to balance flexibility, relation
 
 ### 🧠 AI Integrations (One API Gateway)
 6.  **One API Gateway (Gemini & Groq)**: Acts as the centralized, unified router for all AI features in the system. It load-balances and manages API credentials, routing requests to:
-    - **Gemini (gemini-2.5-flash / gemini-1.5-flash)**: Primary models used for heavy operations like system design diagram analysis, chat history, and problem importing/rewriting.
-    - **Groq (llama-3.3-70b-versatile / llama-3.1-8b-instant)**: High-speed fallback models for instant evaluations.
+    - Gemini : Primary models used for heavy operations like system design diagram analysis, chat history, and problem importing/rewriting.
+    - Groq : High-speed fallback models for instant evaluations.
 7.  **Unified AI Judging**: If Judge0 fails a submission due to strict formatting differences (e.g. trailing whitespaces) or does not support a specific language, the Hono API falls back to evaluating logical correctness using these gateway models with an automated multi-stage fallback queue.
 
 ---
