@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   RotateCcw,
   HelpCircle,
@@ -62,6 +62,26 @@ export function CodeDiagramPanel({ editor }: CodeDiagramPanelProps) {
   );
   const [spacing, setSpacing] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const stopPropagation = (e: KeyboardEvent) => {
+      e.stopPropagation();
+    };
+
+    container.addEventListener("keydown", stopPropagation, { capture: true });
+    container.addEventListener("keyup", stopPropagation, { capture: true });
+    container.addEventListener("keypress", stopPropagation, { capture: true });
+
+    return () => {
+      container.removeEventListener("keydown", stopPropagation, { capture: true });
+      container.removeEventListener("keyup", stopPropagation, { capture: true });
+      container.removeEventListener("keypress", stopPropagation, { capture: true });
+    };
+  }, []);
 
   const handleEditorDidMount = (editorInstance: any, monaco: any) => {
     monaco.languages.register({ id: "system-diagram" });
@@ -196,10 +216,8 @@ export function CodeDiagramPanel({ editor }: CodeDiagramPanelProps) {
             </div>
 
             <div 
+              ref={containerRef}
               className="h-84 w-full rounded-md border border-input overflow-hidden focus-within:ring-1 focus-within:ring-ring"
-              onKeyDownCapture={(e) => e.stopPropagation()}
-              onKeyUpCapture={(e) => e.stopPropagation()}
-              onKeyPressCapture={(e) => e.stopPropagation()}
             >
               <Editor
                 height="100%"
