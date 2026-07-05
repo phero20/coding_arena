@@ -9,18 +9,18 @@ Understanding where the logic lives is the first step to mastery.
 
 | Folder | Name | Tech Stack | Role & Responsibility |
 | :--- | :--- | :--- | :--- |
-| **[`/api`](api)** | The Brain | Bun, Hono, Drizzle, Postgres, Mongo, Redis | **Central REST API**: Manages user authentication (Clerk), problem banks, and persistent analytics. |
-| **[`/arena`](arena)** | The Heart | Go, Fiber, Redis | **Real-time Engine**: A high-performance WebSocket hub that manages live match state and lobby broadcasting. |
-| **[`/web`](web)** | The Face | Next.js 15+, Zustand | **Frontend UI**: The React-based user platform featuring Monaco Editor and real-time dashboards. |
-| **[`/admin`](admin)** | The Operator | Next.js, TailwindCSS | **Admin Portal**: Interface for managing contest problems, system design topics, and user suspensions. |
-| **[`/driver`](driver)** | The Bridge | Java, C++, C, Go, Rust... | **Execution Logic**: Wraps user code into language-specific test packages before sending to Judge0. |
-| **[`/cloud`](cloud)** | The Orchestrator | TypeScript | **VM Control Layer**: Orchestrates Judge0 execution VMs and sandboxes on cloud providers (Azure VM controls). |
-| **[`/infra`](infra)** | The Blueprint | Docker | **Environment Recipes**: Contains production-ready Dockerfiles for the backend services. |
-| **[`/envexamples`](envexamples)** | The Vault | Config | **Templates**: Master `.env` templates to ensure consistent configuration across environments. |
-| **[`/docs`](docs)** | The Source | Markdown, PNG | **Encyclopedia**: Architectural blueprints, UML diagrams, and system flow references. |
-| **[`/testings`](testings)** | The Guard | TS/JS | **Quality Assurance**: Automated health-check scripts to verify inter-service connectivity. |
-| **[`/scratch`](scratch)** | The Scratchpad | Markdown | **Developer Workspace**: Houses temporary scratch files, local experiments, and developer notes. |
-| **[`/scripts`](scripts)** | The Tools | Bash / Node | **DevOps Utilities**: Contains local db migration, seeding, and docker maintenance utilities. |
+| **[`/api`](api)** | The Brain | Bun, Hono, Drizzle, Postgres, Mongo, Redis | **Central REST API**: Coordinates authentication via Clerk, manages problem banks, serves code execution logic, routes AI diagram queries, processes solution submissions, and updates Postgres database stats. |
+| **[`/arena`](arena)** | The Heart | Go, Fiber, Redis | **Real-time Engine**: A high-concurrency WebSocket server that manages lobbies, processes real-time leaderboard scores, matches competitive programming battle players, and handles Pub/Sub events. |
+| **[`/web`](web)** | The Face | Next.js 15+, Zustand | **Frontend UI**: Responsive React web client hosting the coding interface (Monaco Editor), System Design whiteboard editor (Tldraw), multiplayer dashboard panels, and the Academy portal. |
+| **[`/admin`](admin)** | The Operator | Next.js, TailwindCSS | **Admin Dashboard**: Portal interface enabling managers to create contest problems, manage categories taxonomy, audit AI verdicts feedback logs, and moderate user profiles. |
+| **[`/driver`](driver)** | The Bridge | Java, C++, C, Go, Rust... | **Compiler Adapter**: Wraps student and competitor code into language-specific compiler templates and execution packages before dispatching them safely to the Judge0 sandbox. |
+| **[`/cloud`](cloud)** | The Orchestrator | TypeScript | **Cloud Controller**: VM provisioner handling scaling, health inspection, and start/stop automation scripts of remote sandbox servers running on Azure. |
+| **[`/infra`](infra)** | The Blueprint | Docker | **Container Infrastructure**: Production-ready docker-compose files, Dockerfiles, and environment config recipes to containerize and deploy microservices. |
+| **[`/envexamples`](envexamples)** | The Vault | Config | **Env Templates**: Holds standard environment templates (`.env.example`) to ensure consistent configuration keys and values across the REST API, Frontend, and WebSocket nodes. |
+| **[`/docs`](docs)** | The Source | Markdown, PNG | **Technical Documents**: Complete reference manual containing project setup workflows, UML sequence/activity/class/usecase diagrams, database ERDs, and caching key architectures. |
+| **[`/testings`](testings)** | The Guard | TS/JS | **Quality Checks**: System integration scripts to verify correct network handshakes, database client pools connection status, and basic endpoint accessibility. |
+| **[`/scratch`](scratch)** | The Scratchpad | Markdown | **Developer Sandbox**: Area hosting temporary local mock test cases, draft notes, configuration testing files, and scratch scripts for developer experiments. |
+| **[`/scripts`](scripts)** | The Tools | Bash / Node | **Automation Utilities**: Houses bash shell tools and Node modules to automate database seeding, execute Drizzle migrations, and maintain Docker networks. |
 
 ---
 

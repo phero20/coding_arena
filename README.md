@@ -1,4 +1,11 @@
-# 🚀 SlaveCode: High-Performance Competitive Programming & System Design Platform
+<h1 align="center">
+  <img src="web/public/logos/logo1.png" alt="SlaveCode Logo" width="50"  />
+  <b>SlaveCode</b>
+</h1>
+
+<p align="center">
+  High-Performance Competitive Programming & System Design Platform
+</p>
 
 SlaveCode is a comprehensive, modern platform built for real-time multiplayer competitive programming matches, structured computer science curricula, and interactive system design workspaces. 
 
@@ -117,20 +124,20 @@ flowchart TB
 
 The codebase is organized into key folders for modular development:
 
-| Path | Description | Key Tech Stack |
-| :--- | :--- | :--- |
-| **[`/api`](api)** | Central REST API, DI containers, services, repository layers, and BullMQ worker processors. | Bun, Hono, Drizzle ORM, Mongoose, BullMQ |
-| **[`/arena`](arena)** | Real-time WebSocket matchmaking server, handling lobby connections, match state, and scoring. | Golang, Fiber WebSockets, Redis |
-| **[`/web`](web)** | Interactive web client dashboard, code panels, academy tracking, and system design whiteboards. | Next.js 15+, Zustand, Monaco, Tldraw |
-| **[`/admin`](admin)** | Admin portal interface for managing problems, system design topics, metrics audit logs, and user status. | Next.js, TailwindCSS |
-| **[`/driver`](driver)** | The execution driver. Wraps user code submissions inside language templates before sending to Judge0. | Java, Python, C++, Go, Rust templates |
-| **[`/cloud`](cloud)** | VM Orchestrator. Coordinates sandbox server virtual machines on cloud providers (e.g. Azure). | TypeScript |
-| **[`/infra`](infra)** | Deployment Docker configurations and worker setup recipes. | Docker |
-| **[`/envexamples`](envexamples)** | Master configuration templates for backend, frontend, and real-time servers. | `.env` templates |
-| **[`/docs`](docs)** | Developer documentation guides, system UML diagrams, and database collections schemas. | Markdown |
-| **[`/testings`](testings)** | Automated connectivity health-checks and QA suites. | TypeScript, Bun |
-| **[`/scratch`](scratch)** | Developer workspace for temporary scratch files, experiments, and notes. | Markdown |
-| **[`/scripts`](scripts)** | DevOps scripts for local db migration, seeding, and docker maintenance utilities. | Bash / Node |
+| Folder | Name | Tech Stack | Role & Responsibility |
+| :--- | :--- | :--- | :--- |
+| **[`/api`](api)** | The Brain | Bun, Hono, Drizzle, Postgres, Mongo, Redis | **Central REST API**: Coordinates authentication via Clerk, manages problem banks, serves code execution logic, routes AI diagram queries, processes solution submissions, and updates Postgres database stats. |
+| **[`/arena`](arena)** | The Heart | Go, Fiber, Redis | **Real-time Engine**: A high-concurrency WebSocket server that manages lobbies, processes real-time leaderboard scores, matches competitive programming battle players, and handles Pub/Sub events. |
+| **[`/web`](web)** | The Face | Next.js 15+, Zustand | **Frontend UI**: Responsive React web client hosting the coding interface (Monaco Editor), System Design whiteboard editor (Tldraw), multiplayer dashboard panels, and the Academy portal. |
+| **[`/admin`](admin)** | The Operator | Next.js, TailwindCSS | **Admin Dashboard**: Portal interface enabling managers to create contest problems, manage categories taxonomy, audit AI verdicts feedback logs, and moderate user profiles and more. |
+| **[`/driver`](driver)** | The Bridge | Java, C++, C, Go, Rust... | **Compiler Adapter**: Wraps student and competitor code into language-specific compiler templates and execution packages before dispatching them safely to the Judge0 sandbox. |
+| **[`/cloud`](cloud)** | The Orchestrator | TypeScript | **Cloud Controller**: VM provisioner handling scaling, health inspection, and start/stop automation scripts of remote sandbox servers running on Azure. |
+| **[`/infra`](infra)** | The Blueprint | Docker | **Container Infrastructure**: Production-ready docker-compose files, Dockerfiles, and environment config recipes to containerize and deploy microservices. |
+| **[`/envexamples`](envexamples)** | The Vault | Config | **Env Templates**: Holds standard environment templates (`.env.example`) to ensure consistent configuration keys and values across the REST API, Frontend, and WebSocket nodes. |
+| **[`/docs`](docs)** | The Source | Markdown, PNG | **Technical Documents**: Complete reference manual containing project setup workflows, UML sequence/activity/class/usecase diagrams, database ERDs, and caching key architectures. |
+| **[`/testings`](testings)** | The Guard | TS/JS | **Quality Checks**: System integration scripts to verify correct network handshakes, database client pools connection status, and basic endpoint accessibility. |
+| **[`/scratch`](scratch)** | The Scratchpad | Markdown | **Developer Sandbox**: Area hosting temporary local mock test cases, draft notes, configuration testing files, and scratch scripts for developer experiments. |
+| **[`/scripts`](scripts)** | The Tools | Bash / Node | **Automation Utilities**: Houses bash shell tools and Node modules to automate database seeding, execute Drizzle migrations, and maintain Docker networks. |
 
 ---
 
