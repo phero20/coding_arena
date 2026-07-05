@@ -141,7 +141,7 @@ const components: any = {
   img: ({ node, src, alt, ...props }: any) => (
     <span className="flex flex-col items-center justify-center my-10">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img width={100} height={100}
+      <img
         src={src}
         alt={alt}
         className="rounded-xl border border-border/50 shadow-sm max-w-full h-auto max-h-[600px] object-contain bg-muted/20"
