@@ -1,12 +1,10 @@
 # Chat Cache Layer (Sliding Window Memory)
 
-Unlike other modules which use a separate cache directory and decorator pattern, the Chat module handles its Redis caching directly within the `ChatService`. This is because its caching strategy is tightly coupled to the logic required to feed the Groq LLM context.
+Unlike other modules which use a separate cache directory and decorator pattern, the Chat module handles its Redis caching directly within the `ChatService`. This is because its caching strategy is tightly coupled to the logic required to feed the LLM context.
 
-**File Location**: [api/src/services/chat/chat.service.ts](../../../api/src/services/chat/chat.service.ts)
+## 1. The Sliding Window Problem
 
-## The Redis Sliding Window
-
-Every time a user interacts with the AI, the Groq LLM needs the recent conversation history to maintain context. Querying PostgreSQL for this history on every keystroke would be incredibly slow. Instead, the backend uses a **Redis Sliding Window**.
+Every time a user interacts with the AI, the LLM needs the recent conversation history to maintain context. Querying PostgreSQL for this history on every keystroke would be incredibly slow. Instead, the backend uses a **Redis Sliding Window**.
 
 ### How it Works:
 

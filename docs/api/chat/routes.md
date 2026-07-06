@@ -49,4 +49,4 @@ The route registration function `registerChatRoutes` expects:
 - **Auth Required**: **Yes**
 - **Validation**: Zod `createChatMessageSchema` (requires `prompt`, and optionally `diagramId` and `canvasGraph`).
 - **Controller Action**: `chatController.sendMessage`
-- **Description**: The core AI endpoint. Receives the user's prompt and the current semantic state of the canvas (`canvasGraph`), forwards it to the Groq LLM, and returns both a conversational text response and an array of executable `canvasActions`.
+- **Description**: The core AI endpoint. Receives the user's prompt and the current semantic state of the canvas (`canvasGraph`), forwards it to the LLM via One API, and returns both a conversational text response and an array of executable `canvasActions`.

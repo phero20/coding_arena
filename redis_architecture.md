@@ -13,7 +13,7 @@ Redis serves as the central nervous system for Coding Arena. It acts as an ultra
 | `bull:submission-evaluation:*`| List / Hash | API Workers | Removed on complete | BullMQ queue for processing code executions. Configured with a Smart Backoff Strategy to handle Azure VM cold starts. |
 | `bull:arena-cleanup:*` | List / Hash | API Workers | Removed on complete | BullMQ queue for sweeping dead/abandoned rooms asynchronously. |
 | `bull:contest-sync:*` | List / Hash | API Workers | Removed on complete | BullMQ queue for periodically scraping Clist.by programming contests. |
-| `groq:*`, `diagram:*` | JSON String | API (Hono) | 24h - 7 Days | Caches LLM AI responses and system diagram generations to dramatically reduce API costs and latency. |
+| `llm:*`, `diagram:*` | JSON String | API (Hono) | 24h - 7 Days | Caches LLM AI responses and system diagram generations to dramatically reduce API costs and latency. |
 
 <br/>
 
@@ -63,7 +63,7 @@ graph TD
     subgraph RedisCluster [Redis Environment]
         
         subgraph Caching [Key-Value Caches]
-            CacheLLM[groq:* / diagram:*]:::cache
+            CacheLLM[llm:* / diagram:*]:::cache
             CacheAc[academy:solved:*]:::cache
             CacheCo[company:*]:::cache
         end

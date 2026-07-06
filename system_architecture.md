@@ -21,7 +21,7 @@ flowchart TB
     %% --------------------------------
     subgraph ThirdParty ["External Services (3rd Party)"]
         Clerk("Clerk\n(Auth & Webhooks)")
-        OneAPI("One API Gateway\n(Gemini & Groq)")
+        OneAPI("One API Gateway\n(Gemini,Gpt,Groq,Deepseek and more)")
         Cloudinary("Cloudinary\n(Image Hosting)")
         ExternalContests("Codeforces / LeetCode\n(External APIs)")
         Judge0("Judge0 API\n(Code Execution Sandbox)")
@@ -113,7 +113,7 @@ The frontend is a monolithic Next.js App Router application. It serves the React
 
 ### 2. External Services
 - **Clerk**: Handles all user authentication. The frontend gets JWT tokens from Clerk, and the Hono API verifies them. Clerk also sends background Webhooks to the API to sync user creations/deletions into our PostgreSQL database.
-- **One API Gateway**: The central AI proxy. Used heavily by `AiAddSolveService` (routing to Gemini and Groq) to evaluate text-based code, generate educational solutions, and power the System Design AI Chat assistant.
+- **One API Gateway**: The central AI proxy. Used heavily by `AiAddSolveService` (routing to Gemini,Groq,GPT,Deepseek and more) to evaluate text-based code, generate educational solutions, and power the System Design AI Chat assistant.
 - **Cloudinary**: Used to store images (like bug report screenshots or user avatars).
 - **Codeforces/LeetCode**: APIs scraped by the background Contest worker to populate the global event calendar.
 - **Judge0 & Wandbox**: External Remote Code Execution (RCE) sandbox APIs. The workers send untrusted user code to these services securely, and they return the `stdout`, `stderr`, and `compile_output`.

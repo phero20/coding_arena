@@ -54,7 +54,7 @@ flowchart TB
     %% --------------------------------
     subgraph SaaS ["Third-Party SaaS"]
         Clerk("Clerk\n(Identity & Auth)"):::saas
-        OneAPIGateway("One API Gateway\n(Gemini & Groq)"):::saas
+        OneAPIGateway("One API Gateway\n(Gemini,Gpt,Groq,Deepseek and more)"):::saas
     end
 
     %% ==========================================
@@ -116,4 +116,4 @@ Rather than hosting databases manually on VMs, the data layer uses specialized m
 
 ### 5. Third-Party SaaS
 - **Clerk**: Handles all user authentication and identity verification at the edge.
-- **One API Gateway**: The unified AI proxy dashboard that routes LLM requests to Google Gemini and Groq Cloud, allowing key rotation, load-balancing, and caching.
+- **One API Gateway**: The unified AI proxy dashboard that routes LLM requests to Google Gemini,Groq,GPT,Deepseek and more allowing key rotation, load-balancing, and caching.

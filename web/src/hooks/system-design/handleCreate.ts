@@ -71,7 +71,7 @@ export async function handleCreate(actions: LLMCanvasActionCreate, tldrawEditor:
       ? (minExistingX + maxExistingX) / 2 - layoutCx
       : vpCx - layoutCx;
   const offsetY =
-    maxExistingY > -Infinity ? maxExistingY + 460 - (minRawY ?? 0) : vpCy;
+    maxExistingY > -Infinity ? maxExistingY + 580 - (minRawY ?? 0) : vpCy;
 
   // 4. Apply offset to get absolute positions
   const absPositions = new Map<string, { x: number; y: number }>();
@@ -231,9 +231,13 @@ export async function handleCreate(actions: LLMCanvasActionCreate, tldrawEditor:
   tldrawEditor.select(frameId);
   const bounds = tldrawEditor.getShapePageBounds(frameId);
   if (bounds) {
-    const cx = (bounds.minX + bounds.maxX) / 2;
-    const cy = (bounds.minY + bounds.maxY) / 2;
-    tldrawEditor.centerOnPoint({ x: cx, y: cy }, { animation: { duration: 400 } });
+    setTimeout(() => {
+      // Re-fetch bounds after render tick
+      const updatedBounds = tldrawEditor.getShapePageBounds(frameId);
+      if (updatedBounds) {
+        tldrawEditor.zoomToBounds(updatedBounds, { animation: { duration: 500 } });
+      }
+    }, 150);
   }
 
 }

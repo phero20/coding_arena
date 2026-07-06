@@ -26,7 +26,7 @@ Master your skills with a comprehensive platform designed for growth. Access ove
 *   **Memory Store & Pub/Sub**: Redis / Valkey (Aiven hosted, powers queues, Go session locks, and worker communications)
 *   **Authentication**: Clerk Identity Management (OAuth, Edge Route cryptographic JWT checks)
 *   **Sandboxed Code Execution**: Judge0 (Dockerized sandbox) & Wandbox API (Alternative remote compilation)
-*   **AI Gateway Routing**: Google Gemini & Groq Cloud (centralized proxy gateway routing, AI audits, and diagram prompts)
+*   **AI Gateway Routing**: Google Gemini,Gpt,Deepseek, Groq Cloud and more (centralized proxy gateway routing, using One API Gateway)
 
 ---
 

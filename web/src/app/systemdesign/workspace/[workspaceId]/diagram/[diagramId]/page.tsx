@@ -61,10 +61,13 @@ export default function DiagramPage({ params }: DiagramPageProps) {
     if (diagramQuery.data) {
       setActiveDiagram(diagramQuery.data);
     }
+  }, [diagramQuery.data, setActiveDiagram]);
+
+  useEffect(() => {
     return () => {
       setActiveDiagram(null);
     };
-  }, [diagramQuery.data, setActiveDiagram]);
+  }, [setActiveDiagram]);
 
   const isOwner = diagramQuery.data?.isOwner === true;
 

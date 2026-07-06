@@ -29,7 +29,7 @@ classDiagram
     }
     class AiAddSolveService {
         -problemRepo
-        -geminiLlmService
+        -llmService
     }
     class AiProblemService {
         -llm
@@ -332,7 +332,7 @@ classDiagram
     class ChatService {
         -chatRepository
         -workspaceService
-        -groqDiagramService
+        -aiDiagramService
     }
     class ChatRepository {
         +createThread()
@@ -350,36 +350,29 @@ classDiagram
     class DiagramResolverService {
         -techAliases
     }
-    class GeminiLlmService {
+    class LlmService {
         -clock
         -apiKey
         -baseUrl
         -circuitBreaker
     }
-    class GroqDiagramService {
+    class AiDiagramService {
         -unifiedLlmService
         -diagramResolverService
     }
-    class GroqLlmService {
-        -clock
-        -apiKey
-        -baseUrl
-        -circuitBreaker
-    }
     class UnifiedLlmService {
-        -groqLlmService
-        -geminiLlmService
+        -llmService
     }
 
     %% Relationships
     SystemDesignController --> SystemDesignService
     WorkspaceController --> WorkspaceService
     ChatController --> ChatService
-    ChatService --> UnifiedLlmService
+    ChatService --> AiDiagramService
     ChatService --> ChatRepository
-    UnifiedLlmService --> GeminiLlmService
-    UnifiedLlmService --> GroqLlmService
-    GroqDiagramService --> DiagramResolverService
+    UnifiedLlmService --> LlmService
+    AiDiagramService --> DiagramResolverService
+    AiDiagramService --> UnifiedLlmService
     SystemDesignService --> SystemDesignRepository
     WorkspaceService --> WorkspaceRepository
 ```

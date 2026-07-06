@@ -1,6 +1,6 @@
 # Chat Services
 
-The `ChatService` handles the heavy lifting of maintaining conversational state, ensuring data security, and interfacing with the external Groq AI Engine.
+The `ChatService` handles the heavy lifting of maintaining conversational state, ensuring data security, and interfacing with the external One API Engine.
 
 **File**: [api/src/services/chat/chat.service.ts](../../../api/src/services/chat/chat.service.ts)
 
@@ -18,7 +18,7 @@ Instead of forcing the AI to remember context by querying the heavy PostgreSQL d
 
 1. **Cache Hit**: Checks `redis.lrange('chat:thread:messages:{threadId}', 0, -1)`.
 2. **Cache Miss**: If empty, fetches the last 25 messages from Postgres, formats them into standard `{ role: "user" | "assistant", content: string }` arrays, and saves them to Redis using a `pipeline`.
-3. **Execution**: Hands the array to the `GroqDiagramService`.
+3. **Execution**: Hands the array to the `AiDiagramService`.
 4. **Cache Update**: Appends the new user prompt and new AI response to the Redis list using `rpush`, trims the list to exactly 25 messages using `ltrim`, and resets the TTL to 1 hour (`3600`).
 
 ### 4. Generative AI Handoff

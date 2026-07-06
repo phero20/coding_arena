@@ -1,9 +1,9 @@
 import {
   SANITIZE_PROFILES,
   sanitizeDescriptionForAi,
-} from "../../../libs/security/prompt-sanitizer";
-import type { Problem } from "../../../types/problems/problem.types";
-import type { AiVerdictAuditInput } from "./ai-verdict-audit.types";
+} from "../security/prompt-sanitizer";
+import type { Problem } from "../../types/problems/problem.types";
+import type { AiVerdictAuditInput } from "../../services/judge/ai-audit/ai-verdict-audit.types";
 
 export function buildAuditSystemPrompt(): string {
   return [

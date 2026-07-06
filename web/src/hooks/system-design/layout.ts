@@ -79,7 +79,7 @@ export function runDagre(
     return posMap;
   }
 
-  const g = new dagre.graphlib.Graph({ compound: false });
+  const g = new dagre.graphlib.Graph();
   g.setGraph({
     rankdir: "LR",
     nodesep: DAGRE_NODESEP,
@@ -90,9 +90,13 @@ export function runDagre(
   g.setDefaultEdgeLabel(() => ({}));
 
   const nodeIds = new Set(nodes.map((n) => n.id));
+  
+  // 1. Add regular nodes
   for (const n of nodes) {
     g.setNode(n.id, { width: ICON_SIZE, height: ICON_SIZE });
   }
+
+  // 2. Add edges
   for (const e of edges) {
     if (nodeIds.has(e.from) && nodeIds.has(e.to)) {
       g.setEdge(e.from, e.to);

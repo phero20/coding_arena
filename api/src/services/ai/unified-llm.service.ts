@@ -24,7 +24,7 @@ interface LlmStep {
 }
 
 const ORDER1: LlmStep[] = [
-  { provider: "groq", model: "llama-3.3-70b-versatile" },
+  { provider: "groq", model: "openai/gpt-oss-120b" },
   { provider: "gemini", model: "gemini-3.1-flash-lite" },
   { provider: "gemini", model: "gemini-2.5-flash" },
   { provider: "gemini", model: "gemini-2.5-flash-lite" },
@@ -32,9 +32,10 @@ const ORDER1: LlmStep[] = [
   { provider: "groq", model: "llama-3.1-8b-instant" },
 ];
 
+
 const ORDER2: LlmStep[] = [
   { provider: "gemini", model: "gemini-2.5-flash" },
-  { provider: "groq", model: "llama-3.3-70b-versatile" },
+  { provider: "groq", model: "openai/gpt-oss-120b" },
   { provider: "gemini", model: "gemini-3.1-flash-lite" },
   { provider: "gemini", model: "gemini-2.5-flash-lite" },
   { provider: "gemini", model: "gemini-3-flash-preview" },
@@ -66,7 +67,7 @@ export class UnifiedLlmService {
       try {
         if (i === 0) {
           logger.info(
-            `Attempting AI evaluation via ${step.provider === "groq" ? "Groq" : "Gemini"} (Primary: ${step.model})`,
+            `Attempting AI evaluation via ${step.provider.charAt(0).toUpperCase() + step.provider.slice(1)} (Primary: ${step.model})`,
           );
         }
 
@@ -79,7 +80,7 @@ export class UnifiedLlmService {
           const nextStep = steps[i + 1];
           logger.warn(
             { error: err.message },
-            `${step.provider === "groq" ? "Groq" : "Gemini"} ${step.model} failed. Falling back to ${nextStep.provider === "groq" ? "Groq" : "Gemini"} (${nextStep.model}).`,
+            `${step.provider.charAt(0).toUpperCase() + step.provider.slice(1)} ${step.model} failed. Falling back to ${nextStep.provider.charAt(0).toUpperCase() + nextStep.provider.slice(1)} (${nextStep.model}).`,
           );
         } else {
           logger.error(

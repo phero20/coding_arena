@@ -23,17 +23,17 @@ A strict syntax validation service. It uses `acorn` (a JS parser) to parse `func
 These services utilize LLMs to automate the heavy lifting of content creation.
 
 ### `ai-problem.service.ts`
-- **Engine**: Groq (Llama 3.1)
+- **Engine**: LLM via One API Gateway
 - **Role**: Takes a text prompt (e.g., "Create a Leetcode Medium about Two Pointers") and returns a fully structured JSON problem document.
 - **Complexity**: Highly complex system prompt engineering to enforce exact JSON schemas (title, description, difficulty, tags, function signature, boilerplate code in 7 languages).
 
 ### `testcase-generator.service.ts`
-- **Engine**: Groq (Llama 3.1)
+- **Engine**: LLM via One API Gateway
 - **Role**: Automatically generates 15-20 robust edge-case test validations for a given problem signature.
 - **Execution**: Because the AI only generates the *inputs*, this service actually calls the backend `CompilerService` to run the AI's inputs against the official solution to mathematically generate the `expected_output`!
 
 ### `testcase-canonical.ts`
-- **Engine**: Groq (Llama 3.1)
+- **Engine**: LLM via One API Gateway
 - **Role**: A parsing assistant. If an admin pastes raw text from a website like Codeforces, this service uses the LLM to intelligently extract the inputs and expected outputs and convert them into the strict `[{ input, expected_output }]` JSON array required by our database.
 
 ### `ai-addsolve.service.ts`

@@ -14,10 +14,10 @@ This is the master orchestrator. It sits between the `SubmissionWorker` and the 
 3. **Execution (`executeAndPoll`)**: Sends the package to `Judge0Service` and polls for completion.
 4. **Parsing**: Uses the internal driver (`parseDriverResult`) to strip away the boilerplate and extract the exact stdout/stderr for each test case.
 5. **Suspicion Engine**: Passes the raw results into `evaluateSuspicion`. This engine checks for cheating (e.g., hardcoding the expected string `if (input==5) print("10")`).
-6. **AI Audit (`AiVerdictAuditService`)**: If the suspicion score is high, it sends the code to the Groq LLM. If the AI determines the user cheated, it overrides Judge0's `ACCEPTED` verdict with a failure state!
+6. **AI Audit (`AiVerdictAuditService`)**: If the suspicion score is high, it sends the code to the LLM via One API. If the AI determines the user cheated, it overrides Judge0's `ACCEPTED` verdict with a failure state!
 
 ---
 
 ## 2. `ai-verdict-audit.service.ts`
 
-A specialized security service. It utilizes the Groq LLM (Llama 3.1) to read the user's code and determine if they actually solved the problem algorithmically, or if they just "gamed" the test cases. It returns a `confidence` score and a `reason`, which the `DriverJudgeExecutionService` uses to confidently override the Sandbox verdict.
+A specialized security service. It utilizes the LLM via One API to read the user's code and determine if they actually solved the problem algorithmically, or if they just "gamed" the test cases. It returns a `confidence` score and a `reason`, which the `DriverJudgeExecutionService` uses to confidently override the Sandbox verdict.

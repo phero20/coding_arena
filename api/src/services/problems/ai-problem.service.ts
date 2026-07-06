@@ -23,6 +23,7 @@ export interface AiRewriteResult {
   rawLlmResponse: LlmJsonResponse<AiProblemOutput>["raw"];
 }
 
+import { AI_PROBLEM_SYSTEM_PROMPT, buildAiProblemUserPrompt } from "../../libs/prompts/ai-problem.prompt";
 import { type ICradle } from "../../libs/awilix-container";
 
 function mergeSignature(
@@ -123,42 +124,7 @@ export class AiProblemService {
     const shouldGenerateSolution =
       !existingSolution || existingSolution.trim() === "";
 
-    const systemPrompt = [
-      "You are a Senior Technical Content Engineer specializing in Competitive Programming.",
-      "Your goal: Augment the provided problem data with hints and accurate metadata while PRESERVING the original narrative content.",
-      "",
-      "=== MASTER PROTOCOL ===",
-      "1. SIGNATURE STRATEGY:",
-      "   - Identify problem_type: 'function' (standard) or 'class' (Design-style, e.g., LRU Cache).",
-      "   - FOR 'function': Provide 'function_signature' { name, return_type, params, inplace_param_index? }.",
-      "   - IN-PLACE TARGETING: If return_type is 'void' and the problem modifies a specific parameter in-place, set 'inplace_param_index' (number). Default is 0 (first param).",
-      "   - FOR 'class': Provide 'class_signature' { class_name, constructor_params, methods: [{ name, return_type, params }] }.",
-      "   - return_type guidelines: Use LeetCode-style strings: int, long, double, boolean, string, char, int[], int[][], string[], ListNode, TreeNode, or List<Integer> / vector<int> style wrappers.",
-      "",
-      "2. JUDGING POLICY (MANDATORY):",
-      "   - Always return problem.judging_policy with these fields:",
-      '     * comparator_mode: "strict" | "problem_specific"',
-      "     * multi_answer: boolean",
-      "     * validation_policy: short machine-friendly string",
-      '     * output_order: "strict" | "any_order"',
-      "     * audit_hints: string[]",
-      "   - For single-correct deterministic problems, use strict policy.",
-      "   - For multi-answer problems (Two Sum style), set comparator_mode=problem_specific and multi_answer=true.",
-      "",
-      "3. HINTS: Generate at least 5 helpful hints for solving the problem.",
-      "",
-      "=== OUTPUT SCHEMA (JSON) ===",
-      "{",
-      '  "problem": {',
-      '    "problem_type": "function" | "class",',
-      '    "hints": ["string"],',
-      '    "code_snippets": { "lang_id": "string" },',
-      '    "function_signature": { "name": "string", "return_type": "string", "params": [{ "name": "string", "type": "string" }] },',
-      '    "class_signature": { "class_name": "string", "constructor_params": [], "methods": [] },',
-      '    "judging_policy": { "comparator_mode": "strict" | "problem_specific", "multi_answer": true | false, "validation_policy": "string", "output_order": "strict" | "any_order", "audit_hints": ["string"] }',
-      "  }",
-      "}",
-    ].join("\n");
+    const systemPrompt = AI_PROBLEM_SYSTEM_PROMPT;
 
     const originalData = JSON.stringify({
       ...input,
@@ -174,28 +140,7 @@ export class AiProblemService {
     let rawAggregate: LlmJsonResponse<AiProblemOutput>["raw"] | undefined;
 
     for (let attempt = 0; attempt < 2; attempt++) {
-      const userPromptParts = [
-        "Process this problem JSON and return the augmented version in JSON mode.",
-        "CRITICAL INSTRUCTIONS:",
-        "1. You MUST generate 'function_signature' and 'judging_policy' for normal problems.",
-        "2. EXTREMELY IMPORTANT: If the problem asks to design a Class or Data Structure (like LRU Cache or Trie), you MUST set 'problem_type' to 'class' and generate a fully nested 'class_signature' object instead. DO NOT output 'function_signature' for class problems.",
-        "3. You MUST generate an array of at least 5 'hints'.",
-        "4. DO NOT output 'title', 'description', 'examples', or 'constraints'. Do not echo them back.",
-        "5. DO NOT output 'code_snippets'.",
-        lastValidationError
-          ? [
-              "=== PREVIOUS ATTEMPT FAILED VALIDATION ===",
-              "Fix function_signature/return_type so it passes structural typing.",
-              "Errors:",
-              lastValidationError,
-              "",
-            ].join("\n")
-          : "",
-        "Original Data:",
-        originalData,
-      ];
-
-      const userPrompt = userPromptParts.filter(Boolean).join("\n");
+      const userPrompt = buildAiProblemUserPrompt(lastValidationError, originalData);
 
 
 

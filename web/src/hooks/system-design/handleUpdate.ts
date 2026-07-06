@@ -518,4 +518,17 @@ function _redrawGroupsAndResize(
       tldrawEditor.groupShapes(shapeIds);
     }
   }
+
+  // Zoom to updated frame
+  tldrawEditor.select(targetFrameId);
+  const bounds = tldrawEditor.getShapePageBounds(targetFrameId);
+  if (bounds) {
+    setTimeout(() => {
+      // Re-fetch bounds after render tick
+      const updatedBounds = tldrawEditor.getShapePageBounds(targetFrameId);
+      if (updatedBounds) {
+        tldrawEditor.zoomToBounds(updatedBounds, { animation: { duration: 500 } });
+      }
+    }, 150);
+  }
 }

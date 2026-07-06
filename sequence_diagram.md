@@ -60,7 +60,7 @@ sequenceDiagram
 
     %% AI Audit (Conditional)
     alt Driver Verdict is Suspicious (e.g. Partial Match)
-        ExecSvc->>OneAPI: Audit Output using LLM (Gemini / Groq)
+        ExecSvc->>OneAPI: Audit Output using LLM (Gemini,Gpt,Groq,Deepseek and more)
         OneAPI-->>ExecSvc: Return Audited Status (e.g. ACCEPTED or WRONG_ANSWER)
     end
     

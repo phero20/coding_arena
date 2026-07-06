@@ -11,7 +11,7 @@ import {
 import {
   buildAuditSystemPrompt,
   buildAuditUserPrompt,
-} from "./ai-audit/ai-verdict-audit.prompt";
+} from "../../libs/prompts/ai-verdict-audit.prompt";
 
 import { type ICradle } from "../../libs/awilix-container";
 

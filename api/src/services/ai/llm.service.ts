@@ -65,7 +65,7 @@ export class LlmService implements ILlmService {
         { role: "user", content: opts.userPrompt },
       ],
       temperature: opts.temperature ?? 0,
-      max_tokens: opts.maxTokens ?? 8192,
+      max_tokens: opts.maxTokens ?? 2000,
     };
 
     const startTime = this.clock.now();

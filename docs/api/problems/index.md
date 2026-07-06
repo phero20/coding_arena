@@ -8,7 +8,7 @@ This module is split into three primary logical flows:
 
 1. **Standard CRUD (`problem.*`)**: Handles the retrieval, creation, and updating of coding problems. Uses Redis caching for high-traffic grid queries.
 2. **Test Case Management (`problem-test.*`)**: Manages the secret input/output pairs that validate user code. Strictly segregated from the main problem documents to prevent accidental leaking of hidden test cases to the frontend.
-3. **AI Generation Engine (`ai-problem.*` & `testcase-*.ts`)**: Utilizes LLMs (Groq & AWS Bedrock Claude) to automatically generate new coding problems from text prompts, automatically solve them, and automatically generate edge-case test validations.
+3. **AI Generation Engine (`ai-problem.*` & `testcase-*.ts`)**: Utilizes LLMs via One API Gateway to automatically generate new coding problems from text prompts, automatically solve them, and automatically generate edge-case test validations.
 
 ## Directory Structure
 
@@ -24,7 +24,7 @@ api/src/
 │   └── problem.routes.ts                  # Core Problem Routes
 ├── services/problems/
 │   ├── ai-addsolve.service.ts             # Anthropic Claude logic
-│   ├── ai-problem.service.ts              # Groq problem generation logic
+│   ├── ai-problem.service.ts              # AI problem generation logic
 │   ├── testcase-generator.service.ts      # LLM Test Case generation
 │   ├── problem.service.ts                 # Standard business logic
 │   └── problem-test.service.ts            # Test Case validation logic

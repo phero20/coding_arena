@@ -2,6 +2,100 @@ import { DIAGRAM_ASSETS, type DiagramAsset } from "../../constants/diagram-asset
 import { type ICradle } from "../../libs/awilix-container";
 import { redis } from "../../libs/core/redis";
 
+const CLOUD_SYNONYMS: Record<string, string[]> = {
+  aws: ["amazon", "aws"],
+  gcp: ["google", "gcp"],
+  azure: ["microsoft", "azure"],
+};
+
+const STOP_WORDS = new Set([
+  "and", "or", "of", "for", "on", "in", "to", "with", "at", "by", "from", "the", "a", "an"
+]);
+
+const PROVIDER_WORDS = new Set([
+  "arch", "res", "aws", "amazon", "gcp", "google", "azure", "microsoft", "brand"
+]);
+
+function getTokens(str: string): string[] {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, " ").split(/\s+/).filter(Boolean);
+}
+
+function expandAcronym(acronym: string): string {
+  const match = acronym.match(/^([a-z]+)([2-9])$/);
+  if (match) {
+    const prefix = match[1];
+    const lastChar = prefix[prefix.length - 1];
+    const repeat = parseInt(match[2], 10);
+    return prefix.slice(0, -1) + lastChar.repeat(repeat);
+  }
+  return acronym;
+}
+
+function getAssetAcronymInitials(assetId: string): string {
+  const tokens = getTokens(assetId);
+  const coreTokens = tokens.filter((token) => !PROVIDER_WORDS.has(token) && !STOP_WORDS.has(token) && !token.match(/^\d+$/));
+  return coreTokens.map((t) => t[0]).join("");
+}
+
+function isTokenMatch(userToken: string, assetToken: string): boolean {
+  if (userToken === assetToken) return true;
+  for (const provider in CLOUD_SYNONYMS) {
+    const list = CLOUD_SYNONYMS[provider];
+    if (list.includes(userToken) && list.includes(assetToken)) return true;
+  }
+  return false;
+}
+
+function calculateScore(userIcon: string, asset: DiagramAsset): number {
+  const userTokens = getTokens(userIcon);
+  const idTokens = getTokens(asset.id);
+  const nameTokens = getTokens(asset.name);
+
+  if (userTokens.length === 0) return 0;
+
+  let matchCount = 0;
+  let exactMatchCount = 0;
+
+  userTokens.forEach((uToken) => {
+    const hasIdMatch = idTokens.some((iToken) => isTokenMatch(uToken, iToken));
+    const hasNameMatch = nameTokens.some((nToken) => isTokenMatch(uToken, nToken));
+
+    if (hasIdMatch || hasNameMatch) {
+      matchCount++;
+      if (idTokens.includes(uToken) || nameTokens.includes(uToken)) {
+        exactMatchCount++;
+      }
+    }
+  });
+
+  let score = matchCount / userTokens.length;
+  score += exactMatchCount * 0.1;
+
+  if (asset.id.endsWith("_64")) {
+    score += 0.05;
+  } else if (asset.id.endsWith("_48")) {
+    score += 0.02;
+  }
+
+  const initials = getAssetAcronymInitials(asset.id);
+  userTokens.forEach((uToken) => {
+    if (uToken.length <= 4) {
+      const expandedUser = expandAcronym(uToken);
+      if (expandedUser === initials && initials.length > 0) {
+        score += 0.4; 
+      } else if (asset.id.toLowerCase().includes(uToken)) {
+        score += 0.15; 
+      }
+    }
+  });
+
+  if (asset.category === "General" || asset.category === "Logos") {
+    score += 0.5;
+  }
+
+  return score;
+}
+
 export interface IDiagramResolverService {
   resolveIconId(input: string): Promise<string>;
 }
@@ -77,6 +171,14 @@ export class DiagramResolverService implements IDiagramResolverService {
     css: "css3",
     javascript: "javascript",
     typescript: "typescript",
+
+    // Common Generics & Stubborn AI Terms
+    client: "client_48_light",
+    user: "user_48_light",
+    users: "users_48_light",
+    router: "arch-category_networking-and-content-delivery_48",
+    llm: "aws-bedrock",
+    ai: "aws-bedrock",
   };
 
   constructor(cradle?: ICradle) {
@@ -137,27 +239,17 @@ export class DiagramResolverService implements IDiagramResolverService {
     let resolvedId = "linux";
     let found = false;
 
-    // 5. Substring Matching in IDs (e.g. "dynamodb" matches "aws-dynamodb")
+    // 5. Semantic Scoring Match (replaces dumb substring search)
+    let highestScore = 0.1;
     for (const asset of DIAGRAM_ASSETS) {
-      const id = asset.id.toLowerCase();
-      if (id.includes(cleanInput) || cleanInput.includes(id)) {
+      const score = calculateScore(cleanInput, asset);
+      if (score > highestScore) {
+        highestScore = score;
         resolvedId = asset.id;
         found = true;
-        break;
       }
     }
 
-    // 6. Substring Matching in Names
-    if (!found) {
-      for (const asset of DIAGRAM_ASSETS) {
-        const name = asset.name.toLowerCase();
-        if (name.includes(cleanInput) || cleanInput.includes(name)) {
-          resolvedId = asset.id;
-          found = true;
-          break;
-        }
-      }
-    }
 
     // 7. Category-Based Graceful Fallbacks
     if (!found) {

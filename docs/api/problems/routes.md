@@ -27,7 +27,7 @@ Handles the deeply nested test cases associated with a problem.
 
 Handles the automated AI generation workflows. All these routes are heavily restricted.
 
-- **POST `/api/v1/ai/problems/generate`**: **Admin Only** route. Triggers the Groq LLM to generate a problem based on a text prompt.
+- **POST `/api/v1/ai/problems/generate`**: **Admin Only** route. Triggers the LLM via One API to generate a problem based on a text prompt.
 - **POST `/api/v1/ai/problems/generate/tests`**: **Admin Only** route. Triggers the LLM to generate robust edge-case tests for an existing problem.
 - **POST `/api/v1/ai/problems/canonicalize`**: **Admin Only** route. Uses the LLM to parse raw pasted text into strict JSON test case arrays.
 - **POST `/api/v1/ai/problems/add-solution`**: **Admin Only** route. Triggers AWS Bedrock (Claude) to solve a given problem and attach the solution to the database.

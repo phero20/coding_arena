@@ -15,4 +15,4 @@ Handles test case operations. Crucially, its `getTests` endpoint does not requir
 ## 3. `ai-problem.controller.ts`
 
 Acts as the gateway for the AI Generation Engine.
-Because generating a problem via Groq or solving a problem via Claude can take several seconds, this controller is designed to await these long-running Promises and return the deeply structured JSON AI outputs directly to the admin frontend.
+Because generating a problem via AI or solving a problem via One API can take several seconds, this controller is designed to await these long-running Promises and return the deeply structured JSON AI outputs directly to the admin frontend.
