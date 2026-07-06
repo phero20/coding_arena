@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAcademyTracks, getTrackConfig, getTrackConcept, getTrackExercise, getSolvedExercises } from "@/services/queries/academy.queries";
 import type { Track, TrackConfigResponse, TrackConceptResponse, TrackExerciseResponse } from "@/types/academy";
+import { useAuth } from "@clerk/nextjs";
 
 /**
  * Hook to fetch all academy tracks for the dashboard.
@@ -54,10 +55,12 @@ export function useTrackExerciseQuery(trackSlug: string, exerciseSlug: string) {
  * Hook to fetch the solved exercises for a track for the authenticated user.
  */
 export function useSolvedExercisesQuery(trackSlug: string) {
+  const { isSignedIn } = useAuth();
+
   return useQuery<string[], Error>({
     queryKey: ["academy-solved-exercises", trackSlug],
     queryFn: () => getSolvedExercises(trackSlug),
     staleTime: 30 * 60 * 1000, // Cache for 30 minutes
-    enabled: !!trackSlug,
+    enabled: !!trackSlug && !!isSignedIn,
   });
 }
