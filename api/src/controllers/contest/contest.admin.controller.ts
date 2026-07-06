@@ -1,5 +1,6 @@
 import { BaseController } from "../base.controller";
 import { type IContestAdminService } from "../../services/contest/contest.admin.service";
+import { type ContestService } from "../../services/contest/contest.service";
 import { type ICradle } from "../../libs/awilix-container";
 import { type ControllerRequest } from "../../types/infrastructure/hono.types";
 import {
@@ -9,10 +10,12 @@ import {
 
 export class ContestAdminController extends BaseController {
   private readonly contestAdminService: IContestAdminService;
+  private readonly contestService: ContestService;
 
   constructor(cradle: ICradle) {
     super(cradle);
     this.contestAdminService = cradle.contestAdminService;
+    this.contestService = cradle.contestService;
   }
 
   async getAllContests(req: ControllerRequest<never>): Promise<any> {
@@ -34,5 +37,10 @@ export class ContestAdminController extends BaseController {
 
   async getStats(req: ControllerRequest<never>): Promise<{ contests: number }> {
     return this.contestAdminService.getStats();
+  }
+
+  async syncContests(req: ControllerRequest<never>): Promise<{ success: boolean; message: string }> {
+    await this.contestService.syncExternalContests();
+    return { success: true, message: "Contest synchronization triggered" };
   }
 }

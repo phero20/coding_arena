@@ -118,6 +118,8 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
  
   registerAiProblemRoutes(v1, {
     aiProblemController,
+    authMiddleware,
+    authorizationMiddleware,
   });
  
   registerArenaRoutes(v1, {
@@ -145,6 +147,7 @@ export const registerRoutes = (app: Hono<AppEnv>) => {
   registerStatsRoutes(v1, {
     statsController,
     authMiddleware,
+    authorizationMiddleware,
   });
  
   registerFollowRoutes(v1, {

@@ -27,4 +27,12 @@ export const cacheService = {
   flushCache: async (): Promise<void> => {
     await apiClient.delete("/admin/system/cache/flush");
   },
+
+  syncLeaderboard: async (): Promise<void> => {
+    await apiClient.post("/stats/leaderboard/sync");
+  },
+
+  syncContests: async (): Promise<void> => {
+    await apiClient.post("/admin/contests/sync");
+  },
 };

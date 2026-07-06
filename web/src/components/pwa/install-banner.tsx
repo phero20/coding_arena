@@ -37,6 +37,7 @@ export function InstallBanner() {
       }
 
       // Stash the event so it can be triggered later when the user clicks our button.
+      (window as any).deferredPrompt = e;
       setDeferredPrompt(e);
       // Show our custom React banner
       setShowBanner(true);
@@ -74,6 +75,7 @@ export function InstallBanner() {
     console.log(`User response to the install prompt: ${outcome}`);
     
     // We've used the prompt, and can't use it again, throw it away
+    (window as any).deferredPrompt = null;
     setDeferredPrompt(null);
   };
 

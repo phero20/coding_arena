@@ -16,11 +16,5 @@ export const registerContestRoutes = (
   // Main endpoint for upcoming contests (Redis-backed)
   contestApp.get("/", contestController.getUpcomingContests);
 
-  // Debug/Proxy endpoint
-  contestApp.get("/external", contestController.getExternalContests);
-
-  // Manual sync trigger
-  contestApp.post("/sync", contestController.syncContests);
-
   app.route("/contests", contestApp);
 };

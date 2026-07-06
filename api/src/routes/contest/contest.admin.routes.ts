@@ -43,6 +43,11 @@ export const registerContestAdminRoutes = (
     contestAdminController.action(contestAdminController.createContest.bind(contestAdminController), { status: 201 })
   );
 
+  adminApp.post(
+    "/sync",
+    contestAdminController.action(contestAdminController.syncContests.bind(contestAdminController))
+  );
+
 
   adminApp.put(
     "/:id",

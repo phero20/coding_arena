@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useCacheAdmin } from "@/hooks/useCache";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Eye, Trash2, RefreshCw, ServerCrash, ChevronRight, ChevronDown, Folder, FolderOpen, FileText } from "lucide-react";
+import { Search, Eye, Trash2, RefreshCw, ServerCrash, ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Trophy, Users } from "lucide-react";
 import { QueryState } from "@/components/ui/query-state";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
@@ -75,7 +75,13 @@ export function CacheList({ onView, activeId }: CacheListProps) {
   const [isFlushAlertOpen, setIsFlushAlertOpen] = useState(false);
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({});
 
-  const { useGetCacheKeys, useDeleteKey, useFlushCache } = useCacheAdmin();
+  const { 
+    useGetCacheKeys, 
+    useDeleteKey, 
+    useFlushCache,
+    useSyncLeaderboard,
+    useSyncContests
+  } = useCacheAdmin();
   
   const { data, isLoading, isError, error, refetch, isFetching } = useGetCacheKeys({
     pattern,
@@ -84,6 +90,8 @@ export function CacheList({ onView, activeId }: CacheListProps) {
   
   const { mutate: deleteKey, isPending: isDeleting } = useDeleteKey();
   const { mutate: flushCache, isPending: isFlushing } = useFlushCache();
+  const { mutate: syncLeaderboard, isPending: isSyncingLeaderboard } = useSyncLeaderboard();
+  const { mutate: syncContests, isPending: isSyncingContests } = useSyncContests();
 
   const handleFlushConfirm = () => {
     flushCache(undefined, {
@@ -214,6 +222,27 @@ export function CacheList({ onView, activeId }: CacheListProps) {
             >
               <ServerCrash className="" />
               {isFlushing ? "Flushing..." : "Flush Cache"}
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => syncLeaderboard()}
+              disabled={isSyncingLeaderboard}
+            >
+              <Users className={`w-4 h-4 ${isSyncingLeaderboard ? 'animate-spin' : ''}`} />
+              {isSyncingLeaderboard ? "Syncing..." : "Sync Leaderboard"}
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => syncContests()}
+              disabled={isSyncingContests}
+            >
+              <Trophy className={`w-4 h-4 ${isSyncingContests ? 'animate-spin' : ''}`} />
+              {isSyncingContests ? "Syncing..." : "Sync Contests"}
             </Button>
           </div>
           

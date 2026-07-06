@@ -1,8 +1,6 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../../types/infrastructure/hono.types";
 import { type CompanyController } from "../../controllers/company/company.controller";
-import { zValidator } from "@hono/zod-validator";
-import { createCompanySchema } from "../../validators/company.validator";
 
 export interface CompanyRouteDependencies {
   companyController: CompanyController;
@@ -25,13 +23,6 @@ export const registerCompanyRoutes = (
   companyApp.get(
     "/:slug/problems",
     companyController.action(companyController.getCompanyProblems, { requireAuth: false })
-  );
-
-  // POST /api/v1/companies
-  companyApp.post(
-    "/",
-    zValidator("json", createCompanySchema),
-    companyController.action(companyController.createCompany, { requireAuth: false })
   );
 
   app.route("/companies", companyApp);

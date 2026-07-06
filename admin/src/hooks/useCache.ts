@@ -50,10 +50,42 @@ export const useCacheAdmin = () => {
     });
   };
 
+  const useSyncLeaderboard = () => {
+    return useMutation({
+      mutationFn: cacheService.syncLeaderboard,
+      onSuccess: () => {
+        toast.success("Leaderboard synchronized successfully");
+        queryClient.invalidateQueries({ queryKey: ["cache"] });
+      },
+      onError: (error: any) => {
+        toast.error(
+          error?.response?.data?.error || "Failed to synchronize leaderboard"
+        );
+      },
+    });
+  };
+
+  const useSyncContests = () => {
+    return useMutation({
+      mutationFn: cacheService.syncContests,
+      onSuccess: () => {
+        toast.success("Contests synchronized successfully");
+        queryClient.invalidateQueries({ queryKey: ["cache"] });
+      },
+      onError: (error: any) => {
+        toast.error(
+          error?.response?.data?.error || "Failed to synchronize contests"
+        );
+      },
+    });
+  };
+
   return {
     useGetCacheKeys,
     useGetKeyDetails,
     useDeleteKey,
     useFlushCache,
+    useSyncLeaderboard,
+    useSyncContests,
   };
 };

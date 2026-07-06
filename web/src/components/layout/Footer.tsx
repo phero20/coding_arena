@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container } from "../shared/Container";
 import Image from "next/image";
 import { shouldHide, shouldHidefooter } from "./shouldHide";
-import { Bug } from "lucide-react";
+import { Bug, Download, Github } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const footerLinks = [
   {
@@ -15,13 +17,14 @@ const footerLinks = [
       { label: "Problems", href: "/problems" },
       { label: "Roadmap", href: "/roadmap" },
       { label: "System Design", href: "/systemdesign" },
+      { label: "Companies", href: "/companies" },
     ],
   },
   {
     title: "Compete & Tools",
     links: [
       { label: "Arena", href: "/arena" },
-      // { label: "Contests", href: "/contests" },
+      { label: "Contests", href: "/contests" },
       { label: "Compilers", href: "/compilers" },
     ],
   },
@@ -38,6 +41,37 @@ const footerLinks = [
 
 export const Footer = () => {
   const pathname = usePathname();
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).deferredPrompt) {
+      setDeferredPrompt((window as any).deferredPrompt);
+    }
+
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      if (typeof window !== "undefined") {
+        (window as any).deferredPrompt = e;
+      }
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to install prompt: ${outcome}`);
+    if (typeof window !== "undefined") {
+      (window as any).deferredPrompt = null;
+    }
+    setDeferredPrompt(null);
+  };
 
   if (shouldHide(pathname) || shouldHidefooter(pathname)) return null;
 
@@ -95,6 +129,28 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} SlaveCode. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            {deferredPrompt && (
+              <Button
+                size="lg"
+                variant="default"
+                onClick={handleInstallClick}
+                className="font-semibold gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Install App
+              </Button>
+            )}
+            <Link
+              href="https://github.com/phero20/slavecode"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors p-2"
+              aria-label="GitHub Repository"
+            >
+              <Github className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </Container>
     </footer>

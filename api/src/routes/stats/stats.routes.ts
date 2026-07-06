@@ -3,17 +3,19 @@ import { type StatsController } from "../../controllers/stats/stats.controller";
 import { type AppEnv } from "../../types/infrastructure/hono.types";
 
 import { type AuthMiddleware } from "../../middlewares/security/auth.middleware";
+import { type AuthorizationMiddleware } from "../../middlewares/security/authorization.middleware";
 
 export interface StatsRoutesDeps {
   statsController: StatsController;
   authMiddleware: AuthMiddleware;
+  authorizationMiddleware: AuthorizationMiddleware;
 }
 
 export const registerStatsRoutes = (
   app: Hono<AppEnv>,
   deps: StatsRoutesDeps,
 ) => {
-  const { statsController, authMiddleware } = deps;
+  const { statsController, authMiddleware, authorizationMiddleware } = deps;
 
   /**
    * GET /stats/profile/:username
@@ -52,12 +54,12 @@ export const registerStatsRoutes = (
 
   /**
    * POST /stats/leaderboard/sync
-   * Admin-only (no auth for now) trigger to prime Redis.
+   * Admin-only trigger to prime Redis.
    */
   app.post(
     "/stats/leaderboard/sync",
-    statsController.action(statsController.syncLeaderboard, {
-      requireAuth: false,
-    }),
+    authMiddleware.handle.bind(authMiddleware),
+    authorizationMiddleware.requireRoles("admin"),
+    statsController.action(statsController.syncLeaderboard),
   );
 };

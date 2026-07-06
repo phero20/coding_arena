@@ -14,7 +14,7 @@ export const CTASection = () => {
         <div className="max-w-3xl flex flex-col items-center">
 
           {/* Heading */}
-          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-6">
+          <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             Ready to Level Up? <br className="hidden md:block" />
             <span className="text-primary/90">Start Your Journey.</span>
           </h2>
