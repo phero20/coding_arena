@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
@@ -121,32 +120,6 @@ export function PracticeProblemsSection({ exercises, solvedExercises = [], class
   const trackExercises = Array.isArray(exercises) ? { practice: exercises } : exercises;
   const resolvedExercises = usePracticeSorter(trackExercises as any, { query });
 
-  const [cols, setCols] = useState(1);
-  useEffect(() => {
-    const checkCols = () => {
-      setCols(window.innerWidth >= 768 ? 2 : 1);
-    };
-    checkCols();
-    window.addEventListener('resize', checkCols);
-    return () => window.removeEventListener('resize', checkCols);
-  }, []);
-
-  const rows = useMemo(() => {
-    if (!resolvedExercises) return [];
-    const chunked = [];
-    for (let i = 0; i < resolvedExercises.length; i += cols) {
-      chunked.push(resolvedExercises.slice(i, i + cols));
-    }
-    return chunked;
-  }, [resolvedExercises, cols]);
-
-  const listRef = useRef<HTMLDivElement>(null);
-  const virtualizer = useWindowVirtualizer({
-    count: rows.length,
-    estimateSize: () => 144, // min-h-32 (128px) + gap-4 (16px)
-    overscan: 4,
-  });
-
   return (
     <section className={cn("space-y-6", className)}>
       <div className="space-y-1">
@@ -167,25 +140,10 @@ export function PracticeProblemsSection({ exercises, solvedExercises = [], class
       </div>
 
       {resolvedExercises?.length ? (
-        <div ref={listRef} style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
-          {virtualizer.getVirtualItems().map((virtualRow) => {
-            const rowExercises = rows[virtualRow.index];
-            return (
-              <div
-                key={virtualRow.index}
-                data-index={virtualRow.index}
-                ref={virtualizer.measureElement}
-                className="absolute top-0 left-0 w-full grid gap-4 grid-cols-1 md:grid-cols-2 pb-4"
-                style={{
-                  transform: `translateY(${virtualRow.start}px)`,
-                }}
-              >
-                {rowExercises.map((exercise: any) => (
-                  <PracticeProblemCard key={exercise.slug} exercise={exercise} isSolved={solvedExercises.includes(exercise.slug)} />
-                ))}
-              </div>
-            );
-          })}
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+          {resolvedExercises.map((exercise: any) => (
+            <PracticeProblemCard key={exercise.slug} exercise={exercise} isSolved={solvedExercises.includes(exercise.slug)} />
+          ))}
         </div>
       ) : (
         <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
