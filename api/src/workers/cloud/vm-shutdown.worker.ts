@@ -34,12 +34,12 @@ export const vmShutdownWorker = new Worker(
 
       const lastActive = parseInt(lastActiveStr, 10);
       const idleTimeMs = Date.now() - lastActive;
-      const timeoutMs = 60 * 60 * 1000; // 1 hour
+      const timeoutMs = config.judge0VmIdleTimeoutHours * 60 * 60 * 1000;
 
       if (idleTimeMs > timeoutMs) {
         logger.info(
           { idleTimeMs, vm: config.judge0VmName },
-          "Judge0 VM has been idle for over 1 hour. Deallocating to save Azure costs."
+          `Judge0 VM has been idle for over ${config.judge0VmIdleTimeoutHours} hour(s). Deallocating to save Azure costs.`
         );
         await cloud.stopVm(config.judge0VmName);
         await redis.del("judge0:last_active");
