@@ -8,6 +8,12 @@ import Image from "next/image";
 import { shouldHide, shouldHidefooter } from "./shouldHide";
 import { Bug, Download, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const footerLinks = [
   {
@@ -127,7 +133,7 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+        <div className="mt-12 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} SlaveCode. All rights reserved.</p>
           <div className="flex items-center gap-4">
             {deferredPrompt && (
@@ -141,15 +147,24 @@ export const Footer = () => {
                 Install App
               </Button>
             )}
-            <Link
-              href="https://github.com/phero20/slavecode"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors p-2"
-              aria-label="GitHub Repository"
-            >
-              <Github className="w-4 h-4" />
-            </Link>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="https://github.com/phero20/slavecode"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-foreground transition-colors p-2"
+                    aria-label="GitHub Repository"
+                  >
+                    <Github className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Please give SlaveCode repository a star</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       </Container>

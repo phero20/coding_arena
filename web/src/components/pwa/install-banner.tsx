@@ -56,7 +56,7 @@ export function InstallBanner() {
     if (showBanner) {
       timeoutId = setTimeout(() => {
         setShowBanner(false);
-      }, 20000); // 30 seconds
+      }, 20000); // 20 seconds
     }
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
@@ -96,7 +96,7 @@ export function InstallBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed top-20 z-[100] w-[calc(100%-2rem)] max-w-md left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 "
+          className="fixed top-20 z-[100] w-[calc(100%-2rem)] max-w-md left-1/2 -translate-x-1/2"
         >
           <Card className="">
             <CardContent className="p-3 flex items-center gap-4">
