@@ -65,7 +65,7 @@ export class LlmService implements ILlmService {
         { role: "user", content: opts.userPrompt },
       ],
       temperature: opts.temperature ?? 0,
-      max_tokens: opts.maxTokens ?? 2000,
+      max_tokens: opts.maxTokens ?? 5000,
     };
 
     const startTime = this.clock.now();
@@ -101,8 +101,11 @@ export class LlmService implements ILlmService {
     }
 
     try {
+      // Strip reasoning <think>...</think> tags if present
+      let cleaned = content.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+
       // Strip Markdown code blocks if present
-      let cleaned = content.replace(/^```json\n?|```$/g, "").trim();
+      cleaned = cleaned.replace(/^```json\n?|```$/g, "").trim();
 
       // Hallucination Guard: Detect repeating bracket garbage
       if (/(\{ *\} *){5,}/.test(cleaned) || /(\{ *){10,}/.test(cleaned)) {

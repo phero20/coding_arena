@@ -24,7 +24,9 @@ interface LlmStep {
 }
 
 const ORDER1: LlmStep[] = [
-  { provider: "groq", model: "openai/gpt-oss-120b" },
+  { provider: "groq", model: "llama-3.3-70b-versatile" },
+  // { provider: "groq", model: "openai/gpt-oss-120b" },
+
   { provider: "gemini", model: "gemini-3.1-flash-lite" },
   { provider: "gemini", model: "gemini-2.5-flash" },
   { provider: "gemini", model: "gemini-2.5-flash-lite" },
@@ -35,7 +37,8 @@ const ORDER1: LlmStep[] = [
 
 const ORDER2: LlmStep[] = [
   { provider: "gemini", model: "gemini-2.5-flash" },
-  { provider: "groq", model: "openai/gpt-oss-120b" },
+  { provider: "groq", model: "llama-3.3-70b-versatile" },
+  // { provider: "groq", model: "openai/gpt-oss-120b" },
   { provider: "gemini", model: "gemini-3.1-flash-lite" },
   { provider: "gemini", model: "gemini-2.5-flash-lite" },
   { provider: "gemini", model: "gemini-3-flash-preview" },
