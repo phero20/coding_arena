@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { DynamicEditor as Editor, LanguageSelector } from "@/components/workspace-shared";
 import { useMonacoConfig } from "@/hooks/workspace/use-monaco-config";
 import { useEditorStore } from "@/store/use-editor-store";
-import { WrapText, Code2, RefreshCw, Settings } from "lucide-react";
+import { WrapText, Code2, RefreshCw, Settings, Upload, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getLangConfig } from "@/constants/compiler-languages";
+import { useCompilerFiles } from "@/hooks/workspace/use-compiler-files";
 import type { LanguageOption } from "@/types/component.types";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -37,9 +38,11 @@ export const CompilerEditor: React.FC<Props> = ({
   const monacoOptions = useMonacoConfig({ ...preferences, wordWrap });
   const monacoLanguage = getLangConfig(language).monacoLang;
 
+  const { handleExport, handleImport } = useCompilerFiles();
+
   return (
     <div className="flex flex-col h-full bg-background">
-      <header className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0">
+      <header className="h-14 px-3 flex items-center gap-2 border-b border-border/40 bg-card/10 backdrop-blur-sm shrink-0 overflow-x-auto">
         <div className="flex items-center gap-2 shrink-0">
           <LanguageSelector
             value={language}
@@ -60,6 +63,28 @@ export const CompilerEditor: React.FC<Props> = ({
             onClick={() => setWordWrap((w) => !w)}
           >
             <WrapText className="size-3.5" />
+          </Button>
+
+          <Button
+            variant="outline"
+            title="Import Code"
+            className=""
+            size="sm"
+            onClick={handleImport}
+          >
+            <Upload className="size-3.5" />
+            <span className="hidden lg:block">Import Code</span>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            title="Export Code"
+            className=""
+            onClick={handleExport}
+          >
+            <Download className="size-3.5" />
+            <span className="hidden lg:block">Export Code</span>
           </Button>
 
           <AlertDialog>
@@ -114,7 +139,7 @@ export const CompilerEditor: React.FC<Props> = ({
         </div>
       </header>
 
-      <div className="flex-1 min-h-0">
+      <div className="flex-1 min-h-0 overflow-hidden">
         <Editor
           height="100%"
           language={monacoLanguage}
