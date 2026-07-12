@@ -29,6 +29,10 @@ export function useCompilerWorkspace() {
     setStdin(language, newStdin);
   }
 
+  function handleResetCode() {
+    setCode(language, langConfig.defaultCode);
+  }
+
   async function handleRun() {
     try {
       const res = await executeMutation.mutateAsync({ compiler: language, code: currentCode, stdin: currentStdin });
@@ -48,6 +52,7 @@ export function useCompilerWorkspace() {
     setLanguage: handleLanguageChange,
     setCode: handleSetCode,
     setStdin: handleSetStdin,
+    resetCode: handleResetCode,
     runCode: handleRun,
   };
 }

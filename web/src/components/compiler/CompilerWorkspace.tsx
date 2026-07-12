@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 export const CompilerWorkspace: React.FC = () => {
   const {
     languages, language, code, stdin, result,
-    isExecuting, setLanguage, setCode, setStdin, runCode,
+    isExecuting, setLanguage, setCode, setStdin, runCode, resetCode,
   } = useCompilerWorkspace();
 
   const [isScratchpadOpen, setIsScratchpadOpen] = useState(false);
@@ -24,10 +24,6 @@ export const CompilerWorkspace: React.FC = () => {
     title: "Compiler Playground" 
   } as any;
 
-  function handleReset() {
-    localStorage.removeItem("coding-arena-playground-state");
-    window.location.reload();
-  }
   const router = useRouter();
 
   return (
@@ -56,7 +52,7 @@ export const CompilerWorkspace: React.FC = () => {
           <ResizablePanel defaultSize={60} minSize={25}
             className="bg-card/30 backdrop-blur-sm border-r border-border/40">
             <CompilerEditor code={code} onChange={setCode} language={language}
-              languages={languages} onLanguageChange={setLanguage} onReset={handleReset} />
+              languages={languages} onLanguageChange={setLanguage} onReset={resetCode} />
           </ResizablePanel>
 
           <ResizableHandle withHandle className="bg-border/20 hover:bg-primary/50 transition-colors" />
@@ -72,7 +68,7 @@ export const CompilerWorkspace: React.FC = () => {
       <div className="flex-1 flex flex-col md:hidden overflow-y-auto custom-scrollbar">
         <section className="h-[500px] shrink-0 border-b border-border/40 bg-card/10">
           <CompilerEditor code={code} onChange={setCode} language={language}
-            languages={languages} onLanguageChange={setLanguage} onReset={handleReset} />
+            languages={languages} onLanguageChange={setLanguage} onReset={resetCode} />
         </section>
         <section className="flex-1 bg-card/30">
           <CompilerConsole stdin={stdin} onStdinChange={setStdin}
