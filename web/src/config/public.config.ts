@@ -10,8 +10,7 @@ export const PUBLIC_CONFIG = {
   // Arena WebSocket URL (Must be set in production)
   ARENA_WS_URL: process.env.NEXT_PUBLIC_ARENA_WS_URL,
 
-  // Visualizer API URL
-  VISUALIZER_API_URL: process.env.NEXT_PUBLIC_VISUALIZER_API_URL,
+
 
   // Tldraw License Key
   TLDRAW_LICENSE_KEY: process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY,
@@ -35,7 +34,5 @@ if (process.env.NODE_ENV === "production") {
   if (!PUBLIC_CONFIG.ARENA_WS_URL) {
     console.error("❌ CRITICAL: NEXT_PUBLIC_ARENA_WS_URL is missing in production!");
   }
-  if (!PUBLIC_CONFIG.VISUALIZER_API_URL) {
-    console.error("❌ CRITICAL: NEXT_PUBLIC_VISUALIZER_API_URL is missing in production!");
-  }
+
 }
