@@ -69,6 +69,7 @@ export interface Problem {
   follow_ups: string[];
   hints: string[];
   code_snippets: CodeSnippets;
+  supported_languages: string[];
   problem_type: 'function' | 'class' | 'interactive';
   function_signature?: FunctionSignature;
   class_signature?: ClassSignature;
@@ -91,6 +92,7 @@ export interface CreateOrUpdateProblemInput {
   follow_ups?: string[];
   hints?: string[];
   code_snippets?: CodeSnippets;
+  supported_languages?: string[];
   problem_type?: 'function' | 'class' | 'interactive';
   function_signature?: FunctionSignature;
   class_signature?: ClassSignature;
