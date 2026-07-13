@@ -42,7 +42,7 @@ export const LanguageSelectDialog: React.FC<LanguageSelectDialogProps> = ({
               <LanguageSelector
                 value={selectedLanguage}
                 onChange={setSelectedLanguage}
-                languages={(problem ? Object.keys(problem.code_snippets) : []).map(
+                languages={(problem.supported_languages || (problem.code_snippets ? Object.keys(problem.code_snippets) : [])).map(
                   (lang) => ({
                     id: lang,
                     name: lang.toUpperCase(),
@@ -51,11 +51,10 @@ export const LanguageSelectDialog: React.FC<LanguageSelectDialogProps> = ({
               />
             )}
           </div>
-          {(!problem?.code_snippets ||
-            Object.keys(problem.code_snippets).length === 0) && (
+          {((!problem?.supported_languages || problem.supported_languages.length === 0) &&
+            (!problem?.code_snippets || Object.keys(problem.code_snippets).length === 0)) && (
             <p className="text-xs text-destructive text-center font-medium">
-              Warning: No code snippets found for this problem. Defaulting to
-              JavaScript.
+              Warning: No code snippets found for this problem.
             </p>
           )}
         </div>

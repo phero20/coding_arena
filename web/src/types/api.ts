@@ -59,6 +59,7 @@ export interface Problem {
   follow_ups: string[];
   hints: string[];
   code_snippets: ProblemCodeSnippets;
+  supported_languages?: string[];
   function_signature: FunctionSignature;
   solutions?: string;
   is_premium?: boolean;
