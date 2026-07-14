@@ -96,6 +96,7 @@ const ProblemSchema = new mongoose.Schema(
     follow_ups: { type: [String], default: [] },
     hints: { type: [String], default: [] },
     code_snippets: { type: CodeSnippetsSchema, default: {} },
+    supported_languages: { type: [String], default: [] },
     problem_type: {
       type: String,
       enum: ["function", "class", "interactive"],

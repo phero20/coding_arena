@@ -51,7 +51,7 @@ export class ProblemRepository
     const docs = await this.model
       .find({ problem_id: { $in: problem_ids } })
       // Projection: only fetch fields needed for list/category views
-      .select('problem_id title difficulty problem_slug topics is_premium')
+      .select('problem_id title difficulty problem_slug topics is_premium supported_languages')
       .lean()
       .exec();
     // Restore the original ordered sequence from the junction table
@@ -69,6 +69,7 @@ export class ProblemRepository
   async searchByTopic(topic: string, limit = 20): Promise<Problem[]> {
     const docs = await this.model
       .find({ topics: topic })
+      .select("problem_id title problem_slug difficulty topics is_premium supported_languages")
       .limit(limit)
       .lean()
       .exec();
@@ -104,6 +105,7 @@ export class ProblemRepository
 
     const docs = await this.model
         .find(query)
+        .select("problem_id title problem_slug difficulty topics is_premium supported_languages")
         .skip(skip)
         .limit(limit)
         .lean()
@@ -127,6 +129,7 @@ export class ProblemRepository
             follow_ups: data.follow_ups ?? [],
             hints: data.hints ?? [],
             code_snippets: data.code_snippets ?? {},
+            supported_languages: data.code_snippets ? Object.keys(data.code_snippets) : [],
           },
         },
         {

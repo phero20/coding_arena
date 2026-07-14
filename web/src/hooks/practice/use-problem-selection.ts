@@ -19,9 +19,9 @@ export function useProblemSelectionHandler({
 
   const openLanguageSelect = (problem: Problem) => {
     setSelectedProblemForArena(problem);
-    const availableLangs = problem.code_snippets
+    const availableLangs = problem.supported_languages || (problem.code_snippets
       ? Object.keys(problem.code_snippets)
-      : [];
+      : []);
     setSelectedLanguage(availableLangs[0] || "javascript");
     setIsDialogOpen(true);
   };
