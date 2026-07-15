@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Container } from "@/components/shared/Container";
@@ -9,6 +11,17 @@ import SideRays from "./ParticleNetwork";
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
+  const [rayOpacity, setRayOpacity] = useState(0.8);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setRayOpacity(window.innerWidth < 768 ? 0.1 : 0.8);
+    };
+    handleResize(); // initial set
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section className="relative pt-24 md:pt-42 pb-20 overflow-hidden bg-background min-h-screen flex flex-col justify-center">
       {/* Dynamic Background */}
@@ -23,7 +36,7 @@ export const Hero = () => {
         saturation={0.3}
         blend={0.75}
         falloff={2.5}
-        opacity={0.2}
+        opacity={rayOpacity}
       />
       <SideRays
         speed={3}
@@ -36,7 +49,7 @@ export const Hero = () => {
         saturation={0.3}
         blend={0.75}
         falloff={2.5}
-        opacity={0.2}
+        opacity={rayOpacity}
       />
 
       <Container className="relative z-10 py-6">
