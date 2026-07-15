@@ -1,4 +1,5 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { SignInSkeleton } from "@/components/skeletons";
 
 const LoginPage = () => {
   return (
@@ -15,33 +16,39 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <SignIn
-          appearance={{
-            elements: {
-              formButtonPrimary:
-                "bg-primary text-primary-foreground hover:opacity-90 text-sm normal-case h-10 transition-all",
-              card: "bg-card/50 border border-border shadow-2xl backdrop-blur-xl",
-              headerTitle: "hidden",
-              headerSubtitle: "hidden",
-              socialButtonsBlockButton:
-                "bg-secondary border border-border text-secondary-foreground hover:bg-secondary/80 h-10 transition-all",
-              socialButtonsBlockButtonText:
-                "text-secondary-foreground font-medium",
-              dividerLine: "bg-border",
-              dividerText: "text-muted-foreground",
-              formFieldLabel: "text-muted-foreground font-medium mb-1",
-              formFieldInput:
-                "bg-secondary/50 border border-border text-foreground h-10 focus:border-primary/50 transition-all",
-              footerActionText: "text-muted-foreground",
-              footerActionLink: "text-primary hover:underline font-medium",
-              identityPreviewText: "text-foreground",
-              identityPreviewEditButtonIcon: "text-primary",
-            },
-          }}
-          routing="path"
-          path="/auth/login"
-          signUpUrl="/auth/register"
-        />
+        <ClerkLoading>
+          <SignInSkeleton />
+        </ClerkLoading>
+        
+        <ClerkLoaded>
+          <SignIn
+            appearance={{
+              elements: {
+                formButtonPrimary:
+                  "bg-primary text-primary-foreground hover:opacity-90 text-sm normal-case h-10 transition-all",
+                card: "bg-card/50 border border-border shadow-2xl backdrop-blur-xl",
+                headerTitle: "hidden",
+                headerSubtitle: "hidden",
+                socialButtonsBlockButton:
+                  "bg-secondary border border-border text-secondary-foreground hover:bg-secondary/80 h-10 transition-all",
+                socialButtonsBlockButtonText:
+                  "text-secondary-foreground font-medium",
+                dividerLine: "bg-border",
+                dividerText: "text-muted-foreground",
+                formFieldLabel: "text-muted-foreground font-medium mb-1",
+                formFieldInput:
+                  "bg-secondary/50 border border-border text-foreground h-10 focus:border-primary/50 transition-all",
+                footerActionText: "text-muted-foreground",
+                footerActionLink: "text-primary hover:underline font-medium",
+                identityPreviewText: "text-foreground",
+                identityPreviewEditButtonIcon: "text-primary",
+              },
+            }}
+            routing="path"
+            path="/auth/login"
+            signUpUrl="/auth/register"
+          />
+        </ClerkLoaded>
       </div>
     </div>
   );

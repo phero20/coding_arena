@@ -6,16 +6,17 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Container } from "@/components/shared/Container";
 import { HeroWorkspaceDemo } from "./HeroWorkspaceDemo";
-import SideRays from "./ParticleNetwork";
+import dynamic from "next/dynamic";
+const SideRays = dynamic(() => import("./ParticleNetwork"), { ssr: false });
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
-  const [rayOpacity, setRayOpacity] = useState(0.8);
+  const [rayOpacity, setRayOpacity] = useState(0.7);
 
   useEffect(() => {
     const handleResize = () => {
-      setRayOpacity(window.innerWidth < 768 ? 0.1 : 0.8);
+      setRayOpacity(window.innerWidth < 768 ? 0.1 : 0.7);
     };
     handleResize(); // initial set
     window.addEventListener("resize", handleResize);

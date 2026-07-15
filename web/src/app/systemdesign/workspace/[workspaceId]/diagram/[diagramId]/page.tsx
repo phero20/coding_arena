@@ -3,7 +3,16 @@
 import { useState, use, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { DiagramCanvas } from "@/components/systemdesign-workspace/diagram/DiagramCanvas";
+import dynamic from "next/dynamic";
+import { SystemDesignWorkspaceSkeleton } from "@/components/skeletons/WorkspaceSkeletons";
+
+const DiagramCanvas = dynamic(
+  () => import("@/components/systemdesign-workspace/diagram/DiagramCanvas").then((mod) => mod.DiagramCanvas),
+  { 
+    ssr: false,
+    loading: () => <SystemDesignWorkspaceSkeleton />
+  }
+);
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -228,16 +237,7 @@ export default function DiagramPage({ params }: DiagramPageProps) {
         window.location.href = `/systemdesign/workspace/${workspaceId}`;
       }}
       retryText="Back to Workspace"
-      skeleton={
-        <div className="flex h-screen items-center justify-center bg-background text-foreground">
-          <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <p className="text-sm text-muted-foreground">
-              Opening your whiteboard canvas...
-            </p>
-          </div>
-        </div>
-      }
+      skeleton={<SystemDesignWorkspaceSkeleton />}
     >
       <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden">
         {/* Header — Clean, minimal like Eraser.io */}

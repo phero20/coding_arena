@@ -6,3 +6,4 @@ export * from "./ProfileSkeletons";
 export * from "./ListSkeletons";
 export * from "./ArenaSkeletons";
 export * from "./workspace";
+export * from "./AuthSkeletons";

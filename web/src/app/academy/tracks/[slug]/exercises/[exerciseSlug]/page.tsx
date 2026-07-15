@@ -1,6 +1,6 @@
 export const revalidate = 86400; // Cache dynamic exercise page for 24 hours
 
-import { AcademyWorkspace } from "@/components/academy/editor/AcademyWorkspace";
+import { AcademyWorkspaceWrapper } from "@/components/academy/editor/AcademyWorkspaceWrapper";
 import { getCachedTrackExercise } from "@/meta/academy/dynamic";
 import { ErrorDisplay } from "@/components/shared/StatusState";
 import { Suspense } from "react";
@@ -34,7 +34,7 @@ async function ExerciseData({ paramsPromise }: { paramsPromise: Promise<{ slug: 
   }
 
   return (
-    <AcademyWorkspace exercise={exercise} trackSlug={resolvedParams.slug} />
+    <AcademyWorkspaceWrapper exercise={exercise} trackSlug={resolvedParams.slug} />
   );
 }
 
