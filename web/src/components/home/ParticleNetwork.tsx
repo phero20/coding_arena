@@ -1,7 +1,7 @@
-import { useRef, useEffect, useState } from 'react';
-import { Renderer, Program, Triangle, Mesh } from 'ogl';
+import { useRef, useEffect, useState } from "react";
+import { Renderer, Program, Triangle, Mesh } from "ogl";
 
-type Origin = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+type Origin = "top-right" | "top-left" | "bottom-right" | "bottom-left";
 
 interface SideRaysProps {
   speed?: number;
@@ -19,21 +19,30 @@ interface SideRaysProps {
 }
 
 const resolveColor = (colorString: string): [number, number, number] => {
-  if (colorString.startsWith('#')) {
+  if (colorString.startsWith("#")) {
     const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(colorString);
-    if (m) return [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255];
+    if (m)
+      return [
+        parseInt(m[1], 16) / 255,
+        parseInt(m[2], 16) / 255,
+        parseInt(m[3], 16) / 255,
+      ];
   }
-  
-  if (typeof document !== 'undefined') {
-    const div = document.createElement('div');
+
+  if (typeof document !== "undefined") {
+    const div = document.createElement("div");
     div.style.color = colorString;
-    div.style.display = 'none';
+    div.style.display = "none";
     document.body.appendChild(div);
     const computed = window.getComputedStyle(div).color;
     document.body.removeChild(div);
     const match = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
     if (match) {
-      return [parseInt(match[1]) / 255, parseInt(match[2]) / 255, parseInt(match[3]) / 255];
+      return [
+        parseInt(match[1]) / 255,
+        parseInt(match[2]) / 255,
+        parseInt(match[3]) / 255,
+      ];
     }
   }
   return [1, 1, 1];
@@ -41,29 +50,36 @@ const resolveColor = (colorString: string): [number, number, number] => {
 
 const originToFlip = (origin: Origin): [number, number] => {
   switch (origin) {
-    case 'top-left': return [1, 0];
-    case 'bottom-right': return [0, 1];
-    case 'bottom-left': return [1, 1];
-    default: return [0, 0];
+    case "top-left":
+      return [1, 0];
+    case "bottom-right":
+      return [0, 1];
+    case "bottom-left":
+      return [1, 1];
+    default:
+      return [0, 0];
   }
 };
 
 const SideRays = ({
   speed = 2.5,
-  rayColor1 = '#EAB308',
-  rayColor2 = '#96c8ff',
+  rayColor1 = "#EAB308",
+  rayColor2 = "#96c8ff",
   intensity = 2,
   spread = 2,
-  origin = 'top-right',
+  origin = "top-right",
   tilt = 0,
   saturation = 1.5,
   blend = 0.75,
   falloff = 2.0,
   opacity = 1.0,
-  className = ''
+  className = "",
 }: SideRaysProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const uniformsRef = useRef<Record<string, { value: number | number[] }> | null>(null);
+  const uniformsRef = useRef<Record<
+    string,
+    { value: number | number[] }
+  > | null>(null);
   const rendererRef = useRef<Renderer | null>(null);
   const animationIdRef = useRef<number | null>(null);
   const meshRef = useRef<Mesh | null>(null);
@@ -75,11 +91,11 @@ const SideRays = ({
     if (!containerRef.current) return;
 
     observerRef.current = new IntersectionObserver(
-      entries => {
+      (entries) => {
         const entry = entries[0];
         setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observerRef.current.observe(containerRef.current);
@@ -103,19 +119,19 @@ const SideRays = ({
     const initializeWebGL = async () => {
       if (!containerRef.current) return;
 
-      await new Promise<void>(resolve => setTimeout(resolve, 10));
+      await new Promise<void>((resolve) => setTimeout(resolve, 10));
 
       if (!containerRef.current) return;
 
       const renderer = new Renderer({
         dpr: Math.min(window.devicePixelRatio, 2),
-        alpha: true
+        alpha: true,
       });
       rendererRef.current = renderer;
 
       const gl = renderer.gl;
-      gl.canvas.style.width = '100%';
-      gl.canvas.style.height = '100%';
+      gl.canvas.style.width = "100%";
+      gl.canvas.style.height = "100%";
 
       while (containerRef.current.firstChild) {
         containerRef.current.removeChild(containerRef.current.firstChild);
@@ -186,6 +202,7 @@ void main() {
   color.rgb = mix(vec3(gray), color.rgb, iSaturation);
 
   color.a = max(color.r, max(color.g, color.b)) * iOpacity;
+  color.rgb *= color.a; // PREMULTIPLY RGB BY ALPHA FOR iOS SAFARI FIX
   gl_FragColor = color;
 }`;
 
@@ -204,12 +221,16 @@ void main() {
         iSaturation: { value: saturation },
         iBlend: { value: blend },
         iFalloff: { value: falloff },
-        iOpacity: { value: opacity }
+        iOpacity: { value: opacity },
       };
       uniformsRef.current = uniforms;
 
       const geometry = new Triangle(gl);
-      const program = new Program(gl, { vertex: vert, fragment: frag, uniforms });
+      const program = new Program(gl, {
+        vertex: vert,
+        fragment: frag,
+        uniforms,
+      });
       const mesh = new Mesh(gl, { geometry, program });
       meshRef.current = mesh;
 
@@ -222,7 +243,8 @@ void main() {
       };
 
       const loop = (t: number) => {
-        if (!rendererRef.current || !uniformsRef.current || !meshRef.current) return;
+        if (!rendererRef.current || !uniformsRef.current || !meshRef.current)
+          return;
         uniforms.iTime.value = t * 0.001;
         try {
           renderer.render({ scene: mesh });
@@ -232,7 +254,7 @@ void main() {
         }
       };
 
-      window.addEventListener('resize', updateSize);
+      window.addEventListener("resize", updateSize);
       updateSize();
       animationIdRef.current = requestAnimationFrame(loop);
 
@@ -241,13 +263,14 @@ void main() {
           cancelAnimationFrame(animationIdRef.current);
           animationIdRef.current = null;
         }
-        window.removeEventListener('resize', updateSize);
+        window.removeEventListener("resize", updateSize);
         if (renderer) {
           try {
-            const loseCtx = renderer.gl.getExtension('WEBGL_lose_context');
+            const loseCtx = renderer.gl.getExtension("WEBGL_lose_context");
             if (loseCtx) loseCtx.loseContext();
             const canvas = renderer.gl.canvas;
-            if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas);
+            if (canvas && canvas.parentNode)
+              canvas.parentNode.removeChild(canvas);
           } catch (e) {}
         }
         rendererRef.current = null;
@@ -264,7 +287,20 @@ void main() {
         cleanupFunctionRef.current = null;
       }
     };
-  }, [isVisible, speed, rayColor1, rayColor2, intensity, spread, origin, tilt, saturation, blend, falloff, opacity]);
+  }, [
+    isVisible,
+    speed,
+    rayColor1,
+    rayColor2,
+    intensity,
+    spread,
+    origin,
+    tilt,
+    saturation,
+    blend,
+    falloff,
+    opacity,
+  ]);
 
   useEffect(() => {
     if (!uniformsRef.current) return;
@@ -282,7 +318,19 @@ void main() {
     u.iBlend.value = blend;
     u.iFalloff.value = falloff;
     u.iOpacity.value = opacity;
-  }, [speed, rayColor1, rayColor2, intensity, spread, origin, tilt, saturation, blend, falloff, opacity]);
+  }, [
+    speed,
+    rayColor1,
+    rayColor2,
+    intensity,
+    spread,
+    origin,
+    tilt,
+    saturation,
+    blend,
+    falloff,
+    opacity,
+  ]);
 
   return (
     <div
@@ -293,5 +341,3 @@ void main() {
 };
 
 export default SideRays;
-
-
