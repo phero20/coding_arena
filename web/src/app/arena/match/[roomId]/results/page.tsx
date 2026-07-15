@@ -58,7 +58,7 @@ const ArenaResultsPage = ({ params }: ArenaResultsPageProps) => {
           saturation={1.5}
           blend={0.75}
           falloff={2.5}
-          opacity={0.1}
+          opacity={0.6}
           />
           <SideRays
           rayColor1='#facc15'
@@ -71,7 +71,7 @@ const ArenaResultsPage = ({ params }: ArenaResultsPageProps) => {
           saturation={1.5}
           blend={0.75}
           falloff={2.5}
-          opacity={0.1}
+          opacity={0.6}
           />
         </div>
         <MatchResults rankings={rankings} isHost={isHost} onClose={handleLeave} />

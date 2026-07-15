@@ -1,6 +1,6 @@
-import { CompilerWorkspace } from "@/components/compiler/CompilerWorkspace";
+import { CompilerWorkspaceWrapper } from "@/components/compiler/CompilerWorkspaceWrapper";
 export { compilersMeta as metadata } from "@/meta/compilers/static";
 
 export default function CompilerPage() {
-  return <CompilerWorkspace />;
+  return <CompilerWorkspaceWrapper />;
 }

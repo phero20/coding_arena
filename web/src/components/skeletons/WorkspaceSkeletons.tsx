@@ -237,3 +237,47 @@ export const SolutionsSkeleton = () => (
     </div>
   </SkeletonProvider>
 );
+
+/**
+ * System Design Workspace Skeleton
+ * Ghost layout for the Tldraw canvas and toolbar
+ */
+export const SystemDesignWorkspaceSkeleton = () => (
+  <SkeletonProvider noWrapper>
+    <div className="flex flex-col h-screen bg-background overflow-hidden">
+      {/* Header Ghost */}
+      <header className="h-14 border-b border-border/40 flex items-center justify-between px-2 md:px-4 bg-card/10 shrink-0">
+        <div className="flex items-center gap-4">
+          <Skeleton width={80} height={32} className="rounded-md" /> {/* Back Button */}
+          <Skeleton width={100} height={20} className="rounded-sm" /> {/* Title */}
+          <Skeleton width={60} height={20} className="rounded-full" /> {/* Saved Badge */}
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <Skeleton width={24} height={24} className="rounded-full hidden sm:block" /> {/* Bug */}
+          <Skeleton width={24} height={24} className="rounded-full hidden sm:block" /> {/* Undo */}
+          <Skeleton width={24} height={24} className="rounded-full hidden sm:block" /> {/* Redo */}
+          <div className="w-px h-6 bg-border/40 mx-1 hidden sm:block"></div>
+          <Skeleton width={80} height={32} className="rounded-md" /> {/* Import */}
+          <Skeleton width={80} height={32} className="rounded-md" /> {/* Export */}
+          <Skeleton width={80} height={32} className="rounded-md" /> {/* Share */}
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex overflow-hidden bg-background">
+        {/* Left Sidebar Box (Hidden on Mobile) */}
+        <div className="hidden md:flex flex-col w-[340px] h-full border-r border-border/40 shrink-0 p-4 gap-6">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="w-full h-12 flex-1 rounded-2xl opacity-20" />
+          ))}
+        </div>
+
+        {/* Center Canvas Box */}
+        <div className="flex-1 h-full">
+          <Skeleton className="w-full h-full rounded-none opacity-10" />
+        </div>
+      </div>
+    </div>
+  </SkeletonProvider>
+);
