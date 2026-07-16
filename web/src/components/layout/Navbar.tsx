@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Github } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Container } from "@/components/shared/Container";
 import { cn } from "@/lib/utils";
@@ -62,7 +63,17 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Profile/Menu Trigger */}
-          <div className="xl:hidden flex items-center gap-2">
+          <div className="xl:hidden flex items-center gap-1">
+            <Link
+              href="https://github.com/phero20/slavecode"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors p-2"
+              aria-label="GitHub Repository"
+            >
+              <Github className="w-4 h-4" />
+            </Link>
+
             <MobileMenu 
               navItems={navItems} 
               pathname={pathname} 
@@ -71,6 +82,19 @@ export const Navbar = () => {
             />
           </div>
         </Container>
+        
+        {/* Absolute GitHub Icon outside the container (Far right edge) */}
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden min-[1390px]:flex items-center">
+          <Link
+            href="https://github.com/phero20/slavecode"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors p-2"
+            aria-label="GitHub Repository"
+          >
+            <Github className="w-5 h-5" />
+          </Link>
+        </div>
       </nav>
     </>
   );

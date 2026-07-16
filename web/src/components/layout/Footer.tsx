@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Container } from "../shared/Container";
 import Image from "next/image";
 import { shouldHide, shouldHidefooter } from "./shouldHide";
-import { Bug, Download, Github } from "lucide-react";
+import { Bug, Download, Github, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -105,6 +105,16 @@ export const Footer = () => {
               and real-time coding arenas. The all-in-one platform to master
               algorithms and prove your engineering excellence.
             </p>
+            <Button variant="outline" className="transition-colors" asChild>
+                <Link 
+                  href="https://github.com/judge0/judge0#showcase" 
+                  target="_blank"
+                  className="flex items-center gap-2"
+                >
+                  <Award className="w-4 h-4 text-primary" />
+                  <span>Officially Featured by <span className="font-bold text-primary">Judge0</span></span>
+                </Link>
+              </Button>
           </div>
 
           {footerLinks.map((section) => (
@@ -136,6 +146,7 @@ export const Footer = () => {
         <div className="mt-12 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} SlaveCode. All rights reserved.</p>
           <div className="flex items-center gap-4">
+            
             {deferredPrompt && (
               <Button
                 size="lg"
@@ -157,7 +168,7 @@ export const Footer = () => {
                     className="text-muted-foreground hover:text-foreground transition-colors p-2"
                     aria-label="GitHub Repository"
                   >
-                    <Github className="w-4 h-4" />
+                    <Github className="w-6 h-6" />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>
