@@ -182,11 +182,11 @@ const CompilerSection = () => {
                          Success
                        </Badge>
                      </div>
-                     
                      <TestCaseField 
                        label="Output"
                        value={"Calculating sum...\nSum of 25 + 17 is: 42"}
                        isOutput
+                       isRaw
                      />
                    </div>
                 </div>   

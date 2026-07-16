@@ -12,6 +12,11 @@ Master algorithms, system design, and interview prep. Join the ultimate all-in-o
 
 Master your skills with a comprehensive platform designed for growth. Access over **11,000+ coding problems**, explore our **Academy** supporting **80 languages**, and follow structured **DSA roadmaps**. Prepare for interviews with **460+ company-specific questions**, dive into **System Design** with detailed concepts and a fully-featured AI-Powered Workspace, and more.
 
+<p align="center">
+  <b>🏅 Officially Recognized & Featured by <a href="https://github.com/judge0/judge0#:~:text=SlaveCode" target="_blank">Judge0</a></b><br/>
+  <i>Integrated with the industry-leading open-source code execution engine.</i>
+</p>
+
 ---
 
 
