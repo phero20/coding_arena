@@ -18,7 +18,7 @@ export const Hero = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setRayOpacity(window.innerWidth < 768 ? 0.1 : 0.7);
+      setRayOpacity(window.innerWidth < 768 ? 0.3 : 0.7);
     };
     handleResize(); // initial set
     window.addEventListener("resize", handleResize);
