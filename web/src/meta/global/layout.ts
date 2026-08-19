@@ -77,11 +77,20 @@ export const globalMetadata: Metadata = {
     title: "SlaveCode | The Ultimate Platform for Software Engineers",
     description: "Standardize your coding journey. From basic academy courses to advanced system design, company interviews, and real-time coding arenas.",
     siteName: "SlaveCode",
+    images: [
+      {
+        url: "https://slavecode.codes/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SlaveCode Cover Image",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SlaveCode | The Ultimate Platform for Software Engineers",
     description: "Standardize your coding journey. From basic academy courses to advanced system design, company interviews, and real-time coding arenas.",
+    images: ["https://slavecode.codes/og-image.png"],
   },
   robots: {
     index: true,
