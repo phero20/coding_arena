@@ -18,6 +18,7 @@ const SyntaxHighlighter = dynamic(
 );
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
+import { LanguageSelector } from "@/components/workspace-shared/editor/LanguageSelector";
 import Link from "next/link";
 
 const JAVA_CODE = `class Solution {
@@ -178,12 +179,11 @@ export const ArenaHomeEditorSection = () => {
             <div className="flex flex-col min-w-0 bg-card/80">
               <div className="h-12 px-3 flex items-center gap-2 border-b border-border/40 bg-card/20 shrink-0">
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Badge
-                    variant="outline"
-                    className="font-black tracking-widest text-[9px] uppercase py-0.5 px-2 border-border/40 text-primary bg-primary/5"
-                  >
-                    JAVA
-                  </Badge>
+                  <LanguageSelector
+                    value="java"
+                    onChange={() => {}}
+                    languages={[{ id: "java", name: "JAVA" }, { id: "javascript", name: "JAVASCRIPT" }, { id: "python", name: "PYTHON" }]}
+                  />
                   <div className="size-7 rounded border border-border/60 flex items-center justify-center  text-primary">
                     <WrapText className="size-3" />
                   </div>

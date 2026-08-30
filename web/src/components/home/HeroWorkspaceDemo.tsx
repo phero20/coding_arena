@@ -11,6 +11,7 @@ const SyntaxHighlighter = dynamic(
 );
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { LanguageSelector } from "@/components/workspace-shared/editor/LanguageSelector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Card } from "@/components/ui/card";
@@ -255,12 +256,11 @@ export const HeroWorkspaceDemo = () => {
               <div className="h-12 px-3 flex items-center gap-2 border-b border-border/40 bg-card/20 shrink-0">
                 {/* Language selector (left) */}
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Badge
-                    variant="outline"
-                    className="font-black tracking-widest text-[9px] uppercase py-0.5 px-2 border-border/40 text-primary flex items-center gap-1"
-                  >
-                    JAVA <ChevronDown className="size-3" />
-                  </Badge>
+                  <LanguageSelector
+                    value="java"
+                    onChange={() => {}}
+                    languages={[{ id: "java", name: "JAVA" }, { id: "javascript", name: "JAVASCRIPT" }, { id: "python", name: "PYTHON" }]}
+                  />
                   <div className="size-7 rounded border border-border/60 flex items-center justify-center text-primary">
                     <WrapText className="size-3" />
                   </div>
