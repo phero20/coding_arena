@@ -59,9 +59,11 @@ export const ArenaMatchCard: React.FC<ArenaMatchCardProps> = ({
                   >
                     {match.difficulty}
                   </Badge>
-                  <Badge variant="secondary" className="uppercase">
-                    {match.language}
-                  </Badge>
+                  {myResult?.languageId && (
+                    <Badge variant="secondary" className="uppercase">
+                      {myResult.languageId}
+                    </Badge>
+                  )}
                 </div>
               )}
             </div>

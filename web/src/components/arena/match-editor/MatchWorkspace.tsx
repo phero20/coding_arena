@@ -65,7 +65,6 @@ export const MatchWorkspace: React.FC<MatchWorkspaceProps> = ({
           activeTab={activeTab}
           onTabChange={setActiveTab}
           roomId={roomId}
-          enforcedLanguage={room?.language}
           verdict={evaluation.status as any}
           isEvaluating={isLoading && evaluation.type === "submit"}
           pollingTests={evaluation.type === "submit" ? evaluation.tests : null}

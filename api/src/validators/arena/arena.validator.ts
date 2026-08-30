@@ -8,7 +8,6 @@ export const createRoomSchema = z.object({
   problemId: z.string().optional(),
   problemSlug: z.string().optional(),
   difficulty: z.string().optional(),
-  language: z.string().optional(),
 });
 export type CreateRoomInput = z.infer<typeof createRoomSchema>;
 
@@ -20,7 +19,6 @@ export const updateRoomProblemSchema = z.object({
   problemId: z.string().min(1, "Problem ID is required"),
   problemSlug: z.string().min(1, "Problem Slug is required"),
   difficulty: z.string().optional(),
-  language: z.string().optional(),
 });
 export type UpdateRoomProblemInput = z.infer<typeof updateRoomProblemSchema>;
 

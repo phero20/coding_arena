@@ -157,15 +157,6 @@ export function ArenaLobby({ roomId }: ArenaLobbyProps) {
               </Badge>
             )}
 
-            {room.language && (
-              <Badge
-                variant="outline"
-                className="font-black tracking-widest text-[10px] uppercase py-1 px-3 border-none"
-              >
-                {room.language}
-              </Badge>
-            )}
-
             {isHost && (
               <Button
                 variant="default"

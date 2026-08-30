@@ -14,11 +14,11 @@ const SideRays = dynamic(() => import("./ParticleNetwork"), { ssr: false });
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
-  const [rayOpacity, setRayOpacity] = useState(0.7);
+  const [rayOpacity, setRayOpacity] = useState(0.5);
 
   useEffect(() => {
     const handleResize = () => {
-      setRayOpacity(window.innerWidth < 768 ? 0.3 : 0.7);
+      setRayOpacity(window.innerWidth < 768 ? 0.3 : 0.5);
     };
     handleResize(); // initial set
     window.addEventListener("resize", handleResize);
@@ -32,7 +32,7 @@ export const Hero = () => {
         speed={3}
         rayColor1="#EAB308"
         rayColor2="#96c8ff"
-        intensity={1.6}
+        intensity={1.4}
         spread={3}
         origin="top-left"
         tilt={-55}
@@ -45,7 +45,7 @@ export const Hero = () => {
         speed={3}
         rayColor1="#EAB308"
         rayColor2="#96c8ff"
-        intensity={1.6}
+        intensity={1.4}
         spread={3}
         origin="top-right"
         tilt={55}

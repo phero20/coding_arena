@@ -85,7 +85,8 @@ export class AiCodeJudgeService implements IAiJudgeService {
       languageId: input.languageId,
       problem: problem ? {
         title: problem.title,
-        description: sanitizeDescriptionForAi(problem.description, SANITIZE_PROFILES.STRICT)
+        description: sanitizeDescriptionForAi(problem.description, SANITIZE_PROFILES.STRICT),
+        multiAnswer: problem.judging_policy?.multi_answer === true
       } : undefined,
       tests: input.tests,
       sourceCode: input.sourceCode

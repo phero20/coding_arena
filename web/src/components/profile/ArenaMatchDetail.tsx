@@ -65,14 +65,7 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
           <div className="min-w-0">
             <h2 className="text-xl font-black tracking-tight truncate flex items-center gap-3">
               {match.problemTitle || match.problemSlug || "Arena Match"}
-              <div className="flex items-center gap-1.5 translate-y-[1px]">
-                <Badge
-                  variant="outline"
-                  className="bg-primary/10 text-primary border-primary/20 text-[10px] uppercase font-bold px-1.5"
-                >
-                  {match.language}
-                </Badge>
-              </div>
+
             </h2>
             <div className="flex items-center gap-3 mt-1.5">
               {match.difficulty && (
@@ -231,8 +224,8 @@ export const ArenaMatchDetail: React.FC<ArenaMatchDetailProps> = ({
                               {player.sourceCode ? (
                                 <CodeViewer
                                   code={player.sourceCode}
-                                  language={player.languageId || match.language}
-                                  label={`${player.languageId}`}
+                                  language={player.languageId || "javascript"}
+                                  label={`${player.languageId || "javascript"}`}
                                 />
                               ) : (
                                 <div className="flex flex-col gap-2 items-center justify-center py-10  text-center text-muted-foreground">

@@ -13,7 +13,7 @@ import { useProblemSelectionHandler } from "@/hooks/practice/use-problem-selecti
 import { ArenaSelectionBanner } from "./ArenaSelectionBanner";
 import { ProblemFilters } from "./ProblemFilters";
 import { ProblemTable } from "./ProblemTable";
-import { LanguageSelectDialog } from "./LanguageSelectDialog";
+// LanguageSelectDialog removed as language selection is now per-player
 
 export const PracticeProblemList: React.FC<PracticeProblemListProps & { initialData?: any }> = ({
   isSelectPage = false,
@@ -68,13 +68,7 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps & { initialD
 
   const {
     selectingId,
-    isDialogOpen,
-    setIsDialogOpen,
-    selectedLanguage,
-    setSelectedLanguage,
-    selectedProblemForArena,
     openLanguageSelect,
-    handleConfirmSelection
   } = useProblemSelectionHandler({
     roomId,
     updateProblem,
@@ -120,15 +114,6 @@ export const PracticeProblemList: React.FC<PracticeProblemListProps & { initialD
         )}
       </div>
 
-      <LanguageSelectDialog
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        problem={selectedProblemForArena}
-        selectedLanguage={selectedLanguage}
-        setSelectedLanguage={setSelectedLanguage}
-        onConfirm={handleConfirmSelection}
-        isActionLoading={isHosting || isUpdating}
-      />
     </section>
   );
 };

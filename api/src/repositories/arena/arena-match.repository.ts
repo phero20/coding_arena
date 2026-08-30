@@ -27,7 +27,7 @@ export interface CreateArenaMatchInput {
   problemTitle?: string;
   problemSlug?: string;
   difficulty?: string;
-  language: string;
+  language?: string;
   players: ArenaPlayerResult[];
 }
 
@@ -274,7 +274,6 @@ export class ArenaMatchRepository extends MongoBaseRepository<
             difficulty: { $first: "$difficulty" },
             language: { $first: "$language" },
             status: { $first: "$status" },
-            expiresAt: { $first: "$expiresAt" },
             startedAt: { $first: "$startedAt" },
             endedAt: { $first: "$endedAt" },
             createdAt: { $first: "$createdAt" },

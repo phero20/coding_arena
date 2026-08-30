@@ -57,7 +57,6 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   runError,
   activeTab: externalTab,
   onTabChange,
-  enforcedLanguage,
   roomId,
   verdict,
   isEvaluating,
@@ -69,12 +68,11 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
 
   const sessionId = useMemo(() => {
     if (mode === "arena") {
-      if (!enforcedLanguage) return `arena:loading:${roomId}`;
-      if (matchId) return `arena:${matchId}:${enforcedLanguage}`;
-      return `arena:room:${roomId}:${enforcedLanguage}`;
+      if (matchId) return `arena:${matchId}`;
+      return `arena:room:${roomId}`;
     }
     return `practice:${problem.problem_id}`;
-  }, [mode, matchId, roomId, enforcedLanguage, problem.problem_id]);
+  }, [mode, matchId, roomId, problem.problem_id]);
 
   const {
     language,
@@ -87,7 +85,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
   } = useProblemEditor(
     problem,
     sessionId,
-    enforcedLanguage,
+    undefined, // no longer enforcedLanguage
     mode === "arena" ? (matchId as string | null) : undefined,
   );
 
@@ -137,6 +135,8 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
     if (monaco.languages.json) {
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({ validate: false });
     }
+
+
   };
 
   return (
@@ -162,20 +162,11 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
           {/* Language selector — only meaningful on Code tab */}
           {activeTab === "code" && (
             <div className="flex items-center gap-2 shrink-0">
-              {mode === "arena" ? (
-                <Badge
-                  variant="outline"
-                  className="font-black tracking-widest text-[10px] uppercase py-1 px-3 border-border/40 text-primary bg-primary/5"
-                >
-                  {enforcedLanguage}
-                </Badge>
-              ) : (
-                <LanguageSelector
-                  value={language}
-                  onChange={setLanguage}
-                  languages={languageOptions}
-                />
-              )}
+              <LanguageSelector
+                value={language}
+                onChange={setLanguage}
+                languages={languageOptions}
+              />
 
               <Button
                 variant="ghost"
@@ -269,10 +260,8 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
             <Editor
               height="100%"
               beforeMount={handleEditorWillMount}
-              defaultLanguage={
-                mode === "arena" ? enforcedLanguage : monacoLanguage
-              }
-              language={mode === "arena" ? enforcedLanguage : monacoLanguage}
+              defaultLanguage={monacoLanguage}
+              language={monacoLanguage}
               theme="vs-dark"
               value={code}
               onChange={(value) => setCode(value ?? "")}

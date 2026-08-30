@@ -20,10 +20,7 @@ export function evaluateSuspicion(input: SuspicionInput): SuspicionResult {
   const comparatorMode =
     input.problem.judging_policy?.comparator_mode ?? "strict";
   const multiAnswerRisk =
-    input.problem.judging_policy?.multi_answer === true ||
-    ["two-sum", "longest-palindromic-substring"].includes(
-      input.problem.problem_slug,
-    );
+    input.problem.judging_policy?.multi_answer === true;
 
   if (input.parsedWarnings.length > 0) {
     score += 3;
@@ -36,9 +33,8 @@ export function evaluateSuspicion(input: SuspicionInput): SuspicionResult {
   }
 
   if (
-    (input.problem.judging_policy?.validation_policy ===
-      "two_sum_indices_sum_target" ||
-      input.problem.problem_slug === "two-sum") &&
+    input.problem.judging_policy?.validation_policy ===
+      "two_sum_indices_sum_target" &&
     hasInvalidTwoSumExpectedOutput(input.selectedCases)
   ) {
     score += 4;

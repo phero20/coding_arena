@@ -51,19 +51,15 @@ export function useArenaMatch({ problem, roomId }: UseArenaMatchProps) {
   const me = userId ? room?.players[userId] : null;
   const hasSubmitted = me?.status === "SUBMITTED";
 
-  // 3. Editor State (Atomic Context Lock)
-  // Industry Standard: Key your session by both the identity (roomId) AND the mandated configuration (language).
-  // If the language arrives late, the key CHANGES, forcing a fresh, correct initialization.
   const sessionId = useMemo(() => {
-    if (!room?.language) return `arena:loading:${roomId}`;
-    if (matchId) return `arena:${matchId}:${room.language}`;
-    return `arena:room:${roomId}:${room.language}`;
-  }, [matchId, roomId, room?.language]);
+    if (matchId) return `arena:${matchId}`;
+    return `arena:room:${roomId}`;
+  }, [matchId, roomId]);
 
   const editor = useProblemEditor(
     problem,
     sessionId,
-    room?.language,
+    undefined,
     matchId as string | null,
   );
 

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Check, Copy, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, mapLanguageAlias } from "@/lib/utils";
 import { DynamicHighlighter as SyntaxHighlighter } from "../workspace-shared/editor/DynamicHighlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -23,6 +23,10 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
   showHeader = true,
 }) => {
   const [copied, setCopied] = useState(false);
+
+  const mappedLanguage = useMemo(() => {
+    return mapLanguageAlias(language);
+  }, [language]);
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -67,7 +71,7 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
 
       <div className="relative">
         <SyntaxHighlighter
-          language={language.toLowerCase()}
+          language={mappedLanguage}
           style={vscDarkPlus}
           PreTag="div"
           customStyle={{

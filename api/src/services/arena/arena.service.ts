@@ -10,6 +10,7 @@ import {
 } from "../../types/arena/arena.types";
 import { type ICradle } from "../../libs/awilix-container";
 import type { ArenaMatch } from "../../mongo/models/arena-match.model";
+import type { ArenaMatchDetailed } from "../../types/arena/arena-match.types";
 import { AppError } from "../../utils/app-error";
 import { ERRORS } from "../../constants/errors";
 import { redis, withLock } from "../../libs/core/redis";
@@ -59,7 +60,6 @@ export class ArenaService {
       problemId?: string;
       problemSlug?: string;
       difficulty?: string;
-      language?: string;
     },
   ): Promise<ArenaRoom> {
     validateServiceInput(CreateRoomSchema, { clerkUserId, details });
@@ -98,7 +98,6 @@ export class ArenaService {
       problemId: details.problemId,
       problemSlug: details.problemSlug,
       difficulty: details.difficulty,
-      language: details.language,
       players: { [clerkUserId]: creator },
       createdAt: this.clock.nowDate(),
     };
@@ -128,7 +127,6 @@ export class ArenaService {
       problemId: string;
       problemSlug: string;
       difficulty?: string;
-      language?: string;
     },
   ): Promise<ArenaRoom> {
     validateServiceInput(UpdateRoomProblemSchema, {
@@ -148,7 +146,6 @@ export class ArenaService {
       problemId: details.problemId,
       problemSlug: details.problemSlug,
       difficulty: details.difficulty,
-      language: details.language,
       topic: formattedTopic,
     });
     await arenaRedis.publishArenaUpdate(roomId, {
@@ -208,7 +205,6 @@ export class ArenaService {
           problemTitle: room.topic,
           problemSlug: room.problemSlug,
           difficulty: room.difficulty,
-          language: room.language || "javascript",
           players,
         },
         options,
@@ -257,7 +253,7 @@ export class ArenaService {
     });
   }
 
-  async getMatchStatus(matchId: string): Promise<ArenaMatch> {
+  async getMatchStatus(matchId: string): Promise<ArenaMatchDetailed> {
     const match =
       await this.arenaMatchRepository.findByIdWithSubmissions(matchId);
     if (!match) throw AppError.from(ERRORS.ARENA.MATCH_NOT_FOUND);

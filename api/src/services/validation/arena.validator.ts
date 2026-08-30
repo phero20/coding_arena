@@ -13,7 +13,6 @@ export const CreateRoomSchema = z.object({
     problemId: z.string().optional(),
     problemSlug: z.string().optional(),
     difficulty: z.string().optional(),
-    language: z.string().optional(),
   }),
 });
 
@@ -24,7 +23,6 @@ export const UpdateRoomProblemSchema = z.object({
     problemId: z.string().min(1, "Problem ID is required"),
     problemSlug: z.string().min(1, "Problem Slug is required"),
     difficulty: z.string().optional(),
-    language: z.string().optional(),
   }),
 });
 

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useCallback } from "react";
 import { useEditorStore } from "@/store/use-editor-store";
 import { Problem } from "@/types/api";
 import { useShallow } from "zustand/react/shallow";
+import { mapLanguageAlias } from "@/lib/utils";
 
 /**
  * Enhanced hook to manage editor state across both Practice and Arena modes.
@@ -103,40 +104,7 @@ export function useProblemEditor(
   );
 
   const monacoLanguage = useMemo(() => {
-    switch (currentLanguage) {
-      case "python3":
-      case "python":
-        return "python";
-      case "cpp":
-        return "cpp";
-      case "csharp":
-        return "csharp";
-      case "golang":
-      case "go":
-        return "go";
-      case "javascript":
-        return "javascript";
-      case "typescript":
-        return "typescript";
-      case "java":
-        return "java";
-      case "php":
-        return "php";
-      case "swift":
-        return "swift";
-      case "kotlin":
-        return "kotlin";
-      case "dart":
-        return "dart";
-      case "ruby":
-        return "ruby";
-      case "rust":
-        return "rust";
-      case "scala":
-        return "scala";
-      default:
-        return "javascript";
-    }
+    return mapLanguageAlias(currentLanguage);
   }, [currentLanguage]);
 
   return {

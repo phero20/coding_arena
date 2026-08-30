@@ -69,7 +69,6 @@ const ArenaMatchSchema = new mongoose.Schema(
     },
     language: {
       type: String,
-      required: true,
     },
     status: {
       type: String,
@@ -83,10 +82,6 @@ const ArenaMatchSchema = new mongoose.Schema(
       type: [ArenaPlayerResultSchema],
       default: [],
     },
-    expiresAt: {
-      type: Date,
-      default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    },
   },
   {
     timestamps: true,
@@ -96,7 +91,6 @@ const ArenaMatchSchema = new mongoose.Schema(
 ArenaMatchSchema.index({ hostId: 1, createdAt: -1 });
 ArenaMatchSchema.index({ "players.userId": 1, createdAt: -1 });
 ArenaMatchSchema.index({ createdAt: -1 });
-ArenaMatchSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export interface ArenaPlayerResult {
   userId: string;
@@ -120,12 +114,11 @@ export interface ArenaMatch {
   problemTitle?: string;
   problemSlug?: string;
   difficulty?: string;
-  language: string;
+  language?: string;
   status: ArenaMatchStatus;
   startedAt?: Date;
   endedAt?: Date;
   players: ArenaPlayerResult[];
-  expiresAt: Date;
   createdAt: Date;
   updatedAt: Date;
 }

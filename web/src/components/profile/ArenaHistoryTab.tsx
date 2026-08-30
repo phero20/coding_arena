@@ -175,7 +175,7 @@ export const ArenaHistoryTab: React.FC<ArenaHistoryTabProps> = ({ username }) =>
                             )}
                           </div>
                           <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-tighter truncate">
-                            {match.language}
+                            {myResult?.languageId || ""}
                           </span>
                         </div>
                       </TableCell>

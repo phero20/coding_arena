@@ -13,32 +13,20 @@ export function useProblemSelectionHandler({
   hostArena,
 }: UseProblemSelectionHandlerProps) {
   const [selectingId, setSelectingId] = useState<string | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
   const [selectedProblemForArena, setSelectedProblemForArena] = useState<Problem | null>(null);
 
   const openLanguageSelect = (problem: Problem) => {
     setSelectedProblemForArena(problem);
-    const availableLangs = problem.supported_languages || (problem.code_snippets
-      ? Object.keys(problem.code_snippets)
-      : []);
-    setSelectedLanguage(availableLangs[0] || "javascript");
-    setIsDialogOpen(true);
-  };
-
-  const handleConfirmSelection = () => {
-    if (!selectedProblemForArena) return;
-    const problem = selectedProblemForArena;
-
+    
+    // We no longer need to select a language at the room level
+    // Directly trigger the room creation / update
     setSelectingId(problem.problem_id);
-    setIsDialogOpen(false);
 
     if (roomId) {
       updateProblem({
         problemId: problem.problem_id,
         problemSlug: problem.problem_slug,
         difficulty: problem.difficulty,
-        language: selectedLanguage,
       }, {
         onSettled: () => setSelectingId(null)
       });
@@ -47,18 +35,18 @@ export function useProblemSelectionHandler({
         problemId: problem.problem_id,
         problemSlug: problem.problem_slug,
         difficulty: problem.difficulty,
-        language: selectedLanguage,
       });
-      // SelectingId is cleared if needed elsewhere or via navigating away
     }
   };
 
+  const handleConfirmSelection = () => {}; // Kept for backwards compatibility if needed, but unused
+
   return {
     selectingId,
-    isDialogOpen,
-    setIsDialogOpen,
-    selectedLanguage,
-    setSelectedLanguage,
+    isDialogOpen: false,
+    setIsDialogOpen: () => {},
+    selectedLanguage: "",
+    setSelectedLanguage: () => {},
     selectedProblemForArena,
     openLanguageSelect,
     handleConfirmSelection,
